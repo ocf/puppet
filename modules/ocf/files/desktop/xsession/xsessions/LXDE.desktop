@@ -1,0 +1,5 @@
+# OCF config
+[Desktop Entry]
+Type=Application
+Name=LXDE
+Exec=/usr/bin/startlxde

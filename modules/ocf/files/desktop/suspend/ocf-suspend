@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# OCF config
+
+# Continue only if previous command succeeds unless forced
+# Reset tmpfs-mounted directories
+if [ -z "$1" ]; then
+  umount /home && mount /home || exit 2
+  umount /tmp && mount /tmp
+elif [ "$1" = '--silent' ]; then
+  umount /home 2> /dev/null && mount /home || exit 2
+  umount /tmp 2> /dev/null && mount /tmp
+elif [ "$1" = '-f' -o "$1" = '--force' ]; then
+  umount /home && mount /home
+  umount /tmp && mount /tmp
+else
+  exit 1
+fi
+
+# Enable WOL and sleep until magic packet wakes you up
+/sbin/ethtool -s eth0 wol g
+/usr/sbin/pm-suspend > /dev/null
+
+# Alternatively, we could have slept until specified time
+# Determine whether to use time for tomorrow or today
+#hour=`date '+%H'`
+#if [ $hour -lt 9 ]; then
+#  time_t=`date -d '09:00' '+%s'`
+#else
+#  time_t=`date -d 'tomorrow 09:00' '+%s'`
+#fi
+#/usr/sbin/rtcwake -m mem -t $time_t

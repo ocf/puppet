@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# OCF config
+# Eliminate all session child processes
+
+# Send child processes SIGTERM
+pkill -u $USER
+
+# Wait 1 second
+sleep 1
+
+# Send all remaining child processes SIGKILL
+pkill -9 -u $USER

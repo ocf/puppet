@@ -1,0 +1,18 @@
+#!/bin/sh
+
+computers='
+78:2b:cb:83:45:5d
+78:2b:cb:83:4a:03
+78:2b:cb:83:48:25
+78:2b:cb:83:4a:9a
+78:2b:cb:83:4c:1b
+78:2b:cb:83:46:10
+00:22:19:2b:76:64
+00:1d:92:4a:78:9e
+00:22:19:2b:75:4c
+00:22:19:2b:76:46
+00:22:19:2b:75:fd'
+
+for address in $computers; do
+  wakeonlan $address > /dev/null
+done

@@ -1,0 +1,10 @@
+# OCF config
+Defaults passprompt="%u/root's password: "
+Defaults env_reset
+
+root ALL=(ALL) ALL
+dumper ALL=NOPASSWD:/usr/bin/rsync, /usr/bin/nice, /usr/bin/ionice
+%admin ALL=(ALL) ALL
+<% sudo.each do |val| -%>
+%<%= val %> ALL=(ALL) ALL
+<% end -%>

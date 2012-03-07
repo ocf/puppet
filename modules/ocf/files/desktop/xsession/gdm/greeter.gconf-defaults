@@ -1,0 +1,8 @@
+# OCF config
+/desktop/gnome/background/picture_filename /opt/share/xsession/background
+/apps/gdm/simple-greeter/logo_icon_name ocf
+/apps/gdm/simple-greeter/disable_restart_buttons true
+/apps/gdm/simple-greeter/disable_user_list true
+/desktop/gnome/sound/event_sounds false
+/apps/metacity/general/compositing_manager false
+/apps/gnome-power-manager/ui/icon_policy never

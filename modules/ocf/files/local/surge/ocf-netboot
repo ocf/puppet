@@ -1,0 +1,46 @@
+#!/bin/sh
+
+set -e
+
+arch='amd64'
+dist='squeeze'
+netboot="/opt/debmirror/data/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
+tftpdir='/opt/tftp'
+nonfree='yes'
+fw="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$dist/current/firmware.tar.gz"
+fwdir='/tmp/di_firmware'
+
+rm -rf $tftpdir
+mkdir $tftpdir && chmod 755 $tftpdir
+
+cd $tftpdir
+cp $netboot .
+tar -zxf netboot.tar.gz
+
+if [ "$nonfree" = "yes" ]; then
+  rm -rf $fwdir
+  mkdir  -p $fwdir/firmware
+  cd $fwdir
+  wget -q "$fw"
+  cd $fwdir/firmware
+  tar -zxf ../firmware.tar.gz
+  cd $fwdir
+  pax -x sv4cpio -s'%firmware%/firmware%' -w firmware | gzip -c > firmware.cpio.gz
+
+  cd $tftpdir/debian-installer/$arch
+  [ -f initrd.gz.orig ] || cp -p initrd.gz initrd.gz.orig
+  cat initrd.gz.orig $fwdir/firmware.cpio.gz > initrd.gz
+  #sed -i "s#debian-installer/$arch/linux#debian-installer/$arch/linux auto url=mirror.int.ocf.berkeley.edu/preseednf.cfg#g" boot-screens/txt.cfg
+else
+  cd $tftpdir/debian-installer/$arch
+  #sed -i "s#debian-installer/$arch/linux#debian-installer/$arch/linux auto url=mirror.int.ocf.berkeley.edu/preseed.cfg#g" boot-screens/txt.cfg
+fi
+
+rm $tftpdir/netboot.tar.gz
+rm -rf $fwdir
+
+service tftpd-hpa restart > /dev/null
+
+cd /var/www
+patch --quiet -i preseednf.patch -o preseednf.cfg preseed.cfg
+chmod 644 preseed*

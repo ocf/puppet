@@ -1,0 +1,2 @@
+#!/bin/sh
+lxsession-logout --banner "/opt/share/xsession/logout-banner.png" --prompt "The OCF will be with you. Always." --side=top

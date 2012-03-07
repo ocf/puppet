@@ -1,0 +1,11 @@
+# OCF config
+
+# Wake desktops with magic packet at lab opening
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# m h dom mon dow user command
+00 12 * * 0   root /usr/local/sbin/ocf-wakeup
+00 09 * * 1-5 root /usr/local/sbin/ocf-wakeup
+00 11 * * 6   root /usr/local/sbin/ocf-wakeup

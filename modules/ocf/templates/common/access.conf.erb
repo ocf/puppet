@@ -1,0 +1,12 @@
+# OCF config
+# Login access control table, scanned for first entry matching user@origin
+# format: permission : users/groups : origins
+#
++ : root : ALL
++ : dumper : pollution.int.ocf.berkeley.edu pollution.ocf.berkeley.edu
++ : (sys) : ALL
++ : (admin) : ALL
+<% login.each do |val| -%>
++ : (<%= val %>) : ALL
+<% end -%>
+- : ALL : ALL

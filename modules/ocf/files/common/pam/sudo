@@ -1,0 +1,4 @@
+# OCF config
+auth    required pam_krb5.so   minimum_uid=1000 alt_auth_map=%s/root only_alt_auth
+account required pam_permit.so
+session required pam_permit.so

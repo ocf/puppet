@@ -1,0 +1,9 @@
+# OCF config
+deb http://mirror.ocf.berkeley.edu/debian/ squeeze main<% if nonfree %> contrib non-free<% end %>
+deb http://security.debian.org/ squeeze/updates main<% if nonfree %> contrib non-free<% end %>
+deb http://mirror.ocf.berkeley.edu/debian/ squeeze-updates main<% if nonfree %> contrib non-free<% end %>
+deb http://backports.debian.org/debian-backports/ squeeze-backports main<% if nonfree %> contrib non-free<% end %>
+<% if desktop -%>
+deb http://www.debian-multimedia.org/ squeeze main<% if nonfree %> non-free<% end %>
+deb http://mozilla.debian.net/ squeeze-backports iceweasel-release
+<% end -%>

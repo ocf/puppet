@@ -1,0 +1,32 @@
+# OCF config
+127.0.0.1 localhost
+128.32.129.253 coupdetat.ocf.berkeley.edu coupdetat
+
+# coupdetat NAT
+10.0.0.1  coupdetat.decal.ocf.berkeley.edu
+10.0.0.65 alpha.decal.ocf.berkeley.edu
+10.0.0.66 bravo.decal.ocf.berkeley.edu
+10.0.0.67 charlie.decal.ocf.berkeley.edu
+10.0.0.68 delta.decal.ocf.berkeley.edu
+10.0.0.69 echo.decal.ocf.berkeley.edu
+10.0.0.70 foxtrot.decal.ocf.berkeley.edu
+10.0.0.71 golf.decal.ocf.berkeley.edu
+10.0.0.72 hotel.decal.ocf.berkeley.edu
+10.0.0.73 india.decal.ocf.berkeley.edu
+10.0.0.74 juliet.decal.ocf.berkeley.edu
+10.0.0.75 kilo.decal.ocf.berkeley.edu
+10.0.0.76 lima.decal.ocf.berkeley.edu
+10.0.0.77 mike.decal.ocf.berkeley.edu
+10.0.0.78 november.decal.ocf.berkeley.edu
+10.0.0.79 oscar.decal.ocf.berkeley.edu
+10.0.0.80 papa.decal.ocf.berkeley.edu
+10.0.0.81 quebec.decal.ocf.berkeley.edu
+10.0.0.82 romeo.decal.ocf.berkeley.edu
+10.0.0.83 sierra.decal.ocf.berkeley.edu
+10.0.0.84 tango.decal.ocf.berkeley.edu
+10.0.0.85 uniform.decal.ocf.berkeley.edu
+10.0.0.86 victor.decal.ocf.berkeley.edu
+10.0.0.87 whiskey.decal.ocf.berkeley.edu
+10.0.0.88 xray.decal.ocf.berkeley.edu
+10.0.0.89 yankee.decal.ocf.berkeley.edu
+10.0.0.90 zulu.decal.ocf.berkeley.edu

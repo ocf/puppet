@@ -1,0 +1,14 @@
+# OCF config
+# This is the ssh client system-wide configuration file.  See
+# ssh_config(5) for more information.  This file provides defaults for
+# users, and the values can be changed in per-user configuration files
+# or on the command line.
+
+Host *
+    SendEnv LANG LC_*
+    HashKnownHosts no
+    GSSAPIAuthentication yes
+    GSSAPIDelegateCredentials no
+    GSSAPIKeyExchange yes
+    Compression yes
+    AddressFamily inet

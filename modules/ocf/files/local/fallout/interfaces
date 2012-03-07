@@ -1,0 +1,40 @@
+# OCF config
+
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# public interface
+auto eth0
+iface eth0 inet static
+	address 128.32.129.196
+	netmask 255.255.255.192
+	network 128.32.129.192
+	broadcast 128.32.129.255
+	gateway 128.32.129.193
+	# dns-* options are implemented by the resolvconf package, if installed
+	dns-domain ocf.berkeley.edu
+	dns-nameservers 128.32.129.242 128.32.206.12 128.32.136.9
+	dns-search int.ocf.berkeley.edu ocf.berkeley.edu
+
+# private interface
+auto eth0:0
+iface eth0:0 inet static
+	address 192.168.99.1
+	netmask 255.255.255.0
+	network 192.168.99.0
+	broadcast 192.168.99.255
+	post-up iptables -t nat -A POSTROUTING --source 192.168.99.0/24 -j SNAT -o eth0 --to-source 128.32.129.195
+	pre-down iptables --flush -t nat
+
+# public NAT address
+auto eth0:1
+iface eth0:1 inet static
+	address 128.32.129.195
+	netmask 255.255.255.192
+	network 128.32.129.192
+	broadcast 128.32.129.255
+	gateway 128.32.129.193

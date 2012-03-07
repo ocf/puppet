@@ -1,0 +1,36 @@
+class ocf::desktop::tmpfs {
+
+  include ocf::common::pam
+
+  # mount certain volatile directories in memory
+  mount {
+    '/home':
+      device  => 'tmpfs',
+      fstype  => 'tmpfs',
+      options => 'mode=0755,noatime,nodev,nosuid';
+    '/tmp':
+      device  => 'tmpfs',
+      fstype  => 'tmpfs',
+      options => 'noatime,nodev,nosuid';
+    '/var/lock':
+      device  => 'tmpfs',
+      fstype  => 'tmpfs',
+      options => 'noatime,nodev,noexec,nosuid';
+    '/var/run':
+      device  => 'tmpfs',
+      fstype  => 'tmpfs',
+      options => 'mode=0755,noatime,nodev,noexec,nosuid';
+    '/var/tmp':
+      device  => 'tmpfs',
+      fstype  => 'tmpfs',
+      options => 'noatime,nodev,nosuid'
+  }
+
+  # create pam_mkhomedir profile
+  file { '/usr/share/pam-configs/mkhomedir':
+    source  => 'puppet:///modules/ocf/desktop/pam/mkhomedir',
+    require => Mount['/home'],
+    notify  => Exec['pam-auth-update']
+  }
+
+}

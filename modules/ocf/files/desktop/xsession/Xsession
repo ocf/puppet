@@ -1,0 +1,93 @@
+# OCF config
+# This file is sourced by Xsession, not executed.
+
+## Create desktop
+
+mkdir -p $HOME/Desktop
+
+## Create desktop icons
+
+# Print Queue
+echo "[Desktop Entry]
+Type=Application
+Name=Print Queue
+Exec=x-www-browser http://p/jobs/
+Icon=/opt/share/xsession/icons/printer-printing.svg" > $HOME/Desktop/printq.desktop
+
+# Word Processor
+echo "[Desktop Entry]
+Name=Word Processor
+Exec=libreoffice --writer
+Type=Application
+Icon=libreoffice34-writer" > $HOME/Desktop/writer.desktop
+
+# LibreOffice
+echo "[Desktop Entry]
+Name=LibreOffice
+Exec=libreoffice
+Type=Application
+Icon=libreoffice34-startcenter" > $HOME/Desktop/office.desktop
+
+# Web Browser
+echo "[Desktop Entry]
+Name=Web Browser
+Exec=x-www-browser
+Type=Application
+Icon=/opt/share/xsession/icons/firefox.png" > $HOME/Desktop/x-www-browser.desktop
+
+# Local Computer
+echo "[Desktop Entry]
+Type=Application
+Name=Local Computer
+Exec=pcmanfm computer:/
+Icon=/opt/share/xsession/icons/computer-4.svg" > $HOME/Desktop/computer.desktop
+
+# SSH Terminal
+echo "[Desktop Entry]
+Type=Application
+Name=SSH Terminal
+Exec=x-terminal-emulator -e "ssh -t tsunami 'cd && $SHELL'"
+Icon=terminal" > $HOME/Desktop/ssh.desktop
+
+# Scanner, special order for failingrocks
+if [ `hostname` = 'fallingrocks' ]; then
+  echo "[Desktop Entry]
+  Type=Application
+  Name=Scanner
+  Exec=simple-scan
+  Icon=scanner" > $HOME/Desktop/scanner.desktop
+fi
+
+## OCF File Storage, only if available
+
+if [ -d "$HOME/remote" -a -z "`find "$HOME/remote" -maxdepth 0 -empty`" ]; then
+  # Create bookmark
+  echo "file://$HOME/remote OCF File Storage" > $HOME/.gtk-bookmarks
+  # Create desktop icon
+  echo "[Desktop Entry]
+  Type=Application
+  Name=OCF File Storage
+  Exec=thunar $HOME/remote
+  Icon=/opt/share/xsession/icons/media-floppy-3.svg" > $HOME/Desktop/sftp.desktop
+  # Copy desktop shell rc if available
+  #[ -f "$HOME/remote/.bashrc_desktop" ] && cp "$HOME/remote/.bashrc_desktop" "$HOME/.bashrc"
+  #[ -f "$HOME/remote/.cshrc_desktop" ] && cp "$HOME/remote/.cshrc_desktop" "$HOME/.cshrc"
+  #[ -f "$HOME/remote/.tcshrc_desktop" ] && cp "$HOME/remote/.tcshrc_desktop" "$HOME/.tcshrc"
+  #[ -f "$HOME/remote/.zshrc_desktop" ] && cp "$HOME/remote/.zshrc_desktop" "$HOME/.zshrc"
+else
+  rmdir $HOME/remote
+  rm $HOME/.gtk-bookmarks
+  rm $HOME/Desktop/sftp.desktop
+fi
+
+# Start OCF notification script
+/opt/share/puppet/notify.sh &
+
+# In case lxpanel crashes
+echo 'pkill -KILL lxpanel; find "$HOME/.cache/menus" -type f -exec rm -f {} \;; lxpanel -p LXDE &' > $HOME/.fix-panel.sh
+chmod +x "$HOME/.fix-panel.sh"
+echo "[Desktop Entry]
+Type=Application
+Name=Fix bottom panel
+Exec=$HOME/.fix-panel.sh
+Icon=geany" > $HOME/Desktop/lxpanel.desktop

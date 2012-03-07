@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE pam_mount SYSTEM "pam_mount.conf.xml.dtd">
+
+<pam_mount>
+
+<debug enable="0" />
+
+<!-- Volume definitions -->
+<volume fstype="fuse" path="sshfs#%(USER)@tsunami:" mountpoint="~/remote/" options="follow_symlinks" />
+
+<!-- pam_mount parameters: General tunables -->
+<fusemount>mount.fuse %(VOLUME) %(MNTPT) -o %(OPTIONS)</fusemount>
+
+<mntoptions allow="nosuid,nodev,loop,encryption,fsck,nonempty,allow_root,allow_other" />
+<mntoptions require="nosuid,nodev" />
+
+<logout wait="2000" hup="0" term="1" kill="1" />
+
+<!-- pam_mount parameters: Volume-related -->
+<mkmountpoint enable="1" remove="true" />
+
+
+</pam_mount>
