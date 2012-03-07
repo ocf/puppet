@@ -1,1 +1,11 @@
-TODO
+This is the OCF Git repository of its public Puppet configuration.
+
+Git repository configuration:
+mkdir puppet.git && cd puppet.git
+chown staff:ocfstaff .
+chmod g+swX .
+git init --bare --shared=group
+git config receive.fsckObjects true
+git config receive.denyNonFastForwards true
+Add Git update hook to check Puppet syntax
+Add Git post-receive hook to deploy dev configuration
