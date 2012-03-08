@@ -1,0 +1,12 @@
+#!/bin/sh
+# OCF config
+
+cd  /etc/puppet-dev
+unset GIT_DIR
+
+echo "Attempting to clone workdir in /etc/puppet-dev"
+# local changes are removed
+umask 002
+git fetch
+git reset --hard origin/master
+git clean -xdf
