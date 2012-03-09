@@ -6,11 +6,11 @@ class ocf::common::zabbix {
   file {
     # provide zabbix config
     '/etc/zabbix/zabbix_agentd.conf':
-      source => 'puppet:///modules/ocf/common/zabbix_agentd.conf',
+      source  => 'puppet:///modules/ocf/common/zabbix_agentd.conf',
       require => Package[ 'zabbix-agent' ];
     # provide newer version of zabbix binary
     '/usr/sbin/zabbix_agentd':
-      mode    => 0755,
+      mode    => '0755',
       backup  => false,
       source  => 'puppet:///contrib/common/zabbix_agentd',
       require => Package[ 'zabbix-agent' ];

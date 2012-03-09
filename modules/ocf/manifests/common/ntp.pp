@@ -11,8 +11,8 @@ class ocf::common::ntp {
 
   # start ntp
   service { 'ntp':
-     subscribe => File['/etc/ntp.conf'],
-     require   => Package['ntp']
+    subscribe => File['/etc/ntp.conf'],
+    require   => Package['ntp']
   }
 
 }

@@ -6,7 +6,7 @@ class ocf::desktop::suspend {
   file {
     # suspend script with scheduled wakeup, also attempt resetting tmpfs
     '/usr/local/sbin/ocf-suspend':
-      mode    => 0755,
+      mode    => '0755',
       source  => 'puppet:///modules/ocf/desktop/suspend/ocf-suspend',
       require => Package[ 'ethtool', 'pm-utils' ];
     # run script when power button is pushed

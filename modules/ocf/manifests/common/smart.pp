@@ -1,6 +1,6 @@
 class ocf::common::smart {
 
-  if ( ! $is_virtual ) {
+  if ( ! $::is_virtual ) {
 
     # install smartmontools
     package { 'smartmontools': }

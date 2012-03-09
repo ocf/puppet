@@ -1,13 +1,14 @@
 class ocf::common::pam( $login = '', $sudo = '' ) {
-  
+
   # require kerberos and ldap configuration
   require ocf::common::kerberos
   require ocf::common::ldap
-  
+
   # remove unnecessary pam profiles
   $pamconfig = '/usr/share/pam-configs'
   file { [ "$pamconfig/consolekit", "$pamconfig/gnome-keyring", "$pamconfig/ldap", "$pamconfig/libpam-mount" ]:
-    ensure  => absent
+    ensure  => absent,
+    backup  => false
   }
   exec { 'pam-auth-update':
     command     => 'pam-auth-update --package',
@@ -17,7 +18,7 @@ class ocf::common::pam( $login = '', $sudo = '' ) {
 
   # install kerberos pam module
   package { 'libpam-krb5': }
-  
+
   # login access controls
   file {
     # create pam_access profile
@@ -37,7 +38,7 @@ class ocf::common::pam( $login = '', $sudo = '' ) {
       source  => 'puppet:///modules/ocf/common/pam/sudo',
       require => Package['sudo'];
     '/etc/sudoers':
-      mode    => 0440,
+      mode    => '0440',
       content => template('ocf/common/sudoers.erb'),
       require => Package['sudo'];
   }

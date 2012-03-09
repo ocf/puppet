@@ -23,7 +23,7 @@ class ocf::local::lightning {
   package { 'wakeonlan': }
   file {
     '/usr/local/sbin/ocf-wakeup':
-      mode    => 0755,
+      mode    => '0755',
       source  => 'puppet:///modules/ocf/local/lightning/ocf-wakeup',
       require => Package['wakeonlan'];
     '/etc/cron.d/ocf-wakeup':
@@ -45,7 +45,7 @@ class ocf::local::lightning {
     # provide scripts directory
     '/opt/puppet/scripts':
       ensure  => directory,
-      mode    => 0755,
+      mode    => '0755',
       recurse => true,
       purge   => true,
       force   => true,
@@ -56,7 +56,7 @@ class ocf::local::lightning {
     # provide private per-host shares
     '/opt/puppet/private':
       ensure  => directory,
-      mode    => 0400,
+      mode    => '0400',
       owner   => 'puppet',
       group   => 'puppet',
       recurse => true

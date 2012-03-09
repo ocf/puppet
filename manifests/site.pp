@@ -30,14 +30,14 @@ node base {
 }
 
 node server inherits base {
-  case $hostname {
+  case $::hostname {
     death:   { class { 'ocf::common::apt': stage => first, nonfree => true } }
     default: { class { 'ocf::common::apt': stage => first } }
   }
   include ocf::common::kerberos
   include ocf::common::ldap
   include ocf::common::packages
-  case $hostname {
+  case $::hostname {
     printhost: { class { 'ocf::common::pam': login => 'printing', sudo => 'printing' } }
     coupdetat: { class { 'ocf::common::pam': login => [ 'decal', 'ocfstaff' ], sudo => 'libvirt' } }
     default:   { include ocf::common::pam }
@@ -101,6 +101,6 @@ node surge inherits server {
 # Desktops
 node avalanche, bigbang, cyclone, destruction, eruption, fallingrocks, hurricane, plague, b1, b2, b3 inherits desktop {
 }
-node spy inherits server {
-  include ocf::local::spy
-}
+#node spy inherits server {
+  #include ocf::local::spy
+#}

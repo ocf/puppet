@@ -1,21 +1,19 @@
 class ocf::common::postfix {
 
   # remove exim
-  package { 'exim4':
-    name   => [ 'exim4', 'exim4-base', 'exim4-config', 'exim4-daemon-light' ],
+  package { [ 'exim4', 'exim4-base', 'exim4-config', 'exim4-daemon-light' ]:
     ensure => purged
   }
 
   # install postfix
-  package { 'postfix':
-    name    => [ 'postfix', 'bsd-mailx' ],
-    require => Package['exim4']
+  package { [ 'postfix', 'bsd-mailx' ]:
+    require => Package[ 'exim4', 'exim4-base', 'exim4-config', 'exim4-daemon-light' ]
   }
 
   # provide mail configuration files
   file {
     '/etc/mailname':
-      content  => "$fqdn",
+      content  => "$::fqdn",
       require  => Package['postfix'];
     '/etc/postfix/main.cf':
       content  => template('ocf/common/main.cf.erb'),

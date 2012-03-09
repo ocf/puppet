@@ -9,7 +9,7 @@ class ocf::local::coupdetat {
   ocf::repackage { [ 'bridge-utils', 'dnsmasq-base', 'libvirt-bin', 'lvm2', 'netcat-openbsd', 'virtinst', 'virt-top', 'xen-linux-system-amd64', 'xen-utils-4.0' ]:
     recommends => false
   }
-  
+
   # force xen kernel to be default
   file { '/etc/grub.d/09_linux_xen':
     ensure  => symlink,

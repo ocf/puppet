@@ -88,7 +88,7 @@ class ocf::local::surge {
   package { 'pax': }
   file {
     '/usr/local/sbin/ocf-netboot':
-      mode    => 0755,
+      mode    => '0755',
       source  => 'puppet:///modules/ocf/local/surge/ocf-netboot',
       require => Package['pax'];
     '/etc/cron.weekly/ocf-netboot':

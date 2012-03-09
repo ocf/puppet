@@ -13,7 +13,7 @@ class ocf::common::apt ( $nonfree = false, $desktop = false ) {
       source  => 'puppet:///modules/ocf/common/apt/conffiles';
     # update apt list and clear apt cache and old config daily
     '/etc/cron.daily/ocf-apt':
-      mode    => 0755,
+      mode    => '0755',
       source  => 'puppet:///modules/ocf/common/apt/cronjob',
       require => [ Package['aptitude'], File['/etc/apt/sources.list'] ]
   }
@@ -22,7 +22,7 @@ class ocf::common::apt ( $nonfree = false, $desktop = false ) {
     refreshonly => true,
     subscribe   => File['/etc/apt/sources.list']
   }
-  
+
   if $desktop {
     # trust debian-multimedia and mozilla.debian.net GPG key
     exec {

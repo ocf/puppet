@@ -13,22 +13,25 @@ class ocf::desktop::xsession {
       source  => 'puppet:///modules/ocf/desktop/desktop_list';
     # provide printing and other notification script daemon
     '/opt/share/puppet/notify.sh':
-      mode    => 0755,
+      mode    => '0755',
       source  => 'puppet:///modules/ocf/desktop/xsession/notify.sh',
       require => File['/opt/share/puppet/desktop_list'];
     # provide share directory with icons and wallpapers
     '/opt/share/xsession':
+      ensure  => directory,
       recurse => true,
-      backup  => false,
       purge   => true,
       force   => true,
+      backup  => false,
       source  => 'puppet:///contrib/desktop/xsession',
       require => Class['ocf::common::puppet'];
     # enforce list of possible xsessions
     '/usr/share/xsessions':
+      ensure  => directory,
       recurse => true,
-      backup  => false,
       purge   => true,
+      force   => true,
+      backup  => false,
       source  => 'puppet:///modules/ocf/desktop/xsession/xsessions'
   }
 
@@ -50,7 +53,7 @@ class ocf::desktop::xsession {
       source  => 'puppet:///contrib/desktop/ocf.png';
     # kill child processes on logout
     '/etc/gdm3/PostSession/Default':
-      mode    => 0755,
+      mode    => '0755',
       source  => 'puppet:///modules/ocf/desktop/xsession/gdm/PostSession',
       require => Ocf::Repackage['gdm3'];
   }
@@ -58,9 +61,11 @@ class ocf::desktop::xsession {
   # polkit configuration
   # prevent privileged actions except mounting/ejecting external media
   file {  '/usr/share/polkit-1/actions':
+    ensure  => directory,
     recurse => true,
-    backup  => false,
     purge   => true,
+    force   => true,
+    backup  => false,
     source  => 'puppet:///modules/ocf/desktop/xsession/polkit'
   }
 
@@ -78,7 +83,7 @@ class ocf::desktop::xsession {
   file {
     # replace logout binary with one compiled without dbus support
     '/usr/local/bin/lxsession-logout':
-      mode    => 0755,
+      mode    => '0755',
       backup  => false,
       source  => 'puppet:///contrib/desktop/lxsession-logout';
     # provide logout banner
@@ -87,7 +92,7 @@ class ocf::desktop::xsession {
       source  => 'puppet:///contrib/desktop/logout-banner.png';
     # replace logout script configuration
     '/usr/bin/lxde-logout':
-      mode    => 0755,
+      mode    => '0755',
       source  => 'puppet:///modules/ocf/desktop/xsession/lxde/lxde-logout'
   }
 
@@ -106,7 +111,7 @@ class ocf::desktop::xsession {
   # xscreensaver configuration
   package { 'xscreensaver': }
   file { '/etc/X11/app-defaults/XScreenSaver':
-    mode    => 0755,
+    mode    => '0755',
     backup  => false,
     source  => 'puppet:///modules/ocf/desktop/xsession/XScreenSaver',
     require => Package['xscreensaver']

@@ -2,7 +2,7 @@ class ocf::common::networking( $hosts = true, $interfaces = true, $resolv=true, 
 
   # provide hostname
   file { '/etc/hostname':
-    content => "$hostname"
+    content => "$::hostname"
   }
 
   service {'networking':}
@@ -51,7 +51,7 @@ class ocf::common::networking( $hosts = true, $interfaces = true, $resolv=true, 
         subscribe => File['/etc/resolv.conf']
       }
     }
-  
+
   }
 
 }

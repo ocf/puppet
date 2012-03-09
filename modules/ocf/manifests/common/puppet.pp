@@ -10,10 +10,11 @@ class ocf::common::puppet {
     '/opt/share':
       ensure => directory;
     '/opt/share/puppet':
-      ensure => directory,
-      backup => false,
-      purge  => true,
-      force  => true
+      ensure  => directory,
+      recurse => true,
+      purge   => true,
+      force   => true,
+      backup  => false
   }
 
   # install augeas-tools

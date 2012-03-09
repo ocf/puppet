@@ -15,7 +15,7 @@ class ocf::desktop::sshfs {
   }
   file {
     '/usr/bin/fusermount':
-      mode    => 4754,
+      mode    => '4754',
       group   => fuse,
       require => [ Package['sshfs'], Exec['fuse'] ];
     '/etc/fuse.conf':

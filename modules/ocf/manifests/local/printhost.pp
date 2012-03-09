@@ -21,12 +21,13 @@ class ocf::local::printhost {
       require => Package[ 'cups', 'cups-bsd' ];
     # provide ssl certificates
     '/etc/cups/ssl':
-      mode    => 0600,
+      ensure  => directory,
+      mode    => '0600',
       group   => lp,
       recurse => true,
-      backup  => false,
       purge   => true,
       force   => true,
+      backup  => false,
       source  => 'puppet:///private/cups-ssl',
       require => Package[ 'cups', 'cups-bsd' ]
   }
@@ -40,20 +41,20 @@ class ocf::local::printhost {
   service { 'cups':
     subscribe => File[ '/etc/cups/cupsd.conf', '/etc/cups/lpoptions', '/etc/cups/raw.convs', '/etc/cups/raw.types', '/etc/cups/ssl' ]
   }
-    
+
   # set up pykota
   package {
     'mysql-server':;
-    'pykota':
-      name => [ 'pkpgcounter', 'python-egenix-mxdatetime', 'python-imaging', 'python-jaxml', 'python-minimal', 'python-mysqldb', 'python-osd', 'python-pysnmp4', 'python-reportlab' ]
+    # pykota python dependencies
+    [ 'pkpgcounter', 'python-egenix-mxdatetime', 'python-imaging', 'python-jaxml', 'python-minimal', 'python-mysqldb', 'python-osd', 'python-pysnmp4', 'python-reportlab' ]:
   }
   file {
     # configuration directory
     '/etc/pykota':
-      ensure => directory,
-      backup => false,
-      purge  => true,
-      force  => true;
+      ensure  => directory,
+      recurse => true,
+      purge   => true,
+      force   => true;
     # public configuration
     '/etc/pykota/pykota.conf':
       source  => 'puppet:///modules/ocf/local/printhost/pykota.conf';
@@ -61,9 +62,9 @@ class ocf::local::printhost {
     '/etc/pykota/pykotadmin.conf':
       owner   => lp,
       group   => printing,
-      mode    => 0640,
+      mode    => '0640',
       source  => 'puppet:///private/pykotadmin.conf'
-  } 
+  }
   # export pykota configuration
   package { 'nfs-kernel-server': }
   file { '/etc/exports':
