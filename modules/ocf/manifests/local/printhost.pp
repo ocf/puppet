@@ -16,7 +16,7 @@ class ocf::local::printhost {
       content => 'Default double',
       require => Package[ 'cups', 'cups-bsd' ];
     # deny printing raw jobs
-    '/etc/cups/raw.convs':
+    [ '/etc/cups/raw.convs', '/etc/cups/raw.types' ]:
       content => '# deny printing raw jobs',
       require => Package[ 'cups', 'cups-bsd' ];
     # provide ssl certificates
@@ -38,7 +38,7 @@ class ocf::local::printhost {
   }
   # restart cups
   service { 'cups':
-    subscribe => File[ '/etc/cups/cupsd.conf', '/etc/cups/lpoptions', '/etc/cups/raw.convs', '/etc/cups/ssl' ]
+    subscribe => File[ '/etc/cups/cupsd.conf', '/etc/cups/lpoptions', '/etc/cups/raw.convs', '/etc/cups/raw.types', '/etc/cups/ssl' ]
   }
     
   # set up pykota
