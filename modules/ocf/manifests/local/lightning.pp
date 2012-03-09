@@ -23,6 +23,9 @@ class ocf::local::lightning {
   file {
     '/opt/puppet':
       ensure  => directory;
+    # provide alternate environments
+    '/opt/puppet/env':
+      ensure  => directory;
     # provide scripts directory
     '/opt/puppet/scripts':
       ensure  => directory,
@@ -40,21 +43,6 @@ class ocf::local::lightning {
       owner   => 'puppet',
       group   => 'puppet',
       recurse => true
-  }
-
-  # set up git repositories
-  exec { '/opt/puppet/scripts/gen-git.sh':
-    creates => '/opt/puppet.git'
-  }
-  file {
-    # git update hook checks puppet syntax on push
-    '/opt/puppet.git/hooks/update':
-      ensure  => symlink,
-      target  => '/opt/puppet/scripts/hooks/update';
-    # git post-receive hook deploys dev environment on push
-    '/opt/puppet.git/hooks/post-receive':
-      ensure  => symlink,
-      target  => '/opt/puppet/scripts/hooks/post-receive'
   }
 
 }
