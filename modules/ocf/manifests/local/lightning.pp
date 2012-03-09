@@ -2,9 +2,21 @@ class ocf::local::lightning {
 
   # this is the puppet master
   package { [ 'puppet', 'puppetmaster', 'puppetmaster-passenger' ]: }
-  file { '/etc/default/puppetmaster':
-    source  => 'puppet:///modules/ocf/local/lightning/puppetmaster',
-    require => Package[ 'puppetmaster', 'puppetmaster-passenger' ]
+  file {
+    # disable WEBrick, use Puppet through Passenger in Apache
+    '/etc/default/puppetmaster':
+      source  => 'puppet:///modules/ocf/local/lightning/puppetmaster',
+      require => Package[ 'puppetmaster', 'puppetmaster-passenger' ];
+    # Apache: only listen on private interface and ports used by Puppet
+    '/etc/apache2/ports.conf':
+      content => '# only listen on private interface and ports used by Puppet';
+    # Apache: enable only Puppet Passenger vhost
+    '/etc/apache2/sites-enabled':
+      ensure  => directory,
+      recurse => true,
+      purge   => true,
+      force   => true,
+      source  => 'puppet:///modules/ocf/local/lightning/sites-enabled';
   }
 
   # send magic packet to wakeup desktops at lab opening time
@@ -26,12 +38,17 @@ class ocf::local::lightning {
     # provide alternate environments
     '/opt/puppet/env':
       ensure  => directory;
+    # provide default production environment
+    '/opt/puppet/env/production':
+      ensure  => symlink,
+      target  => '/etc/puppet';
     # provide scripts directory
     '/opt/puppet/scripts':
       ensure  => directory,
       mode    => 0755,
       recurse => true,
       purge   => true,
+      force   => true,
       source  => 'puppet:///modules/ocf/local/lightning/puppet-scripts';
     # provide public external content
     '/opt/puppet/contrib':

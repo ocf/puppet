@@ -1,0 +1,42 @@
+# OCF config
+# Based on Debian and http://projects.puppetlabs.com/projects/1/wiki/Using_Passenger
+
+Listen 192.168.99.210:8140
+
+<VirtualHost 192.168.99.210:8140>
+        SSLEngine on
+        SSLProtocol -ALL +SSLv3 +TLSv1
+        SSLCipherSuite ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP
+
+	SSLCertificateKeyFile /var/lib/puppet/ssl/private_keys/puppet.pem
+    	SSLCertificateFile /var/lib/puppet/ssl/certs/puppet.pem
+    	SSLCACertificateFile /var/lib/puppet/ssl/certs/ca.pem
+        SSLCertificateChainFile /var/lib/puppet/ssl/certs/ca.pem
+        # If Apache complains about invalid signatures on the CRL, you can try disabling
+        # CRL checking by commenting the next line, but this is not recommended.
+        SSLCARevocationFile     /var/lib/puppet/ssl/ca/ca_crl.pem
+        # Set to require if this puppetmaster doesn't issue certificates
+        # to puppet clients.
+        # NB: this requires SSLCACertificateFile /var/lib/puppet/ssl/certs/ca.pem
+        #     issuing puppet client certificate.
+        SSLVerifyClient optional
+        SSLVerifyDepth  1
+        SSLOptions +StdEnvVars
+
+        # Passenger options that can be set in a virtual host
+        # configuration block.
+        PassengerHighPerformance on
+        PassengerStatThrottleRate 120
+        PassengerUseGlobalQueue on
+        RackAutoDetect Off
+        RailsAutoDetect Off
+        RackBaseURI /
+
+        DocumentRoot /usr/share/puppet/rack/puppetmasterd/public
+        <Directory /usr/share/puppet/rack/puppetmasterd/>
+                Options None
+                AllowOverride None
+                Order allow,deny
+                allow from all
+        </Directory>
+</VirtualHost>
