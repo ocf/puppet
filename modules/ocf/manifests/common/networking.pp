@@ -1,4 +1,4 @@
-class ocf::common::networking( $hosts = true, $interfaces = true, $resolv=true, $octet = undef ) {
+class ocf::common::networking( $hosts = true, $interfaces = true, $resolv = true, $octet = undef ) {
 
   # provide hostname
   file { '/etc/hostname':
