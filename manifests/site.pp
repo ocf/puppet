@@ -90,6 +90,10 @@ node fallout inherits server {
   class { 'ocf::common::networking': interfaces => false }
   include ocf::local::fallout
 }
+node maelstrom inherits server {
+  class { 'ocf::common::networking': octet => 150 }
+  include ocf::local::maelstrom
+}
 node pollution inherits server {
   class { 'ocf::common::networking': octet => 198 }
   include ocf::local::pollution

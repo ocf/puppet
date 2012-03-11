@@ -40,7 +40,7 @@ class ocf::common::pam( $login = '', $sudo = '' ) {
     }
   case $::hostname {
     spy:     {
-      file { 
+      file {
         '/etc/sudoers':
           mode    => '0440',
           source  => 'puppet:///modules/ocf/local/spy/sudoers',
