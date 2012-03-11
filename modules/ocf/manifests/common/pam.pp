@@ -33,28 +33,14 @@ class ocf::common::pam( $login = '', $sudo = '' ) {
 
   # sudo access controls
   package { 'sudo': }
-    file {
-      '/etc/pam.d/sudo':
-        source  => 'puppet:///modules/ocf/common/pam/sudo',
-        require => Package['sudo'];
-    }
-  case $::hostname {
-    spy:     {
-      file {
-        '/etc/sudoers':
-          mode    => '0440',
-          source  => 'puppet:///modules/ocf/local/spy/sudoers',
-          require => Package['sudo'];
-        }
-      }
-    default: {
-      file {
-        '/etc/sudoers':
-          mode    => '0440',
-          content => template('ocf/common/sudoers.erb'),
-          require => Package['sudo'];
-      }
-    }
+  file {
+    '/etc/pam.d/sudo':
+      source  => 'puppet:///modules/ocf/common/pam/sudo',
+      require => Package['sudo'];
+    '/etc/sudoers':
+      mode    => '0440',
+      content => template('ocf/common/sudoers.erb'),
+      require => Package['sudo'];
   }
 
 }
