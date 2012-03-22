@@ -1,21 +1,24 @@
 class ocf::common::ldap {
 
-  # install ldap packages
-  package { [ 'libpam-ldapd', 'libnss-ldapd', 'ldap-utils', 'openssl' ]: }
+  # install LDAP packages
+  package { [ 'ldap-utils', 'unscd', 'openssl' ]: }
+  ocf::repackage { 'libnss-ldap':
+    recommends => false,
+  }
 
   file {
-    # provide ldap config
+    # provide LDAP config
     '/etc/ldap/ldap.conf':
       source  => 'puppet:///modules/ocf/common/ldap/ldap.conf',
-      require => Package[ 'ldap-utils' ];
-    # provide nslcd config
-    '/etc/nslcd.conf':
-      source  => 'puppet:///modules/ocf/common/ldap/nslcd.conf',
-      require => Package[ 'libpam-ldapd', 'libnss-ldapd' ];
+      require => Package['ldap-utils'];
+    # provide LDAP user/group lookup config
+    '/etc/libnss-ldap.conf':
+      source  => 'puppet:///modules/ocf/common/ldap/libnss-ldap.conf',
+      require => Ocf::Repackage['libnss-ldap'];
     # provide nsswitch config
     '/etc/nsswitch.conf':
       source  => 'puppet:///modules/ocf/common/ldap/nsswitch.conf',
-      require => Service['nslcd'];
+      require => [ File['/etc/libnss-ldap.conf'], Exec['c_rehash'] ];
     # provide certificate authority
     '/etc/ssl/certs/ocf_ca.pem':
       source  => 'puppet:///modules/ocf/common/ldap/ocf_ca.pem',
@@ -29,15 +32,10 @@ class ocf::common::ldap {
     require     => Package['openssl']
   }
 
-  # restart LDAP caching daemon
-  service { 'nslcd':
-    subscribe => [ File[ '/etc/ldap/ldap.conf', '/etc/nslcd.conf' ], Exec['c_rehash'] ],
-    require   => Package[ 'libpam-ldapd', 'libnss-ldapd' ]
-  }
-
   # restart getent caching daemon
-  service { 'nscd':
-    subscribe => [ Service['nslcd'], File['/etc/nsswitch.conf'] ]
+  service { 'unscd':
+    subscribe => File[ '/etc/libnss-ldap.conf','/etc/nsswitch.conf' ],
+    require   => Package['unscd']
   }
 
 }
