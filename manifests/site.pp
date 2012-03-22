@@ -31,9 +31,9 @@ node base {
 
 node server inherits base {
   case $::hostname {
-    death:   { class { 'ocf::common::apt': stage => first, nonfree => true } }
-    spy:     { }
-    default: { class { 'ocf::common::apt': stage => first } }
+    death:     { class { 'ocf::common::apt': stage => first, nonfree => true } }
+    spy:       { }
+    default:   { class { 'ocf::common::apt': stage => first } }
   }
   include ocf::common::kerberos
   include ocf::common::ldap
@@ -44,10 +44,13 @@ node server inherits base {
     spy:       { class { 'ocf::common::pam': login => 'ocfstaff' } }
     default:   { include ocf::common::pam }
   }
-  include ocf::common::ssh
   case $::hostname {
-    spy:     { }
-    default: { include ocf::common::zabbix }
+    coupdetat: { }
+    default:   { include ocf::common::ssh }
+  }
+  case $::hostname {
+    spy:       { }
+    default:   { include ocf::common::zabbix }
   }
 }
 
