@@ -31,8 +31,8 @@ class ocf::common::apt ( $nonfree = false, $desktop = false ) {
         creates => '/usr/share/keyrings/debian-multimedia-keyring.gpg',
         require => File['/etc/apt/sources.list'];
       'debian-mozilla':
-        command => 'wget -O- -q http://mozilla.debian.net/archive.asc | apt-key add -; aptitude update',
-        unless  => 'apt-key list | grep 06C4AE2A',
+        command => 'aptitude update; aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install pkg-mozilla-archive-keyring; aptitude update',
+        creates => '/etc/apt/trusted.gpg.d/pkg-mozilla-archive-keyring.gpg',
         require => File['/etc/apt/sources.list']
     }
   }
