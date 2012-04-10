@@ -26,8 +26,8 @@ class ocf::desktop::packages {
     [ 'libnotify-bin', 'notification-daemon' ]:;
     # performance improvements
     [ 'preload', 'readahead-fedora' ]:;
-    # suspend support
-    'pm-utils':;
+    # power support
+    [ 'kexec-tools', 'pm-utils' ]:;
     # Xorg
     'xserver-xorg':
   }
