@@ -1,7 +1,7 @@
 class ocf::common::apt ( $nonfree = false, $desktop = false ) {
 
   # ensure latest version of aptitude
-  package { 'aptitude': ensure => latest }
+  package { 'aptitude': }
 
   file {
     # provide sources.list
