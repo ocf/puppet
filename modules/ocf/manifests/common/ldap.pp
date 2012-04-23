@@ -2,8 +2,14 @@ class ocf::common::ldap {
 
   # install LDAP packages
   package { [ 'ldap-utils', 'unscd', 'openssl' ]: }
+  # point nscd to unscd becaused libnss-ldap might need it
+  file { '/etc/init.d/nscd':
+    ensure     => symlink,
+    target     => '/etc/init.d/unscd';
+  }
   ocf::repackage { 'libnss-ldap':
     recommends => false,
+    require    => File['/etc/init.d/nscd'];
   }
 
   file {
