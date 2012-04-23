@@ -10,8 +10,6 @@ class ocf::desktop::packages {
   package {
     # applications
     [ 'claws-mail', 'geany', 'gftp-gtk', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap' ]:;
-    # audio
-    [ 'alsa-utils', 'gnome-alsamixer' ]:;
     # desktop
     [ 'desktop-base', 'desktop-file-utils', 'gpicview', 'lxappearance', 'lxde-core', 'lxde-icon-theme', 'lxtask', 'xarchiver', 'xterm' ]:;
     # fonts

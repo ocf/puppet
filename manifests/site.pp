@@ -61,6 +61,7 @@ node desktop inherits base {
   include ocf::desktop::iceweasel
   include ocf::desktop::limits
   include ocf::desktop::packages
+  include ocf::desktop::pulse
   include ocf::desktop::sshfs
   include ocf::desktop::suspend
   include ocf::desktop::tmpfs
