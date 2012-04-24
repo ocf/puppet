@@ -107,7 +107,7 @@ node surge inherits server {
 }
 
 # Lab
-node avalanche, bigbang, cyclone, destruction, eruption, fallingrocks, hurricane, plague, b1, b2, b3 inherits desktop {
+node avalanche, bigbang, cyclone, destruction, eruption, fallingrocks, hurricane, b1, b2, b3 inherits desktop {
 }
 node spy inherits base {
   class { 'ocf::common::pam': login => 'ocfstaff' }
