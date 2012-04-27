@@ -77,6 +77,10 @@ node lightning, puppet inherits server {
 }
 
 # Server room
+node blight inherits server {
+  class {'ocf::common::networking': octet => 236 }
+  include ocf::local::blight
+}
 node coupdetat inherits server {
   class { 'ocf::common::networking': hosts => false, resolv => false, octet => 253 }
   include ocf::local::coupdetat
@@ -104,6 +108,10 @@ node printhost inherits server {
 node surge inherits server {
   class { 'ocf::common::networking': octet => 207 }
   include ocf::local::surge
+}
+node typhoon inherits server {
+  class {'ocf::common::networking': octet => 214 }
+  #include ocf::local::typhoon
 }
 
 # Lab
