@@ -117,7 +117,7 @@ node typhoon inherits server {
 # Lab
 node avalanche, bigbang, cyclone, destruction, eruption, fallingrocks, hurricane, b1, b2, b3 inherits desktop {
 }
-node spy inherits base {
+node diplomat, spy inherits base {
   class { 'ocf::common::pam': login => 'ocfstaff' }
   include ocf::common::kerberos
   include ocf::common::ldap
