@@ -17,7 +17,7 @@ class ocf::common::packages( $extra = false, $login = false ) {
     # shells
     [ 'bash', 'tcsh', 'zsh' ]:;
     # top
-    [ 'htop', 'iftop', 'iotop', 'powertop' ]:;
+    [ 'htop', 'iperf', 'iftop', 'iotop', 'powertop' ]:;
     'vim':
   }
 
