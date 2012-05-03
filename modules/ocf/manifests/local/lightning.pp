@@ -11,7 +11,7 @@ class ocf::local::lightning {
   }
 
   # this is the puppet master
-  package { [ 'puppet', 'puppetmaster', 'puppetmaster-passenger' ]:
+  package { [ 'puppet', 'puppetmaster', 'puppetmaster-passenger', 'vim-puppet' ]:
     require => Exec['puppetlabs']
   }
   file {
