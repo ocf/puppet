@@ -32,21 +32,26 @@ node base {
 node server inherits base {
   case $::hostname {
     death:     { class { 'ocf::common::apt': stage => first, nonfree => true } }
+    spy:       { }
     default:   { class { 'ocf::common::apt': stage => first } }
   }
   include ocf::common::kerberos
   include ocf::common::ldap
   include ocf::common::packages
   case $::hostname {
-    coupdetat: { class { 'ocf::common::pam': login => [ 'decal', 'ocfstaff' ], sudo => 'libvirt' } }
-    printhost: { class { 'ocf::common::pam': login => 'printing', sudo => 'printing' } }
-    default:   { include ocf::common::pam }
+    coupdetat:     { class { 'ocf::common::pam': login => [ 'decal', 'ocfstaff' ], sudo => 'libvirt' } }
+    diplomat, spy: { class { 'ocf::common::pam': login => 'ocfstaff' } }
+    printhost:     { class { 'ocf::common::pam': login => 'printing', sudo => 'printing' } }
+    default:       { include ocf::common::pam }
   }
   case $::hostname {
     coupdetat: { }
     default:   { include ocf::common::ssh }
   }
-  include ocf::common::zabbix
+  case $::hostname {
+    diplomat, spy: { }
+    default:       { include ocf::common::zabbix }
+  }
 }
 
 node desktop inherits base {
@@ -117,12 +122,9 @@ node typhoon inherits server {
 # Lab
 node avalanche, bigbang, cyclone, destruction, eruption, fallingrocks, hurricane, b1, b2, b3 inherits desktop {
 }
-node diplomat, spy inherits base {
-  class { 'ocf::common::pam': login => 'ocfstaff' }
-  include ocf::common::kerberos
-  include ocf::common::ldap
-  include ocf::common::packages
-  include ocf::common::networking
-  include ocf::common::ssh
+node diplomat, spy inherits server {
+  include ocf::common::cups
+  #include ocf::desktop::suspend
+  include ocf::desktop::tmpfs
   #include ocf::local::spy
 }
