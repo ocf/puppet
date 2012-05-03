@@ -1,7 +1,19 @@
 class ocf::local::lightning {
 
+  # add Puppet Labs repository
+  file { '/etc/apt/sources.list.d/puppetlabs.list':
+    source  => 'puppet:///modules/ocf/local/lightning/puppetlabs.list'
+  }
+  exec { 'puppetlabs':
+    command => 'wget -q https://apt.puppetlabs.com/pubkey.gpg -O- | apt-key add - && aptitude update',
+    unless  => 'apt-key list | grep 4BD6EC30',
+    require => File['/etc/apt/sources.list.d/puppetlabs.list']
+  }
+
   # this is the puppet master
-  package { [ 'puppet', 'puppetmaster', 'puppetmaster-passenger' ]: }
+  package { [ 'puppet', 'puppetmaster', 'puppetmaster-passenger' ]:
+    require => Exec['puppetlabs']
+  }
   file {
     # disable WEBrick, use Puppet through Passenger in Apache
     '/etc/default/puppetmaster':
