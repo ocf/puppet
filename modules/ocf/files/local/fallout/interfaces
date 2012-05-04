@@ -7,7 +7,8 @@
 auto lo
 iface lo inet loopback
 
-# public interface
+# public interface fallout.ocf.berkeley.edu
+# gateway address for biohazard.ocf.berkeley.edu
 auto eth0
 iface eth0 inet static
 	address 128.32.129.196
@@ -20,17 +21,17 @@ iface eth0 inet static
 	dns-nameservers 128.32.129.242 128.32.206.12 128.32.136.9
 	dns-search int.ocf.berkeley.edu ocf.berkeley.edu
 
-# private interface
+# private interface fallout.int.ocf.berkeley.edu
+# gateway address for int.ocf.berkeley.edu
 auto eth0:0
 iface eth0:0 inet static
 	address 192.168.99.1
 	netmask 255.255.255.0
 	network 192.168.99.0
 	broadcast 192.168.99.255
-	post-up iptables -t nat -A POSTROUTING --source 192.168.99.0/24 -j SNAT -o eth0 --to-source 128.32.129.195
-	pre-down iptables --flush -t nat
 
-# public NAT address
+# NAT interface riot.ocf.berkeley.edu
+# destination address for int.ocf.berkeley.edu
 auto eth0:1
 iface eth0:1 inet static
 	address 128.32.129.195
@@ -38,3 +39,16 @@ iface eth0:1 inet static
 	network 128.32.129.192
 	broadcast 128.32.129.255
 	gateway 128.32.129.193
+	post-up iptables -t nat -A POSTROUTING --source 192.168.99.0/24 -j SNAT -o eth0 --to-source 128.32.129.195
+	pre-down iptables --flush -t nat
+
+# NAT interface riot.int.ocf.berkeley.edu
+# destination address for biohazard.ocf.berkeley.edu
+auto eth0:2
+iface eth0:2 inet static
+	address 192.168.99.195
+	netmask 255.255.255.0
+	network 192.168.99.0
+	broadcast 192.168.99.255
+        post-up iptables -t nat -A POSTROUTING --source 128.32.129.235 -j SNAT -o eth0 --to-source 192.168.99.195
+        pre-down iptables --flush -t nat
