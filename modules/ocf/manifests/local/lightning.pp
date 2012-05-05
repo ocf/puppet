@@ -31,6 +31,11 @@ class ocf::local::lightning {
       source  => 'puppet:///modules/ocf/local/lightning/sites-enabled';
   }
 
+  # remove conflicting logrotate rule already defined in /etc/logrotate.d/puppet
+  file { '/etc/logrotate.d/puppetmaster':
+    ensure => absent
+  }
+
   # send magic packet to wakeup desktops at lab opening time
   package { 'wakeonlan': }
   file {
