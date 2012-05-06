@@ -4,12 +4,17 @@ class ocf::common::ldap {
   package { [ 'ldap-utils', 'unscd', 'openssl' ]: }
   # point nscd to unscd becaused libnss-ldap might need it
   file { '/etc/init.d/nscd':
-    ensure     => symlink,
-    target     => '/etc/init.d/unscd';
+    ensure      => symlink,
+    target      => '/etc/init.d/unscd';
+  }
+  # do not add nscd symlink to runlevels
+  exec { 'update-rc.d -f nscd remove':
+    refreshonly => true,
+    subscribe   => File['/etc/init.d/nscd']
   }
   ocf::repackage { 'libnss-ldap':
-    recommends => false,
-    require    => File['/etc/init.d/nscd'];
+    recommends  => false,
+    require     => File['/etc/init.d/nscd'];
   }
 
   file {
