@@ -27,12 +27,12 @@ class ocf::common::apt ( $nonfree = false, $desktop = false ) {
     # trust debian-multimedia and mozilla.debian.net GPG key
     exec {
       'debian-multimedia':
-        command => 'aptitude update; aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install debian-multimedia-keyring; aptitude update',
-        creates => '/usr/share/keyrings/debian-multimedia-keyring.gpg',
+        command => 'aptitude update; aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install deb-multimedia-keyring; aptitude update',
+        unless  => 'dpkg -l deb-multimedia-keyring | grep ^ii',
         require => File['/etc/apt/sources.list'];
       'debian-mozilla':
         command => 'aptitude update; aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install pkg-mozilla-archive-keyring; aptitude update',
-        creates => '/etc/apt/trusted.gpg.d/pkg-mozilla-archive-keyring.gpg',
+        unless  => 'dpkg -l pkg-mozilla-archive-keyring | grep ^ii',
         require => File['/etc/apt/sources.list']
     }
   }
