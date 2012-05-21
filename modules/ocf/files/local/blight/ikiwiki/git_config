@@ -1,0 +1,13 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+	sharedrepository = 1
+[receive]
+	denyNonFastforwards = true
+[remote "github"]
+	url = git@github.com:OCF/wiki.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = github
+	merge = refs/heads/master

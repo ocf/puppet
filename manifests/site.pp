@@ -39,6 +39,7 @@ node server inherits base {
   include ocf::common::ldap
   include ocf::common::packages
   case $::hostname {
+    blight:        { class { 'ocf::common::pam': login => 'ocfstaff' } }
     coupdetat:     { class { 'ocf::common::pam': login => [ 'decal', 'ocfstaff' ], sudo => 'libvirt' } }
     diplomat, spy: { class { 'ocf::common::pam': login => 'ocfstaff' } }
     printhost:     { class { 'ocf::common::pam': login => 'printing', sudo => 'printing' } }

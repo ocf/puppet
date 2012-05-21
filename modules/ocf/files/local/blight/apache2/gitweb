@@ -1,0 +1,14 @@
+<VirtualHost *:80>
+
+  ServerAdmin wheel@ocf.berkeley.edu
+  ServerName git.wiki.ocf.berkeley.edu
+  DocumentRoot /srv/gitweb
+
+  <Directory /srv/gitweb>
+    Options Indexes FollowSymlinks
+    <Files index.cgi>
+        Options +ExecCGI
+        AddHandler cgi-script .cgi
+    </Files>
+  </Directory>
+</VirtualHost>

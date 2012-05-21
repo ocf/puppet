@@ -1,0 +1,17 @@
+<VirtualHost *:80>
+
+  ServerAdmin wheel@ocf.berkeley.edu
+  ServerName wiki.ocf.berkeley.edu
+  ServerAlias blight.ocf.berkeley.edu, *
+  DocumentRoot /srv/ikiwiki/public_html/wiki
+
+  <Directory /srv/ikiwiki/public_html/wiki>
+    Options Indexes FollowSymlinks
+    <Files ikiwiki.cgi>
+        Options +ExecCGI
+        AddHandler cgi-script .cgi
+    </Files>
+  </Directory>
+
+  ErrorDocument 404 /ikiwiki.cgi
+</VirtualHost>
