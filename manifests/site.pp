@@ -24,8 +24,14 @@ node base {
   class { 'ocf::common::groups': stage => first }
   class { 'ocf::common::puppet': stage => first }
   class { 'ocf::common::rootpw': stage => first }
-  include ocf::common::ntp
-  include ocf::common::postfix
+  case $::hostname {
+    sandstorm: { }
+    default:   { include ocf::common::ntp }
+  }
+  case $::hostname {
+    sandstorm: { }
+    default:   { include ocf::common::postfix }
+  }
   include ocf::common::smart
 }
 
@@ -110,6 +116,10 @@ node pollution inherits server {
 node printhost inherits server {
   class { 'ocf::common::networking': octet => 245 }
   include ocf::local::printhost
+}
+node sandstorm inherits server {
+  class { 'ocf::common::networking': octet => 218 }
+  #include ocf::local::sandstorm
 }
 node surge inherits server {
   class { 'ocf::common::networking': octet => 207 }
