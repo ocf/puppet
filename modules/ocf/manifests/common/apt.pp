@@ -1,7 +1,9 @@
 class ocf::common::apt ( $nonfree = false, $desktop = false ) {
 
-  # ensure latest version of aptitude
   package { 'aptitude': }
+
+  # remote package update management support
+  package { [ 'apt-dater-host', 'imvirt' ]: }
 
   file {
     # provide sources.list

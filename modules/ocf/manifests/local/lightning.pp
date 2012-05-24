@@ -36,6 +36,14 @@ class ocf::local::lightning {
     ensure => absent
   }
 
+  # remote package management
+  package { 'apt-dater': }
+  file { '/root/apt-dater.keytab':
+    mode   => '0600',
+    backup => false,
+    source => 'puppet:///private/apt-dater.keytab'
+  }
+
   # send magic packet to wakeup desktops at lab opening time
   package { 'wakeonlan': }
   file {
