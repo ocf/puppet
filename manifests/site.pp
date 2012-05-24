@@ -37,9 +37,8 @@ node base {
 
 node server inherits base {
   case $::hostname {
-    death:     { class { 'ocf::common::apt': stage => first, nonfree => true } }
-    spy:       { }
-    default:   { class { 'ocf::common::apt': stage => first } }
+    death:   { class { 'ocf::common::apt': stage => first, nonfree => true } }
+    default: { class { 'ocf::common::apt': stage => first } }
   }
   include ocf::common::kerberos
   include ocf::common::ldap
