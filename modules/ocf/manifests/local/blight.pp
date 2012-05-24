@@ -33,7 +33,7 @@ class ocf::local::blight {
   file { '/srv/ikiwiki/.ikiwiki/IkiWiki/Plugin/serverlist.pm':
     source => 'puppet:///modules/ocf/local/blight/ikiwiki/plugins/serverlist.pm',
   }
-  
+
 
   # the location of the wiki public_html
   file {
@@ -42,7 +42,7 @@ class ocf::local::blight {
       require => Exec['ikiwiki_setup'],
       owner   => 'www-data',
       group   => 'ocfstaff',
-    #  mode    => '0775',
+#      mode    => '0775',
       recurse => true;
     '/srv/ikiwiki/public_html/wiki/ikiwiki.cgi':
       owner   => 'www-data',
@@ -99,7 +99,7 @@ class ocf::local::blight {
   }
 
   exec { 'refresh_ikiwiki_setup':
-    require => File[ '/srv/ikiwiki/wiki.setup'],
+    require     => File[ '/srv/ikiwiki/wiki.setup'],
     command     => 'ikiwiki --setup wiki.setup',
     cwd         => '/srv/ikiwiki',
     subscribe   => File['/srv/ikiwiki/wiki.setup'],
