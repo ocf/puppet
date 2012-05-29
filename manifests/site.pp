@@ -92,6 +92,10 @@ node blight inherits server {
   class {'ocf::common::networking': octet => 236 }
   include ocf::local::blight
 }
+node conquest inherits server {
+  class {'ocf::common::networking': octet => 248 }
+  #include ocf::local::conquest
+}
 node coupdetat inherits server {
   class { 'ocf::common::networking': hosts => false, resolv => false, octet => 253 }
   include ocf::local::coupdetat
