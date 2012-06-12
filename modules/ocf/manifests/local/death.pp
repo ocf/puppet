@@ -15,7 +15,7 @@ class ocf::local::death {
     'python-pexpect':
       ensure  => installed;
     # for users requesting specific packages
-    [ 'php5-gd' ]:
+    [ 'php5-gd', 'php5-curl' ]:
       ensure  => installed;
   }
 
