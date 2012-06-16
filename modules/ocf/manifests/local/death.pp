@@ -196,6 +196,11 @@ class ocf::local::death {
       owner     => 'root',
       group     => 'root',
       source    => 'puppet:///private/secure.ocf.berkeley.edu.key';
+    '/etc/ssl/certs/CA-BUNDLE.CRT':
+      ensure    => file,
+      owner     => 'root',
+      group     => 'root',
+      source    => 'puppet:///private/CA-BUNDLE.CRT';
   }
 
   # apache must subscribe to all conf files
