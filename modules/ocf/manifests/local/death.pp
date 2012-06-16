@@ -105,6 +105,11 @@ class ocf::local::death {
     notify      => Service['apache2'],
     require     => [Package['apache2'], Package['libapache2-mod-fcgid']],
   }
+  exec { '/usr/sbin/a2enmod headers':
+    unless      => '/bin/readlink -e /etc/apache2/mods-enabled/headers.load',
+    notify      => Service['apache2'],
+    require     => Package['apache2'],
+  }
   exec { '/usr/sbin/a2enmod include':
     unless      => '/bin/readlink -e /etc/apache2/mods-enabled/include.load',
     notify      => Service['apache2'],
