@@ -12,7 +12,7 @@ class ocf::local::death {
     'libhtml-parser-perl':
       ensure  => installed;
     # for account_tools
-    'python-pexpect':
+    [ 'python-pexpect', 'python-paramiko' ]:
       ensure  => installed;
     # for users requesting specific packages
     [ 'php5-gd', 'php5-curl' ]:
@@ -241,19 +241,29 @@ class ocf::local::death {
       ensure    => file,
       source    => 'puppet:///private/account_tools_settings.py.secret',
       mode      => '0600';
-    '/etc/webchpwd':
+    '/usr/local/etc/webchpwd':
       ensure    => directory,
       owner     => 'root',
       group     => 'root';
-    '/etc/webchpwd/ldap.key':
+    '/usr/local/etc/webchpwd/ldap.key':
       ensure    => file,
       source    => 'puppet:///private/webchpwd/ldap.key',
       owner     => 'root',
       group     => 'www-data',
       mode      => '0640';
-    '/etc/webchpwd/webchpwd.keytab':
+    '/usr/local/etc/webchpwd/webchpwd.keytab':
       ensure    => file,
       source    => 'puppet:///private/webchpwd/webchpwd.keytab',
+      owner     => 'root',
+      group     => 'www-data',
+      mode      => '0640';
+    '/usr/local/etc/cmds':
+      ensure    => directory,
+      owner     => 'root',
+      group     => 'root';
+    '/usr/local/etc/cmds/host_keys':
+      ensure    => file,
+      source    => 'puppet:///private/account_tools/host_keys',
       owner     => 'root',
       group     => 'www-data',
       mode      => '0640';
