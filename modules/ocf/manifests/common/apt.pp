@@ -2,6 +2,12 @@ class ocf::common::apt ( $nonfree = false, $desktop = false ) {
 
   package { 'aptitude': }
 
+  # debsecan reports missing security updates
+  package { 'debsecan': }
+  file { '/etc/cron.d/debsecan':
+    ensure => absent
+  }
+
   # remote package update management support
   package { [ 'apt-dater-host', 'imvirt' ]: }
 
@@ -13,11 +19,11 @@ class ocf::common::apt ( $nonfree = false, $desktop = false ) {
     # override conffiles on package installation
     '/etc/apt/apt.conf.d/90conffiles':
       source  => 'puppet:///modules/ocf/common/apt/conffiles';
-    # update apt list and clear apt cache and old config daily
+    # update apt list, report missing updates,  and clear apt cache and old config daily
     '/etc/cron.daily/ocf-apt':
       mode    => '0755',
-      source  => 'puppet:///modules/ocf/common/apt/cronjob',
-      require => [ Package['aptitude'], File['/etc/apt/sources.list'] ]
+      content => template('ocf/common/ocf-apt.erb'),
+      require => [ Package['aptitude', 'debsecan'], File['/etc/apt/sources.list'] ]
   }
 
   exec { 'aptitude update':

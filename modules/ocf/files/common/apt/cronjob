@@ -1,6 +1,0 @@
-#!/bin/sh
-
-aptitude update > /dev/null
-aptitude clean > /dev/null
-aptitude -y purge ~c > /dev/null
-[ -x /usr/sbin/update-flashplugin-nonfree ] && update-flashplugin-nonfree --install --quiet || exit 0

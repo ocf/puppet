@@ -1,0 +1,16 @@
+#!/bin/sh
+
+/usr/bin/aptitude update > /dev/null
+
+# remove downloaded package archives, unused packages, and old config files
+/usr/bin/aptitude clean > /dev/null
+/usr/bin/aptitude purge --assume-yes --quiet '?garbage' > /dev/null
+/usr/bin/aptitude purge --assume-yes --quiet '?config-files' > /dev/null
+
+# debsecan reports packages missing security updates
+/usr/bin/debsecan --suite <%= lsbdistcodename %> --cron --format report --only-fixed --mailto security
+<% if desktop -%>
+
+# update-flashplugin-nonfree updates Adobe Flash Player
+[ -x /usr/sbin/update-flashplugin-nonfree ] && /usr/sbin/update-flashplugin-nonfree --install --quiet || exit 0
+<% end -%>
