@@ -8,7 +8,8 @@
 /usr/bin/aptitude purge --assume-yes --quiet '?config-files' > /dev/null
 
 # debsecan reports packages missing security updates
-/usr/bin/debsecan --suite <%= lsbdistcodename %> --cron --format report --only-fixed --mailto security
+# report format is not quiet (see Debian bug #588065)
+/usr/bin/debsecan --suite <%= lsbdistcodename %> --format detail --only-fixed | grep -Fv -e 'fixed in unstable' -e 'fix is available for the selected suite'
 <% if desktop -%>
 
 # update-flashplugin-nonfree updates Adobe Flash Player
