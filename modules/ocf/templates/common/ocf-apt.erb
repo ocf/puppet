@@ -1,11 +1,19 @@
 #!/bin/sh
 
-if fuser -s /var/lock/aptitude; then true; else
-  # update cache then remove downloaded package archives, unused packages, and old config files
-  /usr/bin/aptitude update --quiet > /dev/null
-  /usr/bin/aptitude clean --quiet > /dev/null
-  /usr/bin/aptitude purge --assume-yes --quiet '?garbage' > /dev/null
-  /usr/bin/aptitude purge --assume-yes --quiet '?config-files' > /dev/null
+apt_cleanup(){
+    # update cache then remove downloaded package archives, unused packages, and old config files
+    /usr/bin/aptitude update --quiet > /dev/null
+    /usr/bin/aptitude clean --quiet > /dev/null
+    /usr/bin/aptitude purge --assume-yes --quiet '?garbage' > /dev/null
+    /usr/bin/aptitude purge --assume-yes --quiet '?config-files' > /dev/null
+}
+
+if [ ! -f /var/lock/aptitude ]; then
+  apt_cleanup
+elif fuser -s /var/lock/aptitude; then
+  true
+else
+  apt_cleanup
 fi
 
 <% if desktop -%>
@@ -15,22 +23,24 @@ fi
 
 # debsecan reports packages missing security updates
 # report format is not ordinarily quiet (see Debian bug #588065)
-umask 077
-debsecan_file='/tmp/debsecan'
+debsecan_file='/etc/motd'
 debsecan_sum='/tmp/debsecan.md5sum'
 mailto='security'
 
 debsecan="`/usr/bin/debsecan --suite <%= lsbdistcodename %> --format report --only-fixed`" > /dev/null
-if [ -n "$debsecan" ]; then
-  if echo "$debsecan" | grep -Fq "No known vulnerabilities for which updates are available"; then
+send_mail(){ echo "$debsecan" | mail -s "Security update: `hostname`" $mailto; }
+make_sum(){ md5sum "$debsecan_file" > "$debsecan_sum"; }
+
+if [ -z "$debsecan" ] || echo "$debsecan" | grep -Fq "No known vulnerabilities for which updates are available"; then
     rm -f "$debsecan_file"
+    rm -f "$debsecan_sum"
+else
+  echo "$debsecan" > "$debsecan_file"
+  if [ -f "$debsecan_sum" ]; then
+    md5sum --check --status "$debsecan_sum" || send_mail
+    make_sum
   else
-    echo "$debsecan" > "$debsecan_file"
-    if [ ! -f "$debsecan_sum" ]; then
-      md5sum "$debsecan_file" > "$debsecan_sum"
-      echo "$debsecan" | mail -s "Security update: `hostname`" $mailto
-    else
-      md5sum --check --status "$debsecan_sum" || echo "$debsecan" | mail -s "Security update: `hostname`" $mailto
-    fi
+    send_mail
+    make_sum
   fi
 fi
