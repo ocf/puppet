@@ -46,7 +46,7 @@ Icon=/opt/share/xsession/icons/computer-4.svg" > $HOME/Desktop/computer.desktop
 echo "[Desktop Entry]
 Type=Application
 Name=SSH Terminal
-Exec=x-terminal-emulator -e "ssh -t tsunami 'cd && $SHELL'"
+Exec=x-terminal-emulator -e "ssh -Kt tsunami 'cd && $SHELL'"
 Icon=terminal" > $HOME/Desktop/ssh.desktop
 
 # Scanner, special order for failingrocks
