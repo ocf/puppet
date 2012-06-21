@@ -32,10 +32,11 @@ send_mail(){ echo "$debsecan" | mail -s "Security update: `hostname`" $mailto; }
 make_sum(){ md5sum "$debsecan_file" > "$debsecan_sum"; }
 
 if [ -z "$debsecan" ] || echo "$debsecan" | grep -Fq "No known vulnerabilities for which updates are available"; then
-    rm -f "$debsecan_file"
-    rm -f "$debsecan_sum"
+  rm -f "$debsecan_file"
+  rm -f "$debsecan_sum"
 else
   echo "$debsecan" > "$debsecan_file"
+<% if ! desktop -%>
   if [ -f "$debsecan_sum" ]; then
     md5sum --check --status "$debsecan_sum" || send_mail
     make_sum
@@ -43,4 +44,5 @@ else
     send_mail
     make_sum
   fi
+<% end -%>
 fi
