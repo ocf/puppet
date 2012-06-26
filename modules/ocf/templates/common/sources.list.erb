@@ -1,9 +1,9 @@
 # OCF config
-deb http://mirrors.kernel.org/debian/ <%= lsbdistcodename %> main<% if nonfree %> contrib non-free<% end %>
+deb http://http.debian.net/debian/ <%= lsbdistcodename %> main<% if nonfree %> contrib non-free<% end %>
 deb http://security.debian.org/ <%= lsbdistcodename %>/updates main<% if nonfree %> contrib non-free<% end %>
 <% if lsbdistcodename == 'squeeze' -%>
-deb http://mirrors.kernel.org/debian/ <%= lsbdistcodename %>-updates main<% if nonfree %> contrib non-free<% end %>
-deb http://backports.debian.org/debian-backports/ <%= lsbdistcodename %>-backports main<% if nonfree %> contrib non-free<% end %>
+deb http://http.debian.net/debian/ <%= lsbdistcodename %>-updates main<% if nonfree %> contrib non-free<% end %>
+deb http://http.debian.net/debian-backports/ <%= lsbdistcodename %>-backports main<% if nonfree %> contrib non-free<% end %>
 <% end -%>
 <% if desktop -%>
 deb http://www.debian-multimedia.org/ <%= lsbdistcodename %> main<% if nonfree %> non-free<% end %>
