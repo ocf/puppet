@@ -1,8 +1,12 @@
 class ocf::common::apt ( $nonfree = false, $desktop = false ) {
 
   package { 'aptitude': }
+  exec { 'aptitude update':
+    refreshonly => true,
+    subscribe   => File['/etc/apt/sources.list']
+  }
 
-  # debsecan reports missing security updates
+  # debsecan reports missing security updates, do not use provided cronjob
   package { 'debsecan': }
   file { '/etc/cron.d/debsecan':
     ensure => absent
@@ -26,20 +30,22 @@ class ocf::common::apt ( $nonfree = false, $desktop = false ) {
       require => [ Package['aptitude', 'debsecan'], File['/etc/apt/sources.list'] ]
   }
 
-  exec { 'aptitude update':
-    refreshonly => true,
-    subscribe   => File['/etc/apt/sources.list']
+  # trust puppetlabs GPG key
+  exec { 'puppetlabs':
+    command => 'wget -q https://apt.puppetlabs.com/pubkey.gpg -O- | apt-key add - && aptitude update',
+    unless  => 'apt-key list | grep 4BD6EC30',
+    require => File['/etc/apt/sources.list']
   }
 
   if $desktop {
     # trust debian-multimedia and mozilla.debian.net GPG key
     exec {
       'debian-multimedia':
-        command => 'aptitude update; aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install deb-multimedia-keyring; aptitude update',
+        command => 'aptitude update && aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install deb-multimedia-keyring && aptitude update',
         unless  => 'dpkg -l deb-multimedia-keyring | grep ^ii',
         require => File['/etc/apt/sources.list'];
       'debian-mozilla':
-        command => 'aptitude update; aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install pkg-mozilla-archive-keyring; aptitude update',
+        command => 'aptitude update && aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install pkg-mozilla-archive-keyring && aptitude update',
         unless  => 'dpkg -l pkg-mozilla-archive-keyring | grep ^ii',
         require => File['/etc/apt/sources.list']
     }

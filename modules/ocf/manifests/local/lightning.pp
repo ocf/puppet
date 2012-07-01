@@ -1,15 +1,5 @@
 class ocf::local::lightning {
 
-  # add Puppet Labs repository
-  file { '/etc/apt/sources.list.d/puppetlabs.list':
-    source  => 'puppet:///modules/ocf/local/lightning/puppetlabs.list'
-  }
-  exec { 'puppetlabs':
-    command => 'wget -q https://apt.puppetlabs.com/pubkey.gpg -O- | apt-key add - && aptitude update',
-    unless  => 'apt-key list | grep 4BD6EC30',
-    require => File['/etc/apt/sources.list.d/puppetlabs.list']
-  }
-
   # this is the puppet master
   package { [ 'puppetmaster', 'puppetmaster-passenger', 'vim-puppet' ]:
     require => Exec['puppetlabs']
