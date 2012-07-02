@@ -1,8 +1,5 @@
 class ocf::local::blight {
 
-  # to automount /opt (and also home dirs)
-  package { 'autofs5-ldap': }
-
   # for ikiwiki and ikiwiki search
   package { [ 'ikiwiki', 'xapian-omega', 'libsearch-xapian-perl' ]: }
   package { ['libyaml-perl']: }
