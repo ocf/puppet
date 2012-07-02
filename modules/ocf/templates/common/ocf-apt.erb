@@ -22,27 +22,29 @@ fi
 <% end -%>
 
 # debsecan reports packages missing security updates
-# report format is not ordinarily quiet (see Debian bug #588065)
 debsecan_file='/etc/motd'
 debsecan_sum='/tmp/debsecan.md5sum'
 mailto='security'
 
-debsecan="`/usr/bin/debsecan --suite <%= lsbdistcodename %> --format report --only-fixed`" > /dev/null
+# report format lists "Fixed vulnerabilities"
+#debsecan="`/usr/bin/debsecan --suite <%= lsbdistcodename %> --format report --only-fixed`" > /dev/null
+debsecan="`/usr/bin/debsecan --suite <%= lsbdistcodename %> --format report --only-fixed | grep -B1000 -Fx '*** Fixed vulnerabilities' | grep -vFx '*** Fixed vulnerabilities'`" > /dev/null
 send_mail(){ echo "$debsecan" | mail -s "Security update: `hostname`" $mailto; }
 make_sum(){ md5sum "$debsecan_file" > "$debsecan_sum"; }
 
-if [ -z "$debsecan" ] || echo "$debsecan" | grep -Fq "No known vulnerabilities for which updates are available"; then
-  rm -f "$debsecan_file"
-  rm -f "$debsecan_sum"
-else
+# report format is not silent when there are no updates (Debian bug #588065)
+#if [ -n "$debsecan" ]; then
+if echo "$debsecan" | grep -Fq 'CVE-'; then
   echo "$debsecan" > "$debsecan_file"
 <% if ! desktop -%>
   if [ -f "$debsecan_sum" ]; then
     md5sum --check --status "$debsecan_sum" || send_mail
-    make_sum
   else
     send_mail
-    make_sum
   fi
+  make_sum
 <% end -%>
+else
+  rm -f "$debsecan_file"
+  rm -f "$debsecan_sum"
 fi
