@@ -245,6 +245,12 @@ class ocf::local::death {
       ensure    => directory,
       owner     => 'root',
       group     => 'root';
+    '/usr/local/etc/webchpwd/ldap.conf':
+      ensure    => file,
+      source    => 'puppet:///private/webchpwd/ldap.conf',
+      owner     => 'root',
+      group     => 'www-data',
+      mode      => '0640';
     '/usr/local/etc/webchpwd/ldap.key':
       ensure    => file,
       source    => 'puppet:///private/webchpwd/ldap.key',
