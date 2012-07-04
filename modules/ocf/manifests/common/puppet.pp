@@ -1,6 +1,9 @@
 class ocf::common::puppet {
 
-  package { 'puppet': }
+  package { 'puppet':
+    ensure  => latest,
+    require => Exec['aptitude update']
+  }
 
   file {
     # enable puppet agent, reporting to master, and listen for triggers
