@@ -1,24 +1,25 @@
-### Global definitions ###
+### global definitions ###
 
-# Store old config on puppetmaster
+# backup existing files to puppetmaster
+# path must be explicitly undefined, see puppet bug #5362
 filebucket { 'main': path => false }
-# Create first stage to run before everything else
+# create first stage to run before everything else
 stage { 'first': before => Stage['main'] }
 
-### Global defaults ###
+### global defaults ###
 
-# Set path for executions
+# default path for executions
 Exec { path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' }
-# Set default file permissions and store old config on puppetmaster
+# default file permissions and backup existing files to puppetmaster
 File { mode => 0644, owner => root, group => root, backup => main }
-# Add managed filesystems to fstab by default
+# add managed filesystems to fstab by default
 Mount { ensure => defined }
-# Use aptitude for package installation
+# use aptitude for package installation
 Package { provider => aptitude }
-# Use init scripts
+# use init scripts
 Service { hasstatus => true, hasrestart => true }
 
-### Generic nodes ###
+### generic nodes ###
 
 node base {
   class { 'ocf::common::groups': stage => first }
@@ -79,15 +80,15 @@ node desktop inherits base {
   include ocf::desktop::xsession
 }
 
-### Managed nodes ###
+### managed nodes ###
 
-# Puppet master
+# puppetmaster
 node lightning, puppet inherits server {
   class { 'ocf::common::networking': octet => 210 }
   include ocf::local::lightning
 }
 
-# Server room
+# server room
 node blight inherits server {
   class {'ocf::common::networking': octet => 236 }
   include ocf::local::blight
@@ -137,7 +138,7 @@ node war inherits server {
   include ocf::local::war
 }
 
-# Lab
+# lab and lounge
 node avalanche, bigbang, cyclone, destruction, eruption, fallingrocks, hurricane, b1, b2, b3 inherits desktop {
 }
 node diplomat, spy inherits server {

@@ -10,9 +10,9 @@ class ocf::common::puppet {
     # allow puppet master to trigger runs
     '/etc/puppet/auth.conf':
       source  => 'puppet:///modules/ocf/common/puppet/auth.conf';
-    # file must exist for puppet agent to start listening
+    # file must exist for puppet 2.6.x agent to start listening
     '/etc/puppet/namespaceauth.conf':
-      content => ''
+      content => 'file must exist for puppet 2.6.x agent to start listening'
   }
 
   service { 'puppet':
