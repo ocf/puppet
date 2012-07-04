@@ -35,4 +35,11 @@ class ocf::common::puppet {
   # install augeas-tools
   package { 'augeas-tools': }
 
+  # install custom script to display and set puppet environment
+  file { '/usr/local/sbin/ocf-puppetenv':
+    mode    => '0755',
+    source  => 'puppet:///modules/ocf/common/puppet/ocf-puppetenv',
+    require => Package['augeas-tools','puppet']
+  }
+
 }
