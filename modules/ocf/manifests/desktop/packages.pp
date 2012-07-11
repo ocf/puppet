@@ -24,8 +24,6 @@ class ocf::desktop::packages {
     [ 'libnotify-bin', 'notification-daemon' ]:;
     # performance improvements
     [ 'preload', 'readahead-fedora' ]:;
-    # reboot fast support
-    'kexec-tools':;
     # Xorg
     'xserver-xorg':
   }

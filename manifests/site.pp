@@ -25,6 +25,9 @@ node base {
   class { 'ocf::common::groups': stage => first }
   class { 'ocf::common::puppet': stage => first }
   class { 'ocf::common::rootpw': stage => first }
+  if $::is_virtual {
+    include ocf::common::kexec
+  }
   case $::hostname {
     sandstorm: { }
     default:   { include ocf::common::ntp }
@@ -68,6 +71,7 @@ node desktop inherits base {
   include ocf::common::crondeny
   include ocf::common::cups
   include ocf::common::kerberos
+  include ocf::common::kexec
   include ocf::common::ldap
   include ocf::common::networking
   include ocf::desktop::iceweasel
@@ -108,6 +112,11 @@ node death inherits server {
 node fallout inherits server {
   class { 'ocf::common::networking': interfaces => false }
   include ocf::local::fallout
+}
+node hal inherits server {
+  class { 'ocf::common::networking': interfaces => false }
+  include ocf::common::kexec
+  include ocf::local::hal
 }
 node maelstrom inherits server {
   class { 'ocf::common::networking': octet => 150 }
