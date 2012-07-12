@@ -29,6 +29,16 @@ class ocf::local::death {
     notify    => Service['apache2'],
   }
 
+  file { '/etc/apache2/conf.d/misc-general-tweaks':
+    ensure    => file,
+    owner     => 'root',
+    group     => 'root',
+    mode      => '0644',
+    source    => 'puppet:///modules/ocf/local/death/apache/conf.d/misc-general-tweaks',
+    require   => [ Package['apache2'] ],
+    notify    => Service['apache2'],
+  }
+
   file { '/etc/apache2/sites-available':
     ensure    => directory,
     owner     => 'root',
@@ -186,6 +196,17 @@ class ocf::local::death {
       mode      => '0644',
       source    => 'puppet:///modules/ocf/local/death/apache/mods/suphp.config.ocf',
       require   => Package['libapache2-mod-suphp'],
+  }
+
+  #php ini file
+  file {
+     '/etc/php5/cgi/php.ini':
+      ensure    => file,
+      owner     => 'root',
+      group     => 'root',
+      mode      => '0644',
+      source    => 'puppet:///modules/ocf/local/death/apache/mods/php.ini',
+      require   => Package['php5'],
   }
 
   # copy ssl files
