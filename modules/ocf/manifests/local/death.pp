@@ -80,7 +80,7 @@ class ocf::local::death {
 
   file { '/usr/lib/apache2/suexec':
     ensure    => file,
-    source    => 'puppet:///modules/ocf/local/death/apache/mods/suexec',
+    source    => 'puppet:///contrib/local/death/suexec',
     backup    => false, # it's a binary file
     mode      => '4755',
     owner     => 'root',
