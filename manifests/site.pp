@@ -107,6 +107,7 @@ node coupdetat inherits server {
 }
 node death inherits server {
   class { 'ocf::common::networking': octet => 243 }
+  include ocf::common::acct
   include ocf::local::death
 }
 node fallout inherits server {
@@ -132,6 +133,7 @@ node printhost inherits server {
 }
 node sandstorm inherits server {
   class { 'ocf::common::networking': octet => 218 }
+  include ocf::common::acct
   #include ocf::local::sandstorm
 }
 node surge inherits server {
