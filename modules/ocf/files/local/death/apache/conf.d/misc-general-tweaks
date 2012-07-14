@@ -1,0 +1,10 @@
+# From zombie nee death. tzhu 07/11/2012
+
+# performance tweaks [2/9/11 sanjayk]
+# NFS related stuff
+EnableMMAP Off
+EnableSendfile Off
+
+# added [10/5/10 sanjayk] deal with higher loads
+ServerLimit 768
+MaxClients  768
