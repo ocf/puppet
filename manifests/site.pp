@@ -123,6 +123,11 @@ node maelstrom inherits server {
   class { 'ocf::common::networking': octet => 150 }
   include ocf::local::maelstrom
 }
+node pandemic inherits server {
+  class { 'ocf::common::networking': octet => 206 }
+  include ocf::common::kexec
+  #include ocf::local::pandemic
+}
 node pollution inherits server {
   class { 'ocf::common::networking': octet => 198 }
   include ocf::local::pollution
