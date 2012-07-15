@@ -4,4 +4,4 @@
 START=yes
 
 # Startup options
-DAEMON_OPTS='--report --listen'
+DAEMON_OPTS='--report'
