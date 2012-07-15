@@ -27,7 +27,10 @@ class ocf::common::apt ( $nonfree = false, $desktop = false ) {
     '/etc/cron.daily/ocf-apt':
       mode    => '0755',
       content => template('ocf/common/apt/ocf-apt.erb'),
-      require => [ Package['aptitude', 'debsecan'], File['/etc/apt/sources.list'] ]
+      require => [ Package['aptitude', 'debsecan'], File['/etc/apt/sources.list'] ];
+    '/var/lib/debsecan/whitelist':
+      source  => 'puppet:///modules/ocf/common/apt/debsecan-whitelist',
+      require => Package['debsecan']
   }
 
   if $architecture in ['amd64', 'i386'] {
