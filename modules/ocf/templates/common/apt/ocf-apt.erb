@@ -10,7 +10,7 @@ apt_cleanup(){
 
 if [ ! -f /var/lock/aptitude ]; then
   apt_cleanup
-elif fuser -s /var/lock/aptitude; then
+elif fuser -s /var/lib/dpkg/lock 2> /dev/null; then
   true
 else
   apt_cleanup
