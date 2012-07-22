@@ -1,0 +1,25 @@
+# OCF config
+
+auto lo
+iface lo inet loopback
+
+auto br0
+allow-hotplug br0
+iface br0 inet static
+        address 128.32.129.<%= octet %>
+        netmask 255.255.255.192
+        network 128.32.129.192
+        broadcast 128.32.129.255
+        gateway 128.32.129.193
+        bridge_ports eth0
+        bridge_stp off
+        bridge_maxwait 0
+        bridge_fd 0
+
+auto br0:0
+allow-hotplug br0:0
+iface br0:0 inet static
+        address 192.168.99.<%= octet %>
+        netmask 255.255.255.0
+        network 192.168.99.0
+        broadcast 192.168.99.255

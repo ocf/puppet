@@ -116,16 +116,17 @@ node fallout inherits server {
 }
 node hal inherits server {
   class { 'ocf::common::networking': interfaces => false }
+  class { 'ocf::services::kvm':      octet      => 199 }
   include ocf::common::kexec
-  include ocf::local::hal
+  #include ocf::local::hal
 }
 node maelstrom inherits server {
   class { 'ocf::common::networking': octet => 150 }
   include ocf::local::maelstrom
 }
 node pandemic inherits server {
-  #class { 'ocf::common::networking': octet => 206 }
   class { 'ocf::common::networking': interfaces => false }
+  class { 'ocf::services::kvm':      octet      => 206 }
   include ocf::common::kexec
   #include ocf::local::pandemic
 }
