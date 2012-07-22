@@ -124,7 +124,8 @@ node maelstrom inherits server {
   include ocf::local::maelstrom
 }
 node pandemic inherits server {
-  class { 'ocf::common::networking': octet => 206 }
+  #class { 'ocf::common::networking': octet => 206 }
+  class { 'ocf::common::networking': interfaces => false }
   include ocf::common::kexec
   #include ocf::local::pandemic
 }
