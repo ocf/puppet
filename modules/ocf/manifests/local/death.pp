@@ -200,7 +200,7 @@ class ocf::local::death {
 
   #php ini file
   file {
-     '/etc/php5/cgi/php.ini':
+    '/etc/php5/cgi/php.ini':
       ensure    => file,
       owner     => 'root',
       group     => 'root',

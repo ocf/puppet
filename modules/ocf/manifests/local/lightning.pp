@@ -5,8 +5,8 @@ class ocf::local::lightning {
     ensure  => latest,
     require => Exec['puppetlabs']
   }
- # puppet manifest help
- package { [ 'puppet-lint', 'vim-puppet' ]: }
+  # puppet manifest help
+  package { [ 'puppet-lint', 'vim-puppet' ]: }
   file {
     # disable WEBrick, use Puppet through Passenger in Apache
     '/etc/default/puppetmaster':
