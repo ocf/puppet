@@ -110,6 +110,11 @@ node death inherits server {
   include ocf::common::acct
   include ocf::local::death
 }
+node fallingrocks inherits server {
+  class { 'ocf::common::networking': interfaces => false }
+  class { 'ocf::services::kvm':      octet      => 225 }
+  include ocf::common::kexec
+}
 node fallout inherits server {
   class { 'ocf::common::networking': interfaces => false }
   include ocf::local::fallout
@@ -161,7 +166,7 @@ node war inherits server {
 }
 
 # lab and lounge
-node avalanche, bigbang, cyclone, destruction, eruption, fallingrocks, hurricane, b1, b2, b3 inherits desktop {
+node avalanche, bigbang, cyclone, destruction, eruption, hurricane, b1, b2, b3 inherits desktop {
 }
 node diplomat, spy inherits server {
   include ocf::common::cups
