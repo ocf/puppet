@@ -1,27 +1,29 @@
 class ocf::common::ssh {
 
-  require ocf::common::kerberos
-
   # install ssh client and server
   package { [ 'openssh-client', 'openssh-server' ]: }
 
-  # provide ssh client/server config and list of hosts
-  file {
-    '/etc/ssh/ssh_config':
-      source  => 'puppet:///modules/ocf/common/ssh/ssh_config',
-      require => Package['openssh-client'];
-    '/etc/ssh/sshd_config':
-      source  => 'puppet:///modules/ocf/common/ssh/sshd_config',
-      require => Package['openssh-server'];
-    '/etc/ssh/ssh_known_hosts':
-      source  => 'puppet:///modules/ocf/common/ssh/ssh_known_hosts',
-      require => Package['openssh-server'];
+  # for readability, do not hash known_hosts file by default
+  # enable GSSAPI host key verification
+  augeas { '/etc/ssh/ssh_config':
+    context => '/files/etc/ssh/ssh_config',
+    changes => [ 
+                 'set HashKnownHosts no',
+                 'set GSSAPIAuthentication yes',
+                 'set GSSAPIKeyExchange yes',
+                 'set GSSAPIDelegateCredentials no'
+                ],
+    require => Package['openssh-client']
   }
 
-  # start ssh server
+  # provide list of ssh hosts
+  file { '/etc/ssh/ssh_known_hosts':
+      source  => 'puppet:///contrib/common/ssh_known_hosts',
+      require => Package['openssh-client'];
+  }
+
   service { 'ssh':
-    subscribe => File['/etc/ssh/sshd_config'],
-    require   => Package['openssh-server']
+    require => Package['openssh-server']
   }
 
 }

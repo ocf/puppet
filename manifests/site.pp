@@ -36,6 +36,8 @@ node base {
     sandstorm: { }
     default:   { include ocf::common::postfix }
   }
+  include ocf::common::kerberos
+  include ocf::common::ldap
   include ocf::common::smart
 }
 
@@ -44,13 +46,11 @@ node server inherits base {
     death:   { class { 'ocf::common::apt': stage => first, nonfree => true } }
     default: { class { 'ocf::common::apt': stage => first } }
   }
-  include ocf::common::kerberos
-  include ocf::common::ldap
   include ocf::common::packages
   case $::hostname {
-    coupdetat:     { class { 'ocf::common::pam': login => [ 'decal', 'ocfstaff' ], sudo => 'libvirt' } }
-    printhost:     { class { 'ocf::common::pam': login => 'printing', sudo => 'printing' } }
-    default:       { class { 'ocf::common::pam': login => 'ocfstaff' } }
+    coupdetat:     { class { 'ocf::common::auth': login => [ 'decal', 'ocfstaff' ], sudo => 'libvirt' } }
+    printhost:     { class { 'ocf::common::auth': login => 'printing', sudo => 'printing' } }
+    default:       { class { 'ocf::common::auth': login => 'ocfstaff' } }
   }
   case $::hostname {
     coupdetat: { }
@@ -63,14 +63,12 @@ node server inherits base {
 }
 
 node desktop inherits base {
-  class { 'ocf::common::apt': stage => first, nonfree => true, desktop => true }
-  class { 'ocf::common::pam': login => 'ocf' }
+  class { 'ocf::common::apt':  stage => first, nonfree => true, desktop => true }
+  class { 'ocf::common::auth': login => 'ocf' }
   include ocf::common::acct
   include ocf::common::crondeny
   include ocf::common::cups
-  include ocf::common::kerberos
   include ocf::common::kexec
-  include ocf::common::ldap
   include ocf::common::networking
   include ocf::desktop::iceweasel
   include ocf::desktop::limits

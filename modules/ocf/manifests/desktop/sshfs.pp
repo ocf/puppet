@@ -1,6 +1,6 @@
 class ocf::desktop::sshfs {
 
-  require ocf::common::pam
+  require ocf::common::auth
   require ocf::common::ssh
   require ocf::desktop::xsession
 

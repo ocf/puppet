@@ -1,7 +1,5 @@
 class ocf::desktop::tmpfs {
 
-  include ocf::common::pam
-
   # mount certain volatile directories in memory
   mount {
     '/home':
