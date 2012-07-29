@@ -13,11 +13,13 @@ for host in $hostnames; do
     echo "Creating host/$host.int.ocf.berkeley.edu principal"
     /usr/sbin/kadmin -p $user/admin add -r --use-defaults host/$host.int.ocf.berkeley.edu
     echo "Exporting host/$host.int.ocf.berkeley.edu keytab"
+    rm $host/krb5.keytab
     /usr/sbin/kadmin -p $user/admin ext_keytab -k $host/krb5.keytab host/$host.int.ocf.berkeley.edu
   elif [ $int = 'n' -o $int = 'N' ]; then
     echo "Creating host/$host.int.ocf.berkeley.edu and host/$host.ocf.berkeley.edu principals and keytab"
     /usr/sbin/kadmin -p $user/admin add -r --use-defaults host/$host.int.ocf.berkeley.edu host/$host.ocf.berkeley.edu
     echo "Exporting host/$host.int.ocf.berkeley.edu and host/$host.ocf.berkeley.edu keytab"
+    rm $host/krb5.keytab
     /usr/sbin/kadmin -p $user/admin ext_keytab -k $host/krb5.keytab host/$host.int.ocf.berkeley.edu host/$host.ocf.berkeley.edu
   else
     echo "Error parsing: $int"
