@@ -5,32 +5,49 @@ class ocf::common::auth( $login = '', $sudo = '' ) {
   require ocf::common::kerberos
 
   # NSS user/group identification
-  package {
+  ocf::repackage {
+    # SSSD for users
     'sssd':
-      require => Package['nscd'];
+      recommends => false;
     'libnss-sss':
-      require => [ Package['sssd','libnss-ldap'], File['/etc/sssd/sssd.conf'] ];
-    'libpam-sss':
-      ensure  => purged,
-      require => Package['sssd'];
-    ['nscd','libnss-ldap']:
-      ensure  => purged
+      recommends => false,
+      require    => [ Ocf::Repackage['sssd'], File['/etc/sssd/sssd.conf'] ];
+    # NSCD for groups
+    'nscd':;
+    'libnss-ldap':
+      recommends => false
+  }
+  package { [ 'libnss-ldapd', 'libpam-ldap', 'libpam-sss', 'nslcd' ]:
+    ensure => purged
   }
   file {
-    # provide SSSD config
+    # SSSD config
     '/etc/sssd/sssd.conf':
       mode    => '0600',
       source  => 'puppet:///modules/ocf/common/auth/sssd.conf',
-      require => Package['sssd'];
-    # provide name service config
+      require => Ocf::Repackage['sssd'];
+    # NSCD config
+    '/etc/nscd.conf':
+      source  => 'puppet:///modules/ocf/common/auth/nscd.conf',
+      require => Ocf::Repackage['nscd'];
+    # NSCD LDAP config
+    '/etc/libnss-ldap.conf':
+      source  => 'puppet:///modules/ocf/common/auth/libnss-ldap.conf',
+      require => Ocf::Repackage['libnss-ldap'];
+    # use SSSD for users and NSCD for groups
     '/etc/nsswitch.conf':
       source  => 'puppet:///modules/ocf/common/auth/nsswitch.conf',
-      require => [ Package[ 'sssd','libnss-sss' ], File['/etc/sssd/sssd.conf'] ];
+      require => [ Ocf::Repackage['sssd','libnss-sss','libnss-ldap'], File['/etc/sssd/sssd.conf','/etc/libnss-ldap.conf'] ];
   }
   # restart SSSD
   service { 'sssd':
     subscribe => File['/etc/sssd/sssd.conf'],
-    require   => Package['sssd']
+    require   => Ocf::Repackage['sssd']
+  }
+  # restart NSCD
+  service { 'nscd':
+    subscribe => File['/etc/libnss-ldap.conf','/etc/nscd.conf'],
+    require   => Ocf::Repackage['nscd']
   }
 
   # PAM user authentication
