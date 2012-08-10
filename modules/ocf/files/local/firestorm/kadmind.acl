@@ -1,0 +1,18 @@
+#principal                              [priv1,priv2,...]                       [glob-pattern]
+kedo/admin@OCF.BERKELEY.EDU             all
+sanjayk/admin@OCF.BERKELEY.EDU          all
+waf/admin@OCF.BERKELEY.EDU              all
+daradib/admin@OCF.BERKELEY.EDU          all
+amloessb/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
+daradib/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
+kedo/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
+kfang/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
+kmock/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
+jakakxl/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
+mcint/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
+mwilliams/root@OCF.BERKELEY.EDU         change-password                         *@OCF.BERKELEY.EDU
+raphtown/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
+sanjayk/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
+tzhu/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
+waf/root@OCF.BERKELEY.EDU               change-password                         *@OCF.BERKELEY.EDU
+webchpwd@OCF.BERKELEY.EDU               change-password                         *@OCF.BERKELEY.EDU

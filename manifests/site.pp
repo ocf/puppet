@@ -115,6 +115,10 @@ node fallout inherits server {
   class { 'ocf::common::networking': interfaces => false }
   include ocf::local::fallout
 }
+node firestorm inherits server{
+  class { 'ocf::common::networking': octet => 200 }
+  include ocf::local::firestorm
+}
 node hal inherits server {
   class { 'ocf::common::networking': interfaces => false }
   class { 'ocf::services::kvm':      octet      => 199 }
