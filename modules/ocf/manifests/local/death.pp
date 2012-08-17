@@ -1,5 +1,4 @@
 class ocf::local::death {
-  include ocf::common::mount
   package {
     [ 'apache2', 'php5', 'php5-mysql', 'libapache-mod-security', 'libapache2-mod-suphp', 'python-django', 'python-ldap', 'python-mysqldb', 'python-flup', 'python-cracklib', 'apache2-threaded-dev', 'libapache2-mod-fcgid' ]:
       ensure  => installed;
