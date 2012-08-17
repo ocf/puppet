@@ -25,7 +25,7 @@ node base {
   class { 'ocf::common::groups': stage => first }
   class { 'ocf::common::puppet': stage => first }
   class { 'ocf::common::rootpw': stage => first }
-  if $::is_virtual {
+  if $::is_virtual == 'true' {
     include ocf::common::kexec
   }
   case $::hostname {
