@@ -1,6 +1,8 @@
 class ocf::common::smart {
 
-  if ( ! $::is_virtual ) {
+  # facter currently outputs strings not booleans
+  # see http://projects.puppetlabs.com/issues/3704
+  if $::is_virtual == 'false' {
 
     # install smartmontools
     package { 'smartmontools': }
@@ -13,6 +15,14 @@ class ocf::common::smart {
     service { 'smartmontools':
       subscribe => File['/etc/default/smartmontools'],
       require   => Package['smartmontools']
+    }
+
+  }
+
+  else {
+
+    package { 'smartmontools':
+      ensure => purged
     }
 
   }
