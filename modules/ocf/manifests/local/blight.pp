@@ -6,6 +6,9 @@ class ocf::local::blight {
 
   package { 'gitweb': }
 
+  # for old wiki
+  package { 'php5': }
+
   # the location of ikwiki
   file { '/srv/ikiwiki':
     ensure => 'directory',
@@ -128,8 +131,8 @@ class ocf::local::blight {
     '/etc/apache2/sites-enabled/gitweb':
       ensure => symlink,
       target => '/etc/apache2/sites-available/gitweb';
-    '/etc/apache2/sites-enabled/000-default':
-      ensure => absent;
+    #'/etc/apache2/sites-enabled/000-default':
+    #  ensure => absent;
   }
 
   # gitweb setup
@@ -141,5 +144,27 @@ class ocf::local::blight {
       content => 'wiki.git';
     '/etc/gitweb.conf':
       source  => 'puppet:///modules/ocf/local/blight/gitweb/gitweb.conf';
+  }
+
+  # old wiki (docs)
+  file { '/etc/apache2/sites-available/docs':
+    source      => 'puppet:///modules/ocf/local/blight/apache2/docs',
+    ensure      => file,
+  }
+  exec { '/usr/sbin/a2ensite docs':
+    unless      => '/bin/readlink -e /etc/apache2/sites-enabled/docs',
+    notify      => Service['apache2'],
+    require     => File['/etc/apache2/sites-available/docs'],
+  }
+
+  # default blight site
+  file { '/etc/apache2/sites-available/000-default':
+    source      => 'puppet:///modules/ocf/local/blight/apache2/000-default',
+    ensure      => file,
+  }
+  exec { '/usr/sbin/a2ensite default':
+    unless      => '/bin/readlink -e /etc/apache2/sites-enabled/000-default',
+    notify      => Service['apache2'],
+    require     => File['/etc/apache2/sites-available/000-default'],
   }
 }

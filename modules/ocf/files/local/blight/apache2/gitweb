@@ -2,6 +2,7 @@
 
   ServerAdmin wheel@ocf.berkeley.edu
   ServerName git.wiki.ocf.berkeley.edu
+  ServerAlias git.wiki
   DocumentRoot /srv/gitweb
 
   <Directory /srv/gitweb>

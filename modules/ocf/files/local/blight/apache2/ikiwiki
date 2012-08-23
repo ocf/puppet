@@ -1,8 +1,7 @@
 <VirtualHost *:80>
-
   ServerAdmin wheel@ocf.berkeley.edu
   ServerName wiki.ocf.berkeley.edu
-  ServerAlias blight.ocf.berkeley.edu, *
+  ServerAlias wiki wiki.ocf
   DocumentRoot /srv/ikiwiki/public_html/wiki
 
   <Directory /srv/ikiwiki/public_html/wiki>
