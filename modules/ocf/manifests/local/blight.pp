@@ -7,7 +7,7 @@ class ocf::local::blight {
   package { 'gitweb': }
 
   # for old wiki
-  package { 'php5': }
+  package { ['php5', 'php5-cli', 'php5-mysql']: }
 
   # the location of ikwiki
   file { '/srv/ikiwiki':
