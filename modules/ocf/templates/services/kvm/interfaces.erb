@@ -3,6 +3,7 @@
 auto lo
 iface lo inet loopback
 
+<% if octet.to_i > 192 -%>
 auto br0
 allow-hotplug br0
 iface br0 inet static
@@ -15,6 +16,20 @@ iface br0 inet static
         bridge_stp off
         bridge_maxwait 0
         bridge_fd 0
+<% elsif octet.to_i > 64 && octet.to_i < 128 -%>
+auto br0
+allow-hotplug br0
+iface br0 inet static
+        address 169.229.172.<%= octet %>
+        netmask 255.255.255.192
+        network 169.229.172.64
+        broadcast 169.229.172.255
+        gateway 169.229.172.65
+        bridge_ports eth0
+        bridge_stp off
+        bridge_maxwait 0
+        bridge_fd 0
+<% end -%>
 
 auto br0:0
 allow-hotplug br0:0

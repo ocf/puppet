@@ -1,9 +1,11 @@
 # OCF config
 # Based on Debian and http://projects.puppetlabs.com/projects/1/wiki/Using_Passenger
 
-Listen 192.168.99.210:8140
+#Listen 192.168.99.210:8140
+Listen *:8140
 
-<VirtualHost 192.168.99.210:8140>
+#<VirtualHost 192.168.99.210:8140>
+<VirtualHost *:8140>
         SSLEngine on
         SSLProtocol -ALL +SSLv3 +TLSv1
         SSLCipherSuite ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP

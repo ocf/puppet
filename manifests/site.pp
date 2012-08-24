@@ -49,7 +49,7 @@ node server inherits base {
   include ocf::common::packages
   case $::hostname {
     coupdetat:     { class { 'ocf::common::auth': login => [ 'decal', 'ocfstaff' ], sudo => 'libvirt' } }
-    printhost:     { class { 'ocf::common::auth': login => 'printing', sudo => 'printing' } }
+    printhost:     { class { 'ocf::common::auth': login => 'ocfstaff', sudo => 'ocfstaff' } }
     default:       { class { 'ocf::common::auth': login => 'ocfstaff' } }
   }
   case $::hostname {
@@ -108,12 +108,16 @@ node death inherits server {
 }
 node fallingrocks inherits server {
   class { 'ocf::common::networking': interfaces => false }
-  class { 'ocf::services::kvm':      octet      => 225 }
+  class { 'ocf::services::kvm':      octet      => 79 }
   include ocf::common::kexec
 }
 node fallout inherits server {
   class { 'ocf::common::networking': interfaces => false }
   include ocf::local::fallout
+}
+node fallout2 inherits server {
+  class { 'ocf::common::networking': interfaces => false }
+  include ocf::local::fallout2
 }
 node firestorm inherits server{
   class { 'ocf::common::networking': octet => 200 }
@@ -130,7 +134,7 @@ node maelstrom inherits server {
   include ocf::local::maelstrom
 }
 node mudslide inherits server {
-  class { 'ocf::common::networking': octet => 203 }
+  class { 'ocf::common::networking': octet => 68 }
   #include ocf::local::sandstorm
 }
 node pandemic inherits server {
