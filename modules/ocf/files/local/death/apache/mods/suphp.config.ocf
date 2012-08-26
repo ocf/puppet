@@ -33,7 +33,7 @@ env_path=/bin:/usr/bin
 umask=0077
 
 ; Minimum UID
-min_uid=100
+min_uid=33
 
 ; Minimum GID
 min_gid=20
