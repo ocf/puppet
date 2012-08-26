@@ -1,12 +1,12 @@
-# OCF config
 # Login access control table, scanned for first entry matching user@origin
 # format: permission : users/groups : origins
 #
 + : root : ALL
-+ : apt-dater : lightning.int.ocf.berkeley.edu lightning.ocf.berkeley.edu
-#+ : dumper : pollution.int.ocf.berkeley.edu pollution.ocf.berkeley.edu
++ : apt-dater : lightning.ocf.berkeley.edu
+#+ : dumper : pollution.ocf.berkeley.edu
 + : nessus : .security.berkeley.edu
 + : (admin) : ALL
++ : (ocfstaff) : ALL
 + : (sys) : ALL
 <% login.each do |val| -%>
 + : (<%= val %>) : ALL
