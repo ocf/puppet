@@ -101,7 +101,7 @@ node coupdetat inherits server {
   include ocf::local::coupdetat
 }
 node death inherits server {
-  class { 'ocf::common::networking': octet => 205 }
+  class { 'ocf::common::networking': octet => 243 }
   include ocf::local::death
 }
 node fallout inherits server {
