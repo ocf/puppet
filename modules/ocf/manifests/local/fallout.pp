@@ -1,17 +1,5 @@
 class ocf::local::fallout {
 
-  # setup nat
-  package { 'netstat-nat': }
-  # Uncomment to enable net.ipv4.ip_forward in /etc/sysctl.conf
-  file { '/etc/network/interfaces':
-    source => 'puppet:///modules/ocf/local/fallout/interfaces',
-    notify => Service['networking']
-  }
-  exec { 'ifup -a':
-    refreshonly => true,
-    subscribe   => File['/etc/network/interfaces']
-  }
-
   # setup dhcp server
   package { 'isc-dhcp-server': }
   file { '/etc/dhcp/dhcpd.conf':

@@ -1,67 +1,23 @@
-# OCF config
-
 auto lo
 iface lo inet loopback
 
+auto eth0
+allow-hotplug eth0
 <% if octet != :undef -%>
+iface eth0 inet static
 <% if octet.to_i > 192 -%>
-auto eth0
-allow-hotplug eth0
-iface eth0 inet static
-        address 128.32.129.<%= octet %>
-        netmask 255.255.255.192
-        network 128.32.129.192
-        broadcast 128.32.129.255
-        gateway 128.32.129.193
-        # dns-* options are implemented by the resolvconf package, if installed
-        dns-domain ocf.berkeley.edu
-        dns-nameservers 128.32.129.242 128.32.206.12 128.32.136.9
-        dns-search int.ocf.berkeley.edu ocf.berkeley.edu
-
-auto eth0:0
-allow-hotplug eth0:0
-iface eth0:0 inet static
-        address 192.168.99.<%= octet %>
-        netmask 255.255.255.0
-        network 192.168.99.0
-        broadcast 192.168.99.255
-<% elsif octet.to_i > 64 && octet.to_i < 128 -%>
-auto eth0
-allow-hotplug eth0
-iface eth0 inet static
-        address 169.229.172.<%= octet %>
-        netmask 255.255.255.192
-        network 169.229.172.64
-        broadcast 169.229.172.255
-        gateway 169.229.172.65
-        # dns-* options are implemented by the resolvconf package, if installed
-        dns-domain ocf.berkeley.edu
-        dns-nameservers 128.32.129.242 128.32.206.12 128.32.136.9
-        dns-search int.ocf.berkeley.edu ocf.berkeley.edu
-
-auto eth0:0
-allow-hotplug eth0:0
-iface eth0:0 inet static
-        address 192.168.99.<%= octet %>
-        netmask 255.255.255.0
-        network 192.168.99.0
-        broadcast 192.168.99.255
+  address 128.32.129.<%= octet %>
+  netmask 255.255.255.192
+  gateway 128.32.129.193
+<% elsif octet.to_i > 65 && octet.to_i < 127 -%>
+  address 169.229.172.<%= octet %>
+  netmask 255.255.255.192
+  gateway 169.229.172.65
 <% else -%>
-auto eth0
-allow-hotplug eth0
-iface eth0 inet static
-        address 192.168.99.<%= octet %>
-        netmask 255.255.255.0
-        network 192.168.99.0
-        broadcast 192.168.99.255
-        gateway 192.168.99.1
-        # dns-* options are implemented by the resolvconf package, if installed
-        dns-domain int.ocf.berkeley.edu
-        dns-nameservers 192.168.99.242 128.32.206.12 128.32.136.9
-        dns-search int.ocf.berkeley.edu ocf.berkeley.edu
+  address 192.168.99.<%= octet %>
+  netmask 255.255.255.0
+  gateway 192.168.99.1
 <% end -%>
 <% else -%>
-auto eth0
-allow-hotplug eth0
 iface eth0 inet dhcp
 <% end -%>

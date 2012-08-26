@@ -48,9 +48,9 @@ node server inherits base {
   }
   include ocf::common::packages
   case $::hostname {
-    coupdetat:     { class { 'ocf::common::auth': login => [ 'decal', 'ocfstaff' ], sudo => 'libvirt' } }
-    printhost:     { class { 'ocf::common::auth': login => 'ocfstaff', sudo => 'ocfstaff' } }
-    default:       { class { 'ocf::common::auth': login => 'ocfstaff' } }
+    coupdetat:     { class { 'ocf::common::auth': login => 'decal', sudo => 'libvirt' } }
+    printhost:     { class { 'ocf::common::auth': sudo  => 'ocfstaff' } }
+    default:       { class { 'ocf::common::auth': } }
   }
   case $::hostname {
     coupdetat: { }
@@ -112,11 +112,11 @@ node fallingrocks inherits server {
   include ocf::common::kexec
 }
 node fallout inherits server {
-  class { 'ocf::common::networking': interfaces => false }
+  class { 'ocf::common::networking': octet => 196 }
   include ocf::local::fallout
 }
 node fallout2 inherits server {
-  class { 'ocf::common::networking': interfaces => false }
+  class { 'ocf::common::networking': octet => 67 }
   include ocf::local::fallout2
 }
 node firestorm inherits server{

@@ -1,10 +1,9 @@
-# OCF config
-domain <%= domain %>
-<% if domain == 'int.ocf.berkeley.edu' %>
-nameserver 192.168.99.242
-<% else -%>
 nameserver 128.32.129.242
-<% end -%>
 nameserver 128.32.206.12
 nameserver 128.32.136.9
-search int.ocf.berkeley.edu ocf.berkeley.edu
+
+<% if domain == 'lab.ocf.berkeley.edu' %>
+search lab.ocf.berkeley.edu ocf.berkeley.edu
+<% else %>
+search ocf.berkeley.edu lab.ocf.berkeley.edu
+<% end -%>

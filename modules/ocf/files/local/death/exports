@@ -9,5 +9,5 @@
 # /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
 #
 
-/var/log/apache2	supernova.int.ocf.berkeley.edu(rw,fsid=0,no_root_squash,no_subtree_check) \
-			tsunami.int.ocf.berkeley.edu(ro,fsid=0,root_squash,no_subtree_check)
+/var/log/apache2	supernova(rw,fsid=0,no_root_squash,no_subtree_check) \
+			tsunami(ro,fsid=0,root_squash,no_subtree_check)

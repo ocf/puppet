@@ -1,40 +1,19 @@
-# OCF config
-
 auto lo
 iface lo inet loopback
 
-<% if octet.to_i > 192 -%>
 auto br0
 allow-hotplug br0
 iface br0 inet static
+<% if octet.to_i > 192 -%>
         address 128.32.129.<%= octet %>
         netmask 255.255.255.192
-        network 128.32.129.192
-        broadcast 128.32.129.255
         gateway 128.32.129.193
-        bridge_ports eth0
-        bridge_stp off
-        bridge_maxwait 0
-        bridge_fd 0
-<% elsif octet.to_i > 64 && octet.to_i < 128 -%>
-auto br0
-allow-hotplug br0
-iface br0 inet static
+<% elsif octet.to_i > 65 && octet.to_i < 127 -%>
         address 169.229.172.<%= octet %>
         netmask 255.255.255.192
-        network 169.229.172.64
-        broadcast 169.229.172.255
         gateway 169.229.172.65
+<% end -%>
         bridge_ports eth0
         bridge_stp off
         bridge_maxwait 0
         bridge_fd 0
-<% end -%>
-
-auto br0:0
-allow-hotplug br0:0
-iface br0:0 inet static
-        address 192.168.99.<%= octet %>
-        netmask 255.255.255.0
-        network 192.168.99.0
-        broadcast 192.168.99.255
