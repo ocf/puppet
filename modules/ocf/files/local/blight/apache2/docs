@@ -2,7 +2,7 @@
     DirectoryIndex docs.html
     DocumentRoot /var/www/
     ServerName docs.ocf.berkeley.edu
-    ServerAlias docs docs.ocf docs.int docs.int.ocf
+    ServerAlias docs
     <Directory /var/www/>
        Options Indexes FollowSymLinks MultiViews
        AllowOverride All
@@ -10,32 +10,9 @@
        allow from all
     </Directory>
 
-#RewriteEngine On 
-#RewriteCond %{SERVER_PORT} 80 
-#RewriteCond %{REQUEST_URI} staffwiki
-#RewriteRule ^(.*)$ https://docs.ocf.berkeley.edu/$1 [R,L]
-
 ErrorLog "/var/log/apache2/wiki-error.log"
 </VirtualHost>
-<VirtualHost *:80>
-    DocumentRoot /var/www/sw
-    ServerName staffwiki.ocf.berkeley.edu
-    ServerAlias staffwiki staffwiki.int staffwiki.ocf staffwiki.int.ocf
-    Alias /sw /var/www/sw
-    <Directory /var/www/sw>
-            Options Indexes FollowSymLinks MultiViews
-            AllowOverride All
-            Order allow,deny
-            allow from all
-    </Directory>
 
-#RewriteEngine On 
-#RewriteCond %{SERVER_PORT} 80 
-#RewriteCond %{REQUEST_URI} staffwiki
-#RewriteRule ^(.*)$ https://docs.ocf.berkeley.edu/$1 [R,L]
-
-ErrorLog "/var/log/apache2/staffwiki-error.log"
-</VirtualHost>
 <IfModule alias_module>
 	Alias /wiki /var/www/w/index.php
         Alias /staffwiki /var/www/sw/index.php

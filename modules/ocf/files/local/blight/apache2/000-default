@@ -1,7 +1,7 @@
 <VirtualHost *:80>
         ServerAdmin webmaster@ocf.berkeley.edu
 	ServerName blight.ocf.berkeley.edu
-	ServerAlias blight.ocf blight
+	ServerAlias blight
 
         DocumentRoot /var/www
         <Directory />
