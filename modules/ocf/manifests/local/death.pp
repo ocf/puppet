@@ -14,6 +14,9 @@ class ocf::local::death {
     # for account_tools
     'python-pexpect':
       ensure  => installed;
+    # for users requesting specific packages
+    [ 'php5-gd' ]:
+      ensure  => installed;
   }
 
   file { '/etc/apache2/httpd.conf':
