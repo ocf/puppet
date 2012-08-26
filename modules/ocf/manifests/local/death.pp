@@ -213,4 +213,28 @@ class ocf::local::death {
   service { 'nfs-kernel-server':
     ensure => 'running',
   }
+
+  # account tools requires some sensitive files
+  file {
+    '/root/account_tools_settings.py.secret':
+      ensure    => file,
+      source    => 'puppet:///private/account_tools_settings.py.secret',
+      mode      => '0600';
+    '/etc/webchpwd':
+      ensure    => directory,
+      owner     => 'root',
+      group     => 'root';
+    '/etc/webchpwd/ldap.key':
+      ensure    => file,
+      source    => 'puppet:///private/webchpwd/ldap.key',
+      owner     => 'root',
+      group     => 'www-data',
+      mode      => '0640';
+    '/etc/webchpwd/webchpwd.keytab':
+      ensure    => file,
+      source    => 'puppet:///private/webchpwd/webchpwd.keytab',
+      owner     => 'root',
+      group     => 'www-data',
+      mode      => '0640';
+  }
 }
