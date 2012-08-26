@@ -5,6 +5,15 @@ class ocf::local::death {
       ensure  => installed;
     'nfs-kernel-server':
       ensure  => installed;
+    # for general development
+    'git':
+      ensure  => installed;
+    # for staff_hours.cgi (perl)
+    'libhtml-parser-perl':
+      ensure  => installed;
+    # for account_tools
+    'python-pexpect':
+      ensure  => installed;
   }
 
   file { '/etc/apache2/httpd.conf':
