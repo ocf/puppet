@@ -132,6 +132,10 @@ node typhoon inherits server {
   class {'ocf::common::networking': octet => 214 }
   #include ocf::local::typhoon
 }
+node war inherits server {
+  class {'ocf::common::networking': octet => 244 }
+  include ocf::local::war
+}
 
 # Lab
 node avalanche, bigbang, cyclone, destruction, eruption, fallingrocks, hurricane, b1, b2, b3 inherits desktop {
