@@ -13,7 +13,7 @@ class ocf::local::war {
     group     => 'root',
     mode      => '0644',
     source    => 'puppet:///modules/ocf/local/war/apache/httpd.conf',
-    require   => [ Package['apache2'], File['/etc/apache2/virtual.conf'] ],
+    require   => [ Package['apache2'] ],
     notify      => Service['apache2'],
   }
 
