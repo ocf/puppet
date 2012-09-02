@@ -1,5 +1,0 @@
-# OCF config
-Dpkg::Options {
-   "--force-confnew";
-   "--force-confmiss";
-}

@@ -20,9 +20,9 @@ class ocf::common::apt ( $nonfree = false, $desktop = false ) {
     '/etc/apt/sources.list':
       content => template('ocf/common/apt/sources.list.erb'),
       require => Package['aptitude'];
-    # override conffiles on package installation
+    # we previously override conffiles on package installation, not a good idea anymore
     '/etc/apt/apt.conf.d/90conffiles':
-      source  => 'puppet:///modules/ocf/common/apt/conffiles';
+      ensure  => absent;
     # update apt list, report missing updates,  and clear apt cache and old config daily
     '/etc/cron.daily/ocf-apt':
       mode    => '0755',
