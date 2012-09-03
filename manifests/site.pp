@@ -170,7 +170,7 @@ node war inherits server {
 }
 
 # lab and lounge
-node avalanche, bigbang, cyclone, destruction, eruption, hurricane, b1, b2, b3 inherits desktop {
+node avalanche, bigbang, cyclone, destruction, eruption, hurricane, b1, b2, b3, b4 inherits desktop {
 }
 node diplomat, spy inherits server {
   include ocf::common::cups
