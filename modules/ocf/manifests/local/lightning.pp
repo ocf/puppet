@@ -1,33 +1,12 @@
 class ocf::local::lightning {
 
   # this is the puppet master
-  package { [ 'puppetmaster', 'puppetmaster-passenger' ]:
+  package { 'puppetmaster-passenger':
     ensure  => latest,
     require => Exec['puppetlabs']
   }
   # puppet manifest help
   package { [ 'puppet-lint', 'vim-puppet' ]: }
-  file {
-    # disable WEBrick, use Puppet through Passenger in Apache
-    '/etc/default/puppetmaster':
-      source  => 'puppet:///modules/ocf/local/lightning/puppetmaster',
-      require => Package[ 'puppetmaster', 'puppetmaster-passenger' ];
-    # Apache: only listen on private interface and ports used by Puppet
-    '/etc/apache2/ports.conf':
-      content => '# only listen on private interface and ports used by Puppet';
-    # Apache: enable only Puppet Passenger vhost
-    '/etc/apache2/sites-enabled':
-      ensure  => directory,
-      recurse => true,
-      purge   => true,
-      force   => true,
-      source  => 'puppet:///modules/ocf/local/lightning/sites-enabled';
-  }
-
-  # remove conflicting logrotate rule already defined in /etc/logrotate.d/puppet
-  file { '/etc/logrotate.d/puppetmaster':
-    ensure => absent
-  }
 
   # remote package management
   package { 'apt-dater': }
