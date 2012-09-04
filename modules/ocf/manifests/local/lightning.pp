@@ -16,18 +16,6 @@ class ocf::local::lightning {
     source => 'puppet:///private/apt-dater.keytab'
   }
 
-  # send magic packet to wakeup desktops at lab opening time
-  package { 'wakeonlan': }
-  file {
-    '/usr/local/bin/ocf-wakeup':
-      mode    => '0755',
-      source  => 'puppet:///modules/ocf/local/lightning/ocf-wakeup',
-      require => Package['wakeonlan'];
-    '/etc/cron.d/ocf-wakeup':
-      source  => 'puppet:///modules/ocf/local/lightning/crontab',
-      require => File['/usr/local/bin/ocf-wakeup']
-  }
-
   # provide miscellaneous puppet directories
   file {
     '/opt/puppet':

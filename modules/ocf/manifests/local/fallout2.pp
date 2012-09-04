@@ -11,4 +11,16 @@ class ocf::local::fallout2 {
     subscribe => File['/etc/dhcp/dhcpd.conf']
   }
 
+  # send magic packet to wakeup desktops at lab opening time
+  package { 'wakeonlan': }
+  file {
+    '/usr/local/bin/ocf-wakeup':
+      mode    => '0755',
+      source  => 'puppet:///modules/ocf/local/fallout2/wakeup/script',
+      require => Package['wakeonlan'];
+    '/etc/cron.d/ocf-wakeup':
+      source  => 'puppet:///modules/ocf/local/fallout2/wakeup/cron',
+      require => File['/usr/local/bin/ocf-wakeup']
+  }
+
 }
