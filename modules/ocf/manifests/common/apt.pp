@@ -51,7 +51,7 @@ class ocf::common::apt ( $nonfree = false, $desktop = false ) {
   if $desktop {
     # provide desktop sources.list
     file { '/etc/apt/sources.list.d/desktop.list':
-      content => "deb http://www.debian-multimedia.org/ $lsbdistcodename main non-free\ndeb http://mozilla.debian.net/ $lsbdistcodename-backports iceweasel-release",
+      content => "deb http://www.deb-multimedia.org/ $lsbdistcodename main non-free\ndeb http://mozilla.debian.net/ $lsbdistcodename-backports iceweasel-release",
       require => Package['aptitude'],
       before  => File['/etc/cron.daily/ocf-apt']
     }
