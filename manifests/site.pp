@@ -130,7 +130,7 @@ node hal inherits server {
   #include ocf::local::hal
 }
 node maelstrom inherits server {
-  class { 'ocf::common::networking': octet => 150 }
+  class { 'ocf::common::networking': octet => 229 }
   include ocf::local::maelstrom
 }
 node mudslide inherits server {
@@ -170,7 +170,7 @@ node war inherits server {
 }
 
 # lab and lounge
-node avalanche, bigbang, cyclone, destruction, eruption, hurricane, b1, b2, b3, b4 inherits desktop {
+node avalanche, bigbang, cyclone, debian, destruction, eruption, hurricane, b1, b2, b3, b4 inherits desktop {
 }
 node diplomat, spy inherits server {
   include ocf::common::cups
