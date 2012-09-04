@@ -77,10 +77,10 @@ class ocf::local::printhost {
   }
 
   # reboot at midnight
-  cron { 'reboot':
-    command => '/sbin/reboot',
-    hour    => 00,
-    minute  => 01
-  }
+  #cron { 'reboot':
+  #  command => '/sbin/reboot',
+  #  hour    => 00,
+  #  minute  => 01
+  #}
 
 }
