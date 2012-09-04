@@ -6,47 +6,40 @@ class ocf::common::auth( $login = '', $sudo = '' ) {
 
   # NSS user/group identification
   ocf::repackage {
-    # SSSD for users
-    'sssd':
-      recommends => false;
-    'libnss-sss':
-      recommends => false,
-      require    => [ Ocf::Repackage['sssd'], File['/etc/sssd/sssd.conf'] ];
-    # NSCD for groups
-    'nscd':;
+    # LDAP nameservice provider
     'libnss-ldap':
-      recommends => false
+      recommends => false;
+    # NSCD for LDAP caching
+    'nscd':;
+    # nss_updatedb for offline LDAP caching
+    'nss-updatedb':
   }
-  package { [ 'libnss-ldapd', 'libpam-ldap', 'libpam-sss', 'nslcd' ]:
+  package { [ 'libnss-ldapd', 'libnss-sss', 'libpam-ldap', 'libpam-sss', 'nslcd', 'sssd' ]:
     ensure => purged
   }
   file {
-    # SSSD config
-    '/etc/sssd/sssd.conf':
-      mode    => '0600',
-      source  => 'puppet:///modules/ocf/common/auth/sssd.conf',
-      require => Ocf::Repackage['sssd'];
-    # NSCD config
+    # store local copy of LDAP daily with nss_updatedb
+    '/etc/cron.daily/nss-updatedb':
+      mode    => '0755',
+      content => 'nss_updatedb ldap > /dev/null',
+      require => Ocf::Repackage['nss-updatedb'];
+    # NSCD caching configuration
     '/etc/nscd.conf':
-      source  => 'puppet:///modules/ocf/common/auth/nscd.conf',
+      source  => 'puppet:///modules/ocf/common/auth/nss/nscd.conf',
       require => Ocf::Repackage['nscd'];
-    # NSCD LDAP config
+    # LDAP nameservice configuration
     '/etc/libnss-ldap.conf':
-      source  => 'puppet:///modules/ocf/common/auth/libnss-ldap.conf',
+      ensure  => symlink,
+      target  => '/etc/ldap/ldap.conf',
       require => Ocf::Repackage['libnss-ldap'];
-    # use SSSD for users and NSCD for groups
+    # nameservice configuration: use LDAP but failover to local copy
     '/etc/nsswitch.conf':
-      source  => 'puppet:///modules/ocf/common/auth/nsswitch.conf',
-      require => [ Ocf::Repackage['sssd','libnss-sss','libnss-ldap'], File['/etc/sssd/sssd.conf','/etc/libnss-ldap.conf'] ];
-  }
-  # restart SSSD
-  service { 'sssd':
-    subscribe => File['/etc/sssd/sssd.conf'],
-    require   => Ocf::Repackage['sssd']
+      source  => 'puppet:///modules/ocf/common/auth/nss/nsswitch.conf',
+      require => [ Ocf::Repackage['libnss-ldap'], File['/etc/libnss-ldap.conf'] ];
   }
   # restart NSCD
   service { 'nscd':
-    subscribe => File['/etc/libnss-ldap.conf','/etc/nscd.conf'],
+    subscribe => File['/etc/nscd.conf', '/etc/nsswitch.conf'],
     require   => Ocf::Repackage['nscd']
   }
 
