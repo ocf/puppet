@@ -21,7 +21,7 @@ class ocf::common::auth( $login = '', $sudo = '' ) {
     # store local copy of LDAP daily with nss_updatedb
     '/etc/cron.daily/nss-updatedb':
       mode    => '0755',
-      content => 'nss_updatedb ldap > /dev/null',
+      content => "#!/bin/sh\nnss_updatedb ldap > /dev/null",
       require => Ocf::Repackage['nss-updatedb'];
     # NSCD caching configuration
     '/etc/nscd.conf':
