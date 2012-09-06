@@ -229,10 +229,7 @@ class ocf::local::death {
   }
 
   # apache must subscribe to all conf files
-  service { 'apache2':
-    ensure      => 'running',
-    provider    => 'debian',
-  }
+  service { 'apache2': }
 
   # nfs export of apache logs
   file {
@@ -251,9 +248,7 @@ class ocf::local::death {
       require   => Package['logrotate'],
   }
 
-  service { 'nfs-kernel-server':
-    ensure => 'running',
-  }
+  service { 'nfs-kernel-server': }
 
   # account tools requires some sensitive files
   file {
