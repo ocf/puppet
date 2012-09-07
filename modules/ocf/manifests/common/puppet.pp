@@ -1,5 +1,12 @@
 class ocf::common::puppet {
 
+  # set environment to production
+  augeas { '/etc/puppet/puppet.conf':
+    context => '/files/etc/puppet/puppet.conf',
+    changes => 'set agent/environment production',
+    require => Package['augeas-tools','puppet']
+  }
+
   package { 'puppet':
     ensure  => latest,
     require => Exec['aptitude update']
@@ -19,7 +26,7 @@ class ocf::common::puppet {
   }
 
   service { 'puppet':
-    subscribe => File['/etc/default/puppet'],
+    subscribe => [ File['/etc/default/puppet'], Augeas['/etc/puppet/puppet.conf'] ],
     require   => Package['puppet']
   }
 
