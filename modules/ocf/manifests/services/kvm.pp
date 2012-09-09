@@ -1,7 +1,7 @@
 class ocf::services::kvm( $octet, $group = 'admin' ) {
 
   # install kvm, libvirt, lvm, bridge networking
-  ocf::repackage { [ 'bridge-utils', 'libvirt-bin', 'lvm2', 'netcat-openbsd', 'qemu-kvm', 'virtinst', 'virt-top' ]:
+  ocf::repackage { [ 'bridge-utils', 'libvirt-bin', 'lvm2', 'qemu-kvm', 'virtinst', 'virt-top' ]:
     recommends => false
   }
 
