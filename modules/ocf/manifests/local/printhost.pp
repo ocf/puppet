@@ -60,8 +60,8 @@ class ocf::local::printhost {
       source  => 'puppet:///modules/ocf/local/printhost/pykota.conf';
     # private configuration
     '/etc/pykota/pykotadmin.conf':
-      owner   => lp,
-      group   => printing,
+      owner   => 'lp',
+      group   => 'ocfstaff',
       mode    => '0640',
       source  => 'puppet:///private/pykotadmin.conf'
   }
