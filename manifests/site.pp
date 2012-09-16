@@ -10,8 +10,8 @@ stage { 'first': before => Stage['main'] }
 
 # default path for executions
 Exec { path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' }
-# default file permissions and backup existing files to puppetmaster
-File { mode => 0644, owner => root, group => root, backup => main }
+# default file permissions, follow symlinks when serving files, backup existing files to puppetmaster
+File { mode => 0644, owner => root, group => root, links => follow, backup => main }
 # add managed filesystems to fstab by default
 Mount { ensure => defined }
 # use aptitude for package installation
@@ -129,10 +129,6 @@ node hal inherits server {
   include ocf::common::kexec
   #include ocf::local::hal
 }
-node maelstrom inherits server {
-  class { 'ocf::common::networking': octet => 229 }
-  include ocf::local::maelstrom
-}
 node mudslide inherits server {
   class { 'ocf::common::networking': octet => 68 }
   #include ocf::local::sandstorm
@@ -168,9 +164,13 @@ node war inherits server {
   class {'ocf::common::networking': octet => 244 }
   include ocf::local::war
 }
+node zombie inherits server {
+  class { 'ocf::common::networking': octet => 229 }
+  include ocf::local::maelstrom
+}
 
 # lab and lounge
-node avalanche, bigbang, cyclone, debian, destruction, eruption, hurricane, b1, b2, b3, b4 inherits desktop {
+node avalanche, bigbang, cyclone, debian, destruction, eruption, hurricane, b1, b2, b3, b4, 02 inherits desktop {
 }
 node diplomat, spy inherits server {
   include ocf::common::cups
