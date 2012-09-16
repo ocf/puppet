@@ -1,6 +1,6 @@
 class ocf::local::death {
   package {
-    [ 'apache2', 'php5', 'php5-mysql', 'libapache-mod-security', 'libapache2-mod-suphp', 'python-django', 'python-ldap', 'python-mysqldb', 'python-flup', 'python-cracklib', 'apache2-threaded-dev', 'libapache2-mod-fcgid' ]:
+    [ 'apache2', 'php5', 'php5-mysql', 'libapache-mod-security', 'libapache2-mod-suphp', 'python-django', 'python-ldap', 'python-mysqldb', 'python-flup', 'python-cracklib', 'apache2-threaded-dev', 'libapache2-mod-fcgid', 'python-flask' ]:
       ensure  => installed;
     [ 'nfs-kernel-server', 'logrotate' ]:
       ensure  => installed;
