@@ -249,44 +249,4 @@ class ocf::local::death {
   }
 
   service { 'nfs-kernel-server': }
-
-  # account tools requires some sensitive files
-  file {
-    '/root/account_tools_settings.py.secret':
-      ensure    => file,
-      source    => 'puppet:///private/account_tools_settings.py.secret',
-      mode      => '0600';
-    '/usr/local/etc/webchpwd':
-      ensure    => directory,
-      owner     => 'root',
-      group     => 'root';
-    '/usr/local/etc/webchpwd/ldap.conf':
-      ensure    => file,
-      source    => 'puppet:///private/webchpwd/ldap.conf',
-      owner     => 'root',
-      group     => 'www-data',
-      mode      => '0640';
-    '/usr/local/etc/webchpwd/ldap.key':
-      ensure    => file,
-      source    => 'puppet:///private/webchpwd/ldap.key',
-      owner     => 'root',
-      group     => 'www-data',
-      mode      => '0640';
-    '/usr/local/etc/webchpwd/webchpwd.keytab':
-      ensure    => file,
-      source    => 'puppet:///private/webchpwd/webchpwd.keytab',
-      owner     => 'root',
-      group     => 'www-data',
-      mode      => '0640';
-    '/usr/local/etc/cmds':
-      ensure    => directory,
-      owner     => 'root',
-      group     => 'root';
-    '/usr/local/etc/cmds/host_keys':
-      ensure    => file,
-      source    => 'puppet:///private/account_tools/host_keys',
-      owner     => 'root',
-      group     => 'www-data',
-      mode      => '0640';
-  }
 }
