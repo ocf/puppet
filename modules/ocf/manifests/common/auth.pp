@@ -30,6 +30,7 @@ class ocf::common::auth( $login = '', $sudo = '' ) {
     # LDAP nameservice configuration
     '/etc/libnss-ldap.conf':
       ensure  => symlink,
+      links   => manage,
       target  => '/etc/ldap/ldap.conf',
       require => Ocf::Repackage['libnss-ldap'];
     # nameservice configuration: use LDAP but failover to local copy

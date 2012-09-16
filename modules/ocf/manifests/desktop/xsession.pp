@@ -101,10 +101,12 @@ class ocf::desktop::xsession {
     # enable font auto-hinting
     '/etc/fonts/conf.d/10-autohint.conf':
       ensure => symlink,
+      links  => manage,
       target => '/etc/fonts/conf.avail/10-autohint.conf';
     # enable font sub-pixel rendering
     '/etc/fonts/conf.d/10-sub-pixel-rgb.conf':
       ensure => symlink,
+      links  => manage,
       target => '/etc/fonts/conf.avail/10-sub-pixel-rgb.conf'
   }
 

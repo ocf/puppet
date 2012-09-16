@@ -125,11 +125,13 @@ class ocf::local::blight {
       source => 'puppet:///modules/ocf/local/blight/apache2/ikiwiki';
     '/etc/apache2/sites-enabled/ikiwiki':
       ensure => symlink,
+      links  => manage,
       target => '/etc/apache2/sites-available/ikiwiki';
     '/etc/apache2/sites-available/gitweb':
       source => 'puppet:///modules/ocf/local/blight/apache2/gitweb';
     '/etc/apache2/sites-enabled/gitweb':
       ensure => symlink,
+      links  => manage,
       target => '/etc/apache2/sites-available/gitweb';
     #'/etc/apache2/sites-enabled/000-default':
     #  ensure => absent;
@@ -139,6 +141,7 @@ class ocf::local::blight {
   file {
     '/srv/gitweb':
       ensure  => symlink,
+      links   => manage,
       target  => '/usr/share/gitweb';
     '/srv/gitweb/projects.list':
       content => 'wiki.git';

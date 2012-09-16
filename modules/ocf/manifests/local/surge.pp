@@ -47,6 +47,7 @@ class ocf::local::surge {
       source => 'puppet:///modules/ocf/local/surge/apache';
     '/etc/apache2/sites-enabled/debmirror':
       ensure => symlink,
+      links  => manage,
       target => '/etc/apache2/sites-available/debmirror'
   }
   service { 'apache2':
@@ -93,6 +94,7 @@ class ocf::local::surge {
       require => Package['pax'];
     '/etc/cron.weekly/ocf-netboot':
       ensure  => symlink,
+      links   => manage,
       target  => '/usr/local/sbin/ocf-netboot'
   }
 

@@ -13,6 +13,7 @@ class ocf::local::coupdetat {
   # force xen kernel to be default
   file { '/etc/grub.d/09_linux_xen':
     ensure  => symlink,
+    links   => manage,
     target  => '/etc/grub.d/20_linux_xen',
     require => Ocf::Repackage['xen-linux-system-amd64']
   }

@@ -23,6 +23,7 @@ class ocf::services::netboot {
       require => Package['pax'];
     '/etc/cron.weekly/ocf-netboot':
       ensure  => symlink,
+      links   => manage,
       target  => '/usr/local/sbin/ocf-netboot'
   }
 

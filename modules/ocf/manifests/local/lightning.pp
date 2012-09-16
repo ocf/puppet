@@ -26,6 +26,7 @@ class ocf::local::lightning {
     # provide default production environment
     '/opt/puppet/env/production':
       ensure  => symlink,
+      links   => manage,
       target  => '/etc/puppet';
     # provide scripts directory
     '/opt/puppet/scripts':
