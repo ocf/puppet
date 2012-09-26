@@ -8,12 +8,13 @@ class ocf::common::puppet {
   }
 
   package { 'puppet':
-    ensure    => latest,
-    require   => Exec['aptitude update']
+    ensure      => latest,
+    require     => Exec['aptitude update']
   }
   exec { 'puppet-fix_bug7680':
-    command   => 'sed -i "s/metadata.links == :manage/resource[:links] == :manage/g" /usr/lib/ruby/1.8/puppet/type/file/source.rb',
-    subscribe => Package['puppet']
+    command     => 'sed -i "s/metadata.links == :manage/resource[:links] == :manage/g" /usr/lib/ruby/1.8/puppet/type/file/source.rb',
+    refreshonly => true,
+    subscribe   => Package['puppet']
   }
 
   file {
