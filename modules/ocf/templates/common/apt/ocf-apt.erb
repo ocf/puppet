@@ -29,7 +29,10 @@ mailto='security'
 # report format lists "Fixed vulnerabilities"
 #debsecan="`/usr/bin/debsecan --suite <%= lsbdistcodename %> --format report --only-fixed`" > /dev/null
 debsecan="`/usr/bin/debsecan --suite <%= lsbdistcodename %> --format report --only-fixed | grep -B1000 -Fx '*** Fixed vulnerabilities' | grep -vFx '*** Fixed vulnerabilities'`" > /dev/null
-send_mail(){ echo "$debsecan" | mail -s "Security update: `hostname`" $mailto; }
+
+# disable sending mail
+#send_mail(){ echo "$debsecan" | mail -s "Security update: `hostname`" $mailto; }
+send_mail(){ true; }
 make_sum(){ md5sum "$debsecan_file" > "$debsecan_sum"; }
 
 # report format is not silent when there are no updates (Debian bug #588065)
