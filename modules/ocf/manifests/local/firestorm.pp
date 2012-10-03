@@ -35,7 +35,7 @@ class ocf::local::firestorm {
 
   ##Ldap server install##
   #Packages
-  package { ['slapd', 'libsasl2-modules-gssapi-heimdal']: }
+  package { ['slapd']: }
 
   #define service
   service {
@@ -74,7 +74,7 @@ class ocf::local::firestorm {
   file {
     '/etc/ldap/sasl2/slapd.conf':
       source  => 'puppet:///modules/ocf/local/firestorm/sasl2-slapd',
-      require =>  [ Package['slapd'], Package['libsasl2-modules-gssapi-heimdal'] ],
+      require =>  [ Package['slapd'], Package['libsasl2-modules-gssapi-mit'] ],
   }
 
   file {
