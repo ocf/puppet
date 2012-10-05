@@ -1,0 +1,3 @@
+GSSAPIAuthentication yes
+GSSAPIKeyExchange yes
+GSSAPIDelegateCredentials no
