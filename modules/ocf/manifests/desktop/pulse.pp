@@ -1,25 +1,24 @@
 class ocf::desktop::pulse {
 
-  # PulseAudio without recommends
-  ocf::repackage { 'pulseaudio':
-    recommends => false
+  ocf::repackage {
+    # PulseAudio without recommends
+    'pulseaudio':
+      recommends => false,
+    ;
+    # PulseAudio graphical interfaces
+    [ 'paprefs', 'pavucontrol' ]:
+      recommends => false,
+      require    => Ocf::Repackage['pulseaudio'],
+    ;
   }
 
-  # PulseAudio ALSA plugin
-  package { 'libasound2-plugins':
-    require => Ocf::Repackage['pulseaudio']
-  }
-
-  # PulseAudio graphical interfaces
-  ocf::repackage { [ 'paprefs', 'pavucontrol' ]:
-    recommends => false,
-    require    => Ocf::Repackage['pulseaudio']
-  }
+  # ALSA ultilities and PulseAudio plugin
+  package { [ 'alsa-utils', 'libasound2-plugins' ]: }
 
   # route ALSA sound through PulseAudio
   file { '/etc/asound.conf':
     source  => 'puppet:///modules/ocf/desktop/asound.conf',
-    require => Package['libasound2-plugins']
+    require => Package['libasound2-plugins'],
   }
 
 }
