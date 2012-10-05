@@ -1,9 +1,28 @@
 class ocf::local::lightning {
 
   # this is the puppet master
-  package { 'puppetmaster-passenger':
+  package {
+  'libapache2-mod-passenger':
+  ;
+  'puppetmaster-passenger':
     ensure  => latest,
-    require => Exec['puppetlabs']
+    require => Exec[ 'puppetlabs', 'a2enmod passenger' ],
+  ;
+  }
+  exec {
+    'a2enmod passenger':
+      creates => '/etc/apache2/mods-enabled/passenger.load',
+      require => Package['libapache2-mod-passenger'],
+      notify  => Service['apache2'],
+    ;
+    'a2ensite puppetmaster':
+      creates => '/etc/apache2/sites-enabled/puppetmaster',
+      require => [ Package['puppetmaster-passenger'], Exec['a2enmod passenger'], ],
+      notify  => Service['apache2'],
+    ;
+  }
+  service { 'apache2':
+      require => Package['puppetmaster-passenger'],
   }
   # puppet manifest help
   package { [ 'puppet-lint', 'vim-puppet' ]: }
