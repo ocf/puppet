@@ -4,7 +4,8 @@ class ocf::common::puppet {
   augeas { '/etc/puppet/puppet.conf':
     context => '/files/etc/puppet/puppet.conf',
     changes => 'set agent/environment production',
-    require => Package['augeas-tools','puppet']
+    require => Package['augeas-tools','puppet'],
+    notify  => Service['puppet'],
   }
 
   package { 'puppet':
@@ -17,34 +18,28 @@ class ocf::common::puppet {
     subscribe   => Package['puppet']
   }
 
-  file {
-    # enable puppet agent, reporting to master, and listen for triggers
-    '/etc/default/puppet':
-      source  => 'puppet:///modules/ocf/common/puppet/puppetd',
-      require => File['/etc/puppet/namespaceauth.conf'];
-    # allow puppet master to trigger runs
-    '/etc/puppet/auth.conf':
-      source  => 'puppet:///modules/ocf/common/puppet/auth.conf';
-    # file must exist for puppet 2.6.x agent to start listening
-    '/etc/puppet/namespaceauth.conf':
-      content => 'file must exist for puppet 2.6.x agent to start listening'
+  # enable puppet agent and reporting to master
+  file { '/etc/default/puppet':
+    source => 'puppet:///modules/ocf/common/puppet/puppetd',
+    notify => Service['puppet'],
   }
 
   service { 'puppet':
-    subscribe => [ File['/etc/default/puppet'], Augeas['/etc/puppet/puppet.conf'] ],
-    require   => Package['puppet']
+    require   => Package['puppet'],
   }
 
   # create share directories
   file {
     '/opt/share':
-      ensure => directory;
+      ensure => directory,
+    ;
     '/opt/share/puppet':
       ensure  => directory,
       recurse => true,
       purge   => true,
       force   => true,
-      backup  => false
+      backup  => false,
+    ;
   }
 
   # install augeas-tools
@@ -54,7 +49,7 @@ class ocf::common::puppet {
   file { '/usr/local/sbin/ocf-puppetenv':
     mode    => '0755',
     source  => 'puppet:///modules/ocf/common/puppet/ocf-puppetenv',
-    require => Package['augeas-tools','puppet']
+    require => Package['augeas-tools','puppet'],
   }
 
 }
