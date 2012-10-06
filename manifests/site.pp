@@ -48,8 +48,8 @@ node server inherits base {
   }
   include ocf::common::packages
   case $::hostname {
-    coupdetat:     { class { 'ocf::common::auth': login => 'decal', sudo => 'libvirt' } }
-    printhost:     { class { 'ocf::common::auth': login => 'approve', sudo  => 'ocfstaff' } }
+    coupdetat:     { class { 'ocf::common::auth': login => 'decal',   sudo => 'libvirt' } }
+    printhost:     { class { 'ocf::common::auth': login => 'approve', sudo => 'ocfstaff' } }
     default:       { class { 'ocf::common::auth': } }
   }
   case $::hostname {
@@ -106,6 +106,9 @@ node death inherits server {
   include ocf::common::acct
   include ocf::local::death
 }
+node emp inherits server {
+  class { 'ocf::common::networking': octet => 194 }
+}
 node fallingrocks inherits server {
   class { 'ocf::common::networking': interfaces => false }
   class { 'ocf::services::kvm':      octet      => 79 }
@@ -122,6 +125,10 @@ node "fallout.lab" inherits server {
 node firestorm inherits server{
   class { 'ocf::common::networking': octet => 200 }
   include ocf::local::firestorm
+}
+node flood inherits server{
+  class { 'ocf::common::networking': octet => 95 }
+  #include ocf::local::flood
 }
 node hal inherits server {
   class { 'ocf::common::networking': interfaces => false }
