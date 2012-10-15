@@ -19,14 +19,14 @@ echo "[Desktop Entry]
 Name=Word Processor
 Exec=libreoffice --writer
 Type=Application
-Icon=libreoffice34-writer" > $HOME/Desktop/writer.desktop
+Icon=libreoffice-writer" > $HOME/Desktop/writer.desktop
 
 # LibreOffice
 echo "[Desktop Entry]
 Name=LibreOffice
 Exec=libreoffice
 Type=Application
-Icon=libreoffice34-startcenter" > $HOME/Desktop/office.desktop
+Icon=libreoffice-startcenter" > $HOME/Desktop/office.desktop
 
 # Web Browser
 echo "[Desktop Entry]
