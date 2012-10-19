@@ -1,4 +1,4 @@
-class ocf::common::auth( $login = '', $sudo = '' ) {
+class ocf::common::auth( $login = '', $gsudo = '', $usudo = '' ) {
 
   # require LDAP/Kerberos configuration
   require ocf::common::ldap
