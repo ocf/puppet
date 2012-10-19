@@ -1,4 +1,4 @@
-class ocf::common::apt ( $nonfree = false, $desktop = false ) {
+class ocf::common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
 
   package { 'aptitude': }
   exec { 'aptitude update':
