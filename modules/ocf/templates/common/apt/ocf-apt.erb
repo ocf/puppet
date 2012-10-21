@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Prevent "TERM is not set, so the dialog frontend is not usable." error message
+PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
 apt_cleanup(){
     # update cache then remove downloaded package archives, unused packages, and old config files
     /usr/bin/aptitude update --quiet > /dev/null
