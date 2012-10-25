@@ -137,7 +137,7 @@ node hal inherits server {
   #include ocf::local::hal
 }
 node mudslide inherits server {
-  class { 'ocf::common::networking': octet => 68 }
+  class { 'ocf::common::networking': octet => 203 }
   #include ocf::local::mudslide
 }
 node pandemic inherits server {
