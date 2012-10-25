@@ -31,12 +31,16 @@ class ocf::common::networking( $hosts = true, $interfaces = true, $resolv = true
   # if IP address statically assigned and resolv.conf provided
   if $octet != undef and $resolv {
 
+    package { 'resolvconf':
+      ensure => purged,
+    }
+
     # if interfaces provided
     if $interfaces {
       # provide resolv.conf
       file { '/etc/resolv.conf':
         content => template('ocf/common/networking/resolv.conf.erb'),
-        require => Exec['ifup -a']
+        require => [ Exec['ifup -a'], Package['resolvconf'] ],
       }
     }
 
@@ -45,6 +49,7 @@ class ocf::common::networking( $hosts = true, $interfaces = true, $resolv = true
       # provide resolv.conf
       file { '/etc/resolv.conf':
         content => template('ocf/common/networking/resolv.conf.erb'),
+        require => Package['resolvconf'],
       }
       # start network interfaces
       exec { 'ifup -a':

@@ -6,14 +6,25 @@ class ocf::common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
     subscribe   => File['/etc/apt/sources.list']
   }
 
-  # debsecan reports missing security updates, do not use provided cronjob
-  package { 'debsecan': }
-  file { '/etc/cron.d/debsecan':
-    ensure => absent
-  }
-
   # remote package update management support
   package { [ 'apt-dater-host', 'imvirt' ]: }
+
+  # Evaluate security status of Debian machines
+  if $::operatingsystem == 'Debian' {
+    package { 'debsecan':
+      before => File['/etc/cron.daily/ocf-apt'],
+    }
+    file {
+      # debsecan reports missing security updates, do not use provided cronjob
+      '/etc/cron.d/debsecan':
+        ensure  => absent,
+      ;
+      '/var/lib/debsecan/whitelist':
+        source  => 'puppet:///modules/ocf/common/apt/debsecan-whitelist',
+        require => Package['debsecan'],
+      ;
+    }
+  }
 
   file {
     # provide sources.list
@@ -27,10 +38,7 @@ class ocf::common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
     '/etc/cron.daily/ocf-apt':
       mode    => '0755',
       content => template('ocf/common/apt/ocf-apt.erb'),
-      require => [ Package['aptitude', 'debsecan'], File['/etc/apt/sources.list'] ];
-    '/var/lib/debsecan/whitelist':
-      source  => 'puppet:///modules/ocf/common/apt/debsecan-whitelist',
-      require => Package['debsecan']
+      require => [ Package['aptitude'], File['/etc/apt/sources.list'] ];
   }
 
   if $architecture in ['amd64', 'i386'] {
@@ -48,7 +56,7 @@ class ocf::common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
     }
   }
 
-  if $desktop {
+  if $::operatingsystem == 'Debian' and $desktop {
     # provide desktop sources.list
     file { '/etc/apt/sources.list.d/desktop.list':
       content => "deb http://www.deb-multimedia.org/ $lsbdistcodename main non-free\ndeb http://mozilla.debian.net/ $lsbdistcodename-backports iceweasel-release",

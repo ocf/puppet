@@ -1,3 +1,4 @@
+<% if operatingsystem == 'Debian' -%>
 deb http://http.debian.net/debian/ <%= lsbdistcodename %> main<% if nonfree %> contrib non-free<% end %>
 deb http://security.debian.org/ <%= lsbdistcodename %>/updates main<% if nonfree %> contrib non-free<% end %>
 deb http://http.debian.net/debian/ <%= lsbdistcodename %>-updates main<% if nonfree %> contrib non-free<% end %>
@@ -6,4 +7,10 @@ deb http://http.debian.net/debian-backports/ <%= lsbdistcodename %>-backports ma
 <% end -%>
 <% if kiosk -%>
 deb http://debian.webconverger.com/ lenny/
+<% end -%>
+<% elsif operatingsystem == 'Ubuntu' -%>
+deb http://us.archive.ubuntu.com/ubuntu/ <%= lsbdistcodename %> main restricted universe multiverse
+deb http://us.archive.ubuntu.com/ubuntu/ <%= lsbdistcodename %>-updates main restricted universe multiverse
+deb http://us.archive.ubuntu.com/ubuntu/ <%= lsbdistcodename %>-backports main restricted universe multiverse
+deb http://security.ubuntu.com/ubuntu/ <%= lsbdistcodename %>-security main restricted universe multiverse
 <% end -%>

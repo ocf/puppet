@@ -48,18 +48,11 @@ node server inherits base {
   }
   include ocf::common::packages
   case $::hostname {
-    coupdetat:     { class { 'ocf::common::auth': login => 'decal',   sudo => 'libvirt' } }
+    coupdetat:     { class { 'ocf::common::auth': login => 'decal',   gsudo  => 'libvirt' } }
     printhost:     { class { 'ocf::common::auth': login => 'approve', sudo => 'ocfstaff' } }
     default:       { class { 'ocf::common::auth': } }
   }
-  case $::hostname {
-    coupdetat: { }
-    default:   { include ocf::common::ssh }
-  }
-  case $::hostname {
-    diplomat, spy: { }
-    default:       { include ocf::common::zabbix }
-  }
+  include ocf::common::ssh
 }
 
 node desktop inherits base {
@@ -98,8 +91,8 @@ node conquest inherits server {
   #include ocf::local::conquest
 }
 node coupdetat inherits server {
-  class { 'ocf::common::networking': hosts => false, resolv => false, octet => 253 }
-  include ocf::local::coupdetat
+  class { 'ocf::common::networking': interfaces => false }
+  #include ocf::local::coupdetat
 }
 node death inherits server {
   class { 'ocf::common::networking': octet => 243 }

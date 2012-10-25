@@ -24,6 +24,7 @@ fi
 [ -x /usr/sbin/update-flashplugin-nonfree ] && /usr/sbin/update-flashplugin-nonfree --install --quiet || exit 0
 <% end -%>
 
+<% if operatingsystem == 'Debian' -%>
 # debsecan reports packages missing security updates
 debsecan_file='/etc/motd'
 debsecan_sum='/etc/motd.md5sum'
@@ -54,3 +55,4 @@ else
   rm -f "$debsecan_file"
   rm -f "$debsecan_sum"
 fi
+<% end -%>
