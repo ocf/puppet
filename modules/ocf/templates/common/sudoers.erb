@@ -13,3 +13,5 @@ apt-dater ALL=NOPASSWD: /usr/bin/apt-get, /usr/bin/aptitude, /sbin/reboot
 <% usudo.each do |user| -%>
 <%= user %> ALL=(ALL) ALL
 <% end -%>
+
+#includedir /etc/sudoers.d
