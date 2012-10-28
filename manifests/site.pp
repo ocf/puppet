@@ -43,13 +43,16 @@ node base {
 
 node server inherits base {
   case $::hostname {
-    death:   { class { 'ocf::common::apt': stage => first, nonfree => true } }
-    default: { class { 'ocf::common::apt': stage => first } }
+    death:   	{ class { 'ocf::common::apt': stage => first, nonfree => true } }
+    diplomat:   { class { 'ocf::common::apt': stage => first, nonfree => true, kiosk => true } }
+    default: 	{ class { 'ocf::common::apt': stage => first } }
   }
   include ocf::common::packages
   case $::hostname {
     coupdetat:     { class { 'ocf::common::auth': login => 'decal',   gsudo  => 'libvirt' } }
-    printhost:     { class { 'ocf::common::auth': login => 'approve', sudo => 'ocfstaff' } }
+    printhost:     { class { 'ocf::common::auth': login => 'approve', gsudo => 'ocfstaff' } }
+    flood:	   { class { 'ocf::common::auth': usudo => 'nolm' } }
+    emp:	   { class { 'ocf::common::auth': usudo => 'amloessb' } }
     default:       { class { 'ocf::common::auth': } }
   }
   include ocf::common::ssh
@@ -65,6 +68,8 @@ node desktop inherits base {
   include ocf::common::networking
   include ocf::desktop::iceweasel
   include ocf::desktop::limits
+  include ocf::desktop::lxpanel
+  include ocf::desktop::numlockx
   include ocf::desktop::packages
   include ocf::desktop::pulse
   include ocf::desktop::sshfs
