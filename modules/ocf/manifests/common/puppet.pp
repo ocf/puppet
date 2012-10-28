@@ -9,13 +9,13 @@ class ocf::common::puppet {
   }
 
   package { 'puppet':
-    ensure      => latest,
-    require     => Exec['aptitude update']
+    ensure  => latest,
+    require => Exec['aptitude update']
   }
   exec { 'puppet-fix_bug7680':
-    command     => 'sed -i "s/metadata.links == :manage/resource[:links] == :manage/g" /usr/lib/ruby/1.8/puppet/type/file/source.rb',
-    refreshonly => true,
-    subscribe   => Package['puppet']
+    command => 'sed -i "s/metadata.links == :manage/resource[:links] == :manage/g" /usr/lib/ruby/vendor_ruby/puppet/type/file/source.rb',
+    onlyif  => 'grep "metadata.links == :manage" /usr/lib/ruby/vendor_ruby/puppet/type/file/source.rb',
+    require => Package['puppet'],
   }
 
   # enable puppet agent and reporting to master
