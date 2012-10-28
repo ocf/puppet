@@ -1,7 +1,8 @@
 # Login access control table, scanned for first entry matching user@origin
 # format: permission : users/groups : origins
 #
-+ : root : ALL
++ : ALL : crond
++ : root : LOCAL
 + : apt-dater : lightning.ocf.berkeley.edu
 #+ : dumper : pollution.ocf.berkeley.edu
 + : nessus : .security.berkeley.edu
