@@ -1,8 +1,12 @@
 class ocf::common::networking( $hosts = true, $interfaces = true, $resolv = true, $octet = undef ) {
 
+  # set FQDN and hostname from SSL client certificate
+  $fqdn = $::clientcert
+  $hostname = regsubst($::clientcert, '^(\w+)\..*$', '\1')
+
   # provide hostname
   file { '/etc/hostname':
-    content => "$::hostname"
+    content => "$hostname"
   }
 
   service {'networking':}
