@@ -30,7 +30,7 @@ use IkiWiki::Setup::Standard {
 	# rcs backend to use
 	rcs => 'git',
 	# plugins to add to the default configuration
-	add_plugins => [qw{goodstuff websetup search 404 passwordauth editpage rename serverlist}],
+	add_plugins => [qw{goodstuff websetup search 404 passwordauth editpage rename serverlist favicon}],
 	# plugins to disable
 	disable_plugins => [qw(openid httpauth)],
 	# additional directory to search for template files
