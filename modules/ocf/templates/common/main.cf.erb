@@ -1,3 +1,7 @@
-# relay all mail through smtp server
+# Use FQDN as mail hostname
+myhostname = <%= fqdn %>
+myorigin = $myhostname
+
+# Relay all mail through smtp
 relayhost = smtp
 mydestination =
