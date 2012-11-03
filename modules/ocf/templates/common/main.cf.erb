@@ -1,9 +1,3 @@
-# OCF config
-biff = no
-readme_directory = no
-
-myhostname = <%= fqdn %>
-myorigin = $myhostname
-
-relayhost = smtp.<%= domain %>
+# relay all mail through smtp server
+relayhost = smtp
 mydestination =
