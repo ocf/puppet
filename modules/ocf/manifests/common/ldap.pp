@@ -11,6 +11,7 @@ class ocf::common::ldap {
     ;
     '/etc/ldap/ldap.conf':
       ensure  => symlink,
+      links   => manage,
       target  => '/etc/ldap.conf',
     ;
     # provide LDAP CA certificate
