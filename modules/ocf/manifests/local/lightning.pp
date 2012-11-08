@@ -24,8 +24,11 @@ class ocf::local::lightning {
   service { 'apache2':
       require => Package['puppetmaster-passenger'],
   }
-  # puppet manifest help
+  # Puppet manifest help
   package { [ 'puppet-lint', 'vim-puppet' ]: }
+
+  # Hiera, PyYAML, and YAML validator
+  package { [ 'hiera', 'python-yaml', 'kwalify' ]: }
 
   # remote package management
   package { 'apt-dater': }
