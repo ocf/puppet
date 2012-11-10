@@ -54,7 +54,7 @@ class ocf::common::packages( $extra = false, $login = false ) {
       # signat perl dependency
       'libwww-mechanize-perl':;
       # python
-      [ 'python-dev', 'python-django', 'python-egenix-mxdatetime', 'python-imaging', 'python-ldap', 'python-lxml', 'python-mysqldb', 'python-pygresql' ]:;
+      [ 'python-dev', 'python-django', 'python-imaging', 'python-ldap', 'python-lxml', 'python-mysqldb', 'python-pygresql' ]:;
       # compiler stuff
       [ 'bison', 'flex' ]:
     }
