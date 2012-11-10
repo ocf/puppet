@@ -47,7 +47,10 @@ node server inherits base {
     diplomat:   { class { 'ocf::common::apt': stage => first, nonfree => true, kiosk => true } }
     default: 	{ class { 'ocf::common::apt': stage => first } }
   }
-  include ocf::common::packages
+  case $::hostname {
+    tsunami:	{ class { 'ocf::common::packages':    extra => true, login => true } }
+    default:	{ class { 'ocf::common::packages': } }
+  }
   case $::hostname {
     coupdetat:     { class { 'ocf::common::auth': login => 'decal',   gsudo  => 'libvirt' } }
     printhost:     { class { 'ocf::common::auth': login => 'approve', gsudo => 'ocfstaff' } }
@@ -163,7 +166,6 @@ node surge inherits server {
 }
 node tsunami inherits server {
   class { 'ocf::common::networking': octet => 223 }
-  class { 'ocf::local::packages':    extra => true, login => true }
 }
 node typhoon inherits server {
   class { 'ocf::common::networking': octet => 214 }
