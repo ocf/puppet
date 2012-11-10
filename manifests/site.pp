@@ -39,6 +39,7 @@ node base {
   include ocf::common::kerberos
   include ocf::common::ldap
   include ocf::common::smart
+  include ocf::common::zabbix
 }
 
 node server inherits base {
@@ -48,7 +49,7 @@ node server inherits base {
     default: 	{ class { 'ocf::common::apt': stage => first } }
   }
   case $::hostname {
-    tsunami:	{ class { 'ocf::common::packages':    extra => true, login => true } }
+  #  tsunami:	{ class { 'ocf::common::packages':    extra => true, login => true } }
     default:	{ class { 'ocf::common::packages': } }
   }
   case $::hostname {
