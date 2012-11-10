@@ -86,7 +86,7 @@ node lightning, puppet inherits server {
   include ocf::local::lightning
 }
 
-# server room
+# servers
 node blight inherits server {
   class {'ocf::common::networking': octet => 236 }
   include ocf::local::blight
@@ -161,12 +161,16 @@ node surge inherits server {
   class { 'ocf::common::networking': octet => 207 }
   include ocf::local::surge
 }
+node tsunami inherits server {
+  class { 'ocf::common::networking': octet => 223 }
+  class { 'ocf::local::packages':    extra => true, login => true }
+}
 node typhoon inherits server {
-  class {'ocf::common::networking': octet => 214 }
+  class { 'ocf::common::networking': octet => 214 }
   #include ocf::local::typhoon
 }
 node war inherits server {
-  class {'ocf::common::networking': octet => 244 }
+  class { 'ocf::common::networking': octet => 244 }
   include ocf::local::war
 }
 node zombie inherits server {

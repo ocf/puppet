@@ -42,8 +42,10 @@ class ocf::common::packages( $extra = false, $login = false ) {
       # database clients
       [ 'mysql-client', 'postgresql-client' ]:;
       'emacs23-nox':;
+      # irc clients
       'irssi':;
-      'lynx':;
+      # text web browsers
+      [ 'elinks', 'lynx' ]:;
       # mail clients
       [ 'alpine', 'mutt' ]:;
       'octave3.2':;
