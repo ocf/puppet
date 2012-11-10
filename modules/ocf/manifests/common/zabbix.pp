@@ -6,7 +6,8 @@ class ocf::common::zabbix {
   file {
     # provide zabbix config
     '/etc/zabbix/zabbix_agentd.conf':
-      source  => 'puppet:///modules/ocf/common/zabbix_agentd.conf',
+      #source  => 'puppet:///modules/ocf/common/zabbix_agentd.conf',
+      content => template('ocf/common/zabbix_agentd.conf.erb'),
       require => Package[ 'zabbix-agent' ];
     # provide newer version of zabbix binary
     #'/usr/sbin/zabbix_agentd':

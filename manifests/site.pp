@@ -39,28 +39,28 @@ node base {
   include ocf::common::kerberos
   include ocf::common::ldap
   include ocf::common::smart
-  include ocf::common::zabbix
 }
 
 node server inherits base {
   case $::hostname {
-    death:   	{ class { 'ocf::common::apt': stage => first, nonfree => true } }
-    diplomat:   { class { 'ocf::common::apt': stage => first, nonfree => true, kiosk => true } }
-    default: 	{ class { 'ocf::common::apt': stage => first } }
+    death:     { class { 'ocf::common::apt': stage => first, nonfree => true } }
+    diplomat:  { class { 'ocf::common::apt': stage => first, nonfree => true, kiosk => true } }
+    default:   { class { 'ocf::common::apt': stage => first } }
   }
   case $::hostname {
-  #  tsunami:	{ class { 'ocf::common::packages':    extra => true, login => true } }
-    default:	{ class { 'ocf::common::packages': } }
+    tsunami:   { class { 'ocf::common::packages': extra => true, login => true } }
+    default:   { class { 'ocf::common::packages': } }
   }
   case $::hostname {
-    coupdetat:     { class { 'ocf::common::auth': login => 'decal',   gsudo  => 'libvirt' } }
-    emp:	   { class { 'ocf::common::auth': usudo => 'amloessb' } }
-    flood:	   { class { 'ocf::common::auth': usudo => 'nolm' } }
-    printhost:     { class { 'ocf::common::auth': login => 'approve', gsudo => 'ocfstaff' } }
-    tsunami:	   { class { 'ocf::common::auth': login => 'ocf' } }
-    default:       { class { 'ocf::common::auth': } }
+    coupdetat: { class { 'ocf::common::auth': login => 'decal',   gsudo  => 'libvirt' } }
+    emp:       { class { 'ocf::common::auth': usudo => 'amloessb' } }
+    flood:     { class { 'ocf::common::auth': usudo => 'nolm' } }
+    printhost: { class { 'ocf::common::auth': login => 'approve', gsudo => 'ocfstaff' } }
+    tsunami:   { class { 'ocf::common::auth': login => 'ocf' } }
+    default:   { class { 'ocf::common::auth': } }
   }
   include ocf::common::ssh
+  include ocf::common::zabbix
 }
 
 node desktop inherits base {
