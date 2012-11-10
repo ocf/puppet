@@ -52,7 +52,11 @@ class ocf::common::packages( $extra = false, $login = false ) {
       # pykota python dependencies
       [ 'pkpgcounter', 'python-egenix-mxdatetime', 'python-imaging', 'python-jaxml', 'python-minimal', 'python-mysqldb', 'python-osd', 'python-pysnmp4', 'python-reportlab' ]:;
       # signat perl dependency
-      'libwww-mechanize-perl':
+      'libwww-mechanize-perl':;
+      # python
+      [ 'python-dev', 'python-django', 'python-egenix-mxdatetime', 'python-imaging', 'python-ldap', 'python-lxml', 'python-mysqldb', 'python-pygresql' ]:;
+      # compiler stuff
+      [ 'bison', 'flex' ]:
     }
   }
 
