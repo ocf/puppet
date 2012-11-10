@@ -53,9 +53,10 @@ node server inherits base {
   }
   case $::hostname {
     coupdetat:     { class { 'ocf::common::auth': login => 'decal',   gsudo  => 'libvirt' } }
-    printhost:     { class { 'ocf::common::auth': login => 'approve', gsudo => 'ocfstaff' } }
-    flood:	   { class { 'ocf::common::auth': usudo => 'nolm' } }
     emp:	   { class { 'ocf::common::auth': usudo => 'amloessb' } }
+    flood:	   { class { 'ocf::common::auth': usudo => 'nolm' } }
+    printhost:     { class { 'ocf::common::auth': login => 'approve', gsudo => 'ocfstaff' } }
+    tsunami:	   { class { 'ocf::common::auth': login => 'ocf' } }
     default:       { class { 'ocf::common::auth': } }
   }
   include ocf::common::ssh
