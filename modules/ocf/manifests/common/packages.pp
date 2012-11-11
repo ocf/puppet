@@ -47,7 +47,7 @@ class ocf::common::packages( $extra = false, $login = false ) {
       # text web browsers
       [ 'elinks', 'lynx' ]:;
       # mail clients
-      [ 'alpine', 'mutt' ]:;
+      [ 'alpine', 'bogofilter', 'mutt' ]:;
       'octave3.2':;
       # pykota python dependencies
       [ 'pkpgcounter', 'python-egenix-mxdatetime', 'python-imaging', 'python-jaxml', 'python-minimal', 'python-mysqldb', 'python-osd', 'python-pysnmp4', 'python-reportlab' ]:;
