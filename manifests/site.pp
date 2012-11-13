@@ -36,6 +36,7 @@ node base {
     sandstorm: { }
     default:   { include ocf::common::postfix }
   }
+  include ocf::common::autologout
   include ocf::common::kerberos
   include ocf::common::ldap
   include ocf::common::smart
