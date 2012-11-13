@@ -29,8 +29,8 @@ node base {
     include ocf::common::kexec
   }
   case $::hostname {
-    hal: { }
-    default:   { include ocf::common::ntp }
+    hal, pandemic: { }
+    default:       { include ocf::common::ntp }
   }
   case $::hostname {
     sandstorm: { }
