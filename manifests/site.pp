@@ -86,12 +86,6 @@ node desktop inherits base {
 
 ### managed nodes ###
 
-# puppetmaster
-node lightning, puppet inherits server {
-  class { 'ocf::common::networking': octet => 210 }
-  include ocf::local::lightning
-}
-
 # servers
 node blight inherits server {
   class {'ocf::common::networking': octet => 236 }
@@ -140,6 +134,10 @@ node hal inherits server {
   class { 'ocf::services::kvm':      octet      => 199 }
   include ocf::common::kexec
   #include ocf::local::hal
+}
+node lightning inherits server {
+  class { 'ocf::common::networking': octet => 210 }
+  include ocf::local::lightning
 }
 node mudslide inherits server {
   class { 'ocf::common::networking': octet => 203 }

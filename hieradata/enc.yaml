@@ -64,7 +64,7 @@ hostname:    mudslide
 ipoctet:     203
 
 ---
-hostname:    puppet
+hostname:    lightning
 ipoctet:     210
 classes:     ['ocf::local::lightning']
 
