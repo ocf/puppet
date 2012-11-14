@@ -86,7 +86,6 @@ classes:     ['ocf::local::printhost']
 ---
 hostname:    sandstorm
 ipoctet:     218
-classes:     ['ocf::local::sandstorm']
 
 ---
 hostname:    spy
@@ -97,7 +96,6 @@ classes:     ['ocf::common::cups']
 ---
 hostname:    tsunami
 ipoctet:     223
-classes:     ['ocf::local::tsunami']
 
 ---
 hostname:    typhoon
