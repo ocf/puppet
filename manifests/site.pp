@@ -123,7 +123,7 @@ node fallout inherits server {
   class { 'ocf::common::networking': octet => 196 }
   include ocf::local::fallout
 }
-node "fallout.lab" inherits server {
+node fallout2 inherits server {
   class { 'ocf::common::networking': octet => 67 }
   include ocf::local::fallout2
 }
