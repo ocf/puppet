@@ -1,13 +1,5 @@
 class ocf::common::puppet {
 
-  # set environment to production
-  augeas { '/etc/puppet/puppet.conf':
-    context => '/files/etc/puppet/puppet.conf',
-    changes => 'set agent/environment production',
-    require => Package['augeas-tools','libaugeas-ruby','puppet'],
-    notify  => Service['puppet'],
-  }
-
   package { 'puppet':
     ensure  => latest,
     require => Exec['aptitude update']
@@ -47,11 +39,6 @@ class ocf::common::puppet {
 
   # install custom scripts
   file {
-    '/usr/local/sbin/ocf-puppetenv':
-      mode    => '0755',
-      source  => 'puppet:///modules/ocf/common/puppet/ocf-puppetenv',
-      require => Package['augeas-tools','puppet'],
-    ;
     '/usr/local/sbin/puppet-ls':
       mode    => 0755,
       source  => 'puppet:///contrib/common/puppet-ls',
