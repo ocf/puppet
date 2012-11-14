@@ -1,0 +1,159 @@
+# Node definitions for use with enc.py
+# Please respect convention:
+#   * order documents alphabetically by hostname
+#   * order of keys within documents:
+#       hostname, macaddress, ipoctet, (these are required)
+#       macaddress, subnet, type, classes, environment, (these are optional)
+#       and then alphabetically (these are optional)
+---
+hostname:    blight
+ipoctet:     236
+classes:     ['ocf::local::blight']
+
+---
+hostname:    coupdetat
+ipoctet:     253
+
+---
+hostname:    death
+ipoctet:     243
+classes:     ['ocf::local::death']
+
+---
+hostname:    diplomat
+ipoctet:     69
+subnet:      hearst
+
+---
+hostname:    emp
+ipoctet:     194
+
+---
+hostname:    fallingrocks
+ipoctet:     79
+subnet:      hearst
+classes:     ['ocf::common::kexec', 'ocf::services::kvm']
+
+---
+hostname:    fallout
+ipoctet:     196
+classes:     ['ocf::local::fallout']
+
+---
+hostname:    fallout2
+ipoctet:     67
+classes:     ['ocf::local::fallout2']
+
+---
+hostname:    firestorm
+ipoctet:     200
+classes:     ['ocf::local::firestorm']
+
+---
+hostname:    flood
+ipoctet:     95
+subnet:      hearst
+
+---
+hostname:    hal
+ipoctet:     199
+classes:     ['ocf::common::kexec', 'ocf::services::kvm']
+
+---
+hostname:    mudslide
+ipoctet:     203
+
+---
+hostname:    puppet
+ipoctet:     210
+classes:     ['ocf::local::lightning']
+
+---
+hostname:    pandemic
+ipoctet:     206
+classes:     ['ocf::common::kexec', 'ocf::services::kvm']
+
+---
+hostname:    pollution
+ipoctet:     198
+classes:     ['ocf::local::pollution']
+
+---
+hostname:    printhost
+ipoctet:     245
+classes:     ['ocf::local::printhost']
+
+---
+hostname:    sandstorm
+ipoctet:     218
+classes:     ['ocf::local::sandstorm']
+
+---
+hostname:    spy
+ipoctet:     68
+subnet:      hearst
+classes:     ['ocf::common::cups']
+
+---
+hostname:    tsunami
+ipoctet:     223
+classes:     ['ocf::local::tsunami']
+
+---
+hostname:    typhoon
+ipoctet:     214
+
+---
+hostname:    zombie
+ipoctet:     229
+classes:     ['ocf::local::maelstrom']
+
+### NEEDS FIXING
+---
+hostname: avalanche
+subnet: hearst
+type: desktop
+---
+hostname: bigbang
+subnet: hearst
+type: desktop
+---
+hostname: cyclone
+subnet: hearst
+type: desktop
+---
+hostname: debian
+subnet: hearst
+type: desktop
+---
+hostname: destruction
+subnet: hearst
+type: desktop
+---
+hostname: eruption
+subnet: hearst
+type: desktop
+---
+hostname: hurricane
+subnet: hearst
+type: desktop
+---
+hostname: b1
+subnet: hearst
+type: desktop
+---
+hostname: b2
+subnet: hearst
+type: desktop
+---
+hostname: b3
+subnet: hearst
+type: desktop
+---
+hostname: b4
+subnet: hearst
+type: desktop
+---
+hostname: '02'
+subnet: hearst
+type: desktop

@@ -1,0 +1,48 @@
+type: map
+mapping:
+
+  "hostname":
+    required: yes
+    pattern:  /^([a-z])|([a-z][a-z0-9\-]*[a-z0-9])$/
+    type:     str
+    length:   {min: 1, max: 255}
+    unique:   yes
+
+  "ipoctet":
+    required: yes
+    type:     int
+    range:    {min: 1, max: 254}
+    unique:   yes
+
+  "macaddress":
+    pattern:  /^(([0-9a-f]{2}:){5}([0-9a-f]{2}))?$/
+    type:     str
+    length:   {min: 0, max: 17}
+    unique:   yes
+
+  "subnet":
+    enum:     [esh, hearst]
+    type:     str
+    unique:   yes
+    default:  esh
+
+  "type":
+    enum:    [base, desktop, server]
+    type:    str
+    unique:  yes
+    default: server
+
+  "classes":
+    type:     seq
+    sequence:
+      - pattern: /^[a-z]([a-z0-9_])*(::[a-z][a-z0-9_]*)*$/
+        type:    str
+        length:  {min: 1, max: 255}
+        unique:  yes
+
+  "environment":
+    pattern: /^[a-z0-9_]+$/
+    type:    str
+    length:  {min: 1, max: 255}
+    unique:  yes
+    default: production
