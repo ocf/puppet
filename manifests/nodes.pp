@@ -82,6 +82,7 @@ node death inherits server {
   class { 'ocf::common::networking': octet => 243 }
   include ocf::common::acct
   include ocf::common::limits
+  include ocf::common::mysql
   include ocf::local::death
 }
 node emp inherits server {
@@ -150,6 +151,7 @@ node tsunami inherits server {
   class { 'ocf::common::networking': octet => 223 }
   include ocf::common::acct
   include ocf::common::limits
+  include ocf::common::mysql
 }
 node typhoon inherits server {
   class { 'ocf::common::networking': octet => 214 }
