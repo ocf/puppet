@@ -1,9 +1,8 @@
 nameserver 128.32.129.242
 nameserver 128.32.206.12
 nameserver 128.32.136.9
-
-<% if domain == 'lab.ocf.berkeley.edu' %>
+<% if domain == 'lab.ocf.berkeley.edu' -%>
 search lab.ocf.berkeley.edu ocf.berkeley.edu int.ocf.berkeley.edu
-<% else %>
+<% else -%>
 search ocf.berkeley.edu lab.ocf.berkeley.edu int.ocf.berkeley.edu
 <% end -%>
