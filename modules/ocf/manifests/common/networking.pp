@@ -1,4 +1,11 @@
-class ocf::common::networking( $hosts = true, $interfaces = true, $resolv = true, $octet = undef ) {
+class ocf::common::networking( $hosts = true, $interfaces = true, $octet = undef ) {
+
+  # do not provide resolv.conf if using DHCP
+  if $octet == undef {
+    $resolv = false
+  } else {
+    $resolv = true
+  }
 
   # set FQDN and hostname from SSL client certificate
   $fqdn = $::clientcert
@@ -6,7 +13,7 @@ class ocf::common::networking( $hosts = true, $interfaces = true, $resolv = true
 
   # provide hostname
   file { '/etc/hostname':
-    content => "$hostname"
+    content => $hostname,
   }
 
   service {'networking':}
@@ -14,7 +21,7 @@ class ocf::common::networking( $hosts = true, $interfaces = true, $resolv = true
   if $hosts {
     # provide /etc/hosts
     file { '/etc/hosts':
-      content => template('ocf/common/networking/hosts.erb');
+      content => template('ocf/common/networking/hosts.erb'),
     }
   }
 
@@ -23,44 +30,24 @@ class ocf::common::networking( $hosts = true, $interfaces = true, $resolv = true
     # provide network interfaces
     file { '/etc/network/interfaces':
       content => template('ocf/common/networking/interfaces.erb'),
-      notify  => Service['networking']
+      notify  => [ Service['networking'], Exec['ifup -a'] ],
     }
     # start network interfaces
     exec { 'ifup -a':
       refreshonly => true,
-      subscribe   => File['/etc/network/interfaces']
     }
   }
 
-  # if IP address statically assigned and resolv.conf provided
-  if $octet != undef and $resolv {
-
+  # if resolv.conf provided
+  if $resolv {
     package { 'resolvconf':
       ensure => purged,
     }
-
-    # if interfaces provided
-    if $interfaces {
-      # provide resolv.conf
-      file { '/etc/resolv.conf':
-        content => template('ocf/common/networking/resolv.conf.erb'),
-        require => [ Exec['ifup -a'], Package['resolvconf'] ],
-      }
+    # provide resolv.conf
+    file { '/etc/resolv.conf':
+      content => template('ocf/common/networking/resolv.conf.erb'),
+      require => Package['resolvconf'],
     }
-
-    # if interfaces not provided
-    if ! $interfaces {
-      # provide resolv.conf
-      file { '/etc/resolv.conf':
-        content => template('ocf/common/networking/resolv.conf.erb'),
-        require => Package['resolvconf'],
-      }
-      # start network interfaces
-      exec { 'ifup -a':
-        subscribe => File['/etc/resolv.conf']
-      }
-    }
-
   }
 
 }
