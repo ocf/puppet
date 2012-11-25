@@ -89,8 +89,8 @@ node emp inherits server {
   class { 'ocf::common::networking': octet => 194 }
 }
 node fallingrocks inherits server {
-  class { 'ocf::common::networking': interfaces => false }
-  class { 'ocf::services::kvm':      octet      => 79 }
+  class { 'ocf::common::networking': octet => 79, interfaces => false }
+  class { 'ocf::services::kvm':      octet => 79 }
   include ocf::common::kexec
 }
 node fallout inherits server {
@@ -110,8 +110,8 @@ node flood inherits server{
   #include ocf::local::flood
 }
 node hal inherits server {
-  class { 'ocf::common::networking': interfaces => false }
-  class { 'ocf::services::kvm':      octet      => 199 }
+  class { 'ocf::common::networking': octet => 199, interfaces => false }
+  class { 'ocf::services::kvm':      octet => 199 }
   include ocf::common::kexec
   #include ocf::local::hal
 }
@@ -124,8 +124,8 @@ node mudslide inherits server {
   #include ocf::local::mudslide
 }
 node pandemic inherits server {
-  class { 'ocf::common::networking': interfaces => false }
-  class { 'ocf::services::kvm':      octet      => 206 }
+  class { 'ocf::common::networking': octet => 206, interfaces => false }
+  class { 'ocf::services::kvm':      octet => 206 }
   include ocf::common::kexec
   #include ocf::local::pandemic
 }
