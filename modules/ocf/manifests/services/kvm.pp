@@ -1,8 +1,7 @@
 class ocf::services::kvm( $octet, $group = 'admin' ) {
 
   # install kvm, libvirt, lvm, bridge networking
-  ocf::repackage { [ 'bridge-utils', 'libvirt-bin', 'lvm2', 'qemu-kvm', 'virtinst', 'virt-top' ]:
-    recommends => false
+  package { [ 'bridge-utils', 'libvirt-bin', 'lvm2', 'qemu-kvm', 'virtinst', 'virt-top' ]:
   }
 
   # provide network interfaces
@@ -23,11 +22,11 @@ class ocf::services::kvm( $octet, $group = 'admin' ) {
                     "set unix_sock_group $group",
                     'set unix_sock_rw_perms 0770'
                   ],
-    require   => [ File['/etc/nsswitch.conf'], Ocf::Repackage['libvirt-bin'] ]
+    require   => [ File['/etc/nsswitch.conf'], Package['libvirt-bin'] ]
   }
   service { 'libvirt-bin':
     subscribe => Augeas['/etc/libvirt/libvirtd.conf'],
-    require   => Ocf::Repackage['libvirt-bin']
+    require   => Package['libvirt-bin']
   }
 
 }
