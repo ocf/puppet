@@ -59,7 +59,7 @@ def load_yaml(filename):
 def load_node(certname):
     """Load the YAML document corresponding to a node"""
     hostname = get_hostname(certname)
-    input = load_yaml('/opt/puppet/env/production/hieradata/enc.yaml')
+    input = load_yaml('/opt/puppet/env/production/enc/nodes.yaml')
     for document in input:
         if document['hostname'] == hostname:
             node = document
