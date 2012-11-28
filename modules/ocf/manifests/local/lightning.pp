@@ -46,15 +46,18 @@ class ocf::local::lightning {
   # provide miscellaneous puppet directories
   file {
     '/opt/puppet':
-      ensure  => directory;
+      ensure  => directory,
+    ;
     # provide alternate environments
     '/opt/puppet/env':
-      ensure  => directory;
+      ensure  => directory,
+    ;
     # provide default production environment
     '/opt/puppet/env/production':
       ensure  => symlink,
       links   => manage,
-      target  => '/etc/puppet';
+      target  => '/etc/puppet',
+    ;
     # provide scripts directory
     '/opt/puppet/scripts':
       ensure  => directory,
@@ -62,17 +65,23 @@ class ocf::local::lightning {
       recurse => true,
       purge   => true,
       force   => true,
-      source  => 'puppet:///modules/ocf/local/lightning/puppet-scripts';
-    # provide public external content
-    '/opt/puppet/contrib':
-      ensure  => directory;
-    # provide private per-host shares
-    '/opt/puppet/private':
+      source  => 'puppet:///modules/ocf/local/lightning/puppet-scripts',
+    ;
+    # provide fileserver shares directory
+    '/opt/puppet/shares':
       ensure  => directory,
+    ;
+    # provide public external content
+    '/opt/puppet/shares/contrib':
+      ensure  => directory,
+    ;
+    # provide private per-host shares
+    '/opt/puppet/shares/private':
       mode    => '0400',
       owner   => 'puppet',
       group   => 'puppet',
       recurse => true
+    ;
   }
 
 }
