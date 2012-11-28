@@ -19,7 +19,7 @@ class ocf::desktop::packages {
     # lyx
     'lyx':;
     # nonfree packages
-    [ 'acroread', 'firmware-linux', 'flashplugin-nonfree', 'ttf-mscorefonts-installer' ]:;
+    [ 'firmware-linux', 'flashplugin-nonfree', 'ttf-mscorefonts-installer' ]:;
     # notifications
     [ 'libnotify-bin', 'notification-daemon' ]:;
     # performance improvements
