@@ -30,6 +30,11 @@ class ocf::local::lightning {
   # Hiera, PyYAML, and YAML validator
   package { [ 'hiera', 'python-yaml', 'kwalify' ]: }
 
+  # automatic rebase for git pull in new repositories
+  file { '/etc/gitconfig':
+    content => "[branch]\nautosetuprebase = always",
+  }
+
   # remote package management
   package { 'apt-dater': }
   file { '/root/apt-dater.keytab':
