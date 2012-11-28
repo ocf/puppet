@@ -29,6 +29,7 @@ class ocf::local::lightning {
   file {
     # external node classifier script parses nodes.yaml
     '/etc/puppet/enc.py':
+      mode    => '0755',
       source  => 'puppet:///modules/ocf/local/lightning/enc.py',
     ;
     # configure contrib and private shares
