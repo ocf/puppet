@@ -24,6 +24,22 @@ class ocf::local::lightning {
   service { 'apache2':
       require => Package['puppetmaster-passenger'],
   }
+
+  # provide puppetmaster configuration
+  file {
+    # configure contrib and private shares
+    '/etc/puppet/fileserver.conf':
+      source  => 'puppet:///modules/ocf/local/lightning/fileserver.conf',
+    ;
+    '/etc/puppet/puppet.conf':
+      source  => 'puppet:///modules/ocf/local/lightning/puppet.conf',
+    ;
+    # mail errors and warnings about puppet runs
+    '/etc/puppet/tagmail.conf':
+      content => 'warning, err, alert, emerg, crit: puppet',
+    ;
+  }
+
   # Puppet manifest help
   package { [ 'puppet-lint', 'vim-puppet' ]: }
 
@@ -51,12 +67,6 @@ class ocf::local::lightning {
     # provide alternate environments
     '/opt/puppet/env':
       ensure  => directory,
-    ;
-    # provide default production environment
-    '/opt/puppet/env/production':
-      ensure  => symlink,
-      links   => manage,
-      target  => '/etc/puppet',
     ;
     # provide scripts directory
     '/opt/puppet/scripts':
