@@ -27,6 +27,10 @@ class ocf::local::lightning {
 
   # provide puppetmaster configuration
   file {
+    # external node classifier script parses nodes.yaml
+    '/etc/puppet/enc.py':
+      source  => 'puppet:///modules/ocf/local/lightning/enc.py',
+    ;
     # configure contrib and private shares
     '/etc/puppet/fileserver.conf':
       source  => 'puppet:///modules/ocf/local/lightning/fileserver.conf',
