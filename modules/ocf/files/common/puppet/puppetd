@@ -1,7 +1,0 @@
-# OCF config
-
-# Start puppet on boot?
-START=yes
-
-# Startup options
-DAEMON_OPTS='--report --no-usecacheonfailure'

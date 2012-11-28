@@ -10,10 +10,22 @@ class ocf::common::puppet {
     require => Package['puppet'],
   }
 
-  # enable puppet agent and reporting to master
+  # enable puppet agent
   file { '/etc/default/puppet':
-    source => 'puppet:///modules/ocf/common/puppet/puppetd',
-    notify => Service['puppet'],
+    content => 'START=yes',
+    notify  => Service['puppet'],
+  }
+
+  # configure puppet agent
+  # set environment to match server and disable cached catalog on failure
+  augeas { '/etc/puppet/puppet.conf':
+    context => '/files/etc/puppet/puppet.conf',
+    changes => [
+               "set agent/environment $::environment",
+               'set agent/usecacheonfailure false',
+               ],
+    require => Package['augeas-tools', 'libaugeas-ruby', 'puppet'],
+    notify  => Service['puppet'],
   }
 
   service { 'puppet':
