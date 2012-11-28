@@ -13,7 +13,7 @@ class ocf::common::postfix {
   # provide mail configuration files
   file {
     '/etc/mailname':
-      content  => "$::fqdn",
+      content  => 'ocf.berkeley.edu',
       require  => Package['postfix'];
     '/etc/postfix/main.cf':
       content  => template('ocf/common/main.cf.erb'),
