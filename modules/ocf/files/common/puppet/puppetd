@@ -4,4 +4,4 @@
 START=yes
 
 # Startup options
-DAEMON_OPTS='--report'
+DAEMON_OPTS='--report --no-usecacheonfailure'
