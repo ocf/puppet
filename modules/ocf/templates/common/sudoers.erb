@@ -5,7 +5,7 @@ Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/b
 
 root ALL=(ALL) ALL
 apt-dater ALL=NOPASSWD: /usr/bin/apt-get, /usr/bin/aptitude, /sbin/reboot
-#dumper ALL=NOPASSWD: /usr/bin/rsync, /usr/bin/nice, /usr/bin/ionice
+dumper ALL=NOPASSWD: /usr/bin/rsync, /usr/bin/nice, /usr/bin/ionice
 %admin ALL=(ALL) ALL
 <% gsudo.each do |group| -%>
 %<%= group %> ALL=(ALL) ALL
