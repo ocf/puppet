@@ -51,10 +51,10 @@ class ocf::common::packages( $extra = false, $login = false ) {
       'octave3.2':;
       # pykota python dependencies
       [ 'pkpgcounter', 'python-egenix-mxdatetime', 'python-imaging', 'python-jaxml', 'python-minimal', 'python-mysqldb', 'python-osd', 'python-pysnmp4', 'python-reportlab' ]:;
-      # signat perl dependency
+      # signat.pl dependency
       'libwww-mechanize-perl':;
       # python
-      [ 'python-dev', 'python-django', 'python-ldap', 'python-lxml', 'python-pygresql' ]:;
+      [ 'ipython', 'python-dev', 'python-django', 'python-ldap', 'python-lxml', 'python-yaml' ]:;
       # compiler stuff
       [ 'bison', 'flex' ]:
     }
