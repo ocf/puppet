@@ -1,11 +1,17 @@
-# OCF config
+# We're using the /root principal in PAM so change the prompt accordingly
 Defaults passprompt="%u/root's password: "
-Defaults env_reset
-Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
+# Reset PATH, other environment variables, and umask
+Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Defaults env_reset
+Defaults umask_override
+
+# Hard code sudo access for root and system users
 root ALL=(ALL) ALL
 apt-dater ALL=NOPASSWD: /usr/bin/apt-get, /usr/bin/aptitude, /sbin/reboot
 dumper ALL=NOPASSWD: /usr/bin/rsync, /usr/bin/nice, /usr/bin/ionice
+
+# User specification
 %admin ALL=(ALL) ALL
 <% gsudo.each do |group| -%>
 %<%= group %> ALL=(ALL) ALL
@@ -13,5 +19,3 @@ dumper ALL=NOPASSWD: /usr/bin/rsync, /usr/bin/nice, /usr/bin/ionice
 <% usudo.each do |user| -%>
 <%= user %> ALL=(ALL) ALL
 <% end -%>
-
-#includedir /etc/sudoers.d
