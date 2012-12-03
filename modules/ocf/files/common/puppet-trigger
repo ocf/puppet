@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if service puppet status > /dev/null; then
+  kill -USR1 `cat /var/run/puppet/agent.pid`
+else
+  echo "Error: Puppet agent does not appear to be running" >&2
+  exit 255
+fi
