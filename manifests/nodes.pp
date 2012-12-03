@@ -98,10 +98,12 @@ node fallingrocks inherits server {
 node fallout inherits server {
   class { 'ocf::common::networking': octet => 196 }
   include ocf::local::fallout
+  include ocf::services::netboot
 }
 node fallout2 inherits server {
   class { 'ocf::common::networking': octet => 67 }
   include ocf::local::fallout2
+  include ocf::services::netboot
 }
 node firestorm inherits server{
   class { 'ocf::common::networking': octet => 200 }
