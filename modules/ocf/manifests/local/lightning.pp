@@ -51,9 +51,21 @@ class ocf::local::lightning {
   # Hiera, PyYAML, and YAML validator
   package { [ 'hiera', 'python-yaml', 'kwalify' ]: }
 
-  # automatic rebase for git pull in new repositories
-  file { '/etc/gitconfig':
-    content => "[branch]\nautosetuprebase = always",
+  # git configuration
+  file {
+    # automatic rebase for git pull in new repositories
+    '/etc/gitconfig':
+      content => "[branch]\nautosetuprebase = always",
+    ;
+    # bare repo at /opt/puppet, force FF, github remote
+    '/opt/puppet/.git/config':
+      source  => 'puppet:///modules/ocf/local/lightning/git/config',
+    ;
+    # post-receive hook deploys environment and pushes to github
+    '/opt/puppet/.git/hooks/post-receive':
+      mode    => '0755',
+      source  => 'puppet:///modules/ocf/local/lightning/git/post-receive',
+    ;
   }
 
   # remote package management

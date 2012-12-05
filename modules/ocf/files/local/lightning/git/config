@@ -1,0 +1,11 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[merge]
+	ff = only
+[receive]
+	denyNonFastForwards = true
+[remote "github"]
+	url = git@github.com:ocf/puppet.git
+	fetch = +refs/heads/*:refs/remotes/github/*
