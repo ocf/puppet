@@ -7,6 +7,6 @@ SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # m h dom mon dow user command
-*/15 00-11,17-23 * * 0   root /usr/local/sbin/ocf-suspend --silent
-*/15 00-08,18-23 * * 1-5 root /usr/local/sbin/ocf-suspend --silent
-*/15 00-10,18-23 * * 6   root /usr/local/sbin/ocf-suspend --silent
+*/15 00-08,21-23 * * *   root /usr/local/sbin/ocf-suspend --silent
+*/15 00-08,21-23 * * 1-5 root /usr/local/sbin/ocf-suspend --silent
+*/15 00-08,21-23 * * 6   root /usr/local/sbin/ocf-suspend --silent
