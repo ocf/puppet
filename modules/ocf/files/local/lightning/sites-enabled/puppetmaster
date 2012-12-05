@@ -1,4 +1,3 @@
-# OCF config
 # Based on Debian and http://projects.puppetlabs.com/projects/1/wiki/Using_Passenger
 
 #Listen 192.168.99.210:8140

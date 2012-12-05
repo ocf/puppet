@@ -34,7 +34,6 @@ class ocf::local::blight {
     source => 'puppet:///modules/ocf/local/blight/ikiwiki/plugins/serverlist.pm',
   }
 
-
   # the location of the wiki public_html
   file {
     '/srv/ikiwiki/public_html/wiki':

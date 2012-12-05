@@ -31,7 +31,6 @@
 #include "unixd.h"        /* Contains the suexec_identity hook used on Unix */
 #endif
 
-
 /*
  * The default directory in user's home dir
  * In the default install, the module is disabled
@@ -85,7 +84,6 @@ static void *merge_userdir_config(apr_pool_t *p, void *basev, void *overridesv)
     
     return cfg;
 }
-
 
 static const char *set_user_dir(cmd_parms *cmd, void *dummy, const char *arg)
 {

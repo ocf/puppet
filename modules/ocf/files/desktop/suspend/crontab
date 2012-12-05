@@ -1,5 +1,3 @@
-# OCF config
-
 # Run suspend script during lab off hours
 # if not in use, resets some tmpfs directories and suspends
 

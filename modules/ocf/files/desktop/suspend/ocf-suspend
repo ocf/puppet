@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# OCF config
-
 # Continue only if previous command succeeds unless forced
 # Reset tmpfs-mounted directories
 if [ -z "$1" ]; then

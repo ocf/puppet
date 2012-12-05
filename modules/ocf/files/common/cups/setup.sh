@@ -1,5 +1,4 @@
 #!/bin/sh
-# OCF config
 
 service cups start
 

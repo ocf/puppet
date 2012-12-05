@@ -1,4 +1,3 @@
-# OCF config
 event=button[ /]power
 #action=/etc/acpi/powerbtn-acpi-support.sh
 action=/usr/local/sbin/ocf-suspend --force

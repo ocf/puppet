@@ -1,5 +1,4 @@
 #!/bin/sh
-# OCF config
 
 # fix creation of system users
 sed -i -e s/FIRST_SYSTEM_UID=.*/FIRST_SYSTEM_UID=300/g \

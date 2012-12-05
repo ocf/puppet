@@ -1,10 +1,8 @@
 #!/bin/sh
-# OCF config
 
 ssh="/usr/bin/ssh -o ConnectTimeout=2 -o BatchMode=yes -n -T ssh"
 pssh="parallel-ssh --hosts /opt/share/puppet/desktop_list --timeout 2 -i"
 notify_send="/usr/bin/notify-send --expire-time=30000 --icon=/opt/share/xsession/backgrounds/ocf_logo_borderless.png"
-
 
 # display staff in lab
 lab_staff="`$pssh who | grep -F \(\: | cut -d' ' -f1 | grep -vFx $USER |

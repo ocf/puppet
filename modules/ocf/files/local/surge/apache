@@ -1,4 +1,3 @@
-# OCF config
 <VirtualHost *:80>
 
   ServerAdmin daradib@ocf.berkeley.edu

@@ -19,5 +19,4 @@
 <!-- pam_mount parameters: Volume-related -->
 <mkmountpoint enable="1" remove="true" />
 
-
 </pam_mount>

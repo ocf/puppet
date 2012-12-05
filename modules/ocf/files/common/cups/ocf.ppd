@@ -69,9 +69,6 @@
 *driverObsolete: False
 *driverManufacturerSupplied: False
 
-
-
-
 *VariablePaperSize: False
 
 *FoomaticIDs: Generic-PostScript_Printer Postscript
@@ -171,7 +168,6 @@
 
 *CloseGroup: General
 
-
 *% Generic boilerplate PPD stuff as standard PostScript fonts and so on
 
 *DefaultFont: Courier
@@ -210,4 +206,3 @@
 *Font Times-Roman: Standard "(001.007S)" Standard ROM
 *Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
 *Font ZapfDingbats: Special "(001.004S)" Standard ROM
-

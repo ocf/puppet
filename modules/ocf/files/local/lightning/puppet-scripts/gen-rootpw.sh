@@ -1,5 +1,4 @@
 #!/bin/sh
-# OCF config
 
 echo 'List of hosts (leave off domain) to provide root passwords for, separated by spaces:'
 read hostnames

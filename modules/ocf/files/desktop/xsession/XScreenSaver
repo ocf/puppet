@@ -1,5 +1,3 @@
-! OCF config
-
 *mode:			blank
 *timeout:		0:10:00
 *cycle:			0:00:00
@@ -94,7 +92,6 @@ GetViewPortIsFullOfLies: False
 !				x-terminal-emulator -title '%s manual' \
 !				  -e /bin/sh -c 'man "%s"'
 
-
 ! The format used for printing the date and time in the password dialog box
 ! (see the strftime(3) manual page for details.)
 *dateFormat:		%Y-%m-%d %H:%M:%S
@@ -105,7 +102,6 @@ GetViewPortIsFullOfLies: False
 ! For 24 hour time:
 ! *dateFormat:		%H:%M
 
-
 ! This command is executed by the "New Login" button on the lock dialog.
 ! (That button does not appear on the dialog if this program does not exist.)
 ! For Gnome: probably "gdmflexiserver -ls".  KDE, probably "kdmctl reserve".
@@ -114,7 +110,6 @@ GetViewPortIsFullOfLies: False
 ! Debian: Hard-wire the command in case the build machine does not have gdm
 -*newLoginCommand:	gdmflexiserver -l -a -c FLEXI_XSERVER
 
-
 ! Turning on "installColormap" on 8-bit systems interacts erratically with
 ! certain jurassic window managers.  If your screen turns some color other
 ! than black, the window manager is buggy, and you need to set this resource
@@ -122,7 +117,6 @@ GetViewPortIsFullOfLies: False
 ! graphics card.
 !
 *installColormap:	True
-
 
 ! This is the list of installed screen saver modes.  See "man xscreensaver"
 ! for the syntax used here.
@@ -332,21 +326,17 @@ GetViewPortIsFullOfLies: False
 - GL: 				rubikblocks -root			    \n\
 				unicode -root				    \n
 
-
-
 !=============================================================================
 !
 !      You probably don't want to change anything after this point.
 !
 !=============================================================================
 
-
 XScreenSaver.pointerPollTime:		0:00:05
 XScreenSaver.pointerHysteresis:		10
 XScreenSaver.initialDelay:		0:00:00
 XScreenSaver.windowCreationTimeout:	0:00:30
 XScreenSaver.bourneShell:		/bin/sh
-
 
 ! Resources for the password and splash-screen dialog boxes of
 ! the "xscreensaver" daemon.
@@ -394,7 +384,6 @@ XScreenSaver.bourneShell:		/bin/sh
 *splash.body2.label:		Jamie Zawinski <jwz@jwz.org>
 *splash.demo.label:		Settings
 *splash.help.label:		Help
-
 
 !=============================================================================
 !

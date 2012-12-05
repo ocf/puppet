@@ -38,7 +38,6 @@ min_uid=33
 ; Minimum GID
 min_gid=20
 
-
 [handlers]
 ;Handler for php-scripts
 application/x-httpd-suphp="php:/usr/bin/php-cgi"

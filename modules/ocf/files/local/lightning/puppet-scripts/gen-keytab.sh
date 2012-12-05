@@ -1,5 +1,4 @@
 #!/bin/sh
-# OCF config
 
 read -p 'Your username: ' user
 echo 'List of hosts (leave off domain) to generate principals for, separated by spaces:'
