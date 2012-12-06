@@ -57,6 +57,16 @@ class ocf::local::lightning {
     '/etc/gitconfig':
       content => "[branch]\nautosetuprebase = always",
     ;
+    # root user ssh directory
+    '/root/.ssh':
+      ensure  => directory,
+      mode    => '0700',
+    ;
+    # root user private key used to deploy to github
+    '/root/.ssh/id_rsa':
+      mode    => '0700',
+      source  => 'puppet:///private/id_rsa',
+    ;
     # bare repo at /opt/puppet, force FF, github remote
     '/opt/puppet/.git/config':
       source  => 'puppet:///modules/ocf/local/lightning/git/config',
