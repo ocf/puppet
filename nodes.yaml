@@ -41,11 +41,6 @@ ipoctet:     196
 classes:     ['ocf::local::fallout']
 
 ---
-hostname:    fallout2
-ipoctet:     67
-classes:     ['ocf::local::fallout2']
-
----
 hostname:    firestorm
 ipoctet:     200
 classes:     ['ocf::local::firestorm']
@@ -73,6 +68,11 @@ classes:     ['ocf::local::lightning']
 hostname:    pandemic
 ipoctet:     206
 classes:     ['ocf::common::kexec', 'ocf::services::kvm']
+
+---
+hostname:    pestilence
+ipoctet:     66
+classes:     ['ocf::local::pestilence']
 
 ---
 hostname:    pollution

@@ -1,9 +1,9 @@
-class ocf::local::fallout2 {
+class ocf::local::pestilence {
 
   # setup dhcp server
   package { 'isc-dhcp-server': }
   file { '/etc/dhcp/dhcpd.conf':
-    source   => 'puppet:///modules/ocf/local/fallout2/dhcpd.conf',
+    source   => 'puppet:///modules/ocf/local/pestilence/dhcpd.conf',
     require  => Package['isc-dhcp-server'],
     notify   => Service['isc-dhcp-server']
   }
@@ -16,10 +16,10 @@ class ocf::local::fallout2 {
   file {
     '/usr/local/bin/ocf-wakeup':
       mode    => '0755',
-      source  => 'puppet:///modules/ocf/local/fallout2/wakeup/script',
+      source  => 'puppet:///modules/ocf/local/pestilence/wakeup/script',
       require => Package['wakeonlan'];
     '/etc/cron.d/ocf-wakeup':
-      source  => 'puppet:///modules/ocf/local/fallout2/wakeup/cron',
+      source  => 'puppet:///modules/ocf/local/pestilence/wakeup/cron',
       require => File['/usr/local/bin/ocf-wakeup']
   }
 

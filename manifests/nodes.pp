@@ -100,11 +100,6 @@ node fallout inherits server {
   include ocf::local::fallout
   include ocf::services::netboot
 }
-node fallout2 inherits server {
-  class { 'ocf::common::networking': octet => 67 }
-  include ocf::local::fallout2
-  include ocf::services::netboot
-}
 node firestorm inherits server{
   class { 'ocf::common::networking': octet => 200 }
   include ocf::local::firestorm
@@ -132,6 +127,11 @@ node pandemic inherits server {
   class { 'ocf::services::kvm':      octet => 206 }
   include ocf::common::kexec
   #include ocf::local::pandemic
+}
+node pestilence inherits server {
+  class { 'ocf::common::networking': octet => 66 }
+  include ocf::local::pestilence
+  include ocf::services::netboot
 }
 node pollution inherits server {
   class { 'ocf::common::networking': octet => 198 }
