@@ -18,7 +18,7 @@ environment: decal
 ---
 hostname:    death
 ipoctet:     243
-classes:     ['ocf::local::death']
+classes:     ['ocf::common::firehol', 'ocf::local::death']
 
 ---
 hostname:    diplomat
@@ -87,6 +87,7 @@ classes:     ['ocf::local::printhost']
 ---
 hostname:    sandstorm
 ipoctet:     218
+classes:     ['ocf::common::firehol']
 
 ---
 hostname:    spy
@@ -97,6 +98,7 @@ classes:     ['ocf::common::cups']
 ---
 hostname:    tsunami
 ipoctet:     223
+classes:     ['ocf::common::firehol']
 
 ---
 hostname:    typhoon
