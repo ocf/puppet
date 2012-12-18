@@ -21,7 +21,7 @@ class ocf::common::networking( $hosts = true, $interfaces = true, $octet = undef
   if $hosts {
     # provide /etc/hosts
     file { '/etc/hosts':
-      content => template('ocf/common/networking/hosts.erb'),
+      content => '127.0.0.1 localhost',
     }
   }
 

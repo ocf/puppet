@@ -13,8 +13,6 @@ class ocf::common::kerberos {
   #               'set realms/realm/admin_server kerberos.ocf.berkeley.edu',
   #               'set domain_realm/.ocf.berkeley.edu OCF.BERKELEY.EDU',
   #               'set domain_realm/ocf.berkeley.edu OCF.BERKELEY.EDU',
-  #               'set domain_realm/.lab.ocf.berkeley.edu OCF.BERKELEY.EDU',
-  #               'set domain_realm/lab.ocf.berkeley.edu OCF.BERKELEY.EDU',
   #              ],
   file { '/etc/krb5.conf':
     source  => 'puppet:///modules/ocf/common/auth/krb5.conf',

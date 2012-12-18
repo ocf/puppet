@@ -20,12 +20,6 @@ mapping:
     length:   {min: 0, max: 17}
     unique:   yes
 
-  "subnet":
-    enum:     [esh, hearst]
-    type:     str
-    unique:   yes
-    default:  esh
-
   "type":
     enum:    [base, desktop, server]
     type:    str

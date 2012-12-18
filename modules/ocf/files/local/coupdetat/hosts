@@ -1,5 +1,4 @@
 127.0.0.1 localhost
-128.32.129.253 coupdetat.ocf.berkeley.edu coupdetat
 
 # coupdetat NAT
 10.0.0.1  coupdetat.decal.ocf.berkeley.edu

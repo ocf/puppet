@@ -7,154 +7,118 @@
 #       and then alphabetically (these are optional)
 ---
 hostname:    blight
-ipoctet:     236
+ipoctet:     76
 classes:     ['ocf::local::blight']
 
 ---
-hostname:    coupdetat
-ipoctet:     253
-environment: decal
-
----
 hostname:    death
-ipoctet:     243
-classes:     ['ocf::common::firehol', 'ocf::local::death']
-
----
-hostname:    diplomat
-ipoctet:     69
-subnet:      hearst
-
----
-hostname:    emp
-ipoctet:     194
+ipoctet:     67
+classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits', 'ocf::local::death']
 
 ---
 hostname:    fallingrocks
-ipoctet:     79
-subnet:      hearst
+ipoctet:     84
 classes:     ['ocf::common::kexec', 'ocf::services::kvm']
 
 ---
-hostname:    fallout
-ipoctet:     196
-classes:     ['ocf::local::fallout']
-
----
 hostname:    firestorm
-ipoctet:     200
+ipoctet:     71
 classes:     ['ocf::local::firestorm']
 
 ---
 hostname:    flood
-ipoctet:     95
-subnet:      hearst
+ipoctet:     85
 
 ---
 hostname:    hal
-ipoctet:     199
+ipoctet:     72
 classes:     ['ocf::common::kexec', 'ocf::services::kvm']
 
 ---
+hostname:    maelstrom
+ipoctet:     79
+classes:     ['ocf::local::maelstrom']
+
+---
 hostname:    mudslide
-ipoctet:     203
+ipoctet:     80
 
 ---
 hostname:    lightning
-ipoctet:     210
+ipoctet:     70
 classes:     ['ocf::local::lightning']
 
 ---
 hostname:    pandemic
-ipoctet:     206
+ipoctet:     74
 classes:     ['ocf::common::kexec', 'ocf::services::kvm']
 
 ---
 hostname:    pestilence
 ipoctet:     66
-classes:     ['ocf::local::pestilence']
+classes:     ['ocf::local::pestilence', 'ocf::services::netboot']
 
 ---
 hostname:    pollution
-ipoctet:     198
+ipoctet:     78
 classes:     ['ocf::local::pollution']
 
 ---
 hostname:    printhost
-ipoctet:     245
+ipoctet:     82
 classes:     ['ocf::local::printhost']
 
 ---
 hostname:    sandstorm
-ipoctet:     218
-classes:     ['ocf::common::firehol']
-
----
-hostname:    spy
 ipoctet:     68
-subnet:      hearst
-classes:     ['ocf::common::cups']
+classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits']
 
 ---
 hostname:    tsunami
-ipoctet:     223
-classes:     ['ocf::common::firehol']
+ipoctet:     69
+classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits', 'ocf::common::mysql']
 
 ---
 hostname:    typhoon
-ipoctet:     214
-
----
-hostname:    zombie
-ipoctet:     229
-classes:     ['ocf::local::maelstrom']
+ipoctet:     81
 
 ### NEEDS FIXING
 ---
+hostname:    spy
+classes:     ['ocf::common::cups']
+---
 hostname: avalanche
-subnet: hearst
 type: desktop
 ---
 hostname: bigbang
-subnet: hearst
 type: desktop
 ---
 hostname: cyclone
-subnet: hearst
 type: desktop
 ---
 hostname: debian
-subnet: hearst
 type: desktop
 ---
 hostname: destruction
-subnet: hearst
 type: desktop
 ---
 hostname: eruption
-subnet: hearst
 type: desktop
 ---
 hostname: hurricane
-subnet: hearst
 type: desktop
 ---
 hostname: b1
-subnet: hearst
 type: desktop
 ---
 hostname: b2
-subnet: hearst
 type: desktop
 ---
 hostname: b3
-subnet: hearst
 type: desktop
 ---
 hostname: b4
-subnet: hearst
 type: desktop
 ---
 hostname: '02'
-subnet: hearst
 type: desktop
