@@ -1,12 +1,14 @@
 auto lo
 iface lo inet loopback
 
-<% if ipaddress != :undef and netmask != :undef -%>
+<% if @ipaddress -%>
 auto <% if bridge %>br0<% else %>eth0<% end %>
 iface <% if bridge %>br0<% else %>eth0<% end %> inet static
   address <%= ipaddress %>
   netmask <%= netmask %>
-  <% if gateway %>gateway <%= gateway %><% end %>
+<% if @gateway -%>
+  gateway <%= gateway %>
+<% end -%>
 <% if bridge -%>
   bridge_ports eth0
   bridge_stp off

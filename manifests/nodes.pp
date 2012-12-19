@@ -62,7 +62,6 @@ node default {
     include ocf::common::crondeny
     include ocf::common::cups
     include ocf::common::kexec
-    include ocf::common::networking
     include ocf::desktop::acroread
     include ocf::desktop::iceweasel
     include ocf::desktop::limits
