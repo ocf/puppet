@@ -37,7 +37,7 @@ class ocf::local::lightning {
       source  => 'puppet:///modules/ocf/local/lightning/fileserver.conf',
     ;
     '/etc/puppet/puppet.conf':
-      source  => 'puppet:///modules/ocf/local/lightning/puppet.conf',
+      content => template('ocf/local/lightning/puppet.conf.erb'),
     ;
     # mail errors and warnings about puppet runs
     '/etc/puppet/tagmail.conf':

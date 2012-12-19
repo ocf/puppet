@@ -9,8 +9,8 @@ ssldir = $vardir/ssl
 
 [agent]
 
-certname = lightning.ocf.berkeley.edu
-environment = production
+certname = <%= clientcert %>
+environment = <%= environment %>
 usecacheonfailure = false
 
 [master]
