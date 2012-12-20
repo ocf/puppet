@@ -18,6 +18,7 @@ node default {
   include ocf::common::kerberos
   include ocf::common::ldap
   include ocf::common::smart
+  include ocf::common::zabbix
   if $::ipoctet != undef {
     case $::hostname {
       hal, fallingrocks, pandemic: {$bridge = true}
@@ -52,7 +53,6 @@ node default {
       default:   { class { 'ocf::common::auth': } }
     }
     include ocf::common::ssh
-    include ocf::common::zabbix
   }
 
   if $type == 'desktop' {

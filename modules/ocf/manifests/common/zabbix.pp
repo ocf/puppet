@@ -1,26 +1,18 @@
 class ocf::common::zabbix {
 
-  # install zabbix
-  package { 'zabbix-agent': }
-
-  file {
-    # provide zabbix config
-    '/etc/zabbix/zabbix_agentd.conf':
-      #source  => 'puppet:///modules/ocf/common/zabbix_agentd.conf',
-      content => template('ocf/common/zabbix_agentd.conf.erb'),
-      require => Package[ 'zabbix-agent' ];
-    # provide newer version of zabbix binary
-    #'/usr/sbin/zabbix_agentd':
-    #  mode    => '0755',
-    #  backup  => false,
-    #  source  => 'puppet:///contrib/common/zabbix_agentd',
-    #  require => Package[ 'zabbix-agent' ];
+  package { 'zabbix-agent':
+    ensure => purged,
   }
 
-  # restart zabbix
-  service { 'zabbix-agent':
-    subscribe => [ Package['zabbix-agent'], File[ '/etc/zabbix/zabbix_agentd.conf' ] ]
-    #subscribe => [ Package['zabbix-agent'], File[ '/etc/zabbix/zabbix_agentd.conf', '/usr/sbin/zabbix_agentd' ] ]
+  file {
+    '/etc/zabbix':
+      ensure  => absent,
+      recurse => true,
+      backup  => false,
+    ;
+    '/usr/sbin/zabbix_agentd':
+      ensure  => absent,
+    ;
   }
 
 }
