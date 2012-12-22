@@ -13,7 +13,7 @@ classes:     ['ocf::local::blight']
 ---
 hostname:    death
 ipoctet:     67
-classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits', 'ocf::local::death']
+classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits', 'ocf::common::mysql', 'ocf::local::death']
 
 ---
 hostname:    fallingrocks
