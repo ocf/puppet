@@ -35,6 +35,10 @@ ipoctet:     72
 classes:     ['ocf::common::kexec', 'ocf::services::kvm']
 
 ---
+hostname:    locusts
+ipoctect:    68
+
+---
 hostname:    maelstrom
 ipoctet:     79
 classes:     ['ocf::local::maelstrom']
