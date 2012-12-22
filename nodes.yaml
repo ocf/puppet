@@ -74,6 +74,10 @@ ipoctet:     68
 classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits']
 
 ---
+hostname:    supernova
+ipoctet:     77
+
+---
 hostname:    tsunami
 ipoctet:     69
 classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits', 'ocf::common::mysql']
