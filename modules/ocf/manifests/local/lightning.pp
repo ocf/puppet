@@ -48,8 +48,8 @@ class ocf::local::lightning {
   # Puppet manifest help
   package { [ 'puppet-lint', 'vim-puppet' ]: }
 
-  # Hiera, PyYAML, and YAML validator
-  package { [ 'hiera', 'python-yaml', 'kwalify' ]: }
+  # PyYAML, and YAML validator
+  package { ['python-yaml', 'kwalify']: }
 
   # git configuration
   file {
