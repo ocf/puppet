@@ -43,6 +43,7 @@ node default {
       default:   { class { 'ocf::common::apt': stage => first } }
     }
     case $::hostname {
+      supernova: { class { 'ocf::common::packages': extra => true, login => true } }
       tsunami:   { class { 'ocf::common::packages': extra => true, login => true } }
       default:   { class { 'ocf::common::packages': } }
     }
