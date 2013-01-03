@@ -80,7 +80,7 @@ classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits'
 ---
 hostname:    supernova
 ipoctet:     77
-classes:     ['ocf::local::supernova']
+classes:     ['ocf::common::mysql', 'ocf::local::supernova']
 
 ---
 hostname:    tsunami
