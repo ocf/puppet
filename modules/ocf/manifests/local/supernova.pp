@@ -1,3 +1,8 @@
 class ocf::local::supernova {
-  package { 'python-twisted': }
+  package {
+    'python-twisted':
+      ;
+    'python-ldap':
+      ;
+  }
 }
