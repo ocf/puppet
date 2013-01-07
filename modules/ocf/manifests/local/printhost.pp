@@ -6,30 +6,40 @@ class ocf::local::printhost {
     recommends => false
   }
   file {
-    # provide config
+    # provide cups config
     '/etc/cups/cupsd.conf':
-      path    => '/etc/cups/cupsd.conf',
       source  => 'puppet:///modules/ocf/local/printhost/cupsd.conf',
-      require => Package[ 'cups', 'cups-bsd' ];
+      require => Package['cups'],
+      notify  => Service['cups'],
+    ;
+    # provide more sensitive cups config
+    '/etc/cups/cups-files.conf':
+      source  => 'puppet:///modules/ocf/local/printhost/cups-files.conf',
+      require => Package['cups'],
+      notify  => Service['cups'],
+    ;
     # set default printer double
     '/etc/cups/lpoptions':
       content => 'Default double',
-      require => Package[ 'cups', 'cups-bsd' ];
+      require => Package[ 'cups'],
+      notify  => Service['cups'],
+    ;
     # deny printing raw jobs
     [ '/etc/cups/raw.convs', '/etc/cups/raw.types' ]:
       content => '# deny printing raw jobs',
-      require => Package[ 'cups', 'cups-bsd' ];
-    # provide ssl certificates
+      require => Package['cups'],
+      notify  => Service['cups'],
+    ;
+    # provide ssl certificate and key
     '/etc/cups/ssl':
       ensure  => directory,
       mode    => '0600',
       group   => lp,
-      recurse => true,
-      purge   => true,
-      force   => true,
       backup  => false,
       source  => 'puppet:///private/cups-ssl',
-      require => Package[ 'cups', 'cups-bsd' ]
+      require => Package['cups'],
+      notify  => Service['cups'],
+    ;
   }
   # mount /var/spool/cups in tmpfs
   mount { '/var/spool/cups':
@@ -37,10 +47,7 @@ class ocf::local::printhost {
     fstype  => 'tmpfs',
     options => 'mode=0710,gid=lp,noatime,nodev,noexec,nosuid';
   }
-  # restart cups
-  service { 'cups':
-    subscribe => File[ '/etc/cups/cupsd.conf', '/etc/cups/lpoptions', '/etc/cups/raw.convs', '/etc/cups/raw.types', '/etc/cups/ssl' ]
-  }
+  service { 'cups': }
 
   # set up pykota
   package {
@@ -52,20 +59,21 @@ class ocf::local::printhost {
     # configuration directory
     '/etc/pykota':
       ensure  => directory,
-      recurse => true,
-      purge   => true,
-      force   => true;
+    ;
     # public configuration
     '/etc/pykota/pykota.conf':
-      source  => 'puppet:///modules/ocf/local/printhost/pykota.conf';
+      source  => 'puppet:///modules/ocf/local/printhost/pykota.conf',
+    ;
     # private configuration
     '/etc/pykota/pykotadmin.conf':
       owner   => 'lp',
       group   => 'ocfstaff',
       mode    => '0640',
       source  => 'puppet:///private/pykotadmin.conf'
+    ;
   }
-  # export pykota configuration
+
+  # share pykota configuration over NFS
   package { 'nfs-kernel-server': }
   file { '/etc/exports':
     source    => 'puppet:///modules/ocf/local/printhost/exports',
@@ -75,12 +83,5 @@ class ocf::local::printhost {
     subscribe => File['/etc/exports'],
     require   => Package['nfs-kernel-server']
   }
-
-  # reboot at midnight
-  #cron { 'reboot':
-  #  command => '/sbin/reboot',
-  #  hour    => 00,
-  #  minute  => 01
-  #}
 
 }
