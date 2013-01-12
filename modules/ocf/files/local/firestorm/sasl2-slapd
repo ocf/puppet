@@ -1,1 +1,2 @@
 mech_list:      GSSAPI
+pwcheck_method: saslauthd
