@@ -29,6 +29,10 @@
 		AllowOverride None
 		Order allow,deny
 		allow from all
+    		<Files index.cgi>
+    		    Options +ExecCGI
+    		    AddHandler cgi-script .cgi
+    		</Files>
 	</Directory>
 
 	ErrorLog ${APACHE_LOG_DIR}/error.log
