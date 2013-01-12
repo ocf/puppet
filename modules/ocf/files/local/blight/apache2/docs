@@ -20,6 +20,8 @@ ErrorLog "/var/log/apache2/wiki-error.log"
 <IfModule mod_ssl.c>
 <VirtualHost *:443>
 	ServerAdmin webmaster@ocf.berkeley.edu
+    	ServerName docs.ocf.berkeley.edu
+    	ServerAlias docs
     	DirectoryIndex docs.html
 
 	DocumentRoot /var/www
@@ -32,14 +34,6 @@ ErrorLog "/var/log/apache2/wiki-error.log"
 		AllowOverride None
 		Order allow,deny
 		allow from all
-	</Directory>
-
-	ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
-	<Directory "/usr/lib/cgi-bin">
-		AllowOverride None
-		Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-		Order allow,deny
-		Allow from all
 	</Directory>
 
 	ErrorLog ${APACHE_LOG_DIR}/error.log
