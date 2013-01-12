@@ -18,7 +18,7 @@ ErrorLog "/var/log/apache2/wiki-error.log"
         Alias /staffwiki /var/www/sw/index.php
 </IfModule>
 <IfModule mod_ssl.c>
-<VirtualHost _default_:443>
+<VirtualHost *:443>
 	ServerAdmin webmaster@ocf.berkeley.edu
     	DirectoryIndex docs.html
 

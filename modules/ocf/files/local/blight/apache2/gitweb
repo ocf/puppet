@@ -14,7 +14,7 @@
   </Directory>
 </VirtualHost>
 <IfModule mod_ssl.c>
-<VirtualHost _default_:443>
+<VirtualHost *:443>
 	ServerAdmin webmaster@ocf.berkeley.edu
   	ServerName git.wiki.ocf.berkeley.edu
   	ServerAlias git.wiki
