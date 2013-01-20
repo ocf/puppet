@@ -4,7 +4,7 @@ class ocf::local::supernova {
       ;
     'python-argparse':
       ;
-    'python-pycryptopp':
+    'python-crypto':
       ;
   }
 }
