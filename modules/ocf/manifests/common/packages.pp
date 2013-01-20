@@ -11,7 +11,7 @@ class ocf::common::packages( $extra = false, $login = false ) {
   # common packages for all ocf machines
   package {
     # general packages
-    [ 'beep', 'bsdmainutils', 'cpufrequtils', 'finger', 'netcat-openbsd', 'pigz', 'pv', 'pwgen', 'quota', 'rsync', 'tofrodos', 'tree' ]:;
+    [ 'beep', 'bsdmainutils', 'cpufrequtils', 'finger', 'netcat-openbsd', 'pigz', 'pv', 'pwgen', 'quota', 'rsync', 'tofrodos', 'tree', 'unzip' ]:;
     # console managers
     [ 'dtach', 'screen', 'tmux' ]:;
     # shells
