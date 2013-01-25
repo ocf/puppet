@@ -8,9 +8,9 @@
 # Remember to re-run ikiwiki --setup any time you edit this file.
 use IkiWiki::Setup::Standard {
 	# name of the wiki
-	wikiname => 'OCF Wiki',
+	wikiname => 'OCF wiki',
 	# contact email for wiki
-	adminemail => 'wheel@ocf.berkeley.edu',
+	adminemail => 'help@ocf.berkeley.edu',
 	# users who are wiki admins
 	adminuser => [qw{}],
 	# users who are banned from the wiki
@@ -20,9 +20,9 @@ use IkiWiki::Setup::Standard {
 	# where to build the wiki
 	destdir => '/srv/ikiwiki/public_html/wiki',
 	# base url to the wiki
-	url => 'http://wiki.ocf.berkeley.edu',
+	url => 'https://wiki.ocf.berkeley.edu',
 	# url to the ikiwiki.cgi
-	cgiurl => 'http://wiki.ocf.berkeley.edu/ikiwiki.cgi',
+	cgiurl => 'https://wiki.ocf.berkeley.edu/ikiwiki.cgi',
 	# filename of cgi wrapper to generate
 	cgi_wrapper => '/srv/ikiwiki/public_html/wiki/ikiwiki.cgi',
 	# mode for cgi_wrapper (can safely be made suid)
