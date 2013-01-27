@@ -10,7 +10,7 @@ class ocf::desktop::xsession {
       require => File['/opt/share/xsession'];
     # provide list of desktops
     '/opt/share/puppet/desktop_list':
-      source  => 'puppet:///modules/ocf/desktop/desktop_list';
+      source  => 'puppet:///contrib/desktop/desktop_list';
     # provide printing and other notification script daemon
     '/opt/share/puppet/notify.sh':
       mode    => '0755',
