@@ -3,9 +3,6 @@ node default {
   class { 'ocf::common::groups': stage => first }
   class { 'ocf::common::puppet': stage => first }
   class { 'ocf::common::rootpw': stage => first }
-  if $::is_virtual == 'true' {
-    include ocf::common::kexec
-  }
   case $::hostname {
     hal, pandemic: { }
     default:       { include ocf::common::ntp }
@@ -62,7 +59,6 @@ node default {
     include ocf::common::acct
     include ocf::common::crondeny
     include ocf::common::cups
-    include ocf::common::kexec
     include ocf::desktop::acroread
     include ocf::desktop::iceweasel
     include ocf::desktop::limits
