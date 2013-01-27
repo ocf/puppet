@@ -66,6 +66,7 @@ node default {
     include ocf::desktop::numlockx
     include ocf::desktop::packages
     include ocf::desktop::pulse
+    include ocf::desktop::seti
     include ocf::desktop::sshfs
     include ocf::desktop::suspend
     include ocf::desktop::tmpfs
