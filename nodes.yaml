@@ -2,8 +2,8 @@
 # Please respect convention:
 #   * order documents alphabetically by hostname
 #   * order of keys within documents:
-#       hostname, macaddress, ipoctet, (these are required)
-#       macaddress, subnet, type, classes, environment, (these are optional)
+#       hostname, ipoctet, (these are required)
+#       macaddress, type, classes, environment, (these are optional)
 #       and then alphabetically (these are optional)
 ---
 hostname:    blight
