@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [ -n "$1" ]; then
+  puppetdir="/opt/puppet/env/$1"
+else
+  puppetdir=/etc/puppet
+fi
+
+# validate for parser errors
+manifests="`find $puppetdir -name '*.pp' -print`"
+echo "$manifests" | xargs puppet parser validate || exit 1
+
+# lint for style errors
+for manifest in $manifests; do
+  lint="`puppet-lint --no-80chars-check $manifest`"
+  [ -n "$lint" ] && ( echo "$lint"; echo "puppet-lint: $manifest"; exit 1 )
+done
