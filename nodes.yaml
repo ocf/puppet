@@ -5,93 +5,78 @@
 #       hostname, ipoctet, (these are required)
 #       macaddress, type, classes, environment, (these are optional)
 #       and then alphabetically (these are optional)
+
+### SERVERS
 ---
 hostname:    blight
 ipoctet:     76
 classes:     ['ocf::local::blight']
-
 ---
 hostname:    death
 ipoctet:     67
 classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits', 'ocf::common::mysql', 'ocf::local::death']
-
 ---
 hostname:    fallingrocks
 ipoctet:     84
 classes:     ['ocf::services::kvm']
-
 ---
 hostname:    firestorm
 ipoctet:     71
 classes:     ['ocf::local::firestorm']
-
 ---
 hostname:    flood
 ipoctet:     85
-
 ---
 hostname:    hal
 ipoctet:     72
 classes:     ['ocf::services::kvm']
-
 ---
 hostname:    locusts
 ipoctect:    86
-
 ---
 hostname:    maelstrom
 ipoctet:     79
 classes:     ['ocf::local::maelstrom']
-
 ---
 hostname:    mudslide
 ipoctet:     80
-
 ---
 hostname:    lightning
 ipoctet:     70
 classes:     ['ocf::local::lightning']
-
 ---
 hostname:    pandemic
 ipoctet:     74
 classes:     ['ocf::services::kvm']
-
 ---
 hostname:    pestilence
 ipoctet:     66
 classes:     ['ocf::local::pestilence', 'ocf::services::netboot']
-
 ---
 hostname:    pollution
 ipoctet:     78
 classes:     ['ocf::local::pollution']
-
 ---
 hostname:    printhost
 ipoctet:     82
 classes:     ['ocf::local::printhost']
-
 ---
 hostname:    sandstorm
 ipoctet:     68
 classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits']
-
 ---
 hostname:    supernova
 ipoctet:     77
 classes:     ['ocf::common::mysql', 'ocf::local::supernova']
-
 ---
 hostname:    tsunami
 ipoctet:     69
 classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits', 'ocf::common::mysql']
-
 ---
 hostname:    typhoon
 ipoctet:     81
 
-### NEEDS FIXING
+### DESKTOPS
 ---
 hostname:    spy
 classes:     ['ocf::common::cups']
