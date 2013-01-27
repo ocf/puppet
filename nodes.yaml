@@ -105,9 +105,6 @@ type: desktop
 hostname: cyclone
 type: desktop
 ---
-hostname: debian
-type: desktop
----
 hostname: destruction
 type: desktop
 ---
@@ -117,17 +114,11 @@ type: desktop
 hostname: hurricane
 type: desktop
 ---
-hostname: b1
+hostname: madcow
 type: desktop
 ---
-hostname: b2
+hostname: outbreak
 type: desktop
 ---
-hostname: b3
-type: desktop
----
-hostname: b4
-type: desktop
----
-hostname: '02'
-type: desktop
+hostname: volcano
+rype: desktop
