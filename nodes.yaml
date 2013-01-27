@@ -32,7 +32,7 @@ ipoctet:     72
 classes:     ['ocf::services::kvm']
 ---
 hostname:    locusts
-ipoctect:    86
+ipoctet:    86
 ---
 hostname:    maelstrom
 ipoctet:     79
@@ -103,4 +103,4 @@ hostname: outbreak
 type: desktop
 ---
 hostname: volcano
-rype: desktop
+type: desktop
