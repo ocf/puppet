@@ -78,9 +78,6 @@ ipoctet:     81
 
 ### DESKTOPS
 ---
-hostname:    spy
-classes:     ['ocf::common::cups']
----
 hostname: avalanche
 type: desktop
 ---
