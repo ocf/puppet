@@ -46,6 +46,7 @@ node default {
     }
     case $::hostname {
       flood:     { class { 'ocf::common::auth': usudo => 'nolm' } }
+      locusts:   { class { 'ocf::common::auth': usudo => 'nolm' } }
       printhost: { class { 'ocf::common::auth': login => 'approve', gsudo => 'ocfstaff' } }
       tsunami:   { class { 'ocf::common::auth': login => 'ocf' } }
       default:   { class { 'ocf::common::auth': } }
