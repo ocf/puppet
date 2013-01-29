@@ -71,7 +71,7 @@ classes:     ['ocf::common::mysql', 'ocf::local::supernova']
 ---
 hostname:    tsunami
 ipoctet:     69
-classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits', 'ocf::common::mysql']
+classes:     ['ocf::common::acct', 'ocf::common::cups', 'ocf::common::firehol', 'ocf::common::limits', 'ocf::common::mysql']
 ---
 hostname:    typhoon
 ipoctet:     81
