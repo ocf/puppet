@@ -1,6 +1,9 @@
 class ocf::local::supernova {
 
   package {
+    # account approval dependencies
+    ['python-cracklib', 'python-dnspython']:
+    ;
     # account creation dependecies
     ['python-twisted', 'python-argparse', 'python-crypto']:
     ;
