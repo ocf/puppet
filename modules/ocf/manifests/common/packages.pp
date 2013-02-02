@@ -55,8 +55,8 @@ class ocf::common::packages( $extra = false, $login = false ) {
       'libwww-mechanize-perl':;
       # python
       [ 'ipython', 'python-dev', 'python-django', 'python-ldap', 'python-lxml', 'python-yaml' ]:;
-      # compiler stuff
-      [ 'bison', 'flex' ]:
+      # useful for CS classes
+      [ 'bison', 'flex', 'libncurses5-dev', 'python3' ]:;
     }
   }
 
