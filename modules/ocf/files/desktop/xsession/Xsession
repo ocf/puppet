@@ -48,8 +48,8 @@ Name=SSH Terminal
 Exec=x-terminal-emulator -e "ssh -Kt tsunami 'cd && $SHELL'"
 Icon=terminal" > $HOME/Desktop/ssh.desktop
 
-# Scanner, special order for failingrocks
-if [ `hostname` = 'fallingrocks' ]; then
+# Scanner if connected by USB
+if lsusb | grep -q Fujitsu; then
   echo "[Desktop Entry]
   Type=Application
   Name=Scanner
