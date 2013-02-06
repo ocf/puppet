@@ -1,6 +1,6 @@
 class ocf::local::death {
   package {
-    [ 'apache2', 'php5', 'php5-mysql', 'libapache-mod-security', 'libapache2-mod-suphp', 'python-django', 'python-ldap', 'python-mysqldb', 'python-flup', 'python-cracklib', 'apache2-threaded-dev', 'libapache2-mod-fcgid', 'python-flask' ]:
+    [ 'apache2', 'php5', 'php5-mysql', 'libapache-mod-security', 'libapache2-mod-suphp', 'python-django', 'python-mysqldb', 'python-flup', 'apache2-threaded-dev', 'libapache2-mod-fcgid', 'python-flask' ]:
       ensure  => installed;
     [ 'nfs-kernel-server', 'logrotate' ]:
       ensure  => installed;
@@ -11,7 +11,7 @@ class ocf::local::death {
     'libhtml-parser-perl':
       ensure  => installed;
     # for account_tools
-    [ 'python-pexpect', 'python-paramiko' ]:
+    [ 'python-ldap', 'python-pexpect', 'python-paramiko' ]:
       ensure  => installed;
     # for users requesting specific packages
     [ 'php5-gd', 'php5-curl', 'libdbi-perl' ]:

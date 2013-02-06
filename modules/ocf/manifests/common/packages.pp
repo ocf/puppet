@@ -12,6 +12,8 @@ class ocf::common::packages( $extra = false, $login = false ) {
   package {
     # general packages
     [ 'beep', 'bsdmainutils', 'cpufrequtils', 'finger', 'netcat-openbsd', 'pigz', 'pv', 'pwgen', 'quota', 'rsync', 'tofrodos', 'tree', 'unzip' ]:;
+    # account approval and chpass/passwd dependencies
+    ['python-cracklib', 'python-dnspython']:;
     # console managers
     [ 'dtach', 'screen', 'tmux' ]:;
     # shells
