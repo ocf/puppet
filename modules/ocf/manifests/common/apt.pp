@@ -9,23 +9,6 @@ class ocf::common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
   # remote package update management support
   package { [ 'apt-dater-host', 'imvirt' ]: }
 
-  # Evaluate security status of Debian machines
-  if $::operatingsystem == 'Debian' {
-    package { 'debsecan':
-      before => File['/etc/cron.daily/ocf-apt'],
-    }
-    file {
-      # debsecan reports missing security updates, do not use provided cronjob
-      '/etc/cron.d/debsecan':
-        ensure  => absent,
-      ;
-      '/var/lib/debsecan/whitelist':
-        source  => 'puppet:///modules/ocf/common/apt/debsecan-whitelist',
-        require => Package['debsecan'],
-      ;
-    }
-  }
-
   file {
     # provide sources.list
     '/etc/apt/sources.list':
