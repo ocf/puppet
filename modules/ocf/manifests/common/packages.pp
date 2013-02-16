@@ -41,8 +41,6 @@ class ocf::common::packages( $extra = false, $login = false ) {
     package {
       # chpass perl dependencies
       [ 'libexpect-perl', 'libunicode-map8-perl' ]:;
-      # database clients
-      [ 'mysql-client', 'postgresql-client' ]:;
       'emacs23-nox':;
       # irc clients
       'irssi':;
