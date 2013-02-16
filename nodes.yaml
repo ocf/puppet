@@ -16,6 +16,10 @@ hostname:    death
 ipoctet:     67
 classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits', 'ocf::common::mysql', 'ocf::local::death']
 ---
+hostname:    emp
+ipoctet:     110
+classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits', 'ocf::common::mysql', 'ocf::local::death']
+---
 hostname:    fallingrocks
 ipoctet:     84
 classes:     ['ocf::services::kvm']
