@@ -18,7 +18,7 @@ classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits'
 ---
 hostname:    emp
 ipoctet:     110
-classes:     ['ocf::common::acct', 'ocf::common::firehol', 'ocf::common::limits', 'ocf::common::mysql', 'ocf::local::death']
+classes:     ['ocf::common::acct', 'ocf::common::limits', 'ocf::common::mysql', 'ocf::local::death']
 ---
 hostname:    fallingrocks
 ipoctet:     84
