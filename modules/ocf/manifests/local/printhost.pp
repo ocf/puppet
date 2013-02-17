@@ -60,16 +60,40 @@ class ocf::local::printhost {
     '/etc/pykota':
       ensure  => directory,
     ;
+    '/etc/pykota/pykota.semester':
+      ensure  => directory,
+    ;
     # public configuration
+    '/etc/pykota/pykota.semester/pykota.conf':
+      source  => 'puppet:///modules/ocf/local/printhost/pykota-semester.conf',
+    ;
     '/etc/pykota/pykota.conf':
       source  => 'puppet:///modules/ocf/local/printhost/pykota.conf',
     ;
-    # private configuration
     '/etc/pykota/pykotadmin.conf':
       owner   => 'lp',
       group   => 'ocfstaff',
       mode    => '0640',
-      source  => 'puppet:///private/pykotadmin.conf'
+      source  => 'puppet:///modules/ocf/local/printhost/pykotadmin.conf',
+    ;
+    '/etc/pykota/update_semester_quota.sh':
+      mode    => '0755',
+      source  => 'puppet:///modules/ocf/local/printhost/update_semester_quota.sh',
+    ;
+    '/etc/pykota/set_daily_quota.sh':
+      mode    => '0755',
+      source  => 'puppet:///modules/ocf/local/printhost/set_daily_quota.sh',
+    ;
+    '/etc/pykota/reset_daily_quota.sh':
+      mode    => '0755',
+      source  => 'puppet:///modules/ocf/local/printhost/reset_daily_quota.sh',
+    ;
+    # private configuration
+    '/etc/pykota/pykota.semester/pykotadmin.conf':
+      owner   => 'lp',
+      group   => 'ocfstaff',
+      mode    => '0640',
+      source  => 'puppet:///private/pykotadmin-semester.conf'
     ;
   }
 
