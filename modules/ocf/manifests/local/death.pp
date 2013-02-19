@@ -1,21 +1,30 @@
 class ocf::local::death {
   package {
-    [ 'apache2', 'php5', 'php5-mysql', 'libapache-mod-security', 'libapache2-mod-suphp', 'python-django', 'python-mysqldb', 'python-flup', 'apache2-threaded-dev', 'libapache2-mod-fcgid', 'python-flask' ]:
-      ensure  => installed;
-    [ 'nfs-kernel-server', 'logrotate' ]:
-      ensure  => installed;
+    [ 'apache2', 'libapache-mod-security', 'apache2-threaded-dev', 'libapache2-mod-fcgid']:
+    ;
+    # php
+    ['php5', 'php5-mysql', 'libapache2-mod-suphp', 'php5-gd', 'php5-curl']:
+    ;
+    # python and django
+    ['python-django', 'python-mysqldb', 'python-flup', 'python-flask']:
+    ;
+    # perl
+    ['libdbi-perl']:
+    ;
+    # ruby and rails
+    ['rails', 'libfcgi-ruby1.8', 'libmysql-ruby']:
+    ;
+    ['nfs-kernel-server']:
+    ;
     # for general development
     'git':
-      ensure  => installed;
+    ;
     # for staff_hours.cgi (perl)
     'libhtml-parser-perl':
-      ensure  => installed;
+    ;
     # for account_tools
-    [ 'python-ldap', 'python-pexpect', 'python-paramiko' ]:
-      ensure  => installed;
-    # for users requesting specific packages
-    [ 'php5-gd', 'php5-curl', 'libdbi-perl' ]:
-      ensure  => installed;
+    ['python-ldap', 'python-pexpect', 'python-paramiko']:
+    ;
   }
 
   file { '/etc/apache2/httpd.conf':
@@ -245,7 +254,6 @@ class ocf::local::death {
     '/etc/logrotate.d/apache2':
       ensure    => file,
       source    => 'puppet:///modules/ocf/local/death/logrotate/apache2',
-      require   => Package['logrotate'],
   }
 
   service { 'nfs-kernel-server': }
