@@ -195,6 +195,12 @@ class ocf::local::death {
     require     => [Exec['/usr/sbin/a2enmod rewrite'], Exec['/usr/sbin/a2enmod include'], File['/etc/apache2/sites-available/01-www.conf']],
   }
 
+  # dpkg-divert
+  exec { '/usr/bin/dpkg-divert --divert /usr/lib/apache2/suexec.dist --rename /usr/lib/apache2/suexec':
+    unless      => '/usr/bin/dpkg-divert --list | grep suexec',
+    require     => File['/usr/lib/apache2/suexec'],
+  }
+
   # suphp is separated from apache
   file {
     '/etc/suphp/suphp.conf':
