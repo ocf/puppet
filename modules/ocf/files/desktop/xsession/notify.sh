@@ -21,9 +21,9 @@ fi
 
 # report printing quota
 while true; do
-  balance=`$ssh "pkusers --list $USER" | grep -F 'Account balance' | cut -d':' -f2 | cut -d'.' -f1 | tr -d -c '[:digit:]'`
-  if [ -n "$balance" ] && ( [ -z "$old_balance" ] || [ "$balance" -ne "$old_balance" ] ); then
-    $notify_send "$balance pages remaining
+  balance="`$ssh /opt/ocf/bin/paper | grep pages`"
+  if [ -n "$balance" ] && ( [ -z "$old_balance" ] || [ "$balance" != "$old_balance" ] ); then
+    $notify_send "$balance
 (as of `date '+%I:%M%P'`)"
     old_balance=$balance
   fi
