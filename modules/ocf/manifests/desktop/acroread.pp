@@ -1,6 +1,12 @@
 class ocf::desktop::acroread {
 
-  package { 'acroread': }
+  package {
+    'acroread':
+    ;
+    # required dependency
+    'ia32-libs-gtk':
+    ;
+  }
 
   # hide EULA
   file { '/usr/lib/Adobe/Reader9/Reader/GlobalPrefs/reader_prefs':
