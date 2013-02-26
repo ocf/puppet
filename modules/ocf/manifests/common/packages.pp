@@ -53,6 +53,8 @@ class ocf::common::packages( $extra = false, $login = false ) {
       [ 'pkpgcounter', 'python-egenix-mxdatetime', 'python-imaging', 'python-jaxml', 'python-minimal', 'python-mysqldb', 'python-osd', 'python-pysnmp4', 'python-reportlab' ]:;
       # signat.pl dependency
       'libwww-mechanize-perl':;
+      # php
+      'php5-cli':;
       # python
       [ 'ipython', 'python-dev', 'python-django', 'python-ldap', 'python-lxml', 'python-yaml' ]:;
       # useful for CS classes
