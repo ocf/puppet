@@ -4,6 +4,6 @@ SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # m h dom mon dow user command
-59 11 * * 0   nobody /usr/local/bin/ocf-wakeup
-59 08 * * 1-5 nobody /usr/local/bin/ocf-wakeup
-59 10 * * 6   nobody /usr/local/bin/ocf-wakeup
+00 12 * * 0   nobody /usr/local/bin/ocf-wakeup
+00 09 * * 1-5 nobody /usr/local/bin/ocf-wakeup
+00 11 * * 6   nobody /usr/local/bin/ocf-wakeup
