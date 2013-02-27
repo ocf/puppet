@@ -47,6 +47,7 @@ node default {
     case $::hostname {
       printhost: { class { 'ocf::common::auth': login => 'approve', gsudo => 'ocfstaff' } }
       tsunami:   { class { 'ocf::common::auth': login => 'ocf' } }
+      riot:      { class { 'ocf::common::auth': login_users => [ ['kiosk', 'LOCAL'] ] } }
       default:   { class { 'ocf::common::auth': } }
     }
     include ocf::common::ssh

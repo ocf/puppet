@@ -67,6 +67,7 @@ classes:     ['ocf::local::printhost']
 ---
 hostname:    riot
 ipoctet:     111
+classes:     ['ocf::local::riot', 'ocf::common::cups']
 ---
 hostname:    sandstorm
 ipoctet:     68

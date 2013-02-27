@@ -6,6 +6,9 @@
 + : apt-dater : lightning.ocf.berkeley.edu
 + : dumper : pollution.ocf.berkeley.edu
 + : nessus : .security.berkeley.edu
+<% login_users.each do |user,from| -%>
++ : <%= user %> : <%= from %>
+<% end -%>
 + : (admin) : ALL
 + : (ocfstaff) : ALL
 + : (sys) : ALL

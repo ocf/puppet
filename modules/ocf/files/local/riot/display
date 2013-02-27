@@ -1,0 +1,16 @@
+#!/bin/sh
+
+date "+Today is %A, %B %d, %Y. Time: %I:%M %p %Z"
+echo
+
+echo "\033[1mCurrent jobs on printing queue:\033[0m"
+lpq -a
+echo
+
+echo "\033[1mRecently completed jobs:\033[0m"
+lpstat -W completed -o | tail -n 25 | tac
+
+echo "\033[1m"
+cat /opt/kiosk/motd
+echo -n "\033[0m"
+
