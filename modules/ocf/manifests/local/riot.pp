@@ -24,6 +24,19 @@ class ocf::local::riot {
           owner    => 'root',
           group    => 'root',
           mode     => '0755';
+      '/opt/kiosk/autologin':
+          ensure   => file,
+          source   => 'puppet:///modules/ocf/local/riot/autologin',
+          owner    => 'root',
+          group    => 'root',
+          mode     => '0755';
+
+      '/etc/inittab':
+          ensure   => file,
+          source   => 'puppet:///modules/ocf/local/riot/inittab',
+          owner    => 'root',
+          group    => 'root',
+          mode     => '0644';
       
       '/etc/cron.d/update-motd':
           ensure   => file,
