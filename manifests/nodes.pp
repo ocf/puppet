@@ -48,6 +48,7 @@ node default {
       printhost: { class { 'ocf::common::auth': login => 'approve', gsudo => 'ocfstaff' } }
       tsunami:   { class { 'ocf::common::auth': login => 'ocf' } }
       riot:      { class { 'ocf::common::auth': login_users => [ ['kiosk', 'LOCAL'] ] } }
+      locusts:   { class { 'ocf::common::auth': login_users => [ ['NuclearPoweredKimJongIl', 'ALL' ] ] } }
       default:   { class { 'ocf::common::auth': } }
     }
     include ocf::common::ssh
