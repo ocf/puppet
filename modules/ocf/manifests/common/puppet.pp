@@ -1,6 +1,6 @@
 class ocf::common::puppet {
 
-  package { ['hiera', 'facter', 'puppet']:
+  package { ['facter', 'puppet']:
     ensure  => latest,
     require => Exec['aptitude update']
   }
