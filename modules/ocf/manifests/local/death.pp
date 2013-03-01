@@ -3,7 +3,7 @@ class ocf::local::death {
     [ 'apache2', 'libapache-mod-security', 'apache2-threaded-dev', 'libapache2-mod-fcgid']:
     ;
     # php
-    ['php5', 'php5-mysql', 'libapache2-mod-suphp', 'php5-gd', 'php5-curl']:
+    ['php5', 'php5-mysql', 'libapache2-mod-suphp', 'php5-gd', 'php5-curl', 'php5-mcrypt']:
     ;
     # python and django
     ['python-django', 'python-mysqldb', 'python-flup', 'python-flask']:
