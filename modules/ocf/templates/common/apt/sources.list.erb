@@ -1,12 +1,17 @@
 <% if operatingsystem == 'Debian' -%>
+<% if architecture == 'amd64' or architecture == 'i386' -%>
 deb http://linux.csua.berkeley.edu/debian/ <%= lsbdistcodename %> main<% if nonfree %> contrib non-free<% end %>
-deb http://security.debian.org/ <%= lsbdistcodename %>/updates main<% if nonfree %> contrib non-free<% end %>
 deb http://linux.csua.berkeley.edu/debian/ <%= lsbdistcodename %>-updates main<% if nonfree %> contrib non-free<% end %>
+<% else -%>
+deb http://mirrors.kernel.org/debian/ <%= lsbdistcodename %> main<% if nonfree %> contrib non-free<% end %>
+deb http://mirrors.kernel.org/debian/ <%= lsbdistcodename %>-updates main<% if nonfree %> contrib non-free<% end %>
+<% end -%>
+deb http://security.debian.org/ <%= lsbdistcodename %>/updates main<% if nonfree %> contrib non-free<% end %>
 <% if lsbdistcodename == 'squeeze' -%>
 deb http://debian.gtisc.gatech.edu/debian-backports/ <%= lsbdistcodename %>-backports main<% if nonfree %> contrib non-free<% end %>
 <% end -%>
 <% if kiosk -%>
-deb http://debian.webconverger.com/ lenny/
+deb http://debian.webconverger.com/ squeeze/
 <% end -%>
 <% elsif operatingsystem == 'Ubuntu' -%>
 deb http://us.archive.ubuntu.com/ubuntu/ <%= lsbdistcodename %> main restricted universe multiverse
