@@ -2,6 +2,9 @@
 <% if architecture == 'amd64' or architecture == 'i386' -%>
 deb http://linux.csua.berkeley.edu/debian/ <%= lsbdistcodename %> main<% if nonfree %> contrib non-free<% end %>
 deb http://linux.csua.berkeley.edu/debian/ <%= lsbdistcodename %>-updates main<% if nonfree %> contrib non-free<% end %>
+<% elsif architecture == 'armv6l' -%>
+deb http://archive.raspbian.org/raspbian/ <%= lsbdistcodename %> main rpi
+deb http://archive.raspberrypi.org/debian/ <%= lsbdistcodename %> main
 <% else -%>
 deb http://mirrors.kernel.org/debian/ <%= lsbdistcodename %> main<% if nonfree %> contrib non-free<% end %>
 deb http://mirrors.kernel.org/debian/ <%= lsbdistcodename %>-updates main<% if nonfree %> contrib non-free<% end %>
