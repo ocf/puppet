@@ -18,6 +18,8 @@ class ocf::common::packages( $extra = false, $login = false ) {
     [ 'dtach', 'screen', 'tmux' ]:;
     # shells
     [ 'bash', 'tcsh', 'zsh' ]:;
+    # apache utilities (such as htpasswd)
+    [ 'apache2-utils' ]:;
     # top
     [ 'htop', 'iperf', 'iftop', 'iotop', 'powertop' ]:;
     'vim':
