@@ -90,3 +90,7 @@ Type=Application
 Name=Fix bottom panel
 Exec=$HOME/.fix-panel.sh
 Icon=geany" > $HOME/Desktop/lxpanel.desktop
+
+# Fix multiple monitors if available
+[ "`xrandr | grep ' connected' | wc -l`" = "2" ] && \
+   xrandr --output HDMI1 --mode 1680x1050 --pos 1680x0 --rotate normal --output DP1 --off --output VGA1 --mode 1680x1050 --pos 0x0 --rotate normal
