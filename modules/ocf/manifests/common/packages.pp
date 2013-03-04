@@ -18,8 +18,6 @@ class ocf::common::packages( $extra = false, $login = false ) {
     [ 'dtach', 'screen', 'tmux' ]:;
     # shells
     [ 'bash', 'tcsh', 'zsh' ]:;
-    # apache utilities (such as htpasswd)
-    [ 'apache2-utils' ]:;
     # top
     [ 'htop', 'iperf', 'iftop', 'iotop', 'powertop' ]:;
     'vim':
@@ -44,6 +42,8 @@ class ocf::common::packages( $extra = false, $login = false ) {
       # chpass perl dependencies
       [ 'libexpect-perl', 'libunicode-map8-perl' ]:;
       'emacs23-nox':;
+      # apache utilities (such as htpasswd)
+      [ 'apache2-utils' ]:;
       # irc clients
       'irssi':;
       # text web browsers
