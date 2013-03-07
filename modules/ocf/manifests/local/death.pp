@@ -6,7 +6,7 @@ class ocf::local::death {
     ['php5', 'php5-mysql', 'libapache2-mod-suphp', 'php5-gd', 'php5-curl', 'php5-mcrypt']:
     ;
     # python and django
-    ['python-django', 'python-mysqldb', 'python-flup', 'python-flask']:
+    ['python-django', 'python-mysqldb', 'python-flup', 'python-flask', 'python-sqlalchemy']:
     ;
     # perl
     ['libdbi-perl']:
