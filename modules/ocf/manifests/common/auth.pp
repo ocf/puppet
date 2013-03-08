@@ -10,11 +10,12 @@ class ocf::common::auth( $login = '', $login_users = '', $gsudo = '', $usudo = '
     'libnss-ldap':
       recommends => false;
     # NSCD for LDAP caching
-    'nscd':;
+    'unscd':
+      require    => Package['nscd'];
     # nss_updatedb for offline LDAP caching
     'nss-updatedb':
   }
-  package { [ 'libnss-ldapd', 'libnss-sss', 'libpam-ldap', 'libpam-sss', 'nslcd', 'sssd' ]:
+  package { [ 'libnss-ldapd', 'libnss-sss', 'libpam-ldap', 'libpam-sss', 'nslcd', 'nscd', 'sssd' ]:
     ensure => purged
   }
   file {
@@ -26,7 +27,7 @@ class ocf::common::auth( $login = '', $login_users = '', $gsudo = '', $usudo = '
     # NSCD caching configuration
     '/etc/nscd.conf':
       source  => 'puppet:///modules/ocf/common/auth/nss/nscd.conf',
-      require => Ocf::Repackage['nscd'];
+      require => Ocf::Repackage['unscd'];
     # LDAP nameservice configuration
     '/etc/libnss-ldap.conf':
       ensure  => symlink,
@@ -39,9 +40,9 @@ class ocf::common::auth( $login = '', $login_users = '', $gsudo = '', $usudo = '
       require => [ Ocf::Repackage['libnss-ldap'], File['/etc/libnss-ldap.conf'] ];
   }
   # restart NSCD
-  service { 'nscd':
+  service { 'unscd':
     subscribe => File['/etc/nscd.conf', '/etc/nsswitch.conf'],
-    require   => Ocf::Repackage['nscd']
+    require   => Ocf::Repackage['unscd']
   }
 
   # PAM user authentication
