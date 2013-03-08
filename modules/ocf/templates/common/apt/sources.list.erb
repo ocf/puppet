@@ -18,8 +18,8 @@ deb http://debian.gtisc.gatech.edu/debian-backports/ <%= lsbdistcodename %>-back
 deb http://debian.webconverger.com/ squeeze/
 <% end -%>
 <% elsif operatingsystem == 'Ubuntu' -%>
-deb http://us.archive.ubuntu.com/ubuntu/ <%= lsbdistcodename %> main restricted universe multiverse
-deb http://us.archive.ubuntu.com/ubuntu/ <%= lsbdistcodename %>-updates main restricted universe multiverse
-deb http://us.archive.ubuntu.com/ubuntu/ <%= lsbdistcodename %>-backports main restricted universe multiverse
+deb http://mirrors.kernel.org/ubuntu/ <%= lsbdistcodename %> main restricted universe multiverse
+deb http://mirrors.kernel.org/ubuntu/ <%= lsbdistcodename %>-updates main restricted universe multiverse
+deb http://mirrors.kernel.org/ubuntu/ <%= lsbdistcodename %>-backports main restricted universe multiverse
 deb http://security.ubuntu.com/ubuntu/ <%= lsbdistcodename %>-security main restricted universe multiverse
 <% end -%>
