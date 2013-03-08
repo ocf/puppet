@@ -36,7 +36,7 @@ ipoctet:     72
 classes:     ['ocf::services::kvm']
 ---
 hostname:    locusts
-ipoctet:    86
+ipoctet:     86
 ---
 hostname:    maelstrom
 ipoctet:     79
@@ -56,6 +56,9 @@ classes:     ['ocf::services::kvm']
 hostname:    pestilence
 ipoctet:     66
 classes:     ['ocf::local::pestilence', 'ocf::services::netboot']
+---
+hostname:    plague
+ipoctet:     88
 ---
 hostname:    pollution
 ipoctet:     78
