@@ -1,9 +1,15 @@
 class ocf::local::death {
   package {
     [ 'apache2', 'libapache-mod-security', 'apache2-threaded-dev', 'libapache2-mod-fcgid']:
+      before => Package['libapache2-mod-php5'],
     ;
     # php
     ['php5', 'php5-mysql', 'libapache2-mod-suphp', 'php5-gd', 'php5-curl', 'php5-mcrypt']:
+      before => Package['libapache2-mod-php5'],
+    ;
+    # mod-php interferes with suphp and fcgid but is pulled in as recommended dependency
+    'libapache2-mod-php5':
+      ensure => purged,
     ;
     # python and django
     ['python-django', 'python-mysqldb', 'python-flup', 'python-flask', 'python-sqlalchemy']:
