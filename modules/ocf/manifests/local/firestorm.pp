@@ -76,4 +76,30 @@ class ocf::local::firestorm {
     ;
   }
 
+  # LDAP revision control
+  # ldap-git-backup currently must be fetched from unstable
+  package { 'ldap-git-backup': }
+  file {
+    # Snapshot daily at 4AM
+    '/etc/cron.d/ldap-git-backup':
+      content => '0 4 * * * root /usr/sbin/ldap-git-backup',
+      require => Package['ldap-git-backup'],
+    ;
+    # Push repository to GitHub
+    '/var/backups/ldap/.git/hooks/post-commit':
+      mode    => '0755',
+      content => 'git push -fq git@github.com:ocf/ldap',
+      require => [Package['ldap-git-backup'], File['/root/.ssh/id_rsa']],
+    ;
+    '/root/.ssh':
+      ensure  => directory,
+      mode    => '0600',
+    ;
+    # GitHub deployer key
+    '/root/.ssh/id_rsa':
+      mode   => '0600',
+      source => 'puppet:///private/id_rsa',
+    ;
+  }
+
 }
