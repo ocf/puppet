@@ -16,7 +16,9 @@ node default {
   include ocf::common::ldap
   include ocf::common::smart
   include ocf::common::zabbix
-  if $::ipHostNumber != undef {
+  if $::macAddress {
+      include networking
+  } else {
     case $::hostname {
       hal, fallingrocks, pandemic: {$bridge = true}
       default: {$bridge = false}
@@ -29,9 +31,6 @@ node default {
       domain      => 'ocf.berkeley.edu',
       nameservers => ['169.229.172.66', '128.32.206.12', '128.32.136.9'],
     }
-  }
-  else {
-      include networking
   }
 
   if $type == 'server' {
