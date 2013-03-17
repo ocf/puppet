@@ -1,36 +1,32 @@
 class ocf::local::firestorm {
   ##Heimdal server configuration##
   # if local realm has not been defined installation will fail
-  package {
-    'heimdal-kdc':
-      require => File['/etc/krb5.conf'];
+  package { 'heimdal-kdc':
+    require => File['/etc/krb5.conf'],
   }
 
   #define logrotate so we can modify the conf
   package { ['logrotate']: }
 
-  file {
-    '/etc/logrotate.d/heimdal-kdc':
+  file { '/etc/logrotate.d/heimdal-kdc':
     source  => 'puppet:///modules/ocf/local/firestorm/heimdal-kdc-logrotate',
-    require => [ Package['heimdal-kdc'], Package['logrotate'] ]
+    require => Package['heimdal-kdc', 'logrotate'],
   }
 
   #define the heimdal service
-  service {
-    'heimdal-kdc':
-      subscribe => File[ '/etc/heimdal-kdc/kdc.conf', '/etc/heimdal-kdc/kadmind.acl' ]
+  service { 'heimdal-kdc':
+    subscribe => File['/etc/heimdal-kdc/kdc.conf', '/etc/heimdal-kdc/kadmind.acl'],
   }
 
   file {
     '/etc/heimdal-kdc/kdc.conf':
       source  => 'puppet:///modules/ocf/local/firestorm/kdc.conf',
-      require => [ Package['heimdal-kdc'] ],
+      require => Package['heimdal-kdc'],
   }
 
-  file {
-    '/etc/heimdal-kdc/kadmind.acl':
-      source  => 'puppet:///modules/ocf/local/firestorm/kadmind.acl',
-      require => [ Package['heimdal-kdc'] ],
+  file { '/etc/heimdal-kdc/kadmind.acl':
+    source  => 'puppet:///modules/ocf/local/firestorm/kadmind.acl',
+    require => Package['heimdal-kdc'],
   }
 
   ##Ldap server install##
@@ -38,52 +34,46 @@ class ocf::local::firestorm {
   package { ['slapd']: }
 
   #define service
-  service {
-    'slapd':
-      subscribe => File[ '/etc/ldap/slapd.conf', '/etc/ldap/schema/ocf.schema', '/etc/ldap/ocf_ldap.key', '/etc/default/slapd','/etc/ldap/sasl2/slapd.conf']
+  service { 'slapd':
+    subscribe => File[ '/etc/ldap/slapd.conf', '/etc/ldap/schema/ocf.schema', '/etc/ldap/ocf_ldap.key', '/etc/default/slapd','/etc/ldap/sasl2/slapd.conf'],
   }
 
   #needed config files
   file {
     '/etc/ldap/slapd.conf':
       source  => 'puppet:///modules/ocf/local/firestorm/slapd.conf',
-      require => [ Package['slapd'] ],
-  }
-
-  file {
+      require => Package['slapd'],
+    ;
     '/etc/ldap/schema/ocf.schema':
       source  => 'puppet:///modules/ocf/local/firestorm/ocf.schema',
-      require => [ Package['slapd'] ],
-  }
-
-  file {
+      require => Package['slapd'],
+    ;
+    '/etc/ldap/schema/puppet.schema':
+      source  => 'puppet:///contrib/local/firestorm/puppet.schema',
+      require => Package['slapd'],
+    ;
     '/etc/ldap/ocf_ldap.key':
       source  => 'puppet:///private/ocf_ldap.key',
-      require => [ Package['slapd'], Package['openssl'] ],
+      require => Package['slapd', 'openssl'],
       mode    => '0600',
       owner   => 'openldap',
       group   => 'openldap',
-  }
-
-  file {
+    ;
     '/etc/default/slapd':
       source  => 'puppet:///modules/ocf/local/firestorm/slapd-defaults',
-      require =>  [ Package['slapd'], Package['openssl'] ],
-  }
-
-  file {
+      require => Package['slapd', 'openssl'],
+    ;
     '/etc/ldap/sasl2/slapd.conf':
       source  => 'puppet:///modules/ocf/local/firestorm/sasl2-slapd',
-      require =>  [ Package['slapd'], Package['libsasl2-modules-gssapi-mit'] ],
-  }
-
-  file {
+      require =>  Package['slapd', 'libsasl2-modules-gssapi-mit'],
+    ;
     '/etc/ldap/krb5.keytab':
       source  => 'puppet:///private/krb5-ldap.keytab',
-      require => [ Package['slapd'], Package['heimdal-clients'] ],
+      require => Package['slapd', 'heimdal-clients'],
       mode    => '0600',
       owner   => 'openldap',
       group   => 'openldap',
+    ;
   }
 
 }
