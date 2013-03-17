@@ -23,8 +23,11 @@ ssl_client_header = SSL_CLIENT_S_DN
 ssl_client_verify_header = SSL_CLIENT_VERIFY
 
 # use external node classifer
-node_terminus = exec
-external_nodes = /etc/puppet/enc.py
+node_terminus = ldap
+ldapserver = ldap.ocf.berkeley.edu
+ldapport = 636
+ldapssl = true
+ldapbase = ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU
 
 # log and mail reports from clients
 reports=log, tagmail

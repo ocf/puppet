@@ -16,13 +16,13 @@ node default {
   include ocf::common::ldap
   include ocf::common::smart
   include ocf::common::zabbix
-  if $::ipoctet != undef {
+  if $::ipHostNumber != undef {
     case $::hostname {
       hal, fallingrocks, pandemic: {$bridge = true}
       default: {$bridge = false}
     }
     class { 'networking':
-      ipaddress   => "169.229.172.$::ipoctet",
+      ipaddress   => $::ipHostNumber,
       netmask     => '255.255.255.192',
       gateway     => '169.229.172.65',
       bridge      => $bridge,
