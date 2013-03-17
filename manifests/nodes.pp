@@ -61,7 +61,9 @@ node default {
     include ocf::common::acct
     include ocf::common::crondeny
     include ocf::common::cups
-    include ocf::desktop::acroread
+    if $::lsbdistcodename != 'wheezy' {
+      include ocf::desktop::acroread
+    }
     include ocf::desktop::iceweasel
     include ocf::desktop::limits
     include ocf::desktop::lxpanel

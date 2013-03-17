@@ -34,9 +34,9 @@ class ocf::desktop::packages {
     'sane-utils':
       ensure  => purged;
     # reportedly buggy as default PDF reader
-    [ 'evince', 'evince-gtk', 'xpdf' ]:
-      ensure  => purged,
-      require => Package[ 'acroread' ];
+    #[ 'evince', 'evince-gtk', 'xpdf' ]:
+    #  ensure  => purged,
+    #  require => Package[ 'acroread' ];
     # should not be default PDF reader
     'gimp':
       ensure  => purged;
