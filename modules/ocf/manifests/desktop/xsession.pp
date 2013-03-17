@@ -72,8 +72,13 @@ class ocf::desktop::xsession {
   # lxde configuration
   file {
     # provide lxde wallpaper configuration
-    '/usr/share/lxde/pcmanfm/LXDE.conf':
-      source  => 'puppet:///modules/ocf/desktop/xsession/lxde/LXDE.conf';
+    if $::lsbdistcodename == 'wheezy' {
+      '/etc/xdg/pcmanfm/LXDE/pcmanfm.conf':
+        source  => 'puppet:///modules/ocf/desktop/xsession/lxde/LXDE.conf';
+    } else {
+      '/usr/share/lxde/pcmanfm/LXDE.conf':
+        source  => 'puppet:///modules/ocf/desktop/xsession/lxde/LXDE.conf';
+    }
     # provide lxterminal configuration to fix transparency bug
     '/usr/share/lxterminal/lxterminal.conf':
       source  => 'puppet:///modules/ocf/desktop/xsession/lxde/lxterminal.conf';
