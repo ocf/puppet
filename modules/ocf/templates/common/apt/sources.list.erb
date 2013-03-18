@@ -13,6 +13,8 @@ deb http://security.debian.org/ <%= lsbdistcodename %>/updates main<% if nonfree
 <% end -%>
 <% if lsbdistcodename == 'squeeze' -%>
 deb http://debian.gtisc.gatech.edu/debian-backports/ <%= lsbdistcodename %>-backports main<% if nonfree %> contrib non-free<% end %>
+<% elsif lsbdistcodename == 'wheezy' -%>
+deb http://linux.csua.berkeley.edu/debian/ <%= lsbdistcodename %>-backports main<% if nonfree %> contrib non-free<% end %>
 <% end -%>
 <% if kiosk -%>
 deb http://debian.webconverger.com/ squeeze/
