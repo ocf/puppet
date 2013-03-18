@@ -88,7 +88,7 @@ class ocf::local::firestorm {
     # Push repository to GitHub
     '/var/backups/ldap/.git/hooks/post-commit':
       mode    => '0755',
-      content => 'git push -fq git@github.com:ocf/ldap',
+      content => 'git push -q git@github.com:ocf/ldap',
       require => [Package['ldap-git-backup'], File['/root/.ssh/id_rsa']],
     ;
     '/root/.ssh':
