@@ -82,7 +82,7 @@ class ocf::local::firestorm {
   file {
     # Snapshot daily at 4AM
     '/etc/cron.d/ldap-git-backup':
-      content => '0 4 * * * root /usr/sbin/ldap-git-backup',
+      content => "0 4 * * * root /usr/sbin/ldap-git-backup\n",
       require => Package['ldap-git-backup'],
     ;
     # Push repository to GitHub
