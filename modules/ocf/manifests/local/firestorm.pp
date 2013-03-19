@@ -29,6 +29,21 @@ class ocf::local::firestorm {
     require => Package['heimdal-kdc'],
   }
 
+  # Kerberos revision control
+  file {
+    # Script to snapshot by dumping and committing
+    '/usr/local/sbin/kerberos-git-backup':
+      mode    => '0755',
+      source  => 'puppet:///modules/ocf/local/firestorm/kerberos-git-backup',
+    ;
+    # Snapshot daily at 4AM
+    '/etc/cron.d/kerberos-git-backup':
+      content => "0 4 * * * root /usr/local/sbin/kerberos-git-backup\n",
+      require => File['/usr/local/sbin/kerberos-git-backup'],
+    ;
+    # TODO: need to push repository somewhere secure
+  }
+
   ##Ldap server install##
   #Packages
   package { ['slapd']: }
