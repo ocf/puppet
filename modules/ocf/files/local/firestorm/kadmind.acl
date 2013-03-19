@@ -1,5 +1,3 @@
-#keep all alphabetical please
-
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #admin principals
 daradib/admin@OCF.BERKELEY.EDU          all
@@ -8,6 +6,7 @@ morshed/admin@OCF.BERKELEY.EDU          all
 sanjayk/admin@OCF.BERKELEY.EDU          all
 tzhu/admin@OCF.BERKELEY.EDU             all
 waf/admin@OCF.BERKELEY.EDU              all
+nolm/admin@OCF.BERKELEY.EDU             all
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
