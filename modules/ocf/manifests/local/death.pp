@@ -22,9 +22,6 @@ class ocf::local::death {
     ;
     ['nfs-kernel-server']:
     ;
-    # for general development
-    'git':
-    ;
     # for staff_hours.cgi (perl)
     'libhtml-parser-perl':
     ;
