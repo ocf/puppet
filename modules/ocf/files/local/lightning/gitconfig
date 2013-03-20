@@ -1,0 +1,5 @@
+[branch]
+	autosetuprebase = always
+[rebase]
+	autosquash = true
+	stat = true

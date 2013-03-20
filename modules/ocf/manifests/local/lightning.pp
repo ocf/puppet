@@ -55,7 +55,7 @@ class ocf::local::lightning {
   file {
     # automatic rebase for git pull in new repositories
     '/etc/gitconfig':
-      content => "[branch]\nautosetuprebase = always",
+      source  => 'puppet:///modules/ocf/local/lightning/gitconfig',
     ;
     # root user ssh directory
     '/root/.ssh':
