@@ -32,7 +32,8 @@ class ocf::common::packages( $extra = false, $login = false ) {
       'nmap':;
       'pssh':;
       # version control
-      [ 'git', 'mercurial', 'subversion' ]:
+      # git is included in ocf::common::git
+      [ 'mercurial', 'subversion' ]:
     }
   }
 
