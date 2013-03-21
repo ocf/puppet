@@ -3,3 +3,5 @@
 [rebase]
 	autosquash = true
 	stat = true
+[color]
+	ui = true
