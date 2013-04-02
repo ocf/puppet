@@ -57,6 +57,20 @@ class ocf::common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
         unless  => 'dpkg -l pkg-mozilla-archive-keyring | grep ^ii',
         require => File['/etc/apt/sources.list','/etc/apt/sources.list.d/desktop.list']
     }
+  } else {
+    # provide desktop sources.list
+    file { '/etc/apt/sources.list.d/desktop.list':
+      content => "deb http://www.deb-multimedia.org/ $lsbdistcodename main non-free",
+      require => Package['aptitude'],
+      before  => File['/etc/cron.daily/ocf-apt']
+    }
+    # trust debian-multimedia and mozilla.debian.net GPG key
+    exec {
+      'debian-multimedia':
+        command => 'aptitude update && aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install deb-multimedia-keyring && aptitude update',
+        unless  => 'dpkg -l deb-multimedia-keyring | grep ^ii',
+        require => File['/etc/apt/sources.list','/etc/apt/sources.list.d/desktop.list'];
+    }
   }
 
 }
