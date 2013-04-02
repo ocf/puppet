@@ -63,8 +63,8 @@ node default {
     include ocf::common::cups
     if $::lsbdistcodename != 'wheezy' {
       include ocf::desktop::acroread
-      include ocf::desktop::iceweasel
     }
+    include ocf::desktop::iceweasel
     include ocf::desktop::limits
     include ocf::desktop::lxpanel
     include ocf::desktop::numlockx

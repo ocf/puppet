@@ -39,7 +39,7 @@ class ocf::common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
     }
   }
 
-  if $::operatingsystem == 'Debian' and $desktop {
+  if $::operatingsystem == 'Debian' and ! $::lsbdistcodename == 'wheezy' and $desktop {
     # provide desktop sources.list
     file { '/etc/apt/sources.list.d/desktop.list':
       content => "deb http://www.deb-multimedia.org/ $lsbdistcodename main non-free\ndeb http://mozilla.debian.net/ $lsbdistcodename-backports iceweasel-release",
