@@ -58,7 +58,7 @@ class ocf::common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
           unless  => 'dpkg -l pkg-mozilla-archive-keyring | grep ^ii',
           require => File['/etc/apt/sources.list','/etc/apt/sources.list.d/desktop.list']
       }
-    } elsif $::lsbdistcodename == 'squeeze' {
+    } elsif $::lsbdistcodename == 'wheezy' {
       # provide desktop sources.list
       file { '/etc/apt/sources.list.d/desktop.list':
         content => "deb http://www.deb-multimedia.org/ $lsbdistcodename main non-free",
