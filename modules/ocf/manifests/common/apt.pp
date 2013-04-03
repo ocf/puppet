@@ -39,37 +39,39 @@ class ocf::common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
     }
   }
 
-  if $::operatingsystem == 'Debian' and ! $::lsbdistcodename == 'wheezy' and $desktop {
-    # provide desktop sources.list
-    file { '/etc/apt/sources.list.d/desktop.list':
-      content => "deb http://www.deb-multimedia.org/ $lsbdistcodename main non-free\ndeb http://mozilla.debian.net/ $lsbdistcodename-backports iceweasel-release",
-      require => Package['aptitude'],
-      before  => File['/etc/cron.daily/ocf-apt']
-    }
-    # trust debian-multimedia and mozilla.debian.net GPG key
-    exec {
-      'debian-multimedia':
-        command => 'aptitude update && aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install deb-multimedia-keyring && aptitude update',
-        unless  => 'dpkg -l deb-multimedia-keyring | grep ^ii',
-        require => File['/etc/apt/sources.list','/etc/apt/sources.list.d/desktop.list'];
-      'debian-mozilla':
-        command => 'aptitude update && aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install pkg-mozilla-archive-keyring && aptitude update',
-        unless  => 'dpkg -l pkg-mozilla-archive-keyring | grep ^ii',
-        require => File['/etc/apt/sources.list','/etc/apt/sources.list.d/desktop.list']
-    }
-  } else {
-    # provide desktop sources.list
-    file { '/etc/apt/sources.list.d/desktop.list':
-      content => "deb http://www.deb-multimedia.org/ $lsbdistcodename main non-free",
-      require => Package['aptitude'],
-      before  => File['/etc/cron.daily/ocf-apt']
-    }
-    # trust debian-multimedia and mozilla.debian.net GPG key
-    exec {
-      'debian-multimedia':
-        command => 'aptitude update && aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install deb-multimedia-keyring && aptitude update',
-        unless  => 'dpkg -l deb-multimedia-keyring | grep ^ii',
-        require => File['/etc/apt/sources.list','/etc/apt/sources.list.d/desktop.list'];
+  if $::operatingsystem == 'Debian' and $desktop {
+    if $::lsbdistcodename == 'squeeze' {
+      # provide desktop sources.list
+      file { '/etc/apt/sources.list.d/desktop.list':
+        content => "deb http://www.deb-multimedia.org/ $lsbdistcodename main non-free\ndeb http://mozilla.debian.net/ $lsbdistcodename-backports iceweasel-release",
+        require => Package['aptitude'],
+        before  => File['/etc/cron.daily/ocf-apt']
+      }
+      # trust debian-multimedia and mozilla.debian.net GPG key
+      exec {
+        'debian-multimedia':
+          command => 'aptitude update && aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install deb-multimedia-keyring && aptitude update',
+          unless  => 'dpkg -l deb-multimedia-keyring | grep ^ii',
+          require => File['/etc/apt/sources.list','/etc/apt/sources.list.d/desktop.list'];
+        'debian-mozilla':
+          command => 'aptitude update && aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install pkg-mozilla-archive-keyring && aptitude update',
+          unless  => 'dpkg -l pkg-mozilla-archive-keyring | grep ^ii',
+          require => File['/etc/apt/sources.list','/etc/apt/sources.list.d/desktop.list']
+      }
+    } elsif $::lsbdistcodename == 'squeeze' {
+      # provide desktop sources.list
+      file { '/etc/apt/sources.list.d/desktop.list':
+        content => "deb http://www.deb-multimedia.org/ $lsbdistcodename main non-free",
+        require => Package['aptitude'],
+        before  => File['/etc/cron.daily/ocf-apt']
+      }
+      # trust debian-multimedia and mozilla.debian.net GPG key
+      exec {
+        'debian-multimedia':
+          command => 'aptitude update && aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install deb-multimedia-keyring && aptitude update',
+          unless  => 'dpkg -l deb-multimedia-keyring | grep ^ii',
+          require => File['/etc/apt/sources.list','/etc/apt/sources.list.d/desktop.list'];
+      }
     }
   }
 
