@@ -45,11 +45,11 @@ node default {
       default:   { class { 'ocf::common::packages': } }
     }
     case $::hostname {
-      locusts:   { class { 'ocf::common::auth': login_users => [ ['NuclearPoweredKimJongIl', 'ALL' ] ] } }
-      printhost: { class { 'ocf::common::auth': login => 'approve', gsudo => 'ocfstaff' } }
-      supernova: { class { 'ocf::common::auth': login => 'approve' } }
-      riot:      { class { 'ocf::common::auth': login_users => [ ['kiosk', 'LOCAL'] ] } }
-      tsunami:   { class { 'ocf::common::auth': login => 'ocf' } }
+      locusts:   { class { 'ocf::common::auth': ulogin => [ ['NuclearPoweredKimJongIl', 'ALL' ] ] } }
+      printhost: { class { 'ocf::common::auth': glogin => 'approve', gsudo => 'ocfstaff' } }
+      supernova: { class { 'ocf::common::auth': glogin => 'approve' } }
+      riot:      { class { 'ocf::common::auth': ulogin => [ ['kiosk', 'LOCAL'] ] } }
+      tsunami:   { class { 'ocf::common::auth': glogin => 'ocf' } }
       default:   { class { 'ocf::common::auth': } }
     }
     include ocf::common::ssh
