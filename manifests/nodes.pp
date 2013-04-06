@@ -57,7 +57,7 @@ node default {
 
   if $type == 'desktop' {
     class { 'ocf::common::apt':  stage => first, nonfree => true, desktop => true }
-    class { 'ocf::common::auth': login => 'ocf' }
+    class { 'ocf::common::auth': glogin => 'ocf' }
     include ocf::common::acct
     include ocf::common::crondeny
     include ocf::common::cups
