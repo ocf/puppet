@@ -1,5 +1,5 @@
 #!/bin/sh
 pactl load-module module-rtp-recv > /tmp/pulse_rtp_module
-watch -tc /opt/kiosk/display
+watch -tc /opt/kiosk-bin/display
 pactl unload-module `cat /tmp/pulse_rtp_module`
 rm /tmp/pulse_rtp_module
