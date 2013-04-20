@@ -1,0 +1,5 @@
+# Relay all local mail with OCF domain
+mydestination =
+mydomain = ocf.berkeley.edu
+myorigin = $mydomain
+relayhost = smtp.ocf.berkeley.edu
