@@ -57,7 +57,10 @@ node default {
 
   if $type == 'desktop' {
     class { 'ocf::common::apt':  stage => first, nonfree => true, desktop => true }
-    class { 'ocf::common::auth': glogin => 'ocf' }
+    case $::hostname {
+      eruption:  { class { 'ocf::common::auth': glogin => 'approve' } }
+      default:   { class { 'ocf::common::auth': glogin => 'ocf' } }
+    }
     include ocf::common::acct
     include ocf::common::crondeny
     include ocf::common::cups

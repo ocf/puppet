@@ -44,6 +44,9 @@ class ocf::desktop::xsession {
   # provide gdm config
   file {
     # login interface
+    '/etc/gdm3/greeter.gsettings':
+      source  => 'puppet:///modules/ocf/desktop/xsession/gdm/greeter.gsettings',
+      require => Ocf::Repackage['gdm3'];
     '/etc/gdm3/greeter.gconf-defaults':
       source  => 'puppet:///modules/ocf/desktop/xsession/gdm/greeter.gconf-defaults',
       require => Ocf::Repackage['gdm3'];
