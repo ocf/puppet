@@ -76,7 +76,9 @@ node default {
     include ocf::desktop::seti
     include ocf::desktop::sshfs
     include ocf::desktop::suspend
-    include ocf::desktop::tmpfs
+    if $::hostname != 'eruption' {
+      include ocf::desktop::tmpfs
+    }
     include ocf::desktop::xsession
   }
 
