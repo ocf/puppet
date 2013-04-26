@@ -68,7 +68,6 @@ node default {
       include ocf::desktop::acroread
     }
     include ocf::desktop::iceweasel
-    include ocf::desktop::limits
     include ocf::desktop::lxpanel
     include ocf::desktop::numlockx
     include ocf::desktop::packages
@@ -78,6 +77,7 @@ node default {
     include ocf::desktop::suspend
     if $::hostname != 'eruption' {
       include ocf::desktop::tmpfs
+      include ocf::desktop::limits
     }
     include ocf::desktop::xsession
   }
