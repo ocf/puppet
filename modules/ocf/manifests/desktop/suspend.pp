@@ -1,6 +1,7 @@
 class ocf::desktop::suspend {
 
-  require ocf::desktop::tmpfs
+  # this gets included anyway...
+  # require ocf::desktop::tmpfs
 
   file {
     # suspend script with scheduled wakeup, also attempt resetting tmpfs
