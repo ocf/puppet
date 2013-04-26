@@ -24,7 +24,6 @@ class ocf::local::eruption {
   # create pam_mkhomedir profile
   file { '/usr/share/pam-configs/mkhomedir':
     source  => 'puppet:///modules/ocf/desktop/pam/mkhomedir',
-    require => Mount['/home'],
     notify  => Exec['pam-auth-update']
   }
 
