@@ -13,10 +13,6 @@ class ocf::local::riot {
   }
 
   file {
-      '/etc/apt/sources.list.d/raspbian.list':
-          ensure   => file,
-          content  => "deb http://archive.raspbian.org/raspbian wheezy main contrib non-free\ndeb-src http://archive.raspbian.org/raspbian wheezy main contrib non-free\n",
-      ;
       '/etc/default/pulseaudio':
           source   => 'puppet:///modules/ocf/local/riot/pulseaudio',
           notify   => Service['pulseaudio'],
@@ -26,7 +22,7 @@ class ocf::local::riot {
           owner    => 'kiosk',
           purge    => true,
       ;
-      '/opt/kiosk-bin/':
+      '/opt/kiosk-bin':
           ensure   => directory,
           purge    => true,
       ;
