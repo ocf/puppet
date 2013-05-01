@@ -1,4 +1,4 @@
-class ocf::local::lightning {
+class lightning {
 
   # this is the puppet master
   package {
@@ -30,14 +30,14 @@ class ocf::local::lightning {
     # external node classifier script parses nodes.yaml
     '/etc/puppet/enc.py':
       mode    => '0755',
-      source  => 'puppet:///modules/ocf/local/lightning/enc.py',
+      source  => 'puppet:///modules/lightning/enc.py',
     ;
     # configure contrib and private shares
     '/etc/puppet/fileserver.conf':
-      source  => 'puppet:///modules/ocf/local/lightning/fileserver.conf',
+      source  => 'puppet:///modules/lightning/fileserver.conf',
     ;
     '/etc/puppet/puppet.conf':
-      content => template('ocf/local/lightning/puppet.conf.erb'),
+      content => template('lightning/puppet.conf.erb'),
     ;
     # mail errors and warnings about puppet runs
     '/etc/puppet/tagmail.conf':
@@ -65,12 +65,12 @@ class ocf::local::lightning {
     ;
     # bare repo at /opt/puppet, force FF, github remote
     '/opt/puppet/.git/config':
-      source  => 'puppet:///modules/ocf/local/lightning/git/config',
+      source  => 'puppet:///modules/lightning/git/config',
     ;
     # post-receive hook deploys environment and pushes to github
     '/opt/puppet/.git/hooks/post-receive':
       mode    => '0755',
-      source  => 'puppet:///modules/ocf/local/lightning/git/post-receive',
+      source  => 'puppet:///modules/lightning/git/post-receive',
     ;
   }
 
@@ -98,7 +98,7 @@ class ocf::local::lightning {
       recurse => true,
       purge   => true,
       force   => true,
-      source  => 'puppet:///modules/ocf/local/lightning/puppet-scripts',
+      source  => 'puppet:///modules/lightning/puppet-scripts',
     ;
     # provide fileserver shares directory
     '/opt/puppet/shares':

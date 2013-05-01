@@ -1,4 +1,4 @@
-class ocf::local::surge {
+class surge {
 
   # set up mirror sync
   # add user to perform sync
@@ -28,7 +28,7 @@ class ocf::local::surge {
       group   => debmirror,
       require => Exec['ftpsync'];
     '/opt/debmirror/etc/ftpsync.conf':
-      source  => 'puppet:///modules/ocf/local/surge/ftpsync.conf',
+      source  => 'puppet:///modules/surge/ftpsync.conf',
       require => Exec['ftpsync']
   }
   # add cronjob to sync twice daily
@@ -44,7 +44,7 @@ class ocf::local::surge {
   package { 'apache2': }
   file {
     '/etc/apache2/sites-available/debmirror':
-      source => 'puppet:///modules/ocf/local/surge/apache';
+      source => 'puppet:///modules/surge/apache';
     '/etc/apache2/sites-enabled/debmirror':
       ensure => symlink,
       links  => manage,
@@ -65,7 +65,7 @@ class ocf::local::surge {
     '/etc/default/rsync':
       content => 'RSYNC_ENABLE=true';
     '/etc/rsyncd.conf':
-      source  => 'puppet:///modules/ocf/local/surge/rsyncd.conf'
+      source  => 'puppet:///modules/surge/rsyncd.conf'
   }
   service { 'rsync':
     subscribe => File[ '/etc/default/rsync', '/etc/rsyncd.conf' ],

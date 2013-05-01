@@ -1,4 +1,4 @@
-class ocf::local::printhost {
+class printhost {
 
   # set up cups
   package { [ 'cups', 'cups-bsd' ]: }
@@ -8,13 +8,13 @@ class ocf::local::printhost {
   file {
     # provide cups config
     '/etc/cups/cupsd.conf':
-      source  => 'puppet:///modules/ocf/local/printhost/cupsd.conf',
+      source  => 'puppet:///modules/printhost/cupsd.conf',
       require => Package['cups'],
       notify  => Service['cups'],
     ;
     # provide more sensitive cups config
     '/etc/cups/cups-files.conf':
-      source  => 'puppet:///modules/ocf/local/printhost/cups-files.conf',
+      source  => 'puppet:///modules/printhost/cups-files.conf',
       require => Package['cups'],
       notify  => Service['cups'],
     ;
@@ -65,28 +65,28 @@ class ocf::local::printhost {
     ;
     # public configuration
     '/etc/pykota/pykota.semester/pykota.conf':
-      source  => 'puppet:///modules/ocf/local/printhost/pykota-semester.conf',
+      source  => 'puppet:///modules/printhost/pykota-semester.conf',
     ;
     '/etc/pykota/pykota.conf':
-      source  => 'puppet:///modules/ocf/local/printhost/pykota.conf',
+      source  => 'puppet:///modules/printhost/pykota.conf',
     ;
     '/etc/pykota/pykotadmin.conf':
       owner   => 'lp',
       group   => 'ocfstaff',
       mode    => '0640',
-      source  => 'puppet:///modules/ocf/local/printhost/pykotadmin.conf',
+      source  => 'puppet:///modules/printhost/pykotadmin.conf',
     ;
     '/etc/pykota/update_semester_quota.sh':
       mode    => '0755',
-      source  => 'puppet:///modules/ocf/local/printhost/update_semester_quota.sh',
+      source  => 'puppet:///modules/printhost/update_semester_quota.sh',
     ;
     '/etc/pykota/set_daily_quota.sh':
       mode    => '0755',
-      source  => 'puppet:///modules/ocf/local/printhost/set_daily_quota.sh',
+      source  => 'puppet:///modules/printhost/set_daily_quota.sh',
     ;
     '/etc/pykota/reset_daily_quota.sh':
       mode    => '0755',
-      source  => 'puppet:///modules/ocf/local/printhost/reset_daily_quota.sh',
+      source  => 'puppet:///modules/printhost/reset_daily_quota.sh',
     ;
     # private configuration
     '/etc/pykota/pykota.semester/pykotadmin.conf':
@@ -100,7 +100,7 @@ class ocf::local::printhost {
   # share pykota configuration over NFS
   package { 'nfs-kernel-server': }
   file { '/etc/exports':
-    source    => 'puppet:///modules/ocf/local/printhost/exports',
+    source    => 'puppet:///modules/printhost/exports',
     require   => Package['nfs-kernel-server']
   }
   service { 'nfs-kernel-server':

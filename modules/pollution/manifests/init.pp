@@ -1,4 +1,4 @@
-class ocf::local::pollution {
+class pollution {
 
   # dumper home directory
   file { '/opt/dumper':
@@ -17,7 +17,7 @@ class ocf::local::pollution {
 #      ensure  => directory,
 #      require => Mount['/opt/dumper'];
 #    '/opt/dumper/config/rsnapshot.conf':
-#      source  => 'puppet:///modules/ocf/local/pollution/rsnapshot.conf';
+#      source  => 'puppet:///modules/pollution/rsnapshot.conf';
 #    '/opt/dumper/config/dumper.keytab':
 #      mode    => 0400,
 #      owner   => dumper,

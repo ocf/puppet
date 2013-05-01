@@ -1,4 +1,4 @@
-class ocf::local::blight {
+class blight {
 
   # for ikiwiki and ikiwiki search
   package { [ 'ikiwiki', 'xapian-omega', 'libsearch-xapian-perl' ]: }
@@ -31,7 +31,7 @@ class ocf::local::blight {
       ensure  => 'directory';
   }
   file { '/srv/ikiwiki/.ikiwiki/IkiWiki/Plugin/serverlist.pm':
-    source => 'puppet:///modules/ocf/local/blight/ikiwiki/plugins/serverlist.pm',
+    source => 'puppet:///modules/blight/ikiwiki/plugins/serverlist.pm',
   }
 
   # the location of the wiki public_html
@@ -62,7 +62,7 @@ class ocf::local::blight {
   # the config file replaces the default
   file {
     '/srv/ikiwiki/wiki.git/config':
-      source  => 'puppet:///modules/ocf/local/blight/ikiwiki/git_config',
+      source  => 'puppet:///modules/blight/ikiwiki/git_config',
       owner   => 'root',
       group   => 'ocfstaff',
       mode    => '0775';
@@ -106,7 +106,7 @@ class ocf::local::blight {
   }
 
   file { '/srv/ikiwiki/wiki.setup':
-    source => 'puppet:///modules/ocf/local/blight/ikiwiki/wiki.setup',
+    source => 'puppet:///modules/blight/ikiwiki/wiki.setup',
     owner  => 'root',
     group  => 'ocfstaff',
     mode   => '0640',
@@ -121,13 +121,13 @@ class ocf::local::blight {
 
   file {
     '/etc/apache2/sites-available/ikiwiki':
-      source => 'puppet:///modules/ocf/local/blight/apache2/ikiwiki';
+      source => 'puppet:///modules/blight/apache2/ikiwiki';
     '/etc/apache2/sites-enabled/ikiwiki':
       ensure => symlink,
       links  => manage,
       target => '/etc/apache2/sites-available/ikiwiki';
     '/etc/apache2/sites-available/gitweb':
-      source => 'puppet:///modules/ocf/local/blight/apache2/gitweb';
+      source => 'puppet:///modules/blight/apache2/gitweb';
     '/etc/apache2/sites-enabled/gitweb':
       ensure => symlink,
       links  => manage,
@@ -145,12 +145,12 @@ class ocf::local::blight {
     '/srv/gitweb/projects.list':
       content => 'wiki.git';
     '/etc/gitweb.conf':
-      source  => 'puppet:///modules/ocf/local/blight/gitweb/gitweb.conf';
+      source  => 'puppet:///modules/blight/gitweb/gitweb.conf';
   }
 
   # old wiki (docs)
   file { '/etc/apache2/sites-available/docs':
-    source      => 'puppet:///modules/ocf/local/blight/apache2/docs',
+    source      => 'puppet:///modules/blight/apache2/docs',
     ensure      => file,
   }
   exec { '/usr/sbin/a2ensite docs':
@@ -161,7 +161,7 @@ class ocf::local::blight {
 
   # default blight site
   file { '/etc/apache2/sites-available/000-default':
-    source      => 'puppet:///modules/ocf/local/blight/apache2/000-default',
+    source      => 'puppet:///modules/blight/apache2/000-default',
     ensure      => file,
   }
   exec { '/usr/sbin/a2ensite default':

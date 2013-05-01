@@ -1,18 +1,18 @@
-class ocf::local::coupdetat {
+class coupdetat {
 
   # prepare NAT networking
   file {
     # provide NAT DNS entries
     '/etc/hosts':
-      source  => 'puppet:///modules/ocf/local/coupdetat/hosts',
+      source  => 'puppet:///modules/coupdetat/hosts',
     ;
     # provide libvirt NAT configuration
     '/etc/libvirt/qemu/networks/default.xml':
-      source  => 'puppet:///modules/ocf/local/coupdetat/nat.xml',
+      source  => 'puppet:///modules/coupdetat/nat.xml',
     ;
     # provide NAT DNS resolution
     '/etc/resolv.conf':
-      source  => 'puppet:///modules/ocf/local/coupdetat/resolv.conf',
+      source  => 'puppet:///modules/coupdetat/resolv.conf',
     ;
     '/etc/sysctl.d/60-forward.conf':
       content => 'net.ipv4.ip_forward = 1',

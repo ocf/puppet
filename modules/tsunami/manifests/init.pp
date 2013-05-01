@@ -1,4 +1,4 @@
-class ocf::local::tsunami {
+class tsunami {
 
   package {
     # redirect to www and shell

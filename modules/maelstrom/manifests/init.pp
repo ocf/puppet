@@ -1,4 +1,4 @@
-class ocf::local::maelstrom {
+class maelstrom {
 
   # install mysql and set root password
   package { 'mysql-server-5.1':
@@ -12,7 +12,7 @@ class ocf::local::maelstrom {
   # provide mysql server and client config
   file {
     '/etc/mysql/my.cnf':
-      source => 'puppet:///modules/ocf/local/maelstrom/my.cnf';
+      source => 'puppet:///modules/maelstrom/my.cnf';
     '/root/.my.cnf':
       mode   => '0600',
       source => 'puppet:///private/root-my.cnf'

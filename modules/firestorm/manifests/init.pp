@@ -1,4 +1,4 @@
-class ocf::local::firestorm {
+class firestorm {
   ##Heimdal server configuration##
   # if local realm has not been defined installation will fail
   package { 'heimdal-kdc':
@@ -9,7 +9,7 @@ class ocf::local::firestorm {
   package { ['logrotate']: }
 
   file { '/etc/logrotate.d/heimdal-kdc':
-    source  => 'puppet:///modules/ocf/local/firestorm/heimdal-kdc-logrotate',
+    source  => 'puppet:///modules/firestorm/heimdal-kdc-logrotate',
     require => Package['heimdal-kdc', 'logrotate'],
   }
 
@@ -20,12 +20,12 @@ class ocf::local::firestorm {
 
   file {
     '/etc/heimdal-kdc/kdc.conf':
-      source  => 'puppet:///modules/ocf/local/firestorm/kdc.conf',
+      source  => 'puppet:///modules/firestorm/kdc.conf',
       require => Package['heimdal-kdc'],
   }
 
   file { '/etc/heimdal-kdc/kadmind.acl':
-    source  => 'puppet:///modules/ocf/local/firestorm/kadmind.acl',
+    source  => 'puppet:///modules/firestorm/kadmind.acl',
     require => Package['heimdal-kdc'],
   }
 
@@ -34,7 +34,7 @@ class ocf::local::firestorm {
     # Script to snapshot by dumping and committing
     '/usr/local/sbin/kerberos-git-backup':
       mode    => '0755',
-      source  => 'puppet:///modules/ocf/local/firestorm/kerberos-git-backup',
+      source  => 'puppet:///modules/firestorm/kerberos-git-backup',
     ;
     # Snapshot daily at 4AM
     '/etc/cron.d/kerberos-git-backup':
@@ -56,11 +56,11 @@ class ocf::local::firestorm {
   #needed config files
   file {
     '/etc/ldap/slapd.conf':
-      source  => 'puppet:///modules/ocf/local/firestorm/slapd.conf',
+      source  => 'puppet:///modules/firestorm/slapd.conf',
       require => Package['slapd'],
     ;
     '/etc/ldap/schema/ocf.schema':
-      source  => 'puppet:///modules/ocf/local/firestorm/ocf.schema',
+      source  => 'puppet:///modules/firestorm/ocf.schema',
       require => Package['slapd'],
     ;
     '/etc/ldap/schema/puppet.schema':
@@ -75,11 +75,11 @@ class ocf::local::firestorm {
       group   => 'openldap',
     ;
     '/etc/default/slapd':
-      source  => 'puppet:///modules/ocf/local/firestorm/slapd-defaults',
+      source  => 'puppet:///modules/firestorm/slapd-defaults',
       require => Package['slapd', 'openssl'],
     ;
     '/etc/ldap/sasl2/slapd.conf':
-      source  => 'puppet:///modules/ocf/local/firestorm/sasl2-slapd',
+      source  => 'puppet:///modules/firestorm/sasl2-slapd',
       require =>  Package['slapd', 'libsasl2-modules-gssapi-mit'],
     ;
     '/etc/ldap/krb5.keytab':

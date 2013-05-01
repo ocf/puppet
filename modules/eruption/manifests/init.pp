@@ -1,4 +1,4 @@
-class ocf::local::eruption {
+class eruption {
   # because ocf staff loves hosing, use persistent homedirs
   # this is just ocf::desktop::tmpfs without the /home mount
 

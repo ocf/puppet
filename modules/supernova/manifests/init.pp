@@ -1,4 +1,4 @@
-class ocf::local::supernova {
+class supernova {
 
   package {
     # account creation dependecies

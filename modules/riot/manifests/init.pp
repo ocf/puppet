@@ -1,4 +1,4 @@
-class ocf::local::riot {
+class riot {
 
   package { 'pulseaudio': }
   service { 'pulseaudio': }
@@ -14,7 +14,7 @@ class ocf::local::riot {
 
   file {
       '/etc/default/pulseaudio':
-          source   => 'puppet:///modules/ocf/local/riot/pulseaudio',
+          source   => 'puppet:///modules/riot/pulseaudio',
           notify   => Service['pulseaudio'],
       ;
       '/opt/kiosk/':
@@ -27,18 +27,18 @@ class ocf::local::riot {
           purge    => true,
       ;
       '/opt/kiosk-bin/display':
-          source   => 'puppet:///modules/ocf/local/riot/display',
+          source   => 'puppet:///modules/riot/display',
           mode     => '0755',
       ;
       '/opt/kiosk-bin/shell':
-          source   => 'puppet:///modules/ocf/local/riot/shell',
+          source   => 'puppet:///modules/riot/shell',
           mode     => '0755',
       ;
       '/etc/inittab':
-          source   => 'puppet:///modules/ocf/local/riot/inittab',
+          source   => 'puppet:///modules/riot/inittab',
       ;
       '/etc/cron.d/update-motd':
-          source   => 'puppet:///modules/ocf/local/riot/crontab',
+          source   => 'puppet:///modules/riot/crontab',
       ;
   }
 
