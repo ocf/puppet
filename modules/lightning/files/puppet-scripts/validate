@@ -1,14 +1,23 @@
 #!/bin/sh
 
 if [ -n "$1" ]; then
-  puppetdir="/opt/puppet/env/$1"
+  environment="$1"
 else
-  puppetdir=/etc/puppet
+  environment="production"
 fi
+
+puppetdir="/opt/puppet/env/$environment"
 
 # validate for parser errors
 manifests="`find $puppetdir -name '*.pp' -print`"
 echo "$manifests" | xargs puppet parser validate || exit 1
+
+# validate erb files
+templates="`find $puppetdir -name '*.erb' -print`"
+for template in $templates; do
+  echo -n "$template: "
+  cat "$template" | erb -x -P -T -| ruby -c || exit 1
+done
 
 # lint for style errors
 for manifest in $manifests; do
