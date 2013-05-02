@@ -11,4 +11,8 @@ class networking::interfaces($ipaddress, $netmask, $gateway, $bridge) {
     package { 'bridge-utils': }
   }
 
+  if $vlan {
+    package { 'vlan': }
+  }
+
 }

@@ -2,18 +2,45 @@ auto lo
 iface lo inet loopback
 
 <% if @ipaddress -%>
-auto <% if bridge %>br0<% else %>eth0<% end %>
-iface <% if bridge %>br0<% else %>eth0<% end %> inet static
+<% if bridge -%>
+auto br0
+iface br0 inet static
+<% end -%>
+<% if vlan -%>
+
+auto br1695
+iface br1695 inet static
+<% end -%>
   address <%= ipaddress %>
   netmask <%= netmask %>
 <% if @gateway -%>
   gateway <%= gateway %>
 <% end -%>
-<% if bridge -%>
+<% if bridge or vlan -%>
+  <% if vlan -%>
+  bridge_ports eth0.1695
+  <% else -%>
   bridge_ports eth0
+  <% end -%>
+  bridge_stp off
+  bridge_maxwait 0
+<% end -%>
+
+<% if vlan -%>
+auto br695
+iface br695 inet static
+  bridge_ports eth0.695
   bridge_stp off
   bridge_maxwait 0
   bridge_fd 0
+
+auto eth0.1695
+iface eth0.1695 inet manual
+  vlan_raw_device eth0
+
+auto eth0.695
+iface eth0.695 inet manual
+  vlan_raw_device eth0
 <% end -%>
 <% else -%>
 auto eth0

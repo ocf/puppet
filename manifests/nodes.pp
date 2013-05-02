@@ -21,14 +21,18 @@ node default {
       include networking
   } else {
     case $::hostname {
-      hal, fallingrocks, pandemic: {$bridge = true}
-      default: {$bridge = false}
+      fallingrocks: { $bridge = true
+                      $vlan   = true }
+      hal, pandemic: { $bridge = true }
+      default: { $bridge = false
+                 $vlan   = false }
     }
     class { 'networking':
       ipaddress   => $::ipHostNumber,
       netmask     => '255.255.255.192',
       gateway     => '169.229.172.65',
       bridge      => $bridge,
+      vlan        => $vlan,
       domain      => 'ocf.berkeley.edu',
       nameservers => ['169.229.172.66', '128.32.206.12', '128.32.136.9'],
     }
