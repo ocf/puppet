@@ -23,7 +23,8 @@ node default {
     case $::hostname {
       fallingrocks: { $bridge = true
                       $vlan   = true }
-      hal, pandemic: { $bridge = true }
+      hal, pandemic: { $bridge = true
+                       $vlan   = false } 
       default: { $bridge = false
                  $vlan   = false }
     }
