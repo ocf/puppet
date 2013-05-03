@@ -11,6 +11,10 @@ iface br0 inet static
 auto br1695
 iface br1695 inet static
 <% end -%>
+<% if not bridge and not vlan -%>
+auto eth0
+iface eth0 inet static
+<% end -%>
   address <%= ipaddress %>
   netmask <%= netmask %>
 <% if @gateway -%>
