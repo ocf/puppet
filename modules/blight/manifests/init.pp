@@ -150,8 +150,8 @@ class blight {
 
   # old wiki (docs)
   file { '/etc/apache2/sites-available/docs':
-    source      => 'puppet:///modules/blight/apache2/docs',
     ensure      => file,
+    source      => 'puppet:///modules/blight/apache2/docs',
   }
   exec { '/usr/sbin/a2ensite docs':
     unless      => '/bin/readlink -e /etc/apache2/sites-enabled/docs',
@@ -161,8 +161,8 @@ class blight {
 
   # default blight site
   file { '/etc/apache2/sites-available/000-default':
-    source      => 'puppet:///modules/blight/apache2/000-default',
     ensure      => file,
+    source      => 'puppet:///modules/blight/apache2/000-default',
   }
   exec { '/usr/sbin/a2ensite default':
     unless      => '/bin/readlink -e /etc/apache2/sites-enabled/000-default',

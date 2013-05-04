@@ -1,4 +1,4 @@
-class networking::interfaces($ipaddress, $netmask, $gateway, $bridge) {
+class networking::interfaces($ipaddress, $netmask, $gateway, $bridge, $vlan) {
 
   file { '/etc/network/interfaces':
     content => template('networking/interfaces.erb'),

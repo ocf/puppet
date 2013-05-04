@@ -1,6 +1,6 @@
 class networking($ipaddress = undef, $netmask = undef, $gateway = undef,
-                 $bridge = false, $domain = undef, $nameservers = undef,
-                 $vlan = false,) {
+  $bridge = false, $domain = undef, $nameservers = undef,
+  $vlan = false,) {
 
   class {
     'networking::interfaces':
@@ -8,6 +8,7 @@ class networking($ipaddress = undef, $netmask = undef, $gateway = undef,
       netmask     => $netmask,
       gateway     => $gateway,
       bridge      => $bridge,
+      vlan        => $vlan,
     ;
     'networking::resolvconf':
       domain      => $domain,

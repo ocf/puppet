@@ -57,7 +57,7 @@ class coupdetat {
 
   # create pam_mkhomedir profile
   file { '/usr/share/pam-configs/mkhomedir':
-    source  => 'puppet:///modules/ocf/desktop/pam/mkhomedir',
+    source  => 'puppet:///modules/desktop/pam/mkhomedir',
     notify  => Exec['pam-auth-update']
   }
 

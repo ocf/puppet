@@ -1,32 +1,38 @@
 node default {
 
-  class { 'ocf::common::groups': stage => first }
-  class { 'ocf::common::puppet': stage => first }
-  class { 'ocf::common::rootpw': stage => first }
+  class { 'common::groups': stage => first }
+  class { 'common::puppet': stage => first }
+  class { 'common::rootpw': stage => first }
   case $::hostname {
     hal, pandemic: { }
-    default:       { include ocf::common::ntp }
+    default:       { include common::ntp }
   }
   case $::hostname {
     sandstorm: { }
-    default:   { include ocf::common::postfix }
+    default:   { include common::postfix }
   }
-  include ocf::common::autologout
-  include ocf::common::git
-  include ocf::common::kerberos
-  include ocf::common::ldap
-  include ocf::common::smart
-  include ocf::common::zabbix
+  include common::autologout
+  include common::git
+  include common::kerberos
+  include common::ldap
+  include common::smart
+  include common::zabbix
   if $::macAddress {
       include networking
   } else {
     case $::hostname {
-      fallingrocks: { $bridge = true
-                      $vlan   = true }
-      hal, pandemic: { $bridge = true
-                       $vlan   = false } 
-      default: { $bridge = false
-                 $vlan   = false }
+      fallingrocks: {
+        $bridge = true
+        $vlan   = true
+      }
+      hal, pandemic: {
+        $bridge = true
+        $vlan   = false
+      }
+      default: {
+        $bridge = false
+        $vlan   = false
+      }
     }
     class { 'networking':
       ipaddress   => $::ipHostNumber,
@@ -41,50 +47,50 @@ node default {
 
   if $type == 'server' {
     case $::hostname {
-      death:     { class { 'ocf::common::apt': stage => first, nonfree => true } }
-      default:   { class { 'ocf::common::apt': stage => first } }
+      death:     { class { 'common::apt': stage => first, nonfree => true } }
+      default:   { class { 'common::apt': stage => first } }
     }
     case $::hostname {
-      supernova: { class { 'ocf::common::packages': extra => true, login => true } }
-      tsunami:   { class { 'ocf::common::packages': extra => true, login => true } }
-      default:   { class { 'ocf::common::packages': } }
+      supernova: { class { 'common::packages': extra => true, login => true } }
+      tsunami:   { class { 'common::packages': extra => true, login => true } }
+      default:   { class { 'common::packages': } }
     }
     case $::hostname {
-      locusts:   { class { 'ocf::common::auth': ulogin => [ ['NuclearPoweredKimJongIl', 'ALL' ] ] } }
-      printhost: { class { 'ocf::common::auth': glogin => 'approve', gsudo => 'ocfstaff' } }
-      supernova: { class { 'ocf::common::auth': glogin => 'approve' } }
-      riot:      { class { 'ocf::common::auth': ulogin => [ ['kiosk', 'LOCAL'] ] } }
-      tsunami:   { class { 'ocf::common::auth': glogin => 'ocf' } }
-      default:   { class { 'ocf::common::auth': } }
+      locusts:   { class { 'common::auth': ulogin => [ ['NuclearPoweredKimJongIl', 'ALL' ] ] } }
+      printhost: { class { 'common::auth': glogin => 'approve', gsudo => 'ocfstaff' } }
+      supernova: { class { 'common::auth': glogin => 'approve' } }
+      riot:      { class { 'common::auth': ulogin => [ ['kiosk', 'LOCAL'] ] } }
+      tsunami:   { class { 'common::auth': glogin => 'ocf' } }
+      default:   { class { 'common::auth': } }
     }
-    include ocf::common::ssh
+    include common::ssh
   }
 
   if $type == 'desktop' {
-    class { 'ocf::common::apt':  stage => first, nonfree => true, desktop => true }
+    class { 'common::apt':  stage => first, nonfree => true, desktop => true }
     case $::hostname {
-      eruption:  { class { 'ocf::common::auth': glogin => 'approve' } }
-      default:   { class { 'ocf::common::auth': glogin => 'ocf' } }
+      eruption:  { class { 'common::auth': glogin => 'approve' } }
+      default:   { class { 'common::auth': glogin => 'ocf' } }
     }
-    include ocf::common::acct
-    include ocf::common::crondeny
-    include ocf::common::cups
+    include common::acct
+    include common::crondeny
+    include common::cups
     if $::lsbdistcodename != 'wheezy' {
-      include ocf::desktop::acroread
+      include desktop::acroread
     }
-    include ocf::desktop::iceweasel
-    include ocf::desktop::lxpanel
-    include ocf::desktop::numlockx
-    include ocf::desktop::packages
-    include ocf::desktop::pulse
-    include ocf::desktop::seti
-    include ocf::desktop::sshfs
-    include ocf::desktop::suspend
+    include desktop::iceweasel
+    include desktop::lxpanel
+    include desktop::numlockx
+    include desktop::packages
+    include desktop::pulse
+    include desktop::seti
+    include desktop::sshfs
+    include desktop::suspend
     if $::hostname != 'eruption' {
-      include ocf::desktop::tmpfs
-      include ocf::desktop::limits
+      include desktop::tmpfs
+      include desktop::limits
     }
-    include ocf::desktop::xsession
+    include desktop::xsession
   }
 
 }
