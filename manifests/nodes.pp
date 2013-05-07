@@ -60,7 +60,7 @@ node default {
       printhost: { class { 'common::auth': glogin => 'approve', gsudo => 'ocfstaff' } }
       supernova: { class { 'common::auth': glogin => 'approve' } }
       riot:      { class { 'common::auth': ulogin => [ ['kiosk', 'LOCAL'] ] } }
-      tsunami:   { class { 'common::auth': glogin => 'ocf' } }
+      tsunami:   { class { 'common::auth': glogin => [ 'ocf', 'sorry' ] } }
       default:   { class { 'common::auth': } }
     }
     include common::ssh
