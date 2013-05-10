@@ -2,7 +2,7 @@ class common::ntp {
 
   # facter currently outputs strings not booleans
   # see http://projects.puppetlabs.com/issues/3704
-  if $::is_virtual == false {
+  if $::is_virtual == 'false' {
 
     # install ntp
     package { 'ntp': }
