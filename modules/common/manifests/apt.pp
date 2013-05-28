@@ -27,7 +27,7 @@ class common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
   if $::architecture in ['amd64', 'i386'] {
     # provide puppetlabs sources.list
     file { '/etc/apt/sources.list.d/puppetlabs.list':
-      content => "deb http://apt.puppetlabs.com/ $::lsbdistcodename main",
+      content => "deb http://apt.puppetlabs.com/ $::lsbdistcodename main dependencies",
       require => Package['aptitude'],
       before  => File['/etc/cron.daily/ocf-apt']
     }
