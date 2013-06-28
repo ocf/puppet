@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# Prevent "TERM is not set, so the dialog frontend is not usable." error message
-PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+# set sane path and non-interactive package installation
+export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+export DEBIAN_FRONTEND=noninteractive
 
 apt_cleanup(){
     # update cache then remove downloaded package archives, unused packages, and old config files
@@ -11,8 +12,9 @@ apt_cleanup(){
     /usr/bin/aptitude purge --assume-yes --quiet '?config-files' > /dev/null
 }
 
-if [ ! -f /var/lock/aptitude ]; then
-  apt_cleanup
+# only proceed if APT and dpkg are not in use
+if [ -f /var/lock/aptitude ]; then
+  true
 elif fuser -s /var/lib/dpkg/lock 2> /dev/null; then
   true
 else
@@ -20,6 +22,6 @@ else
 fi
 
 <% if desktop -%>
-# update-flashplugin-nonfree updates Adobe Flash Player
+# update Adobe Flash Player
 [ -x /usr/sbin/update-flashplugin-nonfree ] && /usr/sbin/update-flashplugin-nonfree --install --quiet || exit 0
 <% end -%>
