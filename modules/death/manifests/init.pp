@@ -30,24 +30,12 @@ class death {
     ;
   }
 
-  file { '/etc/apache2/httpd.conf':
-    ensure    => file,
-    owner     => 'root',
-    group     => 'root',
-    mode      => '0644',
-    source    => 'puppet:///modules/death/apache/httpd.conf',
-    require   => [ Package['apache2'] ],
-    notify    => Service['apache2'],
-  }
-
-  file { '/etc/apache2/conf.d/misc-general-tweaks':
-    ensure    => file,
-    owner     => 'root',
-    group     => 'root',
-    mode      => '0644',
-    source    => 'puppet:///modules/death/apache/conf.d/misc-general-tweaks',
-    require   => [ Package['apache2'] ],
-    notify    => Service['apache2'],
+  file { '/etc/apache2/conf.d':
+    ensure  => directory,
+    recurse => true,
+    source  => 'puppet:///modules/death/apache/conf.d',
+    require => Package['apache2'],
+    notify  => Service['apache2'],
   }
 
   file { '/etc/apache2/sites-available':
@@ -64,11 +52,6 @@ class death {
     source    => 'puppet:///modules/death/apache/sites/account_tools.conf',
   }
 
-  file { '/etc/apache2/sites-available/22-staff_hours.conf':
-    ensure    => file,
-    source    => 'puppet:///modules/death/apache/sites/staff_hours.conf',
-  }
-
   file { '/etc/apache2/sites-available/02-ssl.conf':
     ensure    => file,
     source    => 'puppet:///modules/death/apache/sites/ssl.conf',
@@ -82,6 +65,10 @@ class death {
   file { '/etc/apache2/sites-available/01-www.conf':
     ensure    => file,
     source    => 'puppet:///modules/death/apache/sites/www.conf',
+  }
+
+  file { '/etc/apache2/sites-common.conf':
+    source => 'puppet:///modules/death/apache/sites-common.conf',
   }
 
   file { '/etc/apache2/mods-available':
@@ -181,11 +168,6 @@ class death {
     unless      => '/bin/readlink -e /etc/apache2/sites-enabled/02-ssl.conf',
     notify      => Service['apache2'],
     require     => [Exec['/usr/sbin/a2enmod rewrite'], File['/etc/apache2/sites-available/02-ssl.conf']],
-  }
-  exec { '/usr/sbin/a2ensite 22-staff_hours.conf':
-    unless      => '/bin/readlink -e /etc/apache2/sites-enabled/22-staff_hours.conf',
-    notify      => Service['apache2'],
-    require     => File['/etc/apache2/sites-available/22-staff_hours.conf'],
   }
   exec { '/usr/sbin/a2ensite 03-userdir.conf':
     unless      => '/bin/readlink -e /etc/apache2/sites-enabled/03-userdir.conf',
