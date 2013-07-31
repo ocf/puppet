@@ -90,7 +90,7 @@ class death {
     ensure    => file,
     source    => 'puppet:///contrib/local/death/suexec',
     backup    => false, # it's a binary file
-    mode      => '4755',
+    mode      => '4750',
     owner     => 'root',
     group     => 'www-data',
     require   => Package['apache2'],
