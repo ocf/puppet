@@ -1,3 +1,4 @@
 # NFSv4
 /etc/pykota tsunami(ro,fsid=0,no_subtree_check,root_squash) \
+            jaws(ro,fsid=0,no_subtree_check,root_squash) \
             supernova(rw,fsid=0,no_subtree_check,no_root_squash)

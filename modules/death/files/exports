@@ -11,6 +11,6 @@
 
 /export  supernova(rw,fsid=0,no_root_squash,no_subtree_check)
 
-/export/logs tsunami(ro,fsid=0,root_squash,no_subtree_check) supernova(ro,no_root_squash,no_subtree_check)
+/export/logs jaws(ro,fsid=0,root_squash,no_subtree_check) tsunami(ro,fsid=0,root_squash,no_subtree_check) supernova(ro,no_root_squash,no_subtree_check)
 
 /export/approve supernova(rw,no_root_squash,no_subtree_check)
