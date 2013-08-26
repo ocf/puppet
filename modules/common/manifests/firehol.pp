@@ -1,9 +1,15 @@
 class common::firehol {
 
+  package {
+    ['firehol']:
+    ;
+  }
+
   file {
     # list of IANA reserved IP address ranges
     '/etc/firehol/RESERVED_IPS':
       content => "0.0.0.0/8\n10.0.0.0/8\n240.0.0.0/4",
+      require => Package['firehol']
     ;
     # filter out iptables warnings from syslog
     # requires FIREHOL_LOG_PREFIX="firehol: " in /etc/firehol/firehol.conf
