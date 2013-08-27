@@ -44,4 +44,9 @@ class maelstrom {
     require     => Package['aptitude'],
   }
 
+  # install xtrabackup
+  package { 'percona-xtrabackup':
+    require => Exec['force aptitude update'],
+  }
+
 }
