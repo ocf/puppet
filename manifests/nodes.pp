@@ -53,6 +53,7 @@ node default {
     case $::hostname {
       supernova: { class { 'common::packages': extra => true, login => true } }
       tsunami:   { class { 'common::packages': extra => true, login => true } }
+      jaws:      { class { 'common::packages': extra => true, login => true } }
       default:   { class { 'common::packages': } }
     }
     case $::hostname {
@@ -61,6 +62,7 @@ node default {
       supernova: { class { 'common::auth': glogin => 'approve' } }
       riot:      { class { 'common::auth': ulogin => [ ['kiosk', 'LOCAL'] ] } }
       tsunami:   { class { 'common::auth': glogin => [ 'ocf', 'sorry' ] } }
+      jaws:      { class { 'common::auth': glogin => [ 'ocf', 'sorry' ] } }
       default:   { class { 'common::auth': } }
     }
     include common::ssh
