@@ -51,7 +51,7 @@ class common::packages( $extra = false, $login = false ) {
       [ 'elinks', 'lynx' ]:;
       # mail clients
       [ 'alpine', 'bogofilter', 'mutt' ]:;
-      'octave3.2':;
+      'octave':;
       # pykota python dependencies
       [ 'pkpgcounter', 'python-egenix-mxdatetime', 'python-imaging', 'python-jaxml', 'python-minimal', 'python-mysqldb', 'python-osd', 'python-pysnmp4', 'python-reportlab' ]:;
       # signat.pl dependency
