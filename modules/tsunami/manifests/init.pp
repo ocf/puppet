@@ -25,47 +25,47 @@ class tsunami {
 
   mount {
     '/services':
+    ensure  => 'mounted',
     require => File[ '/services' ],
     device  => 'services:/services',
     fstype  => 'nfs4',
-    atboot  => 'true',
-    options => 'rw,bg,noatime,nodev,nosuid',
-    ensure  => 'mounted';
+    atboot  => true,
+    options => 'rw,bg,noatime,nodev,nosuid';
     '/home':
+    ensure  => 'mounted',
     require => File[ '/home' ],
     device  => 'homes:/home',
     fstype  => 'nfs4',
-    atboot  => 'true',
-    options => 'rw,bg,noatime,nodev,nosuid',
-    ensure  => 'mounted';
+    atboot  => true,
+    options => 'rw,bg,noatime,nodev,nosuid';
     '/opt/ocf':
+    ensure  => 'mounted',
     require => File[ '/opt/ocf' ],
     device  => 'opt:/i686-real',
     fstype  => 'nfs4',
-    atboot  => 'true',
-    options => 'ro,bg,noatime,nodev,nosuid',
-    ensure  => 'mounted';
+    atboot  => true,
+    options => 'ro,bg,noatime,nodev,nosuid';
     '/var/mail':
+    ensure  => 'mounted',
     require => File[ '/var/mail' ],
     device  => 'mailbox:/',
     fstype  => 'nfs4',
-    atboot  => 'true',
-    options => 'rw,bg,noatime,nodev,nosuid',
-    ensure  => 'mounted';
+    atboot  => true,
+    options => 'rw,bg,noatime,nodev,nosuid';
     '/etc/pykota':
+    ensure  => 'mounted',
     require => File[ '/etc/pykota' ],
     device  => 'printhost:/',
     fstype  => 'nfs4',
-    atboot  => 'true',
-    options => 'ro,bg,noatime,nodev,nosuid',
-    ensure  => 'mounted';
+    atboot  => true,
+    options => 'ro,bg,noatime,nodev,nosuid';
     '/opt/httpd':
+    ensure  => 'mounted',
     require => File[ '/opt/httpd' ],
     device  => 'www:/',
     fstype  => 'nfs4',
-    atboot  => 'true',
-    options => 'ro,bg,noatime,nodev,nosuid',
-    ensure  => 'mounted';
+    atboot  => true,
+    options => 'ro,bg,noatime,nodev,nosuid';
   }
 
   package {

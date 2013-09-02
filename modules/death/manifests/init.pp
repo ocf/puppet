@@ -76,7 +76,7 @@ class death {
   }
 
   file { '/etc/apache2/sites-common.conf':
-    source => 'puppet:///modules/death/apache/sites-common.conf',
+    source    => 'puppet:///modules/death/apache/sites-common.conf',
     notify    => Service['apache2'],
     require   => Package['apache2'],
   }
