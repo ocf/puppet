@@ -112,11 +112,15 @@ class tsunami {
   file { '/etc/apache2/sites-available/01-ssh.conf':
     ensure    => file,
     source    => 'puppet:///modules/tsunami/apache/sites/ssh.conf',
+    notify    => Service['apache2'],
+    require   => [ Package['apache2'] ],
   }
 
   file { '/etc/apache2/sites-available/02-ssl.conf':
     ensure    => file,
     source    => 'puppet:///modules/tsunami/apache/sites/ssl.conf',
+    notify    => Service['apache2'],
+    require   => [ Package['apache2'] ],
   }
 
   exec { '/usr/sbin/a2enmod rewrite':

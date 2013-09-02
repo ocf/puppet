@@ -50,25 +50,35 @@ class death {
   file { '/etc/apache2/sites-available/21-account_tools.conf':
     ensure    => file,
     source    => 'puppet:///modules/death/apache/sites/account_tools.conf',
+    notify    => Service['apache2'],
+    require   => Package['apache2'],
   }
 
   file { '/etc/apache2/sites-available/02-ssl.conf':
     ensure    => file,
     source    => 'puppet:///modules/death/apache/sites/ssl.conf',
+    notify    => Service['apache2'],
+    require   => Package['apache2'],
   }
 
   file { '/etc/apache2/sites-available/03-userdir.conf':
     ensure    => file,
     source    => 'puppet:///modules/death/apache/sites/userdir.conf',
+    notify    => Service['apache2'],
+    require   => Package['apache2'],
   }
 
   file { '/etc/apache2/sites-available/01-www.conf':
     ensure    => file,
     source    => 'puppet:///modules/death/apache/sites/www.conf',
+    notify    => Service['apache2'],
+    require   => Package['apache2'],
   }
 
   file { '/etc/apache2/sites-common.conf':
     source => 'puppet:///modules/death/apache/sites-common.conf',
+    notify    => Service['apache2'],
+    require   => Package['apache2'],
   }
 
   file { '/etc/apache2/mods-available':
