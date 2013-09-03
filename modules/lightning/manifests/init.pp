@@ -27,11 +27,6 @@ class lightning {
 
   # provide puppetmaster configuration
   file {
-    # external node classifier script parses nodes.yaml
-    '/etc/puppet/enc.py':
-      mode    => '0755',
-      source  => 'puppet:///modules/lightning/enc.py',
-    ;
     # configure contrib and private shares
     '/etc/puppet/fileserver.conf':
       source  => 'puppet:///modules/lightning/fileserver.conf',
@@ -47,9 +42,6 @@ class lightning {
 
   # Puppet manifest help
   package { [ 'puppet-lint', 'vim-puppet' ]: }
-
-  # PyYAML, and YAML validator
-  package { ['python-yaml', 'kwalify']: }
 
   # git configuration
   file {
