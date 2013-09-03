@@ -1,71 +1,67 @@
 class tsunami {
 
-  # Create directories to mount on
-  file {
-    '/services':
-      ensure  => directory;
-    '/home':
-      ensure  => directory;
-    '/opt/ocf':
-      ensure  => directory;
-    '/var/mail':
-      ensure  => directory,
-      owner   => 'root',
-      group   => 'disk',
-      mode    => '1777';
-    '/etc/pykota':
-      ensure  => directory,
-      owner   => 'nobody',
-      group   => 'nogroup',
-      mode    => '0755';
-    '/opt/httpd':
-      ensure  => directory,
-      group   => 'adm';
+  # Create directories to mount NFS shares on
+  # Directory permissions are set by NFS share when mounted
+  # Use exec instead of file so that permissions are not managed
+  exec {
+    'mkdir /home':
+      creates => '/home',
+    ;
+    'mkdir /opt/ocf':
+      creates => '/opt/ocf',
+    ;
+    'mkdir /services':
+      creates => '/services',
+    ;
+    'mkdir /var/mail':
+      creates => '/var/mail',
+    ;
+    'mkdir /etc/pykota':
+      creates => '/etc/pykota',
+    ;
+    'mkdir /opt/httpd':
+      creates => '/opt/httpd',
+    ;
   }
 
+  # Mount NFS shares
   mount {
-    '/services':
-      ensure  => 'mounted',
-      require => File[ '/services' ],
-      device  => 'services:/services',
-      fstype  => 'nfs4',
-      atboot  => true,
-      options => 'rw,bg,noatime,nodev,nosuid';
     '/home':
-      ensure  => 'mounted',
-      require => File[ '/home' ],
       device  => 'homes:/home',
       fstype  => 'nfs4',
-      atboot  => true,
-      options => 'rw,bg,noatime,nodev,nosuid';
+      options => 'rw,bg,noatime,nodev,nosuid',
+      require => Exec['mkdir /home'],
+    ;
     '/opt/ocf':
-      ensure  => 'mounted',
-      require => File[ '/opt/ocf' ],
       device  => 'opt:/i686-real',
       fstype  => 'nfs4',
-      atboot  => true,
-      options => 'ro,bg,noatime,nodev,nosuid';
+      options => 'ro,bg,noatime,nodev',
+      require => Exec['mkdir /opt/ocf'],
+    ;
+    '/services':
+      device  => 'services:/services',
+      fstype  => 'nfs4',
+      options => 'rw,bg,noatime,nodev,nosuid',
+      require => Exec['mkdir /services'],
+    ;
     '/var/mail':
-      ensure  => 'mounted',
-      require => File[ '/var/mail' ],
       device  => 'mailbox:/',
       fstype  => 'nfs4',
-      atboot  => true,
-      options => 'rw,bg,noatime,nodev,nosuid';
+      options => 'rw,bg,noatime,nodev,noexec,nosuid',
+      require => Exec['mkdir /var/mail'],
+    ;
     '/etc/pykota':
-      ensure  => 'mounted',
-      require => File[ '/etc/pykota' ],
       device  => 'printhost:/',
       fstype  => 'nfs4',
-      atboot  => true,
-      options => 'ro,bg,noatime,nodev,nosuid';
+      options => 'ro,bg,noatime,nodev,noexec,nosuid',
+      require => Exec['mkdir /etc/pykota'],
+    ;
     '/opt/httpd':
-      ensure  => 'mounted',
-      require => File[ '/opt/httpd' ],
       device  => 'www:/',
       fstype  => 'nfs4',
-      atboot  => true,
-      options => 'ro,bg,noatime,nodev,nosuid';
+      options => 'ro,bg,noatime,nodev,noexec,nosuid',
+      require => Exec['mkdir /opt/httpd'],
+    ;
   }
 
   package {
