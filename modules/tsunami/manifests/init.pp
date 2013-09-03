@@ -1,6 +1,6 @@
 class tsunami {
 
-  # all the mounts
+  # Create directories to mount on
   file {
     '/services':
       ensure  => directory;
@@ -25,51 +25,51 @@ class tsunami {
 
   mount {
     '/services':
-    ensure  => 'mounted',
-    require => File[ '/services' ],
-    device  => 'services:/services',
-    fstype  => 'nfs4',
-    atboot  => true,
-    options => 'rw,bg,noatime,nodev,nosuid';
+      ensure  => 'mounted',
+      require => File[ '/services' ],
+      device  => 'services:/services',
+      fstype  => 'nfs4',
+      atboot  => true,
+      options => 'rw,bg,noatime,nodev,nosuid';
     '/home':
-    ensure  => 'mounted',
-    require => File[ '/home' ],
-    device  => 'homes:/home',
-    fstype  => 'nfs4',
-    atboot  => true,
-    options => 'rw,bg,noatime,nodev,nosuid';
+      ensure  => 'mounted',
+      require => File[ '/home' ],
+      device  => 'homes:/home',
+      fstype  => 'nfs4',
+      atboot  => true,
+      options => 'rw,bg,noatime,nodev,nosuid';
     '/opt/ocf':
-    ensure  => 'mounted',
-    require => File[ '/opt/ocf' ],
-    device  => 'opt:/i686-real',
-    fstype  => 'nfs4',
-    atboot  => true,
-    options => 'ro,bg,noatime,nodev,nosuid';
+      ensure  => 'mounted',
+      require => File[ '/opt/ocf' ],
+      device  => 'opt:/i686-real',
+      fstype  => 'nfs4',
+      atboot  => true,
+      options => 'ro,bg,noatime,nodev,nosuid';
     '/var/mail':
-    ensure  => 'mounted',
-    require => File[ '/var/mail' ],
-    device  => 'mailbox:/',
-    fstype  => 'nfs4',
-    atboot  => true,
-    options => 'rw,bg,noatime,nodev,nosuid';
+      ensure  => 'mounted',
+      require => File[ '/var/mail' ],
+      device  => 'mailbox:/',
+      fstype  => 'nfs4',
+      atboot  => true,
+      options => 'rw,bg,noatime,nodev,nosuid';
     '/etc/pykota':
-    ensure  => 'mounted',
-    require => File[ '/etc/pykota' ],
-    device  => 'printhost:/',
-    fstype  => 'nfs4',
-    atboot  => true,
-    options => 'ro,bg,noatime,nodev,nosuid';
+      ensure  => 'mounted',
+      require => File[ '/etc/pykota' ],
+      device  => 'printhost:/',
+      fstype  => 'nfs4',
+      atboot  => true,
+      options => 'ro,bg,noatime,nodev,nosuid';
     '/opt/httpd':
-    ensure  => 'mounted',
-    require => File[ '/opt/httpd' ],
-    device  => 'www:/',
-    fstype  => 'nfs4',
-    atboot  => true,
-    options => 'ro,bg,noatime,nodev,nosuid';
+      ensure  => 'mounted',
+      require => File[ '/opt/httpd' ],
+      device  => 'www:/',
+      fstype  => 'nfs4',
+      atboot  => true,
+      options => 'ro,bg,noatime,nodev,nosuid';
   }
 
   package {
-    # redirect to shell
+    # Reverse proxy for shellinabox
     ['apache2']:
     ;
 
@@ -78,7 +78,7 @@ class tsunami {
     ;
   }
 
-  # dem ssh keys
+  # Provide SSH host keys
   file {
     '/etc/ssh/ssh_host_dsa_key':
       ensure  => file,
@@ -159,18 +159,19 @@ class tsunami {
     require     => [Package['apache2'], Exec['/usr/sbin/a2enmod proxy'], Exec['/usr/sbin/a2enmod proxy_http'], File['/etc/apache2/sites-available/02-ssl.conf']],
   }
 
-  # copy ssl files
+  # Provide SSL certificate and key
   file {
     '/etc/ssl/certs/tsunami.ocf.berkeley.edu.crt':
       ensure    => file,
       owner     => 'root',
       group     => 'root',
-      mode      => '0600',
+      mode      => '0644',
       source    => 'puppet:///private/tsunami.ocf.berkeley.edu.crt';
     '/etc/ssl/private/tsunami.ocf.berkeley.edu.key':
       ensure    => file,
       owner     => 'root',
       group     => 'root',
+      mode      => '0600',
       source    => 'puppet:///private/tsunami.ocf.berkeley.edu.key';
     '/etc/ssl/certs/CA-BUNDLE.CRT':
       ensure    => file,
