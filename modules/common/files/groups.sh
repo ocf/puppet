@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# fix creation of system users
+# move gid range of system users and groups to prevent collisions with LDAP
 sed -i -e s/FIRST_SYSTEM_UID=.*/FIRST_SYSTEM_UID=300/g \
        -e s/LAST_SYSTEM_UID=.*/LAST_SYSTEM_UID=499/g \
        -e s/FIRST_SYSTEM_GID=.*/FIRST_SYSTEM_GID=300/g \
@@ -10,8 +10,14 @@ sed -i -e s/FIRST_SYSTEM_UID=.*/FIRST_SYSTEM_UID=300/g \
        -e s/FIRST_GID=.*/FIRST_GID=500/g \
        -e s/LAST_GID=.*/LAST_GID=999/g /etc/adduser.conf
 
-# fix existing system groups but keep fuse group uid if changed
-sed -i -e 's/:20:/:220:/g' \
-       -e 's/:102:/:202:/g' \
-       -e 's/:110:/:210:/g' /etc/group
-sed -i -e 's/fuse:x:220:/fuse:x:20:/g' /etc/group
+# change fuse group gid to match ocf group gid
+sed -i 's/fuse:x:220:/fuse:x:20:/g' /etc/group
+
+# renumber existing system groups and files they own
+for gid in 20 110; do
+  new_gid=`expr $gid + 100`
+  sed -i "s/:$gid:/:$new_gid:/g" /etc/group
+  find / -xdev -group $gid -perm -g+s -print0 | xargs -0 -I '{}' \
+  sh -c "chgrp $new_gid {} && chmod g+s {}"
+  find / -xdev -group $gid -print0 | xargs -0 -I '{}' chgrp $new_gid {}
+done
