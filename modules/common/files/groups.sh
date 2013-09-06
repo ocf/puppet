@@ -13,11 +13,8 @@ sed -i -e s/FIRST_SYSTEM_UID=.*/FIRST_SYSTEM_UID=300/g \
 # change fuse group gid to match ocf group gid
 sed -i 's/fuse:x:220:/fuse:x:20:/g' /etc/group
 
-# renumber existing system groups and files they own
+# renumber existing system groups
 for gid in 20 110; do
   new_gid=`expr $gid + 100`
   sed -i "s/:$gid:/:$new_gid:/g" /etc/group
-  find / -xdev -group $gid -perm -g+s -print0 | xargs -0 -I '{}' \
-  sh -c "chgrp $new_gid {} && chmod g+s {}"
-  find / -xdev -group $gid -print0 | xargs -0 -I '{}' chgrp $new_gid {}
 done
