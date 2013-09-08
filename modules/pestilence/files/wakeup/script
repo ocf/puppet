@@ -12,7 +12,8 @@ computers='
 00:1d:92:4a:78:9e
 00:22:19:2b:75:4c
 00:22:19:2b:76:46
-00:22:19:2b:75:fd'
+00:22:19:2b:75:fd
+00:21:9b:37:bc:e7'
 
 for address in $computers; do
   wakeonlan $address > /dev/null
