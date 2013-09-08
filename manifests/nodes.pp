@@ -77,9 +77,7 @@ node default {
     include common::acct
     include common::crondeny
     include common::cups
-    if $::lsbdistcodename != 'wheezy' {
-      include desktop::acroread
-    }
+    include desktop::acroread
     include desktop::iceweasel
     include desktop::lxpanel
     include desktop::numlockx
@@ -87,8 +85,8 @@ node default {
     include desktop::pulse
     include desktop::seti
     include desktop::sshfs
-    include desktop::suspend
     if $::hostname != 'eruption' {
+      include desktop::suspend
       include desktop::tmpfs
       include desktop::limits
     }

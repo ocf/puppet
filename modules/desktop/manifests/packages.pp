@@ -15,7 +15,7 @@ class desktop::packages {
     # fonts
     [ 'cm-super', 'ttf-inconsolata', 'ttf-liberation', 'ttf-linux-libertine' ]:;
     # games
-    [ 'armagetronad', 'gl-117', 'gnome-games', 'warzone2100', 'wesnoth', 'wesnoth-editor', 'wesnoth-music' ]:;
+    [ 'armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music' ]:;
     # lyx
     'lyx':;
     # nonfree packages
@@ -56,7 +56,7 @@ class desktop::packages {
       backports  => true;
     'thunar':
       recommends => false;
-    [ 'virt-manager', 'virt-viewer', 'gtk-led-askpass' ]:
+    [ 'virt-manager', 'virt-viewer' ]:
       recommends => false
   }
 

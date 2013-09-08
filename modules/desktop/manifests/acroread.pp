@@ -1,11 +1,10 @@
 class desktop::acroread {
 
-  package {
-    'acroread':
-    ;
-    # required dependency
-    'ia32-libs-gtk':
-    ;
+  package { 'acroread': }
+
+  # required dependency on debian squeeze
+  if $::lsbdistcodename == 'squeeze' {
+    package { 'ia32-libs-gtk': }
   }
 
   # hide EULA
