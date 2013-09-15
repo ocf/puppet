@@ -12,6 +12,9 @@ apt_cleanup(){
     /usr/bin/aptitude purge --assume-yes --quiet '?config-files' > /dev/null
 }
 
+# delay for open file descriptors before running fuser, Debian bug #629048
+sleep 1
+
 # only proceed if APT and dpkg are not in use
 if [ -f /var/lock/aptitude ] && fuser -s /var/lock/aptitude; then
   true
