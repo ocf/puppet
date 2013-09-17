@@ -59,11 +59,11 @@ class common::packages( $extra = false, $login = false ) {
       # php
       'php5-cli':;
       # python
-      ['ipython', 'python-dev', 'python-django', 'python-flask', 'python-ldap', 'python-lxml', 'python-yaml']:;
+      ['ipython', 'python-dev', 'python-django', 'python-flask', 'python-ldap', 'python-lxml', 'python-virtualenv', 'python-yaml']:;
       # ruby
       'rails':;
       # useful for CS classes
-      [ 'bison', 'flex', 'libncurses5-dev', 'python3' ]:;
+      ['bison', 'flex', 'ipython3', 'libncurses5-dev', 'python3']:;
     }
   }
 
