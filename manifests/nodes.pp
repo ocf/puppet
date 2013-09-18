@@ -15,6 +15,7 @@ node default {
   include common::git
   include common::kerberos
   include common::ldap
+  include common::memtest
   include common::smart
   include common::zabbix
   if $::macAddress {
