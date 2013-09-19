@@ -4,7 +4,7 @@ node default {
   class { 'common::puppet': stage => first }
   class { 'common::rootpw': stage => first }
   case $::hostname {
-    hal, pandemic: { }
+    hal, pandemic, famine: { }
     default:       { include common::ntp }
   }
   case $::hostname {
@@ -26,7 +26,7 @@ node default {
         $bridge = true
         $vlan   = true
       }
-      hal, pandemic: {
+      hal, pandemic, famine: {
         $bridge = true
         $vlan   = false
       }
