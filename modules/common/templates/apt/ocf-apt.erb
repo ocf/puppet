@@ -24,7 +24,7 @@ else
   apt_cleanup
 fi
 
-<% if desktop -%>
+<% if @desktop -%>
 # update Adobe Flash Player
 [ -x /usr/sbin/update-flashplugin-nonfree ] && \
 /usr/sbin/update-flashplugin-nonfree --install --quiet > /dev/null || exit 0
