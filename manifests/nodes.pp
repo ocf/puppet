@@ -4,7 +4,7 @@ node default {
   class { 'common::puppet': stage => first }
   class { 'common::rootpw': stage => first }
   case $::hostname {
-    hal, pandemic, famine: { }
+    hal, pandemic, jaws: { }
     default:       { include common::ntp }
   }
   case $::hostname {
@@ -26,7 +26,7 @@ node default {
         $bridge = true
         $vlan   = true
       }
-      hal, pandemic, famine: {
+      hal, pandemic, jaws: {
         $bridge = true
         $vlan   = false
       }
@@ -54,7 +54,6 @@ node default {
     case $::hostname {
       supernova: { class { 'common::packages': extra => true, login => true } }
       tsunami:   { class { 'common::packages': extra => true, login => true } }
-      jaws:      { class { 'common::packages': extra => true, login => true } }
       default:   { class { 'common::packages': } }
     }
     case $::hostname {
@@ -63,7 +62,6 @@ node default {
       supernova: { class { 'common::auth': glogin => 'approve' } }
       riot:      { class { 'common::auth': ulogin => [ ['kiosk', 'LOCAL'] ] } }
       tsunami:   { class { 'common::auth': glogin => [ 'ocf', 'sorry' ] } }
-      jaws:      { class { 'common::auth': glogin => [ 'ocf', 'sorry' ] } }
       default:   { class { 'common::auth': } }
     }
     include common::ssh
