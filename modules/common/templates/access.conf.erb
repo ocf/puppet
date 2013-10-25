@@ -8,7 +8,9 @@
 + : dumper : pollution.ocf.berkeley.edu
 + : nessus : .security.berkeley.edu
 <% @ulogin.each do |user,from| -%>
+<% if not user.nil? and not from.nil? -%>
 + : <%= user %> : <%= from %>
+<% end -%>
 <% end -%>
 + : (admin) : ALL
 + : (ocfstaff) : ALL

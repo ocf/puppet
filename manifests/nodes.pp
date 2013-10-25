@@ -58,11 +58,11 @@ node default {
     }
     case $::hostname {
       locusts:   { class { 'common::auth': ulogin => [ ['NuclearPoweredKimJongIl', 'ALL' ] ] } }
-      printhost: { class { 'common::auth': glogin => 'approve', gsudo => 'ocfstaff' } }
-      supernova: { class { 'common::auth': glogin => 'approve' } }
+      printhost: { class { 'common::auth': glogin => [ 'approve' ], gsudo => [ 'ocfstaff' ] } }
+      supernova: { class { 'common::auth': glogin => [ 'approve' ] } }
       riot:      { class { 'common::auth': ulogin => [ ['kiosk', 'LOCAL'] ] } }
       tsunami:   { class { 'common::auth': glogin => [ 'ocf', 'sorry' ] } }
-      default:   { class { 'common::auth': } }
+      default:   { class { 'common::auth': ulogin => [[]], glogin => [], usudo => [], gsudo => [] } }
     }
     include common::ssh
   }
