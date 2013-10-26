@@ -70,8 +70,8 @@ node default {
   if $type == 'desktop' {
     class { 'common::apt':  stage => first, nonfree => true, desktop => true }
     case $::hostname {
-      eruption:  { class { 'common::auth': glogin => 'approve' } }
-      default:   { class { 'common::auth': glogin => 'ocf' } }
+      eruption:  { class { 'common::auth': glogin => [ 'approve' ] } }
+      default:   { class { 'common::auth': glogin => [ 'ocf' ] } }
     }
     include common::acct
     include common::crondeny
