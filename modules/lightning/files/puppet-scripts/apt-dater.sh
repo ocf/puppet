@@ -11,8 +11,8 @@ kinit -t "$keytab" apt-dater
 
 cat /dev/null > "$config"
 
-hosts="`nmap -sP --system-dns --exclude $exclude_hosts $subnet \
-| grep ^Host | cut -d' ' -f2 | sed 's/.ocf.berkeley.edu//gI'`"
+hosts="`nmap -sn -oG - --system-dns --exclude $exclude_hosts $subnet \
+| grep ^Host | cut -d' ' -f3 | cut -f1 | tr -d '()' | sed 's/.ocf.berkeley.edu//gI'`"
 echo '[ocf]' >> "$config"; echo -n 'Hosts=' >> "$config"
 for host in $hosts; do
   echo -n "apt-dater@$host;"
