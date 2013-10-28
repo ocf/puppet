@@ -18,6 +18,8 @@ class desktop::packages {
     [ 'armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music' ]:;
     # lyx
     'lyx':;
+	# programming environments
+	[ 'python3', 'python3-tk' ]:;
     # nonfree packages
     [ 'firmware-linux', 'flashplugin-nonfree', 'ttf-mscorefonts-installer' ]:;
     # notifications
