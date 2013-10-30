@@ -1,13 +1,13 @@
 class maelstrom {
 
   # install mysql and set root password
-  package { 'percona-server-server-5.5':
-    responsefile => '/opt/share/puppet/percona-server-server-5.5.preseed',
+  package { 'percona-server-server-5.6':
+    responsefile => '/opt/share/puppet/percona-server-server-5.6.preseed',
     require      => Exec['force aptitude update']
   }
-  file { '/opt/share/puppet/percona-server-server-5.5.preseed':
+  file { '/opt/share/puppet/percona-server-server-5.6.preseed':
     mode         => '0600',
-    source       => 'puppet:///private/percona-server-server-5.5.preseed'
+    source       => 'puppet:///private/percona-server-server-5.6.preseed'
   }
 
   # provide mysql server and client config
@@ -21,7 +21,7 @@ class maelstrom {
 
   service { 'mysql':
     subscribe => File['/etc/mysql/my.cnf'],
-    require   => Package['percona-server-server-5.5']
+    require   => Package['percona-server-server-5.6']
   }
 
   # add percona repo
