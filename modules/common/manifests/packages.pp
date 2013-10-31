@@ -61,7 +61,7 @@ class common::packages( $extra = false, $login = false ) {
       # python
       ['ipython', 'python-dev', 'python-django', 'python-flask', 'python-ldap', 'python-lxml', 'python-virtualenv', 'python-yaml']:;
       # ruby
-      'rails':;
+      ['rails', 'ruby-dev']:;
       # useful for CS classes
       ['bison', 'flex', 'ipython3', 'libncurses5-dev', 'python3', 'python3-tk']:;
     }
