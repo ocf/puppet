@@ -1,7 +1,6 @@
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #admin principals
 daradib/admin@OCF.BERKELEY.EDU          all
-kfang/admin@OCF.BERKELEY.EDU            all
 morshed/admin@OCF.BERKELEY.EDU          all
 sanjayk/admin@OCF.BERKELEY.EDU          all
 tzhu/admin@OCF.BERKELEY.EDU             all
@@ -11,9 +10,6 @@ nolm/admin@OCF.BERKELEY.EDU             all
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
 daradib/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
-etshen/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
-kedo/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
-kfang/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
 mcint/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
 morshed/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 nolm/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
