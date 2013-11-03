@@ -63,7 +63,7 @@ class common::packages( $extra = false, $login = false ) {
       # ruby
       ['rails', 'ruby-dev']:;
       # useful for CS classes
-      ['bison', 'flex', 'ipython3', 'libncurses5-dev', 'python3', 'python3-tk']:;
+      ['bison', 'flex', 'ipython3', 'libncurses5-dev', 'python3', 'python3-tk', 'chicken-bin']:;
     }
   }
 
