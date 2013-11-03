@@ -5,20 +5,14 @@ morshed/admin@OCF.BERKELEY.EDU          all
 sanjayk/admin@OCF.BERKELEY.EDU          all
 tzhu/admin@OCF.BERKELEY.EDU             all
 waf/admin@OCF.BERKELEY.EDU              all
-nolm/admin@OCF.BERKELEY.EDU             all
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
 daradib/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
-mcint/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
 morshed/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
-nolm/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
-raphtown/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 sanjayk/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 tzhu/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
 waf/root@OCF.BERKELEY.EDU               change-password                         *@OCF.BERKELEY.EDU
-paulinar/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
-naless/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 
 # chpass
 chpass/death.ocf.berkeley.edu@OCF.BERKELEY.EDU change-password                  *@OCF.BERKELEY.EDU
