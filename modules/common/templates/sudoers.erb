@@ -13,6 +13,7 @@ dumper ALL=NOPASSWD: /usr/bin/rsync, /usr/bin/nice, /usr/bin/ionice
 
 # User specification
 %admin ALL=(ALL) ALL
+%ocfroot ALL=(ALL) ALL
 <% @gsudo.each do |group| -%>
 %<%= group %> ALL=(ALL) ALL
 <% end -%>
