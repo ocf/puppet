@@ -17,6 +17,15 @@ class blight {
     mode   => '0775',
   }
 
+  # www-data user private key used to deploy to github
+  file {
+    '/srv/ikiwiki/id_rsa':
+      mode    => '0400',
+      owner   => 'www-data',
+      group   => 'www-data',
+      source  => 'puppet:///private/id_rsa';
+  }
+
   # the serverlist ikiwiki plugin needs to be in a certain folder
   file {
     '/srv/ikiwiki/.ikiwiki/IkiWiki/Plugin':
