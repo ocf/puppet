@@ -1,0 +1,4 @@
+puppet
+======
+
+OCF Puppet Configuration
