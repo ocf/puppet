@@ -13,5 +13,10 @@ class supernova {
     content => "if \$FROMHOST startswith 'tsunami' then /var/log/tsunami.log\n& ~\n",
     notify  => Service['rsyslog'],
   }
-
+  
+  # provide logrotate rule for account creation scripts
+  file { '/etc/logrotate.d/account-creation':
+    ensure => file,
+    source => 'puppet:///modules/supernova/logrotate/account-creation';
+  }
 }

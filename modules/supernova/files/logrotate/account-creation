@@ -1,0 +1,6 @@
+/opt/create/private/backup/approved.users /opt/create/private/backup/mid_approved.users {
+        daily
+        missingok
+        rotate 7
+        create 400 root root
+}
