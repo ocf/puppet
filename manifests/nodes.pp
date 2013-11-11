@@ -7,7 +7,10 @@ node default {
     sandstorm: { }
     default:   { include common::postfix }
   }
-  include common::ntp
+  case $::hostname {
+    hal, pandemic, jaws: { class { 'common::ntp': physical => true } }
+    default:             { include common::ntp }
+  }
   include common::autologout
   include common::git
   include common::kerberos
