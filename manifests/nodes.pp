@@ -4,13 +4,10 @@ node default {
   class { 'common::puppet': stage => first }
   class { 'common::rootpw': stage => first }
   case $::hostname {
-    hal, pandemic, jaws: { }
-    default:       { include common::ntp }
-  }
-  case $::hostname {
     sandstorm: { }
     default:   { include common::postfix }
   }
+  include common::ntp
   include common::autologout
   include common::git
   include common::kerberos
