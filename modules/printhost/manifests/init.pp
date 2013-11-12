@@ -40,6 +40,22 @@ class printhost {
       require => Package['cups'],
       notify  => Service['cups'],
     ;
+    '/etc/cups/ssl/printhost_ocf_berkeley_edu.pem':
+      mode    => '0600',
+      group   => lp,
+      backup  => false,
+      source  => 'puppet:///private/cups-ssl/printhost_ocf_berkeley_edu.cer',
+      require => Package['cups'],
+      notify  => Service['cups'],
+    ;
+    '/etc/cups/ssl/printhost_ocf_berkeley_edu.key':
+      mode    => '0600',
+      group   => lp,
+      backup  => false,
+      source  => 'puppet:///private/cups-ssl/printhost_ocf_berkeley_edu.key',
+      require => Package['cups'],
+      notify  => Service['cups'],
+    ;
   }
   # mount /var/spool/cups in tmpfs
   mount { '/var/spool/cups':
