@@ -85,10 +85,11 @@ class blight {
       owner   => 'root',
       group   => 'ocfstaff',
       mode    => '0775';
-    '/srv/ikiwiki/wiki.git/hooks/post-update':
-      mode    => '2775',
-      owner   => 'root',
-      group   => 'ocfstaff';
+    '/srv/ikiwiki/wiki.git/hooks/post-receive':
+      source  => 'puppet:///modules/blight/ikiwiki/post-receive',
+      owner   => 'www-data',
+      group   => 'ocfstaff',
+      mode    => '0774';
   }
 
   # the lockfile is necessary for 'ikiwiki --setup'
