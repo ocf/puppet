@@ -19,6 +19,16 @@ class blight {
 
   # www-data user private key used to deploy to github
   file {
+    '/var/www/.ssh':
+      ensure  => 'directory',
+      owner   => 'www-data',
+      group   => 'www-data',
+      mode    => '750';
+    '/var/www/.ssh/config':
+      source  => 'puppet:///modules/blight/ssh/config',
+      owner   => 'www-data',
+      group   => 'www-data',
+      mode    => '640';
     '/srv/ikiwiki/id_rsa':
       mode    => '0400',
       owner   => 'www-data',

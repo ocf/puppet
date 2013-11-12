@@ -1,0 +1,2 @@
+Host github.com
+	IdentityFile /srv/ikiwiki/id_rsa
