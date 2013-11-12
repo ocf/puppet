@@ -16,8 +16,8 @@ class desktop::packages {
     [ 'cm-super', 'ttf-inconsolata', 'ttf-liberation', 'ttf-linux-libertine' ]:;
     # games
     [ 'armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music' ]:;
-    # lyx
-    'lyx':;
+    # useful tools
+    [ 'lyx', 'gitk' ]:;
     # programming environments
     [ 'python3', 'python3-tk' ]:;
     # nonfree packages
