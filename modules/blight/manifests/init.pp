@@ -99,6 +99,14 @@ class blight {
       recurse => true;
   }
 
+  file {
+    '/srv/ikiwiki/wiki/.git/hooks/post-commit':
+      source  => 'puppet:///modules/blight/ikiwiki/post-commit',
+      owner   => 'www-data',
+      group   => 'ocfstaff',
+      mode    => '0774';
+  }
+
   exec { 'ikiwiki_setup':
     require => File[ '/srv/ikiwiki/wiki.setup'],
     command => 'ikiwiki --setup wiki.setup',

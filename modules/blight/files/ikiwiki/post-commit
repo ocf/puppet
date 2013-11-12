@@ -1,0 +1,18 @@
+#!/bin/bash
+# Change commit author emails from ${user}@web to ${user}@ocf.berkeley.edu
+# This assumes that usernames on the wiki correspond to OCF usernames
+
+git filter-branch -f --env-filter '
+case "$GIT_AUTHOR_EMAIL" in
+        *@web)
+                export GIT_AUTHOR_EMAIL="$(echo "$GIT_AUTHOR_EMAIL" | sed 's/@web//')@ocf.berkeley.edu"
+        ;;
+esac
+' HEAD^..HEAD
+
+# unfortunately git passes commands to sh and not bash, so we
+# have to use the mess above instead of this...
+#
+# if [[ "$GIT_AUTHOR_EMAIL" == *@web ]]; then
+#       export GIT_AUTHOR_EMAIL="${a%@*}@ocf.berkeley.edu"
+# fi
