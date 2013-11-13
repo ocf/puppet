@@ -223,13 +223,14 @@ class death {
     '/etc/ssl/certs/secure.ocf.berkeley.edu.crt':
       ensure    => file,
       owner     => 'root',
-      group     => 'root',
-      mode      => '0600',
+      group     => 'ssl-cert',
+      mode      => '0640',
       source    => 'puppet:///private/secure.ocf.berkeley.edu.crt';
     '/etc/ssl/private/secure.ocf.berkeley.edu.key':
       ensure    => file,
       owner     => 'root',
-      group     => 'root',
+      group     => 'ssl-cert',
+      mode      => '0640',
       source    => 'puppet:///private/secure.ocf.berkeley.edu.key';
     '/etc/ssl/certs/CA-BUNDLE.CRT':
       ensure    => file,

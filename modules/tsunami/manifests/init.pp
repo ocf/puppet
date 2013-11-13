@@ -162,14 +162,14 @@ class tsunami {
     '/etc/ssl/certs/tsunami.ocf.berkeley.edu.crt':
       ensure    => file,
       owner     => 'root',
-      group     => 'root',
-      mode      => '0644',
+      group     => 'ssl-cert',
+      mode      => '0640',
       source    => 'puppet:///private/tsunami.ocf.berkeley.edu.crt';
     '/etc/ssl/private/tsunami.ocf.berkeley.edu.key':
       ensure    => file,
       owner     => 'root',
-      group     => 'root',
-      mode      => '0600',
+      group     => 'ssl-cert',
+      mode      => '0640',
       source    => 'puppet:///private/tsunami.ocf.berkeley.edu.key';
     '/etc/ssl/certs/CA-BUNDLE.CRT':
       ensure    => file,
