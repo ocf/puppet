@@ -260,7 +260,7 @@ class death {
       mode     => 400,
       owner    => 'account-tools',
       group    => 'account-tools',
-      source   => 'puppet://private/account_tools/chpass.keytab';
+      source   => 'puppet:///private/account_tools/chpass.keytab';
   }
 
   # nfs export of apache logs
