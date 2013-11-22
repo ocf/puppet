@@ -8,3 +8,10 @@ EnableSendfile Off
 # added [10/5/10 sanjayk] deal with higher loads
 ServerLimit 768
 MaxClients  768
+
+# serve .php4 files using suphp
+<IfModule mod_suphp.c>
+	<FilesMatch "\.php4$">
+		SetHandler application/x-httpd-suphp
+	</FilesMatch>
+</IfModule>
