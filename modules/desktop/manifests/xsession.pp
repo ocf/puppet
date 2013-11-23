@@ -106,6 +106,15 @@ class desktop::xsession {
       source  => 'puppet:///modules/desktop/xsession/lxde/lxde-logout'
   }
 
+  # disable user switching and screen locking (prevent normal users
+  # from executing the necessary binaries)
+  file {
+    '/usr/bin/lxlock':
+      mode => '0744';
+    '/usr/bin/xscreensaver-command':
+      mode => '0744';
+  }
+
   # font configuration
   file {
     # enable font auto-hinting
