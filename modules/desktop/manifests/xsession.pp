@@ -62,7 +62,7 @@ class desktop::xsession {
   }
 
   # polkit configuration
-  # prevent privileged actions except mounting/ejecting external media
+  # prevent privileged actions
   file {  '/usr/share/polkit-1/actions':
     ensure  => directory,
     recurse => true,
@@ -91,11 +91,6 @@ class desktop::xsession {
 
   # lxde logout configuration
   file {
-    # replace logout binary with one compiled without dbus support
-    '/usr/local/bin/lxsession-logout':
-      mode    => '0755',
-      backup  => false,
-      source  => 'puppet:///contrib/desktop/lxsession-logout';
     # provide logout banner
     '/opt/share/xsession/logout-banner.png':
       backup  => false,

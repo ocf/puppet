@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
+<policyconfig>
+  <vendor>The UPower Project</vendor>
+  <vendor_url>http://upower.freedesktop.org/</vendor_url>
+  <icon_name>system-suspend</icon_name>
+
+  <action id="org.freedesktop.upower.suspend">
+    <description>Suspend the system</description>
+    <description xml:lang="fr">Mettre le système en veille</description>
+    <description xml:lang="it">Sospende il sistema</description>
+    <description xml:lang="pl">Wstrzymanie systemu</description>
+    <description xml:lang="sv">Försätt systemet i vänteläge</description>
+    <message>Authentication is required to suspend the system</message>
+    <message xml:lang="fr">Vous devez vous identifier pour mettre le système en veille</message>
+    <message xml:lang="it">È richiesto autenticarsi per sospendere il sistema</message>
+    <message xml:lang="pl">Wymagane jest uwierzytelnienie, aby wstrzymać system</message>
+    <message xml:lang="sv">Autentisering krävs för att försätta systemet i vänteläge</message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>no</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.freedesktop.upower.hibernate">
+    <description>Hibernate the system</description>
+    <description xml:lang="fr">Mettre le système en hibernation</description>
+    <description xml:lang="it">Iberna il sistema</description>
+    <description xml:lang="pl">Hibernacja systemu</description>
+    <description xml:lang="sv">Försätt systemet i viloläge</description>
+    <message>Authentication is required to hibernate the system</message>
+    <message xml:lang="fr">Vous devez vous identifier pour mettre le système en hibernation</message>
+    <message xml:lang="it">È richiesto autenticarsi per ibernare il sistema</message>
+    <message xml:lang="pl">Wymagane jest uwierzytelnienie, aby zahibernować system</message>
+    <message xml:lang="sv">Autentisering krävs för att försätta systemet i viloläge</message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>no</allow_active>
+    </defaults>
+  </action>
+
+</policyconfig>
