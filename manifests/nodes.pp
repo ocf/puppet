@@ -79,6 +79,7 @@ node default {
     include desktop::acroread
     include desktop::iceweasel
     include desktop::lxpanel
+    include desktop::modprobe
     include desktop::numlockx
     include desktop::packages
     include desktop::pulse
