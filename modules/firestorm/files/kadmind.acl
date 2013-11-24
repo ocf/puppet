@@ -5,6 +5,7 @@ morshed/admin@OCF.BERKELEY.EDU          all
 sanjayk/admin@OCF.BERKELEY.EDU          all
 tzhu/admin@OCF.BERKELEY.EDU             all
 waf/admin@OCF.BERKELEY.EDU              all
+ckuehl/admin@OCF.BERKELEY.EDU           all
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
