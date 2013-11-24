@@ -76,7 +76,6 @@ node default {
     include common::acct
     include common::crondeny
     include common::cups
-    include desktop::acroread
     include desktop::iceweasel
     include desktop::lxpanel
     include desktop::modprobe

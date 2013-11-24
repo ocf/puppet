@@ -9,7 +9,7 @@ class desktop::packages {
   # install a lot of other packages
   package {
     # applications
-    [ 'claws-mail', 'geany', 'gftp-gtk', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap' ]:;
+    [ 'evince-gtk', 'claws-mail', 'geany', 'gftp-gtk', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap' ]:;
     # desktop
     [ 'desktop-base', 'desktop-file-utils', 'gpicview', 'lxappearance', 'lxde-core', 'lxde-icon-theme', 'lxtask', 'lxterminal', 'xarchiver', 'xterm', 'lightdm' ]:;
     # fonts
@@ -35,10 +35,6 @@ class desktop::packages {
     # causes gid conflicts
     'sane-utils':
       ensure  => purged;
-    # reportedly buggy as default PDF reader
-    [ 'evince', 'evince-gtk', 'xpdf' ]:
-      ensure  => purged,
-      require => Package[ 'acroread' ];
     # should not be default PDF reader
     'gimp':
       ensure  => purged;

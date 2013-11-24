@@ -43,19 +43,12 @@ class common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
   if $::operatingsystem == 'Debian' and $desktop {
     # provide desktop sources.list
     file { '/etc/apt/sources.list.d/desktop.list':
-      content => "deb http://www.deb-multimedia.org/ $::lsbdistcodename main non-free\ndeb http://mozilla.debian.net/ $::lsbdistcodename-backports iceweasel-release",
+      content => "deb http://mozilla.debian.net/ $::lsbdistcodename-backports iceweasel-release",
       notify  => Exec['aptitude update'],
       before  => File['/etc/cron.daily/ocf-apt'],
     }
-    # trust debian-multimedia and mozilla.debian.net GPG key
+    # trust mozilla.debian.net GPG key
     exec {
-      'debian-multimedia':
-        command => 'aptitude update && aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install deb-multimedia-keyring',
-        unless  => 'dpkg -l deb-multimedia-keyring | grep ^ii',
-        notify  => Exec['aptitude update'],
-        require => [Package['aptitude'], File['/etc/apt/sources.list','/etc/apt/sources.list.d/desktop.list']],
-        before  => File['/etc/cron.daily/ocf-apt'],
-      ;
       'debian-mozilla':
         command => 'aptitude update && aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install pkg-mozilla-archive-keyring',
         unless  => 'dpkg -l pkg-mozilla-archive-keyring | grep ^ii',
