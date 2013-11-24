@@ -4,7 +4,7 @@ node default {
   class { 'common::puppet': stage => first }
   class { 'common::rootpw': stage => first }
   case $::hostname {
-    sandstorm: { }
+    sandstorm, typhoon: { }
     default:   { include common::postfix }
   }
   case $::hostname {
