@@ -22,9 +22,4 @@ define ocf::repackage(
     command => "aptitude -y ${r}${b}install $package",
     unless  => "dpkg -l $package | grep ^ii"
   }
-  #exec { "apt-get install $package":
-    #command => "apt-get -y --force-yes ${r}${b}install $package",
-    #unless  => "dpkg -l $package | grep ^ii"
-  #}
-
 }
