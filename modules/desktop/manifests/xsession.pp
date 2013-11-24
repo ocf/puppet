@@ -48,6 +48,21 @@ class desktop::xsession {
       source  => 'puppet:///modules/desktop/xsession/lightdm/session-cleanup';
   }
 
+  # use ocf logo on login screen
+  file {
+    '/usr/share/icons/hicolor/64x64/devices/ocf.png':
+      backup  => false,
+      source  => 'puppet:///contrib/desktop/ocf-color-64.png';
+    '/usr/share/lightdm-gtk-greeter/greeter.ui':
+      source  => 'puppet:///modules/desktop/xsession/lightdm/greeter.ui';
+  }
+
+  exec {
+    'gtk-update-icon-cache /usr/share/icons/hicolor':
+      subscribe  => File["/usr/share/icons/hicolor/64x64/devices/ocf.png"],
+      refreshonly => true;
+  }
+
   # polkit configuration
   # prevent privileged actions
   file {  '/usr/share/polkit-1/actions':
