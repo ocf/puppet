@@ -35,30 +35,17 @@ class desktop::xsession {
       source  => 'puppet:///modules/desktop/xsession/xsessions'
   }
 
-  # gdm configuration
-  # install gdm3 as login manager with minimal bloat
-  # metacity is needed to work around gdm hourglass bug
-  ocf::repackage { [ 'gdm3', 'gnome-settings-daemon', 'metacity' ]:
-    recommends => false
-  }
-  # provide gdm config
+  # lightdm configuration
+  # install lightdm as login manager with minimal bloat
   file {
-    # login interface
-    '/etc/gdm3/greeter.gsettings':
-      source  => 'puppet:///modules/desktop/xsession/gdm/greeter.gsettings',
-      require => Ocf::Repackage['gdm3'];
-    '/etc/gdm3/greeter.gconf-defaults':
-      source  => 'puppet:///modules/desktop/xsession/gdm/greeter.gconf-defaults',
-      require => Ocf::Repackage['gdm3'];
-    # ocf icon
-    '/usr/share/icons/ocf.png':
-      backup  => false,
-      source  => 'puppet:///contrib/desktop/ocf.png';
+    '/etc/lightdm/lightdm.conf':
+      source  => 'puppet:///modules/desktop/xsession/lightdm/lightdm.conf';
+    '/etc/X11/default-display-manager':
+      source  => 'puppet:///modules/desktop/xsession/default-display-manager';
     # kill child processes on logout
-    '/etc/gdm3/PostSession/Default':
+    '/etc/lightdm/session-cleanup':
       mode    => '0755',
-      source  => 'puppet:///modules/desktop/xsession/gdm/PostSession',
-      require => Ocf::Repackage['gdm3'];
+      source  => 'puppet:///modules/desktop/xsession/lightdm/session-cleanup';
   }
 
   # polkit configuration

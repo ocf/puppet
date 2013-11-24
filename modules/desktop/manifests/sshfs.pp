@@ -32,7 +32,7 @@ class desktop::sshfs {
     ensure => directory
   }
 
-  # configure libpam_mount and add to gdm pam
+  # configure libpam_mount and add to lightdm pam
   file {
     '/etc/security/pam_mount.conf.xml':
       source  => 'puppet:///modules/desktop/pam/mount.conf.xml',
@@ -41,8 +41,8 @@ class desktop::sshfs {
       content => 'session optional pam_mount.so disable_interactive';
   }
   exec { 'ocf-pammount':
-    command => 'echo "@include ocf-pammount" >> /etc/pam.d/gdm3',
-    unless  => 'grep "^@include ocf-pammount$" /etc/pam.d/gdm3',
+    command => 'echo "@include ocf-pammount" >> /etc/pam.d/lightdm',
+    unless  => 'grep "^@include ocf-pammount$" /etc/pam.d/lightdm',
     require => File[ '/etc/skel/remote', '/etc/pam.d/ocf-pammount' ]
   }
 
