@@ -1,7 +1,8 @@
 mydomain = rt.ocf.berkeley.edu
 mydestination = $mydomain
 myorigin = $mydomain
-#masquerade_domains = !rt.$mydomain $mydomain
+relay_domains = ocf.berkeley.edu
+relayhost = smtp.ocf.berkeley.edu
 masquerade_classes = envelope_sender, envelope_recipient, header_sender, header_recipient
 
 # OCF and Google Apps
