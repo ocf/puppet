@@ -106,7 +106,7 @@ use IkiWiki::Setup::Standard {
 	#historyurl => 'http://git.example.com/gitweb.cgi?p=wiki.git;a=history;f=[[file]];hb=HEAD',
 	historyurl => 'https://github.com/ocf/wiki/commits/master/[[file]]',
 	# gitweb url to show a diff ([[file]], [[sha1_to]], [[sha1_from]], [[sha1_commit]], and [[sha1_parent]] substituted)
-	diffurl => 'https://github.com/ocf/wiki/commit/[[sha1_commit]]',
+	diffurl => 'https://github.com/ocf/wiki/compare/[[sha1_from]]...[[sha1_to]]',
 	# where to pull and push changes (set to empty string to disable)
 	#gitorigin_branch => 'origin',
 	# branch that the wiki is stored in
