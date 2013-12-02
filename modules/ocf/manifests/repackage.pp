@@ -2,7 +2,7 @@ define ocf::repackage(
     $package    = $title,
     $recommends = undef,
     $backports  = undef,
-    $dist       = 'squeeze'
+    $dist       = $lsbdistcodename
   ) {
 
   case $recommends {

@@ -1,7 +1,10 @@
 class common::git {
-  package { 'git': }
+  ocf::repackage { 'git':
+    backports => true
+  }
+
   file { '/etc/gitconfig':
     source  => 'puppet:///modules/common/gitconfig',
-    require => Package['git'],
+    require => Ocf::Repackage['git'],
   }
 }
