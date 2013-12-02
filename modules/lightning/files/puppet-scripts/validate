@@ -19,6 +19,8 @@ for template in $templates; do
   cat "$template" | erb -x -P -T -| ruby -c || exit 1
 done
 
+echo
+
 # lint for style errors
 for manifest in $manifests; do
   lint="`puppet-lint --no-80chars-check $manifest`"

@@ -23,12 +23,12 @@ class blight {
       ensure  => 'directory',
       owner   => 'www-data',
       group   => 'www-data',
-      mode    => '750';
+      mode    => '0750';
     '/var/www/.ssh/config':
       source  => 'puppet:///modules/blight/ssh/config',
       owner   => 'www-data',
       group   => 'www-data',
-      mode    => '640';
+      mode    => '0640';
     '/srv/ikiwiki/id_rsa':
       mode    => '0400',
       owner   => 'www-data',

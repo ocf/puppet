@@ -246,18 +246,18 @@ class death {
   file {
     '/var/www/account_tools/config':
       ensure   => directory,
-      mode     => 750,
+      mode     => '0750',
       owner    => 'account-tools',
       group    => 'account-tools';
     '/var/www/account_tools/config/cmds_host_keys':
       ensure   => file,
-      mode     => 440,
+      mode     => '0440',
       owner    => 'account-tools',
       group    => 'account-tools',
       source   => 'puppet:///private/account_tools/host_keys';
     '/var/www/account_tools/config/chpass.keytab':
       ensure   => file,
-      mode     => 400,
+      mode     => '0400',
       owner    => 'account-tools',
       group    => 'account-tools',
       source   => 'puppet:///private/account_tools/chpass.keytab';
