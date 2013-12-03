@@ -25,6 +25,19 @@ class supernova {
       mode   => '0400',
       source => 'puppet:///private/create.keytab';
 
+    '/opt/create/private/mid_approved.users':
+      ensure => 'file',
+      owner  => 'create',
+      group  => 'approve',
+      mode   => '0640';
+
+    '/opt/create/private/private_pass.pem':
+      ensure => 'file',
+      owner  => 'create',
+      group  => 'approve',
+      mode   => '0400',
+      source => 'puppet:///private/private_pass.pem';
+
     '/etc/sudoers.d/create':
       mode   => '0440',
       source => 'puppet:///modules/supernova/create.sudoers';
