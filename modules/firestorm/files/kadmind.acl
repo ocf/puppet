@@ -18,3 +18,6 @@ ckuehl/root@OCF.BERKELEY.EDU            change-password                         
 
 # chpass
 chpass/death.ocf.berkeley.edu@OCF.BERKELEY.EDU change-password                  *@OCF.BERKELEY.EDU
+
+# create
+create/admin@OCF.BERKELEY.EDU           add                                     *@OCF.BERKELEY.EDU
