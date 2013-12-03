@@ -8,6 +8,24 @@ class supernova {
 
   service { 'rsyslog': }
 
+  # log directory, crontab, and keytab for create
+  file {
+    '/opt/create/private':
+      ensure => 'directory',
+      owner  => 'create',
+      group  => 'approve',
+      mode   => '0750';
+
+    '/etc/cron.d/create':
+      source => 'puppet:///modules/supernova/create.cron';
+
+    '/opt/create/private/create.keytab':
+      owner  => 'create',
+      group  => 'approve,
+      mode   => '0400',
+      source => 'puppet:///private/create.keytab';
+  }
+
   # receive remote syslog from tsunami
   file { '/etc/rsyslog.d/tsunami.conf':
     content => "if \$FROMHOST startswith 'tsunami' then /var/log/tsunami.log\n& ~\n",
