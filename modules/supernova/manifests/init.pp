@@ -21,9 +21,13 @@ class supernova {
 
     '/opt/create/private/create.keytab':
       owner  => 'create',
-      group  => 'approve,
+      group  => 'approve',
       mode   => '0400',
       source => 'puppet:///private/create.keytab';
+
+    '/etc/sudoers.d/create':
+      mode   => '0440',
+      source => 'puppet:///modules/supernova/create.sudoers';
   }
 
   # receive remote syslog from tsunami
