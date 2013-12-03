@@ -2,5 +2,5 @@
         daily
         missingok
         rotate 7
-        create 400 root root
+        create 600 create approve
 }
