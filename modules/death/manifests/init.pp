@@ -263,6 +263,33 @@ class death {
       source   => 'puppet:///private/account_tools/chpass.keytab';
   }
 
+  # create / approve directory files
+  file {
+    '/export/approve/approved.log':
+      ensure   => file,
+      mode     => '0660',
+      owner    => 'account-tools',
+      group    => 'approve';
+
+    '/export/approve/approved.users':
+      ensure   => file,
+      mode     => '0660',
+      owner    => 'account-tools',
+      group    => 'approve';
+
+    '/export/approve/public_pass.pem':
+      ensure   => file,
+      mode     => '0440',
+      owner    => 'account-tools',
+      group    => 'approve';
+
+    '/export/approve/reserved_names.txt':
+      ensure   => file,
+      mode     => '0440',
+      owner    => 'account-tools',
+      group    => 'approve';
+  }
+
   # nfs export of apache logs
   file {
     '/etc/exports':
