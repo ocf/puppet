@@ -13,13 +13,13 @@ class supernova {
     '/opt/create/private':
       ensure  => 'directory',
       owner   => 'create',
-      group   => 'approve'
+      group   => 'approve',
       mode    => '0750';
 
     '/opt/create/private/backup':
       ensure  => 'directory',
       owner   => 'create',
-      group   => 'approve'
+      group   => 'approve',
       mode    => '0750';
 
     '/etc/cron.d/create':
