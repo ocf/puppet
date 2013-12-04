@@ -46,12 +46,13 @@ class supernova {
 
   # user for account creation
   user { 'create':
-    home     => '/opt/create/private',
-    shell    => '/bin/false',
-    uid      => 501,
-    gid      => 1002, # group = approve
-    comment  => 'OCF account creation user',
-    ensure   => 'present',
+    home       => '/opt/create/private',
+    shell      => '/bin/false',
+    uid        => 501,
+    gid        => 1002, # group = approve
+    comment    => 'OCF account creation user',
+    forcelocal => true,
+    ensure     => 'present',
   }
 
   # receive remote syslog from tsunami
