@@ -11,10 +11,11 @@ class supernova {
   # log directory, crontab, and keytab for create
   file {
     '/opt/create/private':
-      ensure => 'directory',
-      owner  => 'create',
-      group  => 'approve',
-      mode   => '0750';
+      ensure  => 'directory',
+      owner   => 'create',
+      group   => 'approve',
+      recurse => true,
+      mode    => '0750';
 
     '/etc/cron.d/create':
       source => 'puppet:///modules/supernova/create.cron';
@@ -41,6 +42,16 @@ class supernova {
     '/etc/sudoers.d/create':
       mode   => '0440',
       source => 'puppet:///modules/supernova/create.sudoers';
+  }
+
+  # user for account creation
+  user { 'create':
+    home     => '/opt/create/private',
+    shell    => '/bin/false',
+    uid      => 501,
+    gid      => 1002, # group = approve
+    comment  => 'OCF account creation user',
+    ensure   => 'present',
   }
 
   # receive remote syslog from tsunami
