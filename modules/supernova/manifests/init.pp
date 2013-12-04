@@ -14,7 +14,9 @@ class supernova {
       ensure  => 'directory',
       owner   => 'create',
       group   => 'approve',
-      recurse => true,
+      recurse => true;
+
+    '/opt/create/private':
       mode    => '0750';
 
     '/etc/cron.d/create':
