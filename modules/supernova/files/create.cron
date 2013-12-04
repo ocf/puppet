@@ -1,5 +1,5 @@
 MAILTO=sm@ocf.berkeley.edu
 PATH=/usr/sbin:/usr/bin
 # m h dom mon dow user   command
-  50 16 *   *   *   create /opt/ocf/packages/create/create.py --keytab=/opt/create/private/create.keytab
+  0 9 *   *   *   create /opt/ocf/packages/create/create.py --keytab=/opt/create/private/create.keytab
 
