@@ -278,12 +278,14 @@ class death {
       group    => 'approve';
 
     '/export/approve/public_pass.pem':
+      source   => 'puppet:///modules/death/public_pass.pem',
       ensure   => file,
       mode     => '0440',
       owner    => 'account-tools',
       group    => 'approve';
 
     '/export/approve/reserved_names.txt':
+      source   => 'puppet:///modules/death/reserved_names.txt',
       ensure   => file,
       mode     => '0440',
       owner    => 'account-tools',
