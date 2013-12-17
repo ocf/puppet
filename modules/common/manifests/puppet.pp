@@ -12,7 +12,7 @@ class common::puppet {
 
   # enable puppet agent
   file { '/etc/default/puppet':
-    content => 'START=yes',
+    content => "export LANG=en_US.UTF-8\nSTART=yes",
     notify  => Service['puppet'],
   }
 
