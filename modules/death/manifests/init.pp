@@ -12,14 +12,18 @@ class death {
       ensure => purged,
     ;
     # python and django
-    ['python-django', 'python-mysqldb', 'python-flup', 'python-flask', 'python-sqlalchemy']:
+    ['python-django', 'python-mysqldb', 'python-flup', 'python-flask', 'python-sqlalchemy', 'python3']:
     ;
     # perl
     ['libdbi-perl']:
     ;
     # ruby and rails
-    ['rails', 'libfcgi-ruby1.8', 'libmysql-ruby']:
+    ['rails', 'libfcgi-ruby1.8', 'libmysql-ruby', 'ruby-sqlite3']:
     ;
+    # misc dev packages
+    ['libfcgi-dev', 'sqlite3', 'libsqlite3-dev', 'libtidy-dev']:
+    ;
+    # nfs
     ['nfs-kernel-server']:
     ;
     # for staff_hours.cgi (perl)
