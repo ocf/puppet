@@ -82,15 +82,6 @@ fi
 # Start OCF notification script
 /opt/share/puppet/notify.sh &
 
-# In case lxpanel crashes
-echo 'pkill -KILL lxpanel; find "$HOME/.cache/menus" -type f -exec rm -f {} \;; lxpanel -p LXDE &' > $HOME/.fix-panel.sh
-chmod +x "$HOME/.fix-panel.sh"
-echo "[Desktop Entry]
-Type=Application
-Name=Fix bottom panel
-Exec=$HOME/.fix-panel.sh
-Icon=geany" > $HOME/Desktop/lxpanel.desktop
-
 # Fix multiple monitors if available
 [ "`xrandr | grep ' connected' | wc -l`" = "2" ] && \
    xrandr --output HDMI1 --mode 1920x1200 --pos 1920x0 --rotate normal --output DP1 --off --output VGA1 --mode 1920x1200 --pos 0x0 --rotate normal
