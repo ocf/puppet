@@ -57,7 +57,7 @@ class common::packages( $extra = false, $login = false ) {
       # signat.pl dependency
       'libwww-mechanize-perl':;
       # php
-      'php5-cli':;
+      ['php5-cli', 'php5-mysql', 'php5-gd', 'php5-curl', 'php5-mcrypt']:;
       # python
       ['ipython', 'python-dev', 'python-django', 'python-flask', 'python-ldap', 'python-lxml', 'python-virtualenv', 'python-yaml']:;
       # ruby
