@@ -36,7 +36,7 @@ class lightning {
     ;
     # mail errors and warnings about puppet runs
     '/etc/puppet/tagmail.conf':
-      content => 'warning, err, alert, emerg, crit: wheel',
+      content => 'warning, err, alert, emerg, crit: root',
     ;
   }
 
