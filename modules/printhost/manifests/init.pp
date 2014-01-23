@@ -104,6 +104,10 @@ class printhost {
       mode    => '0755',
       source  => 'puppet:///modules/printhost/reset_daily_quota.sh',
     ;
+    '/etc/pykota/make_pubstaff.sh':
+      mode    => '0755',
+      source  => 'puppet:///modules/printhost/make_pubstaff.sh',
+    ;
     # private configuration
     '/etc/pykota/pykota.semester/pykotadmin.conf':
       owner   => 'lp',

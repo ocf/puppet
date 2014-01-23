@@ -10,3 +10,6 @@ $pkprinters -a -c 1 logjam-double > /dev/null
 $pkprinters -a -c 1 logjam-single > /dev/null
 $pkprinters -a -c 1 deforestation-single > /dev/null
 $pkprinters -a -c 1 deforestation-double > /dev/null
+
+# recreate pubstaff user
+/etc/pykota/make_pubstaff.sh
