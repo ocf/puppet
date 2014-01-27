@@ -4,7 +4,7 @@ class death {
       before => Package['libapache2-mod-php5'],
     ;
     # php
-    ['php5', 'php5-mysql', 'libapache2-mod-suphp', 'php5-gd', 'php5-curl', 'php5-mcrypt']:
+    ['php5', 'php5-mysql', 'php5-sqlite', 'libapache2-mod-suphp', 'php5-gd', 'php5-curl', 'php5-mcrypt']:
       before => Package['libapache2-mod-php5'],
     ;
     # mod-php interferes with suphp and fcgid but is pulled in as recommended dependency
