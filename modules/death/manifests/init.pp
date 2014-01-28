@@ -21,7 +21,7 @@ class death {
     ['rails', 'libfcgi-ruby1.8', 'libmysql-ruby', 'ruby-sqlite3']:
     ;
     # misc dev packages
-    ['libfcgi-dev', 'sqlite3', 'libsqlite3-dev', 'libtidy-dev']:
+    ['libfcgi-dev', 'sqlite3', 'libsqlite3-dev', 'libtidy-dev', 'nodejs']:
     ;
     # nfs
     ['nfs-kernel-server']:
