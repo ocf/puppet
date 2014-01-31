@@ -6,7 +6,7 @@ notify_send="/usr/bin/notify-send --expire-time=30000 --icon=/opt/share/xsession
 
 # display staff in lab
 lab_staff="`$pssh who | grep -F \(\: | cut -d' ' -f1 | grep -vFx $USER |
-           xargs --no-run-if-empty groups | grep -Fw ocfstaff | cut -d' ' -f1 | sort -u |
+           xargs --no-run-if-empty groups | grep -Fw approve | cut -d' ' -f1 | sort -u |
            xargs --no-run-if-empty finger -ms | grep -v ^Login | awk '{print $2}' | sort -u | tr '\n' ',' | sed -e 's/,$//g' -e 's/,/, /g'`"
 
 if [ -n "$lab_staff" ]; then
