@@ -103,6 +103,17 @@ class desktop::xsession {
       source  => 'puppet:///modules/desktop/xsession/lxde/lxde-logout'
   }
 
+  # xfce configuration
+  file {
+    # enable kiosk mode (disables shutdown, etc.)
+    '/etc/xdg/xfce4/kiosk':
+      ensure => 'directory',
+      source => 'puppet:///modules/desktop/xsession/xfce4/kiosk/',
+      recurse => true,
+      owner => 'root',
+      group => 'root';
+  }
+
   # disable user switching and screen locking (prevent normal users
   # from executing the necessary binaries)
   file {

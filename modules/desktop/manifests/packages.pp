@@ -11,7 +11,7 @@ class desktop::packages {
     # applications
     [ 'evince-gtk', 'claws-mail', 'geany', 'gftp-gtk', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap' ]:;
     # desktop
-    [ 'desktop-base', 'desktop-file-utils', 'gpicview', 'lxappearance', 'lxde-core', 'lxde-icon-theme', 'lxtask', 'lxterminal', 'xarchiver', 'xterm', 'lightdm' ]:;
+    [ 'desktop-base', 'desktop-file-utils', 'gpicview', 'lxappearance', 'lxde-core', 'lxde-icon-theme', 'lxtask', 'lxterminal', 'xarchiver', 'xterm', 'lightdm', 'xfce4', 'xfce4-goodies' ]:;
     # fonts
     [ 'cm-super', 'ttf-inconsolata', 'ttf-liberation', 'ttf-linux-libertine' ]:;
     # games
