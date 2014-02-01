@@ -14,7 +14,7 @@ class desktop::sshfs {
     require => Package['sshfs']
   }
   file {
-    '/usr/bin/fusermount':
+    '/bin/fusermount':
       mode    => '4754',
       group   => fuse,
       require => [ Package['sshfs'], Exec['fuse'] ];
@@ -23,7 +23,7 @@ class desktop::sshfs {
       require => [ Package['sshfs'], Exec['fuse'] ]
   }
   service { 'fuse':
-      subscribe => [ Exec['fuse'], File[ '/usr/bin/fusermount', '/etc/fuse.conf' ] ],
+      subscribe => [ Exec['fuse'], File[ '/bin/fusermount', '/etc/fuse.conf' ] ],
       require   => [ Package['sshfs'],  ]
   }
 
