@@ -40,6 +40,8 @@ class desktop::xsession {
   file {
     '/etc/lightdm/lightdm.conf':
       source  => 'puppet:///modules/desktop/xsession/lightdm/lightdm.conf';
+    '/etc/lightdm/lightdm-gtk-greeter.conf':
+        source  => 'puppet:///modules/desktop/xsession/lightdm/lightdm-gtk-greeter.conf';
     '/etc/X11/default-display-manager':
       source  => 'puppet:///modules/desktop/xsession/default-display-manager';
     # kill child processes on logout

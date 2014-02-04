@@ -8,7 +8,7 @@
         <property name="color1" type="empty"/>
         <property name="color2" type="empty"/>
         <property name="color-style" type="empty"/>
-        <property name="image-path" type="string" value="/usr/share/xfce4/backdrops/xfce4gradientcurve.png"/>
+		<property name="image-path" type="string" value="/opt/share/xsession/background"/>
         <property name="image-show" type="empty"/>
         <property name="last-image" type="string" value="/usr/share/xfce4/backdrops/xfce4gradientcurve.png"/>
         <property name="last-single-image" type="string" value="/usr/share/xfce4/backdrops/xfce4gradientcurve.png"/>
