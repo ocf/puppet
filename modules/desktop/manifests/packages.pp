@@ -9,7 +9,7 @@ class desktop::packages {
   # install a lot of other packages
   package {
     # applications
-    [ 'evince-gtk', 'claws-mail', 'geany', 'gftp-gtk', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap' ]:;
+    [ 'evince-gtk', 'claws-mail', 'geany', 'gftp-gtk', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp' ]:;
     # desktop
     [ 'desktop-base', 'desktop-file-utils', 'gpicview', 'lxappearance', 'lxde-core', 'lxde-icon-theme', 'lxtask', 'lxterminal', 'xarchiver', 'xterm', 'lightdm', 'xfce4', 'xfce4-goodies' ]:;
     # fonts
@@ -34,9 +34,6 @@ class desktop::packages {
   package {
     # causes gid conflicts
     'sane-utils':
-      ensure  => purged;
-    # should not be default PDF reader
-    'gimp':
       ensure  => purged;
     # no longer used
     [ 'rusers', 'rusersd' ]:
