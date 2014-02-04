@@ -18,6 +18,7 @@ node default {
   include common::memtest
   include common::smart
   include common::zabbix
+  include common::zsh
   if $::macAddress {
       include networking
   } else {
