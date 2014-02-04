@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Adobe Flash Player
+Comment=Preferences for Adobe Flash Player
+Exec=flash-player-properties
+Icon=flash-player-properties
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Settings;GNOME;GTK;X-GNOME-PersonalSettings;
+NotShowIn=KDE;
+X-XFCE-Source=file:///usr/share/applications/flash-player-properties.desktop

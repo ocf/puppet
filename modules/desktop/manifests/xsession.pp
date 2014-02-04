@@ -112,6 +112,23 @@ class desktop::xsession {
       recurse => true,
       owner => 'root',
       group => 'root';
+    # default config
+    '/etc/xdg/xfce4/xfconf':
+      ensure => 'directory',
+      source => 'puppet:///modules/desktop/xsession/xfce4/xfconf/',
+      recurse => true,
+      owner => 'root',
+      group => 'root';
+  }
+
+  file {
+    # copy skel files
+    '/etc/skel/.config':
+      ensure => 'directory',
+      source => 'puppet:///modules/desktop/skel/config/',
+      recurse => true,
+      owner => 'root',
+      group => 'root';
   }
 
   # disable user switching and screen locking (prevent normal users

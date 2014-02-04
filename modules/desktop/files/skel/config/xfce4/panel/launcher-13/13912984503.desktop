@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Icon=libreoffice-impress
+Type=Application
+Categories=Office;
+Exec=libreoffice --impress %U
+MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-flat-xml;application/vnd.oasis.opendocument.presentation-template;application/vnd.sun.xml.impress;application/vnd.sun.xml.impress.template;application/mspowerpoint;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.ms-powerpoint.presentation.macroenabled.12;application/vnd.openxmlformats-officedocument.presentationml.template;application/vnd.ms-powerpoint.template.macroenabled.12;application/vnd.openxmlformats-officedocument.presentationml.slide;application/vnd.openxmlformats-officedocument.presentationml.slideshow;
+Name=LibreOffice Impress
+GenericName=Presentation
+GenericName[en]=Presentation
+Comment=Create and edit presentations for slideshows, meeting and Web pages by using Impress.
+Comment[en]=Create and edit presentations for slideshows, meeting and Web pages by using Impress.
+InitialPreference=5
+X-XFCE-Source=file:///usr/share/applications/libreoffice-impress.desktop
