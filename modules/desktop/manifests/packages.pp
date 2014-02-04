@@ -37,7 +37,10 @@ class desktop::packages {
       ensure  => purged;
     # no longer used
     [ 'rusers', 'rusersd' ]:
-      ensure  => purged
+      ensure  => purged;
+    # xpdf takes over as defauult sometimes
+    'xpdf':
+      ensure  => purged;
   }
 
   # install packages without recommends
