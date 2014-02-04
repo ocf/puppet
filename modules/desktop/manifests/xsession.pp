@@ -76,6 +76,11 @@ class desktop::xsession {
     source  => 'puppet:///modules/desktop/xsession/polkit'
   }
 
+  # set default applications for files
+  file { '/usr/share/applications/mimeapps.list':
+    source  => 'puppet:///modules/desktop/xsession/mimeapps.list';
+  }
+
   # lxde configuration
     # provide lxde wallpaper configuration
     if $::lsbdistcodename == 'wheezy' {
