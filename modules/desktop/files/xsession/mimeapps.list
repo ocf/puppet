@@ -1,2 +1,25 @@
 [Added Associations]
 application/pdf=evince.desktop
+image/pdf=evince.desktop
+
+image/gif=gpicview.desktop
+image/png=gpicview.desktop
+image/jpeg=gpicview.desktop
+image/jpeg2000=gpicview.desktop
+image/jpg=gpicview.desktop
+
+text/css=gedit.desktop
+text/html=gedit.desktop
+text/plain=gedit.desktop
+text/x-c++hdr=gedit.desktop
+text/x-c++src=gedit.desktop
+text/x-chdr=gedit.desktop
+text/x-csrc=gedit.desktop
+text/x-diff=gedit.desktop
+text/x-dsrc=gedit.desktop
+text/x-java=gedit.desktop
+text/x-pascal=gedit.desktop
+text/x-perl=gedit.desktop
+text/x-python=gedit.desktop
+text/x-sql=gedit.desktop
+text/xml=gedit.desktop
