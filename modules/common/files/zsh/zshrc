@@ -66,3 +66,6 @@ else # if root
 fi
 
 PROMPT="%{$fg_bold[$PROMPT_COLOR]%}%n@%m%{$reset_color%}:%{$fg_bold[blue]%}%~%{$reset_color%}$PROMPT_SYMBOL "
+
+alias ls="ls --color"
+alias grep="grep --color"
