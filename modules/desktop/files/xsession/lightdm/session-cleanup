@@ -10,3 +10,5 @@ sleep 1
 
 # Send all remaining child processes SIGKILL
 pkill -9 -u $USER
+
+sudo -u ocfstats "/opt/stats/update-delay.sh" &

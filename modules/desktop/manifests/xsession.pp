@@ -44,6 +44,9 @@ class desktop::xsession {
         source  => 'puppet:///modules/desktop/xsession/lightdm/lightdm-gtk-greeter.conf';
     '/etc/X11/default-display-manager':
       source  => 'puppet:///modules/desktop/xsession/default-display-manager';
+    '/etc/lightdm/session-setup':
+      mode    => '0755',
+      source  => 'puppet:///modules/desktop/xsession/lightdm/session-setup';
     # kill child processes on logout
     '/etc/lightdm/session-cleanup':
       mode    => '0755',

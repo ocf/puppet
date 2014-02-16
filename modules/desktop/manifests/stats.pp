@@ -27,6 +27,11 @@ class desktop::stats {
       owner  => ocfstats,
       source => 'puppet:///modules/desktop/stats/update.sh';
 
+    '/opt/stats/update-delay.sh':
+      mode   => '500',
+      owner  => ocfstats,
+      source => 'puppet:///modules/desktop/stats/update-delay.sh';
+
     # CA certificate (used to verify server)
     '/opt/stats/ca.crt':
       mode   => '444',

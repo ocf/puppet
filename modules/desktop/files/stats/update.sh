@@ -3,7 +3,7 @@
 # (and so we can't see them in output of w/who)
 # https://bugs.launchpad.net/ubuntu/+source/lightdm/+bug/870297
 CUR_USER=$(ps aux | grep "/bin/sh /opt/share/puppet/notify.sh" | \
-	grep -v grep | cut -d' ' -f1)
+	grep -v grep | cut -d' ' -f1 | head -n1)
 
 DATA="state=inactive"
 

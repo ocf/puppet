@@ -1,0 +1,2 @@
+#!/bin/sh
+sudo -u ocfstats "/opt/stats/update-delay.sh" &
