@@ -83,6 +83,7 @@ node default {
     include desktop::modprobe
     include desktop::numlockx
     include desktop::packages
+    include desktop::pam
     include desktop::pulse
     include desktop::seti
     include desktop::sshfs

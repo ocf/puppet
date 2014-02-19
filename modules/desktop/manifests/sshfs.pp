@@ -45,14 +45,4 @@ class desktop::sshfs {
     unless  => 'grep "^@include ocf-pammount$" /etc/pam.d/lightdm',
     require => File[ '/etc/skel/remote', '/etc/pam.d/ocf-pammount' ]
   }
-
-  # "temporary" fix which seems to prevent lightdm from hanging when users
-  # attempt to log in with bad passwords
-  # (disables pam delay after failed auth attempts)
-  file {
-    '/etc/pam.d/common-auth':
-      source => 'puppet:///modules/desktop/pam/common-auth';
-    '/etc/pam.d/login':
-      source => 'puppet:///modules/desktop/pam/login';
-  }
 }
