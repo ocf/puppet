@@ -6,7 +6,7 @@
 <debug enable="0" />
 
 <!-- Volume definitions -->
-<volume fstype="fuse" path="sshfs#%(USER)@tsunami:" mountpoint="~/remote/" options="follow_symlinks" pgrp="ocf" />
+<volume fstype="fuse" path="sshfs#%(USER)@tsunami:" mountpoint="~/remote/" options="follow_symlinks" pgrp="20" />
 
 <!-- pam_mount parameters: General tunables -->
 <fusemount>mount.fuse %(VOLUME) %(MNTPT) -o %(OPTIONS)</fusemount>
