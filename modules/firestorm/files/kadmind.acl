@@ -6,6 +6,7 @@ sanjayk/admin@OCF.BERKELEY.EDU          all
 tzhu/admin@OCF.BERKELEY.EDU             all
 waf/admin@OCF.BERKELEY.EDU              all
 ckuehl/admin@OCF.BERKELEY.EDU           all
+nickimp/admin@OCF.BERKELEY.EDU          all
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
@@ -15,6 +16,7 @@ sanjayk/root@OCF.BERKELEY.EDU           change-password                         
 tzhu/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
 waf/root@OCF.BERKELEY.EDU               change-password                         *@OCF.BERKELEY.EDU
 ckuehl/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
+nickimp/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 
 # chpass
 chpass/death.ocf.berkeley.edu@OCF.BERKELEY.EDU change-password                  *@OCF.BERKELEY.EDU
