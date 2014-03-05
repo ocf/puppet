@@ -1,7 +1,7 @@
 class dementors {
   package {
-    ['python3', 'apache2-mpm-prefork', 'libapache2-mod-php5', 'php5-mcrypt',
-    'mysql-server', 'pssh']:;
+    ['python3', 'apache2', 'apache2-mpm-prefork', 'libapache2-mod-php5',
+     'php5-mcrypt', 'mysql-server', 'pssh']:;
   }
 
   user {
@@ -89,5 +89,40 @@ class dementors {
       ensure => link,
       links => manage,
       target => '/etc/ssl/stats/ca/certs/stats.ocf.berkeley.edu/stats.ocf.berkeley.edu.key';
+  }
+
+  # apache
+  file {
+    '/etc/apache2/ports.conf':
+      owner => root,
+      group => root,
+      mode => 644,
+      require => Package['apache2'],
+      notify => Exec["apache-reload"],
+      source => 'puppet:///modules/dementors/apache/ports.conf';
+    '/etc/apache2/sites-available/stats.ocf.berkeley.edu':
+      owner => root,
+      group => root,
+      mode => 644,
+      require => Package['apache2'],
+      notify => Exec["apache-reload"],
+      source => 'puppet:///modules/dementors/apache/stats.ocf.berkeley.edu';
+  }
+
+  exec {
+    "apache-reload":
+      command => "/usr/sbin/service apache2 reload",
+      refreshonly => true;
+    "/usr/sbin/a2dissite default":
+      onlyif => "/bin/readlink -e /etc/apache2/sites-enabled/default",
+      notify => Exec["apache-reload"],
+      require => Package["apache2"];
+    "/usr/sbin/a2ensite stats.ocf.berkeley.edu":
+      unless => "/bin/readlink -e /etc/apache2/sites-enabled/stats.ocf.berkeley.edu",
+      notify => Exec["apache-reload"],
+      require => [
+        Package["apache2"],
+        File["/etc/apache2/sites-available/stats.ocf.berkeley.edu"]
+      ];
   }
 }
