@@ -81,5 +81,13 @@ class dementors {
       owner => root,
       group => root,
       mode => 755;
+    '/etc/ssl/private/stats.crt':
+      ensure => link,
+      links => manage,
+      target => '/etc/ssl/stats/ca/certs/stats.ocf.berkeley.edu/stats.ocf.berkeley.edu.crt';
+    '/etc/ssl/private/stats.key':
+      ensure => link,
+      links => manage,
+      target => '/etc/ssl/stats/ca/certs/stats.ocf.berkeley.edu/stats.ocf.berkeley.edu.key';
   }
 }
