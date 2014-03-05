@@ -39,5 +39,32 @@ class dementors {
       group => ocfstaff,
       mode => 444,
       source => 'puppet:///modules/dementors/stats/id_rsa.pub';
+
+    # certificate authority
+    '/etc/ssl/stats':
+      ensure => directory,
+      owner => root,
+      group => root,
+      mode => 755;
+    '/etc/ssl/stats/ca':
+      ensure => directory,
+      owner => root,
+      group => root,
+      mode => 755;
+    '/etc/ssl/stats/ca/certs':
+      ensure => directory,
+      owner => root,
+      group => root,
+      mode => 755;
+    '/etc/ssl/stats/ca/crl':
+      ensure => directory,
+      owner => root,
+      group => root,
+      mode => 755;
+    '/etc/ssl/stats/ca/openssl.cnf':
+      source => 'puppet:///modules/dementors/ca/openssl.cnf',
+      owner => root,
+      group => root,
+      mode => 644;
   }
 }
