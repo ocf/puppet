@@ -39,7 +39,20 @@ class dementors {
       group => ocfstaff,
       mode => 444,
       source => 'puppet:///modules/dementors/stats/id_rsa.pub';
+  }
+  
+  cron { "labstats":
+    ensure => present,
+    command => "/opt/stats/lab-cron.sh > /dev/null",
+    user => "ocfstats",
+    weekday => "*",
+    month => "*",
+    monthday => "*",
+    hour => "*",
+    minute => "*";
+  }
 
+  file {
     # certificate authority
     '/etc/ssl/stats':
       ensure => directory,
