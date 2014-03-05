@@ -66,5 +66,20 @@ class dementors {
       owner => root,
       group => root,
       mode => 644;
+    '/etc/ssl/stats/ca/ca.key':
+      owner => root,
+      group => root,
+      mode => 400,
+      source => 'puppet:///private/stats/ca.key';
+    '/etc/ssl/stats/ca/ca.crt':
+      owner => root,
+      group => root,
+      mode => 444,
+      source => 'puppet:///private/stats/ca.crt';
+    '/etc/ssl/stats/ca/create-cert.sh':
+      source => 'puppet:///modules/dementors/ca/create-cert.sh',
+      owner => root,
+      group => root,
+      mode => 755;
   }
 }
