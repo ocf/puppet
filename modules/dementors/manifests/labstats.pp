@@ -1,6 +1,6 @@
 class dementors::labstats {
   package {
-    ['python3', 'mysql-server', 'pssh']:;
+    ['mysql-server', 'pssh']:;
   }
 
   user {

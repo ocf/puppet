@@ -12,7 +12,7 @@ class death {
       ensure => purged,
     ;
     # python and django
-    ['python-django', 'python-mysqldb', 'python-flup', 'python-flask', 'python-sqlalchemy', 'python3']:
+    ['python-django', 'python-mysqldb', 'python-flup', 'python-flask', 'python-sqlalchemy']:
     ;
     # perl
     ['libdbi-perl']:

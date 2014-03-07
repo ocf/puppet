@@ -19,7 +19,7 @@ class desktop::packages {
     # useful tools
     [ 'lyx', 'texmaker', 'gitk', 'curl' ]:;
     # programming environments
-    [ 'python3', 'python3-tk' ]:;
+    [ 'python3-tk' ]:;
     # nonfree packages
     [ 'firmware-linux', 'flashplugin-nonfree', 'ttf-mscorefonts-installer' ]:;
     # notifications

@@ -14,6 +14,8 @@ class common::packages( $extra = false, $login = false ) {
     [ 'beep', 'bsdmainutils', 'cpufrequtils', 'finger', 'netcat-openbsd', 'pigz', 'pv', 'pwgen', 'quota', 'rsync', 'tofrodos', 'tree', 'unzip', 'apt-listchanges' ]:;
     # account approval and chpass/passwd dependencies
     ['python-cracklib', 'python-dnspython']:;
+    # common scripting languages
+    ['python3', 'python3-pip']:;
     # console managers
     [ 'dtach', 'screen', 'tmux' ]:;
     # shells
@@ -63,7 +65,7 @@ class common::packages( $extra = false, $login = false ) {
       # ruby
       ['rails', 'rails3', 'ruby-dev', 'ruby-sqlite3']:;
       # scripting/programming/development packages
-      ['bison', 'flex', 'ipython3', 'libncurses5-dev', 'python3', 'python3-tk', 'chicken-bin', 'libfcgi-dev', 'sqlite3', 'libsqlite3-dev', 'libtidy-dev', 'nodejs', 'openjdk-7-jdk']:;
+      ['bison', 'flex', 'ipython3', 'libncurses5-dev', 'python3-tk', 'chicken-bin', 'libfcgi-dev', 'sqlite3', 'libsqlite3-dev', 'libtidy-dev', 'nodejs', 'openjdk-7-jdk']:;
     }
   }
 
