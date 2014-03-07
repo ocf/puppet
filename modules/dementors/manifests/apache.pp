@@ -23,8 +23,8 @@ class dementors::apache {
     "apache-reload":
       command => "/usr/sbin/service apache2 reload",
       refreshonly => true;
-    "/usr/sbin/a2dissite default":
-      onlyif => "/bin/readlink -e /etc/apache2/sites-enabled/default",
+    "/usr/sbin/a2dissite 000-default":
+      onlyif => "/bin/readlink -e /etc/apache2/sites-enabled/000-default",
       notify => Exec["apache-reload"],
       require => Package["apache2"];
     "/usr/sbin/a2ensite stats.ocf.berkeley.edu":
