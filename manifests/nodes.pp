@@ -63,6 +63,7 @@ node default {
       supernova: { class { 'common::auth': glogin => [ 'approve' ] } }
       riot:      { class { 'common::auth': ulogin => [ ['kiosk', 'LOCAL'] ] } }
       tsunami:   { class { 'common::auth': glogin => [ 'ocf', 'sorry' ] } }
+      test1, test2, test3: { class { 'test::auth': ulogin => [ 'ocfstaff' ], gsudo => [ 'ocfstaff' ] } }
       default:   { class { 'common::auth': ulogin => [[]], glogin => [], usudo => [], gsudo => [] } }
     }
     include common::ssh
