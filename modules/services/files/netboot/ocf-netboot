@@ -1,9 +1,13 @@
-#!/bin/sh
+#!/bin/bash
+# Downloads Debian netboot image and prepares for PXE booting and
+# automated installations (via preseed file)
+# 
+# Optionally adds Debian nonfree firmware to initrd
 
 set -e
 
 arch='amd64'
-dist='squeeze'
+dist='wheezy'
 
 netboot="http://mirrors.kernel.org/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
 fw="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$dist/current/firmware.tar.gz"
@@ -11,33 +15,56 @@ fw="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$dist/current
 tftpdir='/opt/tftp'
 fwdir='/tmp/di_firmware'
 
+# remove old pxe files
 rm -rf $tftpdir
 mkdir $tftpdir && chmod 755 $tftpdir
 
+# download and extract netboot image
+echo "Downloading netboot.tar.gz..."
+
 cd $tftpdir
-wget -q "$netboot"
+wget "$netboot"
 tar -zxf netboot.tar.gz
 
 if [ -n "$fw" ]; then
+  # add non-free firmware to initrd
+  echo "Downloading non-free firmware..."
   rm -rf $fwdir
   mkdir  -p $fwdir/firmware
   cd $fwdir
-  wget -q "$fw"
+  wget "$fw"
   cd $fwdir/firmware
   tar -zxf ../firmware.tar.gz
   cd $fwdir
+
+  echo "Adding non-free firmware to initrd..."
   pax -x sv4cpio -s'%firmware%/firmware%' -w firmware | gzip -c > firmware.cpio.gz
 
   cd $tftpdir/debian-installer/$arch
   [ -f initrd.gz.orig ] || cp -p initrd.gz initrd.gz.orig
   cat initrd.gz.orig $fwdir/firmware.cpio.gz > initrd.gz
-  #sed -i "s#debian-installer/$arch/linux#debian-installer/$arch/linux auto url=mirror.int.ocf.berkeley.edu/preseednf.cfg#g" boot-screens/txt.cfg
-else
-  cd $tftpdir/debian-installer/$arch
-  #sed -i "s#debian-installer/$arch/linux#debian-installer/$arch/linux auto url=mirror.int.ocf.berkeley.edu/preseed.cfg#g" boot-screens/txt.cfg
 fi
 
+echo "Adding OCF preseed file into installer menu..."
+cd $tftpdir/debian-installer/$arch
+
+# unset "Install" as default
+sed -i '/menu default/d' boot-screens/txt.cfg
+
+# add OCF install option
+echo "label ocf
+	menu label OCF Automated Install
+	menu default
+	kernel debian-installer/amd64/linux
+	append auto=true priority=critical locale=en_US keymap=us vga=788 initrd=debian-installer/amd64/initrd.gz -- quiet" >> boot-screens/txt.cfg
+
+# auto-select OCF option after 10 seconds
+sed -i 's/timeout 0/timeout 100/' pxelinux.cfg/default
+
+# clean up
 rm $tftpdir/netboot.tar.gz
 rm -rf $fwdir
 
-service tftpd-hpa restart > /dev/null
+service tftpd-hpa restart
+
+echo "PXE image is ready."
