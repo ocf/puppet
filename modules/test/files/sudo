@@ -1,9 +1,0 @@
-# DON'T use /root principal to sudo
-auth required pam_krb5.so minimum_uid=1000
-account required pam_permit.so 
-
-# sensible defaults including logging
-@include common-session-noninteractive
-
-# reset user limits
-session required pam_limits.so
