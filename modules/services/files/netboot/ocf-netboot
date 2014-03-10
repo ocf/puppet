@@ -23,7 +23,7 @@ mkdir $tftpdir && chmod 755 $tftpdir
 echo "Downloading netboot.tar.gz..."
 
 cd $tftpdir
-wget "$netboot"
+wget -q "$netboot"
 tar -zxf netboot.tar.gz
 
 if [ -n "$fw" ]; then
@@ -32,7 +32,7 @@ if [ -n "$fw" ]; then
   rm -rf $fwdir
   mkdir  -p $fwdir/firmware
   cd $fwdir
-  wget "$fw"
+  wget -q "$fw"
   cd $fwdir/firmware
   tar -zxf ../firmware.tar.gz
   cd $fwdir
