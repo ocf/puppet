@@ -1,0 +1,153 @@
+#!/usr/bin/env python2.7
+# Creates and configures a new vm
+# python2.7 because stable version of paramiko isn't yet compatible with python3
+from __future__ import print_function
+import sys, os.path, subprocess, colorama, time, paramiko, socket
+from colorama import Fore, Style # pretty colors
+
+VM_MEMORY = 4096
+VM_DISK_SIZE = 15
+VM_OS_TYPE = "linux"
+VM_OS_VARIANT = "debianwheezy"
+VM_NETWORK = "bridge=br0"
+
+PRESEED_USERNAME = "root"
+PRESEED_PASSWORD = "r00tme"
+
+DHCP_IP = "169.229.172.113" # IP the server will have from DHCP
+
+devnull = open(os.devnull, "w")
+
+def exec_cmd(cmd):
+	"""Executes the given shell command with some pretty colors. Script
+	exits if the command exits with a non-zero status code."""
+
+	print("{}$ {}{}".format(Fore.GREEN, cmd, Fore.RED))
+	subprocess.check_call(cmd, shell=True, stdout=sys.stdout)
+	print(Style.RESET_ALL, end="")
+
+def create_disk(name):
+	"""Creates a logical volume."""
+	
+	if os.path.exists("/dev/vg/" + name):
+		print("Can't create new lv, /dev/vg/{0} already exists.".format(name))
+		sys.exit(2)
+	
+	cmd = "lvcreate -L {}GB --name {} vg".format(VM_DISK_SIZE, name)
+	exec_cmd(cmd)
+
+def create_vm(name):
+	"""Creates a new VM."""
+
+	# try to print info about the domain to see if it already exists
+	# we expect this command to fail
+	try:
+		subprocess.check_call("virsh dominfo {}".format(name), shell=True, stderr=devnull)
+		print("Can't create new vm, domain {} already exists.".format(name))
+		sys.exit(2)
+	except subprocess.CalledProcessError:
+		pass # all good
+	
+	cmd = "virt-install -r {} --pxe --os-type={} --os-variant={} " + \
+		"--disk {},cache=none --network {} --graphics vnc --serial pty --name {}"
+	cmd = cmd.format(VM_MEMORY, VM_OS_TYPE, VM_OS_VARIANT, 
+			"/dev/vg/" + name, VM_NETWORK, name)
+
+	exec_cmd(cmd)
+
+def wait_for_shutdown(name):
+	output = name
+
+	while name in output:
+		output = subprocess.check_output("virsh list", shell=True).decode("utf-8")
+		time.sleep(1)
+
+def start_vm(name):
+	exec_cmd("virsh start {}".format(name))
+
+def get_ssh_connection():
+	client = paramiko.SSHClient()
+	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+	# wait for the VM to be live
+	while True:
+		try:
+			client.connect(DHCP_IP, username=PRESEED_USERNAME, password=PRESEED_PASSWORD, timeout=2)
+
+			print()
+			return client
+		except (socket.timeout, socket.error):
+			print(".", end="")
+			sys.stdout.flush()
+			time.sleep(1)
+
+def configure_network(ssh, ip):
+	lines = [
+		"auto lo",
+		"iface lo inet loopback",
+		"",
+		"auto eth0",
+		"iface eth0 inet static",
+		"\taddress {}".format(ip),
+		"\tnetmask 255.255.255.192",
+		"\tgateway 169.229.172.65"
+	]
+
+	ssh.exec_command("echo -n \"\" > /etc/network/interfaces")
+
+	for line in lines:
+		ssh.exec_command("echo \"{}\" >> /etc/network/interfaces".format(line))
+
+if __name__ == "__main__":
+	if len(sys.argv) != 3:
+		print("usage: {} hostname ip".format(sys.argv[0]))
+		print()
+		print("\thostname: short hostname (not FQDN) of the new VM (ex: raptors)")
+		print("\tip: full IP address of the new VM (ex: 169.229.172.93)")
+		sys.exit(1)
+	
+	if os.geteuid() != 0:
+		print("You are not root.")
+		sys.exit(1)
+
+	host, ip = sys.argv[1:]
+
+	print("Creating new VM with the following details:")
+	print("\tHostname: {}".format(host))
+	print("\tIP Address: {}".format(ip))
+	print("\tOS Type: {}".format(VM_OS_TYPE))
+	print("\tOS Variant: {}".format(VM_OS_VARIANT))
+	print("\tDisk Space: {} GB".format(VM_DISK_SIZE))
+	print("\tMemory: {} MB".format(VM_MEMORY))
+	print("\tNetwork: {}".format(VM_NETWORK))
+
+	if raw_input("Continue? [yN] ") != "y":
+		print("Cancelled.")
+		sys.exit(2)
+	
+	create_disk(host)
+	create_vm(host)
+	
+	print("VM created, waiting for it to finish installing and shut down...")
+	wait_for_shutdown(host)
+
+	print("Installation successful, starting VM...")
+	start_vm(host)
+
+	print("Connecting to VM via SSH...")
+	client = get_ssh_connection()
+
+	print("Setting hostname to {}...".format(host))
+	client.exec_command("echo {} > /etc/hostname".format(host))
+	client.exec_command("hostname -F /etc/hostname")
+
+	print("Configuring static IP {}...".format(ip))
+	configure_network(client, ip)
+
+	print("Turning on puppet...")
+	client.exec_command("sed -i 's/START=no/START=yes/' /etc/default/puppet")
+	
+	print("Restarting VM...")
+	client.exec_command("shutdown -r now")
+
+	print("{} is now minimally configured. You should now sign the puppet cert.".format(host))
