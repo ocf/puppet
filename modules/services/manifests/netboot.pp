@@ -21,10 +21,11 @@ class services::netboot {
       mode    => '0755',
       source  => 'puppet:///modules/services/netboot/ocf-netboot',
       require => Package['pax'];
-    '/etc/cron.weekly/ocf-netboot':
-      ensure  => symlink,
-      links   => manage,
-      target  => '/usr/local/sbin/ocf-netboot'
   }
 
+  cron { "ocf-netboot":
+    command => "/usr/local/sbin/ocf-netboot > /dev/null",
+    user    => root,
+    special => "weekly";
+  }
 }
