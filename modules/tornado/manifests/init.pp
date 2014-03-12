@@ -11,6 +11,11 @@ class tornado {
       groups  => ['sys', 'pulse-access'],
       require => Package['pulseaudio'],
   }
+  
+  exec { "rotate-display":
+    command => "echo display_rotate=3 >> /boot/config.txt",
+    unless  => "grep display_rotate /boot/config.txt";
+  }
 
   file {
       '/etc/default/pulseaudio':
