@@ -1,13 +1,9 @@
 <% if @operatingsystem == 'Debian' -%>
 <% if @architecture == 'amd64' or @architecture == 'i386' -%>
-deb http://mirrors.kernel.org/debian/ <%= @lsbdistcodename %> main<% if @nonfree %> contrib non-free<% end %>
-deb http://mirrors.kernel.org/debian/ <%= @lsbdistcodename %>-updates main<% if @nonfree %> contrib non-free<% end %>
+deb http://mirrors/debian/ <%= @lsbdistcodename %> main<% if @nonfree %> contrib non-free<% end %>
+deb http://mirrors/debian/ <%= @lsbdistcodename %>-updates main<% if @nonfree %> contrib non-free<% end %>
 deb http://security.debian.org/ <%= @lsbdistcodename %>/updates main<% if @nonfree %> contrib non-free<% end %>
-<% if @lsbdistcodename == 'squeeze' -%>
-deb http://debian.gtisc.gatech.edu/debian-backports/ <%= @lsbdistcodename %>-backports main<% if @nonfree %> contrib non-free<% end %>
-<% elsif @lsbdistcodename == 'wheezy' -%>
-deb http://mirrors.kernel.org/debian/ <%= @lsbdistcodename %>-backports main<% if @nonfree %> contrib non-free<% end %>
-<% end -%>
+deb http://mirrors/debian/ <%= @lsbdistcodename %>-backports main<% if @nonfree %> contrib non-free<% end %>
 <% elsif @architecture == 'armv6l' -%>
 deb http://archive.raspbian.org/raspbian/ <%= @lsbdistcodename %> main rpi
 deb http://archive.raspberrypi.org/debian/ <%= @lsbdistcodename %> main

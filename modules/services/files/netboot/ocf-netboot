@@ -9,7 +9,7 @@ set -e
 arch='amd64'
 dist='wheezy'
 
-netboot="http://mirrors.kernel.org/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
+netboot="http://mirrors/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
 fw="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$dist/current/firmware.tar.gz"
 
 tftpdir='/opt/tftp'
