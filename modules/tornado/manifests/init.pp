@@ -17,6 +17,11 @@ class tornado {
     unless  => "grep display_rotate /boot/config.txt";
   }
 
+  exec { "disable-blanking":
+    command => "sed -i 's/BLANK_TIME=.*/BLANK_TIME=0/' /etc/kbd/config",
+    unless  => "grep BLANK_TIME=0 /etc/kbd/config";
+  }
+
   file {
       '/etc/default/pulseaudio':
           source   => 'puppet:///modules/tornado/pulseaudio',
@@ -45,6 +50,15 @@ class tornado {
       '/etc/cron.d/update-motd':
           source   => 'puppet:///modules/tornado/crontab',
       ;
+      "/opt/kiosk-bin/monitor-power":
+        source     => "puppet:///modules/tornado/monitor-power",
+        mode       => 755;
   }
-
+  
+  cron { "monitor-power":
+    command => "/opt/kiosk-bin/monitor-power > /dev/null",
+    user    => root,
+    hour    => "*",
+    minute  => "*/5";
+  }
 }
