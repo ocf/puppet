@@ -23,10 +23,6 @@ node default {
       include networking
   } else {
     case $::hostname {
-      fallingrocks: {
-        $bridge = true
-        $vlan   = true
-      }
       hal, pandemic, jaws: {
         $bridge = true
         $vlan   = false
