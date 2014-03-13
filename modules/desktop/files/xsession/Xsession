@@ -79,9 +79,6 @@ else
   rm $HOME/Desktop/sftp.desktop
 fi
 
-# Disable caps lock
-setxkbmap -option ctrl:nocaps
-
 # Set a reasonable keyboard repeat rate
 xset r on
 xset r rate 200 30
