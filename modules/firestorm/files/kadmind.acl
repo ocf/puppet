@@ -1,12 +1,12 @@
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #admin principals
-daradib/admin@OCF.BERKELEY.EDU          all
-morshed/admin@OCF.BERKELEY.EDU          all
-sanjayk/admin@OCF.BERKELEY.EDU          all
-tzhu/admin@OCF.BERKELEY.EDU             all
-waf/admin@OCF.BERKELEY.EDU              all
+daradib/admin@OCF.BERKELEY.EDU          all,get-keys
+morshed/admin@OCF.BERKELEY.EDU          all,get-keys
+sanjayk/admin@OCF.BERKELEY.EDU          all,get-keys
+tzhu/admin@OCF.BERKELEY.EDU             all,get-keys
+waf/admin@OCF.BERKELEY.EDU              all,get-keys
 ckuehl/admin@OCF.BERKELEY.EDU           all,get-keys
-nickimp/admin@OCF.BERKELEY.EDU          all
+nickimp/admin@OCF.BERKELEY.EDU          all,get-keys
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
