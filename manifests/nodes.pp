@@ -53,13 +53,18 @@ node default {
       tsunami:   { class { 'common::packages': extra => true, login => true } }
       default:   { class { 'common::packages': } }
     }
-    case $::hostname {
-      locusts:   { class { 'common::auth': ulogin => [ ['NuclearPoweredKimJongIl', 'ALL' ] ] } }
-      printhost: { class { 'common::auth': glogin => [ 'approve' ], gsudo => [ 'ocfstaff' ] } }
-      supernova: { class { 'common::auth': glogin => [ 'approve' ] } }
-      tornado:      { class { 'common::auth': ulogin => [ ['kiosk', 'LOCAL'] ] } }
-      tsunami:   { class { 'common::auth': glogin => [ 'ocf', 'sorry' ] } }
-      default:   { class { 'common::auth': ulogin => [[]], glogin => [], usudo => [], gsudo => [] } }
+
+    if $owner == undef {
+      case $::hostname {
+        locusts:   { class { 'common::auth': ulogin => [ ['NuclearPoweredKimJongIl', 'ALL' ] ] } }
+        printhost: { class { 'common::auth': glogin => [ 'approve' ], gsudo => [ 'ocfstaff' ] } }
+        supernova: { class { 'common::auth': glogin => [ 'approve' ] } }
+        tornado:      { class { 'common::auth': ulogin => [ ['kiosk', 'LOCAL'] ] } }
+        tsunami:   { class { 'common::auth': glogin => [ 'ocf', 'sorry' ] } }
+        default:   { class { 'common::auth': ulogin => [[]], glogin => [], usudo => [], gsudo => [] } }
+      }
+    } else { # grant sudo to owner
+      class { 'common::auth': usudo => [$owner] }
     }
     include common::ssh
   }
