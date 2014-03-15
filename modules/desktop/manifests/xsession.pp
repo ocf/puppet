@@ -136,13 +136,17 @@ class desktop::xsession {
       group => 'root';
   }
 
-  # disable user switching and screen locking (prevent normal users
-  # from executing the necessary binaries)
+  # disable user switching and screen locking (prevent non-staff users from
+  # executing the necessary binaries)
   file {
     '/usr/bin/lxlock':
-      mode => '0744';
+      owner => root,
+      group => approve,
+      mode => '0754';
     '/usr/bin/xscreensaver-command':
-      mode => '0744';
+      owner => root,
+      group => approve,
+      mode => '0754';
   }
 
   # font configuration
