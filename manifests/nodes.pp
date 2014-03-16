@@ -80,6 +80,7 @@ node default {
     include common::cups
     include desktop::defaults
     include desktop::iceweasel
+    include desktop::chrome
     include desktop::lxpanel
     include desktop::modprobe
     include desktop::numlockx

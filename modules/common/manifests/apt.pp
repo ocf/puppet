@@ -43,20 +43,26 @@ class common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
   if $::operatingsystem == 'Debian' and $desktop {
     # provide desktop sources.list
     file { '/etc/apt/sources.list.d/desktop.list':
-      content => "deb http://mozilla.debian.net/ $::lsbdistcodename-backports iceweasel-release",
+      content => "deb http://mozilla.debian.net/ $::lsbdistcodename-backports iceweasel-release\ndeb http://dl.google.com/linux/chrome/deb/ stable main",
       notify  => Exec['aptitude update'],
       before  => File['/etc/cron.daily/ocf-apt'],
     }
-    # trust mozilla.debian.net GPG key
+
+    # trust GPG keys
     exec {
       'debian-mozilla':
         command => 'aptitude update && aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install pkg-mozilla-archive-keyring',
         unless  => 'dpkg -l pkg-mozilla-archive-keyring | grep ^ii',
         notify  => Exec['aptitude update'],
         require => [Package['aptitude'], File['/etc/apt/sources.list','/etc/apt/sources.list.d/desktop.list']],
-        before  => File['/etc/cron.daily/ocf-apt'],
-      ;
+        before  => File['/etc/cron.daily/ocf-apt'];
+
+     'google-gpg':
+        command => "wget -q https://dl-ssl.google.com/linux/linux_signing_key.pub -O- | apt-key add -",
+        unless  => "apt-key list | grep 7FAC5991",
+        notify  => Exec['aptitude update'],
+        require => [Package['aptitude'], File['/etc/apt/sources.list','/etc/apt/sources.list.d/desktop.list']],
+        before  => File['/etc/cron.daily/ocf-apt'];
     }
   }
-
 }

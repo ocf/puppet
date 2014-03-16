@@ -27,12 +27,19 @@ Exec=libreoffice
 Type=Application
 Icon=libreoffice-startcenter" > $HOME/Desktop/office.desktop
 
-# Web Browser
+# Iceweasel
 echo "[Desktop Entry]
-Name=Web Browser
-Exec=x-www-browser
+Name=Firefox
+Exec=iceweasel
 Type=Application
-Icon=/opt/share/xsession/icons/firefox.png" > $HOME/Desktop/x-www-browser.desktop
+Icon=/opt/share/xsession/icons/firefox.png" > $HOME/Desktop/iceweasel.desktop
+
+# Chrome
+echo "[Desktop Entry]
+Name=Chrome
+Exec=google-chrome
+Type=Application
+Icon=/opt/share/xsession/icons/chrome.png" > $HOME/Desktop/chrome.desktop
 
 # Local Computer
 echo "[Desktop Entry]

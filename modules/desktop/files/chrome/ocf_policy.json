@@ -1,0 +1,21 @@
+{
+	"HomepageLocation": "https://secure.ocf.berkeley.edu/",
+	"HomepageIsNewTabPage": false,
+	"ShowHomeButton": true,
+	"RestoreOnStartup": 4,
+	"RestoreOnStartupURLs": ["https://secure.ocf.berkeley.edu/"],
+
+	"ForceEphemeralProfiles": true,
+	"SavingBrowserHistoryDisabled": true,
+	"IncognitoModeAvailability": 1,
+
+	"PasswordManagerEnabled": false,
+	"AutoFillEnabled": false,
+
+	"SigninAllowed": false,
+	"MetricsReportingEnabled": false,
+	"DefaultBrowserSettingEnabled": false,
+
+	"AuthServerWhitelist": "rt.ocf.berkeley.edu",
+	"AuthNegotiateDelegateWhitelist": "rt.ocf.berkeley.edu"
+}
