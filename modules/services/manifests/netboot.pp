@@ -24,8 +24,9 @@ class services::netboot {
   }
 
   cron { "ocf-netboot":
-    command => "/usr/local/sbin/ocf-netboot > /dev/null",
-    user    => root,
-    special => "weekly";
+    command     => "/usr/local/sbin/ocf-netboot > /dev/null",
+    user        => root,
+    environment => 'PATH=/bin:/usr/bin:/usr/sbin',
+    special     => "weekly";
   }
 }
