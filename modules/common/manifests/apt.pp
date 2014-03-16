@@ -43,9 +43,18 @@ class common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
   if $::operatingsystem == 'Debian' and $desktop {
     # provide desktop sources.list
     file { '/etc/apt/sources.list.d/desktop.list':
-      content => "deb http://mozilla.debian.net/ $::lsbdistcodename-backports iceweasel-release\ndeb http://dl.google.com/linux/chrome/deb/ stable main",
+      content => "deb http://mozilla.debian.net/ $::lsbdistcodename-backports iceweasel-release",
       notify  => Exec['aptitude update'],
-      before  => File['/etc/cron.daily/ocf-apt'],
+      before  => File['/etc/cron.daily/ocf-apt'];
+    }
+
+    # create separate sources file for Chrome if it doesn't exist
+    exec {
+      'chrome-apt':
+        command => "echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' > /etc/apt/sources.list.d/google-chrome.list",
+        creates => "/etc/apt/sources.list.d/google-chrome.list",
+        notify  => Exec['aptitude update'],
+        before  => File['/etc/cron.daily/ocf-apt'];
     }
 
     # trust GPG keys
@@ -61,7 +70,7 @@ class common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
         command => "wget -q https://dl-ssl.google.com/linux/linux_signing_key.pub -O- | apt-key add -",
         unless  => "apt-key list | grep 7FAC5991",
         notify  => Exec['aptitude update'],
-        require => [Package['aptitude'], File['/etc/apt/sources.list','/etc/apt/sources.list.d/desktop.list']],
+        require => [Package['aptitude'], File['/etc/apt/sources.list'], Exec['chrome-apt']],
         before  => File['/etc/cron.daily/ocf-apt'];
     }
   }
