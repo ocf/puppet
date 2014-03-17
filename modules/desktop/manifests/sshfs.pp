@@ -5,7 +5,7 @@ class desktop::sshfs {
   require desktop::xsession
 
   # install sshfs and libpam-mount
-  package { [ 'libpam-mount', 'sshfs' ]: }
+  package { [ 'libpam-mount', 'sshfs', 'fuse-utils' ]: }
 
   # change fuse group to match ocf group gid
   exec { 'fuse':
@@ -20,11 +20,7 @@ class desktop::sshfs {
       require => [ Package['sshfs'], Exec['fuse'] ];
     '/etc/fuse.conf':
       group   => fuse,
-      require => [ Package['sshfs'], Exec['fuse'] ]
-  }
-  service { 'fuse':
-      subscribe => [ Exec['fuse'], File[ '/bin/fusermount', '/etc/fuse.conf' ] ],
-      require   => [ Package['sshfs'],  ]
+      require => [ Package['sshfs'], Exec['fuse'] ];
   }
 
   # create directory to mount to
@@ -36,7 +32,7 @@ class desktop::sshfs {
   file {
     '/etc/security/pam_mount.conf.xml':
       source  => 'puppet:///modules/desktop/pam/mount.conf.xml',
-      require => [ Package[ 'libpam-mount', 'sshfs' ], Service['fuse'] ];
+      require => [ Package[ 'libpam-mount', 'sshfs' ] ];
     '/etc/pam.d/ocf-pammount':
       content => 'session optional pam_mount.so disable_interactive';
   }
