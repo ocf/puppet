@@ -1,4 +1,3 @@
-# Mozilla User Preferences
 user_pref("browser.cache.disk.capacity", 0);
 user_pref("browser.download.useDownloadDir", false);
 user_pref("browser.privatebrowsing.autostart", true);
