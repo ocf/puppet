@@ -6,13 +6,18 @@
 
 	Options +Indexes +SymlinksIfOwnerMatch
 	IndexOptions NameWidth=* +SuppressDescription
-	
-	# prevent non-OCF from using tons of bandwidth
-	<Directory /opt/mirrors/ftp/>
-		Order deny,allow
+</VirtualHost>
 
-		Allow from 169.229.172.64/26
-		Allow from 127.0.0.0/8
-		Deny from all
-	</Directory>
+<VirtualHost 169.229.172.84:443>
+	ServerName mirrors.ocf.berkeley.edu
+
+	DocumentRoot /opt/mirrors/ftp/
+
+	Options +Indexes +SymlinksIfOwnerMatch
+	IndexOptions NameWidth=* +SuppressDescription
+
+	SSLEngine On
+	SSLCertificateFile /etc/ssl/private/mirrors.ocf.berkeley.edu.crt
+	SSLCertificateKeyFile /etc/ssl/private/mirrors.ocf.berkeley.edu.key
+	SSLCertificateChainFile /etc/ssl/private/incommon.crt
 </VirtualHost>
