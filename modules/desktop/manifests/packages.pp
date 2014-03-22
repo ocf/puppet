@@ -17,7 +17,7 @@ class desktop::packages {
     # games
     [ 'armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music' ]:;
     # useful tools
-    [ 'lyx', 'texmaker', 'gitk', 'curl' ]:;
+    [ 'lyx', 'texmaker', 'gitk' ]:;
     # programming environments
     [ 'python3-tk' ]:;
     # nonfree packages

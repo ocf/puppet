@@ -11,7 +11,7 @@ class common::packages( $extra = false, $login = false ) {
   # common packages for all ocf machines
   package {
     # general packages
-    [ 'beep', 'bsdmainutils', 'cpufrequtils', 'finger', 'netcat-openbsd', 'pigz', 'pv', 'pwgen', 'quota', 'rsync', 'tofrodos', 'tree', 'unzip', 'apt-listchanges' ]:;
+    [ 'beep', 'bsdmainutils', 'cpufrequtils', 'finger', 'netcat-openbsd', 'pigz', 'pv', 'pwgen', 'quota', 'rsync', 'tofrodos', 'tree', 'unzip', 'apt-listchanges', 'curl', 'vim' ]:;
     # account approval and chpass/passwd dependencies
     ['python-cracklib', 'python-dnspython']:;
     # common scripting languages
@@ -22,7 +22,8 @@ class common::packages( $extra = false, $login = false ) {
     [ 'bash', 'tcsh', 'zsh' ]:;
     # top
     [ 'htop', 'iperf', 'iftop', 'iotop', 'powertop' ]:;
-    'vim':
+    # network debugging
+    [ 'tcpdump', 'mtr' ]:;
   }
 
   # extra packages for desktops and possibly a server
