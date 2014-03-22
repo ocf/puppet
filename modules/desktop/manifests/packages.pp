@@ -9,7 +9,7 @@ class desktop::packages {
   # install a lot of other packages
   package {
     # applications
-    [ 'evince-gtk', 'claws-mail', 'geany', 'gftp-gtk', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp' ]:;
+    [ 'evince-gtk', 'claws-mail', 'geany', 'gftp-gtk', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp' ]:;
     # desktop
     [ 'desktop-base', 'desktop-file-utils', 'gpicview', 'lxappearance', 'lxde-core', 'lxde-icon-theme', 'lxtask', 'lxterminal', 'xarchiver', 'xterm', 'lightdm', 'accountsservice', 'xfce4', 'xfce4-goodies' ]:;
     # fonts
