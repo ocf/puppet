@@ -1,4 +1,9 @@
 #!/bin/sh
+# wake up OCF lab machines
+
+# don't wake up if /opt/ocf-nowakeup file exists
+# (useful over breaks to conserve power)
+[ ! -f /opt/ocf-nowakeup ] || exit 0
 
 computers='
 78:2b:cb:83:45:5d
