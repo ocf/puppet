@@ -18,7 +18,7 @@ class death {
     ['libdbi-perl']:
     ;
     # ruby and rails
-    ['rails', 'rails3', 'libfcgi-ruby1.8', 'libmysql-ruby', 'ruby-sqlite3']:
+    ['rails3', 'libfcgi-ruby1.8', 'libmysql-ruby', 'ruby-sqlite3']:
     ;
     # misc dev packages
     ['libfcgi-dev', 'sqlite3', 'libsqlite3-dev', 'libtidy-dev', 'nodejs']:
