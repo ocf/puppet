@@ -17,13 +17,17 @@ class common::packages( $extra = false, $login = false ) {
     # common scripting languages
     ['python3', 'python3-pip']:;
     # console managers
-    [ 'dtach', 'screen', 'tmux' ]:;
+    [ 'dtach', 'screen' ]:;
     # shells
     [ 'bash', 'tcsh', 'zsh' ]:;
     # top
     [ 'htop', 'iperf', 'iftop', 'iotop', 'powertop' ]:;
     # network debugging
     [ 'tcpdump', 'mtr' ]:;
+  }
+  ocf::repackage {
+    'tmux':
+      backports => true;
   }
 
   # extra packages for desktops and possibly a server
