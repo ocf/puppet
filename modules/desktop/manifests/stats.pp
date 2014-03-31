@@ -14,14 +14,7 @@ class desktop::stats {
       group => root,
       mode => 700,
       require => User['ocfstats'];
-    
-    '/opt/stats/.ssh':
-      ensure => directory,
-      owner => ocfstats,
-      group => root,
-      source => 'puppet:///modules/desktop/stats/ssh',
-      recurse => true;
-    
+
     '/opt/stats/update.sh':
       mode   => '500',
       owner  => ocfstats,
@@ -49,5 +42,16 @@ class desktop::stats {
       owner  => ocfstats,
       source => 'puppet:///private/stats/local.crt';
 
+  }
+
+  cron { "labstats":
+    ensure   => present,
+    command  => "/opt/stats/update.sh > /dev/null",
+    user     => "ocfstats",
+    weekday  => "*",
+    month    => "*",
+    monthday => "*",
+    hour     => "*",
+    minute   => "*";
   }
 }

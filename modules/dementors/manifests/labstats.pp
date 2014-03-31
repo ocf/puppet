@@ -28,16 +28,6 @@ class dementors::labstats {
       group => ocfstaff,
       mode => 444,
       source => 'puppet:///contrib/desktop/desktop_list';
-    '/opt/stats/id_rsa':
-      owner => ocfstats,
-      group => root,
-      mode => 400,
-      source => 'puppet:///private/stats/id_rsa';
-    '/opt/stats/id_rsa.pub':
-      owner => ocfstats,
-      group => ocfstaff,
-      mode => 444,
-      source => 'puppet:///modules/dementors/stats/id_rsa.pub';
   }
   
   cron { "labstats":

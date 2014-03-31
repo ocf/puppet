@@ -76,8 +76,8 @@ node default {
       default:   { class { 'common::auth': glogin => [ 'ocf' ] } }
     }
     include common::acct
-    include common::crondeny
     include common::cups
+    include desktop::crondeny
     include desktop::defaults
     include desktop::iceweasel
     include desktop::chrome
