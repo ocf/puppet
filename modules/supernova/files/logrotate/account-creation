@@ -2,5 +2,6 @@
         daily
         missingok
         rotate 7
+        shred
         create 600 create approve
 }
