@@ -14,8 +14,8 @@ if [[ $(date +%u) -gt 5 ]] ; then
     		/usr/local/bin/autopykota --initbalance $page_total
 	fi
 else
-	if [ $page_total -gt 9 ]; then
-                /usr/local/bin/autopykota --initbalance 10.0
+	if [ $page_total -gt 14 ]; then
+                /usr/local/bin/autopykota --initbalance 15.0
         else
                 /usr/local/bin/autopykota --initbalance $page_total
         fi
