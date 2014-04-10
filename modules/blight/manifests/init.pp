@@ -164,6 +164,16 @@ class blight {
     #  ensure => absent;
   }
 
+  file {
+    "/etc/ssl/private/blight_ocf_berkeley_edu.crt":
+      source => "puppet:///private/blight.ocf.berkeley.edu.crt",
+      mode   => 444;
+    "/etc/ssl/private/blight_ocf_berkeley_edu.key":
+      source => "puppet:///private/blight.ocf.berkeley.edu.key",
+      owner  => root,
+      mode   => 400;
+  }
+
   # gitweb setup
   file {
     '/srv/gitweb':
