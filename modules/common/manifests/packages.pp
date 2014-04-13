@@ -35,7 +35,7 @@ class common::packages( $extra = false, $login = false ) {
     package {
       'build-essential':;
       # latex
-      [ 'pdfjam', 'texlive-latex-recommended', 'texlive-latex-extra' ]:;
+      [ 'pdfjam', 'texlive-latex-recommended', 'texlive-latex-extra', 'texlive-fonts-recommended' ]:;
       'nmap':;
       'pssh':;
       # version control
