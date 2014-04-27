@@ -79,6 +79,7 @@ node default {
     include common::cups
     include desktop::crondeny
     include desktop::defaults
+    include desktop::grub
     include desktop::iceweasel
     include desktop::chrome
     include desktop::lxpanel
