@@ -1,4 +1,8 @@
-#!/bin/sh
+#!/bin/bash
+
+# Don't sleep if installing packages or puppet is running
+! /usr/bin/lsof -- /var/lib/dpkg/lock > /dev/null 2>&1 || exit 1
+[ ! -f /var/lib/puppet/state/agent_catalog_run.lock ] || exit 1
 
 # Continue only if previous command succeeds unless forced
 # Reset tmpfs-mounted directories
@@ -18,13 +22,3 @@ fi
 # Enable WOL and sleep until magic packet wakes you up
 /sbin/ethtool -s eth0 wol g
 /usr/sbin/pm-suspend > /dev/null
-
-# Alternatively, we could have slept until specified time
-# Determine whether to use time for tomorrow or today
-#hour=`date '+%H'`
-#if [ $hour -lt 9 ]; then
-#  time_t=`date -d '09:00' '+%s'`
-#else
-#  time_t=`date -d 'tomorrow 09:00' '+%s'`
-#fi
-#/usr/sbin/rtcwake -m mem -t $time_t
