@@ -56,7 +56,7 @@ Exec=x-terminal-emulator -e "ssh -Kt tsunami 'cd && $SHELL'"
 Icon=terminal" > $HOME/Desktop/ssh.desktop
 
 # Scanner if connected by USB
-if lsusb | grep -q Fujitsu; then
+if lsusb | grep -qE (Fujitsu|CanoScan); then
   echo "[Desktop Entry]
   Type=Application
   Name=Scanner
