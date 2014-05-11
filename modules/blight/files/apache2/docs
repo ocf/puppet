@@ -1,16 +1,7 @@
 <VirtualHost *:80>
-    DirectoryIndex docs.html
-    DocumentRoot /var/www/
     ServerName docs.ocf.berkeley.edu
     ServerAlias docs
-    <Directory /var/www/>
-       Options Indexes FollowSymLinks MultiViews
-       AllowOverride All
-       Order allow,deny
-       allow from all
-    </Directory>
-
-ErrorLog "/var/log/apache2/wiki-error.log"
+	Redirect / https://docs.ocf.berkeley.edu/
 </VirtualHost>
 
 <IfModule alias_module>
