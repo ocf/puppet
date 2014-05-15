@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+import ldap
+
+LDAP_SERVER = "ldaps://firestorm.ocf.berkeley.edu/"
+LDAP_BASE = "ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU"
+
+l = ldap.initialize(LDAP_SERVER)
+l.simple_bind_s("", "")
+
+attrs = ["cn", "macAddress", "ipHostNumber"]
+for _, vals in l.search_st(LDAP_BASE, ldap.SCOPE_SUBTREE, "(type=desktop)", attrs):
+	val = lambda key: vals[key][0]
+	print("host {} {{ hardware ethernet {}; fixed-address {}; }}".format(*map(val, attrs)))
