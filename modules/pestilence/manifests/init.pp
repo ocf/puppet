@@ -26,7 +26,7 @@ class pestilence {
   file {
     '/usr/local/bin/ocf-wakeup':
       mode    => '0755',
-      source  => 'puppet:///modules/pestilence/wakeup/script',
+      source  => 'puppet:///modules/pestilence/wakeup/ocf-wakeup',
       require => Package['wakeonlan'];
     '/etc/cron.d/ocf-wakeup':
       source  => 'puppet:///modules/pestilence/wakeup/cron',
