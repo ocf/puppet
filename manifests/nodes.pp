@@ -88,7 +88,6 @@ node default {
     include desktop::packages
     include desktop::pam
     include desktop::pulse
-    include desktop::seti
     include desktop::sshfs
     include desktop::stats
     if $::hostname != 'eruption' {
