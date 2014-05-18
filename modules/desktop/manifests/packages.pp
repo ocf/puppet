@@ -6,6 +6,13 @@ class desktop::packages {
     login  => false
   }
 
+  # install backported kernel for improved compatibility with desktop
+  # integrated graphics (Haswell CPUs)
+  ocf::repackage {
+    "linux-image-$architecture":
+      backports => true;
+  }
+
   # install a lot of other packages
   package {
     # applications
