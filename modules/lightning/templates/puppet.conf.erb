@@ -1,5 +1,7 @@
 [main]
 
+environmentpath = /opt/puppet/env
+
 # debian paths
 logdir = /var/log/puppet
 rundir = /var/run/puppet
@@ -14,8 +16,6 @@ environment = <%= @environment %>
 usecacheonfailure = false
 
 [master]
-
-environmentpath = /opt/puppet/env
 
 # puppetmaster ssl certificate name
 certname = puppet
