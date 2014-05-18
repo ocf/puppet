@@ -12,6 +12,7 @@ node default {
     default:             { include common::ntp }
   }
   include common::autologout
+  include common::locale
   include common::git
   include common::kerberos
   include common::ldap
