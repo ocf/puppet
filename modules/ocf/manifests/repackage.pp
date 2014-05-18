@@ -9,17 +9,15 @@ define ocf::repackage(
     default,undef: { $r = '' }
     true:          { $r = '--with-recommends ' }
     false:         { $r = '--without-recommends ' }
-    #true:  { $r = '--install-recommends ' }
-    #false: { $r = '--no-install-recommends ' }
   }
   case $backports {
-    default,undef: { $b = '' }
-    true:          { $b = "-t ${dist}-backports " }
-    false:         { $b = '' }
+    default,undef: { $b = '' $g = '' }
+    true:          { $b = "-t ${dist}-backports " $g = '| grep ~bpo' }
+    false:         { $b = '' $g = '' }
   }
 
   exec { "aptitude install $package":
     command => "aptitude -y ${r}${b}install $package",
-    unless  => "dpkg -l $package | grep ^ii"
+    unless  => "dpkg -l $package | grep ^ii $g"
   }
 }
