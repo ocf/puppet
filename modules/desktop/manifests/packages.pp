@@ -17,7 +17,7 @@ class desktop::packages {
     # games
     [ 'armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music' ]:;
     # useful tools
-    [ 'lyx', 'texmaker', 'gitk' ]:;
+    [ 'lyx', 'texmaker' ]:;
     # programming environments
     [ 'python3-tk' ]:;
     # nonfree packages
@@ -41,6 +41,13 @@ class desktop::packages {
     # xpdf takes over as defauult sometimes
     'xpdf':
       ensure  => purged;
+  }
+
+  # install backported packages
+  ocf::repackage {
+    'gitk': # git is backported, so we need backported gitk
+      backports => true,
+      require   => Ocf::Repackage['git'];
   }
 
   # install packages without recommends
