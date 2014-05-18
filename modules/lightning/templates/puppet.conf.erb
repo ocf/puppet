@@ -15,6 +15,8 @@ usecacheonfailure = false
 
 [master]
 
+environmentpath = /opt/puppet/env
+
 # puppetmaster ssl certificate name
 certname = puppet
 
@@ -32,7 +34,3 @@ ldapbase = ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU
 # log and mail reports from clients
 reports=log, tagmail
 reportfrom = puppet
-
-# alternate environment paths
-manifest = /opt/puppet/env/$environment/manifests/site.pp
-modulepath = /opt/puppet/env/$environment/modules
