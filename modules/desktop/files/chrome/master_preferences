@@ -1,0 +1,11 @@
+{
+	"browser": {
+		"custom_chrome_frame": true
+	},
+
+	"extensions": {
+		"theme": {
+			"use_system": false
+		}
+	}
+}

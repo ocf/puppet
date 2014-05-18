@@ -1,21 +1,35 @@
 {
+	// Set OCF homepage.
 	"HomepageLocation": "https://secure.ocf.berkeley.edu/",
 	"HomepageIsNewTabPage": false,
 	"ShowHomeButton": true,
 	"RestoreOnStartup": 4,
 	"RestoreOnStartupURLs": ["https://secure.ocf.berkeley.edu/"],
 
+	// Do not store browser history etc.
 	"ForceEphemeralProfiles": true,
 	"SavingBrowserHistoryDisabled": true,
-	"IncognitoModeAvailability": 1,
-
 	"PasswordManagerEnabled": false,
 	"AutoFillEnabled": false,
+	"IncognitoModeAvailability": 0,
 
+	// Avoid reporting data to and integrating with Google.
 	"SigninAllowed": false,
 	"MetricsReportingEnabled": false,
+	"CloudPrintProxyEnabled": false,
+	"CloudPrintSubmitEnabled": false,
+	"HideWebStoreIcon": true,
+	"SyncDisabled": true,
+	"TranslateEnabled": true,
+
+	// Allow SPNEGO for Request Tracker.
+	"AuthServerWhitelist": "rt.ocf.berkeley.edu",
+	"AuthNegotiateDelegateWhitelist": "rt.ocf.berkeley.edu",
+
+	// Misc settings
 	"DefaultBrowserSettingEnabled": false,
 
-	"AuthServerWhitelist": "rt.ocf.berkeley.edu",
-	"AuthNegotiateDelegateWhitelist": "rt.ocf.berkeley.edu"
+	// Disable print preview
+	// (fails when CUPS takes too long to respond, shows invalid settings)
+	"DisablePrintPreview": true
 }
