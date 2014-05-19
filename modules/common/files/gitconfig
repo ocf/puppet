@@ -1,7 +1,15 @@
+# Use rebase instead of merge for git pull.
 [branch]
 	autosetuprebase = always
 [rebase]
 	autosquash = true
 	stat = true
+
+# Enable color output.
 [color]
 	ui = true
+
+# Squelch push.default warnings.
+# 'simple' mode requires Git 1.7.11+, so use 'current' for 1.7.10 in wheezy.
+[push]
+	default = current
