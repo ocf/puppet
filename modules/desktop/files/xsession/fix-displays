@@ -1,0 +1,10 @@
+#!/bin/bash
+# Tile multiple monitors side-by-side
+sleep 1
+monitors=$(xrandr | grep '\bconnected')
+last=$(<<< "$monitors" head -n1 | cut -d' ' -f1)
+<<< "$monitors" tail -n+2 | while read monitor; do
+  interface=$(echo "$monitor" | cut -d' ' -f1)
+  xrandr --output "$interface" --right-of "$last"
+  last=interface
+done

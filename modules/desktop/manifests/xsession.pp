@@ -16,6 +16,10 @@ class desktop::xsession {
       mode    => '0755',
       source  => 'puppet:///modules/desktop/xsession/notify.sh',
       require => File['/opt/share/puppet/desktop_list'];
+    # provide script to tile multiple displays
+    '/usr/local/bin/fix-displays':
+      mode    => '0755',
+      source  => 'puppet:///modules/desktop/xsession/fix-displays';
     # provide share directory with icons and wallpapers
     '/opt/share/xsession':
       ensure  => directory,

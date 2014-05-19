@@ -96,6 +96,5 @@ xset m 0 0
 # Start OCF notification script
 /opt/share/puppet/notify.sh &
 
-# Fix multiple monitors if available
-[ "`xrandr | grep ' connected' | wc -l`" = "2" ] && \
-   xrandr --output HDMI1 --mode 1920x1200 --pos 1920x0 --rotate normal --output DP1 --off --output VGA1 --mode 1920x1200 --pos 0x0 --rotate normal
+# Fix multiple monitors
+/usr/local/bin/fix-displays &
