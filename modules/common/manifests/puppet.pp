@@ -1,7 +1,7 @@
 class common::puppet {
 
   package { ['facter', 'puppet']:
-    ensure  => latest,
+    ensure  => present,
     require => Exec['aptitude update']
   }
   exec { 'puppet-fix_bug7680':

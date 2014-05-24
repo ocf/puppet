@@ -5,7 +5,7 @@ class lightning {
   'libapache2-mod-passenger':
   ;
   'puppetmaster-passenger':
-    ensure  => latest,
+    ensure  => present,
     require => Exec[ 'puppetlabs', 'a2enmod passenger' ],
   ;
   }
