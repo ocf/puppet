@@ -6,11 +6,25 @@ class desktop::packages {
     login  => false
   }
 
-  # install backported kernel for improved compatibility with desktop
-  # integrated graphics (Haswell CPUs)
-  ocf::repackage {
-    "linux-image-$architecture":
-      backports => true;
+  # install backported kernel and intel driver for improved compatibility with
+  # desktop integrated graphics (Haswell CPUs);
+  # this should be removed after desktops are transitioned to jessie
+  ocf::repackage { "linux-image-$architecture":
+    backports => true
+  }
+
+  file { '/opt/share/puppet/packages':
+    ensure  => directory,
+    source  => 'puppet:///contrib/desktop/packages',
+    recurse => true
+  }
+
+  package { 'xserver-xorg-video-intel':
+    provider => dpkg,
+    ensure   => latest,
+
+    # no official backport is available, so we use our own backported package (2014-05-24)
+    source   => '/opt/share/puppet/packages/xserver-xorg-video-intel_2.21.15-2~bpo70+1_amd64.deb'
   }
 
   # install a lot of other packages
