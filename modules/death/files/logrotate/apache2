@@ -1,4 +1,7 @@
-/var/log/apache2/*.log {
+/var/log/apache2/access.log
+		/var/log/apache2/other_vhosts_access.log
+		/var/log/apache2/error.log
+		/var/log/apache2/httpd-suexec.log {
 	daily
 	missingok
 	rotate 7
@@ -6,6 +9,20 @@
 	delaycompress
 	notifempty
 	create 644 root adm
+	sharedscripts
+	postrotate
+		/etc/init.d/apache2 reload > /dev/null
+	endscript
+}
+
+/var/log/apache2/ssl_*.log {
+	daily
+	missingok
+	rotate 7
+	compress
+	delaycompress
+	notifempty
+	create 640 root adm
 	sharedscripts
 	postrotate
 		/etc/init.d/apache2 reload > /dev/null
