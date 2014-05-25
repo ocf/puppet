@@ -98,3 +98,11 @@ xset m 0 0
 
 # Fix multiple monitors
 /usr/local/bin/fix-displays &
+
+# Mute speaker, enable headphones
+amixer -c1 -s << EOF
+  set Master 50% unmute
+  set PCM 0% unmute
+  set Headphone 100% unmute
+  set "Auto-Mute Mode" "Speaker Only"
+EOF
