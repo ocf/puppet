@@ -72,6 +72,13 @@ class death {
     require   => Package['apache2'],
   }
 
+  file { '/etc/apache2/sites-available/04-shorturl.conf':
+    ensure    => file,
+    source    => 'puppet:///modules/death/apache/sites/shorturl.conf',
+    notify    => Service['apache2'],
+    require   => Package['apache2'],
+  }
+
   file { '/etc/apache2/sites-available/01-www.conf':
     ensure    => file,
     source    => 'puppet:///modules/death/apache/sites/www.conf',
@@ -187,6 +194,11 @@ class death {
     unless      => '/bin/readlink -e /etc/apache2/sites-enabled/03-userdir.conf',
     notify      => Service['apache2'],
     require     => [Exec['/usr/sbin/a2enmod userdir'], File['/etc/apache2/sites-available/03-userdir.conf']],
+  }
+  exec { '/usr/sbin/a2ensite 04-shorturl.conf':
+    unless      => '/bin/readlink -e /etc/apache2/sites-enabled/04-shorturl.conf',
+    notify      => Service['apache2'],
+    require     => File['/etc/apache2/sites-available/04-shorturl.conf'],
   }
   exec { '/usr/sbin/a2ensite 01-www.conf':
     unless      => '/bin/readlink -e /etc/apache2/sites-enabled/01-www.conf',
