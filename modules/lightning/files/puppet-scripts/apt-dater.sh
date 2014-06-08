@@ -2,8 +2,8 @@
 
 set -e
 
-subnet='169.229.172.64/26'
-exclude_hosts='169.229.172.65,169.229.172.126'
+subnet='169.229.10.0/24'
+exclude_hosts='169.229.10.1,169.229.10.253'
 keytab='/root/apt-dater.keytab'
 config='/root/.config/apt-dater/hosts.conf'
 
