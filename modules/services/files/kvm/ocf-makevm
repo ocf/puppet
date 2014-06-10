@@ -14,7 +14,8 @@ VM_NETWORK = "bridge=br0"
 PRESEED_USERNAME = "root"
 PRESEED_PASSWORD = "r00tme"
 
-DHCP_IP = "169.229.172.113" # IP the server will have from DHCP
+DHCP_IP_START = "169.229.10.180" # IP the server will have from DHCP
+DHCP_IP_END = "169.229.10.190"
 
 devnull = open(os.devnull, "w")
 
@@ -28,11 +29,11 @@ def exec_cmd(cmd):
 
 def create_disk(name):
 	"""Creates a logical volume."""
-	
+
 	if os.path.exists("/dev/vg/" + name):
 		print("Can't create new lv, /dev/vg/{0} already exists.".format(name))
 		sys.exit(2)
-	
+
 	cmd = "lvcreate -L {}GB --name {} vg".format(VM_DISK_SIZE, name)
 	exec_cmd(cmd)
 
@@ -47,10 +48,10 @@ def create_vm(name):
 		sys.exit(2)
 	except subprocess.CalledProcessError:
 		pass # all good
-	
+
 	cmd = "virt-install -r {} --pxe --os-type={} --os-variant={} " + \
 		"--disk {},cache=none --network {} --graphics vnc --serial pty --name {}"
-	cmd = cmd.format(VM_MEMORY, VM_OS_TYPE, VM_OS_VARIANT, 
+	cmd = cmd.format(VM_MEMORY, VM_OS_TYPE, VM_OS_VARIANT,
 			"/dev/vg/" + name, VM_NETWORK, name)
 
 	exec_cmd(cmd)
@@ -65,21 +66,32 @@ def wait_for_shutdown(name):
 def start_vm(name):
 	exec_cmd("virsh start {}".format(name))
 
+def dhcp_range():
+    # Ghetto IP range solution, only works when the first 3 octets are equal
+    start = map(int, DHCP_IP_START.split('.'))
+    end = map(int, DHCP_IP_END.split('.'))
+
+    while start <= end:
+        yield ".".join(map(str, start))
+        start[-1] += 1
+
 def get_ssh_connection():
 	client = paramiko.SSHClient()
 	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
 	# wait for the VM to be live
 	while True:
-		try:
-			client.connect(DHCP_IP, username=PRESEED_USERNAME, password=PRESEED_PASSWORD, timeout=2)
-
-			print()
-			return client
-		except (socket.timeout, socket.error):
-			print(".", end="")
-			sys.stdout.flush()
-			time.sleep(1)
+		for ip in dhcp_range():
+			try:
+				client.connect(ip, username=PRESEED_USERNAME, password=PRESEED_PASSWORD, timeout=2)
+			except (socket.timeout, socket.error):
+				continue
+			else:
+				print()
+				return client
+		print('.', end='')
+		sys.stdout.flush()
+		time.sleep(1)
 
 def configure_network(ssh, ip):
 	lines = [
@@ -89,8 +101,8 @@ def configure_network(ssh, ip):
 		"auto eth0",
 		"iface eth0 inet static",
 		"\taddress {}".format(ip),
-		"\tnetmask 255.255.255.192",
-		"\tgateway 169.229.172.65"
+		"\tnetmask 255.255.255.0",
+		"\tgateway 169.229.10.1"
 	]
 
 	ssh.exec_command("echo -n \"\" > /etc/network/interfaces")
@@ -98,19 +110,19 @@ def configure_network(ssh, ip):
 	for line in lines:
 		ssh.exec_command("echo \"{}\" >> /etc/network/interfaces".format(line))
 
-if __name__ == "__main__":
-	if len(sys.argv) != 3:
-		print("usage: {} hostname ip".format(sys.argv[0]))
+def _main(args):
+	if len(args) != 2:
+		print("usage: {} hostname ip".format(os.path.basename(__file__)))
 		print()
 		print("\thostname: short hostname (not FQDN) of the new VM (ex: raptors)")
-		print("\tip: full IP address of the new VM (ex: 169.229.172.93)")
+		print("\tip: full IP address of the new VM (ex: 169.229.10.93)")
 		sys.exit(1)
-	
+
 	if os.geteuid() != 0:
 		print("You are not root.")
 		sys.exit(1)
 
-	host, ip = sys.argv[1:]
+	host, ip = args
 
 	print("Creating new VM with the following details:")
 	print("\tHostname: {}".format(host))
@@ -124,10 +136,10 @@ if __name__ == "__main__":
 	if raw_input("Continue? [yN] ") != "y":
 		print("Cancelled.")
 		sys.exit(2)
-	
+
 	create_disk(host)
 	create_vm(host)
-	
+
 	print("VM created, waiting for it to finish installing and shut down...")
 	wait_for_shutdown(host)
 
@@ -146,8 +158,11 @@ if __name__ == "__main__":
 
 	print("Turning on puppet...")
 	client.exec_command("sed -i 's/START=no/START=yes/' /etc/default/puppet")
-	
+
 	print("Restarting VM...")
 	client.exec_command("shutdown -r now")
 
 	print("{} is now minimally configured. You should now sign the puppet cert.".format(host))
+
+if __name__ == "__main__":
+	_main(sys.argv[1:])
