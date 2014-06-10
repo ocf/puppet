@@ -67,13 +67,13 @@ def start_vm(name):
 	exec_cmd("virsh start {}".format(name))
 
 def dhcp_range():
-    # Ghetto IP range solution, only works when the first 3 octets are equal
-    start = map(int, DHCP_IP_START.split('.'))
-    end = map(int, DHCP_IP_END.split('.'))
+	# Ghetto IP range solution, only works when the first 3 octets are equal
+	start = map(int, DHCP_IP_START.split('.'))
+	end = map(int, DHCP_IP_END.split('.'))
 
-    while start <= end:
-        yield ".".join(map(str, start))
-        start[-1] += 1
+	while start <= end:
+		yield ".".join(map(str, start))
+		start[-1] += 1
 
 def get_ssh_connection():
 	client = paramiko.SSHClient()
