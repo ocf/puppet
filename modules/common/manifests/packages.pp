@@ -15,7 +15,7 @@ class common::packages( $extra = false, $login = false ) {
     # account approval and chpass/passwd dependencies
     ['python-cracklib', 'python-dnspython']:;
     # common scripting languages
-    ['python3', 'python3-pip']:;
+    ['python3', 'python3-pip', 'python3-dev', 'python-pip', 'python-dev']:;
     # console managers
     [ 'dtach', 'screen' ]:;
     # shells
