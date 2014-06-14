@@ -2,20 +2,22 @@
 # Creates and configures a new vm
 # python2.7 because stable version of paramiko isn't yet compatible with python3
 from __future__ import print_function
-import sys, os.path, subprocess, colorama, time, paramiko, socket
+
+import argparse
+import os.path
+import re
+import socket
+import subprocess
+import sys
+import time
+
+import colorama
 from colorama import Fore, Style # pretty colors
+import paramiko
 
-VM_MEMORY = 4096
-VM_DISK_SIZE = 15
-VM_OS_TYPE = "linux"
-VM_OS_VARIANT = "debianwheezy"
-VM_NETWORK = "bridge=br0"
-
-PRESEED_USERNAME = "root"
-PRESEED_PASSWORD = "r00tme"
-
-DHCP_IP_START = "169.229.10.180" # IP the server will have from DHCP
-DHCP_IP_END = "169.229.10.190"
+# IP address range that DHCP might assign
+# TODO: better way that would support creating multiple VMs simultaneously
+DHCP_IPS = ["169.229.10." + str(i) for i in range(180, 191)]
 
 devnull = open(os.devnull, "w")
 
@@ -27,17 +29,18 @@ def exec_cmd(cmd):
 	subprocess.check_call(cmd, shell=True, stdout=sys.stdout)
 	print(Style.RESET_ALL, end="")
 
-def create_disk(name):
+def create_disk(name, size):
 	"""Creates a logical volume."""
 
 	if os.path.exists("/dev/vg/" + name):
-		print("Can't create new lv, /dev/vg/{0} already exists.".format(name))
+		print("Can't create new lv, /dev/vg/{} already exists.".format(name))
+		print("Use 'lvremove /dev/vg/{}' if you want to destroy it.".format(name))
 		sys.exit(2)
 
-	cmd = "lvcreate -L {}GB --name {} vg".format(VM_DISK_SIZE, name)
+	cmd = "lvcreate -L {}GB --name {} vg".format(size, name)
 	exec_cmd(cmd)
 
-def create_vm(name):
+def create_vm(name, memory, os_type, os_variant, network):
 	"""Creates a new VM."""
 
 	# try to print info about the domain to see if it already exists
@@ -51,8 +54,8 @@ def create_vm(name):
 
 	cmd = "virt-install -r {} --pxe --os-type={} --os-variant={} " + \
 		"--disk {},cache=none --network {} --graphics vnc --serial pty --name {}"
-	cmd = cmd.format(VM_MEMORY, VM_OS_TYPE, VM_OS_VARIANT,
-			"/dev/vg/" + name, VM_NETWORK, name)
+	cmd = cmd.format(memory, os_type, os_variant, "/dev/vg/" + name,
+		network, name)
 
 	exec_cmd(cmd)
 
@@ -66,24 +69,15 @@ def wait_for_shutdown(name):
 def start_vm(name):
 	exec_cmd("virsh start {}".format(name))
 
-def dhcp_range():
-	# Ghetto IP range solution, only works when the first 3 octets are equal
-	start = map(int, DHCP_IP_START.split('.'))
-	end = map(int, DHCP_IP_END.split('.'))
-
-	while start <= end:
-		yield ".".join(map(str, start))
-		start[-1] += 1
-
-def get_ssh_connection():
+def get_ssh_connection(user, password):
 	client = paramiko.SSHClient()
 	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
 	# wait for the VM to be live
 	while True:
-		for ip in dhcp_range():
+		for ip in DHCP_IPS:
 			try:
-				client.connect(ip, username=PRESEED_USERNAME, password=PRESEED_PASSWORD, timeout=2)
+				client.connect(ip, username=user, password=password, timeout=1)
 			except (socket.timeout, socket.error):
 				continue
 			else:
@@ -101,6 +95,8 @@ def configure_network(ssh, ip):
 		"auto eth0",
 		"iface eth0 inet static",
 		"\taddress {}".format(ip),
+
+		# TODO: argparse these
 		"\tnetmask 255.255.255.0",
 		"\tgateway 169.229.10.1"
 	]
@@ -110,51 +106,118 @@ def configure_network(ssh, ip):
 	for line in lines:
 		ssh.exec_command("echo \"{}\" >> /etc/network/interfaces".format(line))
 
+def confirm(prompt="Continue?", default=False):
+	choices = "Yn" if default else "yN"
+	response = raw_input("{} [{}] ".format(prompt, choices)).lower()
+
+	if response in ("y", "yes"):
+		return True
+
+	if response in ("n", "no"):
+		return False
+
+	return default
+
 def _main(args):
-	if len(args) != 2:
-		print("usage: {} hostname ip".format(os.path.basename(__file__)))
-		print()
-		print("\thostname: short hostname (not FQDN) of the new VM (ex: raptors)")
-		print("\tip: full IP address of the new VM (ex: 169.229.10.93)")
-		sys.exit(1)
+	parser = argparse.ArgumentParser(
+		description="Create and configure new VMs using libvirt CLI tools",
+		formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+	parser.add_argument("-m", "--memory", type=int, default=4096,
+		help="amount of memory (in MB)")
+	parser.add_argument("-s", "--storage", type=int, default=15,
+		help="amount of disk storage (in GB)")
+	parser.add_argument("--os-type", type=str, default="linux",
+		help="os type")
+	parser.add_argument("--os-variant", type=str, default="debianwheezy",
+		help="os variant")
+	parser.add_argument("--network", type=str, default="bridge=br0",
+		help="network configuration")
+	parser.add_argument("--preseed-user", type=str, default="root",
+		help="user created in preseed")
+	parser.add_argument("--preseed-password", type=str, default="r00tme",
+		help="password for user created in preseed")
+	parser.add_argument("--skip-config", action="store_true", default=False,
+		help="don't configure the new VM")
+	parser.add_argument("hostname", type=str,
+		help="hostname for the new VM")
+	parser.add_argument("ip", type=str,
+		help="static ip address for the new VM")
+
+	args = parser.parse_args()
+
+	# sanity checks
+	if not 512 <= args.memory <= 16384:
+		print("Warning: You want {} *MB* of memory.".format(args.memory))
+
+		if not confirm():
+			print("Cancelled.")
+			sys.exit(2)
+
+	if not 5 <= args.storage <= 50:
+		print("Warning: You want {} *GB* of storage.".format(args.storage))
+
+		if not confirm():
+			print("Cancelled.")
+			sys.exit(2)
+
+	if not re.match("^[a-z]{1,20}$", args.hostname):
+		print("Warning: Your hostname is '{}'.".format(args.hostname))
+		print("You probably should NOT include the domain name.")
+
+		if not confirm():
+			print("Cancelled.")
+			sys.exit(2)
+
+	# there are much better ways to do this, plus this allows 169.229.10.999
+	if not re.match("^169\.229\.10\.[0-9]{1,3}$", args.ip):
+		print("Warning: Your IP is '{}'.".format(args.ip))
+		print("It should probably be in 169.229.10.0/24")
+
+		if not confirm():
+			print("Cancelled.")
+			sys.exit(2)
 
 	if os.geteuid() != 0:
 		print("You are not root.")
 		sys.exit(1)
 
-	host, ip = args
-
 	print("Creating new VM with the following details:")
-	print("\tHostname: {}".format(host))
-	print("\tIP Address: {}".format(ip))
-	print("\tOS Type: {}".format(VM_OS_TYPE))
-	print("\tOS Variant: {}".format(VM_OS_VARIANT))
-	print("\tDisk Space: {} GB".format(VM_DISK_SIZE))
-	print("\tMemory: {} MB".format(VM_MEMORY))
-	print("\tNetwork: {}".format(VM_NETWORK))
+	print("\tHostname: {}".format(args.hostname))
+	print("\tIP Address: {}".format(args.ip))
+	print("\tOS Type: {}".format(args.os_type))
+	print("\tOS Variant: {}".format(args.os_variant))
+	print("\tDisk Space: {} GB".format(args.storage))
+	print("\tMemory: {} MB".format(args.memory))
+	print("\tNetwork: {}".format(args.network))
 
-	if raw_input("Continue? [yN] ") != "y":
+	if not confirm():
 		print("Cancelled.")
 		sys.exit(2)
 
-	create_disk(host)
-	create_vm(host)
+	create_disk(args.hostname, args.storage)
+	create_vm(args.hostname, args.memory, args.os_type, args.os_variant,
+		args.network)
+
+	if args.skip_config:
+		print("VM created, skipping configuration. Have fun!")
+		sys.exit(0)
 
 	print("VM created, waiting for it to finish installing and shut down...")
-	wait_for_shutdown(host)
+	wait_for_shutdown(args.hostname)
 
 	print("Installation successful, starting VM...")
-	start_vm(host)
+	start_vm(args.hostname)
 
 	print("Connecting to VM via SSH...")
-	client = get_ssh_connection()
+	client = get_ssh_connection(args.preseed_user, args.preseed_password)
 
-	print("Setting hostname to {}...".format(host))
-	client.exec_command("echo {} > /etc/hostname".format(host))
+	print("Setting hostname to {}...".format(args.hostname))
+	client.exec_command("echo {} > /etc/hostname".format(args.hostname))
 	client.exec_command("hostname -F /etc/hostname")
 
-	print("Configuring static IP {}...".format(ip))
-	configure_network(client, ip)
+	print("Configuring static IP {}...".format(args.ip))
+	configure_network(client, args.ip)
 
 	print("Turning on puppet...")
 	client.exec_command("sed -i 's/START=no/START=yes/' /etc/default/puppet")
@@ -162,7 +225,7 @@ def _main(args):
 	print("Restarting VM...")
 	client.exec_command("shutdown -r now")
 
-	print("{} is now minimally configured. You should now sign the puppet cert.".format(host))
+	print("{} is now minimally configured. You should now sign the puppet cert.".format(args.hostname))
 
 if __name__ == "__main__":
 	_main(sys.argv[1:])
