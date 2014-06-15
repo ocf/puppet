@@ -17,12 +17,17 @@ class services::kvm($group = 'ocfroot') {
   service { 'libvirt-bin':
     require   => Package['libvirt-bin']
   }
-  
+
+  # ocf-makevm and dependencies
   file {
     "/usr/local/sbin/ocf-makevm":
       source => "puppet:///modules/services/kvm/ocf-makevm",
       owner => root,
       group => root,
       mode => 755;
+  }
+
+  package {
+    ['python-colorama', 'python-paramiko']:;
   }
 }
