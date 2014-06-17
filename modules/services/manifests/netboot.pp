@@ -15,7 +15,7 @@ class services::netboot {
   }
 
   # set up netboot image
-  package { 'pax': }
+  package { ['pax', 'p7zip-full']: }
   file {
     '/usr/local/sbin/ocf-netboot':
       mode    => '0755',

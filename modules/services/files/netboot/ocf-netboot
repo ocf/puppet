@@ -11,6 +11,7 @@ dist='wheezy'
 
 netboot="http://mirrors/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
 fw="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$dist/current/firmware.tar.gz"
+dban="http://sourceforge.net/projects/dban/files/latest/download"
 
 tftpdir='/opt/tftp'
 fwdir='/tmp/di_firmware'
@@ -61,9 +62,24 @@ echo "label ocf
 # auto-select OCF option after 10 seconds
 sed -i 's/timeout 0/timeout 100/' pxelinux.cfg/default
 
+# download DBAN, add to menu
+echo "Downloading DBAN..."
+cd $tftpdir
+wget -q -O dban.iso "$dban"
+7z x -odban dban.iso # terrible CLI
+
+find dban -type d -exec chmod 755 {} \;
+
+echo "label dban
+	menu label Darik's Boot and Nuke
+	kernel dban/DBAN.BZI
+	append load_ramdisk=1 root=/dev/ram0 nuke=\"dwipe --autonuke --method zero\"" \
+	>> debian-installer/$arch/boot-screens/txt.cfg
+
 # clean up
 rm $tftpdir/netboot.tar.gz
 rm -rf $fwdir
+rm dban.iso
 
 service tftpd-hpa restart
 
