@@ -17,7 +17,7 @@ import paramiko
 
 # IP address range that DHCP might assign
 # TODO: better way that would support creating multiple VMs simultaneously
-DHCP_IPS = ["169.229.10." + str(i) for i in range(180, 191)]
+DHCP_IPS = ["169.229.10." + str(i) for i in range(190, 200)]
 
 devnull = open(os.devnull, "w")
 
