@@ -178,11 +178,4 @@ class tsunami {
       source    => 'puppet:///private/CA-BUNDLE.CRT';
   }
 
-  # prevent cron by sorried users
-  cron { 'cron-deny':
-    command => "ldapsearch -x -LLL gidNumber=2390 uid | grep '^uid:' | cut -d' ' -f2 > /etc/cron.deny",
-    user    => root,
-    hour    => '*',
-    minute  => '*/15';
-  }
 }
