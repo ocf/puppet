@@ -11,6 +11,10 @@ node default {
     hal, pandemic, jaws: { class { 'common::ntp': physical => true } }
     default:             { include common::ntp }
   }
+  case $::hostname {
+    dementors:   { class { 'common::munin': master => true } }
+    default:     { include common::munin }
+  }
   include common::autologout
   include common::locale
   include common::git
