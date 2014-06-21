@@ -29,10 +29,11 @@ class dementors::labstats {
       mode => 444,
       source => 'puppet:///contrib/desktop/desktop_list';
   }
-  
+
   cron { "labstats":
     ensure => present,
     command => "/opt/stats/lab-cron.sh > /dev/null",
+    environment => "MAILTO=root",
     user => "ocfstats",
     weekday => "*",
     month => "*",
