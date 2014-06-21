@@ -30,7 +30,7 @@ class death {
     'libhtml-parser-perl':
     ;
     # for account_tools
-    ['python-ldap', 'python-pexpect', 'python-paramiko']:
+    ['python-pexpect', 'python-paramiko']:
     ;
   }
 

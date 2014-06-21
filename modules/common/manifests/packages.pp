@@ -15,7 +15,7 @@ class common::packages( $extra = false, $login = false ) {
     # account approval and chpass/passwd dependencies
     ['python-cracklib', 'python-dnspython']:;
     # common scripting languages
-    ['python3', 'python3-pip', 'python3-dev', 'python-pip', 'python-dev']:;
+    ['python3', 'python3-pip', 'python3-dev', 'python-pip', 'python-dev', 'python-ldap']:;
     # console managers
     [ 'dtach', 'screen' ]:;
     # shells
@@ -66,7 +66,7 @@ class common::packages( $extra = false, $login = false ) {
       # php
       ['php5-cli', 'php5-mysql', 'php5-sqlite', 'php5-gd', 'php5-curl', 'php5-mcrypt']:;
       # python
-      ['ipython', 'python-django', 'python-flask', 'python-ldap', 'python-lxml', 'python-virtualenv', 'python-yaml']:;
+      ['ipython', 'python-django', 'python-flask', 'python-lxml', 'python-virtualenv', 'python-yaml']:;
       # ruby
       ['rails3', 'ruby-dev', 'ruby-sqlite3']:;
       # scripting/programming/development packages
