@@ -149,18 +149,28 @@ class desktop::xsession {
       mode => '0754';
   }
 
-  # font configuration
+  # improve font rendering
   file {
-    # enable font auto-hinting
+    # disable autohinter
     '/etc/fonts/conf.d/10-autohint.conf':
-      ensure => symlink,
-      links  => manage,
-      target => '/etc/fonts/conf.avail/10-autohint.conf';
-    # enable font sub-pixel rendering
+      ensure => absent,
+    ;
+    # enable subpixel rendering
     '/etc/fonts/conf.d/10-sub-pixel-rgb.conf':
       ensure => symlink,
       links  => manage,
-      target => '/etc/fonts/conf.avail/10-sub-pixel-rgb.conf'
+      target => '../conf.avail/10-sub-pixel-rgb.conf',
+    ;
+    # enable LCD filter
+    '/etc/fonts/conf.d/11-lcdfilter-default.conf':
+      ensure => symlink,
+      links  => manage,
+      target => '../conf.avail/11-lcdfilter-default.conf',
+    ;
+    # enable hinting and anti-aliasing
+    '/etc/fonts/local.conf':
+      source => 'puppet:///modules/desktop/xsession/fonts.conf',
+    ;
   }
 
   # xscreensaver configuration
