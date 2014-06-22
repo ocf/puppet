@@ -68,8 +68,8 @@ node default {
         tsunami:   { class { 'common::auth': glogin => [ 'ocf', 'sorry' ] } }
         default:   { class { 'common::auth': ulogin => [[]], glogin => [], usudo => [], gsudo => [] } }
       }
-    } else { # grant sudo to owner
-      class { 'common::auth': usudo => [$owner] }
+    } else { # grant login and sudo to owner
+      class { 'common::auth': ulogin => [[$owner, 'ALL']], usudo => [$owner] }
     }
     include common::ssh
   }
