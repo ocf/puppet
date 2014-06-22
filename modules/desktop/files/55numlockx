@@ -1,5 +1,0 @@
-# X session startup script: /etc/X11/Xsession.d/55numlockx
-
-if [ -x /usr/bin/numlockx ]; then /usr/bin/numlockx off || /bin/true; fi
-
-# EOF

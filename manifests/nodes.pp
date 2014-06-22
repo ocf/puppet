@@ -89,7 +89,6 @@ node default {
     include desktop::chrome
     include desktop::lxpanel
     include desktop::modprobe
-    include desktop::numlockx
     include desktop::packages
     include desktop::pam
     include desktop::pulse
