@@ -52,7 +52,7 @@ class firestorm {
 
   #define service
   service { 'slapd':
-    subscribe => File[ '/etc/ldap/slapd.conf', '/etc/ldap/schema/ocf.schema', '/etc/ldap/ocf_ldap.key', '/etc/default/slapd','/etc/ldap/sasl2/slapd.conf'],
+    subscribe => File[ '/etc/ldap/slapd.conf', '/etc/ldap/schema/ocf.schema', '/etc/ldap/ssl/firestorm.ocf.berkeley.edu.key', '/etc/default/slapd','/etc/ldap/sasl2/slapd.conf'],
   }
 
   #needed config files
@@ -69,13 +69,30 @@ class firestorm {
       source  => 'puppet:///contrib/local/firestorm/puppet.schema',
       require => Package['slapd'],
     ;
-    '/etc/ldap/ocf_ldap.key':
-      source  => 'puppet:///private/ocf_ldap.key',
-      require => Package['slapd', 'openssl'],
-      mode    => '0600',
-      owner   => 'openldap',
-      group   => 'openldap',
-    ;
+    '/etc/ldap/ssl':
+      ensure  => directory,
+      owner   => openldap,
+      group   => openldap,
+      mode    => 755,
+      require => Package['slapd'];
+    '/etc/ldap/ssl/firestorm.ocf.berkeley.edu.key':
+      source  => 'puppet:///private/firestorm.ocf.berkeley.edu.key',
+      require => Package['slapd'],
+      mode    => 600,
+      owner   => openldap, # note: can't use root here :-(
+      group   => openldap;
+    '/etc/ldap/ssl/firestorm.ocf.berkeley.edu.crt':
+      source  => 'puppet:///private/firestorm.ocf.berkeley.edu.crt',
+      require => Package['slapd'],
+      mode    => 644,
+      owner   => openldap,
+      group   => openldap;
+    '/etc/ldap/ssl/firestorm.ocf.berkeley.edu.chain':
+      source  => 'puppet:///private/firestorm.ocf.berkeley.edu.chain',
+      require => Package['slapd'],
+      mode    => 644,
+      owner   => openldap,
+      group   => openldap;
     '/etc/default/slapd':
       source  => 'puppet:///modules/firestorm/slapd-defaults',
       require => Package['slapd', 'openssl'],
