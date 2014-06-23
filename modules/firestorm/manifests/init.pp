@@ -30,18 +30,20 @@ class firestorm {
   }
 
   # Kerberos revision control
-  file {
-    # Script to snapshot by dumping and committing
-    '/usr/local/sbin/kerberos-git-backup':
-      mode    => '0755',
-      source  => 'puppet:///modules/firestorm/kerberos-git-backup',
-    ;
-    # Snapshot daily at 4AM
-    '/etc/cron.d/kerberos-git-backup':
-      content => "0 4 * * * root /usr/local/sbin/kerberos-git-backup\n",
-      require => File['/usr/local/sbin/kerberos-git-backup'],
-    ;
-    # TODO: need to push repository somewhere secure
+  if $hostname == 'firestorm' {
+    file {
+      # Script to snapshot by dumping and committing
+      '/usr/local/sbin/kerberos-git-backup':
+        mode    => '0755',
+        source  => 'puppet:///modules/firestorm/kerberos-git-backup',
+      ;
+      # Snapshot daily at 4AM
+      '/etc/cron.d/kerberos-git-backup':
+        content => "0 4 * * * root /usr/local/sbin/kerberos-git-backup\n",
+        require => File['/usr/local/sbin/kerberos-git-backup'],
+      ;
+      # TODO: need to push repository somewhere secure
+    }
   }
 
   ##Ldap server install##
@@ -93,28 +95,29 @@ class firestorm {
 
   # LDAP revision control
   # ldap-git-backup currently must be fetched from unstable
-  package { 'ldap-git-backup': }
-  file {
-    # Snapshot daily at 4AM
-    '/etc/cron.d/ldap-git-backup':
-      content => "0 4 * * * root /usr/sbin/ldap-git-backup\n",
-      require => Package['ldap-git-backup'],
-    ;
-    # Push repository to GitHub
-    '/var/backups/ldap/.git/hooks/post-commit':
-      mode    => '0755',
-      content => 'git push -q git@github.com:ocf/ldap',
-      require => [Package['ldap-git-backup'], File['/root/.ssh/id_rsa']],
-    ;
-    '/root/.ssh':
-      ensure  => directory,
-      mode    => '0600',
-    ;
-    # GitHub deployer key
-    '/root/.ssh/id_rsa':
-      mode   => '0600',
-      source => 'puppet:///private/id_rsa',
-    ;
+  if $hostname == 'firestorm' {
+    package { 'ldap-git-backup': }
+    file {
+      # Snapshot daily at 4AM
+      '/etc/cron.d/ldap-git-backup':
+        content => "0 4 * * * root /usr/sbin/ldap-git-backup\n",
+        require => Package['ldap-git-backup'],
+      ;
+      # Push repository to GitHub
+      '/var/backups/ldap/.git/hooks/post-commit':
+        mode    => '0755',
+        content => 'git push -q git@github.com:ocf/ldap',
+        require => [Package['ldap-git-backup'], File['/root/.ssh/id_rsa']],
+      ;
+      '/root/.ssh':
+        ensure  => directory,
+        mode    => '0600',
+      ;
+      # GitHub deployer key
+      '/root/.ssh/id_rsa':
+        mode   => '0600',
+        source => 'puppet:///private/id_rsa',
+      ;
+    }
   }
-
 }
