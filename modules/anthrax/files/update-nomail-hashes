@@ -1,0 +1,16 @@
+#!/bin/bash
+# update hashes which deny mail
+
+# sorried users
+ldapsearch -x -LLL gidNumber=2390 uid | grep '^uid:' | cut -d' ' -f2 | \
+	sed 's/$/@ocf.berkeley.edu REJECT Account has been disabled./g' \
+	> /etc/postfix/ocf/sorry-postfix
+
+/usr/sbin/postmap /etc/postfix/ocf/sorry-postfix
+
+# manually mail disabled users
+sed 's/$/@ocf.berkeley.edu REJECT Account is sending too much mail; cannot send or receive mail./g' \
+	/etc/postfix/ocf/nomail \
+	> /etc/postfix/ocf/nomail-postfix
+
+/usr/sbin/postmap /etc/postfix/ocf/nomail-postfix

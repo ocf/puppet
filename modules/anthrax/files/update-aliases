@@ -1,0 +1,17 @@
+#!/bin/bash
+# update /etc/aliases-group with new aliases
+
+staff=$(getent group approve | cut -d':' -f4)
+wheel=$(getent group ocfstaff | cut -d':' -f4)
+
+echo "staff-current: ${staff}" > /etc/aliases-group
+echo "wheel-current: ${wheel}" >> /etc/aliases-group
+/usr/sbin/postalias hash:/etc/aliases-group
+
+# update aliases-local
+( for f in /etc/aliases /etc/aliases-group; do
+	grep ':' "$f" | grep -v '^#' | cut -d':' -f1
+done
+) | sort -u | sed 's/.*/\0\t \0@int.ocf.berkeley.edu/' \
+	> /etc/postfix/ocf/aliases-local
+/usr/sbin/postmap /etc/postfix/ocf/aliases-local

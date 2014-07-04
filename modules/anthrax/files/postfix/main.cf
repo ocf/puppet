@@ -1,0 +1,115 @@
+smtpd_banner = $myhostname ESMTP Greetings from the Hearst Gym grotto.
+
+# ocf, google apps
+mynetworks = 169.229.10.0/24 216.239.32.0/19 64.233.160.0/19 66.249.80.0/20
+	72.14.192.0/18 209.85.128.0/17 66.102.0.0/20 74.125.0.0/16 64.18.0.0/20
+	207.126.144.0/20 173.194.0.0/16
+inet_protocols = ipv4
+
+mydomain = ocf.berkeley.edu
+myorigin = $mydomain
+
+# only forward mail (no local delivery), except for special aliases
+mydestination = int.ocf.berkeley.edu
+virtual_mailbox_domains =
+virtual_alias_domains = ocf.berkeley.edu
+
+# aliases
+virtual_alias_maps = hash:/etc/postfix/ocf/aliases-local,
+	proxy:ldap:/etc/postfix/ldap-aliases.cf
+alias_maps = hash:/etc/aliases, hash:/etc/aliases-group
+alias_database = hash:/etc/aliases
+
+# prevent bad forwards
+virtual_alias_expansion_limit = 1
+virtual_alias_recursion_limit = 2
+
+# environment variables for LDAP GSSAPI bind
+import_environment = MAIL_CONFIG MAIL_DEBUG MAIL_LOGTAG TZ XAUTHORITY DISPLAY
+	LANG=C KRB5CCNAME=FILE:/var/spool/postfix/krb5-cred
+
+# postmaster notifications
+notify_classes = resource, software
+
+# masquerade subdomains to ocf.berkeley.edu
+masquerade_domains = !g.$mydomain $mydomain
+masquerade_classes = envelope_sender, envelope_recipient, header_sender,
+	header_recipient
+local_header_rewrite_clients = permit_mynetworks
+
+# tls
+smtpd_tls_cert_file=/etc/ssl/private/anthrax.ocf.berkeley.edu.crt
+smtpd_tls_key_file=/etc/ssl/private/anthrax.ocf.berkeley.edu.key
+smtpd_use_tls=yes
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+# performance
+biff = no
+
+# security and anti-spam
+disable_vrfy_command = yes
+show_user_unknown_table_name = no
+smtpd_delay_reject = yes
+smtpd_helo_required = yes
+smtpd_reject_unlisted_recipient = yes
+smtpd_reject_unlisted_sender = yes
+always_add_missing_headers = yes
+
+# client restrictions for SMTP connections
+# skip OCF, reject if no reverse DNS, greylist if not whitelisted
+smtpd_client_restrictions =
+    permit_mynetworks,
+    reject_unknown_client_hostname,
+    permit_dnswl_client list.dnswl.org,
+    check_policy_service inet:127.0.0.1:10023,
+    sleep 5,
+    permit
+
+# restrictions on HELO hostname
+# reject invalid HELO hostnames
+smtpd_helo_restrictions =
+    permit_mynetworks,
+    reject_invalid_helo_hostname,
+    reject_non_fqdn_helo_hostname,
+    check_helo_access texthash:/etc/postfix/ocf/helo_access
+
+# restrictions on sender addresses
+# reject bad users/auth, non-existant domains, policyd-weight
+smtpd_sender_restrictions =
+    check_sender_access hash:/etc/postfix/ocf/sorry-postfix,
+    check_sender_access hash:/etc/postfix/ocf/nomail-postfix,
+    reject_non_fqdn_sender,
+    reject_unknown_sender_domain,
+    permit_mynetworks,
+    check_policy_service inet:127.0.0.1:12525
+
+# restrictions on recipient addresses
+# reject bad users/auth, non-existant domains, open relay
+smtpd_recipient_restrictions =
+    check_recipient_access hash:/etc/postfix/ocf/sorry-postfix,
+    check_recipient_access hash:/etc/postfix/ocf/nomail-postfix,
+    reject_non_fqdn_recipient,
+    reject_unknown_recipient_domain,
+    permit_mynetworks,
+    reject_unauth_destination
+
+# restrictions before DATA command
+# MAILER-DAEMON should not have multiple recipients, do not speak too early
+smtpd_data_restrictions =
+    permit_mynetworks,
+    reject_multi_recipient_bounce
+
+# restrictions after DATA command
+# do not speak too early
+smtpd_end_of_data_restrictions =
+    permit_mynetworks,
+    reject_unauth_pipelining
+
+# add spamass and clamav milters
+smtpd_milters = unix:/spamass/spamass.sock, unix:/clamav/clamav-milter.ctl
+milter_default_action = tempfail
+
+# send client IP address and hostname to spamass-milter
+# necessary for parsing Received headers and relay path
+milter_connect_macros = j {daemon_name} v {if_name} _

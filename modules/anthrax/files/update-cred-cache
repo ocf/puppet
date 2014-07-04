@@ -1,0 +1,4 @@
+#!/bin/bash
+kinit -t /etc/postfix/ocf/smtp-krb5.keytab -c /var/spool/postfix/krb5-cred \
+	smtp/anthrax.ocf.berkeley.edu
+chown postfix:root /var/spool/postfix/krb5-cred

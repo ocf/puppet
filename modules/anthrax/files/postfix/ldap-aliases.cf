@@ -1,0 +1,23 @@
+# http://www.postfix.org/LDAP_README.html#example_alias
+# http://www.postfix.org/ldap_table.5.html
+# http://postfix.1071664.n5.nabble.com/Postfix-ldap-table-authenticate-to-LDAP-using-GSSAPI-or-EXTERNAL-td54278.html
+
+server_host = ldaps://ldap.ocf.berkeley.edu/
+start_tls = no
+tls_require_cert = no
+tls_ca_cert_file = /etc/ssl/certs/ca-certificates.crt
+version = 3
+
+search_base = ou=People,dc=OCF,dc=Berkeley,dc=EDU
+scope = sub
+
+bind = sasl
+sasl_mechs = GSSAPI
+
+# find by uid=user, return mail attribute
+#
+# note that this is the reverse of most configs (which find a mail address
+# matching the incoming mail and figure out which user to deliver it to)
+query_filter = (uid=%u)
+result_attribute = mail
+result_format = %s

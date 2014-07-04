@@ -1,0 +1,67 @@
+# This is the right place to customize your installation of SpamAssassin.
+#
+# See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+# tweaked.
+#
+# Only a small subset of options are listed below
+#
+###########################################################################
+
+required_score 2.5
+report_safe 0
+
+# show scores of tests in headers
+add_header all Status _YESNO_, score=_SCORE_ required=_REQD_ tests=_TESTSSCORES_ autolearn=_AUTOLEARN_ version=_VERSION_
+
+# OCF and Google IP address ranges
+internal_networks 169.229.10.0/24 216.239.32.0/19 64.233.160.0/19 66.249.80.0/20 72.14.192.0/18 209.85.128.0/17 66.102.0.0/20 74.125.0.0/16 64.18.0.0/20 207.126.144.0/20 173.194.0.0/16
+
+# trusted networks include internal_networks, CalMail, EECS, CSUA
+trusted_networks 169.229.10.0/24 216.239.32.0/19 64.233.160.0/19 66.249.80.0/20 72.14.192.0/18 209.85.128.0/17 66.102.0.0/20 74.125.0.0/16 64.18.0.0/20 207.126.144.0/20 173.194.0.0/16 169.229.218.128/25 169.229.60.87 128.32.112.223
+
+skip_rbl_checks 0
+use_razor2 1
+use_pyzor 1
+dns_available yes
+
+ok_languages en
+ok_locales en
+
+## bayesian setup
+
+use_bayes 0
+bayes_auto_learn 0
+bayes_auto_learn_threshold_nonspam -0.6
+bayes_auto_learn_threshold_spam 5.0
+
+bayes_path        /var/lib/spamd/.db/bayes
+bayes_file_mode   0700
+#bayes_expiry_max_db_size 250000
+
+## score adjustments
+
+header GRANT_SPAM Subject =~ /^Community & educational development$/
+score GRANT_SPAM 100
+header LED_LIGHTING From =~ /ledlighting/
+score LED_LIGHTING 100
+
+score PYZOR_CHECK (2.0)
+score RAZOR2_CHECK (2.0)
+score URIBL_BLACK (2.0)
+score URIBL_SBL (2.0)
+
+## whitelist
+# campus IST
+whitelist_from_rcvd abuse@berkeley.edu berkeley.edu
+whitelist_from_rcvd hostmaster@nic.berkeley.edu berkeley.edu
+whitelist_from_rcvd policy@berkeley.edu berkeley.edu
+whitelist_from_rcvd security@berkeley.edu berkeley.edu
+
+# complaint feedback loop
+whitelist_from_rcvd scomp@aol.net aol.com
+whitelist_from_rcvd staff@hotmail.com hotmail.com
+# returnpath feedback loops already match several ham tests
+
+# reporting false positives and spam
+whitelist_to false@armresearch.com
+whitelist_to spam@armresearch.com

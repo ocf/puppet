@@ -1,0 +1,4 @@
+127.0.0.1 REJECT Client mail server sending false HELO
+128.32.129.243 REJECT Client mail server sending false HELO
+ocf.berkeley.edu REJECT Client mail server sending false HELO
+.ocf.berkeley.edu REJECT Client mail server sending false HELO

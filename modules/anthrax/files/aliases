@@ -1,0 +1,52 @@
+# system
+root: wheel
+
+postmaster: sm
+mailer-daemon: postmaster
+
+# bureaucracy
+bod: :include:/var/mail/aliases/include/bod
+owner-bod: officers
+
+officers: daradib,tzhu,sanjayk,waf,morshed,ckuehl,nickimp
+
+gm: officers
+general-manager: gm
+owner-gm: officers
+
+sm: officers
+site-manager: sm
+owner-sm: officers
+
+staff: staff-current
+wheel: wheel-current
+owner-staff: wheel
+
+# request tracker
+help: "|/usr/bin/rt-mailgate --queue 'help' --action correspond --url https://rt.ocf.berkeley.edu"
+help-comment: "|/usr/bin/rt-mailgate --queue 'help' --action comment --url https://rt.ocf.berkeley.edu"
+owner-help: wheel
+
+hostmaster: "|/usr/bin/rt-mailgate --queue 'hostmaster' --action correspond --url https://rt.ocf.berkeley.edu"
+hostmaster-comment: "|/usr/bin/rt-mailgate --queue 'hostmaster' --action comment --url https://rt.ocf.berkeley.edu"
+owner-hostmaster: wheel
+
+projects: "|/usr/bin/rt-mailgate --queue 'projects' --action correspond --url https://rt.ocf.berkeley.edu"
+projects-comment: "|/usr/bin/rt-mailgate --queue 'projects' --action comment --url https://rt.ocf.berkeley.edu"
+owner-projects: wheel
+
+security: "|/usr/bin/rt-mailgate --queue 'security' --action correspond --url https://rt.ocf.berkeley.edu"
+security-comment: "|/usr/bin/rt-mailgate --queue 'security' --action comment --url https://rt.ocf.berkeley.edu"
+owner-security: wheel
+
+todo: "|/usr/bin/rt-mailgate --queue 'todo' --action correspond --url https://rt.ocf.berkeley.edu"
+todo-comment: "|/usr/bin/rt-mailgate --queue 'todo' --action comment --url https://rt.ocf.berkeley.edu"
+owner-todo: wheel
+
+# accounts only used for sending
+mon: /dev/null
+mirrors: /dev/null
+ocfstats: /dev/null
+
+# misc
+archive: /var/mail/archives/archive
