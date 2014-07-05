@@ -47,6 +47,7 @@ owner-todo: wheel
 mon: /dev/null
 mirrors: /dev/null
 ocfstats: /dev/null
+puppet: /dev/null
 
 # misc
 archive: /var/mail/archives/archive
