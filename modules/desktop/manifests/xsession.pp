@@ -58,12 +58,9 @@ class desktop::xsession {
   }
 
   # use ocf logo on login screen
-  file {
-    '/usr/share/icons/hicolor/64x64/devices/ocf.png':
-      backup  => false,
-      source  => 'puppet:///contrib/desktop/ocf-color-64.png';
-    '/usr/share/lightdm-gtk-greeter/greeter.ui':
-      source  => 'puppet:///modules/desktop/xsession/lightdm/greeter.ui';
+  file { '/usr/share/icons/hicolor/64x64/devices/ocf.png':
+    backup  => false,
+    source  => 'puppet:///contrib/desktop/ocf-color-64.png',
   }
 
   exec {
@@ -84,20 +81,15 @@ class desktop::xsession {
   }
 
   # lxde configuration
-    # provide lxde wallpaper configuration
-    if $::lsbdistcodename == 'wheezy' {
-      file { '/etc/xdg/pcmanfm/LXDE/pcmanfm.conf':
-        source  => 'puppet:///modules/desktop/xsession/lxde/LXDE.conf';
-      }
-    } else {
-      file { '/usr/share/lxde/pcmanfm/LXDE.conf':
-        source  => 'puppet:///modules/desktop/xsession/lxde/LXDE.conf';
-    }
-  }
   file {
+    # provide lxde wallpaper configuration
+    '/etc/xdg/pcmanfm/LXDE/pcmanfm.conf':
+      source  => 'puppet:///modules/desktop/xsession/lxde/LXDE.conf',
+    ;
     # provide lxterminal configuration to fix transparency bug
     '/usr/share/lxterminal/lxterminal.conf':
-      source  => 'puppet:///modules/desktop/xsession/lxde/lxterminal.conf';
+      source  => 'puppet:///modules/desktop/xsession/lxde/lxterminal.conf',
+    ;
   }
 
   # lxde logout configuration
@@ -143,7 +135,7 @@ class desktop::xsession {
   # disable user switching and screen locking (prevent non-staff users from
   # executing the necessary binaries)
   file {
-    ['/usr/bin/lxlock', '/usr/bin/xflock4', '/usr/bin/xscreensaver-command']:
+    ['/usr/bin/lxlock', '/usr/bin/xflock4']:
       owner => root,
       group => 1002, # approve
       mode => '0754';
@@ -171,15 +163,6 @@ class desktop::xsession {
     '/etc/fonts/local.conf':
       source => 'puppet:///modules/desktop/xsession/fonts.conf',
     ;
-  }
-
-  # xscreensaver configuration
-  package { 'xscreensaver': }
-  file { '/etc/X11/app-defaults/XScreenSaver':
-    mode    => '0755',
-    backup  => false,
-    source  => 'puppet:///modules/desktop/xsession/XScreenSaver',
-    require => Package['xscreensaver']
   }
 
 }

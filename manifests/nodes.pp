@@ -87,7 +87,6 @@ node default {
     include desktop::grub
     include desktop::iceweasel
     include desktop::chrome
-    include desktop::lxpanel
     include desktop::modprobe
     include desktop::packages
     include desktop::pam

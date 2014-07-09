@@ -5,22 +5,26 @@ class desktop::sshfs {
   require desktop::xsession
 
   # install sshfs and libpam-mount
-  package { [ 'libpam-mount', 'sshfs', 'fuse-utils' ]: }
+  package { ['libpam-mount', 'sshfs', 'fuse']: }
 
-  # change fuse group to match ocf group gid
-  exec { 'fuse':
-    command => 'sed -i "s/^fuse:.*/fuse:x:20:/g" /etc/group',
-    unless  => 'grep "fuse:x:20:" /etc/group',
-    require => Package['sshfs']
-  }
-  file {
-    '/bin/fusermount':
-      mode    => '4754',
-      group   => fuse,
-      require => [ Package['sshfs'], Exec['fuse'] ];
-    '/etc/fuse.conf':
-      group   => fuse,
-      require => [ Package['sshfs'], Exec['fuse'] ];
+  # In wheezy, ocf group must be set to same gid as fuse group.
+  # In jessie, there is no fuse group. By default all users can use fuse.
+  if $::lsbdistcodename == 'wheezy' {
+    # change fuse group to match ocf group gid
+    exec { 'fuse':
+      command => 'sed -i "s/^fuse:.*/fuse:x:20:/g" /etc/group',
+      unless  => 'grep "fuse:x:20:" /etc/group',
+      require => Package['sshfs']
+    }
+    file {
+      '/bin/fusermount':
+        mode    => '4754',
+        group   => fuse,
+        require => [ Package['sshfs'], Exec['fuse'] ];
+      '/etc/fuse.conf':
+        group   => fuse,
+        require => [ Package['sshfs'], Exec['fuse'] ];
+    }
   }
 
   # create directory to mount to

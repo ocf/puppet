@@ -7,14 +7,6 @@ class eruption {
       device  => 'tmpfs',
       fstype  => 'tmpfs',
       options => 'noatime,nodev,nosuid';
-    '/var/lock':
-      device  => 'tmpfs',
-      fstype  => 'tmpfs',
-      options => 'noatime,nodev,noexec,nosuid';
-    '/var/run':
-      device  => 'tmpfs',
-      fstype  => 'tmpfs',
-      options => 'mode=0755,noatime,nodev,noexec,nosuid';
     '/var/tmp':
       device  => 'tmpfs',
       fstype  => 'tmpfs',

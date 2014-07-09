@@ -12,9 +12,6 @@ deb http://mirrors.kernel.org/debian/ <%= @lsbdistcodename %> main<% if @nonfree
 deb http://mirrors.kernel.org/debian/ <%= @lsbdistcodename %>-updates main<% if @nonfree %> contrib non-free<% end %>
 deb http://security.debian.org/ <%= @lsbdistcodename %>/updates main<% if @nonfree %> contrib non-free<% end %>
 <% end -%>
-<% if @kiosk -%>
-deb http://debian.webconverger.com/ squeeze/
-<% end -%>
 <% elsif @operatingsystem == 'Ubuntu' -%>
 deb http://mirrors.kernel.org/ubuntu/ <%= @lsbdistcodename %> main restricted universe multiverse
 deb http://mirrors.kernel.org/ubuntu/ <%= @lsbdistcodename %>-updates main restricted universe multiverse
