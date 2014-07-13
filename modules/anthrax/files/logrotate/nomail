@@ -1,0 +1,8 @@
+/var/mail/nomail/nomail {
+	daily
+	missingok
+	rotate 14
+	shred
+	nocompress
+	create 600 ocfmail ocfmail
+}

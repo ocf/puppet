@@ -41,12 +41,25 @@ class anthrax::mail {
       shell   => '/bin/false',
       system  => true,
       require => Group['spamd'];
+    'ocfmail':
+      ensure  => present,
+      name    => 'ocfmail',
+      gid     => 'ocfmail',
+      groups  => ['sys'],
+      home    => '/var/mail',
+      shell   => '/bin/false',
+      system  => true,
+      require => Group['ocfmail'];
   }
 
   group {
     'spamd':
       ensure  => present,
       name    => 'spamd',
+      system  => true;
+    'ocfmail':
+      ensure  => present,
+      name    => 'ocfmail',
       system  => true;
   }
 
@@ -196,5 +209,15 @@ class anthrax::mail {
       source  => 'puppet:///modules/anthrax/policyd-weight/policyd-weight.conf',
       notify  => Service['policyd-weight'],
       require => Package['policyd-weight'];
+
+    # outgoing nomail logging
+    '/var/mail/nomail':
+      ensure  => directory,
+      mode    => 755,
+      owner   => ocfmail,
+      group   => ocfmail;
+    '/etc/logrotate.d/nomail':
+      ensure  => file,
+      source  => 'puppet:///modules/anthrax/logrotate/nomail';
   }
 }

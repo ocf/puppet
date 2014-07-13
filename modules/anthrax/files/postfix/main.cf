@@ -20,6 +20,9 @@ virtual_alias_maps = hash:/etc/postfix/ocf/aliases-local,
 alias_maps = hash:/etc/aliases, hash:/etc/aliases-group
 alias_database = hash:/etc/aliases
 
+# user used for delivering mail to files specified in aliases
+default_privs = ocfmail
+
 # prevent bad forwards
 virtual_alias_expansion_limit = 1
 virtual_alias_recursion_limit = 2
@@ -78,7 +81,7 @@ smtpd_helo_restrictions =
 # reject bad users/auth, non-existant domains, policyd-weight
 smtpd_sender_restrictions =
     check_sender_access hash:/etc/postfix/ocf/sorry-postfix,
-    check_sender_access hash:/etc/postfix/ocf/nomail-postfix,
+    check_sender_access hash:/etc/postfix/ocf/nomail-out-postfix,
     reject_non_fqdn_sender,
     reject_unknown_sender_domain,
     permit_mynetworks,
@@ -88,7 +91,7 @@ smtpd_sender_restrictions =
 # reject bad users/auth, non-existant domains, open relay
 smtpd_recipient_restrictions =
     check_recipient_access hash:/etc/postfix/ocf/sorry-postfix,
-    check_recipient_access hash:/etc/postfix/ocf/nomail-postfix,
+    check_recipient_access hash:/etc/postfix/ocf/nomail-in-postfix,
     reject_non_fqdn_recipient,
     reject_unknown_recipient_domain,
     permit_mynetworks,

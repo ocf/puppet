@@ -4,6 +4,9 @@ root: wheel
 postmaster: sm
 mailer-daemon: postmaster
 
+# archive of outgoing mail for nomail'd users
+nomail: /var/mail/nomail/nomail
+
 # bureaucracy
 bod: :include:/var/mail/aliases/include/bod
 owner-bod: officers

@@ -9,8 +9,14 @@ ldapsearch -x -LLL gidNumber=2390 uid | grep '^uid:' | cut -d' ' -f2 | \
 /usr/sbin/postmap /etc/postfix/ocf/sorry-postfix
 
 # manually mail disabled users
-sed 's/$/@ocf.berkeley.edu REJECT Account is sending too much mail; cannot send or receive mail./g' \
+# reject hash for incoming mail
+sed 's/$/@ocf.berkeley.edu REJECT Account is sending too much mail; cannot receive mail./g' \
 	/etc/postfix/ocf/nomail \
-	> /etc/postfix/ocf/nomail-postfix
+	> /etc/postfix/ocf/nomail-in-postfix
+/usr/sbin/postmap /etc/postfix/ocf/nomail-in-postfix
 
-/usr/sbin/postmap /etc/postfix/ocf/nomail-postfix
+# hold hash for outgoing mail
+sed 's/$/@ocf.berkeley.edu REDIRECT nomail@int.ocf.berkeley.edu/g' \
+	/etc/postfix/ocf/nomail \
+	> /etc/postfix/ocf/nomail-out-postfix
+/usr/sbin/postmap /etc/postfix/ocf/nomail-out-postfix
