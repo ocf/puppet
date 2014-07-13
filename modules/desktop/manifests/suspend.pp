@@ -1,8 +1,5 @@
 class desktop::suspend {
 
-  # this gets included anyway...
-  # require desktop::tmpfs
-
   file {
     # suspend script with scheduled wakeup, also attempt resetting tmpfs
     '/usr/local/sbin/ocf-suspend':
