@@ -1,25 +1,14 @@
 #!/bin/bash
-
-# Don't sleep if installing packages or puppet is running
+# Don't sleep if installing packages, puppet is running, or user present
 ! /usr/bin/lsof -- /var/lib/dpkg/lock > /dev/null 2>&1 || exit 1
 [ ! -f /var/lib/puppet/state/agent_catalog_run.lock ] || exit 1
+ps ax | grep 'notify\.sh' | grep -v grep > /dev/null && exit 2
 
-if grep "tmpfs /home" /proc/mounts > /dev/null; then
-	# Continue only if previous command succeeds unless forced
-	# Reset tmpfs-mounted directories
-	if [ -z "$1" ]; then
-		umount /home && mount /home || exit 2
-		umount /tmp && mount /tmp
-	elif [ "$1" = '--silent' ]; then
-		umount /home 2> /dev/null && mount /home || exit 2
-		umount /tmp 2> /dev/null && mount /tmp
-	elif [ "$1" = '-f' -o "$1" = '--force' ]; then
-		umount /home && mount /home
-		umount /tmp && mount /tmp
-	else
-		exit 1
-	fi
+if grep $'tmpfs\t/home' /etc/fstab > /dev/null; then
+	umount /home 2> /dev/null && mount /home || exit 3
 fi
+
+umount /tmp 2> /dev/null && mount /tmp
 
 # Enable WOL and sleep until magic packet wakes you up
 /sbin/ethtool -s eth0 wol g

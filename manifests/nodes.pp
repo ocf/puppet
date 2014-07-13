@@ -94,8 +94,8 @@ node default {
     include desktop::pulse
     include desktop::sshfs
     include desktop::stats
+    include desktop::suspend
     if $::hostname != 'eruption' {
-      include desktop::suspend
       include desktop::tmpfs
       include desktop::limits
     }
