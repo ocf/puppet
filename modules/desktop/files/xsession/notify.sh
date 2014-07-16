@@ -10,11 +10,6 @@ if [ -n "$lab_staff" ]; then
 $lab_staff"
 fi
 
-# warn if email inbox over quota
-if $ssh "grep -Fx $USER /var/mail/etc/quota"; then
-  $notify_send "OCF email inbox is over quota"
-fi
-
 # report printing quota
 while true; do
   balance="`$ssh /opt/ocf/bin/paper | grep pages`"
