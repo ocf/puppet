@@ -70,14 +70,15 @@ class desktop::xsession {
   }
 
   # polkit configuration
-  # prevent privileged actions
-  file {  '/usr/share/polkit-1/actions':
-    ensure  => directory,
-    recurse => true,
-    purge   => true,
-    force   => true,
-    backup  => false,
-    source  => 'puppet:///modules/desktop/xsession/polkit'
+  file {
+    # restrict polkit actions
+    '/etc/polkit-1/localauthority/90-mandatory.d/99-ocf.pkla':
+      source => 'puppet:///modules/desktop/xsession/polkit/99-ocf.pkla',
+    ;
+    # use ocfroot group for polkit admin auth
+    '/etc/polkit-1/localauthority.conf.d/99-ocf.conf':
+      source => 'puppet:///modules/desktop/xsession/polkit/99-ocf.conf',
+    ;
   }
 
   # lxde configuration

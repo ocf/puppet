@@ -1,0 +1,28 @@
+# Restrict polkit actions on OCF desktops.
+#
+# For a list of polkit actions and default values, run:
+#   pkaction --verbose
+#
+# This file is compatible with polkit <= 0.105, as currently included in
+# wheezy and jessie, but not with 0.106 and above which use JavaScript rules.
+
+[Deny most actions except by admin]
+Identity=unix-group:ocf
+Action=*
+ResultAny=no
+ResultInactive=no
+ResultActive=auth_admin
+
+[Allow external drives, wheezy]
+Identity=unix-group:ocf
+Action=org.freedesktop.udisks.filesystem-mount;org.freedesktop.udisks.drive-eject
+ResultAny=no
+ResultInactive=no
+ResultActive=yes
+
+[Allow external drives]
+Identity=unix-group:ocf
+Action=org.freedesktop.udisks2.filesystem-mount;org.freedesktop.udisks2.eject-media
+ResultAny=no
+ResultInactive=no
+ResultActive=yes
