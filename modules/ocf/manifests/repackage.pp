@@ -11,7 +11,8 @@ define ocf::repackage(
     false:          { $r = '--without-recommends ' }
   }
 
-  if ($dist == 'wheezy') and ($backports == true) {
+  if ($dist == 'wheezy') and ($architecture != 'armv6l') and
+     ($backports == true) {
     $b = "-t ${dist}-backports "
     $g = '| grep ~bpo'
   }
