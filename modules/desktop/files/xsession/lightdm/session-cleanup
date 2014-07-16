@@ -1,14 +1,10 @@
 #!/bin/sh
 
-# Eliminate all session child processes
-
-# Send child processes SIGTERM
-pkill -u $USER
-
-# Wait 1 second
-sleep 1
-
-# Send all remaining child processes SIGKILL
-pkill -9 -u $USER
+if [ -n "$USER" ]; then
+  # Send user processes SIGTERM, then SIGKILL
+  pkill -u $USER
+  sleep 1
+  pkill -9 -u $USER
+fi
 
 sudo -u ocfstats "/opt/stats/update-delay.sh" &
