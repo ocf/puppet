@@ -5,6 +5,7 @@ from __future__ import print_function
 
 import argparse
 import os.path
+import random
 import re
 import socket
 import subprocess
@@ -15,9 +16,8 @@ import colorama
 from colorama import Fore, Style # pretty colors
 import paramiko
 
-# IP address range that DHCP might assign
-# TODO: better way that would support creating multiple VMs simultaneously
-DHCP_IPS = ["169.229.10." + str(i) for i in range(190, 200)]
+MAC_KVM_PREFIX = (0x52, 0x54, 0x00)
+MAC_BYTES = 6
 
 devnull = open(os.devnull, "w")
 
@@ -40,7 +40,14 @@ def create_disk(name, size):
 	cmd = "lvcreate -L {}GB --name {} vg".format(size, name)
 	exec_cmd(cmd)
 
-def create_vm(name, memory, os_type, os_variant, network):
+def generate_mac_addr():
+	def random_byte(idx):
+		if idx < len(MAC_KVM_PREFIX):
+			return MAC_KVM_PREFIX[idx]
+		return random.randint(0, 255)
+	return ":".join('{:02x}'.format(random_byte(i)) for i in range(MAC_BYTES))
+
+def create_vm(name, memory, os_type, os_variant, network, mac):
 	"""Creates a new VM."""
 
 	# try to print info about the domain to see if it already exists
@@ -53,9 +60,9 @@ def create_vm(name, memory, os_type, os_variant, network):
 		pass # all good
 
 	cmd = "virt-install -r {} --pxe --os-type={} --os-variant={} " + \
-		"--disk {},cache=none --network {} --graphics vnc --serial pty --name {}"
+		"--disk {},cache=none --network {},mac={} --graphics vnc --serial pty --name {}"
 	cmd = cmd.format(memory, os_type, os_variant, "/dev/vg/" + name,
-		network, name)
+		network, mac, name)
 
 	exec_cmd(cmd)
 
@@ -69,20 +76,30 @@ def wait_for_shutdown(name):
 def start_vm(name):
 	exec_cmd("virsh start {}".format(name))
 
-def get_ssh_connection(user, password):
+def get_ip(mac):
+	"""Get IP address for the given MAC address. This needs some work."""
+	while True:
+		try:
+			subprocess.check_call("nmap -sn 169.229.10.0/24", stdout=devnull)
+			cmd = "arp -an | grep '{}'".format(mac)
+			result = subprocess.check_output(cmd, shell=True).strip()
+			return result.split(" ")[1][1:-1]
+		except subprocess.CalledProcessError:
+			time.sleep(1)
+
+def get_ssh_connection(ip, user, password):
 	client = paramiko.SSHClient()
 	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
 	# wait for the VM to be live
 	while True:
-		for ip in DHCP_IPS:
-			try:
-				client.connect(ip, username=user, password=password, timeout=1)
-			except (socket.timeout, socket.error):
-				continue
-			else:
-				print()
-				return client
+		try:
+			client.connect(ip, username=user, password=password, timeout=1)
+		except (socket.timeout, socket.error):
+			continue
+		else:
+			print()
+			return client
 		print('.', end='')
 		sys.stdout.flush()
 		time.sleep(1)
@@ -161,7 +178,7 @@ def _main(args):
 			print("Cancelled.")
 			sys.exit(2)
 
-	if not re.match("^[a-z]{1,20}$", args.hostname):
+	if not re.match("^[(a-z\-0-9]{1,20}$", args.hostname):
 		print("Warning: Your hostname is '{}'.".format(args.hostname))
 		print("You probably should NOT include the domain name.")
 
@@ -195,9 +212,11 @@ def _main(args):
 		print("Cancelled.")
 		sys.exit(2)
 
+	mac = generate_mac_addr()
+
 	create_disk(args.hostname, args.storage)
 	create_vm(args.hostname, args.memory, args.os_type, args.os_variant,
-		args.network)
+		args.network, mac)
 
 	if args.skip_config:
 		print("VM created, skipping configuration. Have fun!")
@@ -209,8 +228,12 @@ def _main(args):
 	print("Installation successful, starting VM...")
 	start_vm(args.hostname)
 
+	print("Determining IP for VM...")
+	ip = get_ip(mac)
+
+	print("IP: {}".format(ip))
 	print("Connecting to VM via SSH...")
-	client = get_ssh_connection(args.preseed_user, args.preseed_password)
+	client = get_ssh_connection(ip, args.preseed_user, args.preseed_password)
 
 	print("Setting hostname to {}...".format(args.hostname))
 	client.exec_command("echo {} > /etc/hostname".format(args.hostname))
