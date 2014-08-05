@@ -2,16 +2,14 @@ class common::packages( $extra = false, $login = false ) {
 
   # packages to remove
   package {
-    'mlocate':
+    ['mlocate', 'popularity-contest', 'apt-listchanges']:
       ensure => purged;
-    'popularity-contest':
-      ensure => purged
   }
 
   # common packages for all ocf machines
   package {
     # general packages
-    [ 'beep', 'bsdmainutils', 'cpufrequtils', 'finger', 'netcat-openbsd', 'pigz', 'pv', 'pwgen', 'quota', 'rsync', 'tofrodos', 'tree', 'unzip', 'apt-listchanges', 'curl', 'vim', 'lsof' ]:;
+    [ 'beep', 'bsdmainutils', 'cpufrequtils', 'finger', 'netcat-openbsd', 'pigz', 'pv', 'pwgen', 'quota', 'rsync', 'tofrodos', 'tree', 'unzip', 'curl', 'vim', 'lsof' ]:;
     # account approval and chpass/passwd dependencies
     ['python-cracklib', 'python-dnspython']:;
     # common scripting languages
