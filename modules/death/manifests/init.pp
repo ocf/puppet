@@ -29,9 +29,6 @@ class death {
     # for staff_hours.cgi (perl)
     'libhtml-parser-perl':
     ;
-    # for account_tools
-    ['python-pexpect', 'python-paramiko']:
-    ;
   }
 
   file { '/etc/apache2/conf.d':
@@ -48,13 +45,6 @@ class death {
     group     => 'root',
     mode      => '0644',
     recurse   => true,
-    require   => Package['apache2'],
-  }
-
-  file { '/etc/apache2/sites-available/21-account_tools.conf':
-    ensure    => file,
-    source    => 'puppet:///modules/death/apache/sites/account_tools.conf',
-    notify    => Service['apache2'],
     require   => Package['apache2'],
   }
 
@@ -180,11 +170,6 @@ class death {
   }
 
   # enable sites
-  exec { '/usr/sbin/a2ensite 21-account_tools.conf':
-    unless      => '/bin/readlink -e /etc/apache2/sites-enabled/21-account_tools.conf',
-    notify      => Service['apache2'],
-    require     => [Exec['/usr/sbin/a2enmod rewrite'], File['/etc/apache2/sites-available/21-account_tools.conf']],
-  }
   exec { '/usr/sbin/a2ensite 02-ssl.conf':
     unless      => '/bin/readlink -e /etc/apache2/sites-enabled/02-ssl.conf',
     notify      => Service['apache2'],
@@ -257,56 +242,6 @@ class death {
 
   # apache must subscribe to all conf files
   service { 'apache2': }
-
-  # config files for account-tools
-  file {
-    '/var/www/account_tools/config':
-      ensure   => directory,
-      mode     => '0750',
-      owner    => 'account-tools',
-      group    => 'account-tools';
-    '/var/www/account_tools/config/cmds_host_keys':
-      ensure   => file,
-      mode     => '0440',
-      owner    => 'account-tools',
-      group    => 'account-tools',
-      source   => 'puppet:///private/account_tools/host_keys';
-    '/var/www/account_tools/config/chpass.keytab':
-      ensure   => file,
-      mode     => '0400',
-      owner    => 'account-tools',
-      group    => 'account-tools',
-      source   => 'puppet:///private/account_tools/chpass.keytab';
-  }
-
-  # create / approve directory files
-  file {
-    '/export/approve/approved.log':
-      ensure   => file,
-      mode     => '0660',
-      owner    => 'account-tools',
-      group    => 'approve';
-
-    '/export/approve/approved.users':
-      ensure   => file,
-      mode     => '0660',
-      owner    => 'account-tools',
-      group    => 'approve';
-
-    '/export/approve/public_pass.pem':
-      source   => 'puppet:///modules/death/public_pass.pem',
-      ensure   => file,
-      mode     => '0440',
-      owner    => 'account-tools',
-      group    => 'approve';
-
-    '/export/approve/reserved_names.txt':
-      source   => 'puppet:///modules/death/reserved_names.txt',
-      ensure   => file,
-      mode     => '0440',
-      owner    => 'account-tools',
-      group    => 'approve';
-  }
 
   # nfs export of apache logs
   file {
