@@ -96,7 +96,6 @@ node default {
     include desktop::suspend
     if $::hostname != 'eruption' {
       include desktop::tmpfs
-      include desktop::limits
     }
     include desktop::xsession
   }
