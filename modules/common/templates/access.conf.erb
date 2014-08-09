@@ -15,7 +15,9 @@
 + : (ocfroot) : ALL
 + : (ocfstaff) : ALL
 + : (sys) : ALL
-<% @glogin.each do |val| -%>
-+ : (<%= val %>) : ALL
+<% @glogin.each do |group,from| -%>
+<% if not group.nil? and not from.nil? -%>
++ : (<%= group %>) : <%= from %>
+<% end -%>
 <% end -%>
 - : ALL : ALL

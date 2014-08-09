@@ -62,11 +62,11 @@ node default {
     if $owner == undef {
       case $::hostname {
         locusts:   { class { 'common::auth': ulogin => [ ['NuclearPoweredKimJongIl', 'ALL' ] ] } }
-        pollution: { class { 'common::auth': glogin => [ 'approve' ], gsudo => [ 'ocfstaff' ] } }
-        supernova: { class { 'common::auth': glogin => [ 'approve' ] } }
-        tornado:      { class { 'common::auth': ulogin => [ ['kiosk', 'LOCAL'] ] } }
-        tsunami:   { class { 'common::auth': glogin => [ 'ocf', 'sorry' ] } }
-        default:   { class { 'common::auth': ulogin => [[]], glogin => [], usudo => [], gsudo => [] } }
+        pollution: { class { 'common::auth': glogin => [ ['approve', 'ALL'] ], gsudo => [ 'ocfstaff' ] } }
+        supernova: { class { 'common::auth': glogin => [ ['approve', 'ALL'] ] } }
+        tornado:   { class { 'common::auth': ulogin => [ ['kiosk', 'LOCAL'] ] } }
+        tsunami:   { class { 'common::auth': glogin => [ ['ocf', 'ALL'], ['sorry', 'ALL'] ] } }
+        default:   { class { 'common::auth': ulogin => [], glogin => [], usudo => [], gsudo => [] } }
       }
     } else { # grant login and sudo to owner
       class { 'common::auth': ulogin => [[$owner, 'ALL']], usudo => [$owner] }
@@ -77,8 +77,8 @@ node default {
   if $type == 'desktop' {
     class { 'common::apt':  stage => first, nonfree => true, desktop => true }
     case $::hostname {
-      eruption:  { class { 'common::auth': glogin => [ 'approve' ] } }
-      default:   { class { 'common::auth': glogin => [ 'ocf' ] } }
+      eruption:  { class { 'common::auth': glogin => [ ['approve', 'LOCAL'] ] } }
+      default:   { class { 'common::auth': glogin => [ ['ocf', 'LOCAL'] ] } }
     }
     include common::acct
     include common::cups
