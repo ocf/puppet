@@ -43,29 +43,6 @@ class lightning {
   # Puppet manifest help
   package { [ 'puppet-lint', 'vim-puppet' ]: }
 
-  # git configuration
-  file {
-    # root user ssh directory
-    '/root/.ssh':
-      ensure  => directory,
-      mode    => '0700',
-    ;
-    # root user private key used to deploy to github
-    '/root/.ssh/id_rsa':
-      mode    => '0700',
-      source  => 'puppet:///private/id_rsa',
-    ;
-    # bare repo at /opt/puppet, force FF, github remote
-    '/opt/puppet/.git/config':
-      source  => 'puppet:///modules/lightning/git/config',
-    ;
-    # post-receive hook deploys environment and pushes to github
-    '/opt/puppet/.git/hooks/post-receive':
-      mode    => '0755',
-      source  => 'puppet:///modules/lightning/git/post-receive',
-    ;
-  }
-
   # remote package management
   package { 'apt-dater': }
   file { '/root/apt-dater.keytab':
@@ -85,12 +62,9 @@ class lightning {
     ;
     # provide scripts directory
     '/opt/puppet/scripts':
-      ensure  => directory,
-      mode    => '0755',
-      recurse => true,
-      purge   => true,
-      force   => true,
-      source  => 'puppet:///modules/lightning/puppet-scripts',
+      ensure  => symlink,
+      links   => manage,
+      target  => '/opt/share/utils/staff/puppet',
     ;
     # provide fileserver shares directory
     '/opt/puppet/shares':
