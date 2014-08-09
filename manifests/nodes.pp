@@ -16,12 +16,13 @@ node default {
     default:     { include common::munin }
   }
   include common::autologout
-  include common::locale
   include common::git
   include common::kerberos
   include common::ldap
+  include common::locale
   include common::memtest
   include common::smart
+  include common::utils
   include common::zabbix
   include common::zsh
   if $::macAddress {
