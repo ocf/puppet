@@ -21,10 +21,6 @@ class lightning::puppetmaster {
   }
 
   file {
-    '/etc/apache2/conf.d/ocf-puppetmaster':
-      source  => 'puppet:///modules/lightning/apache/puppetmaster',
-      notify  => Service['apache2'];
-
     '/etc/puppet/fileserver.conf':
       source  => 'puppet:///modules/lightning/fileserver.conf';
 
