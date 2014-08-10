@@ -33,6 +33,13 @@ class lightning::puppetmaster {
     ['/opt/puppet', '/opt/puppet/env', '/opt/puppet/shares', '/opt/puppet/shares/contrib']:
       ensure  => directory;
 
+    # hmac secret used for GitHub webhook
+    '/opt/puppet/github.secret':
+      source  => 'puppet:///private/github.secret',
+      owner   => root,
+      group   => www-data,
+      mode    => 640;
+
     '/opt/puppet/shares/private':
       mode    => 400,
       owner   => puppet,
@@ -43,5 +50,8 @@ class lightning::puppetmaster {
       ensure  => symlink,
       links   => manage,
       target  => '/opt/share/utils/staff/puppet';
+
+    '/etc/sudoers.d/github-webhook':
+      content => "www-data ALL=(root) NOPASSWD: /opt/puppet/scripts/update-prod\n";
   }
 }

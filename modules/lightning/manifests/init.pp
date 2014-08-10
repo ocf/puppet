@@ -21,4 +21,14 @@ class lightning {
       addhandlers => [{handler => 'cgi-script', extensions => ['.cgi']}]
     }];
   }
+
+  file {
+    '/var/www/webhook':
+      ensure  => directory,
+      owner   => www-data,
+      group   => www-data,
+      mode    => 755,
+      source  => 'puppet:///modules/lightning/webhook',
+      recurse => true;
+  }
 }
