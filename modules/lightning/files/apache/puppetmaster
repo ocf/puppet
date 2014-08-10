@@ -1,0 +1,52 @@
+# This Apache 2 virtual host config shows how to use Puppet as a Rack
+# application via Passenger. See
+# http://docs.puppetlabs.com/guides/passenger.html for more information.
+
+# You can also use the included config.ru file to run Puppet with other Rack
+# servers instead of Passenger.
+
+# you probably want to tune these settings
+PassengerHighPerformance on
+PassengerMaxPoolSize 12
+PassengerPoolIdleTime 1500
+# PassengerMaxRequests 1000
+PassengerStatThrottleRate 120
+RackAutoDetect Off
+RailsAutoDetect Off
+
+Listen 8140
+
+<VirtualHost *:8140>
+        SSLEngine on
+        SSLProtocol             ALL -SSLv2
+        SSLCipherSuite          ALL:!aNULL:!eNULL:!DES:!3DES:!IDEA:!SEED:!DSS:!PSK:!RC4:!MD5:+HIGH:+MEDIUM:!LOW:!SSLv2:!EXP
+        SSLHonorCipherOrder     on
+
+        SSLCertificateFile      /var/lib/puppet/ssl/certs/puppet.pem
+        SSLCertificateKeyFile   /var/lib/puppet/ssl/private_keys/puppet.pem
+        SSLCertificateChainFile /var/lib/puppet/ssl/certs/ca.pem
+        SSLCACertificateFile    /var/lib/puppet/ssl/certs/ca.pem
+        # If Apache complains about invalid signatures on the CRL, you can try disabling
+        # CRL checking by commenting the next line, but this is not recommended.
+        SSLCARevocationFile     /var/lib/puppet/ssl/ca/ca_crl.pem
+        SSLVerifyClient optional
+        SSLVerifyDepth  1
+        # The `ExportCertData` option is needed for agent certificate expiration warnings
+        SSLOptions +StdEnvVars +ExportCertData
+
+        # This header needs to be set if using a loadbalancer or proxy
+        RequestHeader unset X-Forwarded-For
+
+        RequestHeader set X-SSL-Subject %{SSL_CLIENT_S_DN}e
+        RequestHeader set X-Client-DN %{SSL_CLIENT_S_DN}e
+        RequestHeader set X-Client-Verify %{SSL_CLIENT_VERIFY}e
+
+        DocumentRoot /usr/share/puppet/rack/puppetmasterd/public/
+        RackBaseURI /
+        <Directory /usr/share/puppet/rack/puppetmasterd/>
+                Options None
+                AllowOverride None
+                Order allow,deny
+                allow from all
+        </Directory>
+</VirtualHost>
