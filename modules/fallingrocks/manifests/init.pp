@@ -1,58 +1,48 @@
 class fallingrocks {
-  # mirroring user
-  user { "mirrors":
-    comment => "OCF Mirroring",
-    home    => "/opt/mirrors",
-    groups  => ["sys"],
-    require => File["/opt/mirrors"];
-  }
-
-  File {
-    owner => mirrors,
-    group => mirrors
+  user { 'mirrors':
+    comment => 'OCF Mirroring',
+    home    => '/opt/mirrors',
+    groups  => ['sys'],
+    require => File['/opt/mirrors'];
   }
 
   file {
-    "/opt/mirrors":
+    ['/opt/mirrors', '/opt/mirrors/ftp', '/opt/mirrors/log', '/opt/mirrors/etc']:
       ensure  => directory,
-      mode    => 755;
-    "/opt/mirrors/ftp":
-      ensure  => directory,
-      mode    => 755;
-    "/opt/mirrors/log":
-      ensure  => directory,
-      mode    => 755;
-    "/opt/mirrors/etc":
-      ensure  => directory,
-      mode    => 755;
+      mode    => 755,
+      owner => mirrors,
+      group => mirrors
   }
 
-  # SSL certificates
-  file {
-    # key and cert
-    "/etc/ssl/private/mirrors.ocf.berkeley.edu.key":
-      owner  => root,
-      group  => root,
-      mode   => 400,
-      source => "puppet:///private/mirrors.ocf.berkeley.edu.key";
-    "/etc/ssl/private/mirrors.ocf.berkeley.edu.crt":
-      owner  => root,
-      group  => root,
-      mode   => 444,
-      source => "puppet:///private/mirrors.ocf.berkeley.edu.crt";
+  class { 'apache':
+    default_vhost => false;
+  }
 
-    # certificate chain
-    "/etc/ssl/private/incommon.crt":
-      owner  => root,
-      group  => root,
-      mode   => 444,
-      source => "puppet:///private/incommon.crt";
+  apache::vhost { 'mirrors.ocf.berkeley.edu':
+    serveraliases   => ['mirrors'],
+    port            => 80,
+    docroot         => '/opt/mirrors/ftp',
 
-    # combined key + cert + chain
-    "/etc/ssl/private/mirrors.ocf.berkeley.edu.pem":
-      owner  => root,
-      group  => root,
-      mode   => 400,
-      source => "puppet:///private/mirrors.ocf.berkeley.edu.pem";
+    directories     => [{
+      path          => '/opt/mirrors/ftp',
+      options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
+      indexoptions  => ['NameWidth=*', '+SuppressDescription']
+    }];
+  }
+
+  apache::vhost { 'mirrors.ocf.berkeley.edu-ssl':
+    port            => 443,
+    docroot         => '/opt/mirrors/ftp',
+
+    directories     => [{
+      path          => '/opt/mirrors/ftp',
+      options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
+      index_options => ['NameWidth=*', '+SuppressDescription']
+    }],
+
+    ssl             => true,
+    ssl_key         => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert        => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain       => '/etc/ssl/certs/incommon-intermediate.crt';
   }
 }

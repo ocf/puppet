@@ -1,4 +1,4 @@
-class fallingrocks::ftpsync {
+class fallingrocks::debian {
   exec { "get-ftpsync":
     command => "wget -O - -q http://ftp-master.debian.org/ftpsync.tar.gz | tar xvfz - -C /opt/mirrors",
     user    => "mirrors",
