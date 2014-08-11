@@ -2,7 +2,7 @@
 # /etc/ssl/private/$cert_name.{key,crt,bundle}
 #
 # By default, cert_name is the fully-qualified hostname
-class ocf-ssl($cert_name = $::fqdn) {
+class ocf_ssl($cert_name = $::fqdn) {
   File {
     owner => root,
     group => root
@@ -10,7 +10,7 @@ class ocf-ssl($cert_name = $::fqdn) {
 
   file {
     "/etc/ssl/certs/incommon-intermediate.crt":
-      source  => "puppet:///modules/ocf-ssl/incommon-intermediate.crt",
+      source  => "puppet:///modules/ocf_ssl/incommon-intermediate.crt",
       mode    => 644,
       notify  => Exec['gen-bundle'];
 
