@@ -1,4 +1,4 @@
-class fallingrocks::debian {
+class ocf_mirrorhost::debian {
   exec { "get-ftpsync":
     command => "wget -O - -q http://ftp-master.debian.org/ftpsync.tar.gz | tar xvfz - -C /opt/mirrors",
     user    => "mirrors",
@@ -28,13 +28,13 @@ class fallingrocks::debian {
       target  => "/opt/mirrors/bin/ftpsync",
       require => File["/opt/mirrors/bin"];
     "/opt/mirrors/etc/ftpsync.conf":
-      source  => "puppet:///modules/fallingrocks/ftpsync.conf",
+      source  => "puppet:///modules/ocf_mirrorhost/ftpsync.conf",
       mode    => 644;
     "/opt/mirrors/etc/ftpsync-security.conf":
-      source  => "puppet:///modules/fallingrocks/ftpsync-security.conf",
+      source  => "puppet:///modules/ocf_mirrorhost/ftpsync-security.conf",
       mode    => 644;
     "/opt/mirrors/etc/ftpsync-cd.conf":
-      source  => "puppet:///modules/fallingrocks/ftpsync-cd.conf",
+      source  => "puppet:///modules/ocf_mirrorhost/ftpsync-cd.conf",
       mode    => 644;
     "/opt/mirrors/etc/common":
       ensure  => link,

@@ -1,4 +1,4 @@
-class fallingrocks {
+class ocf_mirrorhost {
   user { 'mirrors':
     comment => 'OCF Mirroring',
     home    => '/opt/mirrors',
