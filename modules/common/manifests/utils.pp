@@ -3,6 +3,6 @@ class common::utils {
     provider => git,
     ensure   => latest,
     revision => 'master',
-    source   => 'git://github.com/ocf/utils.git';
+    source   => 'https://github.com/ocf/utils.git';
   }
 }
