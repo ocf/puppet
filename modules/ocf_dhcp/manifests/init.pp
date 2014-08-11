@@ -1,10 +1,10 @@
-class pestilence {
+class ocf_dhcp {
 
   # setup dhcp server
   package { 'isc-dhcp-server': }
   file {
     '/etc/dhcp/dhcpd.conf':
-      source   => 'puppet:///modules/pestilence/dhcpd.conf',
+      source   => 'puppet:///modules/ocf_dhcp/dhcpd.conf',
       require  => [Package['isc-dhcp-server'], Exec['gen-desktop-leases']],
       notify   => Service['isc-dhcp-server'];
     '/usr/local/sbin/gen-desktop-leases':
