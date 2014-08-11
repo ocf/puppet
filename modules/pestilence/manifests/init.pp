@@ -8,8 +8,9 @@ class pestilence {
       require  => [Package['isc-dhcp-server'], Exec['gen-desktop-leases']],
       notify   => Service['isc-dhcp-server'];
     '/usr/local/sbin/gen-desktop-leases':
-      source   => 'puppet:///modules/pestilence/gen-desktop-leases',
-      mode     => 755;
+      ensure  => link,
+      links   => manage,
+      target  => '/opt/share/utils/staff/lab/gen-desktop-leases';
   }
   exec { 'gen-desktop-leases':
     command    => '/usr/local/sbin/gen-desktop-leases > /etc/dhcp/desktop-leases.conf',
@@ -24,13 +25,31 @@ class pestilence {
   # send magic packet to wakeup desktops at lab opening time
   package { 'wakeonlan': }
   file {
-    '/usr/local/bin/ocf-wakeup':
-      mode    => '0755',
-      source  => 'puppet:///modules/pestilence/wakeup/ocf-wakeup',
+    '/usr/local/bin/lab-wakeup':
+      ensure  => link,
+      links   => manage,
+      target  => '/opt/share/utils/staff/lab/lab-wakeup',
       require => Package['wakeonlan'];
-    '/etc/cron.d/ocf-wakeup':
-      source  => 'puppet:///modules/pestilence/wakeup/cron',
-      require => File['/usr/local/bin/ocf-wakeup']
   }
 
+  cron {
+    'lab-wakeup-weekdays':
+      command => '/usr/local/bin/lab-wakeup > /dev/null',
+      hour    => 9,
+      minute  => 0,
+      weekday => '1-5',
+      require => File['/usr/local/bin/lab-wakeup'];
+    'lab-wakeup-saturday':
+      command => '/usr/local/bin/lab-wakeup > /dev/null',
+      hour    => 11,
+      minute  => 0,
+      weekday => 6,
+      require => File['/usr/local/bin/lab-wakeup'];
+    'lab-wakeup-sunday':
+      command => '/usr/local/bin/lab-wakeup > /dev/null',
+      hour    => 12,
+      minute  => 0,
+      weekday => 0,
+      require => File['/usr/local/bin/lab-wakeup'];
+  }
 }
