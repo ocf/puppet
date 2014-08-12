@@ -49,10 +49,8 @@ node default {
   }
 
   if $type == 'server' {
-    case $::hostname {
-      death:     { class { 'common::apt': stage => first, nonfree => true } }
-      default:   { class { 'common::apt': stage => first } }
-    }
+    class { 'common::apt': stage => first }
+
     case $::hostname {
       supernova: { class { 'common::packages': extra => true, login => true } }
       tsunami:   { class { 'common::packages': extra => true, login => true } }
@@ -75,11 +73,13 @@ node default {
   }
 
   if $type == 'desktop' {
-    class { 'common::apt':  stage => first, nonfree => true, desktop => true }
+    class { 'common::apt': stage => first, desktop => true }
+
     case $::hostname {
       eruption:  { class { 'common::auth': glogin => [ ['approve', 'LOCAL'] ] } }
       default:   { class { 'common::auth': glogin => [ ['ocf', 'LOCAL'] ] } }
     }
+
     include common::acct
     include common::cups
     include desktop::crondeny

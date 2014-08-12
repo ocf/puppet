@@ -1,79 +1,116 @@
-class common::apt ( $nonfree = false, $desktop = false, $kiosk = false ) {
+class common::apt ( $desktop = false ) {
+  package { ['aptitude', 'apt-dater-host', 'imvirt']: }
 
-  package { 'aptitude': }
-  exec { 'aptitude update':
-    refreshonly => true,
-    require     => Package['aptitude'],
+  class { '::apt':
+    purge_sources_list   => true,
+    purge_sources_list_d => true;
   }
 
-  # remote package update management support
-  package { [ 'apt-dater-host', 'imvirt' ]: }
+  case $::operatingsystem {
+    'Debian': {
+      $repos = 'main contrib non-free'
 
-  file {
-    # provide sources.list
-    '/etc/apt/sources.list':
-      content => template('common/apt/sources.list.erb'),
-      notify  => Exec['aptitude update'],
-      before  => File['/etc/cron.daily/ocf-apt'],
-    ;
-    # update apt list, report missing updates, and clear apt cache and old config daily
-    '/etc/cron.daily/ocf-apt':
-      mode    => '0755',
-      content => template('common/apt/ocf-apt.erb'),
-      require => Package['aptitude'],
-    ;
+      apt::source {
+        'debian':
+          location  => 'http://mirrors/debian/',
+          release   => $::lsbdistcodename,
+          repos     => $repos;
+
+        'debian-security':
+          location  => 'http://mirrors/debian-security/',
+          release   => "${::lsbdistcodename}/updates",
+          repos     => $repos;
+      }
+
+      if $::lsbdistcodename == 'wheezy' {
+        apt::source { 'debian-updates':
+          location  => 'http://mirrors/debian/',
+          release   => "${::lsbdistcodename}-updates",
+          repos     => $repos;
+        }
+
+        # TODO: make backports use mirrors.ocf
+        include 'apt::backports'
+      }
+    }
+
+    'Ubuntu': {
+      $repos = 'main restricted universe multiverse'
+
+      apt::source {
+        'ubuntu':
+          location  => 'http://mirrors/ubuntu/',
+          release   => $::lsbdistcodename,
+          repos     => $repos;
+
+        'ubuntu-security':
+          location  => 'http://mirrors/ubuntu/',
+          release   => "${::lsbdistcodename}-security",
+          repos     => $repos;
+
+        'ubuntu-updates':
+          location  => 'http://mirrors/ubuntu/',
+          release   => "${::lsbdistcodename}-updates",
+          repos     => $repos;
+      }
+
+      # TODO: make backports use mirrors.ocf
+      include 'apt::backports'
+    }
   }
 
-  if $::architecture in ['amd64', 'i386'] and $::lsbdistcodename != 'jessie' {
-
-    # provide puppetlabs sources.list
-    file { '/etc/apt/sources.list.d/puppetlabs.list':
-      content => "deb http://apt.puppetlabs.com/ $::lsbdistcodename main dependencies",
-      notify  => Exec['aptitude update'],
-      before  => File['/etc/cron.daily/ocf-apt'],
+  # puppetlabs doesn't currently package for jessie
+  if $::lsbdistcodename != 'jessie' {
+    apt::key { 'puppetlabs':
+      key        => '4BD6EC30',
+      key_source => 'https://apt.puppetlabs.com/pubkey.gpg';
     }
-    # trust puppetlabs GPG key
-    exec { 'puppetlabs':
-      command => 'wget -q https://apt.puppetlabs.com/pubkey.gpg -O- | apt-key add -',
-      unless  => 'apt-key list | grep 4BD6EC30',
-      notify  => Exec['aptitude update'],
-      before  => File['/etc/cron.daily/ocf-apt'],
+
+    apt::source { 'puppetlabs':
+      location   => 'http://apt.puppetlabs.com/',
+      repos      => 'main dependencies',
+      require    => Apt::Key['puppetlabs'];
     }
   }
 
-  if $::operatingsystem == 'Debian' and $::lsbdistcodename != 'jessie' and $desktop {
-
-    # provide Mozilla and Google Chrome sources.list
-    file {
-      '/etc/apt/sources.list.d/desktop.list':
-        content => "deb http://mozilla.debian.net/ $::lsbdistcodename-backports iceweasel-release",
-        notify  => Exec['aptitude update'],
-        before  => File['/etc/cron.daily/ocf-apt'],
-      ;
-      '/etc/apt/sources.list.d/google-chrome.list':
-        content => 'deb http://dl.google.com/linux/chrome/deb/ stable main',
-        notify  => Exec['aptitude update'],
-        before  => File['/etc/cron.daily/ocf-apt'],
-      ;
+  if $desktop {
+    apt::key { 'google':
+      key        => '7FAC5991',
+      key_source => 'https://dl-ssl.google.com/linux/linux_signing_key.pub';
     }
 
-    # trust Mozilla and Google Chrome GPG keys
-    exec {
-      'debian-mozilla':
-        command => 'aptitude update && aptitude -o Aptitude::CmdLine::Ignore-Trust-Violations=true install pkg-mozilla-archive-keyring',
-        unless  => 'dpkg -l pkg-mozilla-archive-keyring | grep ^ii',
-        notify  => Exec['aptitude update'],
-        require => [Package['aptitude'], File['/etc/apt/sources.list', '/etc/apt/sources.list.d/desktop.list']],
-        before  => File['/etc/cron.daily/ocf-apt'],
-      ;
-      'google-gpg':
-        command => "wget -q https://dl-ssl.google.com/linux/linux_signing_key.pub -O- | apt-key add -",
-        unless  => "apt-key list | grep 7FAC5991",
-        notify  => Exec['aptitude update'],
-        require => [Package['aptitude'], File['/etc/apt/sources.list', '/etc/apt/sources.list.d/google-chrome.list']],
-        before  => File['/etc/cron.daily/ocf-apt'],
-      ;
+    # mozilla.debian.net doesn't currently package for jessie
+    if $::lsbdistcodename != 'jessie' {
+      package { 'pkg-mozilla-archive-keyring':; }
+
+      apt::source {
+        'mozilla':
+          location    => 'http://mozilla.debian.net/',
+          release     => "${::lsbdistcodename}-backports",
+          repos       => 'iceweasel-release',
+          include_src => false,
+          require    => Package['pkg-mozilla-archive-keyring'];
+      }
     }
 
+    # Chrome creates /etc/apt/sources.list.d/google-chrome.list upon
+    # installation, so we use the name 'google-chrome' to avoid duplicates
+    #
+    # Chrome will overwrite the puppet apt source during install, but puppet
+    # will later change it back. They say the same thing so it's cool.
+    apt::source {
+      'google-chrome':
+        location    => 'http://dl.google.com/linux/chrome/deb/',
+        release     => 'stable',
+        repos       => 'main',
+        include_src => false,
+        require     => Apt::Key['google'];
+    }
+  }
+
+  file { '/etc/cron.daily/ocf-apt':
+    mode    => '0755',
+    content => template('common/apt/ocf-apt.erb'),
+    require => Package['aptitude'];
   }
 }
