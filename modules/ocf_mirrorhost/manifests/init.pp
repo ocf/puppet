@@ -3,15 +3,16 @@ class ocf_mirrorhost {
     comment => 'OCF Mirroring',
     home    => '/opt/mirrors',
     groups  => ['sys'],
+    shell   => '/bin/false',
     require => File['/opt/mirrors'];
   }
 
   file {
-    ['/opt/mirrors', '/opt/mirrors/ftp', '/opt/mirrors/log', '/opt/mirrors/etc']:
+    ['/opt/mirrors', '/opt/mirrors/ftp', '/opt/mirrors/project']:
       ensure  => directory,
       mode    => 755,
       owner => mirrors,
-      group => mirrors
+      group => mirrors;
   }
 
   class { 'apache':
