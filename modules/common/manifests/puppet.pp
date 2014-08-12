@@ -1,9 +1,6 @@
 class common::puppet {
 
-  package { ['facter', 'puppet']:
-    ensure  => present,
-    require => Exec['aptitude update']
-  }
+  package { ['facter', 'puppet']: }
   exec { 'puppet-fix_bug7680':
     command => 'sed -i "s/metadata.links == :manage/resource[:links] == :manage/g" /usr/lib/ruby/vendor_ruby/puppet/type/file/source.rb',
     onlyif  => 'grep "metadata.links == :manage" /usr/lib/ruby/vendor_ruby/puppet/type/file/source.rb',
@@ -23,6 +20,7 @@ class common::puppet {
     changes => [
       "set agent/environment $::environment",
       'set agent/usecacheonfailure false',
+      'set main/pluginsync true'
     ],
     require => Package['augeas-tools', 'libaugeas-ruby', 'puppet'],
     notify  => Service['puppet'],
