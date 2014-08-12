@@ -1,8 +1,8 @@
-class ocf_mirrorhost::ubuntu {
+class ocf_mirrors::ubuntu {
   file {
     '/opt/mirrors/project/ubuntu':
       ensure  => directory,
-      source  => 'puppet:///modules/ocf_mirrorhost/project/ubuntu/',
+      source  => 'puppet:///modules/ocf_mirrors/project/ubuntu/',
       owner   => mirrors,
       group   => mirrors,
       mode    => 755,

@@ -1,4 +1,4 @@
-class ocf_mirrorhost::debian {
+class ocf_mirrors::debian {
   exec { 'get-ftpsync':
     command => 'wget -O - -q https://ftp-master.debian.org/ftpsync.tar.gz | tar xvfz - -C /opt/mirrors/project/debian',
     user    => 'mirrors',
@@ -25,13 +25,13 @@ class ocf_mirrorhost::debian {
       links   => manage,
       target  => '/opt/mirrors/project/debian/bin/ftpsync';
     '/opt/mirrors/project/debian/etc/ftpsync.conf':
-      source  => 'puppet:///modules/ocf_mirrorhost/project/debian/ftpsync.conf',
+      source  => 'puppet:///modules/ocf_mirrors/project/debian/ftpsync.conf',
       mode    => 644;
     '/opt/mirrors/project/debian/etc/ftpsync-security.conf':
-      source  => 'puppet:///modules/ocf_mirrorhost/project/debian/ftpsync-security.conf',
+      source  => 'puppet:///modules/ocf_mirrors/project/debian/ftpsync-security.conf',
       mode    => 644;
     '/opt/mirrors/project/debian/etc/ftpsync-cd.conf':
-      source  => 'puppet:///modules/ocf_mirrorhost/project/debian/ftpsync-cd.conf',
+      source  => 'puppet:///modules/ocf_mirrors/project/debian/ftpsync-cd.conf',
       mode    => 644;
     '/opt/mirrors/project/debian/etc/common':
       ensure  => link,

@@ -1,4 +1,4 @@
-class ocf_mirrorhost {
+class ocf_mirrors {
   user { 'mirrors':
     comment => 'OCF Mirroring',
     home    => '/opt/mirrors',

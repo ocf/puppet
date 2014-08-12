@@ -1,4 +1,4 @@
-class ocf_mirrorhost::ftp {
+class ocf_mirrors::ftp {
   package {
     ["vsftpd"]:;
   }
@@ -10,7 +10,7 @@ class ocf_mirrorhost::ftp {
 
   file {
     "/etc/vsftpd.conf":
-      source  => "puppet:///modules/ocf_mirrorhost/vsftpd.conf",
+      source  => "puppet:///modules/ocf_mirrors/vsftpd.conf",
       require => Package["vsftpd"];
   }
 }
