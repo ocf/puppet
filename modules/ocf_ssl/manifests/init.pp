@@ -27,7 +27,7 @@ class ocf_ssl($cert_name = $::fqdn) {
 
   exec { 'gen-bundle':
     command =>
-      "cat /etc/ssl/certs/incommon-intermediate.crt \"/etc/ssl/private/${cert_name}.crt\" > /etc/ssl/private/${cert_name}.bundle",
+      "cat \"/etc/ssl/private/${cert_name}.crt\" /etc/ssl/certs/incommon-intermediate.crt > /etc/ssl/private/${cert_name}.bundle",
     creates => "/etc/ssl/private/${cert_name}.bundle",
     require => [
       File["/etc/ssl/certs/incommon-intermediate.crt"],
