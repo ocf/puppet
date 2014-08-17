@@ -1,0 +1,6 @@
+#!/bin/bash
+PYTHONPATH=/srv/atool/src:/srv/atool/src/account_tools \
+	exec setuidgid atool \
+	gunicorn \
+		--log-syslog --log-syslog-to unix:///dev/log --log-syslog-prefix atool \
+		account_tools.wsgi:application
