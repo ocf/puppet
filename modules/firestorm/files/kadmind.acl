@@ -26,7 +26,8 @@ willh/root@OCF.BERKELEY.EDU             change-password                         
 nbfong/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 
 # chpass
-chpass/death.ocf.berkeley.edu@OCF.BERKELEY.EDU change-password                  *@OCF.BERKELEY.EDU
+chpass/earthquake.ocf.berkeley.edu@OCF.BERKELEY.EDU     change-password         *@OCF.BERKELEY.EDU
+chpass/dev-earthquake.ocf.berkeley.edu@OCF.BERKELEY.EDU change-password         *@OCF.BERKELEY.EDU
 
 # create
 create/admin@OCF.BERKELEY.EDU           add                                     *@OCF.BERKELEY.EDU
