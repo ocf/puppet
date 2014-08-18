@@ -12,6 +12,11 @@ class ocf_accounts::proxy {
 
   nginx::resource::vhost {
     'accounts.ocf.berkeley.edu':
+      server_name => [
+        'accounts.ocf.berkeley.edu',
+        'dev-accounts.ocf.berkeley.edu'
+      ],
+
       proxy => 'http://atool',
 
       ssl      => true,
