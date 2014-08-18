@@ -18,6 +18,10 @@ class ocf_accounts::proxy {
       ],
 
       proxy => 'http://atool',
+      proxy_set_header => [
+        'X-Forwarded-Protocol $scheme',
+        'Host $http_host'
+      ],
 
       ssl      => true,
       ssl_cert => "/etc/ssl/private/${::fqdn}.bundle",

@@ -27,6 +27,12 @@ class ocf_accounts::app {
       group    => atool,
       mode     => 400;
 
+    '/srv/atool/etc/gunicorn.py':
+      source   => 'puppet:///modules/ocf_accounts/atool/gunicorn.py',
+      owner    => atool,
+      group    => atool,
+      mode     => 444;
+
     # supervise app with daemontools
     '/etc/service/atool':
       ensure   => directory,
