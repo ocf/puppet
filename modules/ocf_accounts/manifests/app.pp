@@ -15,22 +15,29 @@ class ocf_accounts::app {
     groups   => ['sys'];
   }
 
+  File {
+    owner    => atool,
+    group    => atool
+  }
+
   file {
     ['/srv/atool', '/srv/atool/env', '/srv/atool/etc']:
-      ensure   => directory,
-      owner    => atool,
-      group    => atool;
+      ensure   => directory;
 
     '/srv/atool/etc/settings.py':
       source   => 'puppet:///private/settings.py',
-      owner    => atool,
-      group    => atool,
+      mode     => 400;
+
+    '/srv/atool/etc/chpass.keytab':
+      source   => 'puppet:///private/chpass.keytab',
       mode     => 400;
 
     '/srv/atool/etc/gunicorn.py':
       source   => 'puppet:///modules/ocf_accounts/atool/gunicorn.py',
-      owner    => atool,
-      group    => atool,
+      mode     => 444;
+
+    '/srv/atool/etc/ssh_known_hosts':
+      source   => 'puppet:///modules/ocf_accounts/atool/ssh_known_hosts',
       mode     => 444;
 
     # supervise app with daemontools
