@@ -1,7 +1,11 @@
 class ocf_accounts::app {
-  package { 'gunicorn':
-    provider => pip,
-    ensure   => latest;
+  package {
+    'gunicorn':
+      provider => pip,
+      ensure   => latest;
+
+    # build dependencies for python modules
+    ['libldap2-dev', 'libsasl2-dev']:;
   }
 
   user { 'atool':
