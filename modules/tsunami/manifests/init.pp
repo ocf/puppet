@@ -46,12 +46,6 @@ class tsunami {
       options => 'rw,bg,noatime,nodev,nosuid',
       require => Exec['mkdir /services'],
     ;
-    '/var/mail':
-      device  => 'mailbox:/',
-      fstype  => 'nfs4',
-      options => 'rw,bg,noatime,nodev,noexec,nosuid',
-      require => Exec['mkdir /var/mail'],
-    ;
     '/etc/pykota':
       device  => 'printhost:/',
       fstype  => 'nfs4',
