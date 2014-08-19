@@ -20,6 +20,7 @@ class ocf_accounts::proxy {
       proxy => 'http://atool',
       proxy_set_header => [
         'X-Forwarded-Protocol $scheme',
+        'X-Forwarded-For $proxy_add_x_forwarded_for',
         'Host $http_host'
       ],
 
