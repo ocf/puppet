@@ -1,4 +1,4 @@
-class anthrax::mail {
+class ocf_mail::mail {
   # backport postfix because debian postfix-ldap packages prior to 2.11.1-1 are
   # compiled without -DUSE_LDAP_SASL, and wheezy has only 2.9.6
   #
