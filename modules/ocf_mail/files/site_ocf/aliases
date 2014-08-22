@@ -11,7 +11,7 @@ nomail: /var/mail/nomail/nomail
 bod: :include:/var/mail/aliases/include/bod
 owner-bod: officers
 
-officers: daradib,tzhu,sanjayk,waf,morshed,ckuehl,nickimp
+officers: daradib,tzhu,sanjayk,waf,ckuehl,nickimp
 
 gm: officers
 general-manager: gm
