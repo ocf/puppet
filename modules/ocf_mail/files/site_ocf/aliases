@@ -52,6 +52,7 @@ mirrors: /dev/null
 ocfstats: /dev/null
 puppet: /dev/null
 atool: /dev/null
+create: /dev/null
 
 # misc
 archive: /var/mail/archives/archive
