@@ -48,6 +48,13 @@ class death {
     require   => Package['apache2'],
   }
 
+  file { '/etc/apache2/sites-available/01-www.conf':
+    ensure    => file,
+    source    => 'puppet:///modules/death/apache/sites/www.conf',
+    notify    => Service['apache2'],
+    require   => Package['apache2'],
+  }
+
   file { '/etc/apache2/sites-available/02-ssl.conf':
     ensure    => file,
     source    => 'puppet:///modules/death/apache/sites/ssl.conf',
@@ -69,9 +76,16 @@ class death {
     require   => Package['apache2'],
   }
 
-  file { '/etc/apache2/sites-available/01-www.conf':
+  file { '/etc/apache2/sites-available/05-pma.conf':
     ensure    => file,
-    source    => 'puppet:///modules/death/apache/sites/www.conf',
+    source    => 'puppet:///modules/death/apache/sites/pma.conf',
+    notify    => Service['apache2'],
+    require   => Package['apache2'],
+  }
+
+  file { '/etc/apache2/sites-available/06-hello.conf':
+    ensure    => file,
+    source    => 'puppet:///modules/death/apache/sites/hello.conf',
     notify    => Service['apache2'],
     require   => Package['apache2'],
   }
@@ -170,6 +184,11 @@ class death {
   }
 
   # enable sites
+  exec { '/usr/sbin/a2ensite 01-www.conf':
+    unless      => '/bin/readlink -e /etc/apache2/sites-enabled/01-www.conf',
+    notify      => Service['apache2'],
+    require     => [Exec['/usr/sbin/a2enmod rewrite'], Exec['/usr/sbin/a2enmod include'], File['/etc/apache2/sites-available/01-www.conf']],
+  }
   exec { '/usr/sbin/a2ensite 02-ssl.conf':
     unless      => '/bin/readlink -e /etc/apache2/sites-enabled/02-ssl.conf',
     notify      => Service['apache2'],
@@ -185,10 +204,15 @@ class death {
     notify      => Service['apache2'],
     require     => File['/etc/apache2/sites-available/04-shorturl.conf'],
   }
-  exec { '/usr/sbin/a2ensite 01-www.conf':
-    unless      => '/bin/readlink -e /etc/apache2/sites-enabled/01-www.conf',
+  exec { '/usr/sbin/a2ensite 05-pma.conf':
+    unless      => '/bin/readlink -e /etc/apache2/sites-enabled/05-pma.conf',
     notify      => Service['apache2'],
-    require     => [Exec['/usr/sbin/a2enmod rewrite'], Exec['/usr/sbin/a2enmod include'], File['/etc/apache2/sites-available/01-www.conf']],
+    require     => File['/etc/apache2/sites-available/05-pma.conf'],
+  }
+  exec { '/usr/sbin/a2ensite 06-hello.conf':
+    unless      => '/bin/readlink -e /etc/apache2/sites-enabled/06-hello.conf',
+    notify      => Service['apache2'],
+    require     => File['/etc/apache2/sites-available/06-hello.conf'],
   }
 
   # dpkg-divert
