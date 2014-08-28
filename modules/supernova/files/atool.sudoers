@@ -8,4 +8,4 @@
 #Defaults       env_keep += MAINTAINER
 
 # Allow members of group apt-dater to execute the apt-get command
-create          ALL=NOPASSWD: /usr/bin/install
+atool          ALL=NOPASSWD: /usr/bin/install

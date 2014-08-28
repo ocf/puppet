@@ -3,5 +3,5 @@
         missingok
         rotate 7
         shred
-        create 600 create approve
+        create 600 atool atool
 }

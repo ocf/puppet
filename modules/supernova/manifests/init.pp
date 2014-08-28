@@ -8,17 +8,24 @@ class supernova {
 
   service { 'rsyslog': }
 
+  user { 'atool':
+    comment  => 'OCF Account Creation',
+    home     => '/srv/atool',
+    system   => true,
+    groups   => ['sys'];
+  }
+
   # log directory, crontab, and keytab for create
   file {
     '/opt/create/private':
       ensure  => 'directory',
-      owner   => 'create',
+      owner   => 'atool',
       group   => 'approve',
       mode    => '0750';
 
     '/opt/create/private/backup':
       ensure  => 'directory',
-      owner   => 'create',
+      owner   => 'atool',
       group   => 'approve',
       mode    => '0750';
 
@@ -26,27 +33,27 @@ class supernova {
       source => 'puppet:///modules/supernova/create.cron';
 
     '/opt/create/private/create.keytab':
-      owner  => 'create',
+      owner  => 'atool',
       group  => 'approve',
       mode   => '0400',
       source => 'puppet:///private/create.keytab';
 
     '/opt/create/private/mid_approved.users':
       ensure => 'file',
-      owner  => 'create',
+      owner  => 'atool',
       group  => 'approve',
       mode   => '0640';
 
     '/opt/create/private/private_pass.pem':
       ensure => 'file',
-      owner  => 'create',
+      owner  => 'atool',
       group  => 'approve',
       mode   => '0400',
       source => 'puppet:///private/private_pass.pem';
 
-    '/etc/sudoers.d/create':
+    '/etc/sudoers.d/atool':
       mode   => '0440',
-      source => 'puppet:///modules/supernova/create.sudoers';
+      source => 'puppet:///modules/supernova/atool.sudoers';
   }
 
   # receive remote syslog from tsunami
