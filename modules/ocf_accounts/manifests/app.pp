@@ -32,6 +32,10 @@ class ocf_accounts::app {
       source   => 'puppet:///private/chpass.keytab',
       mode     => 400;
 
+    '/srv/atool/etc/atool-id_rsa':
+      source   => 'puppet:///private/atool-id_rsa',
+      mode     => 400;
+
     '/srv/atool/etc/gunicorn.py':
       source   => 'puppet:///modules/ocf_accounts/atool/gunicorn.py',
       mode     => 444;
