@@ -66,6 +66,7 @@ node default {
         case $::hostname {
           supernova: { class { 'common::auth': glogin => [ ['approve', 'ALL'] ] } }
           tsunami:   { class { 'common::auth': glogin => [ ['ocf', 'ALL'], ['sorry', 'ALL'] ] } }
+          pollution: { class { 'common::auth': glogin => [ ['approve', 'ALL'] ], gsudo => ['ocfstaff'] } }
           default:   { class { 'common::auth': ulogin => [], glogin => [], usudo => [], gsudo => [] } }
         }
       } else { # grant login and sudo to owner
