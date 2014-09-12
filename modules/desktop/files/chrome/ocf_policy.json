@@ -1,10 +1,10 @@
 {
 	// Set OCF homepage.
-	"HomepageLocation": "https://www.ocf.berkeley.edu/",
+	"HomepageLocation": "http://hello.ocf.berkeley.edu/",
 	"HomepageIsNewTabPage": false,
 	"ShowHomeButton": true,
 	"RestoreOnStartup": 4,
-	"RestoreOnStartupURLs": ["https://www.ocf.berkeley.edu/"],
+	"RestoreOnStartupURLs": ["http://hello.ocf.berkeley.edu/"],
 
 	// Do not store browser history etc.
 	"ForceEphemeralProfiles": true,
