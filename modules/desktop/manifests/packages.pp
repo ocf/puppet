@@ -39,7 +39,7 @@ class desktop::packages {
     # useful tools
     [ 'lyx', 'texmaker' ]:;
     # programming environments
-    [ 'python3-tk', 'default-jdk' ]:;
+    [ 'python3-tk', 'default-jdk', 'virtualbox' ]:;
     # nonfree packages
     [ 'firmware-linux', 'flashplugin-nonfree', 'ttf-mscorefonts-installer' ]:;
     # notifications
