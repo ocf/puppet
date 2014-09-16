@@ -2,11 +2,11 @@
 // http://www.chromium.org/administrators/configuring-other-preferences
 {
 	// Set OCF homepage.
-	"HomepageLocation": "http://hello.ocf.berkeley.edu/",
+	"HomepageLocation": "https://www.ocf.berkeley.edu/",
 	"HomepageIsNewTabPage": false,
 	"ShowHomeButton": true,
 	"RestoreOnStartup": 4,
-	"RestoreOnStartupURLs": ["http://hello.ocf.berkeley.edu/"],
+	"RestoreOnStartupURLs": ["https://www.ocf.berkeley.edu/"],
 
 	// Do not store browser history etc.
 	"ForceEphemeralProfiles": true,
