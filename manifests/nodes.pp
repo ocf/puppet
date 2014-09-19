@@ -80,7 +80,7 @@ node default {
       if $owner != undef { # grant login and sudo to owner
         class { 'common::auth': ulogin => [[$owner, 'ALL']], usudo => [$owner] }
       } elsif $::hostname == 'eruption' {
-        class { 'common::auth': glogin => [ ['approve', 'ALL'] ], gsudo => ['ocfstaff'] } }
+        class { 'common::auth': glogin => [ ['approve', 'ALL'] ], gsudo => ['ocfstaff'] }
       } else {
         class { 'common::auth': glogin => [ ['ocf', 'LOCAL'] ], gsudo => ['ocfstaff'] } }
       }
