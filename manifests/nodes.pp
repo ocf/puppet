@@ -82,7 +82,7 @@ node default {
       } elsif $::hostname == 'eruption' {
         class { 'common::auth': glogin => [ ['approve', 'ALL'] ], gsudo => ['ocfstaff'] }
       } else {
-        class { 'common::auth': glogin => [ ['ocf', 'LOCAL'] ], gsudo => ['ocfstaff'] } }
+        class { 'common::auth': glogin => [ ['ocf', 'LOCAL'] ], gsudo => ['ocfstaff'] }
       }
 
       class { 'desktop': staff => $::hostname == 'eruption' }
