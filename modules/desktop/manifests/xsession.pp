@@ -1,4 +1,4 @@
-class desktop::xsession {
+class desktop::xsession ($staff = false) {
 
   require desktop::packages
 
@@ -37,6 +37,19 @@ class desktop::xsession {
       force   => true,
       backup  => false,
       source  => 'puppet:///modules/desktop/xsession/xsessions'
+  }
+
+  # wallpaper symlink
+  $wallpaper = $staff ? {
+    true  => 'background-staff',
+    false => 'background'
+  }
+
+  file { '/opt/share/wallpaper':
+    ensure  => link,
+    links   => manage,
+    target  => "/opt/share/xsession/$wallpaper",
+    require => File['/opt/share/xsession'];
   }
 
   # lightdm configuration

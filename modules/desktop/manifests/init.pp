@@ -15,7 +15,8 @@ class desktop ($staff = false) {
   include sshfs
   include stats
   include suspend
-  include xsession
+
+  class { 'xsession': staff => $staff }
 
   class { 'tmpfs': staff => $staff }
 }
