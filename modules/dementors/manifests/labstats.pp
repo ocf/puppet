@@ -1,6 +1,6 @@
 class dementors::labstats {
   package {
-    ['mysql-server', 'pssh']:;
+    ['mysql-server', 'pssh', 'python-pysnmp4']:;
   }
 
   user {
@@ -11,34 +11,42 @@ class dementors::labstats {
       groups => 'sys';
   }
 
-  file {
-    '/opt/stats':
-      ensure => directory,
-      owner => ocfstats,
-      group => ocfstaff,
-      mode => 775,
-      require => User['ocfstats'];
-    '/opt/stats/cgi':
-      ensure => directory,
-      owner => ocfstats,
-      group => ocfstaff,
-      mode => 775;
-    '/opt/stats/desktop_list':
-      owner => ocfstats,
-      group => ocfstaff,
-      mode => 444,
-      source => 'puppet:///contrib/desktop/desktop_list';
+  File {
+    owner => ocfstats,
+    group => ocfstaff
   }
 
-  cron { "labstats":
-    ensure => present,
-    command => "/opt/stats/lab-cron.sh > /dev/null",
-    environment => "MAILTO=root",
-    user => "ocfstats",
-    weekday => "*",
-    month => "*",
-    monthday => "*",
-    hour => "*",
-    minute => "*";
+  file {
+    ['/opt/stats', '/opt/stats/cgi', '/opt/stats/printing',
+     '/opt/stats/printing/history', '/opt/stats/printing/oracle']:
+      ensure  => directory,
+      mode    => '0755';
+    '/opt/stats/desktop_list':
+      mode    => '0444',
+      source  => 'puppet:///contrib/desktop/desktop_list';
+  }
+
+  cron {
+    'labstats':
+      ensure => present,
+      command => '/opt/stats/lab-cron.sh > /dev/null',
+      environment => 'MAILTO=root',
+      user => 'ocfstats',
+      weekday => '*',
+      month => '*',
+      monthday => '*',
+      hour => '*',
+      minute => '*';
+
+    'printstats':
+      ensure => present,
+      command => '/opt/stats/print-cron.sh > /dev/null',
+      environment => 'MAILTO=root',
+      user => 'ocfstats',
+      weekday => '*',
+      month => '*',
+      monthday => '*',
+      hour => '*',
+      minute => '*/5';
   }
 }
