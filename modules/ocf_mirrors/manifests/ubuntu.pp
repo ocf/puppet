@@ -12,7 +12,7 @@ class ocf_mirrors::ubuntu {
   cron { 'ubuntu':
     command => '/opt/mirrors/project/ubuntu/sync-archive > /dev/null',
     user    => 'mirrors',
-    hour    => '*/4',
+    hour    => '*',
     minute  => '15';
   }
 
