@@ -1,4 +1,4 @@
-class services::kvm($group = 'ocfstaff') {
+class services::kvm($group = 'ocfroot') {
 
   # install kvm, libvirt, lvm, bridge networking
   package { [ 'libvirt-bin', 'lvm2', 'qemu-kvm', 'virtinst', 'virt-top' ]:
