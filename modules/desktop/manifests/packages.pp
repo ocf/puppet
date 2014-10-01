@@ -8,8 +8,11 @@ class desktop::packages {
 
   # install backported kernel and intel driver for improved compatibility with
   # desktop integrated graphics (Haswell CPUs);
-  ocf::repackage { "linux-image-${::architecture}":
-    backports => true,
+  ocf::repackage {
+    "linux-image-${::architecture}":
+      backports => true;
+    "linux-headers-${::architecture}":
+      backports => true;
   }
   if $::lsbdistcodename == 'wheezy' {
     package { 'xserver-xorg-video-intel':
