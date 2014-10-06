@@ -1,4 +1,4 @@
-class supernova {
+class ocf_admin {
 
   package {
     # account creation dependecies
@@ -30,7 +30,7 @@ class supernova {
       mode    => '0750';
 
     '/etc/cron.d/create':
-      source => 'puppet:///modules/supernova/create.cron';
+      source => 'puppet:///modules/ocf_admin/create.cron';
 
     '/opt/create/private/create.keytab':
       owner  => 'atool',
@@ -53,7 +53,7 @@ class supernova {
 
     '/etc/sudoers.d/atool':
       mode   => '0440',
-      source => 'puppet:///modules/supernova/atool.sudoers';
+      source => 'puppet:///modules/ocf_admin/atool.sudoers';
   }
 
   # receive remote syslog from tsunami
@@ -65,6 +65,6 @@ class supernova {
   # provide logrotate rule for account creation scripts
   file { '/etc/logrotate.d/account-creation':
     ensure => file,
-    source => 'puppet:///modules/supernova/logrotate/account-creation';
+    source => 'puppet:///modules/ocf_admin/logrotate/account-creation';
   }
 }
