@@ -1,5 +1,6 @@
 #!/bin/bash
-# Don't sleep if installing packages, puppet is running, or user present
+# Don't sleep if installing packages, puppet is running, user present, or is a virtual machine
+
 ! /usr/bin/lsof -- /var/lib/dpkg/lock > /dev/null 2>&1 || exit 1
 [ ! -f /var/lib/puppet/state/agent_catalog_run.lock ] || exit 1
 ps ax | grep 'notify\.sh' | grep -v grep > /dev/null && exit 2
@@ -7,6 +8,8 @@ ps ax | grep 'notify\.sh' | grep -v grep > /dev/null && exit 2
 if grep $'tmpfs\t/home' /etc/fstab > /dev/null; then
 	umount /home 2> /dev/null && mount /home || exit 3
 fi
+
+imvirt | grep -i Physical > /dev/null || exit 4
 
 umount /tmp 2> /dev/null && mount /tmp
 

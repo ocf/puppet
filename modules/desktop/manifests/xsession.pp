@@ -127,10 +127,13 @@ class desktop::xsession {
     # copy skel files
     '/etc/skel/.config':
       ensure => 'directory',
-      source => 'puppet:///modules/desktop/skel/config/',
+      source => 'puppet:///modules/desktop/skel/config',
       recurse => true,
       owner => 'root',
       group => 'root';
+    '/etc/skel/.xscreensaver':
+      source => 'puppet:///modules/desktop/skel/.xscreensaver',
+    ;
   }
 
   # disable user switching and screen locking (prevent non-staff users from
