@@ -1,6 +1,6 @@
 <VirtualHost *:80>
-    ServerName tsunami.ocf.berkeley.edu
-    ServerAlias ssh.ocf.berkeley.edu ssh.ocf ssh tsunami.ocf tsunami
+    ServerName <%= @fqdn %>
+    ServerAlias ssh.ocf.berkeley.edu ssh.ocf ssh <%= @hostname %>.ocf <%= @hostname %>
     ServerAdmin help@ocf.berkeley.edu
 
     # canonical hostname is ssh.ocf.berkeley.edu

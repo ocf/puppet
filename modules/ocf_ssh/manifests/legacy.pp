@@ -1,4 +1,4 @@
-class tsunami::legacy {
+class ocf_ssh::legacy {
 
   # Symlinks for legacy file paths
   File { ensure => link, links => manage }

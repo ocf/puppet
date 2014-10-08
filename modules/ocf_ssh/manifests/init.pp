@@ -1,6 +1,5 @@
-class tsunami {
-
-  include tsunami::legacy
+class ocf_ssh {
+  include ocf_ssh::legacy
 
   # Create directories to mount NFS shares on
   # Directory permissions are set by NFS share when mounted
@@ -14,9 +13,6 @@ class tsunami {
     ;
     'mkdir /services':
       creates => '/services',
-    ;
-    'mkdir /var/mail':
-      creates => '/var/mail',
     ;
     'mkdir /etc/pykota':
       creates => '/etc/pykota',
@@ -103,14 +99,14 @@ class tsunami {
 
   file { '/etc/apache2/sites-available/01-ssh.conf':
     ensure    => file,
-    source    => 'puppet:///modules/tsunami/apache/sites/ssh.conf',
+    content   => template('ocf_ssh/apache/sites/ssh.conf.erb'),
     notify    => Service['apache2'],
     require   => [ Package['apache2'] ],
   }
 
   file { '/etc/apache2/sites-available/02-ssl.conf':
     ensure    => file,
-    source    => 'puppet:///modules/tsunami/apache/sites/ssl.conf',
+    content   => template('ocf_ssh/apache/sites/ssl.conf.erb'),
     notify    => Service['apache2'],
     require   => [ Package['apache2'] ],
   }
@@ -124,7 +120,7 @@ class tsunami {
   exec { '/usr/sbin/a2enmod ssl':
     unless      => '/bin/readlink -e /etc/apache2/mods-enabled/ssl.load',
     notify      => Service['apache2'],
-    require     => [ File['/etc/ssl/certs/tsunami.ocf.berkeley.edu.crt'], File['/etc/ssl/private/tsunami.ocf.berkeley.edu.key'], Package['apache2'] ],
+    require     => [ File["/etc/ssl/private/${::fqdn}.crt"], File["/etc/ssl/private/${::fqdn}.key"], Package['apache2'] ],
   }
 
   exec { '/usr/sbin/a2enmod proxy':
@@ -150,26 +146,4 @@ class tsunami {
     notify      => Service['apache2'],
     require     => [Package['apache2'], Exec['/usr/sbin/a2enmod proxy'], Exec['/usr/sbin/a2enmod proxy_http'], File['/etc/apache2/sites-available/02-ssl.conf']],
   }
-
-  # Provide SSL certificate and key
-  file {
-    '/etc/ssl/certs/tsunami.ocf.berkeley.edu.crt':
-      ensure    => file,
-      owner     => 'root',
-      group     => 'ssl-cert',
-      mode      => '0640',
-      source    => 'puppet:///private/tsunami.ocf.berkeley.edu.crt';
-    '/etc/ssl/private/tsunami.ocf.berkeley.edu.key':
-      ensure    => file,
-      owner     => 'root',
-      group     => 'ssl-cert',
-      mode      => '0640',
-      source    => 'puppet:///private/tsunami.ocf.berkeley.edu.key';
-    '/etc/ssl/certs/CA-BUNDLE.CRT':
-      ensure    => file,
-      owner     => 'root',
-      group     => 'root',
-      source    => 'puppet:///private/CA-BUNDLE.CRT';
-  }
-
 }
