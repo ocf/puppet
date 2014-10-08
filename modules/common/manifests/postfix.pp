@@ -17,7 +17,7 @@ class common::postfix {
   # disable incoming TCP/IP connections
   augeas { '/etc/postfix/master.cf':
     context => '/files/etc/postfix/master.cf',
-    changes => "rm *[type='inet']",
+    changes => 'rm *[type=\'inet\']',
     notify  => Service['postfix'],
     require => Package['postfix'],
   }

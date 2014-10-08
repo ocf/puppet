@@ -65,7 +65,7 @@ class ocf_mail::spam {
     '/var/lib/spamd':
       ensure  => directory,
       owner   => spamd,
-      mode    => 755,
+      mode    => '0755',
       require => User['spamd'];
     '/etc/default/spamass-milter':
       source  => 'puppet:///modules/ocf_mail/spam/spamass/spamass-milter',

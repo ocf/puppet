@@ -9,10 +9,10 @@ class ocf_mirrors {
 
   file {
     ['/opt/mirrors', '/opt/mirrors/ftp', '/opt/mirrors/project']:
-      ensure  => directory,
-      mode    => 755,
-      owner => mirrors,
-      group => mirrors;
+      ensure => directory,
+      mode   => '0755',
+      owner  => mirrors,
+      group  => mirrors;
   }
 
   class { 'apache':

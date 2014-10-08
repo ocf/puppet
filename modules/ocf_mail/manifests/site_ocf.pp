@@ -95,7 +95,7 @@ class ocf_mail::site_ocf {
 
   file {
     '/etc/postfix/ocf/smtp-krb5.keytab':
-      mode    => 600,
+      mode    => '0600',
       owner   => root,
       group   => root,
       source  => 'puppet:///private/smtp-krb5.keytab',
@@ -103,12 +103,12 @@ class ocf_mail::site_ocf {
 
     # postfix config
     '/etc/postfix/main.cf':
-      mode    => 644,
+      mode    => '0644',
       source  => 'puppet:///modules/ocf_mail/site_ocf/postfix/main.cf',
       notify  => Service['postfix'],
       require => Ocf::Repackage['postfix'];
     '/etc/postfix/ldap-aliases.cf':
-      mode    => 644,
+      mode    => '0644',
       source  => 'puppet:///modules/ocf_mail/site_ocf/postfix/ldap-aliases.cf',
       notify  => Service['postfix'],
       require => Ocf::Repackage['postfix'];
@@ -124,23 +124,23 @@ class ocf_mail::site_ocf {
 
     # aliases and hashes
     '/etc/aliases':
-      mode    => 644,
+      mode    => '0644',
       source  => 'puppet:///modules/ocf_mail/site_ocf/aliases',
       notify  => Exec['newaliases'];
     '/usr/local/sbin/update-aliases':
-      mode    => 755,
+      mode    => '0755',
       source  => 'puppet:///modules/ocf_mail/site_ocf/update-aliases';
     '/usr/local/sbin/update-nomail-hashes':
-      mode    => 755,
+      mode    => '0755',
       source  => 'puppet:///modules/ocf_mail/site_ocf/update-nomail-hashes';
     '/usr/local/sbin/update-cred-cache':
-      mode    => 755,
+      mode    => '0755',
       source  => 'puppet:///modules/ocf_mail/site_ocf/update-cred-cache';
 
     # outgoing nomail logging
     '/var/mail/nomail':
       ensure  => directory,
-      mode    => 755,
+      mode    => '0755',
       owner   => ocfmail,
       group   => ocfmail;
     '/etc/logrotate.d/nomail':

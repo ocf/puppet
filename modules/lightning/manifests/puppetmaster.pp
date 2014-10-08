@@ -38,10 +38,10 @@ class lightning::puppetmaster {
       source  => 'puppet:///private/github.secret',
       owner   => root,
       group   => www-data,
-      mode    => 640;
+      mode    => '0640';
 
     '/opt/puppet/shares/private':
-      mode    => 400,
+      mode    => '0400',
       owner   => puppet,
       group   => puppet,
       recurse => true;

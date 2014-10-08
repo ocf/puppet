@@ -14,7 +14,7 @@ class ocf_mirrors::debian {
   file {
     ['/opt/mirrors/project/debian', '/opt/mirrors/project/debian/log', '/opt/mirrors/project/debian/etc']:
       ensure  => directory,
-      mode    => 755;
+      mode    => '0755';
     '/opt/mirrors/project/debian/bin':
       ensure  => link,
       links   => manage,
@@ -26,13 +26,13 @@ class ocf_mirrors::debian {
       target  => '/opt/mirrors/project/debian/bin/ftpsync';
     '/opt/mirrors/project/debian/etc/ftpsync.conf':
       source  => 'puppet:///modules/ocf_mirrors/project/debian/ftpsync.conf',
-      mode    => 644;
+      mode    => '0644';
     '/opt/mirrors/project/debian/etc/ftpsync-security.conf':
       source  => 'puppet:///modules/ocf_mirrors/project/debian/ftpsync-security.conf',
-      mode    => 644;
+      mode    => '0644';
     '/opt/mirrors/project/debian/etc/ftpsync-cd.conf':
       source  => 'puppet:///modules/ocf_mirrors/project/debian/ftpsync-cd.conf',
-      mode    => 644;
+      mode    => '0644';
     '/opt/mirrors/project/debian/etc/common':
       ensure  => link,
       links   => manage,

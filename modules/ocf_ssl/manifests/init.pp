@@ -9,19 +9,19 @@ class ocf_ssl($cert_name = $::fqdn) {
   }
 
   file {
-    "/etc/ssl/certs/incommon-intermediate.crt":
-      source  => "puppet:///modules/ocf_ssl/incommon-intermediate.crt",
-      mode    => 644,
+    '/etc/ssl/certs/incommon-intermediate.crt':
+      source  => 'puppet:///modules/ocf_ssl/incommon-intermediate.crt',
+      mode    => '0644',
       notify  => Exec['gen-bundle'];
 
     # private ssl
     "/etc/ssl/private/${cert_name}.key":
       source  => "puppet:///private/ssl/${cert_name}.key",
-      mode    => 600,
+      mode    => '0600',
       notify  => Exec['gen-bundle'];
     "/etc/ssl/private/${cert_name}.crt":
       source  => "puppet:///private/ssl/${cert_name}.crt",
-      mode    => 644,
+      mode    => '0644',
       notify  => Exec['gen-bundle'];
   }
 
@@ -30,7 +30,7 @@ class ocf_ssl($cert_name = $::fqdn) {
       "cat \"/etc/ssl/private/${cert_name}.crt\" /etc/ssl/certs/incommon-intermediate.crt > /etc/ssl/private/${cert_name}.bundle",
     creates => "/etc/ssl/private/${cert_name}.bundle",
     require => [
-      File["/etc/ssl/certs/incommon-intermediate.crt"],
+      File['/etc/ssl/certs/incommon-intermediate.crt'],
       File["/etc/ssl/private/${cert_name}.key"],
       File["/etc/ssl/private/${cert_name}.crt"]
     ];

@@ -1,7 +1,5 @@
 class desktop::chrome {
-
   if $::lsbdistcodename != 'jessie' {
-
     file {
       ['/etc/opt/chrome', '/etc/opt/chrome/policies', '/etc/opt/chrome/policies/managed']:
         ensure  => directory,
@@ -17,8 +15,6 @@ class desktop::chrome {
       ;
     }
 
-    package {'google-chrome-stable':}
-
- }
-
+    package { 'google-chrome-stable':; }
+  }
 }

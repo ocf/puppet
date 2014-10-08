@@ -60,7 +60,6 @@ class blight {
       require => Exec['ikiwiki_setup'],
       owner   => 'www-data',
       group   => 'ocfstaff',
-#      mode    => '0775',
       recurse => true;
     '/srv/ikiwiki/public_html/wiki/ikiwiki.cgi':
       owner   => 'www-data',
@@ -98,7 +97,6 @@ class blight {
       ensure  => 'directory',
       owner   => 'www-data',
       group   => 'ocfstaff',
-#      mode    => '0775';
       recurse => true,
   }
   file {
@@ -160,18 +158,16 @@ class blight {
       ensure => symlink,
       links  => manage,
       target => '/etc/apache2/sites-available/gitweb';
-    #'/etc/apache2/sites-enabled/000-default':
-    #  ensure => absent;
   }
 
   file {
-    "/etc/ssl/private/blight_ocf_berkeley_edu.crt":
-      source => "puppet:///private/blight.ocf.berkeley.edu.crt",
-      mode   => 444;
-    "/etc/ssl/private/blight_ocf_berkeley_edu.key":
-      source => "puppet:///private/blight.ocf.berkeley.edu.key",
+    '/etc/ssl/private/blight_ocf_berkeley_edu.crt':
+      source => 'puppet:///private/blight.ocf.berkeley.edu.crt',
+      mode   => '0444';
+    '/etc/ssl/private/blight_ocf_berkeley_edu.key':
+      source => 'puppet:///private/blight.ocf.berkeley.edu.key',
       owner  => root,
-      mode   => 400;
+      mode   => '0400';
   }
 
   # gitweb setup

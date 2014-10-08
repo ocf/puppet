@@ -17,8 +17,8 @@ class desktop::packages {
     }
 
     package { 'xserver-xorg-video-intel':
-      provider  => dpkg,
       ensure    => latest,
+      provider  => dpkg,
       # no official backport is available, so we use our own backported package (2014-05-24)
       source    => '/opt/share/puppet/packages/xserver-xorg-video-intel_2.21.15-2~bpo70+1_amd64.deb',
     }

@@ -5,7 +5,7 @@ class ocf_mirrors::ubuntu {
       source  => 'puppet:///modules/ocf_mirrors/project/ubuntu/',
       owner   => mirrors,
       group   => mirrors,
-      mode    => 755,
+      mode    => '0755',
       recurse => true;
   }
 

@@ -65,7 +65,7 @@ class desktop::xsession {
 
   exec {
     'gtk-update-icon-cache /usr/share/icons/hicolor':
-      subscribe  => File["/usr/share/icons/hicolor/64x64/devices/ocf.png"],
+      subscribe   => File['/usr/share/icons/hicolor/64x64/devices/ocf.png'],
       refreshonly => true;
   }
 
@@ -109,28 +109,29 @@ class desktop::xsession {
   file {
     # enable kiosk mode (disables shutdown, etc.)
     '/etc/xdg/xfce4/kiosk':
-      ensure => 'directory',
-      source => 'puppet:///modules/desktop/xsession/xfce4/kiosk/',
+      ensure  => 'directory',
+      source  => 'puppet:///modules/desktop/xsession/xfce4/kiosk/',
       recurse => true,
-      owner => 'root',
-      group => 'root';
+      owner   => 'root',
+      group   => 'root';
     # default config
     '/etc/xdg/xfce4/xfconf':
-      ensure => 'directory',
-      source => 'puppet:///modules/desktop/xsession/xfce4/xfconf/',
+      ensure  => 'directory',
+      source  => 'puppet:///modules/desktop/xsession/xfce4/xfconf/',
       recurse => true,
-      owner => 'root',
-      group => 'root';
+      owner   => 'root',
+      group   => 'root';
   }
 
   file {
     # copy skel files
     '/etc/skel/.config':
-      ensure => 'directory',
-      source => 'puppet:///modules/desktop/skel/config',
+      ensure  => 'directory',
+      source  => 'puppet:///modules/desktop/skel/config',
       recurse => true,
-      owner => 'root',
-      group => 'root';
+      owner   => 'root',
+      group   => 'root';
+
     '/etc/skel/.xscreensaver':
       source => 'puppet:///modules/desktop/skel/.xscreensaver',
     ;
@@ -142,7 +143,7 @@ class desktop::xsession {
     ['/usr/bin/lxlock', '/usr/bin/xflock4']:
       owner => root,
       group => 1002, # approve
-      mode => '0754';
+      mode  => '0754';
   }
 
   # improve font rendering

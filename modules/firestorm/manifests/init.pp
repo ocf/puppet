@@ -30,12 +30,12 @@ class firestorm {
   }
 
   # Kerberos revision control
-  if $hostname == 'firestorm' {
+  if $::hostname == 'firestorm' {
     file {
       # Script to snapshot by dumping and committing
       '/usr/local/sbin/kerberos-git-backup':
-        mode    => '0755',
-        source  => 'puppet:///modules/firestorm/kerberos-git-backup',
+        mode   => '0755',
+        source => 'puppet:///modules/firestorm/kerberos-git-backup',
       ;
       # Snapshot daily at 4AM
       '/etc/cron.d/kerberos-git-backup':
@@ -73,24 +73,24 @@ class firestorm {
       ensure  => directory,
       owner   => openldap,
       group   => openldap,
-      mode    => 755,
+      mode    => '0755',
       require => Package['slapd'];
     '/etc/ldap/ssl/firestorm.ocf.berkeley.edu.key':
       source  => 'puppet:///private/firestorm.ocf.berkeley.edu.key',
       require => Package['slapd'],
-      mode    => 600,
+      mode    => '0600',
       owner   => openldap, # note: can't use root here :-(
       group   => openldap;
     '/etc/ldap/ssl/firestorm.ocf.berkeley.edu.crt':
       source  => 'puppet:///private/firestorm.ocf.berkeley.edu.crt',
       require => Package['slapd'],
-      mode    => 644,
+      mode    => '0644',
       owner   => openldap,
       group   => openldap;
     '/etc/ldap/ssl/firestorm.ocf.berkeley.edu.chain':
       source  => 'puppet:///private/firestorm.ocf.berkeley.edu.chain',
       require => Package['slapd'],
-      mode    => 644,
+      mode    => '0644',
       owner   => openldap,
       group   => openldap;
     '/etc/default/slapd':
@@ -112,7 +112,7 @@ class firestorm {
 
   # LDAP revision control
   # ldap-git-backup currently must be fetched from unstable
-  if $hostname == 'firestorm' {
+  if $::hostname == 'firestorm' {
     package { 'ldap-git-backup': }
     file {
       # Snapshot daily at 4AM

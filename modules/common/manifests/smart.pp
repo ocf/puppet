@@ -1,9 +1,5 @@
 class common::smart {
-
-  # facter currently outputs strings not booleans
-  # see http://projects.puppetlabs.com/issues/3704
-  if $::is_virtual == 'false' {
-
+  if $::is_virtual == false {
     # install smartmontools
     package { 'smartmontools': }
 
@@ -26,13 +22,9 @@ class common::smart {
     service { 'smartmontools':
       require   => Package['smartmontools'],
     }
-
-  }
-
-  else {
+  } else {
     package { 'smartmontools':
       ensure => purged,
     }
   }
-
 }

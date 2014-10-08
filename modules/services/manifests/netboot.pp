@@ -23,10 +23,10 @@ class services::netboot {
       require => Package['pax'];
   }
 
-  cron { "ocf-netboot":
-    command     => "/usr/local/sbin/ocf-netboot > /dev/null",
+  cron { 'ocf-netboot':
+    command     => '/usr/local/sbin/ocf-netboot > /dev/null',
     user        => root,
     environment => 'PATH=/bin:/usr/bin:/usr/sbin',
-    special     => "weekly";
+    special     => 'weekly';
   }
 }

@@ -57,6 +57,10 @@ class common::apt ( $desktop = false ) {
       # TODO: make backports use mirrors.ocf
       include 'apt::backports'
     }
+
+    default: {
+      warning('Unrecognized operating system; can\'t configure apt!')
+    }
   }
 
   # puppetlabs doesn't currently package for jessie
@@ -89,7 +93,7 @@ class common::apt ( $desktop = false ) {
           release     => "${::lsbdistcodename}-backports",
           repos       => 'iceweasel-release',
           include_src => false,
-          require    => Package['pkg-mozilla-archive-keyring'];
+          require     => Package['pkg-mozilla-archive-keyring'];
       }
     }
 

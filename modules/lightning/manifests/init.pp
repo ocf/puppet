@@ -6,18 +6,18 @@ class lightning {
   include apache::mod::cgid
 
   apache::vhost { 'puppet public':
-    servername  => 'puppet.ocf.berkeley.edu',
-    port        => 443,
-    docroot     => '/var/www',
+    servername => 'puppet.ocf.berkeley.edu',
+    port       => 443,
+    docroot    => '/var/www',
 
-    ssl         => true,
-    ssl_key     => '/etc/ssl/private/lightning.ocf.berkeley.edu.key',
-    ssl_cert    => '/etc/ssl/private/lightning.ocf.berkeley.edu.crt',
-    ssl_chain   => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl        => true,
+    ssl_key    => '/etc/ssl/private/lightning.ocf.berkeley.edu.key',
+    ssl_cert   => '/etc/ssl/private/lightning.ocf.berkeley.edu.crt',
+    ssl_chain  => '/etc/ssl/certs/incommon-intermediate.crt',
 
     directories => [{
-      path    => '/var/www',
-      options => ['ExecCGI'],
+      path        => '/var/www',
+      options     => ['ExecCGI'],
       addhandlers => [{handler => 'cgi-script', extensions => ['.cgi']}]
     }];
   }
@@ -27,7 +27,7 @@ class lightning {
       ensure  => directory,
       owner   => www-data,
       group   => www-data,
-      mode    => 755,
+      mode    => '0755',
       source  => 'puppet:///modules/lightning/webhook',
       recurse => true;
   }

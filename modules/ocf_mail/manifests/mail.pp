@@ -115,17 +115,17 @@ class ocf_mail::mail {
   file {
     # ssl
     '/etc/ssl/private/anthrax.ocf.berkeley.edu.key':
-      mode    => 600,
+      mode    => '0600',
       owner   => root,
       group   => root,
       source  => 'puppet:///private/ssl/anthrax.ocf.berkeley.edu.key',
       require => Ocf::Repackage['postfix'];
     '/etc/ssl/private/anthrax.ocf.berkeley.edu.crt':
-      mode    => 644,
+      mode    => '0644',
       source  => 'puppet:///private/ssl/anthrax.ocf.berkeley.edu.crt',
       require => Ocf::Repackage['postfix'];
     '/etc/postfix/ocf/smtp-krb5.keytab':
-      mode    => 600,
+      mode    => '0600',
       owner   => root,
       group   => root,
       source  => 'puppet:///private/smtp-krb5.keytab',
@@ -133,12 +133,12 @@ class ocf_mail::mail {
 
     # postfix config
     '/etc/postfix/main.cf':
-      mode    => 644,
+      mode    => '0644',
       source  => 'puppet:///modules/anthrax/postfix/main.cf',
       notify  => Service['postfix'],
       require => Ocf::Repackage['postfix'];
     '/etc/postfix/ldap-aliases.cf':
-      mode    => 644,
+      mode    => '0644',
       source  => 'puppet:///modules/anthrax/postfix/ldap-aliases.cf',
       notify  => Service['postfix'],
       require => Ocf::Repackage['postfix'];
@@ -154,17 +154,17 @@ class ocf_mail::mail {
 
     # aliases and hashes
     '/etc/aliases':
-      mode    => 644,
+      mode    => '0644',
       source  => 'puppet:///modules/anthrax/aliases',
       notify  => Exec['newaliases'];
     '/usr/local/sbin/update-aliases':
-      mode    => 755,
+      mode    => '0755',
       source  => 'puppet:///modules/anthrax/update-aliases';
     '/usr/local/sbin/update-nomail-hashes':
-      mode    => 755,
+      mode    => '0755',
       source  => 'puppet:///modules/anthrax/update-nomail-hashes';
     '/usr/local/sbin/update-cred-cache':
-      mode    => 755,
+      mode    => '0755',
       source  => 'puppet:///modules/anthrax/update-cred-cache';
 
     # badness filtering
@@ -183,7 +183,7 @@ class ocf_mail::mail {
     '/var/lib/spamd':
       ensure  => directory,
       owner   => spamd,
-      mode    => 755,
+      mode    => '0755',
       require => User['spamd'];
     '/etc/default/spamass-milter':
       source  => 'puppet:///modules/anthrax/spamass/spamass-milter',
@@ -213,7 +213,7 @@ class ocf_mail::mail {
     # outgoing nomail logging
     '/var/mail/nomail':
       ensure  => directory,
-      mode    => 755,
+      mode    => '0755',
       owner   => ocfmail,
       group   => ocfmail;
     '/etc/logrotate.d/nomail':

@@ -17,7 +17,7 @@ class ocf_accounts::proxy {
         'dev-accounts.ocf.berkeley.edu'
       ],
 
-      proxy => 'http://atool',
+      proxy            => 'http://atool',
       proxy_set_header => [
         'X-Forwarded-Protocol $scheme',
         'X-Forwarded-For $proxy_add_x_forwarded_for',
@@ -28,7 +28,7 @@ class ocf_accounts::proxy {
       ssl_cert => "/etc/ssl/private/${::fqdn}.bundle",
       ssl_key  => "/etc/ssl/private/${::fqdn}.key",
 
-      listen_port => 443,
+      listen_port      => 443,
       rewrite_to_https => true;
 
     'accounts.ocf.berkeley.edu-redirect':
