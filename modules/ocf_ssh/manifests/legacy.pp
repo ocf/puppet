@@ -1,5 +1,4 @@
 class ocf_ssh::legacy {
-
   # Symlinks for legacy file paths
   File { ensure => link, links => manage }
   file {
@@ -19,5 +18,4 @@ class ocf_ssh::legacy {
       target => '/usr/bin/whoami',
     ;
   }
-
 }
