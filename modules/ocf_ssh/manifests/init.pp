@@ -92,6 +92,18 @@ class ocf_ssh {
       group   => 'root',
       mode    => '0644',
       source  => 'puppet:///private/ssh_host_rsa_key.pub';
+    '/etc/ssh/ssh_host_ecdsa_key':
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0600',
+      source  => 'puppet:///private/ssh_host_ecdsa_key';
+    '/etc/ssh/ssh_host_ecdsa_key.pub':
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      source  => 'puppet:///private/ssh_host_ecdsa_key.pub';
   }
 
   # apache must subscribe to all conf files
