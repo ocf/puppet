@@ -1,7 +1,7 @@
 class common::locale {
   file {
     '/etc/locale.gen':
-      content => 'en_US.UTF-8 UTF-8\n';
+      content => "en_US.UTF-8 UTF-8\n";
   }
 
   exec {
