@@ -1,4 +1,4 @@
-class dementors::apache {
+class ocf_stats::apache {
   package {
     ['apache2', 'apache2-mpm-prefork', 'libapache2-mod-php5', 'php5-mcrypt' ]:;
   }
@@ -9,14 +9,14 @@ class dementors::apache {
       mode    => '0644',
       require => Package['apache2'],
       notify  => Exec['apache-reload'],
-      source  => 'puppet:///modules/dementors/apache/ports.conf';
+      source  => 'puppet:///modules/ocf_stats/apache/ports.conf';
     '/etc/apache2/sites-available/stats.ocf.berkeley.edu':
       owner   => root,
       group   => root,
       mode    => '0644',
       require => Package['apache2'],
       notify  => Exec['apache-reload'],
-      source  => 'puppet:///modules/dementors/apache/stats.ocf.berkeley.edu';
+      source  => 'puppet:///modules/ocf_stats/apache/stats.ocf.berkeley.edu';
   }
 
   exec {

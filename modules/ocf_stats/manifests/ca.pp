@@ -1,4 +1,4 @@
-class dementors::ca {
+class ocf_stats::ca {
   file {
     '/etc/ssl/stats':
       ensure => directory,
@@ -21,7 +21,7 @@ class dementors::ca {
       group  => root,
       mode   => '0755';
     '/etc/ssl/stats/ca/openssl.cnf':
-      source => 'puppet:///modules/dementors/ca/openssl.cnf',
+      source => 'puppet:///modules/ocf_stats/ca/openssl.cnf',
       owner  => root,
       group  => root,
       mode   => '0644';
@@ -36,7 +36,7 @@ class dementors::ca {
       mode   => '0444',
       source => 'puppet:///private/stats/ca.crt';
     '/etc/ssl/stats/ca/create-cert.sh':
-      source => 'puppet:///modules/dementors/ca/create-cert.sh',
+      source => 'puppet:///modules/ocf_stats/ca/create-cert.sh',
       owner  => root,
       group  => root,
       mode   => '0755';

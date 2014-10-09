@@ -1,4 +1,4 @@
-class dementors::labstats {
+class ocf_stats::labstats {
   package {
     ['mysql-server', 'pssh', 'python-pysnmp4']:;
   }

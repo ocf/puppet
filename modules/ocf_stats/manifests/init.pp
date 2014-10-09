@@ -1,0 +1,1 @@
+class ocf_stats {}
