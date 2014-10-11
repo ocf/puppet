@@ -9,9 +9,8 @@ MAX_WORKERS = 20
 def local_modules(puppet):
     """Returns absolute paths to local modules."""
     modules = os.path.join(puppet, 'modules')
-    return filter( # filter out git submodules
-        lambda module: not os.path.exists(os.path.join(module, '.git')),
-        (os.path.join(modules, module) for module in os.listdir(modules)))
+    return [os.path.join(modules, module) for module in os.listdir(modules)
+            if not os.path.exists(os.path.join(modules, module, '.git'))]
 
 def get_files(path, ext):
     """Returns list of absolute paths in the directory with extension."""
@@ -51,9 +50,15 @@ def validate_template(path):
         return False
     return True
 
-def lint_manifest(path):
-    return subprocess.call(['puppet-lint', '--fail-on-warnings',
-        '--with-filename', '--no-80chars-check', '--', path]) == 0
+def lint_module(path):
+    disabled_checks = ['80chars', 'documentation', 'puppet_url_without_modules']
+    return subprocess.call(
+            ['puppet-lint', '--fail-on-warnings', '--with-filename'] +
+            ['--no-' + check + '-check' for check in disabled_checks] +
+            ['--', path]) == 0
+
+def list_id(x):
+    return [x]
 
 if __name__ == '__main__':
     start = os.path.realpath(__file__)
@@ -64,8 +69,8 @@ if __name__ == '__main__':
             lambda: validate_files(get_manifests, validate_manifest),
         'validate_templates':
             lambda: validate_files(get_templates, validate_template),
-        'lint_manifests':
-            lambda: validate_files(get_manifests, lint_manifest)
+        'lint_modules':
+            lambda: validate_files(list_id, lint_module)
     }
 
     for name, fn in checks.items():
