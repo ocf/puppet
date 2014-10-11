@@ -1,0 +1,16 @@
+#!/bin/bash -e
+# Test if the mirror hasn't been updated in 24 hours. This can happen if the
+# upstream mirror fails to sync, but we sync successfully with our upstream
+# mirror.
+
+# ubuntu has no symlink for stable, so we use devel
+updated=$(curl -s http://mirrors/ubuntu/dists/devel/Release | \
+	grep Date | cut -d':' -f2- | sed -s 's/^ //')
+updated_epoch=$(date --date="$updated" +%s) # last update (seconds since 1970)
+
+yesterday=$(($(date +%s) - 24 * 60 * 60))
+
+if [ "$updated_epoch" -lt "$yesterday" ]; then
+	echo "Warning: ubuntu has not been updated since $(date --date="$updated")"
+	exit 1
+fi

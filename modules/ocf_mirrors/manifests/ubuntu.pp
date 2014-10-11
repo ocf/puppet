@@ -9,17 +9,23 @@ class ocf_mirrors::ubuntu {
       recurse => true;
   }
 
-  cron { 'ubuntu':
-    command => '/opt/mirrors/project/ubuntu/sync-archive > /dev/null',
-    user    => 'mirrors',
-    hour    => '*',
-    minute  => '15';
-  }
+  cron {
+    'ubuntu':
+      command => '/opt/mirrors/project/ubuntu/sync-archive > /dev/null',
+      user    => 'mirrors',
+      hour    => '*',
+      minute  => '15';
 
-  cron { 'ubuntu-releases':
-    command => '/opt/mirrors/project/ubuntu/sync-releases > /dev/null',
-    user    => 'mirrors',
-    hour    => '*/7',
-    minute  => '18';
+    'ubuntu-releases':
+      command => '/opt/mirrors/project/ubuntu/sync-releases > /dev/null',
+      user    => 'mirrors',
+      hour    => '*/7',
+      minute  => '18';
+
+    'ubuntu-health':
+      command => '/opt/mirrors/project/ubuntu/health',
+      user    => 'mirrors',
+      hour    => '*',
+      minute  => '0';
   }
 }

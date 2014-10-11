@@ -33,30 +33,38 @@ class ocf_mirrors::debian {
     '/opt/mirrors/project/debian/etc/ftpsync-cd.conf':
       source  => 'puppet:///modules/ocf_mirrors/project/debian/ftpsync-cd.conf',
       mode    => '0644';
+    '/opt/mirrors/project/debian/health':
+      source  => 'puppet:///modules/ocf_mirrors/project/debian/health',
+      mode    => '0755';
     '/opt/mirrors/project/debian/etc/common':
       ensure  => link,
       links   => manage,
       target  => '/opt/mirrors/project/debian/distrib/etc/common';
   }
 
-  cron { 'debian':
-    command => 'BASEDIR=/opt/mirrors/project/debian /opt/mirrors/project/debian/bin/ftpsync',
-    user    => 'mirrors',
-    hour    => '*/4',
-    minute  => '42';
-  }
+  cron {
+    'debian':
+      command => 'BASEDIR=/opt/mirrors/project/debian /opt/mirrors/project/debian/bin/ftpsync',
+      user    => 'mirrors',
+      hour    => '*/4',
+      minute  => '42';
 
-  cron { 'debian-security':
-    command => 'BASEDIR=/opt/mirrors/project/debian /opt/mirrors/project/debian/bin/ftpsync-security',
-    user    => 'mirrors',
-    hour    => '*',
-    minute  => '16';
-  }
+    'debian-security':
+      command => 'BASEDIR=/opt/mirrors/project/debian /opt/mirrors/project/debian/bin/ftpsync-security',
+      user    => 'mirrors',
+      hour    => '*',
+      minute  => '16';
 
-  cron { 'debian-cd':
-    command => 'BASEDIR=/opt/mirrors/project/debian /opt/mirrors/project/debian/bin/ftpsync-cd',
-    user    => 'mirrors',
-    hour    => '*/7',
-    minute  => '33';
+    'debian-cd':
+      command => 'BASEDIR=/opt/mirrors/project/debian /opt/mirrors/project/debian/bin/ftpsync-cd',
+      user    => 'mirrors',
+      hour    => '*/7',
+      minute  => '33';
+
+    'debian-health':
+      command => '/opt/mirrors/project/debian/health',
+      user    => 'mirrors',
+      hour    => '*',
+      minute  => '0';
   }
 }
