@@ -1,6 +1,10 @@
 class lightning::puppetmaster {
   package {
-    ['puppetmaster-passenger', 'puppet-lint']:;
+    'puppetmaster-passenger':;
+
+    'puppet-lint':
+      ensure   => '1.1.0',
+      provider => gem;
   }
 
   apache::vhost { 'puppetmaster':
