@@ -1,4 +1,4 @@
-class death {
+class ocf_www {
   package {
     [ 'apache2', 'libapache-mod-security', 'apache2-threaded-dev', 'libapache2-mod-fcgid']:
       before => Package['libapache2-mod-php5'],
@@ -34,7 +34,7 @@ class death {
   file { '/etc/apache2/conf.d':
     ensure  => directory,
     recurse => true,
-    source  => 'puppet:///modules/death/apache/conf.d',
+    source  => 'puppet:///modules/ocf_www/apache/conf.d',
     require => Package['apache2'],
     notify  => Service['apache2'],
   }
@@ -50,48 +50,48 @@ class death {
 
   file { '/etc/apache2/sites-available/01-www.conf':
     ensure  => file,
-    source  => 'puppet:///modules/death/apache/sites/www.conf',
+    source  => 'puppet:///modules/ocf_www/apache/sites/www.conf',
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
 
   file { '/etc/apache2/sites-available/02-ssl.conf':
     ensure  => file,
-    source  => 'puppet:///modules/death/apache/sites/ssl.conf',
+    source  => 'puppet:///modules/ocf_www/apache/sites/ssl.conf',
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
 
   file { '/etc/apache2/sites-available/03-userdir.conf':
     ensure  => file,
-    source  => 'puppet:///modules/death/apache/sites/userdir.conf',
+    source  => 'puppet:///modules/ocf_www/apache/sites/userdir.conf',
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
 
   file { '/etc/apache2/sites-available/04-shorturl.conf':
     ensure  => file,
-    source  => 'puppet:///modules/death/apache/sites/shorturl.conf',
+    source  => 'puppet:///modules/ocf_www/apache/sites/shorturl.conf',
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
 
   file { '/etc/apache2/sites-available/05-pma.conf':
     ensure  => file,
-    source  => 'puppet:///modules/death/apache/sites/pma.conf',
+    source  => 'puppet:///modules/ocf_www/apache/sites/pma.conf',
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
 
   file { '/etc/apache2/sites-available/06-hello.conf':
     ensure  => file,
-    source  => 'puppet:///modules/death/apache/sites/hello.conf',
+    source  => 'puppet:///modules/ocf_www/apache/sites/hello.conf',
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
 
   file { '/etc/apache2/sites-common.conf':
-    source  => 'puppet:///modules/death/apache/sites-common.conf',
+    source  => 'puppet:///modules/ocf_www/apache/sites-common.conf',
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
@@ -103,7 +103,7 @@ class death {
 
   file { '/etc/apache2/mods-available/mod_ocfdir.c':
     ensure => file,
-    source => 'puppet:///modules/death/apache/mods/mod_ocfdir.c',
+    source => 'puppet:///modules/ocf_www/apache/mods/mod_ocfdir.c',
   }
 
   file { '/usr/lib/apache2':
@@ -113,7 +113,7 @@ class death {
 
   file { '/usr/lib/apache2/suexec':
     ensure  => file,
-    source  => 'puppet:///contrib/local/death/suexec',
+    source  => 'puppet:///contrib/local/ocf_www/suexec',
     backup  => false, # it's a binary file
     mode    => '4750',
     owner   => 'root',
@@ -228,7 +228,7 @@ class death {
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      source  => 'puppet:///modules/death/apache/mods/suphp.config.ocf',
+      source  => 'puppet:///modules/ocf_www/apache/mods/suphp.config.ocf',
       require => Package['libapache2-mod-suphp'],
   }
 
@@ -239,7 +239,7 @@ class death {
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      source  => 'puppet:///modules/death/apache/mods/php.ini',
+      source  => 'puppet:///modules/ocf_www/apache/mods/php.ini',
       require => Package['php5'],
   }
 
@@ -271,7 +271,7 @@ class death {
   file {
     '/etc/exports':
       ensure  => file,
-      source  => 'puppet:///modules/death/exports',
+      source  => 'puppet:///modules/ocf_www/exports',
       require => Package['nfs-kernel-server', 'apache2'],
       notify  => Service['nfs-kernel-server'],
   }
@@ -280,7 +280,7 @@ class death {
   file {
     '/etc/logrotate.d/apache2':
       ensure => file,
-      source => 'puppet:///modules/death/logrotate/apache2',
+      source => 'puppet:///modules/ocf_www/logrotate/apache2',
   }
 
   service { 'nfs-kernel-server': }
