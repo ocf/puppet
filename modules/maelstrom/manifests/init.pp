@@ -1,5 +1,5 @@
 class maelstrom {
-  class { 'maelstrom::percona-apt':
+  class { 'maelstrom::percona_apt':
     stage => first;
   }
 

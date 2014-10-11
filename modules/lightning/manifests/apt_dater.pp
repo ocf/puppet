@@ -1,4 +1,4 @@
-class lightning::apt-dater {
+class lightning::apt_dater {
   package { 'apt-dater': }
 
   file { '/root/apt-dater.keytab':
