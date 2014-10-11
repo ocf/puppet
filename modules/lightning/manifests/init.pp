@@ -18,7 +18,10 @@ class lightning {
     directories => [{
       path        => '/var/www',
       options     => ['ExecCGI'],
-      addhandlers => [{handler => 'cgi-script', extensions => ['.cgi']}]
+      addhandlers => [{
+        handler    => 'cgi-script',
+        extensions => ['.cgi']
+      }]
     }];
   }
 

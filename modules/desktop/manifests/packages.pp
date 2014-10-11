@@ -2,8 +2,8 @@ class desktop::packages {
 
   # install common and extra packages but not packages for login server
   class { 'common::packages':
-    extra  => true,
-    login  => false,
+    extra => true,
+    login => false,
   }
 
   if $::lsbdistcodename == 'wheezy' {
@@ -17,10 +17,10 @@ class desktop::packages {
     }
 
     package { 'xserver-xorg-video-intel':
-      ensure    => latest,
-      provider  => dpkg,
+      ensure   => latest,
+      provider => dpkg,
       # no official backport is available, so we use our own backported package (2014-05-24)
-      source    => '/opt/share/puppet/packages/xserver-xorg-video-intel_2.21.15-2~bpo70+1_amd64.deb',
+      source   => '/opt/share/puppet/packages/xserver-xorg-video-intel_2.21.15-2~bpo70+1_amd64.deb',
     }
   }
 

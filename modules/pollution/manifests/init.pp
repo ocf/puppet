@@ -120,8 +120,8 @@ class pollution {
   # share pykota configuration over NFS
   package { 'nfs-kernel-server': }
   file { '/etc/exports':
-    source    => 'puppet:///modules/pollution/exports',
-    require   => Package['nfs-kernel-server']
+    source  => 'puppet:///modules/pollution/exports',
+    require => Package['nfs-kernel-server']
   }
   service { 'nfs-kernel-server':
     subscribe => File['/etc/exports'],

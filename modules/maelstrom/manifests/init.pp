@@ -9,8 +9,8 @@ class maelstrom {
   }
 
   file { '/opt/share/puppet/percona-server-server-5.6.preseed':
-    mode         => '0600',
-    source       => 'puppet:///private/percona-server-server-5.6.preseed'
+    mode   => '0600',
+    source => 'puppet:///private/percona-server-server-5.6.preseed'
   }
 
   # provide mysql server and client config

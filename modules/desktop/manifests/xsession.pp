@@ -59,8 +59,7 @@ class desktop::xsession {
 
   # use ocf logo on login screen
   file { '/usr/share/icons/hicolor/64x64/devices/ocf.png':
-    backup  => false,
-    source  => 'puppet:///contrib/desktop/ocf-color-64.png',
+    source => 'puppet:///contrib/desktop/ocf-color-64.png',
   }
 
   exec {
@@ -101,8 +100,8 @@ class desktop::xsession {
       source  => 'puppet:///contrib/desktop/logout-banner.png';
     # replace logout script configuration
     '/usr/bin/lxde-logout':
-      mode    => '0755',
-      source  => 'puppet:///modules/desktop/xsession/lxde/lxde-logout'
+      mode   => '0755',
+      source => 'puppet:///modules/desktop/xsession/lxde/lxde-logout'
   }
 
   # xfce configuration

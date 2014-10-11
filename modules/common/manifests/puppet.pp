@@ -18,7 +18,7 @@ class common::puppet {
   augeas { '/etc/puppet/puppet.conf':
     context => '/files/etc/puppet/puppet.conf',
     changes => [
-      "set agent/environment $::environment",
+      "set agent/environment ${::environment}",
       'set agent/usecacheonfailure false',
       'set main/pluginsync true'
     ],

@@ -20,20 +20,20 @@ class blight {
   # www-data user private key used to deploy to github
   file {
     '/var/www/.ssh':
-      ensure  => 'directory',
-      owner   => 'www-data',
-      group   => 'www-data',
-      mode    => '0750';
+      ensure => 'directory',
+      owner  => 'www-data',
+      group  => 'www-data',
+      mode   => '0750';
     '/var/www/.ssh/config':
-      source  => 'puppet:///modules/blight/ssh/config',
-      owner   => 'www-data',
-      group   => 'www-data',
-      mode    => '0640';
+      source => 'puppet:///modules/blight/ssh/config',
+      owner  => 'www-data',
+      group  => 'www-data',
+      mode   => '0640';
     '/srv/ikiwiki/id_rsa':
-      mode    => '0400',
-      owner   => 'www-data',
-      group   => 'www-data',
-      source  => 'puppet:///private/id_rsa';
+      mode   => '0400',
+      owner  => 'www-data',
+      group  => 'www-data',
+      source => 'puppet:///private/id_rsa';
   }
 
   # the serverlist ikiwiki plugin needs to be in a certain folder
@@ -184,23 +184,23 @@ class blight {
 
   # old wiki (docs)
   file { '/etc/apache2/sites-available/docs':
-    ensure      => file,
-    source      => 'puppet:///modules/blight/apache2/docs',
+    ensure => file,
+    source => 'puppet:///modules/blight/apache2/docs',
   }
   exec { '/usr/sbin/a2ensite docs':
-    unless      => '/bin/readlink -e /etc/apache2/sites-enabled/docs',
-    notify      => Service['apache2'],
-    require     => File['/etc/apache2/sites-available/docs'],
+    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/docs',
+    notify  => Service['apache2'],
+    require => File['/etc/apache2/sites-available/docs'],
   }
 
   # default blight site
   file { '/etc/apache2/sites-available/000-default':
-    ensure      => file,
-    source      => 'puppet:///modules/blight/apache2/000-default',
+    ensure => file,
+    source => 'puppet:///modules/blight/apache2/000-default',
   }
   exec { '/usr/sbin/a2ensite default':
-    unless      => '/bin/readlink -e /etc/apache2/sites-enabled/000-default',
-    notify      => Service['apache2'],
-    require     => File['/etc/apache2/sites-available/000-default'],
+    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/000-default',
+    notify  => Service['apache2'],
+    require => File['/etc/apache2/sites-available/000-default'],
   }
 }

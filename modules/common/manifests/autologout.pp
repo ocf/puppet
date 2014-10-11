@@ -7,10 +7,10 @@ class common::autologout {
   File { mode => 0755 }
   file {
     '/etc/profile.d/autologout.sh':
-      content => "$condition && export TMOUT=$TMOUT",
+      content => "${condition} && export TMOUT=${TMOUT}",
     ;
     '/etc/profile.d/autologout.csh':
-      content => "$condition && setenv TMOUT $TMOUT",
+      content => "${condition} && setenv TMOUT ${TMOUT}",
     ;
   }
 

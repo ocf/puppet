@@ -15,8 +15,8 @@ class eruption {
 
   # create pam_mkhomedir profile
   file { '/usr/share/pam-configs/mkhomedir':
-    source  => 'puppet:///modules/desktop/pam/mkhomedir',
-    notify  => Exec['pam-auth-update']
+    source => 'puppet:///modules/desktop/pam/mkhomedir',
+    notify => Exec['pam-auth-update']
   }
 
 }

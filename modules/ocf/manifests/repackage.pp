@@ -21,9 +21,9 @@ define ocf::repackage(
     $g = ''
   }
 
-  exec { "aptitude install $package":
-    command => "aptitude -y ${r}${b}install $package",
-    unless  => "dpkg -l $package | grep ^ii $g"
+  exec { "aptitude install ${package}":
+    command => "aptitude -y ${r}${b}install ${package}",
+    unless  => "dpkg -l ${package} | grep ^ii ${g}"
   }
 
 }

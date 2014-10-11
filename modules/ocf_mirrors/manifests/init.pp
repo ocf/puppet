@@ -20,14 +20,14 @@ class ocf_mirrors {
   }
 
   apache::vhost { 'mirrors.ocf.berkeley.edu':
-    serveraliases   => ['mirrors'],
-    port            => 80,
-    docroot         => '/opt/mirrors/ftp',
+    serveraliases  => ['mirrors'],
+    port           => 80,
+    docroot        => '/opt/mirrors/ftp',
 
-    directories     => [{
-      path          => '/opt/mirrors/ftp',
-      options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
-      indexoptions  => ['NameWidth=*', '+SuppressDescription']
+    directories    => [{
+      path         => '/opt/mirrors/ftp',
+      options      => ['+Indexes', '+SymlinksIfOwnerMatch'],
+      indexoptions => ['NameWidth=*', '+SuppressDescription']
     }];
   }
 

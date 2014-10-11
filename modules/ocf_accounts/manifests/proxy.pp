@@ -45,6 +45,8 @@ class ocf_accounts::proxy {
       ssl_cert => "/etc/ssl/private/${::fqdn}.bundle",
       ssl_key  => "/etc/ssl/private/${::fqdn}.key",
 
-      vhost_cfg_append => {'return' => '301 https://accounts.ocf.berkeley.edu$request_uri'};
+      vhost_cfg_append => {
+        'return' => '301 https://accounts.ocf.berkeley.edu$request_uri'
+      };
   }
 }

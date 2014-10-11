@@ -49,10 +49,10 @@ class common::auth( $glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [] ) {
   package { 'libpam-krb5': }
   # remove unnecessary pam profiles
   $pamconfig = '/usr/share/pam-configs'
-  file { [ "$pamconfig/consolekit", "$pamconfig/gnome-keyring", "$pamconfig/ldap", "$pamconfig/libpam-mount" ]:
-    ensure  => absent,
-    backup  => false,
-    notify  => Exec['pam-auth-update']
+  file { [ "${pamconfig}/consolekit", "${pamconfig}/gnome-keyring", "${pamconfig}/ldap", "${pamconfig}/libpam-mount" ]:
+    ensure => absent,
+    backup => false,
+    notify => Exec['pam-auth-update']
   }
   exec { 'pam-auth-update':
     command     => 'pam-auth-update --package',

@@ -5,9 +5,9 @@ class maelstrom::percona-apt {
   }
 
   apt::source { 'percona':
-    location   => 'http://repo.percona.com/apt',
-    release    => $::lsbdistcodename,
-    repos      => 'main',
-    require    => Apt::Key['percona'];
+    location => 'http://repo.percona.com/apt',
+    release  => $::lsbdistcodename,
+    repos    => 'main',
+    require  => Apt::Key['percona'];
   }
 }

@@ -10,7 +10,7 @@ class networking::hostname {
       content => $hostname,
     ;
     '/etc/hosts':
-      content => "127.0.0.1 localhost\n$::ipaddress $fqdn $hostname",
+      content => "127.0.0.1 localhost\n${::ipaddress} ${fqdn} ${hostname}",
     ;
   }
 
