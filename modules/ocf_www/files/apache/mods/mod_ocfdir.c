@@ -1,11 +1,66 @@
-/* OCF mod_ocfdir, OCF implementation of mod_userdir.c.
- * Last author: Sanjay Krishnan sanjayk@ocf.berkeley.edu 
+/**
+ * mod_ocfdir is a fork of mod_userdir by the Open Computing Facility
+ * <https://www.ocf.berkeley.edu/>.
+ *
+ * Originally modified by Sanjay Krishnan <sanjayk@ocf.berkeley.edu>:
+ *
+ *   Normally, pointing UserDir at a single directory does the following:
+ *		UserDir /usr/web -> /usr/web/bar/one/two.html
+ *	 With mod_ocfdir, it instead does:
+ *		UserDir /usr/web -> /usr/web/b/bar/one/two.html
+ *
+ * Additional modifications by Chris Kuehl <ckuehl@ocf.berkeley.edu>.
+ */
 
- * Usage is below there are two operating modes:
- * UserDir public_html      -> ~bar/public_html/..
- * UserDir /usr/web         -> /usr/web/bar/b/..
+/* Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * mod_userdir... implement the UserDir command.  Broken away from the
+ * Alias stuff for a couple of good and not-so-good reasons:
+ *
+ * 1) It shows a real minimal working example of how to do something like
+ *    this.
+ * 2) I know people who are actually interested in changing this *particular*
+ *    aspect of server functionality without changing the rest of it.  That's
+ *    what this whole modular arrangement is supposed to be good at...
+ *
+ * Modified by Alexei Kosut to support the following constructs
+ * (server running at www.foo.com, request for /~bar/one/two.html)
+ *
+ * UserDir public_html      -> ~bar/public_html/one/two.html
+ * UserDir /usr/web         -> /usr/web/bar/one/two.html
+ * UserDir /home/ * /www     -> /home/bar/www/one/two.html
+ *  NOTE: theses ^ ^ space only added allow it to work in a comment, ignore
+ * UserDir http://x/users   -> (302) http://x/users/bar/one/two.html
+ * UserDir http://x/ * /y     -> (302) http://x/bar/y/one/two.html
+ *  NOTE: here also ^ ^
+ *
+ * In addition, you can use multiple entries, to specify alternate
+ * user directories (a la Directory Index). For example:
+ *
+ * UserDir public_html /usr/web http://www.xyz.com/users
+ *
+ * Modified by Ken Coar to provide for the following:
+ *
  * UserDir disable[d] username ...
  * UserDir enable[d] username ...
+ *
+ * If "disabled" has no other arguments, *all* ~<username> references are
+ * disabled, except those explicitly turned on with the "enabled" keyword.
  */
 
 #include "apr_strings.h"
@@ -23,13 +78,14 @@
 #include "http_config.h"
 #include "http_request.h"
 
-#if !defined(WIN32) && !defined(OS2) && !defined(BEOS) && !defined(NETWARE)
+#if !defined(WIN32) && !defined(OS2) && !defined(NETWARE)
 #define HAVE_UNIX_SUEXEC
 #endif
 
 #ifdef HAVE_UNIX_SUEXEC
 #include "unixd.h"        /* Contains the suexec_identity hook used on Unix */
 #endif
+
 
 /*
  * The default directory in user's home dir
@@ -85,6 +141,7 @@ static void *merge_userdir_config(apr_pool_t *p, void *basev, void *overridesv)
     return cfg;
 }
 
+
 static const char *set_user_dir(cmd_parms *cmd, void *dummy, const char *arg)
 {
     userdir_config *s_cfg = ap_get_module_config(cmd->server->module_config,
@@ -109,14 +166,14 @@ static const char *set_user_dir(cmd_parms *cmd, void *dummy, const char *arg)
          * If there are no usernames specified, this is a global disable - we
          * need do no more at this point than record the fact.
          */
-        if (strlen(usernames) == 0) {
+        if (!*usernames) {
             s_cfg->globally_disabled = O_DISABLE;
             return NULL;
         }
         usertable = s_cfg->disabled_users;
     }
     else if ((!strcasecmp(kw, "enable")) || (!strcasecmp(kw, "enabled"))) {
-        if (strlen(usernames) == 0) {
+        if (!*usernames) {
             s_cfg->globally_disabled = O_ENABLE;
             return NULL;
         }
@@ -243,14 +300,11 @@ static int translate_userdir(request_rec *r)
                 else
                     filename = apr_pstrcat(r->pool, x, w, userdir, NULL);
             }
-	   else
-    		{
-			//OCF Patch does the magic
-             		char * first_letter = (char *)(malloc(2));
-             		first_letter[0] = w[0];
-             		first_letter[1] = '\0';
-             		filename = apr_pstrcat(r->pool, userdir, "/",first_letter,"/", w, NULL);
-     		}
+            else {
+                /* make path for user "foo" as "/f/foo/" */
+                char first_letter[2] = {*w, '\0'};
+                filename = apr_pstrcat(r->pool, userdir, "/", first_letter, "/", w, NULL);
+            }
         }
         else if (x && ap_strchr_c(x, ':')) {
             redirect = apr_pstrcat(r->pool, x, w, dname, NULL);
