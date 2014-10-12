@@ -1,0 +1,52 @@
+<VirtualHost *:80>
+    ServerName www.ocf.berkeley.edu
+    ServerAlias www.ocf.berkeley.edu www.ocf www ocf.berkeley.edu ocf dev-www.ocf.berkeley.edu
+    ServerAdmin help@ocf.berkeley.edu
+
+    # canonical hostname is www.ocf.berkeley.edu
+    RewriteEngine on
+    RewriteCond %{HTTP_HOST} !^(dev-)?www\.ocf\.berkeley\.edu$ [NC]
+    RewriteRule ^/(.*)$ http://www.ocf.berkeley.edu/$1 [R=301]
+
+    # Include config shared between www and secure virtual hosts
+    Include sites-common.conf
+
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName www.ocf.berkeley.edu
+    ServerAlias secure.ocf.berkeley.edu secure.ocf secure www.ocf.berkeley.edu www.ocf www ocf.berkeley.edu ocf dev-www.ocf.berkeley.edu
+    ServerAdmin help@ocf.berkeley.edu
+
+    # canonical hostname is www.ocf.berkeley.edu
+    RewriteEngine on
+    RewriteCond %{HTTP_HOST} !^(dev-)?www\.ocf\.berkeley\.edu$ [NC]
+    RewriteRule ^/(.*)$ https://www.ocf.berkeley.edu/$1 [R=301]
+
+    # Include config shared between www and secure virtual hosts
+    Include sites-common.conf
+
+    CustomLog ${APACHE_LOG_DIR}/ssl_access.log combined
+
+    SSLEngine on
+	SSLCertificateFile /etc/ssl/private/<%= @fqdn %>.crt
+	SSLCertificateKeyFile /etc/ssl/private/<%= @fqdn %>.key
+	SSLCertificateChainFile /etc/ssl/private/<%= @fqdn %>.bundle
+
+    <FilesMatch "\.(cgi|shtml|phtml|php)$">
+        SSLOptions +StdEnvVars
+    </FilesMatch>
+    <Directory /usr/lib/cgi-bin>
+        SSLOptions +StdEnvVars
+    </Directory>
+</VirtualHost>
+
+# redirect secure:80 to SSL
+<VirtualHost *:80>
+    ServerName secure.ocf.berkeley.edu
+    ServerAlias secure.ocf.berkeley.edu secure.ocf secure
+    ServerAdmin help@ocf.berkeley.edu
+
+	Redirect 301 / https://www.ocf.berkeley.edu/
+</VirtualHost>
