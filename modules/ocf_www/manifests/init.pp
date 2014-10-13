@@ -1,40 +1,38 @@
-class death {
+class ocf_www {
+  include ocf_ssl
+
   package {
     [ 'apache2', 'libapache-mod-security', 'apache2-threaded-dev', 'libapache2-mod-fcgid']:
-      before => Package['libapache2-mod-php5'],
-    ;
+      before => Package['libapache2-mod-php5'];
+
     # php
     ['php5', 'php5-mysql', 'php5-sqlite', 'libapache2-mod-suphp', 'php5-gd', 'php5-curl', 'php5-mcrypt']:
-      before => Package['libapache2-mod-php5'],
-    ;
+      before => Package['libapache2-mod-php5'];
+
     # mod-php interferes with suphp and fcgid but is pulled in as recommended dependency
     'libapache2-mod-php5':
-      ensure => purged,
-    ;
+      ensure => purged;
+
     # python and django
-    ['python-django', 'python-mysqldb', 'python-flup', 'python-flask', 'python-sqlalchemy']:
-    ;
+    ['python-django', 'python-mysqldb', 'python-flup', 'python-flask', 'python-sqlalchemy']:;
+
     # perl
-    ['libdbi-perl']:
-    ;
+    ['libdbi-perl']:;
+
     # ruby and rails
-    ['rails3', 'libfcgi-ruby1.8', 'libmysql-ruby', 'ruby-sqlite3']:
-    ;
+    ['rails3', 'libfcgi-ruby1.8', 'libmysql-ruby', 'ruby-sqlite3']:;
+
     # misc dev packages
-    ['libfcgi-dev', 'sqlite3', 'libsqlite3-dev', 'libtidy-dev', 'nodejs']:
-    ;
+    ['libfcgi-dev', 'sqlite3', 'libsqlite3-dev', 'libtidy-dev', 'nodejs']:;
+
     # nfs
-    ['nfs-kernel-server']:
-    ;
-    # for staff_hours.cgi (perl)
-    'libhtml-parser-perl':
-    ;
+    'nfs-kernel-server':;
   }
 
   file { '/etc/apache2/conf.d':
     ensure  => directory,
     recurse => true,
-    source  => 'puppet:///modules/death/apache/conf.d',
+    source  => 'puppet:///modules/ocf_www/apache/conf.d',
     require => Package['apache2'],
     notify  => Service['apache2'],
   }
@@ -49,49 +47,31 @@ class death {
   }
 
   file { '/etc/apache2/sites-available/01-www.conf':
-    ensure  => file,
-    source  => 'puppet:///modules/death/apache/sites/www.conf',
+    content => template('ocf_www/vhosts/www.conf.erb'),
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
 
-  file { '/etc/apache2/sites-available/02-ssl.conf':
-    ensure  => file,
-    source  => 'puppet:///modules/death/apache/sites/ssl.conf',
+  file { '/etc/apache2/sites-available/02-shorturl.conf':
+    content => template('ocf_www/vhosts/shorturl.conf.erb'),
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
 
-  file { '/etc/apache2/sites-available/03-userdir.conf':
-    ensure  => file,
-    source  => 'puppet:///modules/death/apache/sites/userdir.conf',
+  file { '/etc/apache2/sites-available/03-pma.conf':
+    content => template('ocf_www/vhosts/pma.conf.erb'),
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
 
-  file { '/etc/apache2/sites-available/04-shorturl.conf':
-    ensure  => file,
-    source  => 'puppet:///modules/death/apache/sites/shorturl.conf',
-    notify  => Service['apache2'],
-    require => Package['apache2'],
-  }
-
-  file { '/etc/apache2/sites-available/05-pma.conf':
-    ensure  => file,
-    source  => 'puppet:///modules/death/apache/sites/pma.conf',
-    notify  => Service['apache2'],
-    require => Package['apache2'],
-  }
-
-  file { '/etc/apache2/sites-available/06-hello.conf':
-    ensure  => file,
-    source  => 'puppet:///modules/death/apache/sites/hello.conf',
+  file { '/etc/apache2/sites-available/04-hello.conf':
+    content => template('ocf_www/vhosts/hello.conf.erb'),
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
 
   file { '/etc/apache2/sites-common.conf':
-    source  => 'puppet:///modules/death/apache/sites-common.conf',
+    source  => 'puppet:///modules/ocf_www/apache/sites-common.conf',
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
@@ -103,7 +83,7 @@ class death {
 
   file { '/etc/apache2/mods-available/mod_ocfdir.c':
     ensure => file,
-    source => 'puppet:///modules/death/apache/mods/mod_ocfdir.c',
+    source => 'puppet:///modules/ocf_www/apache/mods/mod_ocfdir.c',
   }
 
   file { '/usr/lib/apache2':
@@ -113,7 +93,7 @@ class death {
 
   file { '/usr/lib/apache2/suexec':
     ensure  => file,
-    source  => 'puppet:///contrib/local/death/suexec',
+    source  => 'puppet:///contrib/local/ocf_www/suexec',
     backup  => false, # it's a binary file
     mode    => '4750',
     owner   => 'root',
@@ -161,7 +141,7 @@ class death {
   exec { '/usr/sbin/a2enmod ssl':
     unless  => '/bin/readlink -e /etc/apache2/mods-enabled/ssl.load',
     notify  => Service['apache2'],
-    require => [ File['/etc/ssl/certs/secure.ocf.berkeley.edu.crt'], File['/etc/ssl/private/secure.ocf.berkeley.edu.key'], Package['apache2'] ],
+    require => [File["/etc/ssl/private/${::fqdn}.crt"], Package['apache2']],
   }
   exec { '/usr/sbin/a2enmod userdir':
     unless  => '/bin/readlink -e /etc/apache2/mods-enabled/userdir.load',
@@ -189,30 +169,20 @@ class death {
     notify  => Service['apache2'],
     require => [Exec['/usr/sbin/a2enmod rewrite'], Exec['/usr/sbin/a2enmod include'], File['/etc/apache2/sites-available/01-www.conf']],
   }
-  exec { '/usr/sbin/a2ensite 02-ssl.conf':
-    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/02-ssl.conf',
+  exec { '/usr/sbin/a2ensite 02-shorturl.conf':
+    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/02-shorturl.conf',
     notify  => Service['apache2'],
-    require => [Exec['/usr/sbin/a2enmod rewrite'], File['/etc/apache2/sites-available/02-ssl.conf']],
+    require => File['/etc/apache2/sites-available/02-shorturl.conf'],
   }
-  exec { '/usr/sbin/a2ensite 03-userdir.conf':
-    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/03-userdir.conf',
+  exec { '/usr/sbin/a2ensite 03-pma.conf':
+    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/03-pma.conf',
     notify  => Service['apache2'],
-    require => [Exec['/usr/sbin/a2enmod userdir'], File['/etc/apache2/sites-available/03-userdir.conf']],
+    require => File['/etc/apache2/sites-available/03-pma.conf'],
   }
-  exec { '/usr/sbin/a2ensite 04-shorturl.conf':
-    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/04-shorturl.conf',
+  exec { '/usr/sbin/a2ensite 04-hello.conf':
+    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/04-hello.conf',
     notify  => Service['apache2'],
-    require => File['/etc/apache2/sites-available/04-shorturl.conf'],
-  }
-  exec { '/usr/sbin/a2ensite 05-pma.conf':
-    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/05-pma.conf',
-    notify  => Service['apache2'],
-    require => File['/etc/apache2/sites-available/05-pma.conf'],
-  }
-  exec { '/usr/sbin/a2ensite 06-hello.conf':
-    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/06-hello.conf',
-    notify  => Service['apache2'],
-    require => File['/etc/apache2/sites-available/06-hello.conf'],
+    require => File['/etc/apache2/sites-available/04-hello.conf'],
   }
 
   # dpkg-divert
@@ -228,50 +198,26 @@ class death {
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      source  => 'puppet:///modules/death/apache/mods/suphp.config.ocf',
-      require => Package['libapache2-mod-suphp'],
-  }
+      source  => 'puppet:///modules/ocf_www/apache/mods/suphp.config.ocf',
+      require => Package['libapache2-mod-suphp'];
 
-  #php ini file
-  file {
     '/etc/php5/cgi/php.ini':
       ensure  => file,
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      source  => 'puppet:///modules/death/apache/mods/php.ini',
+      source  => 'puppet:///modules/ocf_www/apache/mods/php.ini',
       require => Package['php5'],
   }
 
-  # copy ssl files
-  file {
-    '/etc/ssl/certs/secure.ocf.berkeley.edu.crt':
-      ensure => file,
-      owner  => 'root',
-      group  => 'ssl-cert',
-      mode   => '0640',
-      source => 'puppet:///private/secure.ocf.berkeley.edu.crt';
-    '/etc/ssl/private/secure.ocf.berkeley.edu.key':
-      ensure => file,
-      owner  => 'root',
-      group  => 'ssl-cert',
-      mode   => '0640',
-      source => 'puppet:///private/secure.ocf.berkeley.edu.key';
-    '/etc/ssl/certs/CA-BUNDLE.CRT':
-      ensure => file,
-      owner  => 'root',
-      group  => 'root',
-      source => 'puppet:///private/CA-BUNDLE.CRT';
-  }
-
   # apache must subscribe to all conf files
-  service { 'apache2': }
+  service { 'apache2':; }
 
   # nfs export of apache logs
   file {
     '/etc/exports':
       ensure  => file,
-      source  => 'puppet:///modules/death/exports',
+      source  => 'puppet:///modules/ocf_www/exports',
       require => Package['nfs-kernel-server', 'apache2'],
       notify  => Service['nfs-kernel-server'],
   }
@@ -280,7 +226,7 @@ class death {
   file {
     '/etc/logrotate.d/apache2':
       ensure => file,
-      source => 'puppet:///modules/death/logrotate/apache2',
+      source => 'puppet:///modules/ocf_www/logrotate/apache2',
   }
 
   service { 'nfs-kernel-server': }
