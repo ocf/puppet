@@ -101,6 +101,15 @@ class ocf_www {
     require => Package['apache2'],
   }
 
+  file {
+    '/opt/suexec':
+      ensure => directory;
+
+    '/opt/suexec/php5-fcgi-wrapper.c':
+      source => 'puppet:///modules/ocf_www/apache/php5-fcgi-wrapper.c',
+      mode   => 644;
+  }
+
   exec { '/usr/bin/apxs2 -i -c -a -n ocfdir /etc/apache2/mods-available/mod_ocfdir.c':
     require => [ Package['apache2-threaded-dev'], File['/etc/apache2/mods-available/mod_ocfdir.c'] ],
     notify  => Service['apache2'],
