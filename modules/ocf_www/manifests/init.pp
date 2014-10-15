@@ -127,6 +127,11 @@ class ocf_www {
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
+  exec { '/usr/sbin/a2enmod actions':
+    unless  => '/bin/readlink -e /etc/apache2/mods-enabled/actions.load',
+    notify  => Service['apache2'],
+    require => Package['apache2'],
+  }
   exec { '/usr/sbin/a2enmod fastcgi':
     unless  => '/bin/readlink -e /etc/apache2/mods-enabled/fastcgi.load',
     notify  => Service['apache2'],
