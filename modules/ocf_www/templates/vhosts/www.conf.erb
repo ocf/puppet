@@ -33,6 +33,7 @@
 	SSLCertificateFile /etc/ssl/private/<%= @fqdn %>.crt
 	SSLCertificateKeyFile /etc/ssl/private/<%= @fqdn %>.key
 	SSLCertificateChainFile /etc/ssl/private/<%= @fqdn %>.bundle
+	Include ssl-common.conf
 
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
         SSLOptions +StdEnvVars
