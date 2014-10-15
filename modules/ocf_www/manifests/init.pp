@@ -2,7 +2,7 @@ class ocf_www {
   include ocf_ssl
 
   package {
-    [ 'apache2', 'libapache-mod-security', 'apache2-threaded-dev', 'libapache2-mod-fcgid']:
+    [ 'apache2', 'libapache-mod-security', 'apache2-threaded-dev', 'libapache2-mod-fastcgi']:
       before => Package['libapache2-mod-php5'];
 
     # php
@@ -86,6 +86,11 @@ class ocf_www {
     source => 'puppet:///modules/ocf_www/apache/mods/mod_ocfdir.c',
   }
 
+  file { '/etc/apache2/mods-available/fastcgi.conf':
+    ensure => file,
+    source => 'puppet:///modules/ocf_www/apache/mods/fastcgi.conf',
+  }
+
   file { '/usr/lib/apache2':
     ensure  => directory,
     require => Package['apache2'],
@@ -122,10 +127,15 @@ class ocf_www {
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
-  exec { '/usr/sbin/a2enmod fcgid':
-    unless  => '/bin/readlink -e /etc/apache2/mods-enabled/fcgid.load',
+  exec { '/usr/sbin/a2enmod actions':
+    unless  => '/bin/readlink -e /etc/apache2/mods-enabled/actions.load',
     notify  => Service['apache2'],
-    require => [Package['apache2'], Package['libapache2-mod-fcgid']],
+    require => Package['apache2'],
+  }
+  exec { '/usr/sbin/a2enmod fastcgi':
+    unless  => '/bin/readlink -e /etc/apache2/mods-enabled/fastcgi.load',
+    notify  => Service['apache2'],
+    require => [Package['apache2'], Package['libapache2-mod-fastcgi']],
   }
   exec { '/usr/sbin/a2enmod headers':
     unless  => '/bin/readlink -e /etc/apache2/mods-enabled/headers.load',
