@@ -2,8 +2,8 @@
 EnableMMAP Off
 EnableSendfile Off
 
-ServerLimit 768
-MaxClients  768
+ServerLimit 750
+MaxClients  750
 
 # serve .php4 files using suphp
 <IfModule mod_suphp.c>
