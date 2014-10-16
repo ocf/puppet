@@ -32,7 +32,7 @@
     SSLEngine on
 	SSLCertificateFile /etc/ssl/private/<%= @fqdn %>.crt
 	SSLCertificateKeyFile /etc/ssl/private/<%= @fqdn %>.key
-	SSLCertificateChainFile /etc/ssl/private/<%= @fqdn %>.bundle
+	SSLCertificateChainFile /etc/ssl/certs/incommon-intermediate.crt
 	Include ssl-common.conf
 
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
