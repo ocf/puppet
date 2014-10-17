@@ -118,7 +118,7 @@ class ocf_www {
 
     '/opt/suexec/php5-fcgi-wrapper.c':
       source => 'puppet:///modules/ocf_www/apache/php5-fcgi-wrapper.c',
-      mode   => 644;
+      mode   => '0644';
   }
 
   exec { '/usr/bin/apxs2 -i -c -a -n ocfdir /etc/apache2/mods-available/mod_ocfdir.c':
