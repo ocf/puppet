@@ -1,6 +1,6 @@
 class desktop::xsession ($staff = false) {
-
-  require desktop::packages
+  require packages
+  include xfce
 
   # Xsession configuration
   file {
@@ -48,7 +48,7 @@ class desktop::xsession ($staff = false) {
   file { '/opt/share/wallpaper':
     ensure  => link,
     links   => manage,
-    target  => "/opt/share/xsession/$wallpaper",
+    target  => "/opt/share/xsession/${wallpaper}",
     require => File['/opt/share/xsession'];
   }
 
@@ -93,57 +93,12 @@ class desktop::xsession ($staff = false) {
     ;
   }
 
-  # lxde configuration
-  file {
-    # provide lxde wallpaper configuration
-    '/etc/xdg/pcmanfm/LXDE/pcmanfm.conf':
-      source  => 'puppet:///modules/desktop/xsession/lxde/LXDE.conf',
-    ;
-    # provide lxterminal configuration to fix transparency bug
-    '/usr/share/lxterminal/lxterminal.conf':
-      source  => 'puppet:///modules/desktop/xsession/lxde/lxterminal.conf',
-    ;
-  }
-
-  # lxde logout configuration
-  file {
-    # provide logout banner
-    '/opt/share/xsession/logout-banner.png':
-      backup  => false,
-      source  => 'puppet:///contrib/desktop/logout-banner.png';
-    # replace logout script configuration
-    '/usr/bin/lxde-logout':
-      mode   => '0755',
-      source => 'puppet:///modules/desktop/xsession/lxde/lxde-logout'
-  }
-
-  # xfce configuration
-  file {
-    # enable kiosk mode (disables shutdown, etc.)
-    '/etc/xdg/xfce4/kiosk':
-      ensure  => 'directory',
-      source  => 'puppet:///modules/desktop/xsession/xfce4/kiosk/',
-      recurse => true,
-      owner   => 'root',
-      group   => 'root';
-    # default config
-    '/etc/xdg/xfce4/xfconf':
-      ensure  => 'directory',
-      source  => 'puppet:///modules/desktop/xsession/xfce4/xfconf/',
-      recurse => true,
-      owner   => 'root',
-      group   => 'root';
-  }
-
   file {
     # copy skel files
     '/etc/skel/.config':
-      ensure  => 'directory',
-      source  => 'puppet:///modules/desktop/skel/config',
-      recurse => true,
-      owner   => 'root',
-      group   => 'root';
-
+      ensure => directory,
+      source => 'puppet:///modules/desktop/skel/config',
+      recurse => true;
     '/etc/skel/.xscreensaver':
       source => 'puppet:///modules/desktop/skel/.xscreensaver',
     ;
@@ -162,24 +117,19 @@ class desktop::xsession ($staff = false) {
   file {
     # disable autohinter
     '/etc/fonts/conf.d/10-autohint.conf':
-      ensure => absent,
-    ;
+      ensure => absent;
     # enable subpixel rendering
     '/etc/fonts/conf.d/10-sub-pixel-rgb.conf':
       ensure => symlink,
       links  => manage,
-      target => '../conf.avail/10-sub-pixel-rgb.conf',
-    ;
+      target => '../conf.avail/10-sub-pixel-rgb.conf';
     # enable LCD filter
     '/etc/fonts/conf.d/11-lcdfilter-default.conf':
       ensure => symlink,
       links  => manage,
-      target => '../conf.avail/11-lcdfilter-default.conf',
-    ;
+      target => '../conf.avail/11-lcdfilter-default.conf';
     # enable hinting and anti-aliasing
     '/etc/fonts/local.conf':
-      source => 'puppet:///modules/desktop/xsession/fonts.conf',
-    ;
+      source => 'puppet:///modules/desktop/xsession/fonts.conf';
   }
-
 }

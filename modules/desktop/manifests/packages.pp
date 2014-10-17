@@ -40,7 +40,7 @@ class desktop::packages {
     # applications
     [ 'evince-gtk', 'claws-mail', 'geany', 'gftp-gtk', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp' ]:;
     # desktop
-    [ 'desktop-base', 'desktop-file-utils', 'gpicview', 'lxappearance', 'lxde-core', 'lxde-icon-theme', 'lxtask', 'lxterminal', 'xarchiver', 'xterm', 'lightdm', 'accountsservice', 'xfce4', 'xfce4-goodies' ]:;
+    [ 'desktop-base', 'desktop-file-utils', 'gpicview', 'xarchiver', 'xterm', 'lightdm', 'accountsservice' ]:;
     # fonts
     [ 'cm-super', 'fonts-inconsolata', 'fonts-liberation', 'fonts-linuxlibertine' ]:;
     # games
@@ -91,7 +91,7 @@ class desktop::packages {
     'thunar':
       recommends => false;
     [ 'virt-manager', 'virt-viewer' ]:
-      recommends => false
+      recommends => false;
   }
 
 }
