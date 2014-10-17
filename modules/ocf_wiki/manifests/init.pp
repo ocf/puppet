@@ -3,8 +3,6 @@ class ocf_wiki {
   package { [ 'ikiwiki', 'xapian-omega', 'libsearch-xapian-perl' ]: }
   package { ['libyaml-perl']: }
 
-  package { 'gitweb': }
-
   # for old wiki
   package { ['php5', 'php5-cli', 'php5-mysql']: }
 
@@ -139,9 +137,7 @@ class ocf_wiki {
 
   service { 'apache2':
     subscribe => File[ '/etc/apache2/sites-available/ikiwiki',
-      '/etc/apache2/sites-enabled/ikiwiki',
-      '/etc/apache2/sites-available/gitweb',
-      '/etc/apache2/sites-enabled/gitweb' ],
+      '/etc/apache2/sites-enabled/ikiwiki'];
   }
 
   file {
@@ -151,12 +147,6 @@ class ocf_wiki {
       ensure => symlink,
       links  => manage,
       target => '/etc/apache2/sites-available/ikiwiki';
-    '/etc/apache2/sites-available/gitweb':
-      source => 'puppet:///modules/ocf_wiki/apache2/gitweb';
-    '/etc/apache2/sites-enabled/gitweb':
-      ensure => symlink,
-      links  => manage,
-      target => '/etc/apache2/sites-available/gitweb';
   }
 
   file {
@@ -167,18 +157,6 @@ class ocf_wiki {
       source => 'puppet:///private/blight.ocf.berkeley.edu.key',
       owner  => root,
       mode   => '0400';
-  }
-
-  # gitweb setup
-  file {
-    '/srv/gitweb':
-      ensure  => symlink,
-      links   => manage,
-      target  => '/usr/share/gitweb';
-    '/srv/gitweb/projects.list':
-      content => 'wiki.git';
-    '/etc/gitweb.conf':
-      source  => 'puppet:///modules/ocf_wiki/gitweb/gitweb.conf';
   }
 
   # old wiki (docs)
