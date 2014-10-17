@@ -14,8 +14,9 @@ alias_database = hash:/etc/aliases
 # IPv6 is disabled and not in SPF do not enable without SM+GM approval
 inet_protocols = ipv4
 
-smtpd_tls_cert_file = /etc/ssl/private/rt_ocf_berkeley_edu.crt
-smtpd_tls_key_file = /etc/ssl/private/rt_ocf_berkeley_edu.key
+# TODO: provide chain, don't hard-code FQDN
+smtpd_tls_cert_file = /etc/ssl/private/typhoon.ocf.berkeley.edu.crt
+smtpd_tls_key_file = /etc/ssl/private/typhoon.ocf.berkeley.edu.key
 #smtp_tls_CApath = /etc/ssl/certs
 smtpd_tls_auth_only = yes
 smtpd_tls_security_level = may

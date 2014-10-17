@@ -46,8 +46,9 @@
 	#   SSLCertificateFile directive is needed.
 	#SSLCertificateFile    /etc/ssl/certs/ssl-cert-snakeoil.pem
 	#SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
-        SSLCertificateFile    /etc/ssl/private/blight_ocf_berkeley_edu.crt
-        SSLCertificateKeyFile /etc/ssl/private/blight_ocf_berkeley_edu.key
+	# TODO: don't hard-code FQDN
+        SSLCertificateFile    /etc/ssl/private/blight.ocf.berkeley.edu.crt
+        SSLCertificateKeyFile /etc/ssl/private/blight.ocf.berkeley.edu.key
 
 	#   Server Certificate Chain:
 	#   Point SSLCertificateChainFile at a file containing the
@@ -57,7 +58,7 @@
 	#   when the CA certificates are directly appended to the server
 	#   certificate for convinience.
 	#SSLCertificateChainFile /etc/apache2/ssl.crt/server-ca.crt
-        SSLCertificateChainFile /etc/ssl/private/incommon.crt
+        SSLCertificateChainFile /etc/ssl/certs/incommon-intermediate.crt
 
 	#   Certificate Authority (CA):
 	#   Set the CA certificate verification path where to find CA

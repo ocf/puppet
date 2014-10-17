@@ -1,4 +1,5 @@
 class pollution {
+  include ocf_ssl
 
   # set up cups
   package { [ 'cups', 'cups-bsd' ]: }
@@ -27,32 +28,6 @@ class pollution {
     # deny printing raw jobs
     [ '/etc/cups/raw.convs', '/etc/cups/raw.types' ]:
       content => '# deny printing raw jobs',
-      require => Package['cups'],
-      notify  => Service['cups'],
-    ;
-    # provide ssl certificate and key
-    '/etc/cups/ssl':
-      ensure  => directory,
-      mode    => '0600',
-      group   => lp,
-      backup  => false,
-      source  => 'puppet:///private/cups-ssl',
-      require => Package['cups'],
-      notify  => Service['cups'],
-    ;
-    '/etc/cups/ssl/pollution.ocf.berkeley.edu.crt':
-      mode    => '0600',
-      group   => lp,
-      backup  => false,
-      source  => 'puppet:///private/cups-ssl/pollution.ocf.berkeley.edu.crt',
-      require => Package['cups'],
-      notify  => Service['cups'],
-    ;
-    '/etc/cups/ssl/pollution.ocf.berkeley.edu.key':
-      mode    => '0600',
-      group   => lp,
-      backup  => false,
-      source  => 'puppet:///private/cups-ssl/pollution.ocf.berkeley.edu.key',
       require => Package['cups'],
       notify  => Service['cups'],
     ;

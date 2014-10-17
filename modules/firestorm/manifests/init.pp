@@ -1,4 +1,6 @@
 class firestorm {
+  include ocf_ssl
+
   ##Heimdal server configuration##
   # if local realm has not been defined installation will fail
   package { 'heimdal-kdc':
@@ -52,7 +54,7 @@ class firestorm {
 
   #define service
   service { 'slapd':
-    subscribe => File[ '/etc/ldap/slapd.conf', '/etc/ldap/schema/ocf.schema', '/etc/ldap/ssl/firestorm.ocf.berkeley.edu.key', '/etc/default/slapd','/etc/ldap/sasl2/slapd.conf'],
+    subscribe => File[ '/etc/ldap/slapd.conf', '/etc/ldap/schema/ocf.schema', '/etc/default/slapd','/etc/ldap/sasl2/slapd.conf'],
   }
 
   #needed config files
@@ -69,30 +71,6 @@ class firestorm {
       source  => 'puppet:///contrib/local/firestorm/puppet.schema',
       require => Package['slapd'],
     ;
-    '/etc/ldap/ssl':
-      ensure  => directory,
-      owner   => openldap,
-      group   => openldap,
-      mode    => '0755',
-      require => Package['slapd'];
-    '/etc/ldap/ssl/firestorm.ocf.berkeley.edu.key':
-      source  => 'puppet:///private/firestorm.ocf.berkeley.edu.key',
-      require => Package['slapd'],
-      mode    => '0600',
-      owner   => openldap, # note: can't use root here :-(
-      group   => openldap;
-    '/etc/ldap/ssl/firestorm.ocf.berkeley.edu.crt':
-      source  => 'puppet:///private/firestorm.ocf.berkeley.edu.crt',
-      require => Package['slapd'],
-      mode    => '0644',
-      owner   => openldap,
-      group   => openldap;
-    '/etc/ldap/ssl/firestorm.ocf.berkeley.edu.chain':
-      source  => 'puppet:///private/firestorm.ocf.berkeley.edu.chain',
-      require => Package['slapd'],
-      mode    => '0644',
-      owner   => openldap,
-      group   => openldap;
     '/etc/default/slapd':
       source  => 'puppet:///modules/firestorm/slapd-defaults',
       require => Package['slapd', 'openssl'],
