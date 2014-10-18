@@ -1,7 +1,8 @@
 # Provides the key, certificate, and InCommon CA certificate bundle at
 # /etc/ssl/private/$cert_name.{key,crt,bundle}
 #
-# By default, cert_name is the fully-qualified hostname
+# Provides the InCommon intermediate chain at
+# /etc/ssl/certs/incommon-intermediate.crt
 class ocf_ssl($cert_name = $::fqdn) {
   File {
     owner => root,
@@ -11,28 +12,37 @@ class ocf_ssl($cert_name = $::fqdn) {
   file {
     '/etc/ssl/certs/incommon-intermediate.crt':
       source  => 'puppet:///modules/ocf_ssl/incommon-intermediate.crt',
-      mode    => '0644',
-      notify  => Exec['gen-bundle'];
+      mode    => '0644';
 
     # private ssl
     "/etc/ssl/private/${cert_name}.key":
       source  => "puppet:///private/ssl/${cert_name}.key",
-      mode    => '0600',
-      notify  => Exec['gen-bundle'];
+      mode    => '0600';
     "/etc/ssl/private/${cert_name}.crt":
       source  => "puppet:///private/ssl/${cert_name}.crt",
-      mode    => '0644',
-      notify  => Exec['gen-bundle'];
+      mode    => '0644';
   }
 
-  exec { 'gen-bundle':
-    command =>
-      "cat \"/etc/ssl/private/${cert_name}.crt\" /etc/ssl/certs/incommon-intermediate.crt > /etc/ssl/private/${cert_name}.bundle",
-    creates => "/etc/ssl/private/${cert_name}.bundle",
-    require => [
-      File['/etc/ssl/certs/incommon-intermediate.crt'],
-      File["/etc/ssl/private/${cert_name}.key"],
-      File["/etc/ssl/private/${cert_name}.crt"]
-    ];
+  # generate ssl bundle
+  $bundle = "/etc/ssl/private/${cert_name}.bundle"
+
+  concat { $bundle:
+    owner => root,
+    group => root,
+    mode  => '0644',
+
+    ensure_newline => true;
+  }
+
+  concat::fragment {
+    "${cert_name}-cert":
+      target => $bundle,
+      source => "puppet:///private/ssl/${cert_name}.crt",
+      order  => '0';
+
+    "${cert_name}-intermediate":
+      target => $bundle,
+      source => 'puppet:///modules/ocf_ssl/incommon-intermediate.crt',
+      order  => '1';
   }
 }
