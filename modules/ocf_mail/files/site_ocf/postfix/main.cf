@@ -41,7 +41,7 @@ masquerade_classes = envelope_sender, envelope_recipient, header_sender,
 local_header_rewrite_clients = permit_mynetworks
 
 # tls
-smtpd_tls_cert_file=/etc/ssl/private/anthrax.ocf.berkeley.edu.crt
+smtpd_tls_cert_file=/etc/ssl/private/anthrax.ocf.berkeley.edu.bundle
 smtpd_tls_key_file=/etc/ssl/private/anthrax.ocf.berkeley.edu.key
 smtpd_use_tls=yes
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
