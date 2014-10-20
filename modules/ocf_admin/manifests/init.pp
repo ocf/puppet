@@ -1,4 +1,7 @@
 class ocf_admin {
+  class { 'common::nfs':
+    pykota => true;
+  }
 
   package {
     # account creation dependecies
