@@ -33,6 +33,34 @@ class ocf_stats::labstats {
     source   => 'https://github.com/ocf/labstats.git';
   }
 
+  apache::vhost { 'stats.ocf.berkeley.edu-control':
+    servername => 'stats.ocf.berkeley.edu',
+    port       => 444,
+    docroot    => '/opt/stats/labstats/cgi/',
+    options    => ['-Indexes'],
+
+    ssl => true,
+    ssl_cert => '/etc/ssl/private/stats.crt',
+    ssl_key  => '/etc/ssl/private/stats.key',
+    ssl_ca   => '/etc/ssl/stats/ca/ca.crt',
+
+    ssl_verify_client => 'require',
+    ssl_verify_depth  => 1,
+
+    # pass SSL_CLIENT_* vars to CGI
+    ssl_options => '+StdEnvVars',
+
+    directories   => [{
+      path        => '/opt/stats/labstats/cgi/',
+      options     => ['+ExecCGI'],
+
+      addhandlers => [{
+        handler    => 'cgi-script',
+        extensions => ['.cgi']
+      }]
+    }];
+  }
+
   cron {
     'labstats':
       ensure      => present,
