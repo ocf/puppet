@@ -1,0 +1,8 @@
+/opt/homes supernova(rw,fsid=0,no_subtree_check,no_root_squash) \
+           death(rw,fsid=0,no_subtree_check,root_squash) \
+           dev-death(rw,fsid=0,no_subtree_check,root_squash) \
+           tsunami(rw,fsid=0,no_subtree_check,root_squash) \
+           sandstorm(rw,fsid=0,no_subtree_check,root_squash) \
+           biohazard(rw,fsid=0,no_subtree_check,root_squash)
+
+/opt/backups/mysql maelstrom(rw,fsid=0,no_subtree_check,no_root_squash)
