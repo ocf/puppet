@@ -13,11 +13,7 @@ node default {
     default:             { include common::ntp }
   }
 
-  case $::hostname {
-    dementors:   { class { 'common::munin': master => true } }
-    default:     { include common::munin }
-  }
-
+  include common::munin
   include common::autologout
   include common::git
   include common::kerberos

@@ -1,4 +1,5 @@
-class common::munin( $master = false ) {
+# munin node config
+class common::munin {
   package {
     ['munin-node', 'munin-plugins-core', 'munin-plugins-extra',
     'munin-libvirt-plugins']:;
@@ -14,33 +15,4 @@ class common::munin( $master = false ) {
     notify  => Service['munin-node'],
     require => Package['munin-node'];
   }
-
-
-  if $master {
-    package {
-      ['munin', 'nmap']:;
-    }
-
-    service { 'munin':
-      require => Package['munin'];
-    }
-
-    file {
-      '/etc/munin/munin.conf':
-        source  => 'puppet:///modules/common/munin/munin.conf',
-        mode    => '0644',
-        notify  => Service['munin'],
-        require => Package['munin'];
-      '/usr/local/bin/gen-munin-nodes':
-        source  => 'puppet:///modules/common/munin/gen-munin-nodes',
-        mode    => '0755';
-    }
-
-    cron { 'gen-munin-nodes':
-      command => '/usr/local/bin/gen-munin-nodes > /etc/munin/munin-conf.d/nodes',
-      special => 'hourly',
-      notify  => Service['munin'];
-    }
-  }
-
 }
