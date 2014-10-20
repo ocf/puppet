@@ -1,11 +1,11 @@
 class ocf_stats::labstats {
   package {
-    ['mysql-server', 'pssh', 'python-pysnmp4']:;
+    ['mysql-server', 'python-pysnmp4']:;
   }
 
   user {
     'ocfstats':
-      comment => 'OCF Desktop Stats',
+      comment => 'OCF Lab Stats',
       home    => '/opt/stats',
       system  => true,
       groups  => 'sys';
@@ -17,13 +17,20 @@ class ocf_stats::labstats {
   }
 
   file {
-    ['/opt/stats', '/opt/stats/cgi', '/opt/stats/printing',
-      '/opt/stats/printing/history', '/opt/stats/printing/oracle']:
+    ['/opt/stats', '/opt/stats/printing', '/opt/stats/printing/history',
+    '/opt/stats/printing/oracle']:
         ensure => directory,
         mode   => '0755';
       '/opt/stats/desktop_list':
         mode   => '0444',
         source => 'puppet:///contrib/desktop/desktop_list';
+  }
+
+  vcsrepo { '/opt/stats/labstats':
+    ensure   => latest,
+    provider => git,
+    revision => 'master',
+    source   => 'https://github.com/ocf/labstats.git';
   }
 
   cron {

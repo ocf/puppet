@@ -1,4 +1,5 @@
 class ocf_stats::apache {
+  # TODO: convert to use apache puppet module
   package {
     ['apache2', 'apache2-mpm-prefork', 'libapache2-mod-php5', 'php5-mcrypt' ]:;
   }
