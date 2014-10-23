@@ -55,6 +55,7 @@ node default {
       case $::hostname {
         supernova: { class { 'common::packages': extra => true, login => true } }
         tsunami:   { class { 'common::packages': extra => true, login => true } }
+        biohazard: { class { 'common::packages': extra => true, login => true } }
         default:   { class { 'common::packages': } }
       }
 
@@ -62,6 +63,7 @@ node default {
         case $::hostname {
           supernova: { class { 'common::auth': glogin => [ ['approve', 'ALL'] ] } }
           tsunami:   { class { 'common::auth': glogin => [ ['ocf', 'ALL'], ['sorry', 'ALL'] ] } }
+          tsunami:   { class { 'common::auth': glogin => [ ['ocfdev', 'ALL'] ] } }
           pollution: { class { 'common::auth': glogin => [ ['approve', 'ALL'] ], gsudo => ['ocfstaff'] } }
           default:   { class { 'common::auth': ulogin => [], glogin => [], usudo => [], gsudo => [] } }
         }
