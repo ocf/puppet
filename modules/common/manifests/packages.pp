@@ -45,30 +45,72 @@ class common::packages( $extra = false, $login = false ) {
   # more packages for the login server
   if $login {
     package {
-      # chpass perl dependencies
-      [ 'libexpect-perl', 'libunicode-map8-perl' ]:;
-      'emacs23-nox':;
-      # apache utilities (such as htpasswd)
-      [ 'apache2-utils' ]:;
-      # irc clients
-      'irssi':;
-      # text web browsers
-      [ 'elinks', 'lynx' ]:;
-      # mail clients
-      [ 'alpine', 'bogofilter', 'mutt' ]:;
-      'octave':;
-      # pykota python dependencies
-      [ 'pkpgcounter', 'python-egenix-mxdatetime', 'python-imaging', 'python-jaxml', 'python-minimal', 'python-mysqldb', 'python-osd', 'python-pysnmp4', 'python-reportlab' ]:;
-      # signat.pl dependency
+      # chpass dependencies
+      ['libexpect-perl', 'libunicode-map8-perl']:;
+
+      # signat dependencies
       'libwww-mechanize-perl':;
-      # php
-      ['php5-cli', 'php5-mysql', 'php5-sqlite', 'php5-gd', 'php5-curl', 'php5-mcrypt']:;
-      # python
-      ['ipython', 'python-django', 'python-flask', 'python-lxml', 'python-virtualenv', 'python-yaml']:;
-      # ruby
-      ['rails3', 'ruby-dev', 'ruby-sqlite3']:;
-      # scripting/programming/development packages
-      ['bison', 'flex', 'ipython3', 'libncurses5-dev', 'python3-tk', 'chicken-bin', 'libfcgi-dev', 'sqlite3', 'libsqlite3-dev', 'libtidy-dev', 'nodejs', 'openjdk-7-jdk', 'valgrind', 'gdb', 'cgdb', 'libreadline6-dev', 'libyaml-dev', 'libgdbm-dev', 'libffi-dev', 'pkg-config', 'libtool', 'autoconf', 'automake', 'libpq-dev']:;
+
+      # pykota dependencies
+      ['pkpgcounter', 'python-egenix-mxdatetime', 'python-imaging',
+      'python-jaxml', 'python-minimal', 'python-mysqldb', 'python-osd',
+      'python-pysnmp4', 'python-reportlab']:;
+
+      # utilities
+      [
+      'alpine',
+      'apache2-utils',
+      'bogofilter',
+      'elinks',
+      'emacs23-nox',
+      'irssi',
+      'lynx',
+      'mutt',
+      'octave',
+      ]:;
+
+      # programming/scripting/development
+      [
+      'autoconf',
+      'automake',
+      'bison',
+      'cgdb',
+      'chicken-bin',
+      'flex',
+      'gdb',
+      'ipython',
+      'ipython3',
+      'libfcgi-dev',
+      'libffi-dev',
+      'libgdbm-dev',
+      'libncurses5-dev',
+      'libpq-dev',
+      'libreadline6-dev',
+      'libsqlite3-dev',
+      'libtidy-dev',
+      'libtool',
+      'libyaml-dev',
+      'nodejs',
+      'openjdk-7-jdk',
+      'php5-cli',
+      'php5-curl',
+      'php5-gd',
+      'php5-mcrypt',
+      'php5-mysql',
+      'php5-sqlite',
+      'pkg-config',
+      'python-django',
+      'python-flask',
+      'python-lxml',
+      'python-virtualenv',
+      'python-yaml',
+      'python3-tk',
+      'rails3',
+      'ruby-dev',
+      'ruby-sqlite3',
+      'sqlite3',
+      'valgrind',
+      ]:;
     }
   }
 
