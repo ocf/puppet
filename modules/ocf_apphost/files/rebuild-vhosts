@@ -1,0 +1,45 @@
+#!/bin/bash -e
+SITE_CFG='/etc/nginx/sites-enabled/virtual'
+TEMP=$(mktemp)
+
+(
+grep '^[a-z]' ~staff/vhost/vhost-app.conf | \
+while read line; do
+	user=$(cut -d' ' -f1 <<< $line)
+	vhost=$(cut -d' ' -f2 <<< $line)
+	socket=$(cut -d' ' -f3 <<< $line)
+
+	if [[ "$socket" == "-" ]]; then
+		socket="$user"
+	fi
+
+	socket_dir="/srv/apps/$user"
+	socket_file="$socket_dir/${socket}.sock"
+
+	[ -d "$socket_dir" ] || mkdir "$socket_dir"
+	chown "${user}:ocf" "$socket_dir"
+	chmod 755 "$socket_dir"
+
+	cat <<EOF
+server {
+	listen 80;
+	server_name "$vhost";
+	location / {
+		proxy_pass http://unix:${socket_file};
+		proxy_set_header Host \$host;
+		proxy_set_header X-Forwarded-For \$remote_addr;
+		proxy_set_header X-Real-IP \$remote_addr;
+	}
+}
+EOF
+done
+) > "$TEMP"
+
+if [ ! -f "$SITE_CFG" ] || ! diff "$SITE_CFG" "$TEMP"; then
+	mv "$TEMP" "$SITE_CFG"
+	echo "Things changed, reloading nginx..."
+	/usr/sbin/service nginx reload
+else
+	echo "Nothing changed."
+	rm "$TEMP"
+fi
