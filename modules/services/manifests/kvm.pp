@@ -20,6 +20,13 @@ class services::kvm($group = 'ocfroot') {
 
   # makevm dependencies
   package {
-    ['python-colorama', 'python-paramiko']:;
+    ['python-colorama', 'python-paramiko', 'nmap']:;
+  }
+
+  file {
+    '/usr/local/sbin/makevm':
+      ensure => link,
+      links  => manage,
+      target => '/opt/share/utils/staff/sys/makevm';
   }
 }
