@@ -68,7 +68,7 @@ class common::packages( $extra = false, $login = false ) {
       # ruby
       ['rails3', 'ruby-dev', 'ruby-sqlite3']:;
       # scripting/programming/development packages
-      ['bison', 'flex', 'ipython3', 'libncurses5-dev', 'python3-tk', 'chicken-bin', 'libfcgi-dev', 'sqlite3', 'libsqlite3-dev', 'libtidy-dev', 'nodejs', 'openjdk-7-jdk', 'valgrind', 'gdb', 'cgdb', 'libreadline6-dev', 'libyaml-dev', 'libgdbm-dev', 'libffi-dev', 'pkg-config', 'libtool', 'autoconf', 'automake']:;
+      ['bison', 'flex', 'ipython3', 'libncurses5-dev', 'python3-tk', 'chicken-bin', 'libfcgi-dev', 'sqlite3', 'libsqlite3-dev', 'libtidy-dev', 'nodejs', 'openjdk-7-jdk', 'valgrind', 'gdb', 'cgdb', 'libreadline6-dev', 'libyaml-dev', 'libgdbm-dev', 'libffi-dev', 'pkg-config', 'libtool', 'autoconf', 'automake', 'libpq-dev']:;
     }
   }
 
