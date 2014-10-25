@@ -1,0 +1,20 @@
+#!/bin/sh -e
+if [ $(whoami) != "www-data" ]; then
+	echo "Please run me as www-data to avoid borking permissions!"
+	exit 1
+fi
+
+REMOTE="https://github.com/ocf/wiki.git"
+cd /srv/ikiwiki/wiki.git
+
+# update origin url
+if ! git remote | grep origin > /dev/null; then
+        git remote add origin "$REMOTE"
+else
+        git remote set-url origin "$REMOTE"
+fi
+
+# update from remote
+git fetch origin
+
+ikiwiki --setup /srv/ikiwiki/wiki.setup

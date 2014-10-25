@@ -21,9 +21,19 @@
 		Order allow,deny
 		allow from all
   		<Files ikiwiki.cgi>
-   		    Options +ExecCGI
-   		    AddHandler cgi-script .cgi
+			# no editing allowed >:\
+			Order deny,allow
+			Deny from all
+#   		    Options +ExecCGI
+#   		    AddHandler cgi-script .cgi
    		</Files>
+	</Directory>
+
+	Alias /webhook /srv/ikiwiki/public_html/webhook
+
+	<Directory /srv/ikiwiki/public_html/webhook>
+		Options +ExecCGI
+		AddHandler cgi-script .cgi
 	</Directory>
 
 	ErrorLog ${APACHE_LOG_DIR}/error.log

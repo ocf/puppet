@@ -1,4 +1,0 @@
-#!/bin/bash
-echo -n "Pushing to GitHub... "
-git push -fq -u github
-echo "done."

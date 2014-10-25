@@ -16,25 +16,6 @@ class ocf_wiki {
     mode   => '0775',
   }
 
-  # www-data user private key used to deploy to github
-  file {
-    '/var/www/.ssh':
-      ensure => 'directory',
-      owner  => 'www-data',
-      group  => 'www-data',
-      mode   => '0750';
-    '/var/www/.ssh/config':
-      source => 'puppet:///modules/ocf_wiki/ssh/config',
-      owner  => 'www-data',
-      group  => 'www-data',
-      mode   => '0640';
-    '/srv/ikiwiki/id_rsa':
-      mode   => '0400',
-      owner  => 'www-data',
-      group  => 'www-data',
-      source => 'puppet:///private/id_rsa';
-  }
-
   # the serverlist ikiwiki plugin needs to be in a certain folder
   file {
     '/srv/ikiwiki/.ikiwiki/IkiWiki/Plugin':
@@ -54,65 +35,42 @@ class ocf_wiki {
 
   # the location of the wiki public_html
   file {
+    '/srv/ikiwiki/public_html':
+      ensure => directory,
+      owner  => root,
+      group  => root,
+      mode   => '0755';
+
     '/srv/ikiwiki/public_html/wiki':
       ensure  => 'directory',
-      require => Exec['ikiwiki_setup'],
       owner   => 'www-data',
-      group   => 'ocfstaff',
+      mode    => '0755';
+
+    '/srv/ikiwiki/public_html/webhook':
+      ensure  => directory,
+      source  => 'puppet:///modules/ocf_wiki/webhook',
+      owner   => root,
+      mode    => '0755',
       recurse => true;
-    '/srv/ikiwiki/public_html/wiki/ikiwiki.cgi':
-      owner   => 'www-data',
-      group   => 'ocfstaff',
-      mode    => '2760';
   }
 
   file {
     '/srv/ikiwiki/wiki.git':
       ensure  => 'directory',
-      owner   => 'www-data',
-      group   => 'ocfstaff',
-      recurse => true;
-    '/srv/ikiwiki/wiki.git/description':
-      content => 'wiki.OCF ikiwiki pages';
-  }
-
-  # the config file replaces the default
-  file {
-    '/srv/ikiwiki/wiki.git/config':
-      source  => 'puppet:///modules/ocf_wiki/ikiwiki/git_config',
-      owner   => 'root',
-      group   => 'ocfstaff',
-      mode    => '0775';
-    '/srv/ikiwiki/wiki.git/hooks/post-receive':
-      source  => 'puppet:///modules/ocf_wiki/ikiwiki/post-receive',
-      owner   => 'www-data',
-      group   => 'ocfstaff',
-      mode    => '0774';
+      owner   => 'www-data';
   }
 
   # the lockfile is necessary for 'ikiwiki --setup'
   file {
     '/srv/ikiwiki/wiki':
       ensure  => 'directory',
-      owner   => 'www-data',
-      group   => 'ocfstaff',
-      recurse => true,
+      owner   => 'www-data';
   }
   file {
     '/srv/ikiwiki/wiki/.ikiwiki':
       ensure  => 'directory',
       owner   => 'www-data',
-      group   => 'ocfstaff',
-      mode    => '0775',
-      recurse => true;
-  }
-
-  file {
-    '/srv/ikiwiki/wiki/.git/hooks/post-commit':
-      source  => 'puppet:///modules/ocf_wiki/ikiwiki/post-commit',
-      owner   => 'www-data',
-      group   => 'ocfstaff',
-      mode    => '0774';
+      mode    => '0775';
   }
 
   exec { 'ikiwiki_setup':
@@ -130,11 +88,24 @@ class ocf_wiki {
     refreshonly => true,
   }
 
-  file { '/srv/ikiwiki/wiki.setup':
-    source => 'puppet:///modules/ocf_wiki/ikiwiki/wiki.setup',
-    owner  => 'root',
-    group  => 'ocfstaff',
-    mode   => '0640',
+  file {
+    # holds no secrets
+    '/srv/ikiwiki/wiki.setup':
+      source => 'puppet:///modules/ocf_wiki/ikiwiki/wiki.setup',
+      owner  => root,
+      group  => root,
+      mode   => '0644';
+
+    '/srv/ikiwiki/rebuild-wiki':
+      source => 'puppet:///modules/ocf_wiki/rebuild-wiki',
+      owner  => root,
+      mode   => '0755';
+
+    '/srv/ikiwiki/github.secret':
+      source => 'puppet:///private/github.secret',
+      owner  => root,
+      group  => www-data,
+      mode   => '0640';
   }
 
   service { 'apache2':
