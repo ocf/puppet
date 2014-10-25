@@ -210,6 +210,25 @@ class ocf_www {
     require => File['/etc/apache2/sites-available/04-hello.conf'],
   }
 
+  # special ssl (non-incommon)
+  file {
+    '/etc/ssl/private/ocf.io.key':
+      source => 'puppet:///private/ssl/ocf.io.key',
+      owner  => root,
+      mode   => '0600',
+      notify => Service['apache2'];
+    '/etc/ssl/private/ocf.io.crt':
+      source => 'puppet:///private/ssl/ocf.io.crt',
+      owner  => root,
+      mode   => '0644',
+      notify => Service['apache2'];
+    '/etc/ssl/certs/positivessl-intermediate.crt':
+      source => 'puppet:///private/ssl/positivessl-intermediate.crt',
+      owner  => root,
+      mode   => '0644',
+      notify => Service['apache2'];
+  }
+
   # dpkg-divert
   exec { '/usr/bin/dpkg-divert --divert /usr/lib/apache2/suexec.dist --rename /usr/lib/apache2/suexec':
     unless  => '/usr/bin/dpkg-divert --list | grep suexec',

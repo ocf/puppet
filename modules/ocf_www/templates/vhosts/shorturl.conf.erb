@@ -1,7 +1,12 @@
-<VirtualHost *:80>
+<VirtualHost *:443>
     ServerName ocf.io
-    ServerAlias ocf.sexy open.cf
     ServerAdmin help@ocf.berkeley.edu
+
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/private/ocf.io.crt
+    SSLCertificateKeyFile /etc/ssl/private/ocf.io.key
+    SSLCertificateChainFile /etc/ssl/certs/positivessl-intermediate.crt
+    Include ssl-common.conf
 
     # short URLs
     RewriteEngine on
@@ -27,4 +32,15 @@
     RewriteRule ^/https$ http://status.ocf.berkeley.edu/2014/10/moving-wwwocfberkeleyedu-to-https-only.html [R]
 
     Redirect / https://www.ocf.berkeley.edu/
+
+    Header set Strict-Transport-Security "max-age=31536000"
+</VirtualHost>
+
+# redirect http aliases to https version so we can enable HSTS (for next time)
+<VirtualHost *:80>
+    ServerName ocf.io
+    ServerAlias ocf.sexy open.cf
+    ServerAdmin help@ocf.berkeley.edu
+
+    Redirect 301 / https://ocf.io/
 </VirtualHost>
