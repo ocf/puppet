@@ -5,6 +5,11 @@ class ocf_apphost::proxy {
   }
 
   file {
+    '/etc/nginx/conf.d/local.conf':
+      source  => 'puppet:///modules/ocf_apphost/local.conf',
+      require => Package['nginx'],
+      notify  => Service['nginx'];
+
     '/etc/nginx/sites-enabled/default':
       ensure  => file, # originally a link
       source  => 'puppet:///modules/ocf_apphost/default',
