@@ -9,12 +9,24 @@ while read line; do
 	vhost=$(cut -d' ' -f2 <<< $line)
 	socket=$(cut -d' ' -f3 <<< $line)
 
-	if [[ "$socket" == "-" ]]; then
+	if [ "$socket" == "-" ]; then
 		socket="$user"
 	fi
 
+	if ! grep '\.' <<< "$vhost" > /dev/null; then
+		vhost="${vhost}.berkeley.edu"
+	fi
+
+	# vhost alias under apphost.ocf.berkeley.edu
+	vhost_dev=$(sed 's/\./-/g' <<< "$vhost").apphost.ocf.berkeley.edu
+
 	socket_dir="/srv/apps/$user"
 	socket_file="$socket_dir/${socket}.sock"
+
+	if ! groups "$user" | grep '\bocfdev\b' > /dev/null; then
+		echo "Warning: $user not in group ocfdev but has app vhost:" >&2
+		echo "$user: $vhost at $socket_file" >&2
+	fi
 
 	[ -d "$socket_dir" ] || mkdir "$socket_dir"
 	chown "${user}:ocf" "$socket_dir"
@@ -23,7 +35,7 @@ while read line; do
 	cat <<EOF
 server {
 	listen 80;
-	server_name "$vhost";
+	server_name "$vhost" "$vhost_dev";
 	location / {
 		proxy_pass http://unix:${socket_file};
 		proxy_set_header Host \$host;
