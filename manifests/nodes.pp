@@ -63,7 +63,7 @@ node default {
         case $::hostname {
           supernova: { class { 'common::auth': glogin => [ ['approve', 'ALL'] ] } }
           tsunami:   { class { 'common::auth': glogin => [ ['ocf', 'ALL'], ['sorry', 'ALL'] ] } }
-          tsunami:   { class { 'common::auth': glogin => [ ['ocfdev', 'ALL'] ] } }
+          biohazard: { class { 'common::auth': glogin => [ ['ocfdev', 'ALL'] ] } }
           pollution: { class { 'common::auth': glogin => [ ['approve', 'ALL'] ], gsudo => ['ocfstaff'] } }
           default:   { class { 'common::auth': ulogin => [], glogin => [], usudo => [], gsudo => [] } }
         }
