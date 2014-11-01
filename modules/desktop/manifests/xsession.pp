@@ -99,9 +99,11 @@ class desktop::xsession ($staff = false) {
       ensure => directory,
       source => 'puppet:///modules/desktop/skel/config',
       recurse => true;
-    '/etc/skel/.xscreensaver':
-      source => 'puppet:///modules/desktop/skel/.xscreensaver',
-    ;
+  }
+
+  exec { 'disable-xscreensaver':
+    command => 'sed -i \'s/*mode:.*/*mode: blank/\' /etc/X11/app-defaults/XScreenSaver-nogl',
+    unless  => 'grep \'mode: blank\' /etc/X11/app-defaults/XScreenSaver-nogl';
   }
 
   # disable user switching and screen locking (prevent non-staff users from
