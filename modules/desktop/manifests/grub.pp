@@ -4,11 +4,17 @@ class desktop::grub {
     owner  => root,
     group  => root,
     mode   => '0500',
-    source => 'puppet:///contrib/desktop/grub/01_ocf';
+    source => 'puppet:///contrib/desktop/grub/01_ocf',
+    notify => Exec['update-grub'];
   }
 
-  exec { 'update-grub':
-    subscribe   => File['/etc/grub.d/01_ocf'],
-    refreshonly => true;
+  exec {
+    # only require password to modify commandline or access grub console
+    'sed -i \'s/^CLASS="/CLASS="--unrestricted /\' /etc/grub.d/10_linux':
+      unless => 'grep \'^CLASS="--unrestricted \' /etc/grub.d/10_linux',
+      notify => Exec['update-grub'];
+
+    'update-grub':
+      refreshonly => true;
   }
 }
