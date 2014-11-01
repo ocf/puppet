@@ -20,7 +20,16 @@ class services::kvm($group = 'ocfroot') {
 
   # makevm dependencies
   package {
-    ['python-colorama', 'python-paramiko', 'nmap']:;
+    ['python-colorama', 'nmap']:;
+
+    # python-paramiko in wheezy is incompatible with openssh >= 6.7,
+    # so we install the latest version via pip (rt#3056)
+    'paramiko':
+      provider => pip,
+      ensure   => latest;
+
+    'python-paramiko':
+      ensure => purged;
   }
 
   file {
