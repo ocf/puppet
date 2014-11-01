@@ -71,13 +71,13 @@ class common::auth( $glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [] ) {
       content => template('common/access.conf.erb');
   }
 
-  # SSH GSSAPI user authentication
-  augeas { '/etc/ssh/sshd_config/GSSAPI':
+  augeas { 'sshd: enable gssapi and root login':
     context => '/files/etc/ssh/sshd_config',
     changes => [
       'set GSSAPIAuthentication yes',
       'set GSSAPICleanupCredentials yes',
-      'set GSSAPIStrictAcceptorCheck no'
+      'set GSSAPIStrictAcceptorCheck no',
+      'set PermitRootLogin yes'
     ],
     require => Package['openssh-server'],
     notify  => Service['ssh']
