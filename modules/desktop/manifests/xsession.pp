@@ -71,14 +71,8 @@ class desktop::xsession ($staff = false) {
   }
 
   # use ocf logo on login screen
-  file { '/usr/share/icons/hicolor/64x64/devices/ocf.png':
-    source => 'puppet:///contrib/desktop/ocf-color-64.png',
-  }
-
-  exec {
-    'gtk-update-icon-cache /usr/share/icons/hicolor':
-      subscribe   => File['/usr/share/icons/hicolor/64x64/devices/ocf.png'],
-      refreshonly => true;
+  file { '/usr/share/icons/Adwaita/256x256/status/avatar-default.png':
+    source => 'puppet:///contrib/desktop/ocf-color-256.png',
   }
 
   # polkit configuration
