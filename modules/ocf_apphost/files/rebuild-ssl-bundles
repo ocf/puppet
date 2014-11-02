@@ -1,0 +1,12 @@
+#!/bin/bash -e
+# Build certificate bundles by concatenating .crt and .chain files in
+# /etc/ssl/private/apphost.
+#
+# This is normally executed automaticlaly by puppet when certificates change.
+
+cd /etc/ssl/private/apphost
+
+for c in *.chain; do
+	host="${c:0:${#c} - 6}"
+	cat "${host}.crt" "${host}.chain" > "/etc/ssl/apphost/${host}.bundle"
+done
