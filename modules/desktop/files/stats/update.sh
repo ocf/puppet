@@ -1,4 +1,6 @@
 #!/bin/bash
+[ "$(imvirt)" == "Physical" ] || exit 0 # only count hours on desktops
+
 # workaround for bug in lightdm 1.2 where users aren't logged to utmp
 # (and so we can't see them in output of w/who)
 # https://bugs.launchpad.net/ubuntu/+source/lightdm/+bug/870297
