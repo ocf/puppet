@@ -1,11 +1,5 @@
 class common::puppet {
-
   package { ['facter', 'puppet']: }
-  exec { 'puppet-fix_bug7680':
-    command => 'sed -i "s/metadata.links == :manage/resource[:links] == :manage/g" /usr/lib/ruby/vendor_ruby/puppet/type/file/source.rb',
-    onlyif  => 'grep "metadata.links == :manage" /usr/lib/ruby/vendor_ruby/puppet/type/file/source.rb',
-    require => Package['puppet'],
-  }
 
   # enable puppet agent
   file { '/etc/default/puppet':
@@ -62,5 +56,4 @@ class common::puppet {
       require => Package['puppet'],
     ;
   }
-
 }
