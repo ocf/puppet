@@ -8,6 +8,9 @@ while read line; do
 	user=$(cut -d' ' -f1 <<< $line)
 	vhost=$(cut -d' ' -f2 <<< $line)
 	socket=$(cut -d' ' -f3 <<< $line)
+	ssl_name=$(cut -d' ' -f4 <<< $line)
+
+	config_end=""
 
 	if [ "$socket" == "-" ]; then
 		socket="$user"
@@ -19,6 +22,18 @@ while read line; do
 
 	if ! grep '\.' <<< "$vhost" > /dev/null; then
 		vhost="${vhost}.berkeley.edu"
+	fi
+
+	if [ "$ssl_name" == "-" ]; then
+		port=80
+	else
+		port=443
+		config_end="$config_end
+		ssl on;
+		ssl_certificate /etc/ssl/apphost/${ssl_name}.bundle;
+		ssl_certificate_key /etc/ssl/private/apphost/${ssl_name}.key;
+		add_header Strict-Transport-Security \"max-age=31536000\";"
+
 	fi
 
 	# vhost alias under apphost.ocf.berkeley.edu
@@ -38,7 +53,7 @@ while read line; do
 
 	cat <<EOF
 server {
-	listen 80;
+	listen $port;
 	server_name "$vhost" "$vhost_dev";
 	location / {
 		proxy_pass http://unix:${socket_file};
@@ -46,8 +61,21 @@ server {
 		proxy_set_header X-Forwarded-For \$remote_addr;
 		proxy_set_header X-Real-IP \$remote_addr;
 	}
+
+	$config_end
 }
 EOF
+
+	# https redirect vhost
+	if [ "$ssl_name"] != "-" ]; then
+		cat <<EOF
+server {
+	listen 80;
+	server_name "$vhost" "$vhost_dev";
+	return 301 https://\$server_name\$request_uri;
+}
+EOF
+	fi
 done
 ) > "$TEMP"
 
