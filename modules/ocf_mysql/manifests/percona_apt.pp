@@ -1,4 +1,4 @@
-class maelstrom::percona_apt {
+class ocf_mysql::percona_apt {
   apt::key { 'percona':
     key        => '1C4CBDCDCD2EFD2A',
     key_server => 'keys.gnupg.net';

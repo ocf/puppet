@@ -1,5 +1,5 @@
-class maelstrom {
-  class { 'maelstrom::percona_apt':
+class ocf_mysql {
+  class { 'ocf_mysql::percona_apt':
     stage => first;
   }
 
@@ -16,7 +16,7 @@ class maelstrom {
   # provide mysql server and client config
   file {
     '/etc/mysql/my.cnf':
-      source => 'puppet:///modules/maelstrom/my.cnf';
+      source => 'puppet:///modules/ocf_mysql/my.cnf';
     '/root/.my.cnf':
       mode   => '0600',
       source => 'puppet:///private/root-my.cnf'
