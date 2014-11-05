@@ -17,7 +17,5 @@ class desktop ($staff = false) {
   include suspend
   include xsession
 
-  if ! $staff {
-    include tmpfs
-  }
+  class { 'tmpfs': staff => $staff }
 }

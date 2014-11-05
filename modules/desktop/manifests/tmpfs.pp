@@ -1,11 +1,14 @@
-class desktop::tmpfs {
-
-  # mount certain volatile directories in memory
-  mount {
-    '/home':
+# mount certain volatile directories in memory
+class desktop::tmpfs ($staff = false) {
+  if ! $staff {
+    mount { '/home':
       device  => 'tmpfs',
       fstype  => 'tmpfs',
       options => 'mode=0755,noatime,nodev,nosuid';
+    }
+  }
+
+  mount {
     '/tmp':
       device  => 'tmpfs',
       fstype  => 'tmpfs',
@@ -18,9 +21,7 @@ class desktop::tmpfs {
 
   # create pam_mkhomedir profile
   file { '/usr/share/pam-configs/mkhomedir':
-    source  => 'puppet:///modules/desktop/pam/mkhomedir',
-    require => Mount['/home'],
-    notify  => Exec['pam-auth-update']
+    source => 'puppet:///modules/desktop/pam/mkhomedir',
+    notify => Exec['pam-auth-update']
   }
-
 }
