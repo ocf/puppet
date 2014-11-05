@@ -7,7 +7,7 @@ class networking::hostname {
   # provide hostname and FQDN
   file {
     '/etc/hostname':
-      content => $hostname,
+      content => "${hostname}\n",
     ;
     '/etc/hosts':
       content => "127.0.0.1 localhost\n${::ipaddress} ${fqdn} ${hostname}\n",
