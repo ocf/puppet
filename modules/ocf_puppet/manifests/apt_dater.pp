@@ -1,4 +1,4 @@
-class lightning::apt_dater {
+class ocf_puppet::apt_dater {
   package { 'apt-dater': }
 
   file { '/root/apt-dater.keytab':

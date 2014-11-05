@@ -1,4 +1,4 @@
-class lightning::puppetmaster {
+class ocf_puppet::puppetmaster {
   package {
     'puppetmaster-passenger':;
 
@@ -26,10 +26,10 @@ class lightning::puppetmaster {
 
   file {
     '/etc/puppet/fileserver.conf':
-      source  => 'puppet:///modules/lightning/fileserver.conf';
+      source  => 'puppet:///modules/ocf_puppet/fileserver.conf';
 
     '/etc/puppet/puppet.conf':
-      content => template('lightning/puppet.conf.erb');
+      content => template('ocf_puppet/puppet.conf.erb');
 
     '/etc/puppet/tagmail.conf':
       content => 'warning, err, alert, emerg, crit: root';
