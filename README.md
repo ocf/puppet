@@ -14,8 +14,8 @@ This README outlines development practices for OCF volunteer staff members. If
 you're a member of the UC Berkeley community and interested in getting
 involved, [check us out][hello]!
 
-# Making and testing changes
-## Your puppet environment
+## Making and testing changes
+### Your puppet environment
 
 Puppet environments are stored on the puppetmaster in `/opt/puppet/env/`. Each
 user should have their own environment with the same name as their user name:
@@ -36,7 +36,7 @@ into production.
 If creating a new environment, you should either copy an existing environment,
 or clone the repo and remember to run `git submodule update --init`.
 
-## Testing using your puppet environment
+### Testing using your puppet environment
 
 Before pushing, you should test your changes by switching at least one of the
 affected servers to your puppet environment and triggering a run. We store node
@@ -71,7 +71,7 @@ puppet run, and watch the logs:
 Make sure to switch the environment back to production after pushing your
 changes.
 
-## Linting and validating the puppet config
+### Linting and validating the puppet config
 
 Our puppet config is pretty big; we have a handy script which:
 
@@ -82,7 +82,7 @@ Our puppet config is pretty big; we have a handy script which:
 To run it, just execute `scripts/validate.py` (located in the repo). For best
 results, run it on the puppetmaster.
 
-## Deploying changes to production
+### Deploying changes to production
 
 GitHub is the authoritative source for this repository; at all times, the
 `production` environment on the puppetmaster will be a clone of the `master`
@@ -93,8 +93,8 @@ changes will not take effect until the puppet agent runs on each server (every
 30 minutes, at an arbitrary offset). You can use the `puppet-trigger` script if
 you want it to happen faster.
 
-# Conventions and styling
-## Naming conventions
+## Conventions and styling
+### Naming conventions
 
 All OCF modules that are primarily intended for OCF use (currently, all of
 them) should be prefixed with `ocf_`.
@@ -112,7 +112,7 @@ Try not to refer to servers by hostname (such as `lightning`). Instead, use the
 service CNAME (such as `puppet`) or the top-level variables `$::hostname` and
 `$::fqdn`.
 
-## Including third-party modules
+### Including third-party modules
 
 Third-party modules can be helpful. Try to only use ones that are actively
 maintained.
@@ -127,13 +127,13 @@ puppetmaster (e.g. with the `puppet module` tool):
 * Staff members can test third-party modules without needing root on the
   puppetmaster
 
-## Styling
+### Styling
 
 In lieu of an actual style guide, please try to make your code consistent with
 the existing code (or help write a style guide?), and ensure that it passes
 validation (including linting).
 
-## Minimal config file management
+### Minimal config file management
 
 Try to change as few things as possible; this makes upgrading to newer versions
 of packages and operating systems easier, as well as making it more obvious to
@@ -143,7 +143,7 @@ Instead of overwriting an entire config file just to change one value, try to
 [use augeas][augeas] ([example][augeas-example]) or [sed][sed]
 ([example][sed-example]) to change just the necessary values.
 
-# Future improvements
+## Future improvements
 
 * Finish renaming and cleanup of OCF's modules
 * Consider using [librarian-puppet][lib-puppet] instead of git submodules
