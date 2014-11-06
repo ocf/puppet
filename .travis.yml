@@ -1,0 +1,22 @@
+---
+language: ruby
+before_install:
+  - wget -q https://apt.puppetlabs.com/puppetlabs-release-precise.deb
+  - sudo dpkg -i puppetlabs-release-precise.deb
+  - sudo apt-get update -qq
+install:
+  - sudo apt-get install -y python3 puppet
+  - gem install puppet-lint:1.1.0
+script:
+  - scripts/validate.py
+notifications:
+  email:
+    recipients:
+      - root@ocf.berkeley.edu
+    on_success: never
+    on_failure: always
+  irc:
+    channels:
+      - "irc.ocf.berkeley.edu#rebuild"
+    on_success: never
+    on_failure: always
