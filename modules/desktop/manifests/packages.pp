@@ -22,6 +22,11 @@ class desktop::packages {
       # no official backport is available, so we use our own backported package (2014-05-24)
       source   => '/opt/share/puppet/packages/xserver-xorg-video-intel_2.21.15-2~bpo70+1_amd64.deb',
     }
+
+    # backport poppler to fix broken PDFs
+    ocf::repackage { 'libpoppler-glib8':
+      backports => true;
+    }
   }
 
   file { '/opt/share/puppet/packages':
