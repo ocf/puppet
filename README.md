@@ -1,5 +1,6 @@
 puppet
 ======
+[![Build Status](https://travis-ci.org/ocf/puppet.svg)](https://travis-ci.org/ocf/puppet)
 
 This repository contains the [Puppet][puppet] modules used to maintain and
 configure the servers and desktops used by the [Open Computing Facility][ocf]
