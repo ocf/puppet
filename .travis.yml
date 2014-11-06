@@ -17,6 +17,6 @@ notifications:
     on_failure: always
   irc:
     channels:
-      - "irc.ocf.berkeley.edu#rebuild"
+      - "irc.ocf.berkeley.edu#rebuild-spam"
     on_success: never
     on_failure: always
