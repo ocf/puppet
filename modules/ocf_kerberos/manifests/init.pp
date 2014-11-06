@@ -1,4 +1,4 @@
-class firestorm::kerberos {
+class ocf_kerberos {
   package { 'heimdal-kdc':
     # if local realm has not been defined installation will fail
     require => File['/etc/krb5.conf'];
@@ -11,23 +11,23 @@ class firestorm::kerberos {
 
   file {
     '/etc/heimdal-kdc/kdc.conf':
-      source  => 'puppet:///modules/firestorm/kdc.conf',
+      source  => 'puppet:///modules/ocf_kerberos/kdc.conf',
       require => Package['heimdal-kdc'];
 
     '/etc/heimdal-kdc/kadmind.acl':
-      source  => 'puppet:///modules/firestorm/kadmind.acl',
+      source  => 'puppet:///modules/ocf_kerberos/kadmind.acl',
       require => Package['heimdal-kdc'];
 
     '/etc/logrotate.d/heimdal-kdc':
-      source  => 'puppet:///modules/firestorm/heimdal-kdc-logrotate',
+      source  => 'puppet:///modules/ocf_kerberos/heimdal-kdc-logrotate',
       require => Package['heimdal-kdc'];
   }
 
   # daily git backup
-  if $::hostname == 'firestorm' {
+  if $::hostname == 'firestorm' { # TODO: don't hard-code hostname
     file { '/usr/local/sbin/kerberos-git-backup':
       mode   => '0755',
-      source => 'puppet:///modules/firestorm/kerberos-git-backup';
+      source => 'puppet:///modules/ocf_kerberos/kerberos-git-backup';
     }
 
     cron { 'kerberos-git-backup':

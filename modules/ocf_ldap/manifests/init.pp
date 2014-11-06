@@ -1,6 +1,7 @@
-class firestorm::ldap {
-  package { 'slapd':; }
+class ocf_ldap {
+  include ocf_ssl
 
+  package { 'slapd':; }
   service { 'slapd':
     subscribe => File[
       '/etc/ldap/slapd.conf',
@@ -11,23 +12,23 @@ class firestorm::ldap {
 
   file {
     '/etc/ldap/slapd.conf':
-      source  => 'puppet:///modules/firestorm/slapd.conf',
+      source  => 'puppet:///modules/ocf_ldap/slapd.conf',
       require => Package['slapd'];
 
     '/etc/ldap/schema/ocf.schema':
-      source  => 'puppet:///modules/firestorm/ocf.schema',
+      source  => 'puppet:///modules/ocf_ldap/ocf.schema',
       require => Package['slapd'];
 
     '/etc/ldap/schema/puppet.schema':
-      source  => 'puppet:///contrib/local/firestorm/puppet.schema',
+      source  => 'puppet:///contrib/local/ocf_ldap/puppet.schema',
       require => Package['slapd'];
 
     '/etc/default/slapd':
-      source  => 'puppet:///modules/firestorm/slapd-defaults',
+      source  => 'puppet:///modules/ocf_ldap/slapd-defaults',
       require => Package['slapd', 'openssl'];
 
     '/etc/ldap/sasl2/slapd.conf':
-      source  => 'puppet:///modules/firestorm/sasl2-slapd',
+      source  => 'puppet:///modules/ocf_ldap/sasl2-slapd',
       require => Package['slapd', 'libsasl2-modules-gssapi-mit'];
 
     '/etc/ldap/krb5.keytab':
@@ -39,7 +40,7 @@ class firestorm::ldap {
   }
 
   # daily git backup
-  if $::hostname == 'firestorm' {
+  if $::hostname == 'firestorm' { # todo: don't hard-code hostname
     package { 'ldap-git-backup':; }
 
     cron { 'ldap-git-backup':
