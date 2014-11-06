@@ -11,6 +11,12 @@ script:
   - scripts/validate.py
 notifications:
   email:
-    - root@ocf.berkeley.edu
+    recipients:
+      - root@ocf.berkeley.edu
+    on_success: never
+    on_failure: always
   irc:
-    - "irc.ocf.berkeley.edu#rebuild"
+    channels:
+      - "irc.ocf.berkeley.edu#rebuild"
+    on_success: never
+    on_failure: always
