@@ -29,8 +29,9 @@ class common::apt ( $desktop = false ) {
           repos     => $repos;
         }
 
-        # TODO: make backports use mirrors.ocf
-        include 'apt::backports'
+        class { 'apt::backports':
+          location => 'http://mirrors/debian/';
+        }
       }
     }
 
@@ -54,8 +55,9 @@ class common::apt ( $desktop = false ) {
           repos     => $repos;
       }
 
-      # TODO: make backports use mirrors.ocf
-      include 'apt::backports'
+      class { 'apt::backports':
+        location => 'http://mirrors/ubuntu/';
+      }
     }
 
     default: {
