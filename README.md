@@ -16,9 +16,8 @@ involved, [check us out][hello]!
 # Making and testing changes
 ## Your puppet environment
 
-Puppet environments are stored on the puppetmaster (currently `lightning`) in
-`/opt/puppet/env/`. Each user should have their own environment with the same
-name as their user name:
+Puppet environments are stored on the puppetmaster in `/opt/puppet/env/`. Each
+user should have their own environment with the same name as their user name:
 
     ckuehl@lightning:~$ ls -l /opt/puppet/env
     drwxr-xr-x 6 ckuehl  ocf  4.0K Nov  5 11:04 ckuehl
@@ -26,9 +25,15 @@ name as their user name:
     drwxr-xr-x 5 tzhu    ocf  4.0K Sep  2 17:46 tzhu
     drwxr-xr-x 6 willh   ocf  4.0K Oct  9 13:56 willh
 
+The puppetmaster has service CNAME `puppet`, so you can connect to it via `ssh
+puppet`.
+
 Each environment is just a copy of this git repository owned by the respective
 user. You should make your changes here and push them to GitHub to be deployed
 into production.
+
+If creating a new environment, you should either copy an existing environment,
+or clone the repo and remember to run `git submodule update --init`.
 
 ## Testing using your puppet environment
 
@@ -37,18 +42,28 @@ affected servers to your puppet environment and triggering a run. We store node
 definitions in LDAP, so changing a server's environment requires a `/admin`
 Kerberos principal (and corresponding LDAP privileges).
 
-Start by getting a ticket for your `/admin` principal:
+Start by getting a ticket for your `/admin` principal and launching ldapvi on
+the server's LDAP entry:
 
-    ckuehl@supernova:~$ kinit ckuehl/admin
+    ckuehl@supernova:~$ kinit ckuehl/admin ldapvi cn=raptors
 
-Then, use `ldapvi` to switch the `environment` attribute of the server you want
-to test on:
+A text representation of the LDAP entry will open in your editor. For example:
 
-    ckuehl@supernova:~$ ldapvi cn=raptors
+    0 cn=raptors,ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU
+    cn: raptors
+    type: server
+    ipHostNumber: 169.229.10.200
+    objectClass: device
+    objectClass: ocfDevice
+    environment: production
 
-After switching the environment, you can trigger a puppet run on the server and
-watch the log:
+Change the environment from `production` to your own, then save the file and
+quit your editor. `ldapvi` will ask you to type `y` to confirm the changes.
 
+After switching the environment, you can connect to the server, trigger a
+puppet run, and watch the logs:
+
+    ckuehl@supernova:~$ ssh raptors
     ckuehl@raptors:~$ sudo puppet-trigger
     ckuehl@raptors:~$ sudo less +F /var/log/syslog
 
