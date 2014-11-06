@@ -6,7 +6,7 @@ before_install:
   - sudo apt-get update -qq
 install:
   - sudo apt-get install -y python3 puppet
-  - gem install puppet-lint
+  - gem install puppet-lint:1.1.0
 script:
   - scripts/validate.py
 notifications:
