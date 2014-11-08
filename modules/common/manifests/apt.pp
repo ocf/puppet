@@ -29,8 +29,11 @@ class common::apt ( $desktop = false ) {
           repos     => $repos;
         }
 
+        # XXX: we use a _different_ hostname from the regular archive because
+        # the puppetlabs apt module uses hostname-based apt pinning, which
+        # causes _all_ packages to be pinned at equal priority
         class { 'apt::backports':
-          location => 'http://mirrors/debian/';
+          location => 'http://mirrors.ocf.berkeley.edu/debian/';
         }
       }
     }
@@ -55,8 +58,11 @@ class common::apt ( $desktop = false ) {
           repos     => $repos;
       }
 
+      # XXX: we use a _different_ hostname from the regular archive because
+      # the puppetlabs apt module uses hostname-based apt pinning, which
+      # causes _all_ packages to be pinned at equal priority
       class { 'apt::backports':
-        location => 'http://mirrors/ubuntu/';
+        location => 'http://mirrors.ocf.berkeley.edu/ubuntu/';
       }
     }
 
