@@ -8,11 +8,7 @@ node default {
     default:   { include common::postfix }
   }
 
-  case $::hostname {
-    hal, pandemic, jaws: { class { 'common::ntp': physical => true } }
-    default:             { include common::ntp }
-  }
-
+  include common::ntp
   include common::munin
   include common::autologout
   include common::git
@@ -25,7 +21,7 @@ node default {
   include common::zsh
 
   if $::macAddress {
-      include networking
+    include networking
   } else {
     case $::hostname {
       hal, pandemic, jaws: {
@@ -75,15 +71,13 @@ node default {
     }
 
     'desktop': {
-      if $owner != undef { # grant login and sudo to owner
-        class { 'common::auth': ulogin => [[$owner, 'ALL']], usudo => [$owner] }
-      } elsif $::hostname == 'eruption' {
+      if $::staff_only {
         class { 'common::auth': glogin => [ ['approve', 'ALL'] ], gsudo => ['ocfstaff'] }
       } else {
         class { 'common::auth': glogin => [ ['ocf', 'LOCAL'] ], gsudo => ['ocfstaff'] }
       }
 
-      class { 'desktop': staff => $::hostname == 'eruption' }
+      class { 'desktop': staff => $::staff_only }
     }
   }
 }

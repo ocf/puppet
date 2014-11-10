@@ -1,10 +1,9 @@
-class common::ntp( $physical = false ) {
-
+class common::ntp {
   # install ntp
-  package { 'ntp': }
+  package { 'ntp':; }
 
   # provide ntp config
-  if ! $physical {
+  if $::is_virtual {
     file { '/etc/ntp.conf':
       source  => 'puppet:///modules/common/ntp.conf',
       require => Package['ntp'],
@@ -21,5 +20,4 @@ class common::ntp( $physical = false ) {
     subscribe => File['/etc/ntp.conf'],
     require   => Package['ntp'],
   }
-
 }
