@@ -2,6 +2,8 @@ puppet
 ======
 [![Build Status](https://travis-ci.org/ocf/puppet.svg)](https://travis-ci.org/ocf/puppet)
 
+![ocf servers](http://i.fluffy.cc/RnF1JrLNrzczC5s291tsdlLrbl1fd12S.png)
+
 This repository contains the [Puppet][puppet] modules used to maintain and
 configure the servers and desktops used by the [Open Computing Facility][ocf]
 at UC Berkeley.
