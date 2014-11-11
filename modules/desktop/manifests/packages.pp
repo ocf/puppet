@@ -48,7 +48,7 @@ class desktop::packages {
     # useful tools
     [ 'lyx', 'texmaker' ]:;
     # programming environments
-    [ 'python3-tk', 'ipython', 'ipython-notebook', 'python-matplotlib', 'default-jdk', 'virtualbox', 'vagrant' ]:;
+    [ 'python3-tk', 'ipython', 'ipython-notebook', 'python-matplotlib', 'python-numpy', 'python-scipy', 'default-jdk', 'virtualbox', 'vagrant' ]:;
     # nonfree packages
     [ 'firmware-linux', 'flashplugin-nonfree', 'ttf-mscorefonts-installer' ]:;
     # notifications
