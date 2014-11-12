@@ -18,8 +18,5 @@ File { mode => 0644, owner => root, group => root, links => follow, backup => ma
 # add managed filesystems to fstab by default
 Mount { ensure => defined, }
 
-# use aptitude for package installation
-Package { provider => aptitude, }
-
 # use init script restart and status commands
 Service { hasrestart => true, hasstatus => true, }
