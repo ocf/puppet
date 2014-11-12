@@ -71,8 +71,11 @@ class desktop::xsession ($staff = false) {
   }
 
   # use ocf logo on login screen
-  file { '/usr/share/icons/Adwaita/256x256/status/avatar-default.png':
-    source => 'puppet:///contrib/desktop/ocf-color-256.png',
+  file {
+    ['/usr/share/icons/Adwaita', '/usr/share/icons/Adwaita/256x256', '/usr/share/icons/Adwaita/256x256/status']:
+      ensure => directory;
+    '/usr/share/icons/Adwaita/256x256/status/avatar-default.png':
+      source => 'puppet:///contrib/desktop/ocf-color-256.png';
   }
 
   # polkit configuration
