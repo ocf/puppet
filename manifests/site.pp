@@ -2,7 +2,7 @@
 
 # backup existing files to puppetmaster
 # path must be explicitly undefined, see puppet bug #5362
-filebucket { 'main': path => false, }
+filebucket { 'main':; }
 
 # create first stage to run before everything else
 stage { 'first': before => Stage['main'], }
