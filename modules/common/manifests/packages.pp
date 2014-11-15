@@ -105,6 +105,7 @@ class common::packages( $extra = false, $login = false ) {
       'python-virtualenv',
       'python-yaml',
       'python3-tk',
+      'r-base',
       'rails3',
       'ruby-dev',
       'ruby-sqlite3',
