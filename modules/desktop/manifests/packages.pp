@@ -47,7 +47,7 @@ class desktop::packages {
     # games
     [ 'armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music' ]:;
     # useful tools
-    [ 'lyx', 'texmaker' ]:;
+    [ 'lyx', 'texmaker', 'pandoc' ]:;
     # programming environments
     [ 'python3-tk', 'ipython', 'ipython-notebook', 'python-matplotlib', 'python-numpy', 'python-scipy', 'default-jdk', 'virtualbox', 'vagrant' ]:;
     # nonfree packages
