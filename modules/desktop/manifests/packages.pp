@@ -32,7 +32,7 @@ class desktop::packages {
     # performance improvements
     [ 'preload', 'readahead-fedora' ]:;
     # Xorg
-    'xserver-xorg':
+    ['xserver-xorg', 'xscreensaver']:
   }
 
   # remove some packages

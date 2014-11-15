@@ -98,18 +98,20 @@ class desktop::xsession ($staff = false) {
       recurse => true;
   }
 
-  exec { 'disable-xscreensaver':
+  exec { 'xscreensaver-blanking-only':
     command => 'sed -i \'s/*mode:.*/*mode: blank/\' /etc/X11/app-defaults/XScreenSaver-nogl',
-    unless  => 'grep \'mode: blank\' /etc/X11/app-defaults/XScreenSaver-nogl';
+    unless  => 'grep \'mode: blank\' /etc/X11/app-defaults/XScreenSaver-nogl',
+    require => Package['xscreensaver'];
   }
 
   # disable user switching and screen locking (prevent non-staff users from
   # executing the necessary binaries)
   file {
-    ['/usr/bin/lxlock', '/usr/bin/xflock4']:
-      owner => root,
-      group => 1002, # approve
-      mode  => '0754';
+    '/usr/bin/xflock4':
+      owner   => root,
+      group   => 1002, # approve
+      mode    => '0754',
+      require => Package['xscreensaver'];
   }
 
   # improve font rendering
