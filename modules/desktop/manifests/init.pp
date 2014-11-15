@@ -10,7 +10,6 @@ class desktop ($staff = false) {
   include iceweasel
   include modprobe
   include packages
-  include pam
   include pulse
   include sshfs
   include stats

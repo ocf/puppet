@@ -1,32 +1,8 @@
 class desktop::packages {
-
   # install common and extra packages but not packages for login server
   class { 'common::packages':
     extra => true,
     login => false,
-  }
-
-  if $::lsbdistcodename == 'wheezy' {
-    # install backported kernel and intel driver for improved compatibility with
-    # desktop integrated graphics (Haswell CPUs);
-    ocf::repackage {
-      "linux-image-${::architecture}":
-        backports => true;
-      "linux-headers-${::architecture}":
-        backports => true;
-    }
-
-    package { 'xserver-xorg-video-intel':
-      ensure   => latest,
-      provider => dpkg,
-      # no official backport is available, so we use our own backported package (2014-05-24)
-      source   => '/opt/share/puppet/packages/xserver-xorg-video-intel_2.21.15-2~bpo70+1_amd64.deb',
-    }
-
-    # backport poppler to fix broken PDFs
-    ocf::repackage { 'libpoppler-glib8':
-      backports => true;
-    }
   }
 
   file { '/opt/share/puppet/packages':
@@ -38,7 +14,7 @@ class desktop::packages {
   # install a lot of other packages
   package {
     # applications
-    [ 'evince-gtk', 'claws-mail', 'geany', 'gftp-gtk', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp' ]:;
+    [ 'evince-gtk', 'claws-mail', 'geany', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp' ]:;
     # desktop
     [ 'desktop-base', 'desktop-file-utils', 'gpicview', 'xarchiver', 'xterm', 'lightdm', 'accountsservice' ]:;
     # fonts
@@ -56,7 +32,7 @@ class desktop::packages {
     # performance improvements
     [ 'preload', 'readahead-fedora' ]:;
     # Xorg
-    'xserver-xorg':
+    ['xserver-xorg', 'xscreensaver']:
   }
 
   # remove some packages
@@ -67,7 +43,7 @@ class desktop::packages {
     # no longer used
     [ 'rusers', 'rusersd' ]:
       ensure  => purged;
-    # xpdf takes over as defauult sometimes
+    # xpdf takes over as default sometimes
     'xpdf':
       ensure  => purged;
   }
@@ -93,5 +69,4 @@ class desktop::packages {
     [ 'virt-manager', 'virt-viewer' ]:
       recommends => false;
   }
-
 }
