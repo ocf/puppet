@@ -102,6 +102,7 @@ class common::packages( $extra = false, $login = false ) {
       'python-django',
       'python-flask',
       'python-lxml',
+      'python-pandas',
       'python-virtualenv',
       'python-yaml',
       'python3-tk',
