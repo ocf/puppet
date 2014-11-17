@@ -1,12 +1,12 @@
 class desktop::xfce {
-  package {
-    ['xfce4', 'xfce4-goodies']:
-      install_options => ['--no-install-recommends'];
+  ocf::repackage { ['xfce4', 'xfce4-goodies']:
+    recommends => false;
+  }
 
-    # xfce4-power-manager asks for admin authentication on login in order to
-    # "change laptop display brightness"
-    'xfce4-power-manager':
-      ensure => absent;
+  # xfce4-power-manager asks for admin authentication on login in order to
+  # "change laptop display brightness"
+  package { 'xfce4-power-manager':
+    ensure => absent;
   }
 
   file {
