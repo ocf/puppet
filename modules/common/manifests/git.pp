@@ -1,5 +1,5 @@
 class common::git {
-  ocf::repackage { 'git':
+  ocf::repackage { ['git', 'gitk', 'git-gui']:
     backports => true
   }
 

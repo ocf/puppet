@@ -1,12 +1,8 @@
 class ocf_admin {
+  include common::extrapackages
+
   class { 'common::nfs':
     pykota => true;
-  }
-
-  package {
-    # account creation dependecies
-    ['python-twisted', 'python-argparse', 'python-crypto']:
-    ;
   }
 
   service { 'rsyslog': }

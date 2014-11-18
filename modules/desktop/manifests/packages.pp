@@ -1,9 +1,5 @@
 class desktop::packages {
-  # install common and extra packages but not packages for login server
-  class { 'common::packages':
-    extra => true,
-    login => false,
-  }
+  include common::extrapackages
 
   file { '/opt/share/puppet/packages':
     ensure  => directory,
@@ -36,26 +32,31 @@ class desktop::packages {
       require  => Package['evince-common'];
   }
 
-  # install a lot of other packages
+  # install packages specific to desktops
+  #
+  # in general, prefer to install packages to common::packages so that they are
+  # also available on the login and web servers; this is helpful to users, and
+  # avoids surprises
+  #
+  # this list should be used only for packages that don't make sense on a
+  # server (such as gimp)
   package {
     # applications
-    [ 'claws-mail', 'geany', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp', 'emacs' ]:;
+    ['claws-mail', 'geany', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp']:;
     # desktop
-    [ 'desktop-base', 'desktop-file-utils', 'gpicview', 'xarchiver', 'xterm', 'lightdm', 'accountsservice' ]:;
+    ['desktop-base', 'desktop-file-utils', 'gpicview', 'xarchiver', 'xterm', 'lightdm', 'accountsservice']:;
     # fonts
-    [ 'cm-super', 'fonts-inconsolata', 'fonts-liberation', 'fonts-linuxlibertine' ]:;
+    ['cm-super', 'fonts-inconsolata', 'fonts-liberation', 'fonts-linuxlibertine']:;
     # games
-    [ 'armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music' ]:;
+    ['armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music']:;
     # useful tools
-    [ 'lyx', 'texmaker', 'pandoc' ]:;
-    # programming environments
-    [ 'python3-tk', 'ipython', 'ipython-notebook', 'python-matplotlib', 'python-numpy', 'python-scipy', 'default-jdk', 'virtualbox', 'vagrant' ]:;
+    ['lyx', 'texmaker']:;
     # nonfree packages
-    [ 'firmware-linux', 'flashplugin-nonfree', 'ttf-mscorefonts-installer' ]:;
+    ['firmware-linux', 'flashplugin-nonfree', 'ttf-mscorefonts-installer']:;
     # notifications
-    [ 'libnotify-bin', 'notification-daemon' ]:;
+    ['libnotify-bin', 'notification-daemon']:;
     # performance improvements
-    [ 'preload', 'readahead-fedora' ]:;
+    ['preload', 'readahead-fedora']:;
     # Xorg
     ['xserver-xorg', 'xscreensaver']:
   }
@@ -73,25 +74,18 @@ class desktop::packages {
       ensure  => purged;
   }
 
-  # install backported packages
-  ocf::repackage {
-    'gitk': # git is backported, so we need backported gitk
-      backports => true,
-      require   => Ocf::Repackage['git'];
-  }
-
   # install packages without recommends
   ocf::repackage {
     'brasero':
       recommends => false;
     'gedit':
       recommends => false;
-    [ 'libreoffice-calc', 'libreoffice-draw', 'libreoffice-gnome', 'libreoffice-impress', 'libreoffice-writer', 'ure' ]:
+    ['libreoffice-calc', 'libreoffice-draw', 'libreoffice-gnome', 'libreoffice-impress', 'libreoffice-writer', 'ure']:
       recommends => false,
       backports  => true;
     'thunar':
       recommends => false;
-    [ 'virt-manager', 'virt-viewer' ]:
+    ['virt-manager', 'virt-viewer']:
       recommends => false;
   }
 }

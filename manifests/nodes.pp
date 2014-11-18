@@ -8,14 +8,15 @@ node default {
     default:   { include common::postfix }
   }
 
-  include common::ntp
-  include common::munin
   include common::autologout
   include common::git
   include common::kerberos
   include common::ldap
   include common::locale
   include common::memtest
+  include common::munin
+  include common::ntp
+  include common::packages
   include common::smart
   include common::utils
   include common::zsh
@@ -47,13 +48,6 @@ node default {
   case $type {
     'server': {
       class { 'common::apt': stage => first }
-
-      case $::hostname {
-        supernova: { class { 'common::packages': extra => true, login => true } }
-        tsunami:   { class { 'common::packages': extra => true, login => true } }
-        biohazard: { class { 'common::packages': extra => true, login => true } }
-        default:   { class { 'common::packages': } }
-      }
 
       if $owner == undef {
         case $::hostname {

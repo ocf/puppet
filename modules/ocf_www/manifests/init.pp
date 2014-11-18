@@ -1,4 +1,5 @@
 class ocf_www {
+  include common::extrapackages
   include ocf_ssl
 
   package {
@@ -6,24 +7,12 @@ class ocf_www {
       before => Package['libapache2-mod-php5'];
 
     # php
-    ['php5', 'php5-mysql', 'php5-sqlite', 'libapache2-mod-suphp', 'php5-gd', 'php5-curl', 'php5-mcrypt']:
+    ['libapache2-mod-suphp']:
       before => Package['libapache2-mod-php5'];
 
     # mod-php interferes with suphp and fcgid but is pulled in as recommended dependency
     'libapache2-mod-php5':
       ensure => purged;
-
-    # python and django
-    ['python-django', 'python-mysqldb', 'python-flup', 'python-flask', 'python-sqlalchemy']:;
-
-    # perl
-    ['libdbi-perl']:;
-
-    # ruby and rails
-    ['rails3', 'libfcgi-ruby1.8', 'libmysql-ruby', 'ruby-sqlite3']:;
-
-    # misc dev packages
-    ['libfcgi-dev', 'sqlite3', 'libsqlite3-dev', 'libtidy-dev', 'nodejs']:;
 
     # nfs
     'nfs-kernel-server':;
