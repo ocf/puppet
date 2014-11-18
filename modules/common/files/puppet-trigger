@@ -1,16 +1,49 @@
-#!/bin/bash -e
+#!/usr/bin/env python3
 # Trigger a puppet agent run
+import argparse
+import os
+import subprocess
+import sys
 
-if service puppet status > /dev/null; then
-	# A bug in recent versions prevents USR1 from triggering a run:
-	# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=769621
-	if [ "$(cat /etc/debian_version)" == 'jessie/sid' ]; then
-		echo "Warning: restarting agent (bug #769621)" 2>&1
-		systemctl restart puppet
-	else
-		kill -USR1 $(cat /var/run/puppet/agent.pid)
-	fi
-else
-	echo "Error: Puppet agent does not appear to be running" >&2
-	exit 255
-fi
+def trigger_run():
+    devnull = open('/dev/null', 'w')
+
+    if subprocess.call(('/usr/sbin/service', 'puppet', 'status'),
+            stdout=devnull) == 0:
+        # A bug in recent versions prevents USR1 from triggering a run:
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=769621
+        if is_jessie():
+            print("Warning: restarting agent (bug #769621)",
+                    file=sys.stderr)
+            subprocess.check_call(('systemctl', 'restart', 'puppet'))
+        else:
+            with open('/var/run/puppet/agent.pid') as f:
+                pid = f.read().strip()
+
+            if subprocess.call(('kill', '-USR1', pid)) != 0:
+                print("Error triggering puppet run, are you root?",
+                    file=sys.stderr)
+                sys.exit(1)
+    else:
+        print("Error: Puppet agent does not appear to be running",
+                file=sys.stderr)
+        sys.exit(1)
+
+def tail_syslog():
+    os.execvp('less', ('less', '+F', '/var/log/syslog'))
+
+def is_jessie():
+    with open('/etc/debian_version') as f:
+        return f.read().strip() == 'jessie/sid'
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="trigger puppet agent runs")
+    parser.add_argument('-f', '--tail', action='store_true',
+            help="tail syslog after trigger")
+
+    args = parser.parse_args()
+    trigger_run()
+
+    if args.tail:
+        tail_syslog()
