@@ -1,7 +1,6 @@
 ### global settings ###
 
 # backup existing files to puppetmaster
-# path must be explicitly undefined, see puppet bug #5362
 filebucket { 'main':; }
 
 # create first stage to run before everything else
