@@ -10,8 +10,9 @@ class ocf_ssh {
     pykota => true;
   }
 
-  include legacy
   include hostkeys
+  include legacy
+  include makeservices
   include webssh
 
   mount { '/tmp':
