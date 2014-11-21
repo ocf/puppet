@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # move gid range of system users and groups to prevent collisions with LDAP
-sed -i -e s/FIRST_SYSTEM_UID=.*/FIRST_SYSTEM_UID=300/g \
+sed -i -e s/FIRST_SYSTEM_UID=.*/FIRST_SYSTEM_UID=100/g \
        -e s/LAST_SYSTEM_UID=.*/LAST_SYSTEM_UID=499/g \
        -e s/FIRST_SYSTEM_GID=.*/FIRST_SYSTEM_GID=300/g \
        -e s/LAST_SYSTEM_GID=.*/LAST_SYSTEM_GID=499/g \
