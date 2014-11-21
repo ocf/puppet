@@ -1,5 +1,8 @@
 class ocf_www {
+  include common::acct
   include common::extrapackages
+  include common::limits
+  include common::mysql
   include ocf_ssl
 
   package {

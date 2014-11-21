@@ -1,5 +1,7 @@
 class ocf_puppet {
+  include common::ldapvi
   include ocf_ssl
+
   include apt_dater
   include puppetmaster
 

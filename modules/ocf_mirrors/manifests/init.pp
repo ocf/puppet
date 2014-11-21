@@ -1,4 +1,11 @@
 class ocf_mirrors {
+  include ocf_ssl
+
+  include debian
+  include ftp
+  include rsync
+  include ubuntu
+
   user { 'mirrors':
     comment => 'OCF Mirroring',
     home    => '/opt/mirrors',

@@ -1,1 +1,3 @@
-class ocf_mail {}
+class ocf_mail {
+  include ocf_ssl
+}

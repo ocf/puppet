@@ -1,5 +1,7 @@
 class ocf_admin {
   include common::extrapackages
+  include common::ldapvi
+  include common::mysql
 
   class { 'common::nfs':
     pykota => true;
