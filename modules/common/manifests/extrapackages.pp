@@ -73,7 +73,6 @@ class common::extrapackages {
     'php5-sqlite',
     'pkg-config',
     'pssh',
-    'python-argparse',
     'python-crypto',
     'python-django',
     'python-flask',
