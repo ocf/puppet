@@ -3,7 +3,7 @@
 
 ! /usr/bin/lsof -- /var/lib/dpkg/lock > /dev/null 2>&1 || exit 1
 [ ! -f /var/lib/puppet/state/agent_catalog_run.lock ] || exit 1
-ps ax | grep 'notify\.sh' | grep -v grep > /dev/null && exit 2
+[ $(w --no-header | wc -l) -eq 0 ] || exit 2
 
 if grep $'tmpfs\t/home' /etc/fstab > /dev/null; then
 	umount /home 2> /dev/null && mount /home || exit 3
