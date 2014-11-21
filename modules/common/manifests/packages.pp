@@ -71,6 +71,16 @@ class common::packages {
       ensure => purged;
   }
 
+  # gist is packaged for jessie; prior to that, we install it via gem
+  if $::lsbdistcodename == 'jessie' {
+    package { 'gist':; }
+  } else {
+    package { 'gist':
+      ensure   => '4.3.0',
+      provider => gem;
+    }
+  }
+
   ocf::repackage {
     ['tmux']:
       backports => true;
