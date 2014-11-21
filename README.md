@@ -67,8 +67,7 @@ After switching the environment, you can connect to the server, trigger a
 puppet run, and watch the logs:
 
     ckuehl@supernova:~$ ssh raptors
-    ckuehl@raptors:~$ sudo puppet-trigger
-    ckuehl@raptors:~$ sudo less +F /var/log/syslog
+    ckuehl@raptors:~$ sudo puppet-trigger -f
 
 Make sure to switch the environment back to production after pushing your
 changes.
