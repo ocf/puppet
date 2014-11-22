@@ -1,6 +1,6 @@
 [Configuration]
-ColorForeground=#000000000000
-ColorBackground=#ffffffffffff
+ColorBackground=#000000000000
+ColorForeground=#ffffffffffff
 ColorCursor=#8a8ae2e23434
 FontAllowBold=FALSE
 FontName=Monospace Bold 12
