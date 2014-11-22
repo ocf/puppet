@@ -1,22 +1,6 @@
-<VirtualHost *:80>
-    ServerName www.ocf.berkeley.edu
-    ServerAlias www.ocf.berkeley.edu www.ocf www ocf.berkeley.edu ocf dev-www.ocf.berkeley.edu dev-ocf.berkeley.edu
-    ServerAdmin help@ocf.berkeley.edu
-
-    # canonical hostname is www.ocf.berkeley.edu
-    RewriteEngine on
-    RewriteCond %{HTTP_HOST} !^(dev-)?www\.ocf\.berkeley\.edu$ [NC]
-    RewriteRule ^/(.*)$ http://www.ocf.berkeley.edu/$1 [R=301]
-
-    # Include config shared between www and secure virtual hosts
-    Include sites-common.conf
-
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
-</VirtualHost>
-
 <VirtualHost *:443>
     ServerName www.ocf.berkeley.edu
-    ServerAlias secure.ocf.berkeley.edu secure.ocf secure www.ocf.berkeley.edu www.ocf www ocf.berkeley.edu ocf dev-www.ocf.berkeley.edu dev-ocf.berkeley.edu
+    ServerAlias secure.ocf.berkeley.edu ocf.berkeley.edu dev-www.ocf.berkeley.edu dev-ocf.berkeley.edu
     ServerAdmin help@ocf.berkeley.edu
 
     # canonical hostname is www.ocf.berkeley.edu
@@ -41,13 +25,16 @@
     <Directory /usr/lib/cgi-bin>
         SSLOptions +StdEnvVars
     </Directory>
+
+    Header set Strict-Transport-Security "max-age=31536000"
 </VirtualHost>
 
-# redirect secure:80 to SSL
+# redirect http to https
 <VirtualHost *:80>
-    ServerName secure.ocf.berkeley.edu
-    ServerAlias secure.ocf.berkeley.edu secure.ocf secure
+    ServerName www.ocf.berkeley.edu
+    ServerAlias www ocf.berkeley.edu dev-www.ocf.berkeley.edu dev-ocf.berkeley.edu secure.ocf.berkeley.edu
     ServerAdmin help@ocf.berkeley.edu
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
 
 	Redirect 301 / https://www.ocf.berkeley.edu/
 </VirtualHost>
