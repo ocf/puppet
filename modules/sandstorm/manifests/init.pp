@@ -1,6 +1,6 @@
 class sandstorm {
   include ocf_ssl
-  include common::act
+  include common::acct
   include common::limits
 
   package {
