@@ -20,6 +20,11 @@ class ocf_mirrors {
       mode   => '0755',
       owner  => mirrors,
       group  => mirrors;
+
+    '/opt/mirrors/ftp/README.html':
+      source => 'puppet:///modules/ocf_mirrors/README.html',
+      owner  => mirrors,
+      group  => mirrors;
   }
 
   class { 'apache':
@@ -27,15 +32,17 @@ class ocf_mirrors {
   }
 
   apache::vhost { 'mirrors.ocf.berkeley.edu':
-    serveraliases  => ['mirrors'],
-    port           => 80,
-    docroot        => '/opt/mirrors/ftp',
+    serveraliases   => ['mirrors'],
+    port            => 80,
+    docroot         => '/opt/mirrors/ftp',
 
-    directories    => [{
-      path         => '/opt/mirrors/ftp',
-      options      => ['+Indexes', '+SymlinksIfOwnerMatch'],
-      indexoptions => ['NameWidth=*', '+SuppressDescription']
-    }];
+    directories     => [{
+      path          => '/opt/mirrors/ftp',
+      options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
+      index_options => ['NameWidth=*', '+SuppressDescription']
+    }],
+
+    custom_fragment => "HeaderName README.html\nReadmeName FOOTER.html"
   }
 
   apache::vhost { 'mirrors.ocf.berkeley.edu-ssl':
@@ -47,6 +54,8 @@ class ocf_mirrors {
       options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
       index_options => ['NameWidth=*', '+SuppressDescription']
     }],
+
+    custom_fragment => "HeaderName README.html\nReadmeName FOOTER.html",
 
     ssl             => true,
     ssl_key         => "/etc/ssl/private/${::fqdn}.key",
