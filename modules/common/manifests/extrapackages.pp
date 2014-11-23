@@ -64,7 +64,6 @@ class common::extrapackages {
     'octave',
     'pandoc',
     'pdfjam',
-    'php5',
     'php5-cli',
     'php5-curl',
     'php5-gd',
