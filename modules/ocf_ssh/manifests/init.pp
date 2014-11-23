@@ -6,6 +6,12 @@ class ocf_ssh {
   include common::mysql
   include ocf_ssl
 
+  package {
+    # remove accidentally-installed packages
+    ['php5', 'libapache2-mod-php5', 'apache2']:
+      ensure => purged;
+  }
+
   class { 'common::nfs':
     pykota => true;
   }

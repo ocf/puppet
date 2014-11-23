@@ -3,6 +3,12 @@ class ocf_admin {
   include common::ldapvi
   include common::mysql
 
+  package {
+    # remove accidentally-installed packages
+    ['php5', 'libapache2-mod-php5', 'apache2']:
+      ensure => purged;
+  }
+
   class { 'common::nfs':
     pykota => true;
   }

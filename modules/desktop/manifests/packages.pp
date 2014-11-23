@@ -1,6 +1,12 @@
 class desktop::packages {
   include common::extrapackages
 
+  package {
+    # remove accidentally-installed packages
+    ['php5', 'libapache2-mod-php5', 'apache2']:
+      ensure => purged;
+  }
+
   file { '/opt/share/puppet/packages':
     ensure  => directory,
     source  => 'puppet:///contrib/desktop/packages',
