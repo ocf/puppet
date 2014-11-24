@@ -45,6 +45,17 @@ class ocf_mirrors {
     custom_fragment => "HeaderName README.html\nReadmeName FOOTER.html"
   }
 
+  apache::vhost { 'mirrors.berkeley.edu':
+    port            => 80,
+
+    # we have to specify docroot even though we always redirect
+    docroot         => '/var/www',
+
+    redirect_source => '/',
+    redirect_dest   => 'http://mirrors.ocf.berkeley.edu/',
+    redirect_status => '301';
+  }
+
   apache::vhost { 'mirrors.ocf.berkeley.edu-ssl':
     port            => 443,
     docroot         => '/opt/mirrors/ftp',
