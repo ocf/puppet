@@ -10,7 +10,7 @@ class ocf_www {
       before => Package['libapache2-mod-php5'];
 
     # php
-    ['libapache2-mod-suphp']:
+    ['php5', 'libapache2-mod-suphp']:
       before => Package['libapache2-mod-php5'];
 
     # mod-php interferes with suphp and fcgid but is pulled in as recommended dependency
