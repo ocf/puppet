@@ -125,4 +125,15 @@ class common::apt ( $desktop = false ) {
     content => template('common/apt/ocf-apt.erb'),
     require => Package['aptitude'];
   }
+
+  # needrestart config (jessie only)
+  if $::lsbdistcodename == 'jessie' {
+    package { 'needrestart':; }
+
+    # restart services automatically during upgrade
+    file { '/etc/needrestart/conf.d/auto-restart.conf':
+      content => "\$nrconf{restart} = 'a';\n",
+      require => Package['needrestart'];
+    }
+  }
 }
