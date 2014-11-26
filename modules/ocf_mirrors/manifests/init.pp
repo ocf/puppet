@@ -1,9 +1,12 @@
 class ocf_mirrors {
   include ocf_ssl
 
-  include debian
   include ftp
   include rsync
+
+  # projects
+  include archlinux
+  include debian
   include ubuntu
 
   user { 'mirrors':
