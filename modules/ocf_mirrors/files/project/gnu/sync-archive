@@ -1,0 +1,3 @@
+#/bin/sh -e
+rsync -rltpHS --delete-excluded \
+	rsync://mirrors.kernel.org/gnu/ /opt/mirrors/ftp/gnu
