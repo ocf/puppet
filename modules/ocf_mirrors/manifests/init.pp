@@ -5,6 +5,7 @@ class ocf_mirrors {
   include rsync
 
   # projects
+  include apache
   include archlinux
   include debian
   include ubuntu
@@ -30,7 +31,7 @@ class ocf_mirrors {
       group  => mirrors;
   }
 
-  class { 'apache':
+  class { '::apache':
     default_vhost => false;
   }
 
