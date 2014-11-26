@@ -1,0 +1,5 @@
+#/bin/sh -e
+rsync -a rsync://rsync.gtlib.gatech.edu/finnix-releases/ /opt/mirrors/ftp/finnix-releases
+
+mkdir -p /opt/mirrors/ftp/finnix-releases/project/trace
+TZ=UTC date > "/opt/mirrors/ftp/finnix-releases/project/trace/$(hostname -f)"

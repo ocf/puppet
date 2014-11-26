@@ -8,6 +8,7 @@ class ocf_mirrors {
   include apache
   include archlinux
   include debian
+  include finnix
   include gnu
   include ubuntu
 
