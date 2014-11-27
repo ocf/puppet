@@ -61,6 +61,10 @@ class ocf_admin {
     '/etc/sudoers.d/atool':
       mode   => '0440',
       source => 'puppet:///modules/ocf_admin/atool.sudoers';
+
+    '/opt/acct/sorry':
+      ensure => link,
+      target => '/opt/share/utils/staff/acct/sorry';
   }
 
   # receive remote syslog from tsunami
