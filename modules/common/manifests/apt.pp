@@ -1,5 +1,14 @@
 class common::apt ( $desktop = false ) {
-  package { ['aptitude', 'apt-dater-host', 'imvirt']: }
+  package { ['aptitude', 'imvirt']: }
+
+  # on jessie, apt-dater-host recommends needrestart, which adds an extra step
+  # to updates
+  package { 'needrestart':
+    ensure => purged;
+  }
+  ocf::repackage { 'apt-dater-host':
+    recommends => false;
+  }
 
   class { '::apt':
     purge_sources_list   => true,
@@ -124,16 +133,5 @@ class common::apt ( $desktop = false ) {
     mode    => '0755',
     content => template('common/apt/ocf-apt.erb'),
     require => Package['aptitude'];
-  }
-
-  # needrestart config (jessie only)
-  if $::lsbdistcodename == 'jessie' {
-    package { 'needrestart':; }
-
-    # restart services automatically during upgrade
-    file { '/etc/needrestart/conf.d/auto-restart.conf':
-      content => "\$nrconf{restart} = 'a';\n",
-      require => Package['needrestart'];
-    }
   }
 }
