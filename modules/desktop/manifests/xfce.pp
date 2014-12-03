@@ -1,5 +1,5 @@
 class desktop::xfce {
-  ocf::repackage { ['xfce4', 'xfce4-goodies']:
+  ocf::repackage { ['xfce4', 'xfce4-goodies', 'xfce4-notifyd']:
     recommends => false;
   }
 
