@@ -1,15 +1,6 @@
 class common::apt ( $desktop = false ) {
   package { ['aptitude', 'imvirt']: }
 
-  # on jessie, apt-dater-host recommends needrestart, which adds an extra step
-  # to updates
-  package { 'needrestart':
-    ensure => purged;
-  }
-  ocf::repackage { 'apt-dater-host':
-    recommends => false;
-  }
-
   class { '::apt':
     purge_sources_list   => true,
     purge_sources_list_d => true;

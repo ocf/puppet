@@ -8,8 +8,13 @@
 # tools such that server maintenance becomes unnecessarily painful.
 class common::packages {
   # packages to remove
-  package {['mlocate', 'popularity-contest', 'apt-listchanges']:
+  package {['mlocate', 'popularity-contest', 'apt-listchanges', 'needrestart']:
     ensure => purged;
+  }
+
+  # we don't want needrestart, which apt-dater-host recommends
+  ocf::repackage { 'apt-dater-host':
+    recommends => false;
   }
 
   # common packages for all ocf machines
