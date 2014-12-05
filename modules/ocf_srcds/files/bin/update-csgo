@@ -1,0 +1,2 @@
+#!/bin/bash -e
+/opt/csgo/bin/steamcmd.sh +runscript /opt/csgo/etc/csgo-update.cmd
