@@ -6,6 +6,7 @@ class desktop ($staff = false) {
   include chrome
   include crondeny
   include defaults
+  include drivers
   include grub
   include iceweasel
   include modprobe
