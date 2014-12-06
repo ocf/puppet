@@ -14,6 +14,7 @@ class desktop ($staff = false) {
   include pulse
   include sshfs
   include stats
+  include steam
   include suspend
 
   class { 'xsession': staff => $staff }
