@@ -3,7 +3,19 @@ class desktop::sshfs {
   require common::ssh
 
   # install sshfs and libpam-mount
-  package { ['libpam-mount', 'sshfs', 'fuse']: }
+  package {
+    ['sshfs', 'fuse']:;
+
+    # libpam-mount was removed from jessie, so we install a local version from
+    # sid (TODO: install from ocf apt repo)
+    'libpam-mount':
+      provider => dpkg,
+      source   => '/opt/share/puppet/packages/libpam-mount_2.14-1_amd64.deb',
+      require  => Package['libhx28'];
+
+    # libpam-mount dependencies because dpkg won't resolve them automatically
+    ['libhx28']:;
+  }
 
   # create directory to mount to
   file { '/etc/skel/remote':
