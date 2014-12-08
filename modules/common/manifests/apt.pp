@@ -97,18 +97,6 @@ class common::apt ( $desktop = false ) {
       key_source => 'https://dl-ssl.google.com/linux/linux_signing_key.pub';
     }
 
-    apt::key { 'steam':
-      key        => 'C5A16365C081CFD1',
-      key_source => 'http://repo.steampowered.com/steam/signature.gpg';
-    }
-
-    apt::source { 'steam':
-      location => 'http://repo.steampowered.com/steam/',
-      release  => 'precise',
-      repos    => 'steam',
-      require  => Apt::Key['steam'];
-    }
-
     # mozilla.debian.net doesn't currently package for jessie
     if $::lsbdistcodename != 'jessie' {
       package { 'pkg-mozilla-archive-keyring':; }

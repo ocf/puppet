@@ -1,3 +1,3 @@
 class desktop::steam {
-  package { ['steam-launcher', 'libc6:i386']:; }
+  package { ['steam:i386', 'libc6:i386']:; }
 }
