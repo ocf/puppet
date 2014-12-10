@@ -10,6 +10,7 @@ class ocf_mirrors {
   include debian
   include finnix
   include gnu
+  include tanglu
   include ubuntu
 
   user { 'mirrors':

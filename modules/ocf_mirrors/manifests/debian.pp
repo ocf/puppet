@@ -1,5 +1,5 @@
 class ocf_mirrors::debian {
-  exec { 'get-ftpsync':
+  exec { 'get-ftpsync-debian':
     command => 'wget -O - -q https://ftp-master.debian.org/ftpsync.tar.gz | tar xvfz - -C /opt/mirrors/project/debian',
     user    => 'mirrors',
     creates => '/opt/mirrors/project/debian/distrib',
@@ -19,7 +19,7 @@ class ocf_mirrors::debian {
       ensure  => link,
       links   => manage,
       target  => '/opt/mirrors/project/debian/distrib/bin',
-      require => Exec['get-ftpsync'];
+      require => Exec['get-ftpsync-debian'];
     ['/opt/mirrors/project/debian/bin/ftpsync-security', '/opt/mirrors/project/debian/bin/ftpsync-cd']:
       ensure  => link,
       links   => manage,
