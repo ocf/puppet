@@ -40,7 +40,7 @@ class ocf_mirrors::tanglu {
       minute  => '32';
 
     'tanglu-releases':
-      command => '/opt/mirrors/project/tanglu/sync-releases',
+      command => '/opt/mirrors/project/tanglu/sync-releases > /dev/null',
       user    => 'mirrors',
       hour    => '*/2',
       minute  => '53';
