@@ -4,6 +4,9 @@ root: wheel
 postmaster: sm
 mailer-daemon: postmaster
 
+# specific services that should mail to root but don't
+mirrors: root
+
 # archive of outgoing mail for nomail'd users
 nomail: /var/mail/nomail/nomail
 
@@ -52,7 +55,6 @@ owner-todo: wheel
 
 # accounts only used for sending
 mon: /dev/null
-mirrors: /dev/null
 ocfstats: /dev/null
 puppet: /dev/null
 atool: /dev/null
