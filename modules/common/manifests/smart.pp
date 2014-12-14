@@ -1,7 +1,7 @@
 class common::smart {
   # facter currently outputs strings not booleans
   # see http://projects.puppetlabs.com/issues/3704
-  if $::is_virtual == 'false' {
+  if ! str2bool($::is_virtual) {
     # install smartmontools
     package { 'smartmontools': }
 
