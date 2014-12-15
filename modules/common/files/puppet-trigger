@@ -34,7 +34,7 @@ def tail_syslog():
 
 def is_jessie():
     with open('/etc/debian_version') as f:
-        return f.read().strip() == 'jessie/sid'
+        return f.read().strip().startswith('8.')
 
 
 if __name__ == '__main__':
