@@ -17,6 +17,12 @@ class common::packages {
     recommends => false;
   }
 
+  # facter currently outputs strings not booleans
+  # see http://projects.puppetlabs.com/issues/3704
+  if str2bool($::is_virtual) {
+    package { 'cryptsetup':; }
+  }
+
   # common packages for all ocf machines
   package {
     [
