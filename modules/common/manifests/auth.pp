@@ -1,4 +1,4 @@
-class common::auth( $glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [] ) {
+class common::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopasswd = false) {
   # require LDAP/Kerberos configuration
   require common::ldap
   require common::kerberos

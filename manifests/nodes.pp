@@ -60,17 +60,21 @@ node default {
           default:   { class { 'common::auth': ulogin => [], glogin => [], usudo => [], gsudo => [] } }
         }
       } else { # grant login and sudo to owner
-        class { 'common::auth': ulogin => [[$owner, 'ALL']], usudo => [$owner] }
+        class { 'common::auth': ulogin => [[$owner, 'ALL']], usudo => [$owner], nopasswd => true }
       }
 
       include common::ssh
     }
 
     'desktop': {
-      if $::staff_only {
-        class { 'common::auth': glogin => [ ['approve', 'ALL'] ], gsudo => ['ocfstaff'] }
-      } else {
-        class { 'common::auth': glogin => [ ['ocf', 'LOCAL'] ], gsudo => ['ocfstaff'] }
+      $glogin = $::staff_only ? {
+        true    => [ ['approve', 'ALL'] ],
+        default => [ ['ocf', 'LOCAL'] ]
+      }
+
+      class { 'common::auth':
+        glogin => $glogin,
+        gsudo => ['ocfstaff'];
       }
 
       class { 'desktop': staff => $::staff_only }
