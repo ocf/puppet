@@ -11,7 +11,7 @@ class ocf_puppet {
 
   include apache::mod::cgid
 
-  apache::vhost { 'puppet public':
+  apache::vhost { 'puppet-public':
     servername => 'puppet.ocf.berkeley.edu',
     port       => 443,
     docroot    => '/var/www',
