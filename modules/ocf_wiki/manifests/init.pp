@@ -48,10 +48,14 @@ class ocf_wiki {
 
     '/srv/ikiwiki/public_html/webhook':
       ensure  => directory,
-      source  => 'puppet:///modules/ocf_wiki/webhook',
       owner   => root,
-      mode    => '0755',
-      recurse => true;
+      mode    => '0755';
+  }
+
+  ocf::webhook { '/srv/ikiwiki/public_html/webhook/github.cgi':
+    service    => 'github',
+    secretfile => '/srv/ikiwiki/github.secret',
+    command    => '/srv/ikiwiki/rebuild-wiki';
   }
 
   file {
