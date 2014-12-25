@@ -37,13 +37,6 @@ class ocf_puppet::puppetmaster {
     ['/opt/puppet', '/opt/puppet/env', '/opt/puppet/shares', '/opt/puppet/shares/contrib']:
       ensure  => directory;
 
-    # hmac secret used for GitHub webhook
-    '/opt/puppet/github.secret':
-      source  => 'puppet:///private/github.secret',
-      owner   => root,
-      group   => www-data,
-      mode    => '0640';
-
     '/opt/puppet/shares/private':
       mode    => '0400',
       owner   => puppet,
