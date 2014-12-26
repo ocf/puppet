@@ -1,12 +1,22 @@
 class common::kerberos {
+  if !$::skipKerberos {
+    # install Heimdal Kerberos packages
+    package { [ 'heimdal-clients', 'libsasl2-modules-gssapi-mit' ]: }
 
-  # install Heimdal Kerberos packages
-  package { [ 'heimdal-clients', 'libsasl2-modules-gssapi-mit' ]: }
+    # provide Kerberos config
+    file { '/etc/krb5.conf':
+      source  => 'puppet:///modules/common/auth/krb5.conf',
+      require => Package['heimdal-clients']
+    }
+  } else {
+    # don't use Kerberos, so remove the packages and config file
+    package { [ 'heimdal-clients', 'libsasl2-modules-gssapi-mit' ]:
+      ensure => purged;
+    }
 
-  # provide Kerberos config
-  file { '/etc/krb5.conf':
-    source  => 'puppet:///modules/common/auth/krb5.conf',
-    require => Package['heimdal-clients']
+    file { '/etc/krb5.conf':
+      ensure => absent;
+    }
   }
 
   # provide Kerberos private keytab

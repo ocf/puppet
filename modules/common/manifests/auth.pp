@@ -60,8 +60,14 @@ class common::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopa
   }
 
   # PAM user authentication
-  # install Kerberos PAM module
-  package { 'libpam-krb5': }
+  if !$::skipKerberos {
+    # install Kerberos PAM module
+    package { 'libpam-krb5': }
+  } else {
+    package { 'libpam-krb5':
+      ensure => purged;
+    }
+  }
   # remove unnecessary pam profiles
   $pamconfig = '/usr/share/pam-configs'
   file { [ "${pamconfig}/consolekit", "${pamconfig}/gnome-keyring", "${pamconfig}/ldap", "${pamconfig}/libpam-mount" ]:
