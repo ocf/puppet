@@ -33,10 +33,25 @@ class common::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopa
       links   => manage,
       target  => '/etc/ldap.conf',
       require => Ocf::Repackage['libnss-ldap'];
-    # nameservice configuration: use LDAP but failover to local copy
-    '/etc/nsswitch.conf':
+  }
+
+  # nameservice configuration
+  if !$::skipLdap {
+    # use LDAP but failover to local copy
+    file { '/etc/nsswitch.conf':
       source  => 'puppet:///modules/common/auth/nss/nsswitch.conf',
-      require => [ Ocf::Repackage['libnss-ldap'], File['/etc/libnss-ldap.conf'] ];
+      require => [Ocf::Repackage['libnss-ldap'], File['/etc/libnss-ldap.conf']];
+    }
+  } else {
+    # use local copy only (never consult LDAP during lookups);
+    # this is useful for servers which expect to not have connectivity to ldap
+    #
+    # (they will still use passwd/group from the nss db, which is updated
+    # from ldap, but ldap isn't needed constantly)
+    file { '/etc/nsswitch.conf':
+      source  => 'puppet:///modules/common/auth/nss/nsswitch-noldap.conf',
+      require => [Ocf::Repackage['libnss-ldap'], File['/etc/libnss-ldap.conf']];
+    }
   }
   # restart NSCD
   service { 'unscd':
@@ -94,5 +109,4 @@ class common::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopa
       content => template('common/sudoers.erb'),
       require => Package['sudo'];
   }
-
 }
