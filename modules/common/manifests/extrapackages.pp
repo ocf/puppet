@@ -100,5 +100,8 @@ class common::extrapackages {
     'valgrind',
     'virtualbox',
     ]:;
+
+  'autolink':
+    provider => pip;
   }
 }
