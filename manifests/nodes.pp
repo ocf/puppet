@@ -57,6 +57,7 @@ node default {
           tsunami:   { class { 'common::auth': glogin => [ ['ocf', 'ALL'], ['sorry', 'ALL'] ] } }
           biohazard: { class { 'common::auth': glogin => [ ['ocfdev', 'ALL'] ] } }
           pollution: { class { 'common::auth': glogin => [ ['approve', 'ALL'] ], gsudo => ['ocfstaff'] } }
+          offsite:   { class { 'common::auth': ulogin => [], glogin => [], usudo => [], gsudo => [], nopasswd => true } }
           default:   { class { 'common::auth': ulogin => [], glogin => [], usudo => [], gsudo => [] } }
         }
       } else { # grant login and sudo to owner
