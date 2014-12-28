@@ -2,11 +2,7 @@ class ocf_www {
   include common::acct
   include common::extrapackages
   include common::limits
-
-  if !tagged('ocf_mysql') {
-    include common::mysql
-  }
-
+  include common::mysql
   include ocf_ssl
 
   package {
