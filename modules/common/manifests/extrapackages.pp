@@ -105,4 +105,14 @@ class common::extrapackages {
   'autolink':
     provider => pip;
   }
+
+  # install wp-cli
+  cron { 'download-wp-cli':
+    command => '/opt/share/utils/staff/sys/download-wp-cli',
+    special => 'weekly';
+  }
+  exec { 'download-wp-cli':
+    command => '/opt/share/utils/staff/sys/download-wp-cli',
+    creates => '/usr/local/bin/wp';
+  }
 }
