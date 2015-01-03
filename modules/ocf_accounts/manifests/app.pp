@@ -74,6 +74,6 @@ class ocf_accounts::app {
     ensure   => latest,
     provider => git,
     revision => 'master',
-    source   => 'https://github.com/ocf/account-tools.git';
+    source   => 'https://github.com/ocf/atool.git';
   }
 }
