@@ -10,11 +10,6 @@ if [ -n "$lab_staff" ]; then
 $lab_staff"
 fi
 
-$notify_send "Fall 2014 Hours
-R.R.R. Week: 11am-9pm (starting 12/8)
-Finals Week: 9am-9pm (starting 12/15)
-Friday, Dec. 19: 9am-noon"
-
 # report printing quota
 while true; do
   balance="`$ssh /opt/ocf/bin/paper | grep pages`"
