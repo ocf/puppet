@@ -67,7 +67,7 @@ server {
 EOF
 
 	# https redirect vhost
-	if [ "$ssl_name"] != "-" ]; then
+	if [ "$ssl_name" != "-" ]; then
 		cat <<EOF
 server {
 	listen 80;
