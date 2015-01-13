@@ -75,10 +75,6 @@ class ocf_mail::spam {
       ensure  => directory,
       owner   => clamav,
       group   => root;
-    '/etc/default/clamav-milter':
-      source  => 'puppet:///modules/ocf_mail/spam/clamav/clamav-milter',
-      notify  => Service['clamav-milter'],
-      require => [Package['clamav-milter'], File['/var/spool/postfix/clamav']];
     '/etc/clamav/clamav-milter.conf':
       source  => 'puppet:///modules/ocf_mail/spam/clamav/clamav-milter.conf',
       notify  => Service['clamav-milter'],
