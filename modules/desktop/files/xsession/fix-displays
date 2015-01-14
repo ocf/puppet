@@ -1,10 +1,36 @@
-#!/bin/bash
+#!/usr/bin/env python3
 # Tile multiple monitors side-by-side
-sleep 1
-monitors=$(xrandr | grep '\bconnected')
-last=$(<<< "$monitors" head -n1 | cut -d' ' -f1)
-<<< "$monitors" tail -n+2 | while read monitor; do
-  interface=$(echo "$monitor" | cut -d' ' -f1)
-  xrandr --output "$interface" --right-of "$last"
-  last=interface
-done
+import re
+import subprocess
+import time
+
+
+def get_monitors():
+    lines = subprocess.check_output(['xrandr']).decode('utf8').splitlines()
+    return [line.split()[0] for line in lines if ' connected' in line]
+
+
+if __name__ == '__main__':
+    time.sleep(1)
+    monitors = get_monitors()
+
+    # tile monitors side-by-side
+    prev = None
+    for monitor in monitors:
+        if prev:
+            subprocess.check_call(['xrandr', '--output', monitor, '--right-of', prev])
+        prev = monitor
+
+    # special case: 3 monitors
+    # middle monitor is rotated left 90 degrees
+    if len(monitors) == 3:
+        # left/right monitors are moved down a bit; move middle up to compensate
+        offset = -410
+
+        # need to get the current x position of this monitor first
+        line = next(filter(lambda line: monitors[1] in line,
+                subprocess.check_output(['xrandr']).decode('utf8').splitlines()))
+        x_pos = re.search('\\b\\d+x\\d+\\+(\\d+)\\+', line).group(1)
+
+        subprocess.check_call(['xrandr', '--output', monitors[1],
+            '--rotate', 'left', '--pos', "{}x{}".format(x_pos, offset)])
