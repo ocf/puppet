@@ -17,6 +17,7 @@ class ocf_admin {
 
   user { 'atool':
     comment  => 'OCF Account Creation',
+    gid      => approve,
     home     => '/srv/atool',
     system   => true,
     groups   => ['sys'];
