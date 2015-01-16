@@ -68,12 +68,6 @@ class ocf_admin {
       target => '/opt/share/utils/staff/acct/sorry';
   }
 
-  # receive remote syslog from tsunami
-  file { '/etc/rsyslog.d/tsunami.conf':
-    content => "if \$FROMHOST startswith 'tsunami' then /var/log/tsunami.log\n& ~\n",
-    notify  => Service['rsyslog'],
-  }
-
   # provide logrotate rule for account creation scripts
   file { '/etc/logrotate.d/account-creation':
     ensure => file,
