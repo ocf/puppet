@@ -17,6 +17,7 @@ node default {
   include common::munin
   include common::ntp
   include common::packages
+  include common::ocflib
   include common::smart
   include common::utils
   include common::zsh
