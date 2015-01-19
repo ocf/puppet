@@ -10,6 +10,7 @@ class ocf_accounts::app {
 
   user { 'atool':
     comment => 'OCF Account Creation',
+    gid     => approve,
     home    => '/srv/atool',
     system  => true,
     groups  => ['sys'];
@@ -17,7 +18,7 @@ class ocf_accounts::app {
 
   File {
     owner => atool,
-    group => atool
+    group => approve
   }
 
   file {
@@ -26,7 +27,8 @@ class ocf_accounts::app {
 
     '/srv/atool/etc/settings.py':
       source => 'puppet:///private/settings.py',
-      mode   => '0400';
+      mode   => '0400',
+      notify => Exec['reload-atool'];
 
     '/srv/atool/etc/chpass.keytab':
       source => 'puppet:///private/chpass.keytab',
@@ -68,6 +70,14 @@ class ocf_accounts::app {
       links   => manage,
       target  => '/srv/atool/etc/settings.py',
       require => Vcsrepo['/srv/atool/env/master'];
+
+    ['/opt/create', '/opt/create/public']:
+      ensure  => directory;
+  }
+
+  exec { 'reload-atool':
+    command     => 'svc -h /etc/service/atool',
+    refreshonly => true;
   }
 
   vcsrepo { '/srv/atool/env/master':
