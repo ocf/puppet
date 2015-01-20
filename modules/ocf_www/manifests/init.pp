@@ -266,4 +266,12 @@ class ocf_www {
   }
 
   service { 'nfs-kernel-server': }
+
+  # main website
+  vcsrepo { '/srv/sites/ocf':
+    ensure   => latest,
+    provider => git,
+    revision => 'master',
+    source   => 'https://github.com/ocf/website.git';
+  }
 }
