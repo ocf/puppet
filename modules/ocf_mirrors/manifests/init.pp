@@ -64,6 +64,7 @@ class ocf_mirrors {
   }
 
   apache::vhost { 'mirrors.ocf.berkeley.edu-ssl':
+    servername      => 'mirrors.ocf.berkeley.edu',
     port            => 443,
     docroot         => '/opt/mirrors/ftp',
 

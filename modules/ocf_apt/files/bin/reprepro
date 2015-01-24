@@ -1,0 +1,19 @@
+#!/bin/bash -e
+# Wrapper script for reprepro which sets proper paths and avoids borking
+# permissions.
+#
+# For best results, run under sudo and not as root:
+# sudo -u ocfapt /opt/apt/bin/reprepro [...]
+#
+# Example usage:
+#  - reprepro includedeb wheezy my.deb  # add a new package
+#  - reprepro list wheezy  # list packages in wheezy dist
+#  - reprepro export  # re-export dists (usually not needed)
+
+if [[ "$USER" != "ocfapt" ]]; then
+	echo "This script must be run as the ocfapt user."
+	exit 1
+fi
+
+exec /usr/bin/reprepro \
+	--basedir /opt/apt/ftp --confdir /opt/apt/etc --dbdir /opt/apt/db "$@"
