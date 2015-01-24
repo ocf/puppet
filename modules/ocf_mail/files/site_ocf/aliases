@@ -59,6 +59,7 @@ ocfstats: /dev/null
 puppet: /dev/null
 atool: /dev/null
 create: /dev/null
+ocfapt: /dev/null
 
 # misc
 archive: /var/mail/archives/archive
