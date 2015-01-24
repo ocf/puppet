@@ -34,6 +34,7 @@ class common::packages {
     'curl',
     'dtach',
     'finger',
+    'gist',  # not in wheezy, but in our apt repo
     'htop',
     'iftop',
     'iotop',
@@ -80,16 +81,6 @@ class common::packages {
 
     'python-paramiko':
       ensure => purged;
-  }
-
-  # gist is packaged for jessie; prior to that, we install it via gem
-  if $::lsbdistcodename == 'jessie' {
-    package { 'gist':; }
-  } else {
-    package { 'gist':
-      ensure   => '4.3.0',
-      provider => gem;
-    }
   }
 
   ocf::repackage {
