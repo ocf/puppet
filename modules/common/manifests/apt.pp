@@ -20,6 +20,12 @@ class common::apt ( $desktop = false ) {
           location  => 'http://mirrors/debian-security/',
           release   => "${::lsbdistcodename}/updates",
           repos     => $repos;
+
+        'ocf':
+          location  => 'http://apt/',
+          release   => $::lsbdistcodename,
+          repos     => 'main',
+          include_src => false;
       }
 
       if $::lsbdistcodename == 'wheezy' {
@@ -83,6 +89,11 @@ class common::apt ( $desktop = false ) {
       repos      => 'main dependencies',
       require    => Apt::Key['puppetlabs'];
     }
+  }
+
+  apt::key { 'ocf':
+    key        => '45A686E7D72A0AF4',
+    key_source => 'https://apt.ocf.berkeley.edu/pubkey.gpg';
   }
 
   if $desktop {
