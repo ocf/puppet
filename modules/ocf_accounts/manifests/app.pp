@@ -2,7 +2,7 @@ class ocf_accounts::app {
   package {
     'gunicorn':
       ensure   => latest,
-      provider => pip;
+      provider => pip3;
 
     # build dependencies for python modules
     ['libldap2-dev', 'libsasl2-dev']:;
