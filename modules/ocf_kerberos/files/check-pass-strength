@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Enforce OCF account password complexity
 
 When run as a script, it can be used as a Heimdal Kerberos external
@@ -6,68 +6,12 @@ password quality program. When run as a module, the complexity function
 will raise a PasswordError exception if the password is weak.
 """
 
-import string
+import re
 import sys
-from difflib import SequenceMatcher
-from cracklib import VeryFascistCheck
 
-class PasswordError(ValueError):
-    """Password is not sufficiently sophisticated"""
-    pass
+import ocflib.account.utils as utils
+import ocflib.account.validators as validators
 
-def sanitize(password):
-    """Password must be clean for input to kadmin (contain no newlines)"""
-    if "\n" in password or "\r" in password:
-        raise PasswordError("Password cannot contain newlines")
-
-def lengthy(password):
-    """Password must be at least 8 characters long"""
-    minlength = 8
-    if len(password) < minlength:
-        raise PasswordError(
-            "Password must be at least {0} characters long".format(minlength))
-
-def diversity(password):
-    """Password must contain characters from two character classes"""
-    minclasses = 2
-    classes = set()
-    for letter in password:
-        if letter in string.ascii_letters:
-            classes.add('alphabetic')
-        elif letter in string.digits:
-            classes.add('numeric')
-        elif letter in string.punctuation:
-            classes.add('punctuation')
-    if len(classes) < minclasses:
-        raise PasswordError(
-            "Password must contain characters from {0} character classes".format(minclasses))
-
-def similarity(principal, password):
-    """Password must not contain or be too similar to username"""
-    username = principal.split('@')[0].split('/')[0].lower()
-    password = password.lower()
-    if username in password or username[::-1] in password:
-        raise PasswordError("Password contains username")
-    s = SequenceMatcher()
-    s.set_seqs(password, username)
-    threshold = 0.6
-    if s.ratio() > threshold:
-        raise PasswordError("Password is too similar to username")
-
-def cracklib(password):
-    """Password must pass cracklib VeryFascistCheck"""
-    try:
-        VeryFascistCheck(password)
-    except ValueError as e:
-        raise PasswordError("Password weak: " + str(e))
-
-def complexity(principal, password):
-    """Determine whether password is complex enough"""
-    sanitize(password)
-    lengthy(password)
-    diversity(password)
-    similarity(principal, password)
-    cracklib(password)
 
 if __name__ == '__main__':
     data = {}
@@ -80,17 +24,18 @@ if __name__ == '__main__':
             try:
                 data[line[0]] = line[1][1:]
             except:
-                sys.stderr.write("Could not parse input: " + str(line) + "\n")
+                print("Could not parse input: " + str(line), file=sys.stderr)
+                sys.exit(1)
     try:
-        principal = data['principal']
+        username = utils.extract_username_from_principal(data['principal'])
         password = data['new-password']
-    except KeyError:
-        sys.stderr.write("Did not receive principal or password from input\n")
+    except (KeyError, ValueError):
+        print("Did not receive principal or password from input", file=sys.stderr)
         sys.exit(1)
     else:
         try:
-            complexity(principal, password)
-        except PasswordError as e:
-            sys.stderr.write(str(e) + "\n")
+            validators.validate_password(username, password)
+        except ValueError as e:
+            print(e, file=sys.stderr)
         else:
             print("APPROVED")
