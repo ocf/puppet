@@ -65,7 +65,7 @@ class ocf_accounts::app {
       target  => '/srv/atool/env/master',
       replace => false;
 
-    '/srv/atool/env/master/account_tools/settings.py':
+    '/srv/atool/env/master/atool/settings.py':
       ensure  => link,
       links   => manage,
       target  => '/srv/atool/etc/settings.py',
@@ -84,6 +84,8 @@ class ocf_accounts::app {
     ensure   => latest,
     provider => git,
     revision => 'master',
-    source   => 'https://github.com/ocf/atool.git';
+    source   => 'https://github.com/ocf/atool.git',
+    owner => atool,
+    group => approve;
   }
 }
