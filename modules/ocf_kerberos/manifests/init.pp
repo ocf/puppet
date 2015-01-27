@@ -21,6 +21,10 @@ class ocf_kerberos {
     '/etc/logrotate.d/heimdal-kdc':
       source  => 'puppet:///modules/ocf_kerberos/heimdal-kdc-logrotate',
       require => Package['heimdal-kdc'];
+
+    '/etc/heimdal-kdc/check-pass-strength':
+      source  => 'puppet:///modules/ocf_kerberos/check-pass-strength',
+      mode    => '0755';
   }
 
   # daily git backup
