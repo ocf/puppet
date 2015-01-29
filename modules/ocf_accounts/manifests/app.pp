@@ -77,7 +77,8 @@ class ocf_accounts::app {
 
   exec { 'reload-atool':
     command     => 'svc -h /etc/service/atool',
-    refreshonly => true;
+    refreshonly => true,
+    subscribe   => Package['ocflib'];
   }
 
   vcsrepo { '/srv/atool/env/master':
