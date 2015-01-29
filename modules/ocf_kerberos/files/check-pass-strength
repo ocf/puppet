@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
-"""Enforce OCF account password complexity
+"""Enforce OCF account password complexity.
 
-When run as a script, it can be used as a Heimdal Kerberos external
-password quality program. When run as a module, the complexity function
-will raise a PasswordError exception if the password is weak.
+Designed to be used as an external password check program by Heimdal. Uses
+ocflib to validate password strength with the same requirements as all other
+password changing tools.
+
+Details on interface Heimdal uses:
+http://www.h5l.org/manual/HEAD/info/heimdal/Password-changing.html
+
+Example usage:
+$ echo -n "principal: ckuehl@OCF.BERKELEY.EDU\nnew-password: hello" | ./check-pass-strength
 """
 
 import re
