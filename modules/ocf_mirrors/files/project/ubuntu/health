@@ -6,12 +6,13 @@
 # ubuntu has no symlinks for any of its releases (either stable or unstable),
 # so we can't just always check the same dist, like we can with debian :\
 #
-# instead, we use this terrible thing to find the latest release (sorted
-# alphabetically...), which ought to work until ubuntu wraps around
+# instead, we used to use a terrible "list all the releases and sort them
+# alphabetically, then grab the last" thing to find the latest release, which
+# should have worked until ubuntu wraps around
 #
-# (so we get a few more releases before needing to fix this...)
-dist=$(curl -s http://mirrors.ocf.berkeley.edu/ubuntu/dists/ | \
-	sed -nr 's/.*<td><a href="([a-z]*)\/".*/\1/p' | sort | tail -n1)
+# but turns out it doesn't, so we hard-code the release until we figure out a
+# better way :\
+dist="trusty-updates"
 updated=$(curl -s "http://mirrors/ubuntu/dists/$dist/Release" | \
 	grep Date | cut -d':' -f2- | sed -s 's/^ //')
 updated_epoch=$(date --date="$updated" +%s) # last update (seconds since 1970)
