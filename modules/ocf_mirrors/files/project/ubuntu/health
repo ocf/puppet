@@ -16,9 +16,10 @@ updated=$(curl -s "http://mirrors/ubuntu/dists/$dist/Release" | \
 	grep Date | cut -d':' -f2- | sed -s 's/^ //')
 updated_epoch=$(date --date="$updated" +%s) # last update (seconds since 1970)
 
-yesterday=$(($(date +%s) - 24 * 60 * 60))
+# XXX: for ubuntu we use a 48 hour check, since 24 hours causes false positives
+two_yesterdays=$(($(date +%s) - 24 * 60 * 60 * 2))
 
-if [ "$updated_epoch" -lt "$yesterday" ]; then
+if [ "$updated_epoch" -lt "$two_yesterdays" ]; then
 	echo "Warning: ubuntu has not been updated since $(date --date="$updated")"
 	exit 1
 fi
