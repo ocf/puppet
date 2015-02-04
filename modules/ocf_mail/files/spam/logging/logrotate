@@ -1,0 +1,8 @@
+/var/log/ocfmail.log {
+	daily
+	missingok
+	rotate 7
+	shred
+	nocompress
+	create 600 ocfmail ocfmail
+}
