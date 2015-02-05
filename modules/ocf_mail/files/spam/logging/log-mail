@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+# Appends JSON dictionary of NSA-style metadata about a message read from stdin
+# to /var/log/ocfmail.log for the purposes of monitoring spam. Should be run as
+# the postfix user.
+#
+# Note that `date` returned is the current date (and not one parsed from
+# message headers), since we don't really trust headers more than necessary.
+
+import email
+import email.utils
+import json
+import re
+import sys
+from datetime import datetime
+
+LOG_FILE = '/var/log/ocfmail.log'
+
+
+def parse_received(header):
+    """Attempt to parse relay host and sender uid from Received header.
+
+    This header can be faked by the message sender if they don't send via local
+    MTA to blame other users, so we rely on this being prevented via firewall
+    rules."""
+
+    match = re.match(
+        'by ([a-zA-Z\\-\\.]*) \\(Postfix, from userid ([0-9]*)\\)',
+        header)
+
+    if match:
+        return {'relay': match.group(1), 'uid': match.group(2)}
+
+
+def clean_addr(addr):
+    """Cleans up email address, attempting to normalize as much as possible.
+
+    We keep the realname in case it says something useful (e.g. 'Cron Daemon').
+
+    >>> clean_addr('Chris Kuehl <cKuEhL@OCF.Berkeley.EDU>')
+    ('Chris Kuehl', 'ckuehl@ocf.berkeley.edu')
+    """
+    realname, mail_addr = email.utils.parseaddr(addr)
+    return realname.strip() or None, mail_addr.strip().lower() or None
+
+
+if __name__ == '__main__':
+    message = email.message_from_file(sys.stdin)
+
+    parsed = None
+    received = message.get_all('Received')
+    if received:
+        parsed = parse_received(received[-1])
+
+    info = {
+        'relay': parsed.get('relay'),
+        'uid': parsed.get('uid'),
+        'from': clean_addr(message['From']),
+        'to': clean_addr(message['To']),
+        'subject': message['Subject'],
+        'date': datetime.now().isoformat()
+    }
+
+    with open(LOG_FILE, 'a') as f:
+        print(json.dumps(info), file=f)

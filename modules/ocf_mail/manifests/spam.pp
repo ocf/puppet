@@ -6,6 +6,7 @@
 #  - spamassassin
 #  - postgrey (graylisting)
 #  - policyd-weight (DNSBLs and more)
+#  - basic metadata logging to /var/log/ocfmail.log
 #
 # It is designed to be included by site configurations.
 
@@ -87,5 +88,19 @@ class ocf_mail::spam {
       source  => 'puppet:///modules/ocf_mail/spam/policyd-weight/policyd-weight.conf',
       notify  => Service['policyd-weight'],
       require => Package['policyd-weight'];
+
+    # logging
+    '/usr/local/bin/log-mail':
+      source => 'puppet:///modules/ocf_mail/spam/logging/log-mail',
+      mode   => '0755';
+
+    '/var/log/ocfmail.log':
+      ensure => file,
+      owner  => ocfmail,
+      group  => ocfmail,
+      mode   => '0600';
+
+    '/etc/logrotate.d/mail-log':
+      source => 'puppet:///modules/ocf_mail/spam/logging/logrotate';
   }
 }

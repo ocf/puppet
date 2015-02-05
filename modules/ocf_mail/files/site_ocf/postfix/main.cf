@@ -14,6 +14,9 @@ mydestination = int.ocf.berkeley.edu
 virtual_mailbox_domains =
 virtual_alias_domains = ocf.berkeley.edu
 
+# logging
+always_bcc = ocflog
+
 # aliases
 virtual_alias_maps = hash:/etc/postfix/ocf/aliases-local,
 	proxy:ldap:/etc/postfix/ldap-aliases.cf
