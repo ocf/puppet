@@ -16,19 +16,19 @@ from datetime import datetime
 LOG_FILE = '/var/log/ocfmail.log'
 
 
-def parse_uid(header):
-    """Attempt to parse sender uid from Received header.
+def parse_received(header):
+    """Attempt to parse relay host and sender uid from Received header.
 
     This header can be faked by the message sender if they don't send via local
     MTA to blame other users, so we rely on this being prevented via firewall
     rules."""
 
     match = re.match(
-        'by [a-z\\-]*\\.ocf\\.berkeley\\.edu \\(Postfix, from userid ([0-9]*)\\)',
+        'by ([a-zA-Z\\-\\.]*) \\(Postfix, from userid ([0-9]*)\\)',
         header)
 
     if match:
-        return match.group(1)
+        return {'relay': match.group(1), 'uid': match.group(2)}
 
 
 def clean_addr(addr):
@@ -46,13 +46,14 @@ def clean_addr(addr):
 if __name__ == '__main__':
     message = email.message_from_file(sys.stdin)
 
-    uid = None
+    parsed = None
     received = message.get_all('Received')
     if received:
-        uid = parse_uid(received[-1])
+        parsed = parse_received(received[-1])
 
     info = {
-        'uid': uid,
+        'relay': parsed.get('relay'),
+        'uid': parsed.get('uid'),
         'from': clean_addr(message['From']),
         'to': clean_addr(message['To']),
         'subject': message['Subject'],
