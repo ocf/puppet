@@ -1,0 +1,5 @@
+#!/bin/bash -e
+tmp=$(mktemp)
+wget -qO "$tmp" https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+chmod 755 "$tmp"
+mv "$tmp" /usr/local/bin/wp

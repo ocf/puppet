@@ -109,12 +109,18 @@ class common::extrapackages {
   }
 
   # install wp-cli
+  file { '/usr/local/sbin/download-wp-cli':
+    source  => 'puppet:///modules/common/packages/download-wp-cli',
+    mode    => '0755';
+  }
   cron { 'download-wp-cli':
-    command => '/opt/share/utils/staff/sys/download-wp-cli',
-    special => 'weekly';
+    command => '/usr/local/sbin/download-wp-cli',
+    special => 'weekly',
+    require => File['/usr/local/sbin/download-wp-cli'];
   }
   exec { 'download-wp-cli':
-    command => '/opt/share/utils/staff/sys/download-wp-cli',
-    creates => '/usr/local/bin/wp';
+    command => '/usr/local/sbin/download-wp-cli',
+    creates => '/usr/local/bin/wp',
+    require => File['/usr/local/sbin/download-wp-cli'];
   }
 }

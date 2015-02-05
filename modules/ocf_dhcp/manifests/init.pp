@@ -7,10 +7,10 @@ class ocf_dhcp {
       source   => 'puppet:///modules/ocf_dhcp/dhcpd.conf',
       require  => [Package['isc-dhcp-server'], Exec['gen-desktop-leases']],
       notify   => Service['isc-dhcp-server'];
+
     '/usr/local/sbin/gen-desktop-leases':
-      ensure  => link,
-      links   => manage,
-      target  => '/opt/share/utils/staff/lab/gen-desktop-leases';
+      source => 'puppet:///modules/ocf_dhcp/gen-desktop-leases',
+      mode   => '0755';
   }
   exec { 'gen-desktop-leases':
     command    => '/usr/local/sbin/gen-desktop-leases > /etc/dhcp/desktop-leases.conf',

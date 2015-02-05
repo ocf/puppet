@@ -10,4 +10,12 @@ define ocf::webhook($service, $command, $secretfile, $path = $title, $owner = 'r
     group   => $group,
     mode    => '0755';
   }
+
+  ensure_resource('file', '/opt/share/webhook', {
+      ensure  => directory,
+      source  => 'puppet:///modules/ocf/webhook',
+      recurse => true,
+      mode    => '0755'
+    }
+  )
 }
