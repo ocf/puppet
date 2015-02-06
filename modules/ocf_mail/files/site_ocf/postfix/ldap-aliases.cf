@@ -21,3 +21,9 @@ sasl_mechs = GSSAPI
 query_filter = (uid=%u)
 result_attribute = mail
 result_format = %s
+
+# specify domain to restrict lookups to
+#
+# even though we already set virtual_alias_domains = ocf.b.e in main.cf,
+# postfix will still try to match LDAP first for all domains
+domain = ocf.berkeley.edu
