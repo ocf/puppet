@@ -94,6 +94,10 @@ class ocf_mail::spam {
       source => 'puppet:///modules/ocf_mail/spam/logging/log-mail',
       mode   => '0755';
 
+    '/usr/local/bin/examine-mail-log':
+      source => 'puppet:///modules/ocf_mail/spam/logging/examine-mail-log',
+      mode   => '0755';
+
     '/var/log/ocfmail.log':
       ensure => file,
       owner  => ocfmail,
@@ -102,5 +106,13 @@ class ocf_mail::spam {
 
     '/etc/logrotate.d/mail-log':
       source => 'puppet:///modules/ocf_mail/spam/logging/logrotate';
+  }
+
+  cron { 'examine-mail-log':
+    command     => '/usr/local/bin/examine-mail-log < /var/log/ocfmail.log',
+    user        => ocfmail,
+    environment => 'MAILTO=root',
+    hour        => '05',
+    minute      => '00';
   }
 }

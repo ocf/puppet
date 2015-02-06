@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+import json
+import pwd
+import re
+import sys
+from collections import defaultdict
+
+import dns.resolver
+
+
+MAIL_PER_DAY = 20
+
+REGEX_EXTRACT_DOMAIN = re.compile('^.*@(.*)$')
+REGEX_EXTRACT_USER = re.compile('^(.*)@.*$')
+
+# users that others are allowed to send mail as
+USER_EXCEPTIONS = ('root', 'apache', 'wordpress')
+
+
+def get_user_from_uid(uid):
+    try:
+        uid = int(uid)
+        return pwd.getpwuid(uid).pw_name
+    except (KeyError, ValueError, TypeError):
+        pass
+
+
+def extract_domain(addr):
+    """Returns domain portion of email address."""
+
+    match = REGEX_EXTRACT_DOMAIN.match(addr)
+    if match:
+        return match.group(1)
+
+
+def extract_user(addr):
+    """Returns user portion of email address."""
+
+    match = REGEX_EXTRACT_USER.match(addr)
+    if match:
+        return match.group(1)
+
+
+def is_vhost_host(host):
+    """Returns whether host (either IP or FQDN with trailing dot) hosts
+    vhosts."""
+
+    return host.lower() in ('death.ocf.berkeley.edu.', '169.229.10.23')
+
+
+def is_vhost_domain(domain):
+    """Returns whether domain is one of our vhosts."""
+
+    try:
+        answer = dns.resolver.query(domain, 'A')
+        return any(is_vhost_host(str(record)) for record in answer)
+    except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN):
+        return False
+
+
+def examine_mail(mail):
+    """Examine a JSON dict of mail, yielding problem tuples."""
+
+    from_name, from_addr = mail['from']
+    from_domain = extract_domain(from_addr)
+    try:
+        uid = int(mail.get('uid'))
+    except TypeError:
+        uid = -1 
+    user = get_user_from_uid(uid)
+
+    to_name, to_addr = mail['to']
+
+    if uid >= 1000 and user:
+        if from_domain == 'ocf.berkeley.edu':
+            from_user = extract_user(from_addr)
+
+            if from_user:
+                if from_user != user and from_user not in USER_EXCEPTIONS:
+                    yield "From @ocf but user doesn't match", \
+                        "from {}, should be {} (uid {})".format(from_user, user, uid)
+            else:
+                yield "From @ocf but user doesn't make sense", "from " + from_addr
+        else:
+            """ We could use this to detect if someone is sending mail from our
+            servers with a bad From address, but unfortunately it's extremely
+            common (and basically allowed; think contact forms and such).
+
+            if not is_vhost_domain(from_domain):
+                yield "Not from @ocf", "instead from " + from_addr
+            """
+
+
+if __name__ == '__main__':
+    problems = defaultdict(lambda: defaultdict(list))
+    mail_count = defaultdict(int)
+
+    for mail in map(json.loads, sys.stdin):
+        uid = mail.get('uid')
+
+        if uid:
+            mail_count[uid] += 1
+
+        for problem, details in examine_mail(mail):
+            problems[uid][problem].append((mail, details))
+
+    if problems:
+        for uid, user_problems in problems.items():
+            user = get_user_from_uid(uid)
+            print("Problems for user {} (uid {}):".format(user, uid))
+
+            for problem, examples in user_problems.items():
+                print("- {}:".format(problem))
+
+                for msg, details in examples:
+                    print("  - {}:".format(details))
+
+                    for key in ('from', 'to', 'date', 'relay'):
+                        print("    {}: {}".format(key, msg.get(key)))
+
+                    print()
+
+            print()
+
+
+    def sending_too_much_mail(entry):
+        uid, count = entry
+        try:
+            return int(uid) >= 1000 and count > MAIL_PER_DAY
+        except TypeError:
+            return False  # no uid, so can't flag them
+
+
+    too_much_mail = filter(sending_too_much_mail, mail_count.items())
+
+    if too_much_mail:
+        print("Users sending too much mail:")
+
+        for uid, count in sorted(too_much_mail, key=lambda x: x[1], reverse=True):
+            user = get_user_from_uid(uid)
+            print("- {} (uid {}): {}".format(user, uid, count))

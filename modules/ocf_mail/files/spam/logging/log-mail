@@ -46,7 +46,7 @@ def clean_addr(addr):
 if __name__ == '__main__':
     message = email.message_from_file(sys.stdin)
 
-    parsed = None
+    parsed = {}
     received = message.get_all('Received')
     if received:
         parsed = parse_received(received[-1])
