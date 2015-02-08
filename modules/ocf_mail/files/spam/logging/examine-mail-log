@@ -131,7 +131,7 @@ if __name__ == '__main__':
             return False  # no uid, so can't flag them
 
 
-    too_much_mail = filter(sending_too_much_mail, mail_count.items())
+    too_much_mail = list(filter(sending_too_much_mail, mail_count.items()))
 
     if too_much_mail:
         print("Users sending too much mail:")
