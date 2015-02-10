@@ -17,10 +17,11 @@ class ocf_stats::labstats {
   }
 
   file {
-    ['/opt/stats', '/opt/stats/printing', '/opt/stats/printing/history',
-    '/opt/stats/printing/oracle']:
+    ['/opt/stats', '/opt/stats/var', '/opt/stats/var/printing',
+    '/opt/stats/var/printing/history', '/opt/stats/var/printing/oracle']:
         ensure => directory,
         mode   => '0755';
+
       '/opt/stats/desktop_list':
         mode   => '0444',
         source => 'puppet:///contrib/desktop/desktop_list';
@@ -63,25 +64,21 @@ class ocf_stats::labstats {
 
   cron {
     'labstats':
-      ensure      => present,
-      command     => '/opt/stats/lab-cron.sh > /dev/null',
+      command     => '/opt/stats/labstats/cron/lab-cron > /dev/null',
       environment => 'MAILTO=root',
       user        => 'ocfstats',
-      weekday     => '*',
-      month       => '*',
-      monthday    => '*',
-      hour        => '*',
       minute      => '*';
 
     'printstats':
-      ensure      => present,
-      command     => '/opt/stats/print-cron.sh > /dev/null',
+      command     => '/opt/stats/labstats/cron/print-cron > /dev/null',
       environment => 'MAILTO=root',
       user        => 'ocfstats',
-      weekday     => '*',
-      month       => '*',
-      monthday    => '*',
-      hour        => '*',
+      minute      => '*/5';
+
+    'toner':
+      command     => '/opt/stats/labstats/printing/toner',
+      environment => 'MAILTO=root',
+      user        => 'ocfstats',
       minute      => '*/5';
   }
 }
