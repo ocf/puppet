@@ -8,6 +8,7 @@ ckuehl/admin@OCF.BERKELEY.EDU           all,get-keys
 nickimp/admin@OCF.BERKELEY.EDU          all,get-keys
 willh/admin@OCF.BERKELEY.EDU            all,get-keys
 tmochida/admin@OCF.BERKELEY.EDU         all,get-keys
+mattmcal/admin@OCF.BERKELEY.EDU         all,get-keys
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
