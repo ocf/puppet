@@ -101,11 +101,15 @@ class common::extrapackages {
     'texlive-latex-recommended',
     'vagrant',
     'valgrind',
-    'virtualbox',
     ]:;
 
-  'autolink':
-    provider => pip;
+    'autolink':
+      provider => pip;
+
+    # purge virtualbox for security reasons (setuid binaries allow network control)
+    # see debian bug#760569
+    'virtualbox':
+      ensure => purged;
   }
 
   # install wp-cli
