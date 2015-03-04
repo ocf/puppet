@@ -8,7 +8,7 @@ from collections import defaultdict
 import dns.resolver
 
 
-MAIL_PER_DAY = 20
+MAIL_PER_DAY = 30
 
 REGEX_EXTRACT_DOMAIN = re.compile('^.*@(.*)$')
 REGEX_EXTRACT_USER = re.compile('^(.*)@.*$')
