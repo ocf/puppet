@@ -28,7 +28,7 @@ rm /var/www/index.html
 Replace suphp.conf with one in this folder
 
 Here are configure options for apache (to build suexec). 
-./configure --enable-suexec --with-suexec-caller=www-data --with-suexec-docroot=/services --with-suexec-uidmin=33 --with-suexec-gidmin=20 --with-suexec-logfile=/var/log/apache2/httpd-suexec.log --with-suexec-userdir=public_html
+./configure --enable-suexec --with-suexec-caller=www-data --with-suexec-docroot=/services --with-suexec-uidmin=1000 --with-suexec-gidmin=1000 --with-suexec-logfile=/var/log/apache2/httpd-suexec.log --with-suexec-userdir=public_html
 
 run make
 
