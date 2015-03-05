@@ -50,6 +50,7 @@ class common::extrapackages {
     'libfcgi-ruby1.8',
     'libffi-dev',
     'libgdbm-dev',
+    'libmagickwand-dev',
     'libmysqlclient-dev',
     'libncurses5-dev',
     'libpq-dev',
