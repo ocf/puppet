@@ -6,7 +6,7 @@
 class ocf_ssl($cert_name = $::fqdn) {
   File {
     owner => root,
-    group => root
+    group => ssl-cert
   }
 
   file {
@@ -17,7 +17,7 @@ class ocf_ssl($cert_name = $::fqdn) {
     # private ssl
     "/etc/ssl/private/${cert_name}.key":
       source  => "puppet:///private/ssl/${cert_name}.key",
-      mode    => '0600';
+      mode    => '0640';
     "/etc/ssl/private/${cert_name}.crt":
       source  => "puppet:///private/ssl/${cert_name}.crt",
       mode    => '0644';
@@ -28,7 +28,7 @@ class ocf_ssl($cert_name = $::fqdn) {
 
   concat { $bundle:
     owner => root,
-    group => root,
+    group => ssl-cert,
     mode  => '0644',
 
     ensure_newline => true;
