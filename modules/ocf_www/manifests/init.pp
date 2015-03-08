@@ -19,6 +19,10 @@ class ocf_www {
 
     # nfs
     'nfs-kernel-server':;
+
+    # compass (for hello)
+    ['compass', 'bootstrap-sass']:
+      provider => gem;
   }
 
   file { '/etc/apache2/conf.d':
@@ -267,11 +271,62 @@ class ocf_www {
 
   service { 'nfs-kernel-server': }
 
-  # main website
-  vcsrepo { '/srv/sites/ocf':
-    ensure   => latest,
-    provider => git,
-    revision => 'master',
-    source   => 'https://github.com/ocf/website.git';
+  # webhooks
+  ocf::webhook {
+    '/srv/sites/control/webhook-www.cgi':
+      service    => github,
+      secretfile => '/opt/puppet/webhook-www.secret',
+      command    => 'sudo /opt/puppet/www-deploy.sh';
+
+    '/srv/sites/control/webhook-hello.cgi':
+      service    => github,
+      secretfile => '/opt/puppet/webhook-hello.secret',
+      command    => 'sudo /opt/puppet/hello-deploy.sh';
+  }
+
+  file {
+    '/srv/sites/control':
+      ensure => directory,
+      owner  => root,
+      group  => root,
+      mode   => '0755';
+
+    '/opt/puppet':
+      ensure => directory,
+      owner  => root,
+      group  => root,
+      mode   => '0755';
+
+    '/opt/puppet/hello-deploy.sh':
+      ensure  => file,
+      source  => 'puppet:///modules/ocf_www/hello-deploy.sh',
+      mode    => '0755',
+      owner   => root,
+      group   => root;
+
+    '/opt/puppet/www-deploy.sh':
+      ensure => file,
+      source => 'puppet:///modules/ocf_www/www-deploy.sh',
+      mode   => '0755',
+      owner  => root,
+      group  => root;
+
+    # hmac secrets used for GitHub webhook
+#   '/opt/puppet/webhook-www.secret':
+#     source => 'puppet:///private/webhook-www.secret',
+#     owner  => root,
+#     group  => www-data,
+#     mode   => '0640';
+
+#   '/opt/puppet/webhook-hello.secret':
+#     source => 'puppet:///private/webhook-hello.secret',
+#     owner  => root,
+#     group  => www-data,
+#     mode   => '0640';
+
+    '/etc/sudoers.d/github-webhook':
+      content => 'www-data ALL=(root) NOPASSWD: /opt/puppet/www-deploy.sh ""
+www-data ALL=(root) NOPASSWD: /opt/puppet/hello-deploy.sh ""
+';
   }
 }
