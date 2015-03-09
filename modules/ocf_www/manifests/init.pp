@@ -306,17 +306,17 @@ class ocf_www {
       group  => root;
 
     # hmac secrets used for GitHub webhook
-#   '/opt/puppet/webhook-www.secret':
-#     source => 'puppet:///private/webhook-www.secret',
-#     owner  => root,
-#     group  => www-data,
-#     mode   => '0640';
+    '/opt/puppet/webhook-www.secret':
+      source => 'puppet:///private/webhook-www.secret',
+      owner  => root,
+      group  => www-data,
+      mode   => '0640';
 
-#   '/opt/puppet/webhook-hello.secret':
-#     source => 'puppet:///private/webhook-hello.secret',
-#     owner  => root,
-#     group  => www-data,
-#     mode   => '0640';
+    '/opt/puppet/webhook-hello.secret':
+      source => 'puppet:///private/webhook-hello.secret',
+      owner  => root,
+      group  => www-data,
+      mode   => '0640';
 
     '/etc/sudoers.d/github-webhook':
       content => 'www-data ALL=(root) NOPASSWD: /opt/puppet/www-deploy.sh ""
