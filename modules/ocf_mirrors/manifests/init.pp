@@ -35,7 +35,8 @@ class ocf_mirrors {
   }
 
   class { '::apache':
-    default_vhost => false;
+    default_vhost => false,
+    keepalive     => true;
   }
 
   apache::vhost { 'mirrors.ocf.berkeley.edu':
