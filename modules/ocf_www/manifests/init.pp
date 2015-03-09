@@ -66,12 +66,6 @@ class ocf_www {
     require => Package['apache2'],
   }
 
-  file { '/etc/apache2/sites-common.conf':
-    source  => 'puppet:///modules/ocf_www/apache/sites-common.conf',
-    notify  => Service['apache2'],
-    require => Package['apache2'],
-  }
-
   file { '/etc/apache2/ssl-common.conf':
     source  => 'puppet:///modules/ocf_www/apache/ssl-common.conf',
     notify  => Service['apache2'],

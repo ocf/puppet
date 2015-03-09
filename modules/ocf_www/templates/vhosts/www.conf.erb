@@ -8,8 +8,35 @@
     RewriteCond %{HTTP_HOST} !^(dev-)?www\.ocf\.berkeley\.edu$ [NC]
     RewriteRule ^/(.*)$ https://www.ocf.berkeley.edu/$1 [R=301]
 
-    # Include config shared between www and secure virtual hosts
-    Include sites-common.conf
+    DocumentRoot /srv/sites/ocf/www
+    <Directory /srv/sites/ocf/www/>
+        DirectoryIndex index.shtml index.html
+        Options IncludesNoExec Indexes FollowSymlinks
+
+        # Allow caching of shtml pages
+        SSILastModified on
+
+        # Add missing tilde for user dirs
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule ^([a-z]{3,8}(/.*)?)$ /~$1 [R=301]
+
+        # Disable .htaccess files
+        AllowOverride None
+    </Directory>
+
+    ScriptAlias /cgi-bin/ /srv/sites/ocf/cgi-bin/
+    Alias /staff_hours /srv/sites/ocf/cgi-bin/staff_hours.cgi
+    <Directory /srv/sites/ocf/cgi-bin>
+        Options Includes ExecCGI FollowSymlinks
+
+        # Disable .htaccess files for performance
+        AllowOverride None
+    </Directory>
+
+    LogLevel warn
+    ErrorLog ${APACHE_LOG_DIR}/error.log
 
     CustomLog ${APACHE_LOG_DIR}/ssl_access.log combined
 
