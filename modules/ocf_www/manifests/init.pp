@@ -279,13 +279,7 @@ class ocf_www {
   }
 
   file {
-    '/srv/sites/control':
-      ensure => directory,
-      owner  => root,
-      group  => root,
-      mode   => '0755';
-
-    '/opt/puppet':
+    ['/srv/sites/control', '/opt/puppet']:
       ensure => directory,
       owner  => root,
       group  => root,
