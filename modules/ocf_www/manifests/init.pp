@@ -270,12 +270,12 @@ class ocf_www {
     '/srv/sites/control/webhook-www.cgi':
       service    => github,
       secretfile => '/opt/puppet/webhook-www.secret',
-      command    => 'sudo /opt/puppet/www-deploy.sh';
+      command    => '/opt/puppet/www-deploy.sh';
 
     '/srv/sites/control/webhook-hello.cgi':
       service    => github,
       secretfile => '/opt/puppet/webhook-hello.secret',
-      command    => 'sudo /opt/puppet/hello-deploy.sh';
+      command    => '/opt/puppet/hello-deploy.sh';
   }
 
   file {
@@ -317,10 +317,5 @@ class ocf_www {
       owner  => root,
       group  => www-data,
       mode   => '0640';
-
-    '/etc/sudoers.d/github-webhook':
-      content => 'www-data ALL=(root) NOPASSWD: /opt/puppet/www-deploy.sh ""
-www-data ALL=(root) NOPASSWD: /opt/puppet/hello-deploy.sh ""
-';
   }
 }
