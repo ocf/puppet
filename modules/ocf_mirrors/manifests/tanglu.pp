@@ -34,12 +34,14 @@ class ocf_mirrors::tanglu {
 
   cron {
     'tanglu':
+      ensure  => absent,
       command => 'BASEDIR=/opt/mirrors/project/tanglu /opt/mirrors/project/tanglu/bin/ftpsync',
       user    => 'mirrors',
       hour    => '*/4',
       minute  => '32';
 
     'tanglu-releases':
+      ensure  => absent,
       command => '/opt/mirrors/project/tanglu/sync-releases > /dev/null',
       user    => 'mirrors',
       hour    => '*/2',
