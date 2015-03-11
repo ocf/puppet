@@ -1,6 +1,6 @@
 class ocf_stats::labstats {
   package {
-    ['mysql-server', 'python-pysnmp4']:;
+    ['mysql-client', 'python-pysnmp4']:;
   }
 
   user {
