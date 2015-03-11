@@ -1,6 +1,6 @@
 class ocf_stats::labstats {
   package {
-    ['mysql-server', 'python-pysnmp4']:;
+    ['mysql-client', 'python-pysnmp4']:;
   }
 
   user {
@@ -32,6 +32,14 @@ class ocf_stats::labstats {
     provider => git,
     revision => 'master',
     source   => 'https://github.com/ocf/labstats.git';
+  }
+
+  file { '/opt/stats/labstats/labstats/settings.py':
+    source  => 'puppet:///private/stats/settings.py',
+    owner   => ocfstats,
+    group   => ocfstaff,
+    mode    => '0640',
+    require => Vcsrepo['/opt/stats/labstats'];
   }
 
   apache::vhost { 'stats.ocf.berkeley.edu-control':
