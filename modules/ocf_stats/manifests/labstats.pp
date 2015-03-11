@@ -34,6 +34,14 @@ class ocf_stats::labstats {
     source   => 'https://github.com/ocf/labstats.git';
   }
 
+  file { '/opt/stats/labstats/labstats/settings.py':
+    source  => 'puppet:///private/stats/settings.py',
+    owner   => ocfstats,
+    group   => ocfstaff,
+    mode    => '0640',
+    require => Vcsrepo['/opt/stats/labstats'];
+  }
+
   apache::vhost { 'stats.ocf.berkeley.edu-control':
     servername => 'stats.ocf.berkeley.edu',
     port       => 444,
