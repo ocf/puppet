@@ -13,7 +13,7 @@ class ocf_stats::labstats {
 
   File {
     owner => ocfstats,
-    group => ocfstaff
+    group => ocfstats
   }
 
   file {
@@ -37,7 +37,7 @@ class ocf_stats::labstats {
   file { '/opt/stats/labstats/labstats/settings.py':
     source  => 'puppet:///private/stats/settings.py',
     owner   => ocfstats,
-    group   => ocfstaff,
+    group   => www-data,
     mode    => '0640',
     require => Vcsrepo['/opt/stats/labstats'];
   }
