@@ -269,30 +269,30 @@ class ocf_www {
   ocf::webhook {
     '/srv/sites/control/webhook-www.cgi':
       service    => github,
-      secretfile => '/opt/puppet/webhook-www.secret',
-      command    => '/opt/puppet/www-deploy.sh';
+      secretfile => '/opt/share/webhook/secrets/webhook-www.secret',
+      command    => '/opt/share/webhook/services/www-deploy.sh';
 
     '/srv/sites/control/webhook-hello.cgi':
       service    => github,
-      secretfile => '/opt/puppet/webhook-hello.secret',
-      command    => '/opt/puppet/hello-deploy.sh';
+      secretfile => '/opt/share/webhook/secrets/webhook-hello.secret',
+      command    => '/opt/share/webhook/services/hello-deploy.sh';
   }
 
   file {
-    ['/srv/sites/control', '/opt/puppet']:
+    '/srv/sites/control':
       ensure => directory,
       owner  => root,
       group  => root,
       mode   => '0755';
 
-    '/opt/puppet/hello-deploy.sh':
+    '/opt/share/webhook/services/hello-deploy.sh':
       ensure  => file,
       source  => 'puppet:///modules/ocf_www/hello-deploy.sh',
       mode    => '0755',
       owner   => root,
       group   => root;
 
-    '/opt/puppet/www-deploy.sh':
+    '/opt/share/webhook/services/www-deploy.sh':
       ensure => file,
       source => 'puppet:///modules/ocf_www/www-deploy.sh',
       mode   => '0755',
@@ -300,13 +300,13 @@ class ocf_www {
       group  => root;
 
     # hmac secrets used for GitHub webhook
-    '/opt/puppet/webhook-www.secret':
+    '/opt/share/webhook/secrets/webhook-www.secret':
       source => 'puppet:///private/webhook-www.secret',
       owner  => root,
       group  => www-data,
       mode   => '0640';
 
-    '/opt/puppet/webhook-hello.secret':
+    '/opt/share/webhook/secrets/webhook-hello.secret':
       source => 'puppet:///private/webhook-hello.secret',
       owner  => root,
       group  => www-data,
