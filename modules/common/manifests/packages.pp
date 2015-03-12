@@ -83,6 +83,13 @@ class common::packages {
       ensure => purged;
   }
 
+  if $::lsbdistcodename == 'jessie' {
+    # in jessie, install python-pip-whl to avoid problems where a system-wide
+    # python module (e.g. requests) is updated, resulting in pip breaking
+    # (see rt#3268, Debian #744145)
+    package { 'python-pip-whl':; }
+  }
+
   ocf::repackage {
     ['tmux']:
       backports => true;
