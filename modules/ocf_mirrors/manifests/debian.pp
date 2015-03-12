@@ -46,7 +46,7 @@ class ocf_mirrors::debian {
     'debian':
       command => 'BASEDIR=/opt/mirrors/project/debian /opt/mirrors/project/debian/bin/ftpsync',
       user    => 'mirrors',
-      hour    => '*/4',
+      hour    => '*',
       minute  => '42';
 
     'debian-security':
