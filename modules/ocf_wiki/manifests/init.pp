@@ -54,7 +54,7 @@ class ocf_wiki {
 
   ocf::webhook { '/srv/ikiwiki/public_html/webhook/github.cgi':
     service    => 'github',
-    secretfile => '/srv/ikiwiki/github.secret',
+    secretfile => '/opt/share/webhook/secrets/github.secret',
     command    => '/srv/ikiwiki/rebuild-wiki';
   }
 
@@ -105,7 +105,7 @@ class ocf_wiki {
       owner  => root,
       mode   => '0755';
 
-    '/srv/ikiwiki/github.secret':
+    '/opt/share/webhook/secrets/github.secret':
       source => 'puppet:///private/github.secret',
       owner  => root,
       group  => www-data,

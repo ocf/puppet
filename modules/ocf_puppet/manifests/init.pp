@@ -39,7 +39,7 @@ class ocf_puppet {
       mode    => '0755';
 
     # hmac secret used for GitHub webhook
-    '/opt/puppet/github.secret':
+    '/opt/share/webhook/secrets/github.secret':
       source  => 'puppet:///private/github.secret',
       owner   => root,
       group   => www-data,
@@ -48,7 +48,7 @@ class ocf_puppet {
 
   ocf::webhook { '/var/www/webhook/github.cgi':
     service    => 'github',
-    secretfile => '/opt/puppet/github.secret',
+    secretfile => '/opt/share/webhook/secrets/github.secret',
     command    => 'sudo /opt/puppet/scripts/update-prod';
   }
 }
