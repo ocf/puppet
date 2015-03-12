@@ -4,7 +4,7 @@ node default {
   class { 'common::rootpw': stage => first }
 
   case $::hostname {
-    anthrax, sandstorm, typhoon: { }
+    anthrax, sandstorm: { }
     default:   { include common::postfix }
   }
 
