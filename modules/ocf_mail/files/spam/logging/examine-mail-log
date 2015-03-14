@@ -8,6 +8,7 @@ from collections import defaultdict
 import dns.resolver
 
 
+# number of messages a single account can send per day without being flagged
 MAIL_PER_DAY = 30
 
 REGEX_EXTRACT_DOMAIN = re.compile('^.*@(.*)$')
@@ -27,6 +28,8 @@ def get_user_from_uid(uid):
 
 def extract_domain(addr):
     """Returns domain portion of email address."""
+    if not addr:
+        return
 
     match = REGEX_EXTRACT_DOMAIN.match(addr)
     if match:
@@ -35,6 +38,8 @@ def extract_domain(addr):
 
 def extract_user(addr):
     """Returns user portion of email address."""
+    if not addr:
+        return
 
     match = REGEX_EXTRACT_USER.match(addr)
     if match:
