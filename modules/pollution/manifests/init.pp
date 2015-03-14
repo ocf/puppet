@@ -42,7 +42,6 @@ class pollution {
 
   # set up pykota
   package {
-    'mysql-server':;
     # pykota python dependencies
     [ 'pkpgcounter', 'python-egenix-mxdatetime', 'python-imaging', 'python-jaxml', 'python-minimal', 'python-mysqldb', 'python-osd', 'python-pysnmp4', 'python-reportlab' ]:
   }
