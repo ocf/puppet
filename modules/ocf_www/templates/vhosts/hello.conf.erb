@@ -34,3 +34,12 @@
 
     Redirect / https://hello.ocf.berkeley.edu/
 </VirtualHost>
+
+<Directory /srv/sites/hello/.git>
+    Order deny,allow
+    Deny from all
+</Directory>
+<Directory /srv/sites/hello/.sass-cache>
+    Order deny,allow
+    Deny from all
+</Directory>
