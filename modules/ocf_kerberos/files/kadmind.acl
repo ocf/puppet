@@ -1,9 +1,7 @@
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #admin principals
 daradib/admin@OCF.BERKELEY.EDU          all,get-keys
-morshed/admin@OCF.BERKELEY.EDU          all,get-keys
 tzhu/admin@OCF.BERKELEY.EDU             all,get-keys
-waf/admin@OCF.BERKELEY.EDU              all,get-keys
 ckuehl/admin@OCF.BERKELEY.EDU           all,get-keys
 nickimp/admin@OCF.BERKELEY.EDU          all,get-keys
 willh/admin@OCF.BERKELEY.EDU            all,get-keys
@@ -14,9 +12,7 @@ kpengboy/admin@OCF.BERKELEY.EDU         all,get-keys
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
 daradib/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
-morshed/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 tzhu/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
-waf/root@OCF.BERKELEY.EDU               change-password                         *@OCF.BERKELEY.EDU
 ckuehl/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 nickimp/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 aunnam/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
@@ -26,7 +22,6 @@ peterwu/root@OCF.BERKELEY.EDU           change-password                         
 tmochida/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 wanghan/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 willh/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
-nbfong/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 
 # chpass
 chpass/earthquake.ocf.berkeley.edu@OCF.BERKELEY.EDU     change-password         *@OCF.BERKELEY.EDU
