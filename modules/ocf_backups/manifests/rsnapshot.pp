@@ -33,7 +33,7 @@ class ocf_backups::rsnapshot {
   cron {
     # 8pm on 1st of month
     'rsnapshot-monthly':
-      command  => "${rsnapshot} monthly",
+      command  => "${rsnapshot} sync && ${rsnapshot} monthly",
       hour     => '20',
       monthday => '1',
       weekday  => '*';
