@@ -1,0 +1,3 @@
+#!/bin/bash -e
+ionice -c2 -n7 nice -n15 \
+	bash -c "tar cf - /opt/homes | pv | pigz > homes-$(date +%F).tar.gz"

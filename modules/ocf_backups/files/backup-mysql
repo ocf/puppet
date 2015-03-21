@@ -1,0 +1,13 @@
+#!/bin/bash -e
+# Creates a MySQL backup in the current directory. Intended to be called by
+# rsnapshot.
+
+# We currently use mysqldump-5.6 (from Percona) because our MySQL server runs
+# version 5.6, whereas wheezy has only 5.5. The current mysqldump in wheezy
+# produces errors when trying to make backups.
+#
+# This can be replaced after the upgrade to jessie.
+/opt/homes/i686-real/share/mysqldump-5.6 \
+	--defaults-file=/opt/share/backups/my.cnf \
+	--all-databases --single-transaction | \
+	pigz > "mysql-$(date +%F).sql.gz"
