@@ -1,4 +1,4 @@
-class ocf_srcds::csgo {
+class ocf_csgo {
   user { 'ocfcsgo':
     comment => 'Counter-Strike Server',
     home    => '/opt/csgo',
@@ -17,11 +17,11 @@ class ocf_srcds::csgo {
       mode   => '0755';
 
     '/opt/csgo/bin/update-csgo':
-      source => 'puppet:///modules/ocf_srcds/bin/update-csgo',
+      source => 'puppet:///modules/ocf_csgo/bin/update-csgo',
       mode   => '0755';
 
     '/opt/csgo/etc/csgo-update.cmd':
-      source => 'puppet:///modules/ocf_srcds/etc/csgo-update.cmd';
+      source => 'puppet:///modules/ocf_csgo/etc/csgo-update.cmd';
   }
 
   package {
@@ -49,6 +49,6 @@ class ocf_srcds::csgo {
   }
 
   ocf::munin::plugin { 'csgo':
-    source => 'puppet:///modules/ocf_srcds/munin';
+    source => 'puppet:///modules/ocf_csgo/munin';
   }
 }
