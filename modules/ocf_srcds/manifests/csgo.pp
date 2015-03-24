@@ -47,4 +47,8 @@ class ocf_srcds::csgo {
       refreshonly => true,
       require     => [File['/opt/csgo/bin/update-csgo'], Package['lib32gcc1']];
   }
+
+  ocf::munin::plugin { 'csgo':
+    source => 'puppet:///modules/ocf_srcds/munin';
+  }
 }
