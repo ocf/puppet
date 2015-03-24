@@ -14,7 +14,7 @@ node default {
   include common::ldap
   include common::locale
   include common::memtest
-  include common::munin
+  include ocf::munin::node
   include common::ntp
   include common::packages
   include common::ocflib
