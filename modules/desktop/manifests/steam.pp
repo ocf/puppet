@@ -5,7 +5,8 @@ class desktop::steam {
     #
     # We have an OCF-patched version (steam 1.0.0.49-1+ocf1) in our apt repo.
     'steam':
-      responsefile => '/var/cache/debconf/steam.preseed';
+      responsefile => '/var/cache/debconf/steam.preseed',
+      require      => File['/var/cache/debconf/steam.preseed'];
 
     'steam-installer':
       ensure => purged;
