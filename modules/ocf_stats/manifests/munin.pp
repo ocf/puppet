@@ -10,12 +10,12 @@ class ocf_stats::munin {
 
   file {
     '/etc/munin/munin.conf':
-      source  => 'puppet:///modules/common/munin/munin.conf',
+      source  => 'puppet:///modules/ocf_stats/munin/munin.conf',
       mode    => '0644',
       notify  => Service['munin'],
       require => Package['munin'];
     '/usr/local/bin/gen-munin-nodes':
-      source  => 'puppet:///modules/common/munin/gen-munin-nodes',
+      source  => 'puppet:///modules/ocf_stats/munin/gen-munin-nodes',
       mode    => '0755';
   }
 
