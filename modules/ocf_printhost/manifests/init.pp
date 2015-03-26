@@ -1,4 +1,4 @@
-class pollution {
+class ocf_printhost {
   include ocf_ssl
 
   # set up cups
@@ -9,13 +9,13 @@ class pollution {
   file {
     # provide cups config
     '/etc/cups/cupsd.conf':
-      source  => 'puppet:///modules/pollution/cupsd.conf',
+      source  => 'puppet:///modules/ocf_printhost/cupsd.conf',
       require => Package['cups'],
       notify  => Service['cups'],
     ;
     # provide more sensitive cups config
     '/etc/cups/cups-files.conf':
-      source  => 'puppet:///modules/pollution/cups-files.conf',
+      source  => 'puppet:///modules/ocf_printhost/cups-files.conf',
       require => Package['cups'],
       notify  => Service['cups'],
     ;
@@ -55,32 +55,32 @@ class pollution {
     ;
     # public configuration
     '/etc/pykota/pykota.semester/pykota.conf':
-      source  => 'puppet:///modules/pollution/pykota-semester.conf',
+      source  => 'puppet:///modules/ocf_printhost/pykota-semester.conf',
     ;
     '/etc/pykota/pykota.conf':
-      source  => 'puppet:///modules/pollution/pykota.conf',
+      source  => 'puppet:///modules/ocf_printhost/pykota.conf',
     ;
     '/etc/pykota/pykotadmin.conf':
       owner   => 'lp',
       group   => 'ocfstaff',
       mode    => '0640',
-      source  => 'puppet:///modules/pollution/pykotadmin.conf',
+      source  => 'puppet:///modules/ocf_printhost/pykotadmin.conf',
     ;
     '/etc/pykota/update_semester_quota.sh':
       mode    => '0755',
-      source  => 'puppet:///modules/pollution/update_semester_quota.sh',
+      source  => 'puppet:///modules/ocf_printhost/update_semester_quota.sh',
     ;
     '/etc/pykota/set_daily_quota.sh':
       mode    => '0755',
-      source  => 'puppet:///modules/pollution/set_daily_quota.sh',
+      source  => 'puppet:///modules/ocf_printhost/set_daily_quota.sh',
     ;
     '/etc/pykota/reset_daily_quota.sh':
       mode    => '0755',
-      source  => 'puppet:///modules/pollution/reset_daily_quota.sh',
+      source  => 'puppet:///modules/ocf_printhost/reset_daily_quota.sh',
     ;
     '/etc/pykota/make_pubstaff.sh':
       mode    => '0755',
-      source  => 'puppet:///modules/pollution/make_pubstaff.sh',
+      source  => 'puppet:///modules/ocf_printhost/make_pubstaff.sh',
     ;
     # private configuration
     '/etc/pykota/pykota.semester/pykotadmin.conf':
@@ -94,12 +94,11 @@ class pollution {
   # share pykota configuration over NFS
   package { 'nfs-kernel-server': }
   file { '/etc/exports':
-    source  => 'puppet:///modules/pollution/exports',
+    source  => 'puppet:///modules/ocf_printhost/exports',
     require => Package['nfs-kernel-server']
   }
   service { 'nfs-kernel-server':
     subscribe => File['/etc/exports'],
     require   => Package['nfs-kernel-server']
   }
-
 }
