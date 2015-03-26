@@ -1,4 +1,4 @@
-class common::utils {
+class ocf::utils {
   vcsrepo { '/opt/share/utils':
     ensure   => latest,
     provider => git,

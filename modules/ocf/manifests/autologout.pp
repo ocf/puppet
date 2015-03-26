@@ -1,4 +1,4 @@
-class common::autologout {
+class ocf::autologout {
 
   # autologout terminal matching $condition after $TMOUT seconds of inactivity
   $condition = 'tty | grep -q ^/dev/tty'

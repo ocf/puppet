@@ -1,4 +1,4 @@
-class common::crondeny {
+class ocf::crondeny {
 
   # disable cron and at for all users except root
   file {

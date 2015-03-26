@@ -1,4 +1,4 @@
-class common::ocflib {
+class ocf::ocflib {
   $deps = ['libcrack2-dev']
 
   package {

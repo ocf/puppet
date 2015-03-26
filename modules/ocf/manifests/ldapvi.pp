@@ -1,4 +1,4 @@
-class common::ldapvi {
+class ocf::ldapvi {
   package { 'ldapvi': }
   file { '/etc/ldapvi.conf':
     content => "profile default\nldap-conf: yes\nsasl-mech: GSSAPI\n",

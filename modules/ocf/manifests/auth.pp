@@ -1,7 +1,7 @@
-class common::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopasswd = false) {
+class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopasswd = false) {
   # require LDAP/Kerberos configuration
-  require common::ldap
-  require common::kerberos
+  require ocf::ldap
+  require ocf::kerberos
 
   # NSS user/group identification
   ocf::repackage {
@@ -25,7 +25,7 @@ class common::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopa
       require => Ocf::Repackage['nss-updatedb'];
     # NSCD caching configuration
     '/etc/nscd.conf':
-      source  => 'puppet:///modules/common/auth/nss/nscd.conf',
+      source  => 'puppet:///modules/ocf/auth/nss/nscd.conf',
       require => Ocf::Repackage['unscd'];
     # LDAP nameservice configuration
     '/etc/libnss-ldap.conf':
@@ -39,7 +39,7 @@ class common::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopa
   if !$::skipLdap {
     # use LDAP but failover to local copy
     file { '/etc/nsswitch.conf':
-      source  => 'puppet:///modules/common/auth/nss/nsswitch.conf',
+      source  => 'puppet:///modules/ocf/auth/nss/nsswitch.conf',
       require => [Ocf::Repackage['libnss-ldap'], File['/etc/libnss-ldap.conf']];
     }
   } else {
@@ -49,7 +49,7 @@ class common::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopa
     # (they will still use passwd/group from the nss db, which is updated
     # from ldap, but ldap isn't needed constantly)
     file { '/etc/nsswitch.conf':
-      source  => 'puppet:///modules/common/auth/nss/nsswitch-noldap.conf',
+      source  => 'puppet:///modules/ocf/auth/nss/nsswitch-noldap.conf',
       require => [Ocf::Repackage['libnss-ldap'], File['/etc/libnss-ldap.conf']];
     }
   }
@@ -84,12 +84,12 @@ class common::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopa
   file {
     # create pam_access profile
     '/usr/share/pam-configs/access':
-      source  => 'puppet:///modules/common/auth/pam/access',
+      source  => 'puppet:///modules/ocf/auth/pam/access',
       require => File['/etc/security/access.conf'],
       notify  => Exec['pam-auth-update'];
     # provide access control table
     '/etc/security/access.conf':
-      content => template('common/access.conf.erb');
+      content => template('ocf/access.conf.erb');
   }
 
   augeas { 'sshd: enable gssapi and root login':
@@ -108,11 +108,11 @@ class common::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopa
   package { 'sudo': }
   file {
     '/etc/pam.d/sudo':
-      source  => 'puppet:///modules/common/auth/pam/sudo',
+      source  => 'puppet:///modules/ocf/auth/pam/sudo',
       require => Package['sudo'];
     '/etc/sudoers':
       mode    => '0440',
-      content => template('common/sudoers.erb'),
+      content => template('ocf/sudoers.erb'),
       require => Package['sudo'];
   }
 }

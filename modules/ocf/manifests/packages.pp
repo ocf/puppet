@@ -1,12 +1,12 @@
 # Packages to be installed on all OCF systems.
 #
 # If a package is only needed on user-facing machines, consider adding it to
-# common::extrapackages instead. If the package would be convenient to staff
+# ocf::extrapackages instead. If the package would be convenient to staff
 # working on other servers, though, don't hesitate to add it here.
 #
 # We want to keep this list small, but not to the point of omitting useful
 # tools such that server maintenance becomes unnecessarily painful.
-class common::packages {
+class ocf::packages {
   # packages to remove
   package {['mlocate', 'popularity-contest', 'apt-listchanges', 'needrestart']:
     ensure => purged;

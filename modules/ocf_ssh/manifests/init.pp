@@ -1,9 +1,9 @@
 class ocf_ssh {
-  include common::acct
-  include common::cups
-  include common::extrapackages
-  include common::limits
-  include common::mysql
+  include ocf::acct
+  include ocf::cups
+  include ocf::extrapackages
+  include ocf::limits
+  include ocf::mysql
   include ocf_ssl
 
   package {
@@ -12,7 +12,7 @@ class ocf_ssh {
       ensure => purged;
   }
 
-  class { 'common::nfs':
+  class { 'ocf::nfs':
     pykota => true;
   }
 

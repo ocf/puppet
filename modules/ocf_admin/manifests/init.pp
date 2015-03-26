@@ -1,7 +1,7 @@
 class ocf_admin {
-  include common::extrapackages
-  include common::ldapvi
-  include common::mysql
+  include ocf::extrapackages
+  include ocf::ldapvi
+  include ocf::mysql
 
   package {
     # remove accidentally-installed packages
@@ -9,7 +9,7 @@ class ocf_admin {
       ensure => purged;
   }
 
-  class { 'common::nfs':
+  class { 'ocf::nfs':
     pykota => true;
   }
 

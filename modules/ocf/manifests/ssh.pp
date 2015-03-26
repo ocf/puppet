@@ -1,4 +1,4 @@
-class common::ssh {
+class ocf::ssh {
 
   # install ssh client and server
   package { [ 'openssh-client', 'openssh-server' ]: }
@@ -6,7 +6,7 @@ class common::ssh {
   file {
     # enable GSSAPI host key verification
     '/etc/ssh/ssh_config':
-      source  => 'puppet:///modules/common/ssh_config',
+      source  => 'puppet:///modules/ocf/ssh_config',
       require => Package['openssh-client'],
     ;
     # provide list of ssh hosts

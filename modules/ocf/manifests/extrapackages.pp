@@ -9,8 +9,8 @@
 # maintain this one config (and better for users in at least some cases).
 #
 # This is in a separate manifest so that it can be included by other modules
-# without concerns of redeclaring common::packages with different parameters.
-class common::extrapackages {
+# without concerns of redeclaring ocf::packages with different parameters.
+class ocf::extrapackages {
   package {
     # chpass dependencies
     ['libexpect-perl', 'libunicode-map8-perl', 'python-cracklib']:;
@@ -115,7 +115,7 @@ class common::extrapackages {
 
   # install wp-cli
   file { '/usr/local/sbin/download-wp-cli':
-    source  => 'puppet:///modules/common/packages/download-wp-cli',
+    source  => 'puppet:///modules/ocf/packages/download-wp-cli',
     mode    => '0755';
   }
   cron { 'download-wp-cli':

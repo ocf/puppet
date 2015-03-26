@@ -1,7 +1,7 @@
 class desktop ($staff = false) {
-  class { 'common::apt': stage => first, desktop => true }
-  include common::acct
-  include common::cups
+  class { 'ocf::apt': stage => first, desktop => true }
+  include ocf::acct
+  include ocf::cups
 
   include chrome
   include crondeny
