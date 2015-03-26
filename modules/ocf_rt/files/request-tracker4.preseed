@@ -1,0 +1,6 @@
+request-tracker4	request-tracker4/dbconfig-install	boolean	false
+request-tracker4	request-tracker4/handle-siteconfig-permissions	boolean	true
+request-tracker4	request-tracker4/organization	string	rt.OCF.Berkeley.EDU
+request-tracker4	request-tracker4/rtname	string	OCF
+request-tracker4	request-tracker4/webbaseurl	string	https://rt.ocf.berkeley.edu
+request-tracker4	request-tracker4/webpath	string	
