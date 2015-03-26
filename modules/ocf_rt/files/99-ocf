@@ -8,11 +8,11 @@ Set($CommentAddress , 'root@ocf.berkeley.edu');
 Set($SetOutgoingMailFrom, 1);
 
 # Use external authentication provided by mod_auth_kerb
-Set($WebExternalAuth , 1);
-Set($WebFallbackToInternalAuth, 1);
+Set($WebRemoteUserAuth , 1);
+Set($WebFallbackToRTLogin, 1);
 # create users automatically if no user matching REMOTE_USER is found
-Set($WebExternalAuto, 1);
-Set($WebExternalGecos, undef);
+Set($WebRemoteUserAutocreate, 1);
+Set($WebRemoteUserGecos, undef);
 
 # Plugins
 Set(@MailPlugins, qw(Auth::MailFrom Filter::TakeAction)); 
