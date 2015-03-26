@@ -1,5 +1,5 @@
 # mount certain volatile directories in memory
-class desktop::tmpfs ($staff = false) {
+class ocf_desktop::tmpfs ($staff = false) {
   if ! $staff {
     mount { '/home':
       device  => 'tmpfs',
@@ -21,7 +21,7 @@ class desktop::tmpfs ($staff = false) {
 
   # create pam_mkhomedir profile
   file { '/usr/share/pam-configs/mkhomedir':
-    source => 'puppet:///modules/desktop/pam/mkhomedir',
+    source => 'puppet:///modules/ocf_desktop/pam/mkhomedir',
     notify => Exec['pam-auth-update']
   }
 }

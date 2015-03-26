@@ -1,4 +1,4 @@
-class desktop::sshfs {
+class ocf_desktop::sshfs {
   require ocf::auth
   require ocf::ssh
 
@@ -13,7 +13,7 @@ class desktop::sshfs {
   # configure libpam_mount and add to lightdm pam
   file {
     '/etc/security/pam_mount.conf.xml':
-      source  => 'puppet:///modules/desktop/pam/mount.conf.xml',
+      source  => 'puppet:///modules/ocf_desktop/pam/mount.conf.xml',
       require => [ Package[ 'libpam-mount', 'sshfs' ] ];
     '/etc/pam.d/ocf-pammount':
       content => 'session optional pam_mount.so disable_interactive';

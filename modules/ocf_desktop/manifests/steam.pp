@@ -1,4 +1,4 @@
-class desktop::steam {
+class ocf_desktop::steam {
   package {
     # Preseeded installations are currently broken on Debian steam:
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=772598
@@ -14,6 +14,6 @@ class desktop::steam {
 
   file {
     '/var/cache/debconf/steam.preseed':
-      source => 'puppet:///modules/desktop/steam.preseed';
+      source => 'puppet:///modules/ocf_desktop/steam.preseed';
   }
 }

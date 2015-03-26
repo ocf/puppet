@@ -78,7 +78,7 @@ node default {
         gsudo => ['ocfstaff'];
       }
 
-      class { 'desktop': staff => $::staff_only }
+      class { 'ocf_desktop': staff => $::staff_only }
     }
   }
 }

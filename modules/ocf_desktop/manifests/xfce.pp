@@ -1,4 +1,4 @@
-class desktop::xfce {
+class ocf_desktop::xfce {
   ocf::repackage { ['xfce4', 'xfce4-goodies', 'xfce4-notifyd']:
     recommends => false;
   }
@@ -13,11 +13,11 @@ class desktop::xfce {
     # enable kiosk mode (disables shutdown, etc.)
     '/etc/xdg/xfce4/kiosk':
       ensure => directory,
-      source => 'puppet:///modules/desktop/xsession/xfce4/kiosk/',
+      source => 'puppet:///modules/ocf_desktop/xsession/xfce4/kiosk/',
       recurse => true;
     '/etc/xdg/xfce4/xfconf':
       ensure => directory,
-      source => 'puppet:///modules/desktop/xsession/xfce4/xfconf/',
+      source => 'puppet:///modules/ocf_desktop/xsession/xfce4/xfconf/',
       recurse => true;
   }
 }

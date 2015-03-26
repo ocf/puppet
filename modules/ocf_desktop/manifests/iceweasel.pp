@@ -1,4 +1,4 @@
-class desktop::iceweasel {
+class ocf_desktop::iceweasel {
 
   # install iceweasel from backports and spellcheck dictionary
   ocf::repackage { 'iceweasel':
@@ -9,11 +9,11 @@ class desktop::iceweasel {
   file {
     # disable caching, history, blacklisting, and set homepage
     '/etc/iceweasel/profile/prefs.js':
-      source  => 'puppet:///modules/desktop/iceweasel/prefs.js',
+      source  => 'puppet:///modules/ocf_desktop/iceweasel/prefs.js',
       require => Ocf::Repackage['iceweasel'];
     # start maximized by default
     '/etc/iceweasel/profile/localstore.rdf':
-      source  => 'puppet:///modules/desktop/iceweasel/localstore.rdf',
+      source  => 'puppet:///modules/ocf_desktop/iceweasel/localstore.rdf',
       require => Ocf::Repackage['iceweasel']
   }
 

@@ -1,4 +1,4 @@
-class desktop::stats {
+class ocf_desktop::stats {
   user {
     'ocfstats':
       comment => 'OCF Desktop Stats',
@@ -18,18 +18,18 @@ class desktop::stats {
     '/opt/stats/update.sh':
       mode   => '0500',
       owner  => ocfstats,
-      source => 'puppet:///modules/desktop/stats/update.sh';
+      source => 'puppet:///modules/ocf_desktop/stats/update.sh';
 
     '/opt/stats/update-delay.sh':
       mode   => '0500',
       owner  => ocfstats,
-      source => 'puppet:///modules/desktop/stats/update-delay.sh';
+      source => 'puppet:///modules/ocf_desktop/stats/update-delay.sh';
 
     # CA certificate (used to verify server)
     '/opt/stats/ca.crt':
       mode   => '0444',
       owner  => ocfstats,
-      source => 'puppet:///modules/desktop/stats/ca.crt';
+      source => 'puppet:///modules/ocf_desktop/stats/ca.crt';
 
     # local machine certificate and key
     '/opt/stats/local.key':

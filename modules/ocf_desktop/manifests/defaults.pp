@@ -1,7 +1,7 @@
-class desktop::defaults {
+class ocf_desktop::defaults {
   # default applications for MIME types
   file { '/usr/share/applications/mimeapps.list':
-    source  => 'puppet:///modules/desktop/xsession/mimeapps.list';
+    source  => 'puppet:///modules/ocf_desktop/xsession/mimeapps.list';
   }
 
   # /etc/alternatives/

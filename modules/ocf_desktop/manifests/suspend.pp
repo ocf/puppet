@@ -1,18 +1,18 @@
-class desktop::suspend {
+class ocf_desktop::suspend {
 
   file {
     # suspend script with scheduled wakeup, also attempt resetting tmpfs
     '/usr/local/sbin/ocf-suspend':
       mode    => '0755',
-      source  => 'puppet:///modules/desktop/suspend/ocf-suspend',
+      source  => 'puppet:///modules/ocf_desktop/suspend/ocf-suspend',
       require => Package[ 'ethtool', 'pm-utils' ];
     # run script when power button is pushed
     '/etc/acpi/events/powerbtn-acpi-support':
-      source  => 'puppet:///modules/desktop/suspend/powerbtn-acpi-support',
+      source  => 'puppet:///modules/ocf_desktop/suspend/powerbtn-acpi-support',
       require => Package['acpi-support-base'];
     # run script off hours
     '/etc/cron.d/ocf-suspend':
-      source  => 'puppet:///modules/desktop/suspend/crontab',
+      source  => 'puppet:///modules/ocf_desktop/suspend/crontab',
       require => [ Package['anacron'], File['/usr/local/sbin/ocf-suspend'] ]
   }
 

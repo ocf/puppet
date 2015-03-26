@@ -1,4 +1,4 @@
-class desktop::xsession ($staff = false) {
+class ocf_desktop::xsession ($staff = false) {
   require packages
   include xfce
 
@@ -6,7 +6,7 @@ class desktop::xsession ($staff = false) {
   file {
     # provide custom Xsession script to populate desktop
     '/etc/X11/Xsession.d/95ocf':
-      source  => 'puppet:///modules/desktop/xsession/Xsession',
+      source  => 'puppet:///modules/ocf_desktop/xsession/Xsession',
       require => File['/opt/share/xsession'];
     # provide list of desktops
     '/opt/share/puppet/desktop_list':
@@ -14,12 +14,12 @@ class desktop::xsession ($staff = false) {
     # provide printing and other notification script daemon
     '/opt/share/puppet/notify.sh':
       mode    => '0755',
-      source  => 'puppet:///modules/desktop/xsession/notify.sh',
+      source  => 'puppet:///modules/ocf_desktop/xsession/notify.sh',
       require => File['/opt/share/puppet/desktop_list'];
     # provide script to tile multiple displays
     '/usr/local/bin/fix-displays':
       mode    => '0755',
-      source  => 'puppet:///modules/desktop/xsession/fix-displays';
+      source  => 'puppet:///modules/ocf_desktop/xsession/fix-displays';
     # provide share directory with icons and wallpapers
     '/opt/share/xsession':
       ensure  => directory,
@@ -36,7 +36,7 @@ class desktop::xsession ($staff = false) {
       purge   => true,
       force   => true,
       backup  => false,
-      source  => 'puppet:///modules/desktop/xsession/xsessions'
+      source  => 'puppet:///modules/ocf_desktop/xsession/xsessions'
   }
 
   # wallpaper symlink
@@ -56,18 +56,18 @@ class desktop::xsession ($staff = false) {
   # install lightdm as login manager with minimal bloat
   file {
     '/etc/lightdm/lightdm.conf':
-      source  => 'puppet:///modules/desktop/xsession/lightdm/lightdm.conf';
+      source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm.conf';
     '/etc/lightdm/lightdm-gtk-greeter.conf':
-        source  => 'puppet:///modules/desktop/xsession/lightdm/lightdm-gtk-greeter.conf';
+        source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm-gtk-greeter.conf';
     '/etc/X11/default-display-manager':
-      source  => 'puppet:///modules/desktop/xsession/default-display-manager';
+      source  => 'puppet:///modules/ocf_desktop/xsession/default-display-manager';
     '/etc/lightdm/session-setup':
       mode    => '0755',
-      source  => 'puppet:///modules/desktop/xsession/lightdm/session-setup';
+      source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/session-setup';
     # kill child processes on logout
     '/etc/lightdm/session-cleanup':
       mode    => '0755',
-      source  => 'puppet:///modules/desktop/xsession/lightdm/session-cleanup';
+      source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/session-cleanup';
   }
 
   # use ocf logo on login screen
@@ -82,11 +82,11 @@ class desktop::xsession ($staff = false) {
   file {
     # restrict polkit actions
     '/etc/polkit-1/localauthority/90-mandatory.d/99-ocf.pkla':
-      source => 'puppet:///modules/desktop/xsession/polkit/99-ocf.pkla',
+      source => 'puppet:///modules/ocf_desktop/xsession/polkit/99-ocf.pkla',
     ;
     # use ocfroot group for polkit admin auth
     '/etc/polkit-1/localauthority.conf.d/99-ocf.conf':
-      source => 'puppet:///modules/desktop/xsession/polkit/99-ocf.conf',
+      source => 'puppet:///modules/ocf_desktop/xsession/polkit/99-ocf.conf',
     ;
   }
 
@@ -94,7 +94,7 @@ class desktop::xsession ($staff = false) {
     # copy skel files
     '/etc/skel/.config':
       ensure => directory,
-      source => 'puppet:///modules/desktop/skel/config',
+      source => 'puppet:///modules/ocf_desktop/skel/config',
       recurse => true;
   }
 
@@ -131,6 +131,6 @@ class desktop::xsession ($staff = false) {
       target => '../conf.avail/11-lcdfilter-default.conf';
     # enable hinting and anti-aliasing
     '/etc/fonts/local.conf':
-      source => 'puppet:///modules/desktop/xsession/fonts.conf';
+      source => 'puppet:///modules/ocf_desktop/xsession/fonts.conf';
   }
 }

@@ -1,4 +1,4 @@
-class desktop::grub {
+class ocf_desktop::grub {
   # password protection to prevent modifying kernel options
   file { '/etc/grub.d/01_ocf':
     owner  => root,

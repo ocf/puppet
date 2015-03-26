@@ -1,4 +1,4 @@
-class desktop::packages {
+class ocf_desktop::packages {
   include ocf::extrapackages
 
   package {
