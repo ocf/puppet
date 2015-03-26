@@ -1,4 +1,4 @@
-class common::postfix {
+class ocf::postfix {
 
   # remove exim
   package { ['exim4', 'exim4-base', 'exim4-config', 'exim4-daemon-light']:
@@ -28,7 +28,7 @@ class common::postfix {
       content => 'ocf.berkeley.edu',
     ;
     '/etc/postfix/main.cf':
-      source  => 'puppet:///modules/common/postfix/main.cf',
+      source  => 'puppet:///modules/ocf/postfix/main.cf',
       notify  => Service['postfix'],
       require => Package['postfix'],
     ;

@@ -1,16 +1,16 @@
-class common::ntp {
+class ocf::ntp {
   # install ntp
   package { 'ntp':; }
 
   # provide ntp config
   if $::is_virtual {
     file { '/etc/ntp.conf':
-      source  => 'puppet:///modules/common/ntp.conf',
+      source  => 'puppet:///modules/ocf/ntp.conf',
       require => Package['ntp'],
     }
   } else {
     file { '/etc/ntp.conf':
-      content => template('common/ntp.conf.erb'),
+      content => template('ocf/ntp.conf.erb'),
       require => Package['ntp'],
     }
   }

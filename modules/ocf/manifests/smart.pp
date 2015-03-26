@@ -1,4 +1,4 @@
-class common::smart {
+class ocf::smart {
   # facter currently outputs strings not booleans
   # see http://projects.puppetlabs.com/issues/3704
   if ! str2bool($::is_virtual) {

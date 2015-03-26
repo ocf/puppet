@@ -1,4 +1,4 @@
-class common::nfs($pykota = false) {
+class ocf::nfs($pykota = false) {
   # Create directories to mount NFS shares on
   # Directory permissions are set by NFS share when mounted
   # Use exec instead of file so that permissions are not managed

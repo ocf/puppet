@@ -1,6 +1,6 @@
 class desktop::sshfs {
-  require common::auth
-  require common::ssh
+  require ocf::auth
+  require ocf::ssh
 
   # install sshfs and libpam-mount
   package { ['libpam-mount', 'sshfs', 'fuse']: }

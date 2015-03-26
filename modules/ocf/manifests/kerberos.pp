@@ -1,11 +1,11 @@
-class common::kerberos {
+class ocf::kerberos {
   if !$::skipKerberos {
     # install Heimdal Kerberos packages
     package { [ 'heimdal-clients', 'libsasl2-modules-gssapi-mit' ]: }
 
     # provide Kerberos config
     file { '/etc/krb5.conf':
-      source  => 'puppet:///modules/common/auth/krb5.conf',
+      source  => 'puppet:///modules/ocf/auth/krb5.conf',
       require => Package['heimdal-clients']
     }
   } else {

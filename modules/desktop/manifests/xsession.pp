@@ -28,7 +28,7 @@ class desktop::xsession ($staff = false) {
       force   => true,
       backup  => false,
       source  => 'puppet:///contrib/desktop/xsession',
-      require => Class['common::puppet'];
+      require => Class['ocf::puppet'];
     # enforce list of possible xsessions
     '/usr/share/xsessions':
       ensure  => directory,

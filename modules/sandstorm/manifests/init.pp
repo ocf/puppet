@@ -1,7 +1,7 @@
 class sandstorm {
   include ocf_ssl
-  include common::acct
-  include common::limits
+  include ocf::acct
+  include ocf::limits
 
   package {
     [ 'apache2' ]:

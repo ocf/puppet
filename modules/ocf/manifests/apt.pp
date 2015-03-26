@@ -1,4 +1,4 @@
-class common::apt ( $desktop = false ) {
+class ocf::apt ( $desktop = false ) {
   package { ['aptitude', 'imvirt']: }
 
   class { '::apt':
@@ -140,7 +140,7 @@ class common::apt ( $desktop = false ) {
 
   file { '/etc/cron.daily/ocf-apt':
     mode    => '0755',
-    content => template('common/apt/ocf-apt.erb'),
+    content => template('ocf/apt/ocf-apt.erb'),
     require => Package['aptitude'];
   }
 }

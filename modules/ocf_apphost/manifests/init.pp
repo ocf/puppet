@@ -1,6 +1,6 @@
 class ocf_apphost {
-  include common::extrapackages
-  include common::nfs
+  include ocf::extrapackages
+  include ocf::nfs
   include proxy
   include ssl
 

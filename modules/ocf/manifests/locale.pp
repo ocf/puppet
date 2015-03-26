@@ -1,4 +1,4 @@
-class common::locale {
+class ocf::locale {
   file {
     '/etc/locale.gen':
       content => "en_US.UTF-8 UTF-8\n";

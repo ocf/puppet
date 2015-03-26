@@ -1,5 +1,5 @@
 class desktop::packages {
-  include common::extrapackages
+  include ocf::extrapackages
 
   package {
     # remove accidentally-installed packages
@@ -9,7 +9,7 @@ class desktop::packages {
 
   # install packages specific to desktops
   #
-  # in general, prefer to install packages to common::packages so that they are
+  # in general, prefer to install packages to ocf::packages so that they are
   # also available on the login and web servers; this is helpful to users, and
   # avoids surprises
   #

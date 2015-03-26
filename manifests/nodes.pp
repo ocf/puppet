@@ -1,26 +1,26 @@
 node default {
-  class { 'common::groups': stage => first }
-  class { 'common::puppet': stage => first }
-  class { 'common::rootpw': stage => first }
+  class { 'ocf::groups': stage => first }
+  class { 'ocf::puppet': stage => first }
+  class { 'ocf::rootpw': stage => first }
 
   case $::hostname {
     anthrax, sandstorm: { }
-    default:   { include common::postfix }
+    default:   { include ocf::postfix }
   }
 
-  include common::autologout
-  include common::git
-  include common::kerberos
-  include common::ldap
-  include common::locale
-  include common::memtest
+  include ocf::autologout
+  include ocf::git
+  include ocf::kerberos
+  include ocf::ldap
+  include ocf::locale
+  include ocf::memtest
   include ocf::munin::node
-  include common::ntp
-  include common::packages
-  include common::ocflib
-  include common::smart
-  include common::utils
-  include common::zsh
+  include ocf::ntp
+  include ocf::packages
+  include ocf::ocflib
+  include ocf::smart
+  include ocf::utils
+  include ocf::zsh
 
   if $::macAddress {
     include networking
@@ -50,21 +50,21 @@ node default {
 
   case $type {
     'server': {
-      class { 'common::apt': stage => first }
+      class { 'ocf::apt': stage => first }
 
       if $owner == undef {
         case $::hostname {
-          supernova: { class { 'common::auth': glogin => [ ['approve', 'ALL'] ] } }
-          tsunami:   { class { 'common::auth': glogin => [ ['ocf', 'ALL'], ['sorry', 'ALL'] ] } }
-          biohazard: { class { 'common::auth': glogin => [ ['ocfdev', 'ALL'] ] } }
-          pollution: { class { 'common::auth': glogin => [ ['approve', 'ALL'] ], gsudo => ['ocfstaff'] } }
-          default:   { class { 'common::auth': ulogin => [], glogin => [], usudo => [], gsudo => [] } }
+          supernova: { class { 'ocf::auth': glogin => [ ['approve', 'ALL'] ] } }
+          tsunami:   { class { 'ocf::auth': glogin => [ ['ocf', 'ALL'], ['sorry', 'ALL'] ] } }
+          biohazard: { class { 'ocf::auth': glogin => [ ['ocfdev', 'ALL'] ] } }
+          pollution: { class { 'ocf::auth': glogin => [ ['approve', 'ALL'] ], gsudo => ['ocfstaff'] } }
+          default:   { class { 'ocf::auth': ulogin => [], glogin => [], usudo => [], gsudo => [] } }
         }
       } else { # grant login and sudo to owner
-        class { 'common::auth': ulogin => [[$owner, 'ALL']], usudo => [$owner], nopasswd => true }
+        class { 'ocf::auth': ulogin => [[$owner, 'ALL']], usudo => [$owner], nopasswd => true }
       }
 
-      include common::ssh
+      include ocf::ssh
     }
 
     'desktop': {
@@ -73,7 +73,7 @@ node default {
         default => [ ['ocf', 'LOCAL'] ]
       }
 
-      class { 'common::auth':
+      class { 'ocf::auth':
         glogin => $glogin,
         gsudo => ['ocfstaff'];
       }

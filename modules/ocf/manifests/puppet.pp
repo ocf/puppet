@@ -1,4 +1,4 @@
-class common::puppet {
+class ocf::puppet {
   package { ['facter', 'puppet']: }
 
   # enable puppet agent
@@ -52,7 +52,7 @@ class common::puppet {
     # trigger a puppet run by the agent
     '/usr/local/sbin/puppet-trigger':
       mode    => '0755',
-      source  => 'puppet:///modules/common/puppet-trigger',
+      source  => 'puppet:///modules/ocf/puppet-trigger',
       require => Package['puppet'],
     ;
   }
