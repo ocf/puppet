@@ -25,7 +25,8 @@ class ocf_stats::munin {
     notify  => Service['munin'];
   }
 
-  apache::mod { ['rewrite', 'fcgid']:; }
+  include apache::mod::fcgid
+  include apache::mod::rewrite
 
   apache::vhost { 'munin.ocf.berkeley.edu':
     serveraliases => ['munin'],
