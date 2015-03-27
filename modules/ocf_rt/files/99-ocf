@@ -24,12 +24,12 @@ Set(@Active_MakeClicky, qw(httpurl_overwrite));
 # Non-blank To addresses
 Set($UseFriendlyToLine, 1);
 
-# Enable fulltext search
+# Enable fulltext search without indexes.
+# For indexed FTS, we would need to recompile MySQL with Sphinx; instead, we
+# just use unindexed FTS which, although really slow, at least works.
 Set( %FullTextSearch,
     Enable     => 1,
-    Indexed    => 1,
-    Table      => 'AttachmentsIndex',
-    MaxMatches => '10000',
+    Indexed    => 0
 );
 
 # Use wrapped plain text instead of HTML email
