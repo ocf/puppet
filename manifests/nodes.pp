@@ -23,7 +23,8 @@ node default {
   include ocf::zsh
 
   if $::macAddress {
-    include networking
+    # use DHCP
+    include ocf::networking
   } else {
     case $::hostname {
       hal, pandemic, jaws: {
@@ -36,7 +37,7 @@ node default {
       }
     }
     if !$::skipNetworking {
-      class { 'networking':
+      class { 'ocf::networking':
         ipaddress   => $::ipHostNumber,
         netmask     => '255.255.255.0',
         gateway     => '169.229.10.1',

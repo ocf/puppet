@@ -1,7 +1,7 @@
-class networking::interfaces($ipaddress, $netmask, $gateway, $bridge, $vlan) {
+class ocf::networking::interfaces($ipaddress, $netmask, $gateway, $bridge, $vlan) {
 
   file { '/etc/network/interfaces':
-    content => template('networking/interfaces.erb'),
+    content => template('ocf/networking/interfaces.erb'),
     notify  => Service['networking'],
   }
 

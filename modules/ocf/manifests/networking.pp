@@ -1,21 +1,21 @@
-class networking($ipaddress = undef, $netmask = undef, $gateway = undef,
+class ocf::networking($ipaddress = undef, $netmask = undef, $gateway = undef,
   $bridge = false, $domain = undef, $nameservers = undef,
   $vlan = false,) {
 
   class {
-    'networking::interfaces':
+    'ocf::networking::interfaces':
       ipaddress   => $ipaddress,
       netmask     => $netmask,
       gateway     => $gateway,
       bridge      => $bridge,
       vlan        => $vlan,
     ;
-    'networking::resolvconf':
+    'ocf::networking::resolvconf':
       domain      => $domain,
       nameservers => $nameservers,
     ;
   }
 
-  include networking::hostname
+  include ocf::networking::hostname
 
 }

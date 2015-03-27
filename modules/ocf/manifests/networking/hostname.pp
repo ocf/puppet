@@ -1,4 +1,4 @@
-class networking::hostname {
+class ocf::networking::hostname {
 
   # set FQDN and hostname from SSL client certificate
   $fqdn = $::clientcert
