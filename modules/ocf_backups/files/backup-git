@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+"""Backup all ocf repos on GitHub into the current directory. Intended to be
+used as a backup script by rsnapshot."""
+
+import requests
+import subprocess
+from urllib.parse import quote
+
+
+def get_public_repos(org):
+    """Return dictionary of [name] => [url] git repos on GitHub."""
+    url = "https://api.github.com/orgs/{org}/repos".format(org=quote(org, ''))
+    r = requests.get(url)
+    return {repo['name']: repo['clone_url'] for repo in r.json()}
+
+
+def get_repos():
+    """Return dictionary of [name] => [url] git repos to be backed up."""
+    # TODO: also backup private repos?
+    return get_public_repos('ocf')
+
+
+def backup_repo(name, url):
+    # TODO: what do we want to do when this fails?
+    print("Cloning {name} from {url}".format(name=name, url=url))
+    subprocess.check_call(['git', 'clone', '--bare', '--', url, name])
+
+
+if __name__ == '__main__':
+    for name, url in get_repos().items():
+        backup_repo(name, url)

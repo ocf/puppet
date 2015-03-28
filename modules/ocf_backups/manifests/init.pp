@@ -1,4 +1,5 @@
 class ocf_backups {
+  include ocf_backups::git
   include ocf_backups::mysql
   include ocf_backups::rsnapshot
 
