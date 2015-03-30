@@ -6,20 +6,21 @@ class ocf_backups::rsnapshot {
       source => 'puppet:///modules/ocf_backups/rsnapshot.conf';
   }
 
-  # From the rsnapshot man page:
+  # Since we use sync_first, actual backups only happen at the most frequent
+  # ("smallest") backup level, i.e. daily.
   #
-  #     It is usually a good idea to schedule the larger backup levels to run a
-  #     bit before the lower ones.
+  # The other backup levels just promote a daily backup into a weekly/monthly
+  # one, so they are comparatively fast.
   #
-  # (where "largest" means monthly > weekly > daily)
+  # As of 2015-03-29, it takes 30 minutes to do a promotion, and 4 hours to do
+  # a full backup. So we leave 2 hours for promotions and 8 hours for a full
+  # backup to be safe.
   #
-  # Currently, a job takes about 2 hours, so we leave 4 hours between backup
-  # levels. We want to ensure times don't collide. The general plan is:
-  #
-  #     8pm-12am monthly backup takes place
-  #     12am-4am: weekly backup takes place
-  #     4am-8am: daily backup takes place
-  #     8am+: backups copied from pandemic -> hal
+  # It's important that jobs don't overlap, so our plan is:
+  #     10pm-12am monthly backup takes place (~30 minutes)
+  #     12am-2am: weekly backup takes place (~30 minutes)
+  #     2am-10am: daily backup takes place (~4 hours)
+  #     10am+: backups copied from pandemic -> hal
   #           (during the day since it produces no load on the prod. drives)
 
   $rsnapshot = 'rsnapshot -c /opt/share/backups/rsnapshot.conf'
@@ -31,10 +32,10 @@ class ocf_backups::rsnapshot {
   }
 
   cron {
-    # 8pm on 1st of month
+    # 10pm on 1st of month
     'rsnapshot-monthly':
       command  => "${rsnapshot} monthly",
-      hour     => '20',
+      hour     => '22',
       monthday => '1',
       weekday  => '*';
 
@@ -45,10 +46,10 @@ class ocf_backups::rsnapshot {
       monthday => '*',
       weekday  => '6';
 
-    # 4am daily
+    # 2am daily
     'rsnapshot-daily':
       command  => "${rsnapshot} sync && ${rsnapshot} daily",
-      hour     => '4',
+      hour     => '2',
       monthday => '*',
       weekday  => '*';
   }
