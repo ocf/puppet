@@ -22,8 +22,8 @@ def get_repos():
 
 def backup_repo(name, url):
     # TODO: what do we want to do when this fails?
-    print("Cloning {name} from {url}".format(name=name, url=url))
-    subprocess.check_call(['git', 'clone', '--bare', '--', url, name])
+    subprocess.check_call(
+        ['git', 'clone', '--quiet', '--bare', '--', url, name])
 
 
 if __name__ == '__main__':
