@@ -4,6 +4,10 @@ class ocf_backups::rsnapshot {
   file {
     '/opt/share/backups/rsnapshot.conf':
       source => 'puppet:///modules/ocf_backups/rsnapshot.conf';
+
+    '/opt/share/backups/copy-backups':
+      source => 'puppet:///modules/ocf_backups/copy-backups',
+      mode   => '0755';
   }
 
   # Since we use sync_first, actual backups only happen at the most frequent
@@ -50,6 +54,13 @@ class ocf_backups::rsnapshot {
     'rsnapshot-daily':
       command  => "${rsnapshot} sync && ${rsnapshot} daily",
       hour     => '2',
+      monthday => '*',
+      weekday  => '*';
+
+    # 10am daily
+    'rsnapshot-daily':
+      command  => '/opt/share/backups/copy-backups',
+      hour     => '10',
       monthday => '*',
       weekday  => '*';
   }
