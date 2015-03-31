@@ -18,3 +18,6 @@ LOCKFILE="/var/run/rsnapshot.pid"
 			-e 'ssh -c chacha20-poly1305@openssh.com' \
 			/opt/backups/ ocfbackups@hal:/opt/backups/
 ) 9>"$LOCKFILE"
+
+# rsnapshot won't run unless we remove the lockfile
+rm "$LOCKFILE"
