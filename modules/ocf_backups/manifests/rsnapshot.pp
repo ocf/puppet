@@ -24,7 +24,7 @@ class ocf_backups::rsnapshot {
   #     10pm-12am monthly backup takes place (~30 minutes)
   #     12am-2am: weekly backup takes place (~30 minutes)
   #     2am-10am: daily backup takes place (~4 hours)
-  #     10am+: backups copied from pandemic -> hal
+  #     10am+: backups copied from pandemic -> hal (~5 hours)
   #           (during the day since it produces no load on the prod. drives)
 
   $rsnapshot = 'rsnapshot -c /opt/share/backups/rsnapshot.conf'
