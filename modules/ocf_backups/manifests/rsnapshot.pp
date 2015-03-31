@@ -58,7 +58,7 @@ class ocf_backups::rsnapshot {
       weekday  => '*';
 
     # 10am daily
-    'rsnapshot-daily':
+    'copy-backups':
       command  => '/opt/share/backups/copy-backups',
       hour     => '10',
       monthday => '*',
