@@ -15,7 +15,7 @@ REGEX_EXTRACT_DOMAIN = re.compile('^.*@(.*)$')
 REGEX_EXTRACT_USER = re.compile('^(.*)@.*$')
 
 # users that others are allowed to send mail as
-USER_EXCEPTIONS = ('root', 'apache', 'wordpress')
+USER_EXCEPTIONS = ('root', 'apache', 'wordpress', 'webmaster')
 
 
 def get_user_from_uid(uid):
