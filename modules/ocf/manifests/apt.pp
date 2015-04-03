@@ -77,18 +77,15 @@ class ocf::apt ( $desktop = false ) {
     }
   }
 
-  # puppetlabs doesn't currently package for jessie
-  if $::lsbdistcodename != 'jessie' {
-    apt::key { 'puppetlabs':
-      key        => '4BD6EC30',
-      key_source => 'https://apt.puppetlabs.com/pubkey.gpg';
-    }
+  apt::key { 'puppetlabs':
+    key        => '4BD6EC30',
+    key_source => 'https://apt.puppetlabs.com/pubkey.gpg';
+  }
 
-    apt::source { 'puppetlabs':
-      location   => 'http://apt.puppetlabs.com/',
-      repos      => 'main dependencies',
-      require    => Apt::Key['puppetlabs'];
-    }
+  apt::source { 'puppetlabs':
+    location   => 'http://apt.puppetlabs.com/',
+    repos      => 'main dependencies',
+    require    => Apt::Key['puppetlabs'];
   }
 
   apt::key { 'ocf':
