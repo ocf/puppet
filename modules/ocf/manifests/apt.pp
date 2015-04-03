@@ -44,34 +44,6 @@ class ocf::apt ( $desktop = false ) {
       }
     }
 
-    'Ubuntu': {
-      $repos = 'main restricted universe multiverse'
-
-      apt::source {
-        'ubuntu':
-          location  => 'http://mirrors/ubuntu/',
-          release   => $::lsbdistcodename,
-          repos     => $repos;
-
-        'ubuntu-security':
-          location  => 'http://mirrors/ubuntu/',
-          release   => "${::lsbdistcodename}-security",
-          repos     => $repos;
-
-        'ubuntu-updates':
-          location  => 'http://mirrors/ubuntu/',
-          release   => "${::lsbdistcodename}-updates",
-          repos     => $repos;
-      }
-
-      # XXX: we use a _different_ hostname from the regular archive because
-      # the puppetlabs apt module uses hostname-based apt pinning, which
-      # causes _all_ packages to be pinned at equal priority
-      class { 'apt::backports':
-        location => 'http://mirrors.ocf.berkeley.edu/ubuntu/';
-      }
-    }
-
     default: {
       warning('Unrecognized operating system; can\'t configure apt!')
     }
