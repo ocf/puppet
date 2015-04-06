@@ -5,9 +5,14 @@
 # /etc/ssl/certs/incommon-intermediate.crt
 class ocf_ssl($cert_name = $::fqdn) {
   File {
-    owner => root,
-    group => ssl-cert
+    owner   => root,
+    group   => ssl-cert,
+
+    # the ssl-cert package creates the ssl-cert group
+    require => Package['ssl-cert']
   }
+
+  package { 'ssl-cert':; }
 
   file {
     '/etc/ssl/certs/incommon-intermediate.crt':
