@@ -17,7 +17,7 @@ class ocf_rt::apache {
     port            => 80,
     docroot         => '/var/www',
     redirect_status => 301,
-    redirect_dest   => 'https://rt.ocf.berkeley.edu';
+    redirect_dest   => 'https://rt.ocf.berkeley.edu/';
   }
 
   apache::vhost { 'rt.ocf.berkeley.edu':
