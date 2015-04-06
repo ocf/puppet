@@ -1,11 +1,21 @@
-#!/bin/sh -e
-if [ $(whoami) != "www-data" ]; then
+#!/bin/bash -e
+if [ "$(whoami)" != "www-data" ]; then
 	echo "Please run me as www-data to avoid borking permissions!"
 	exit 1
 fi
 
+TARGET="/srv/wiki/wiki"
 REMOTE="https://github.com/ocf/wiki.git"
-cd /srv/ikiwiki/wiki.git
+
+if [ ! -d "$TARGET/.git" ]; then
+        git init "$TARGET"
+fi
+
+cd "$TARGET"
+
+# we remove .ikiwiki because there are some bugs where it doesn't update otherwise
+# see e.g. http://ikiwiki.info/forum/Need_something_more_powerful_than_Exclude/
+[ -d .ikiwiki ] && rm -rf .ikiwiki
 
 # update origin url
 if ! git remote | grep origin > /dev/null; then
@@ -16,5 +26,7 @@ fi
 
 # update from remote
 git fetch origin
+git reset --hard origin/master
 
-ikiwiki --setup /srv/ikiwiki/wiki.setup
+# rebuild wiki
+ikiwiki --rebuild --setup /srv/wiki/wiki.setup
