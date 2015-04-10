@@ -147,7 +147,6 @@ Instead of overwriting an entire config file just to change one value, try to
 ## Future improvements
 
 * Finish renaming and cleanup of OCF's modules
-* Consider using [librarian-puppet][lib-puppet] instead of git submodules
 * Trigger puppet runs automatically after production is updated
 * Better monitoring of puppet runs (e.g. to see when a server has not updated
   recently, which is a common problem on desktops)
@@ -157,10 +156,9 @@ Instead of overwriting an entire config file just to change one value, try to
 [debian]: https://www.debian.org/
 [ubuntu]: http://www.ubuntu.com/
 [hello]: https://hello.ocf.berkeley.edu/
-[webhook]: https://github.com/ocf/puppet/blob/master/modules/ocf_puppet/files/webhook/github.cgi
+[webhook]: https://github.com/ocf/puppet/blob/57c9bec/modules/ocf_puppet/manifests/init.pp#L49
 [sobmodules]: http://git-scm.com/book/en/v2/Git-Tools-Submodules
-[lib-puppet]: http://librarian-puppet.com/
 [augeas]: http://projects.puppetlabs.com/projects/1/wiki/puppet_augeas
-[augeas-example]: https://github.com/ocf/puppet/blob/master/modules/common/manifests/auth.pp#L75
+[augeas-example]: https://github.com/ocf/puppet/blob/57c9bec/modules/ocf/manifests/auth.pp#L95
 [sed]: http://projects.puppetlabs.com/projects/puppet/wiki/Simple_Text_Patterns/5
-[sed-example]: https://github.com/ocf/puppet/blob/jessie-desktops/modules/desktop/manifests/grub.pp#L13
+[sed-example]: https://github.com/ocf/puppet/blob/e7de500/modules/ocf_desktop/manifests/grub.pp#L13
