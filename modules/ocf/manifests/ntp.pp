@@ -3,7 +3,7 @@ class ocf::ntp {
   package { 'ntp':; }
 
   # provide ntp config
-  if $::is_virtual {
+  if str2bool($::is_virtual) {
     file { '/etc/ntp.conf':
       source  => 'puppet:///modules/ocf/ntp.conf',
       require => Package['ntp'],
