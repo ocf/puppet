@@ -43,7 +43,7 @@ or clone the repo and remember to run `git submodule update --init`.
 Before pushing, you should test your changes by switching at least one of the
 affected servers to your puppet environment and triggering a run. We store node
 definitions in LDAP, so changing a server's environment requires a `/admin`
-Kerberos principal (and corresponding LDAP privileges).
+Kerberos principal.
 
 Start by getting a ticket for your `/admin` principal and launching ldapvi on
 the server's LDAP entry:
