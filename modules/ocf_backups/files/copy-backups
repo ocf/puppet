@@ -13,7 +13,7 @@ LOCKFILE="/var/run/rsnapshot.pid"
 (
 	flock -n 9 || (echo "$LOCKFILE still exists, refusing to copy."; exit 1)
 	kinit -t /opt/share/backups/ocfbackups.keytab ocfbackups \
-		rsync -aH --partial \
+		rsync -aH --delete --partial \
 			--rsync-path="sudo /usr/bin/rsync" \
 			-e 'ssh -c chacha20-poly1305@openssh.com' \
 			/opt/backups/ ocfbackups@hal:/opt/backups/
