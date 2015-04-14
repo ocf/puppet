@@ -4,5 +4,3 @@
            ssh(rw,fsid=0,no_subtree_check,root_squash) \
            sandstorm(rw,fsid=0,no_subtree_check,root_squash) \
            apphost(rw,fsid=0,no_subtree_check,root_squash)
-
-/opt/backups/mysql mysql(rw,fsid=0,no_subtree_check,no_root_squash)
