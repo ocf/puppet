@@ -100,6 +100,7 @@ class ocf::extrapackages {
     'texlive-fonts-recommended',
     'texlive-latex-extra',
     'texlive-latex-recommended',
+    'texlive-publishers',
     'vagrant',
     'valgrind',
     ]:;
