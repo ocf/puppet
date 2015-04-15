@@ -20,11 +20,6 @@ class ocf_wiki {
     '/srv/wiki/rebuild-wiki':
       source => 'puppet:///modules/ocf_wiki/rebuild-wiki',
       mode   => '0755';
-
-    '/opt/share/webhook/secrets/github.secret':
-      source => 'puppet:///private/github.secret',
-      group  => www-data,
-      mode   => '0640';
   }
 
   exec { 'rebuild-wiki':
@@ -38,9 +33,9 @@ class ocf_wiki {
   }
 
   ocf::webhook { '/srv/wiki/webhook/github.cgi':
-    service    => 'github',
-    secretfile => '/opt/share/webhook/secrets/github.secret',
-    command    => '/srv/wiki/rebuild-wiki';
+    service      => 'github',
+    secretsource => 'puppet:///private/github.secret',
+    command      => '/srv/wiki/rebuild-wiki';
   }
 
   class { '::apache':

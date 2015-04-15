@@ -268,14 +268,14 @@ class ocf_www {
   # webhooks
   ocf::webhook {
     '/srv/sites/control/webhook-www.cgi':
-      service    => github,
-      secretfile => '/opt/share/webhook/secrets/webhook-www.secret',
-      command    => '/opt/share/webhook/services/www-deploy.sh';
+      service      => github,
+      secretsource => 'puppet:///private/webhook-www.secret',
+      command      => '/opt/share/webhook/services/www-deploy.sh';
 
     '/srv/sites/control/webhook-hello.cgi':
-      service    => github,
-      secretfile => '/opt/share/webhook/secrets/webhook-hello.secret',
-      command    => '/opt/share/webhook/services/hello-deploy.sh';
+      service      => github,
+      secretsource => 'puppet:///private/webhook-hello.secret',
+      command      => '/opt/share/webhook/services/hello-deploy.sh';
   }
 
   file {
@@ -298,18 +298,5 @@ class ocf_www {
       mode   => '0755',
       owner  => root,
       group  => root;
-
-    # hmac secrets used for GitHub webhook
-    '/opt/share/webhook/secrets/webhook-www.secret':
-      source => 'puppet:///private/webhook-www.secret',
-      owner  => root,
-      group  => www-data,
-      mode   => '0640';
-
-    '/opt/share/webhook/secrets/webhook-hello.secret':
-      source => 'puppet:///private/webhook-hello.secret',
-      owner  => root,
-      group  => www-data,
-      mode   => '0640';
   }
 }
