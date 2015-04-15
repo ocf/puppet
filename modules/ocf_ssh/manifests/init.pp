@@ -13,7 +13,8 @@ class ocf_ssh {
   }
 
   class { 'ocf::nfs':
-    pykota => true;
+    pykota => true,
+    cron   => true;
   }
 
   include hostkeys

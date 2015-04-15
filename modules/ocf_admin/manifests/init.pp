@@ -10,7 +10,8 @@ class ocf_admin {
   }
 
   class { 'ocf::nfs':
-    pykota => true;
+    pykota => true,
+    cron   => true;
   }
 
   service { 'rsyslog': }

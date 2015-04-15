@@ -1,4 +1,4 @@
-class ocf::nfs($pykota = false) {
+class ocf::nfs($pykota = false, $cron = false) {
   # Create directories to mount NFS shares on
   # Directory permissions are set by NFS share when mounted
   # Use exec instead of file so that permissions are not managed
@@ -49,6 +49,15 @@ class ocf::nfs($pykota = false) {
         fstype  => 'nfs4',
         options => 'ro,bg,noatime,nodev,noexec,nosuid',
         require => Exec['mkdir /opt/httpd'];
+    }
+  }
+
+  if $cron {
+    file {
+      '/var/spool/cron/crontabs':
+        ensure => link,
+        target => "/services/crontabs/${::hostname}",
+        force  => true;
     }
   }
 }

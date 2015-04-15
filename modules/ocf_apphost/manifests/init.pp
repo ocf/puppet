@@ -1,8 +1,11 @@
 class ocf_apphost {
   include ocf::extrapackages
-  include ocf::nfs
   include proxy
   include ssl
+
+  class { 'ocf::nfs':
+    cron => true;
+  }
 
   package {
     # remove accidentally-installed packages
