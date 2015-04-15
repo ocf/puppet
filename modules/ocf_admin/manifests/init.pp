@@ -11,7 +11,8 @@ class ocf_admin {
 
   class { 'ocf::nfs':
     pykota => true,
-    cron   => true;
+    cron   => true,
+    web    => true;
   }
 
   service { 'rsyslog': }
