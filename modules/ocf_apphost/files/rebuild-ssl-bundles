@@ -2,7 +2,7 @@
 # Build certificate bundles by concatenating .crt and .chain files in
 # /etc/ssl/private/apphost.
 #
-# This is normally executed automaticlaly by puppet when certificates change.
+# This is normally executed automatically by puppet when certificates change.
 
 cd /etc/ssl/private/apphost
 
