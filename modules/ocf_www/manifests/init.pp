@@ -219,6 +219,16 @@ class ocf_www {
       notify => Service['apache2'];
   }
 
+  # vhost ssl certificates
+  file {
+    '/etc/ssl/private/vhosts':
+      ensure  => directory,
+      source  => 'puppet:///private/ssl/vhosts',
+      recurse => true,
+      owner   => root,
+      mode    => '0600';
+  }
+
   # dpkg-divert
   exec { '/usr/bin/dpkg-divert --divert /usr/lib/apache2/suexec.dist --rename /usr/lib/apache2/suexec':
     unless  => '/usr/bin/dpkg-divert --list | grep suexec',
