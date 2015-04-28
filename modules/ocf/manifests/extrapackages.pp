@@ -40,6 +40,7 @@ class ocf::extrapackages {
     'flex',
     'gdb',
     'gem2deb',
+    'ikiwiki',
     'ipython',
     'ipython-notebook',
     'ipython3',
