@@ -12,6 +12,9 @@
 # (so we get a few more releases before needing to fix this...)
 dist=$(curl -s http://mirrors.ocf.berkeley.edu/ubuntu/dists/ | \
 	sed -nr 's/.*<td><a href="([a-z]*)\/".*/\1/p' | sort | tail -n1)
+# the stable repo does not always get updates, but we suspect -updates will
+dist="${dist}-updates"
+
 updated=$(curl -s "http://mirrors/ubuntu/dists/$dist/Release" | \
 	grep Date | cut -d':' -f2- | sed -s 's/^ //')
 updated_epoch=$(date --date="$updated" +%s) # last update (seconds since 1970)
