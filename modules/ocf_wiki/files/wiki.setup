@@ -10,7 +10,7 @@ use IkiWiki::Setup::Standard {
 	srcdir      => '/srv/wiki/wiki',
 	destdir     => '/srv/wiki/public_html',
 	url         => 'https://wiki.ocf.berkeley.edu',
-	exclude     => '^README\\.md$',
+	exclude     => '^(Makefile|README\\.md)$',
 
 	# url to show file history ([[file]] substituted)
 	historyurl  => 'https://github.com/ocf/wiki/commits/master/[[file]]',
