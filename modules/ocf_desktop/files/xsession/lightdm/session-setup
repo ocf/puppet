@@ -1,2 +1,12 @@
 #!/bin/sh
 sudo -u ocfstats "/opt/stats/update-delay.sh" &
+
+# create temporary on-disk directory
+if [ -n "$USER" ]; then
+	tmpdir="/var/local/tmp/$USER"
+
+	if [ ! -e "$tmpdir" ]; then
+		mkdir -m 700 "$tmpdir"
+		chown "${USER}:ocf" "$tmpdir"
+	fi
+fi

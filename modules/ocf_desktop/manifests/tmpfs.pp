@@ -24,4 +24,21 @@ class ocf_desktop::tmpfs ($staff = false) {
     source => 'puppet:///modules/ocf_desktop/pam/mkhomedir',
     notify => Exec['pam-auth-update']
   }
+
+  # on-disk temporary directories mounted at ~/tmp
+  file {
+    '/var/local/tmp':
+      ensure => directory,
+      mode   => '0755';
+
+    '/usr/local/sbin/clean-temp-files':
+      source  => 'puppet:///modules/ocf_desktop/clean-temp-files',
+      mode    => '0755';
+  }
+
+  cron { 'clean-temp-files':
+    command => '/usr/local/sbin/clean-temp-files',
+    special => 'hourly',
+    require => File['/usr/local/sbin/clean-temp-files'];
+  }
 }

@@ -4,6 +4,9 @@
 
 mkdir -p $HOME/Desktop
 
+# try to create tmp symlink
+[ -e ~/tmp ] || ln -s "/var/local/tmp/$USER/" ~/tmp
+
 ## Create desktop icons
 
 # Print Queue

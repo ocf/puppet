@@ -1,0 +1,19 @@
+#!/bin/bash -e
+# Find and remove temporary files (/var/local/tmp/*) from users who haven't
+# logged in recently.
+#
+# For simplicity, /var/local/tmp/ is owned (and only writable) by root. On
+# login, root creates a new directory for the current user to use. We remove
+# these directories periodically via this cron script.
+
+shopt -s nullglob
+
+cd /var/local/tmp
+for u in *; do
+	# TODO: this check for recent logins is not great; wtmp is rotated monthly
+	# (rather than being a rolling log), so this basically is equivalent to
+	# clearing everyone at the start of the month
+	if ! last -Rw | cut -d' ' -f1 | head -n-2 | grep -q "^$u$"; then
+		rm -rf --one-file-system -- "/var/local/tmp/$u"
+	fi
+done
