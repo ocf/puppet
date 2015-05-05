@@ -251,7 +251,11 @@ class ocf_www {
       group   => 'root',
       mode    => '0644',
       source  => 'puppet:///modules/ocf_www/apache/mods/php.ini',
-      require => Package['php5'],
+      require => Package['php5'];
+
+    '/etc/php5/mods-available/apc.ini':
+      source  => 'puppet:///modules/ocf_www/apache/mods/apc.ini',
+      require => Package['php-apc'];
   }
 
   # apache must subscribe to all conf files
