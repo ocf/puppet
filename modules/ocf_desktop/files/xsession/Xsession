@@ -4,9 +4,13 @@
 
 mkdir -p $HOME/Desktop
 
-# try to create tmp and .steam symlinks
+# try to create tmp and .local/.steam symlinks
 [ -e ~/tmp ] || ln -s "/var/local/tmp/$USER/" ~/tmp
-[ ! -e ~/tmp/.steam -a ! -e ~/.steam ] && mkdir ~/tmp/.steam && ln -s ~/tmp/.steam ~/.steam
+
+for d in .steam .local; do
+	[ ! -e "$HOME/tmp/$d" -a ! -e "$HOME/$d" ] && \
+		mkdir "$HOME/tmp/$d" && ln -s "$HOME/tmp/$d" "$HOME/$d"
+done
 
 ## Create desktop icons
 
