@@ -128,6 +128,11 @@ class ocf_www {
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
+  exec { '/usr/sbin/a2enmod expires':
+    unless  => '/bin/readlink -e /etc/apache2/mods-enabled/expires.load',
+    notify  => Service['apache2'],
+    require => Package['apache2'],
+  }
   exec { '/usr/sbin/a2enmod fastcgi':
     unless  => '/bin/readlink -e /etc/apache2/mods-enabled/fastcgi.load',
     notify  => Service['apache2'],
