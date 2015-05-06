@@ -4,23 +4,27 @@ class ocf_desktop::xsession ($staff = false) {
 
   # Xsession configuration
   file {
-    # provide custom Xsession script to populate desktop
+    # custom Xsession script to populate desktop
     '/etc/X11/Xsession.d/95ocf':
       source  => 'puppet:///modules/ocf_desktop/xsession/Xsession',
       require => File['/opt/share/xsession'];
-    # provide list of desktops
+    # list of desktops
     '/opt/share/puppet/desktop_list':
       source  => 'puppet:///contrib/desktop/desktop_list';
-    # provide printing and other notification script daemon
+    # printing and other notification script daemon
     '/opt/share/puppet/notify.sh':
       mode    => '0755',
       source  => 'puppet:///modules/ocf_desktop/xsession/notify.sh',
       require => File['/opt/share/puppet/desktop_list'];
-    # provide script to tile multiple displays
+    # script to tile multiple displays
     '/usr/local/bin/fix-displays':
       mode    => '0755',
       source  => 'puppet:///modules/ocf_desktop/xsession/fix-displays';
-    # provide share directory with icons and wallpapers
+    # script to fix audio on login
+    '/usr/local/bin/fix-audio':
+      mode    => '0755',
+      source  => 'puppet:///modules/ocf_desktop/xsession/fix-audio';
+    # share directory with icons and wallpapers
     '/opt/share/xsession':
       ensure  => directory,
       recurse => true,
@@ -29,7 +33,7 @@ class ocf_desktop::xsession ($staff = false) {
       backup  => false,
       source  => 'puppet:///contrib/desktop/xsession',
       require => Class['ocf::puppet'];
-    # enforce list of possible xsessions
+    # list of possible xsessions
     '/usr/share/xsessions':
       ensure  => directory,
       recurse => true,

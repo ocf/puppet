@@ -1,0 +1,8 @@
+#!/bin/bash -e
+# Attempt to properly configure PulseAudio to sane defaults for the lab.
+#
+# Currently, we:
+#   * un-mute the Analog Stereo output in PulseAudio.
+
+SINK="$(pacmd list-sinks | grep -E '\s+name: <.+analog-stereo>' | cut -d ' ' -f2)"
+pacmd set-sink-mute ${SINK:1:-1} 0
