@@ -84,7 +84,7 @@ class ocf_stats::labstats {
       minute      => '*/5';
 
     'toner':
-      command     => '/opt/stats/labstats/printing/toner',
+      command     => '/opt/stats/labstats/printing/toner 2> /dev/null',
       environment => 'MAILTO=root',
       user        => 'ocfstats',
       minute      => '*/5';
