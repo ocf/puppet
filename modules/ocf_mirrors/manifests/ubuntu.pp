@@ -23,6 +23,7 @@ class ocf_mirrors::ubuntu {
       minute  => '18';
 
     'ubuntu-health':
+      ensure  => absent,
       command => '/opt/mirrors/project/ubuntu/health',
       user    => 'mirrors',
       hour    => '*',
