@@ -15,7 +15,9 @@ nomail: /var/mail/nomail/nomail
 bod: :include:/var/mail/aliases/include/bod
 owner-bod: officers
 
-officers: daradib,tzhu,sanjayk,waf,ckuehl,nickimp,willh,tmochida,mattmcal,kpengboy,peterwu
+officers: officers@g.ocf.berkeley.edu
+alumni: alumni@g.ocf.berkeley.edu
+decal: decal@g.ocf.berkeley.edu
 
 gm: officers
 general-manager: gm
