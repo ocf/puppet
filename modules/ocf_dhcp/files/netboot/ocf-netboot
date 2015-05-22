@@ -15,7 +15,7 @@ dban="http://sourceforge.net/projects/dban/files/latest/download"
 memtest="http://www.memtest.org/download/5.01/memtest86+-5.01.bin.gz"
 
 tftpdir='/opt/tftp'
-fwdir='/tmp/di_firmware'
+fwdir=$(mktemp -d)
 
 # remove old pxe files
 rm -rf $tftpdir
