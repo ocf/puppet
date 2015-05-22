@@ -9,9 +9,7 @@ set -e
 arch='amd64'
 dist='jessie'
 
-#netboot="http://mirrors/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
-# we use daily images to get a recent image for unreleased jessie
-netboot="http://d-i.debian.org/daily-images/$arch/daily/netboot/netboot.tar.gz"
+netboot="http://mirrors/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
 fw="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$dist/current/firmware.tar.gz"
 dban="http://sourceforge.net/projects/dban/files/latest/download"
 memtest="http://www.memtest.org/download/5.01/memtest86+-5.01.bin.gz"
