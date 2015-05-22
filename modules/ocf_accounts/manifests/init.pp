@@ -1,5 +1,6 @@
 class ocf_accounts {
   # daemontools to supervise application processes
+  # TODO: use systemd for this instead
   package { ['daemontools', 'daemontools-run']:; }
 
   include ocf_ssl

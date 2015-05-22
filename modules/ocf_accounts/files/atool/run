@@ -2,5 +2,4 @@
 PYTHONPATH=/srv/atool/src:/srv/atool/src/atool \
 	exec setuidgid atool \
 	gunicorn -c /srv/atool/etc/gunicorn.py \
-		--log-syslog --log-syslog-to unix:///dev/log --log-syslog-prefix atool \
 		atool.wsgi:application

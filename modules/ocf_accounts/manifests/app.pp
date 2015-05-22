@@ -1,4 +1,6 @@
 class ocf_accounts::app {
+  # TODO: atool dependencies don't get installed automatically
+  # maybe a good candidate for dh_virtualenv?
   package {
     'gunicorn':
       ensure   => latest,
