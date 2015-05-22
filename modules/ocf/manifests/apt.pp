@@ -28,7 +28,8 @@ class ocf::apt ( $desktop = false ) {
           include_src => false;
       }
 
-      if $::lsbdistcodename == 'wheezy' {
+      # repos available only for stable/oldstable
+      if $::lsbdistcodename in ['wheezy', 'jessie'] {
         apt::source { 'debian-updates':
           location  => 'http://mirrors/debian/',
           release   => "${::lsbdistcodename}-updates",
