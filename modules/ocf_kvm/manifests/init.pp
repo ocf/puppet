@@ -11,7 +11,7 @@ class ocf_kvm($group = 'ocfroot') {
                     'set unix_sock_rw_perms 0770'
                   ],
       require => [ File['/etc/nsswitch.conf'], Package['libvirt-bin'] ],
-      notify  => Service['libvirt-bin'];
+      notify  => Service['libvirtd'];
 
     '/etc/libvirt/libvirt.conf':
       # libvirtd lens produces a validation error for this file
@@ -21,7 +21,7 @@ class ocf_kvm($group = 'ocfroot') {
       require => Package['libvirt-bin'];
   }
 
-  service { 'libvirt-bin':
+  service { 'libvirtd':
     require => Package['libvirt-bin']
   }
 
