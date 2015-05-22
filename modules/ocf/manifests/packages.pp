@@ -92,6 +92,6 @@ class ocf::packages {
 
   ocf::repackage {
     ['tmux']:
-      backports => true;
+      backport_on => 'wheezy';
   }
 }

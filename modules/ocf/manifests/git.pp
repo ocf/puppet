@@ -1,6 +1,6 @@
 class ocf::git {
   ocf::repackage { ['git', 'gitk', 'git-gui']:
-    backports => true
+    backport_on => 'wheezy';
   }
 
   file { '/etc/gitconfig':

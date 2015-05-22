@@ -11,9 +11,9 @@ class ocf_mail::site_ocf {
   # access users' mail LDAP attributes for mail forwarding
   ocf::repackage {
     'postfix':
-      backports => true;
+      backport_on => 'wheezy';
     'postfix-ldap':
-      backports => true;
+      backport_on => 'wheezy';
   }
 
   package {

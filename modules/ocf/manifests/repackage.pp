@@ -1,15 +1,15 @@
 define ocf::repackage(
-    $package    = $title,
-    $recommends = true,
-    $backports  = false,
-    $dist       = $::lsbdistcodename,
+    $package     = $title,
+    $recommends  = true,
+    $backport_on = undef,
+    $dist        = $::lsbdistcodename,
   ) {
   $install_options = $recommends ? {
     true    => ['--no-install-recommends'],
     default => []
   }
 
-  if $dist == 'wheezy' and $::architecture != 'armv6l' and $backports {
+  if $backport_on and $dist == $backport_on {
     apt::pin { "bpo-${package}":
       release  => "${dist}-backports",
       priority => 600,
@@ -28,6 +28,10 @@ define ocf::repackage(
   } else {
     package { $package:
       install_options => $install_options;
+    }
+
+    apt::pin { "bpo-${package}":
+      ensure => absent;
     }
   }
 }

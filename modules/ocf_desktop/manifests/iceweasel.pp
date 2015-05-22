@@ -2,7 +2,7 @@ class ocf_desktop::iceweasel {
 
   # install iceweasel from backports and spellcheck dictionary
   ocf::repackage { 'iceweasel':
-    backports => true
+    backport_on => 'wheezy';
   }
   package { 'hunspell-en-us': }
 
