@@ -34,17 +34,11 @@ bayes_auto_learn 0
 bayes_auto_learn_threshold_nonspam -0.6
 bayes_auto_learn_threshold_spam 5.0
 
-bayes_path        /var/lib/spamd/.db/bayes
+bayes_path        /var/lib/spamassassin/.db/bayes
 bayes_file_mode   0700
 #bayes_expiry_max_db_size 250000
 
 ## score adjustments
-
-header GRANT_SPAM Subject =~ /^Community & educational development$/
-score GRANT_SPAM 100
-header LED_LIGHTING From =~ /ledlighting/
-score LED_LIGHTING 100
-
 score PYZOR_CHECK (2.0)
 score RAZOR2_CHECK (2.0)
 score URIBL_BLACK (2.0)

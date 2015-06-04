@@ -20,7 +20,8 @@ class ocf_mail::spam {
 
   service {
     'spamassassin':
-      require => [Package['spamassassin'], User['spamd']];
+      require => Package['spamassassin'],
+      enable  => true;  # disabled by default
     'spamass-milter':
       require => Package['spamass-milter'];
     'clamav-milter':
@@ -31,30 +32,32 @@ class ocf_mail::spam {
       require => Package['policyd-weight'];
   }
 
-  user {
-    'spamd':
-      ensure  => present,
-      name    => 'spamd',
-      gid     => 'spamd',
-      groups  => ['sys'],
-      home    => '/var/lib/spamd',
-      shell   => '/bin/false',
-      system  => true,
-      require => Group['spamd'];
-  }
+  augeas {
+    '/etc/default/spamassassin':
+      context => '/files/etc/default/spamassassin',
+      changes => [
+        'set OPTIONS \'"--max-children=5 --nouser-config"\'',
+        'set CRON 1',
+      ],
+      require => Package['spamassassin'],
+      notify  => Service['spamassassin'];
 
-  group {
-    'spamd':
-      ensure  => present,
-      name    => 'spamd',
-      system  => true;
-  }
+    '/etc/default/spamass-milter':
+      context => '/files/etc/default/spamass-milter',
+      changes => [
+        # `-u spamass-milter` here doesn't do what you think!
+        #
+        # It causes spamass-milter to pass the recipient's username to spamc
+        # and _fall_back_on_ spamass-milter, which we *don't* want.
+        #
+        # Instead, we pass the -u directly to spamc and NOT spamass-milter.
+        'set OPTIONS \'"-i 127.0.0.1 -- -u debian-spamd"\''
+      ],
+      require => Package['spamass-milter'],
+      notify  => Service['spamass-milter'];
+}
 
   file {
-    '/etc/default/spamassassin':
-      source  => 'puppet:///modules/ocf_mail/spam/spamass/spamassassin',
-      notify  => Service['spamassassin'],
-      require => Package['spamassassin'];
     '/etc/spamassassin/local.cf':
       source  => 'puppet:///modules/ocf_mail/spam/spamass/local.cf',
       notify  => Service['spamassassin'],
@@ -63,15 +66,6 @@ class ocf_mail::spam {
       source  => 'puppet:///modules/ocf_mail/spam/spamass/v310.pre',
       notify  => Service['spamassassin'],
       require => Package['spamassassin'];
-    '/var/lib/spamd':
-      ensure  => directory,
-      owner   => spamd,
-      mode    => '0755',
-      require => User['spamd'];
-    '/etc/default/spamass-milter':
-      source  => 'puppet:///modules/ocf_mail/spam/spamass/spamass-milter',
-      notify  => Service['spamass-milter'],
-      require => Package['spamass-milter'];
     '/var/spool/postfix/clamav':
       ensure  => directory,
       owner   => clamav,

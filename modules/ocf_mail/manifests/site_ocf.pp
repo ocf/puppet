@@ -4,25 +4,13 @@
 class ocf_mail::site_ocf {
   include spam
 
-  # backport postfix because debian postfix-ldap packages prior to 2.11.1-1 are
-  # compiled without -DUSE_LDAP_SASL, and wheezy has only 2.9.6
-  #
-  # we need LDAP SASL support in order to auth with a GSSAPI LDAP bind to
-  # access users' mail LDAP attributes for mail forwarding
-  ocf::repackage {
-    'postfix':
-      backport_on => 'wheezy';
-    'postfix-ldap':
-      backport_on => 'wheezy';
-  }
-
   package {
-    ['rt4-clients']:;
+    ['postfix', 'postfix-ldap', 'rt4-clients']:;
   }
 
   service {
     'postfix':
-      require => [Ocf::Repackage['postfix'], Package['rt4-clients']];
+      require => [Package['postfix'], Package['rt4-clients']];
   }
 
   user {
@@ -99,19 +87,19 @@ class ocf_mail::site_ocf {
       owner   => root,
       group   => root,
       source  => 'puppet:///private/smtp-krb5.keytab',
-      require => Ocf::Repackage['postfix'];
+      require => Package['postfix'];
 
     # postfix config
     '/etc/postfix/main.cf':
       mode    => '0644',
       source  => 'puppet:///modules/ocf_mail/site_ocf/postfix/main.cf',
       notify  => Service['postfix'],
-      require => Ocf::Repackage['postfix'];
+      require => Package['postfix'];
     '/etc/postfix/ldap-aliases.cf':
       mode    => '0644',
       source  => 'puppet:///modules/ocf_mail/site_ocf/postfix/ldap-aliases.cf',
       notify  => Service['postfix'],
-      require => Ocf::Repackage['postfix'];
+      require => Package['postfix'];
     '/etc/postfix/ocf':
       ensure  => directory,
       require => Service['postfix'];
