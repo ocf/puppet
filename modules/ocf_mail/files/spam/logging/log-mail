@@ -49,7 +49,7 @@ if __name__ == '__main__':
     parsed = {}
     received = message.get_all('Received')
     if received:
-        parsed = parse_received(received[-1])
+        parsed = parse_received(received[-1]) or {}
 
     info = {
         'relay': parsed.get('relay'),
