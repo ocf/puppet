@@ -54,6 +54,7 @@ class ocf::extrapackages {
     'libmagickwand-dev',
     'libmysqlclient-dev',
     'libncurses5-dev',
+    'libopencv-dev',
     'libpq-dev',
     'libreadline6-dev',
     'libsqlite3-dev',
