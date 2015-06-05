@@ -51,7 +51,7 @@ class ocf_mail::spam {
         # and _fall_back_on_ spamass-milter, which we *don't* want.
         #
         # Instead, we pass the -u directly to spamc and NOT spamass-milter.
-        'set OPTIONS \'"-i 127.0.0.1 -- -u debian-spamd"\''
+        'set OPTIONS \'"-r 4 -i 127.0.0.1 -- -u debian-spamd"\''
       ],
       require => Package['spamass-milter'],
       notify  => Service['spamass-milter'];
