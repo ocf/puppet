@@ -1,94 +1,44 @@
 class ocf_accounts::app {
-  # TODO: atool dependencies don't get installed automatically
-  # maybe a good candidate for dh_virtualenv?
-  package {
-    'gunicorn':
-      ensure   => latest,
-      provider => pip3;
-
-    # build dependencies for python modules
-    ['libldap2-dev', 'libsasl2-dev']:;
-  }
-
   user { 'atool':
     comment => 'OCF Account Creation',
     gid     => approve,
-    home    => '/srv/atool',
+    home    => '/opt/create',
     system  => true,
     groups  => ['sys'];
   }
 
+  # ocf-atool package is installed in our apt repository and sets up gunicorn
+  # running on localhost:8000
+  package { 'ocf-atool':
+    require => User['atool'];
+  }
+
+  service { 'ocf-atool':
+    require => Package['ocf-atool'];
+  }
+
+  # TODO: on dev-accounts, we want staff to be able to read these too
   File {
     owner => atool,
-    group => approve
+    group => root
   }
 
   file {
-    ['/srv/atool', '/srv/atool/env', '/srv/atool/etc']:
-      ensure => directory;
+    '/etc/ocf-atool/chpass.keytab':
+      source  => 'puppet:///private/chpass.keytab',
+      mode    => '0400',
+      notify  => Service['ocf-atool'],
+      require => Package['ocf-atool'];
 
-    '/srv/atool/etc/settings.py':
-      source => 'puppet:///private/settings.py',
-      mode   => '0400',
-      notify => Exec['reload-atool'];
+    '/etc/ocf-atool/atool-id_rsa':
+      source  => 'puppet:///private/atool-id_rsa',
+      mode    => '0400',
+      notify  => Service['ocf-atool'],
+      require => Package['ocf-atool'];
 
-    '/srv/atool/etc/chpass.keytab':
-      source => 'puppet:///private/chpass.keytab',
-      mode   => '0400';
-
-    '/srv/atool/etc/atool-id_rsa':
-      source => 'puppet:///private/atool-id_rsa',
-      mode   => '0400';
-
-    '/srv/atool/etc/gunicorn.py':
-      source => 'puppet:///modules/ocf_accounts/atool/gunicorn.py',
-      mode   => '0444';
-
-    '/srv/atool/etc/ssh_known_hosts':
-      source => 'puppet:///modules/ocf_accounts/atool/ssh_known_hosts',
-      mode   => '0444';
-
-    # supervise app with daemontools
-    '/etc/service/atool':
-      ensure => directory,
-      mode   => '0755';
-
-    '/etc/service/atool/run':
-      source => 'puppet:///modules/ocf_accounts/atool/run',
-      mode   => '0755';
-
-    # src is a symlink to the current deployed source;
-    #
-    # puppet will initially point it at the master branch, but will not
-    # override it if changed, allowing you to point it at your own environment
-    '/srv/atool/src':
-      ensure  => link,
-      links   => manage,
-      target  => '/srv/atool/env/master',
-      replace => false;
-
-    '/srv/atool/env/master/atool/settings.py':
-      ensure  => link,
-      links   => manage,
-      target  => '/srv/atool/etc/settings.py',
-      require => Vcsrepo['/srv/atool/env/master'];
-
-    ['/opt/create', '/opt/create/public']:
-      ensure  => directory;
-  }
-
-  exec { 'reload-atool':
-    command     => 'svc -h /etc/service/atool',
-    refreshonly => true,
-    subscribe   => Package['ocflib'];
-  }
-
-  vcsrepo { '/srv/atool/env/master':
-    ensure   => latest,
-    provider => git,
-    revision => 'master',
-    source   => 'https://github.com/ocf/atool.git',
-    owner => atool,
-    group => approve;
+    '/etc/ocf-atool/ssh_known_hosts':
+      source  => 'puppet:///modules/ocf_accounts/atool/ssh_known_hosts',
+      mode    => '0444',
+      require => Package['ocf-atool'];
   }
 }

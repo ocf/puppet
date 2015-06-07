@@ -1,5 +1,0 @@
-#!/bin/bash
-PYTHONPATH=/srv/atool/src:/srv/atool/src/atool \
-	exec setuidgid atool \
-	gunicorn -c /srv/atool/etc/gunicorn.py \
-		atool.wsgi:application
