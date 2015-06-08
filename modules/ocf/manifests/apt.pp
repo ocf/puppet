@@ -2,8 +2,10 @@ class ocf::apt ( $desktop = false ) {
   package { ['aptitude', 'imvirt']: }
 
   class { '::apt':
-    purge_sources_list   => true,
-    purge_sources_list_d => true;
+    purge => {
+      'source.list'    => true,
+      'sources.list.d' => true,
+    };
   }
 
   case $::operatingsystem {
@@ -25,7 +27,9 @@ class ocf::apt ( $desktop = false ) {
           location  => 'http://apt/',
           release   => $::lsbdistcodename,
           repos     => 'main',
-          include_src => false;
+          include   => {
+            src => false
+          };
       }
 
       # repos available only for stable/oldstable
@@ -51,8 +55,8 @@ class ocf::apt ( $desktop = false ) {
   }
 
   apt::key { 'puppetlabs':
-    key        => '4BD6EC30',
-    key_source => 'https://apt.puppetlabs.com/pubkey.gpg';
+    id     => '47B320EB4C7C375AA9DAE1A01054B7A24BD6EC30',
+    source => 'https://apt.puppetlabs.com/pubkey.gpg';
   }
 
   apt::source { 'puppetlabs':
@@ -62,8 +66,8 @@ class ocf::apt ( $desktop = false ) {
   }
 
   apt::key { 'ocf':
-    key        => '45A686E7D72A0AF4',
-    key_source => 'https://apt.ocf.berkeley.edu/pubkey.gpg';
+    id     => '9FBEC942CCA7D929B41A90EC45A686E7D72A0AF4',
+    source => 'https://apt.ocf.berkeley.edu/pubkey.gpg';
   }
 
   if $desktop {
@@ -75,8 +79,8 @@ class ocf::apt ( $desktop = false ) {
     }
 
     apt::key { 'google':
-      key        => '7FAC5991',
-      key_source => 'https://dl-ssl.google.com/linux/linux_signing_key.pub';
+      id     => '4CCA1EAF950CEE4AB83976DCA040830F7FAC5991',
+      source => 'https://dl-ssl.google.com/linux/linux_signing_key.pub';
     }
 
     # Chrome creates /etc/apt/sources.list.d/google-chrome.list upon
@@ -89,7 +93,9 @@ class ocf::apt ( $desktop = false ) {
         location    => 'http://dl.google.com/linux/chrome/deb/',
         release     => 'stable',
         repos       => 'main',
-        include_src => false,
+        include   => {
+          src => false
+        },
         require     => Apt::Key['google'];
     }
   }
