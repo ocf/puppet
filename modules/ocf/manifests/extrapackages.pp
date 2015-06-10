@@ -78,6 +78,7 @@ class ocf::extrapackages {
     'php5-sqlite',
     'pkg-config',
     'pssh',
+    'puppet-lint',
     'python-crypto',
     'python-django',
     'python-flask',

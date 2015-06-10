@@ -1,10 +1,6 @@
 class ocf_puppet::puppetmaster {
   package {
-    'puppetmaster-passenger':;
-
-    'puppet-lint':
-      ensure   => '1.1.0',
-      provider => gem;
+    ['puppetmaster-passenger', 'puppet-lint']:;
   }
 
   apache::vhost { 'puppetmaster':
