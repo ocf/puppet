@@ -84,10 +84,15 @@ class ocf::packages {
   }
 
   if $::lsbdistcodename == 'jessie' {
-    # in jessie, install python-pip-whl to avoid problems where a system-wide
-    # python module (e.g. requests) is updated, resulting in pip breaking
-    # (see rt#3268, Debian #744145)
-    package { 'python-pip-whl':; }
+    package {
+      # in jessie, install python-pip-whl to avoid problems where a system-wide
+      # python module (e.g. requests) is updated, resulting in pip breaking
+      # (see rt#3268, Debian #744145)
+      'python-pip-whl':;
+
+      # not available in wheezy, but we don't really need it
+      'python-tox':;
+    }
   }
 
   ocf::repackage {

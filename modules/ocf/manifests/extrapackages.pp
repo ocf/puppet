@@ -34,6 +34,7 @@ class ocf::extrapackages {
     'build-essential',
     'cgdb',
     'chicken-bin',
+    'debhelper',
     'default-jdk',
     'elinks',
     'emacs',
@@ -114,6 +115,16 @@ class ocf::extrapackages {
     # see debian bug#760569
     'virtualbox':
       ensure => purged;
+  }
+
+  if $::lsbdistcodename == 'jessie' {
+    package {
+      # not available in wheezy (except backports), but we don't need them
+      [
+      'dh-systemd',
+      'dh-virtualenv',
+      ]:;
+    }
   }
 
   # install wp-cli
