@@ -1,7 +1,7 @@
 class ocf_mysql::percona_apt {
   apt::key { 'percona':
     id     => '430BDF5C56E7C94E848EE60C1C4CBDCDCD2EFD2A',
-    source => 'keys.gnupg.net';
+    server => 'keys.gnupg.net';
   }
 
   apt::source { 'percona':
