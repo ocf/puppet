@@ -1,0 +1,7 @@
+#!/bin/bash -e
+# Install a Debian package from stdin. Called from jenkins-deploy.
+dist="$1"
+
+tmp=$(mktemp --suffix='.deb')
+cat > "$tmp"
+exec /opt/apt/bin/reprepro includedeb "$dist" "$tmp"

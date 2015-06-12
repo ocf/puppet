@@ -35,6 +35,11 @@ class ocf_apt {
       source  => 'puppet:///modules/ocf_apt/bin/',
       mode    => '0755',
       recurse => true;
+
+    '/etc/sudoers.d/ocfdeploy-apt':
+      content => "ocfdeploy ALL=(ocfapt) NOPASSWD: /opt/apt/bin/reprepro, /opt/apt/bin/include-from-stdin\n",
+      owner   => root,
+      group   => root;
   }
 
   exec {

@@ -1,0 +1,4 @@
+#!/bin/bash -e
+slave_jar=$(mktemp)
+wget -O "$slave_jar" "https://jenkins.ocf.berkeley.edu/jnlpJars/slave.jar"
+exec java -jar "$slave_jar"
