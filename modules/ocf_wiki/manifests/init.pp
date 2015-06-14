@@ -4,7 +4,7 @@ class ocf_wiki {
   package { 'ikiwiki':; }
 
   file {
-    ['/srv/wiki', '/srv/wiki/webhook']:
+    '/srv/wiki':
       ensure => directory,
       mode   => '0775';
 
@@ -20,6 +20,9 @@ class ocf_wiki {
     '/srv/wiki/rebuild-wiki':
       source => 'puppet:///modules/ocf_wiki/rebuild-wiki',
       mode   => '0755';
+
+    '/etc/sudoers.d/ocfdeploy-wiki':
+      content => "ocfdeploy ALL=(www-data) NOPASSWD: /srv/wiki/rebuild-wiki\n";
   }
 
   exec { 'rebuild-wiki':
@@ -30,12 +33,6 @@ class ocf_wiki {
       Package['ikiwiki'],
       File['/srv/wiki/wiki.setup', '/srv/wiki/rebuild-wiki', '/srv/wiki/wiki'],
       Apache::Vhost['wiki.ocf.berkeley.edu']];
-  }
-
-  ocf::webhook { '/srv/wiki/webhook/github.cgi':
-    service      => 'github',
-    secretsource => 'puppet:///private/github.secret',
-    command      => '/srv/wiki/rebuild-wiki';
   }
 
   class { '::apache':
@@ -55,20 +52,6 @@ class ocf_wiki {
       servername      => 'wiki.ocf.berkeley.edu',
       port            => 443,
       docroot         => '/srv/wiki/public_html',
-
-      aliases => [{
-        alias => '/webhook',
-        path  => '/srv/wiki/webhook'
-      }],
-
-      directories => [{
-        path        => '/srv/wiki/webhook',
-        options     => ['ExecCGI'],
-        addhandlers => [{
-          handler    => 'cgi-script',
-          extensions => ['.cgi']
-        }]
-      }],
 
       ssl             => true,
       ssl_key         => "/etc/ssl/private/${::fqdn}.key",
