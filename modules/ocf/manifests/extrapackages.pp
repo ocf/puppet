@@ -90,6 +90,7 @@ class ocf::extrapackages {
     'python-pandas',
     'python-scipy',
     'python-sqlalchemy',
+    'python-stdeb',
     'python-twisted',
     'python-virtualenv',
     'python-yaml',
@@ -124,6 +125,7 @@ class ocf::extrapackages {
       [
       'dh-systemd',
       'dh-virtualenv',
+      'python3-stdeb',
       ]:;
     }
   }
