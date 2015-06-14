@@ -16,12 +16,18 @@ class ocf::apt ( $desktop = false ) {
         'debian':
           location  => 'http://mirrors/debian/',
           release   => $::lsbdistcodename,
-          repos     => $repos;
+          repos     => $repos,
+          include   => {
+            src => true
+          };
 
         'debian-security':
           location  => 'http://mirrors/debian-security/',
           release   => "${::lsbdistcodename}/updates",
-          repos     => $repos;
+          repos     => $repos,
+          include   => {
+            src => true
+          };
 
         'ocf':
           location  => 'http://apt/',
@@ -37,7 +43,10 @@ class ocf::apt ( $desktop = false ) {
         apt::source { 'debian-updates':
           location  => 'http://mirrors/debian/',
           release   => "${::lsbdistcodename}-updates",
-          repos     => $repos;
+          repos     => $repos,
+          include   => {
+            src => true
+          };
         }
 
         # XXX: we use a _different_ hostname from the regular archive because
