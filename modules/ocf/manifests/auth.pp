@@ -92,13 +92,18 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
       content => template('ocf/access.conf.erb');
   }
 
-  augeas { 'sshd: enable gssapi and root login':
+  augeas { 'sshd: enable gssapi and root login, disable sorried forwarding':
     context => '/files/etc/ssh/sshd_config',
     changes => [
       'set GSSAPIAuthentication yes',
       'set GSSAPICleanupCredentials yes',
       'set GSSAPIStrictAcceptorCheck no',
-      'set PermitRootLogin yes'
+
+      'set PermitRootLogin yes',
+
+      'set Match/Condition/Group sorry',
+      'set Match/Settings/AllowTcpForwarding no',
+      'set Match/Settings/X11Forwarding no',
     ],
     require => Package['openssh-server'],
     notify  => Service['ssh']
