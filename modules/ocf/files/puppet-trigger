@@ -30,6 +30,8 @@ def trigger_run():
         sys.exit(1)
 
 def tail_syslog():
+    # call less in "secure" mode since this is triggered by passwordless sudo
+    os.environ['LESSSECURE'] = '1'
     os.execvp('less', ('less', '+F', '/var/log/syslog'))
 
 def is_jessie():
