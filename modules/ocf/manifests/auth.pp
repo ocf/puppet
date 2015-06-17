@@ -104,6 +104,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
       'set Match/Condition/Group sorry',
       'set Match/Settings/AllowTcpForwarding no',
       'set Match/Settings/X11Forwarding no',
+      'set Match/Settings/AllowAgentForwarding no',
     ],
     require => Package['openssh-server'],
     notify  => Service['ssh']
