@@ -3,6 +3,10 @@ class ocf_puppet::puppetmaster {
     ['puppetmaster-passenger', 'puppet-lint']:;
   }
 
+  class { 'apache':
+    default_vhost => false;
+  }
+
   apache::vhost { 'puppetmaster':
     docroot    => '/usr/share/puppet/rack/puppetmasterd/public/',
     port       => 8140,
