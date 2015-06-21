@@ -8,7 +8,7 @@ AddHandler cgi-script .cgi .pl .py
 
 <Directory "/services/http/users/*/*/">
     AllowOverride All
-    Options MultiViews IncludesNoExec +ExecCGI +SymLinksIfOwnerMatch
+    Options MultiViews Indexes IncludesNoExec +ExecCGI +SymLinksIfOwnerMatch
 
     DirectoryIndex index.html index.cgi index.pl index.php index.xhtml index.htm index.shtm index.shtml
     <Limit GET POST OPTIONS PROPFIND>
