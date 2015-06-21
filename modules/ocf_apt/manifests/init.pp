@@ -64,14 +64,6 @@ class ocf_apt {
         Exec['import-apt-gpg']];
   }
 
-  cron { 'report-changes':
-    command     => '/opt/apt/bin/report-changes',
-    user        => ocfapt,
-    environment => 'MAILTO=root',
-    minute      => '*/10',
-    require     => File['/opt/apt/bin'];
-  }
-
   apache::vhost { 'apt.ocf.berkeley.edu':
     serveraliases   => ['apt'],
     port            => 80,
