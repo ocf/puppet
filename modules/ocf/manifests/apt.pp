@@ -3,7 +3,7 @@ class ocf::apt ( $desktop = false ) {
 
   class { '::apt':
     purge => {
-      'source.list'    => true,
+      'sources.list'   => true,
       'sources.list.d' => true,
     };
   }
