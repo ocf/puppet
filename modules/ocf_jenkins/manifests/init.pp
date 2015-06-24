@@ -73,6 +73,12 @@ class ocf_jenkins {
       group  => jenkins-deploy,
       mode   => '0640';
 
+    '/opt/jenkins/deploy/.pypirc':
+      source => 'puppet:///private/pypirc',
+      owner  => root,
+      group  => jenkins-deploy,
+      mode   => '0640';
+
     '/etc/sudoers.d/jenkins-deploy':
       content => "jenkins ALL=(jenkins-deploy) NOPASSWD: ALL\n",
       owner   => root,
