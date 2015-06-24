@@ -126,6 +126,7 @@ class ocf::extrapackages {
       'dh-systemd',
       'dh-virtualenv',
       'python3-stdeb',
+      'twine',
       ]:;
     }
   }
