@@ -11,6 +11,10 @@
 # This is in a separate manifest so that it can be included by other modules
 # without concerns of redeclaring ocf::packages with different parameters.
 class ocf::extrapackages {
+  # special snowflake packages that require some config
+  include matplotlib
+
+  # other packages
   package {
     # chpass dependencies
     ['libexpect-perl', 'libunicode-map8-perl', 'python-cracklib']:;
@@ -84,7 +88,6 @@ class ocf::extrapackages {
     'python-flask',
     'python-flup',
     'python-lxml',
-    'python-matplotlib',
     'python-mysqldb',
     'python-numpy',
     'python-pandas',
