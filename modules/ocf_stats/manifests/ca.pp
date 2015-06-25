@@ -1,3 +1,4 @@
+# TODO: this ca setup is TERRIBLE, we need to replace this (rt#3280)
 class ocf_stats::ca {
   file {
     ['/etc/ssl/stats', '/etc/ssl/stats/ca', '/etc/ssl/stats/ca/certs', '/etc/ssl/stats/ca/crl']:

@@ -65,22 +65,22 @@ class ocf_stats::munin {
 
     directories => [
       {
-        path  => '/var/cache/munin/www/static/',
-        allow => 'from all'
+        path         => '/var/cache/munin/www/static/',
+        auth_require => 'all granted',
       },
       {
-        path       => '/munin-cgi/munin-cgi-html',
-        provider   => location,
-        options    => '+ExecCGI',
-        sethandler => 'fcgid-script',
-        allow      => 'from all'
+        path         => '/munin-cgi/munin-cgi-html',
+        provider     => location,
+        options      => '+ExecCGI',
+        sethandler   => 'fcgid-script',
+        auth_require => 'all granted',
       },
       {
-        path       => '/munin-cgi/munin-cgi-graph',
-        provider   => location,
-        options    => '+ExecCGI',
-        sethandler => 'fcgid-script',
-        allow      => 'from all'
+        path         => '/munin-cgi/munin-cgi-graph',
+        provider     => location,
+        options      => '+ExecCGI',
+        sethandler   => 'fcgid-script',
+        auth_require => 'all granted',
       }
     ];
   }

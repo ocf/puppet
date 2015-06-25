@@ -1,7 +1,7 @@
 class ocf_stats::labstats {
-  package {
-    ['mysql-client', 'python-pysnmp4']:;
-  }
+  include ocf::matplotlib
+
+  package { 'python3-mysql.connector':; }
 
   user {
     'ocfstats':
