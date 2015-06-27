@@ -38,7 +38,7 @@ import_environment = MAIL_CONFIG MAIL_DEBUG MAIL_LOGTAG TZ XAUTHORITY DISPLAY
 notify_classes = resource, software
 
 # masquerade subdomains to ocf.berkeley.edu
-masquerade_domains = !g.$mydomain $mydomain
+masquerade_domains = !dev-vhost.$mydomain !g.$mydomain $mydomain
 masquerade_classes = envelope_sender, envelope_recipient, header_sender,
 	header_recipient
 local_header_rewrite_clients = permit_mynetworks
