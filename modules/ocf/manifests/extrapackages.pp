@@ -38,6 +38,7 @@ class ocf::extrapackages {
     'build-essential',
     'cgdb',
     'chicken-bin',
+    'chrpath',
     'debhelper',
     'default-jdk',
     'elinks',
@@ -126,6 +127,7 @@ class ocf::extrapackages {
     package {
       # not available in wheezy (except backports), but we don't need them
       [
+      'apache2-dev',
       'dh-systemd',
       'dh-virtualenv',
       'python3-stdeb',
