@@ -15,6 +15,10 @@ class ocf_admin {
     web    => true;
   }
 
+  class { 'ocf::docker':
+    admin_group => 'ocfroot';
+  }
+
   service { 'rsyslog': }
 
   user { 'atool':
