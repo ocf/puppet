@@ -99,6 +99,7 @@ class ocf::extrapackages {
     'python-virtualenv',
     'python-yaml',
     'python3-tk',
+    'quilt',
     'r-base',
     'ruby-dev',
     'ruby-mysql',
