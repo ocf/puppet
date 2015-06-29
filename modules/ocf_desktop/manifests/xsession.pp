@@ -142,11 +142,11 @@ class ocf_desktop::xsession ($staff = false) {
   package { 'xautolock':; }
 
   file {
-    '/opt/share/xsession/locker':
+    '/usr/local/bin/auto-lock':
       mode   => '0755',
-      source => 'puppet:///modules/ocf_desktop/xsession/locker';
-    '/opt/share/xsession/locker-notify':
+      source => 'puppet:///modules/ocf_desktop/xsession/auto-lock';
+    '/usr/local/bin/auto-lock-notify':
       mode   => '0755',
-      source => 'puppet:///modules/ocf_desktop/xsession/locker-notify';
+      source => 'puppet:///modules/ocf_desktop/xsession/auto-lock-notify';
   }
 }
