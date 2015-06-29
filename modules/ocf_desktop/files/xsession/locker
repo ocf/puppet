@@ -1,0 +1,6 @@
+#!/bin/bash
+if groups | grep -q '\bapprove\b'; then
+	exec xflock4
+else
+	exec xfce4-session-logout
+fi

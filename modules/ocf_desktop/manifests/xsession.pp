@@ -137,4 +137,16 @@ class ocf_desktop::xsession ($staff = false) {
     '/etc/fonts/local.conf':
       source => 'puppet:///modules/ocf_desktop/xsession/fonts.conf';
   }
+
+  # auto logout users
+  package { 'xautolock':; }
+
+  file {
+    '/opt/share/xsession/locker':
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_desktop/xsession/locker';
+    '/opt/share/xsession/locker-notify':
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_desktop/xsession/locker-notify';
+  }
 }

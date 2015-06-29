@@ -112,3 +112,6 @@ xset m 0 0
 
 # Configure PulseAudio properly
 /usr/local/bin/fix-audio &
+
+# Auto logout inactive users
+/usr/bin/xautolock -locker /opt/share/xsession/locker -notify 300 -notifier /opt/share/xsession/locker-notify &
