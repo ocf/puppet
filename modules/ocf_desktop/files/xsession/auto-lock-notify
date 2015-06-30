@@ -1,6 +1,0 @@
-#!/bin/bash
-if groups | grep -q '\bapprove\b'; then
-	exec zenity --warning --text "Will lock screen in 5 minutes due to inactivity"
-else
-	exec zenity --warning --text "Will log out in 5 minutes due to inactivity"
-fi

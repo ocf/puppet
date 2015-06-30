@@ -1,6 +1,25 @@
 #!/bin/bash
+
+WARNTIME=60
+
 if groups | grep -q '\bapprove\b'; then
-	exec xflock4
+	ACTION_TEXT='Screen will lock'
+	BTN_TEXT="Wait, don't lock it"
+	CMD=(xflock4)
 else
-	exec xfce4-session-logout
+	ACTION_TEXT='You will be logged out'
+	BTN_TEXT="Wait, don't log me out"
+	CMD=(xfce4-session-logout --logout)
 fi
+
+for ((i=$WARNTIME; i>=0; i--)); do
+	echo "#$ACTION_TEXT in $i seconds."
+	# We have to use a number slightly larger than $WARNTIME so that
+	# zenity doesn't exit on the very first tick
+	bc -l <<< "$i / $WARNTIME.1 * 100"
+	sleep 1
+done |
+  zenity --progress --title "You have been inactive" \
+  --cancel-label "$BTN_TEXT" --auto-close
+
+[ $? -eq 0 ] && exec "${CMD[@]}"
