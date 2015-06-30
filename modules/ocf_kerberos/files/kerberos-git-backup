@@ -8,6 +8,6 @@ export GIT_DIR="$DIR/.git"
 [ -d "$GIT_WORK_TREE" ] || mkdir "$GIT_WORK_TREE"
 [ -d "$GIT_DIR" ] || git init -q
 dumpfile="$DIR/kerberos.dump"
-/usr/sbin/kadmin -l dump --decrypt > "$dumpfile"
+/usr/bin/kadmin -l dump --decrypt > "$dumpfile"
 git add "$dumpfile"
 git commit -q -m 'kerberos-git-backup' --allow-empty "$dumpfile"
