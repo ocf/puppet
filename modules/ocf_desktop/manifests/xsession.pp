@@ -145,8 +145,5 @@ class ocf_desktop::xsession ($staff = false) {
     '/usr/local/bin/auto-lock':
       mode   => '0755',
       source => 'puppet:///modules/ocf_desktop/xsession/auto-lock';
-    '/usr/local/bin/auto-lock-notify':
-      mode   => '0755',
-      source => 'puppet:///modules/ocf_desktop/xsession/auto-lock-notify';
   }
 }
