@@ -1,6 +1,7 @@
 #!/bin/bash
+LOGOUT_TIME=`date -d "+5 minutes" +%r`
 if groups | grep -q '\bapprove\b'; then
-	exec zenity --warning --text "Will lock screen in 5 minutes due to inactivity"
+	exec notify-send "xautolock" "Locking screen at $LOGOUT_TIME due to inactivity" -i dialog-warning
 else
-	exec zenity --warning --text "Will log out in 5 minutes due to inactivity"
+	exec notify-send "xautolock" "Logging out at $LOGOUT_TIME due to inactivity" -i dialog-warning
 fi
