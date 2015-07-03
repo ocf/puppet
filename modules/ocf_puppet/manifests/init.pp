@@ -1,7 +1,6 @@
 class ocf_puppet {
   include ocf::ldapvi
 
-  include apt_dater
   include puppetmaster
 
   file { '/etc/sudoers.d/ocfdeploy-puppet':

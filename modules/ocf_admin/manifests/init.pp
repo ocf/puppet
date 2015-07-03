@@ -3,6 +3,8 @@ class ocf_admin {
   include ocf::ldapvi
   include ocf::mysql
 
+  include apt_dater
+
   package {
     # remove accidentally-installed packages
     ['php5', 'libapache2-mod-php5', 'apache2']:

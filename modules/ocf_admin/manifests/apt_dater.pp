@@ -1,4 +1,4 @@
-class ocf_puppet::apt_dater {
+class ocf_admin::apt_dater {
   package { 'apt-dater': }
 
   file { '/root/apt-dater.keytab':
