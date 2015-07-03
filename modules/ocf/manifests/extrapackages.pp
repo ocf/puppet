@@ -98,6 +98,7 @@ class ocf::extrapackages {
     'python-twisted',
     'python-virtualenv',
     'python-yaml',
+    'python3-lxml',
     'python3-tk',
     'quilt',
     'r-base',
