@@ -139,14 +139,14 @@ class ocf_desktop::xsession ($staff = false) {
   }
 
   # auto logout users
-  package { 'xautolock':; }
+  package {
+    ['xautolock',
+    'gir1.2-notify-0.7']:;
+  }
 
   file {
     '/usr/local/bin/auto-lock':
       mode   => '0755',
       source => 'puppet:///modules/ocf_desktop/xsession/auto-lock';
-    '/usr/local/bin/auto-lock-notify':
-      mode   => '0755',
-      source => 'puppet:///modules/ocf_desktop/xsession/auto-lock-notify';
   }
 }
