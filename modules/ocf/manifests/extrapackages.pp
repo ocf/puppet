@@ -137,6 +137,7 @@ class ocf::extrapackages {
       'python-pytest',
       'python-pytest-cov',
       'python3-flake8',
+      'python3-flask',
       'python3-mock',
       'python3-pytest',
       'python3-pytest-cov',
