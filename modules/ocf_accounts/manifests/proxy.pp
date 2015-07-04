@@ -24,9 +24,14 @@ class ocf_accounts::proxy {
         'Host $http_host'
       ],
 
-      ssl      => true,
-      ssl_cert => "/etc/ssl/private/${::fqdn}.bundle",
-      ssl_key  => "/etc/ssl/private/${::fqdn}.key",
+      ssl         => true,
+      ssl_cert    => "/etc/ssl/private/${::fqdn}.bundle",
+      ssl_key     => "/etc/ssl/private/${::fqdn}.key",
+      ssl_dhparam => '/etc/ssl/dhparam.pem',
+
+      add_header  => {
+        'Strict-Transport-Security' => 'max-age=31536000',
+      },
 
       listen_port      => 443,
       rewrite_to_https => true;
@@ -41,9 +46,14 @@ class ocf_accounts::proxy {
         $::fqdn
       ],
 
-      ssl      => true,
-      ssl_cert => "/etc/ssl/private/${::fqdn}.bundle",
-      ssl_key  => "/etc/ssl/private/${::fqdn}.key",
+      ssl         => true,
+      ssl_cert    => "/etc/ssl/private/${::fqdn}.bundle",
+      ssl_key     => "/etc/ssl/private/${::fqdn}.key",
+      ssl_dhparam => '/etc/ssl/dhparam.pem',
+
+      add_header  => {
+        'Strict-Transport-Security' => 'max-age=31536000',
+      },
 
       vhost_cfg_append => {
         'return' => '301 https://accounts.ocf.berkeley.edu$request_uri'
