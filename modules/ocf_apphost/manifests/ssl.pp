@@ -13,6 +13,8 @@
 # ...and not have to do the manual concatenation.
 
 class ocf_apphost::ssl {
+  include ocf_ssl
+
   file {
     '/etc/ssl/apphost':
       ensure  => directory,

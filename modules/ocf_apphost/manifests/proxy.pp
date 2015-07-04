@@ -1,12 +1,12 @@
 class ocf_apphost::proxy {
   package { 'nginx':; }
   service { 'nginx':
-    require => [Package['nginx'], Exec['gen-dhparams']];
+    require => Package['nginx'];
   }
 
   file {
     '/etc/nginx/conf.d/local.conf':
-      source  => 'puppet:///modules/ocf_apphost/local.conf',
+      content => template('ocf_apphost/local.conf.erb'),
       require => Package['nginx'],
       notify  => Service['nginx'];
 
@@ -19,13 +19,6 @@ class ocf_apphost::proxy {
     '/usr/local/sbin/rebuild-vhosts':
       source  => 'puppet:///modules/ocf_apphost/rebuild-vhosts',
       mode    => '0755';
-  }
-
-  exec {
-    'gen-dhparams':
-      command => 'openssl dhparam -out /etc/nginx/dhparam.pem 2048',
-      creates => '/etc/nginx/dhparam.pem',
-      require => Package['nginx'];
   }
 
   cron {
