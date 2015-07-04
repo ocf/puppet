@@ -1,0 +1,6 @@
+# Custom OCF-written rules to make dumb spam that otherwise isn't caught.
+
+# "Promote Your Website's Google Ranking"
+# example: https://gist.github.com/chriskuehl/4c66753ca6266fd9ccdc
+body	OCF_PROMOTE_GOOGLE_RANKING	/We can place your website on top of the Natural Listings on Google/
+score	OCF_PROMOTE_GOOGLE_RANKING	5

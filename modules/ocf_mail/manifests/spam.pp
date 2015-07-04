@@ -62,6 +62,10 @@ class ocf_mail::spam {
       source  => 'puppet:///modules/ocf_mail/spam/spamass/local.cf',
       notify  => Service['spamassassin'],
       require => Package['spamassassin'];
+    '/etc/spamassassin/ocf-rules.cf':
+      source  => 'puppet:///modules/ocf_mail/spam/spamass/ocf-rules.cf',
+      notify  => Service['spamassassin'],
+      require => Package['spamassassin'];
     '/etc/spamassassin/v310.pre':
       source  => 'puppet:///modules/ocf_mail/spam/spamass/v310.pre',
       notify  => Service['spamassassin'],
