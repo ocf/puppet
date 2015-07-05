@@ -114,4 +114,4 @@ xset m 0 0
 /usr/local/bin/fix-audio &
 
 # Auto logout inactive users
-/usr/bin/xautolock -locker /usr/local/bin/auto-lock -notify 300 -notifier /usr/local/bin/auto-lock-notify &
+/usr/bin/xautolock -locker /usr/local/bin/auto-lock -time 7 &
