@@ -133,6 +133,7 @@ class ocf::extrapackages {
       'dh-systemd',
       'dh-virtualenv',
       'lolcat',
+      'pre-commit',
       'python-flake8',
       'python-mock',
       'python-pytest',
