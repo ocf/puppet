@@ -1,0 +1,37 @@
+-   repo: https://github.com/chriskuehl/puppet-pre-commit-hooks.git
+    sha: 31dde4ad07f3a0b79157eb8f8694a0897484ab6b
+    hooks:
+    -   id: puppet-validate
+        exclude: ^modules/(?!ocf).*$
+    -   id: erb-validate
+        exclude: ^modules/(?!ocf).*$
+    -   id: puppet-lint
+        exclude: ^modules/(?!ocf).*$
+        args:
+        -   --fail-on-warnings
+        -   --no-80chars-check
+        -   --no-documentation-check
+        -   --no-puppet_url_without_modules-check
+-   repo: https://github.com/pre-commit/pre-commit-hooks.git
+    sha: 516cc9fa72ad09699f2c03ffbd0aa7f60d75b59a
+    hooks:
+    -   id: check-added-large-files
+        exclude: ^modules/(?!ocf).*$
+    -   id: check-docstring-first
+        exclude: ^modules/(?!ocf).*$
+    -   id: check-json
+        exclude: ^modules/(?!ocf).*$
+    -   id: check-merge-conflict
+        exclude: ^modules/(?!ocf).*$
+    -   id: check-xml
+        exclude: ^(modules/(?!ocf).*|modules/ocf_desktop/files/pam/.*\.xml)$
+    -   id: check-yaml
+        exclude: ^modules/(?!ocf).*$
+    -   id: debug-statements
+        exclude: ^modules/(?!ocf).*$
+    -   id: detect-private-key
+        exclude: ^modules/(?!ocf).*$
+    -   id: end-of-file-fixer
+        exclude: ^modules/(?!ocf).*$
+    -   id: trailing-whitespace
+        exclude: ^modules/(?!ocf).*$
