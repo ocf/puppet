@@ -1,10 +1,10 @@
 #!/bin/bash
 # Generates a private key and signed certificate for the given host.
-# 
+#
 # The key and cert will be stored in certs/$HOST/. The csr is deleted.
 # Keys are signed for 10 years by this CA, which is not actually trusted
 # by anything except the stat reporting system.
-# 
+#
 # Use the FQDN for the hostname, e.g. eruption.ocf.berkeley.edu
 # usage: ./create-cert.sh HOSTNAME
 

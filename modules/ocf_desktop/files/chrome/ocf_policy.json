@@ -1,21 +1,21 @@
-// http://www.chromium.org/administrators/policy-list-3
-// http://www.chromium.org/administrators/configuring-other-preferences
 {
-	// Set OCF homepage.
+	"//": "http://www.chromium.org/administrators/policy-list-3",
+	"//": "http://www.chromium.org/administrators/configuring-other-preferences",
+	"//": "Set OCF homepage.",
 	"HomepageLocation": "https://hello.ocf.berkeley.edu/lab.html",
 	"HomepageIsNewTabPage": false,
 	"ShowHomeButton": true,
 	"RestoreOnStartup": 4,
 	"RestoreOnStartupURLs": ["https://hello.ocf.berkeley.edu/lab.html"],
 
-	// Do not store browser history etc.
+	"//": "Do not store browser history etc.",
 	"ForceEphemeralProfiles": true,
 	"SavingBrowserHistoryDisabled": true,
 	"PasswordManagerEnabled": false,
 	"AutoFillEnabled": false,
 	"IncognitoModeAvailability": 0,
 
-	// Avoid reporting data to and integrating with Google.
+	"//": "Avoid reporting data to and integrating with Google.",
 	"SigninAllowed": false,
 	"MetricsReportingEnabled": false,
 	"CloudPrintProxyEnabled": false,
@@ -24,17 +24,17 @@
 	"SyncDisabled": true,
 	"TranslateEnabled": true,
 
-	// Allow SPNEGO for Request Tracker.
+	"//": "Allow SPNEGO for Request Tracker.",
 	"AuthServerWhitelist": "rt.ocf.berkeley.edu",
 	"AuthNegotiateDelegateWhitelist": "rt.ocf.berkeley.edu",
 
-	// Misc settings
+	"//": "Misc settings",
 	"DefaultBrowserSettingEnabled": false,
 
-	// Disable print preview
-	// (fails when CUPS takes too long to respond, shows invalid settings)
+	"//": "Disable print preview",
+	"//": "(fails when CUPS takes too long to respond, shows invalid settings)",
 	"DisablePrintPreview": true,
 
-  // Printing from Chrome's PDF viewer often results in cut-off pages
+  "//": "Printing from Chrome's PDF viewer often results in cut-off pages",
   "DisabledPlugins": ["Chrome PDF Viewer"]
 }
