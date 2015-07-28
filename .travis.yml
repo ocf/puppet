@@ -1,14 +1,9 @@
 ---
-language: ruby
-before_install:
-  - wget -q https://apt.puppetlabs.com/puppetlabs-release-precise.deb
-  - sudo dpkg -i puppetlabs-release-precise.deb
-  - sudo apt-get update -qq
+language: python
 install:
-  - sudo apt-get install -y python3 puppet
-  - gem install puppet-lint:1.1.0
+    - pip install pre-commit
 script:
-  - scripts/validate.py
+    - make test
 notifications:
   email:
     recipients:

@@ -1,5 +1,5 @@
 -   repo: https://github.com/chriskuehl/puppet-pre-commit-hooks.git
-    sha: 31dde4ad07f3a0b79157eb8f8694a0897484ab6b
+    sha: 4bc20784cca4713e2ba5f884ff4c37a1e4e87de1
     hooks:
     -   id: puppet-validate
         exclude: ^modules/(?!ocf).*$
