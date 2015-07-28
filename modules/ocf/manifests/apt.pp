@@ -38,6 +38,14 @@ class ocf::apt ( $desktop = false ) {
           };
       }
 
+      # workaround Debian #793444 by disabling pdiffs
+      # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=793444
+      if $::lsbdistcodename == 'jessie' {
+        file { '/etc/apt/apt.conf.d/99-workaround-debian-793444':
+          content => "Acquire::PDiffs \"false\";\n";
+        }
+      }
+
       # repos available only for stable/oldstable
       if $::lsbdistcodename in ['wheezy', 'jessie'] {
         apt::source { 'debian-updates':
