@@ -16,4 +16,3 @@ class ocf::munin::node {
     require => Package['munin-node'];
   }
 }
-
