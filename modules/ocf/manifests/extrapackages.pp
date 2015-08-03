@@ -132,6 +132,7 @@ class ocf::extrapackages {
       'apache2-dev',
       'dh-systemd',
       'dh-virtualenv',
+      'git-buildpackage',
       'lolcat',
       'pre-commit',
       'python-flake8',
