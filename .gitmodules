@@ -16,3 +16,6 @@
 [submodule "modules/apt"]
 	path = modules/apt
 	url = https://github.com/puppetlabs/puppetlabs-apt.git
+[submodule "modules/spiped"]
+	path = modules/spiped
+	url = https://github.com/chriskuehl/puppet-spiped.git

@@ -4,6 +4,7 @@ class ocf_admin {
   include ocf::mysql
 
   include apt_dater
+  include create
 
   package {
     # remove accidentally-installed packages

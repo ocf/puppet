@@ -41,4 +41,10 @@ class ocf_accounts::app {
       mode    => '0444',
       require => Package['ocf-atool'];
   }
+
+  spiped::tunnel::client { 'redis':
+    source  => '/var/run/redis.sock',
+    dest    => 'create:6379',
+    secret  => file('/opt/puppet/shares/private/create/spiped-key');
+  }
 }
