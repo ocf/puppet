@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -eu
 # Clone /opt/backups on the current host (should be pandemic) to /opt/backups
 # on hal.
 #
@@ -8,16 +8,20 @@
 # We copy files under lock to avoid doing it while a backup takes place. We
 # re-use rsnapshot's lock file because it's convenient (otherwise we'd need to
 # add another check before rsnapshot runs, too).
-
-LOCKFILE="/var/run/rsnapshot.pid"
+LOCKFILE="/run/rsnapshot.pid"
 (
-	flock -n 9 || (echo "$LOCKFILE still exists, refusing to copy."; exit 1)
+
+	flock -n 9 || {
+		echo "$LOCKFILE still exists, refusing to copy."
+		exit 1
+	}
+
+	# rsnapshot won't run unless we remove the lockfile
+	trap "rm \"$LOCKFILE\"" EXIT
+
 	kinit -t /opt/share/backups/ocfbackups.keytab ocfbackups \
 		rsync -aH --delete --partial \
 			--rsync-path="sudo /usr/bin/rsync" \
 			-e 'ssh -c chacha20-poly1305@openssh.com' \
 			/opt/backups/ ocfbackups@hal:/opt/backups/
 ) 9>"$LOCKFILE"
-
-# rsnapshot won't run unless we remove the lockfile
-rm "$LOCKFILE"
