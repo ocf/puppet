@@ -13,6 +13,7 @@ class ocf_admin::create::app {
 
   $broker = "redis+socket://:${redis_password}@/var/run/redis/redis.sock"
   $backend = $broker
+  $redis_uri = "unix://:${redis_password}@/var/run/redis/redis.sock"
 
   augeas { '/etc/ocf-create/ocf-create.conf':
     lens      => 'Puppet.lns',
@@ -21,6 +22,7 @@ class ocf_admin::create::app {
       "set mysql/uri mysql+pymysql://ocfcreate:${mysql_password}@mysql/ocfcreate",
       "set celery/broker ${broker}",
       "set celery/backend ${backend}",
+      "set redis/uri ${redis_uri}",
     ],
     show_diff => false,
     notify    => Service['ocf-create'],
