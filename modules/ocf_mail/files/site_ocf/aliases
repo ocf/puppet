@@ -13,9 +13,6 @@ jenkins: root
 nomail: /var/mail/nomail/nomail
 
 # bureaucracy
-bod: :include:/var/mail/aliases/include/bod
-owner-bod: officers
-
 officers: officers@g.ocf.berkeley.edu
 alumni: alumni@g.ocf.berkeley.edu
 decal: decal@g.ocf.berkeley.edu
@@ -36,6 +33,10 @@ owner-staff: wheel
 devnull: "|/usr/bin/rt-mailgate --queue 'devnull' --action correspond --url https://rt.ocf.berkeley.edu"
 devnull-comment: "|/usr/bin/rt-mailgate --queue 'devnull' --action comment --url https://rt.ocf.berkeley.edu"
 owner-devnull: wheel
+
+bod: "|/usr/bin/rt-mailgate --queue 'bod' --action correspond --url https://rt.ocf.berkeley.edu"
+bod-comment: "|/usr/bin/rt-mailgate --queue 'bod' --action comment --url https://rt.ocf.berkeley.edu"
+owner-bod: wheel
 
 help: "|/usr/bin/rt-mailgate --queue 'help' --action correspond --url https://rt.ocf.berkeley.edu"
 help-comment: "|/usr/bin/rt-mailgate --queue 'help' --action comment --url https://rt.ocf.berkeley.edu"
