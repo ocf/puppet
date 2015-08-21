@@ -61,10 +61,5 @@ class ocf_admin::create::app {
     '/etc/sudoers.d/create':
       mode   => '0440',
       source => 'puppet:///modules/ocf_admin/create.sudoers';
-
-    # TODO: is this link used by anything?
-    '/opt/acct/sorry':
-      ensure => link,
-      target => '/opt/share/utils/staff/acct/sorry';
   }
 }
