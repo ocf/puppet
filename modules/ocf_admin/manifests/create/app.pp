@@ -61,5 +61,9 @@ class ocf_admin::create::app {
     '/etc/sudoers.d/create':
       mode   => '0440',
       source => 'puppet:///modules/ocf_admin/create.sudoers';
+
+    '/usr/local/bin/approve':
+      ensure => link,
+      target => '/usr/share/python/ocf-create/bin/approve';
   }
 }
