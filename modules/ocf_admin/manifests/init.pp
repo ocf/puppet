@@ -1,5 +1,6 @@
 class ocf_admin {
   include ocf::extrapackages
+  include ocf::hostkeys
   include ocf::ldapvi
   include ocf::mysql
 
