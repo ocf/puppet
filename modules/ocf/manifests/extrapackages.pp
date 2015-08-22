@@ -133,6 +133,7 @@ class ocf::extrapackages {
       'dh-systemd',
       'dh-virtualenv',
       'git-buildpackage',
+      'libcrack2-dev',
       'lolcat',
       'pre-commit',
       'python-flake8',
