@@ -25,7 +25,7 @@ if __name__ == '__main__':
     # middle monitor is rotated left 90 degrees
     if len(monitors) == 3:
         # left/right monitors are moved down a bit; move middle up to compensate
-        offset = -150
+        offset = -290
 
         # need to get the current x position of this monitor first
         line = next(filter(lambda line: monitors[1] in line,
