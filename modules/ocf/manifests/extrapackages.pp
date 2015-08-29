@@ -47,6 +47,7 @@ class ocf::extrapackages {
     'gdb',
     'gem2deb',
     'ikiwiki',
+    'inotify-tools',
     'ipython',
     'ipython-notebook',
     'ipython3',
