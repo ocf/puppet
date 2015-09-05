@@ -7,14 +7,19 @@
 # We want to keep this list small, but not to the point of omitting useful
 # tools such that server maintenance becomes unnecessarily painful.
 class ocf::packages {
-  # packages to remove
-  package {['mlocate', 'popularity-contest', 'apt-listchanges', 'needrestart']:
-    ensure => purged;
-  }
+  # special snowflake packages that require some config
+  include ocf::packages::git
+  include ocf::packages::memtest
+  include ocf::packages::needrestart
+  include ocf::packages::ntp
+  include ocf::packages::ocflib
+  include ocf::packages::smart
+  include ocf::packages::ssh
+  include ocf::packages::zsh
 
-  # we don't want needrestart, which apt-dater-host recommends
-  ocf::repackage { 'apt-dater-host':
-    recommends => false;
+  # packages to remove
+  package {['mlocate', 'popularity-contest', 'apt-listchanges']:
+    ensure => purged;
   }
 
   # facter currently outputs strings not booleans
@@ -26,7 +31,7 @@ class ocf::packages {
   # common packages for all ocf machines
   package {
     [
-    # general tools and utilities
+    'apt-dater-host',
     'bash',
     'beep',
     'bsdmainutils',
@@ -46,18 +51,6 @@ class ocf::packages {
     'powertop',
     'pv',
     'pwgen',
-    'quota',
-    'rsync',
-    'screen',
-    'tcpdump',
-    'tcsh',
-    'tofrodos',
-    'tree',
-    'unzip',
-    'vim',
-    'zsh',
-
-    # packages/libraries expected to be available everywhere
     'python',
     'python-colorama',
     'python-dateutil',
@@ -71,20 +64,39 @@ class ocf::packages {
     'python3-dev',
     'python3-pip',
     'python3-requests',
+    'quota',
+    'rsync',
+    'screen',
+    'tcpdump',
+    'tcsh',
+    'tmux',
+    'tofrodos',
+    'tree',
+    'unzip',
+    'vim',
+    'zsh',
     ]:;
 
-    # python-paramiko in wheezy is incompatible with openssh >= 6.7,
-    # so we install the latest version via pip (rt#3056)
-    'paramiko':
-      ensure   => '1.15.1',
-      provider => pip;
+  }
 
-    'python-paramiko':
-      ensure => purged;
+  if $::lsbdistcodename == 'wheezy' {
+    package {
+      # python-paramiko in wheezy is incompatible with openssh >= 6.7,
+      # so we install the latest version via pip (rt#3056)
+      'paramiko':
+        ensure   => '1.15.1',
+        provider => pip;
+
+      'python-paramiko':
+        ensure => purged;
+    }
   }
 
   if $::lsbdistcodename == 'jessie' {
     package {
+      'python-paramiko':;
+      'python3-paramiko':;
+
       # in jessie, install python-pip-whl to avoid problems where a system-wide
       # python module (e.g. requests) is updated, resulting in pip breaking
       # (see rt#3268, Debian #744145)
@@ -93,10 +105,5 @@ class ocf::packages {
       # not available in wheezy, but we don't really need it
       'python-tox':;
     }
-  }
-
-  ocf::repackage {
-    ['tmux']:
-      backport_on => 'wheezy';
   }
 }

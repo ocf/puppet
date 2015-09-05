@@ -1,5 +1,4 @@
-class ocf::postfix {
-
+class ocf::packages::postfix {
   # remove exim
   package { ['exim4', 'exim4-base', 'exim4-config', 'exim4-daemon-light']:
     ensure => purged,
@@ -37,5 +36,4 @@ class ocf::postfix {
   service { 'postfix':
     require => Package['postfix'],
   }
-
 }

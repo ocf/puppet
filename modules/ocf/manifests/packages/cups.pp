@@ -1,4 +1,4 @@
-class ocf::cups {
+class ocf::packages::cups {
 
   # install cups
   package { [ 'cups', 'cups-bsd' ]: }

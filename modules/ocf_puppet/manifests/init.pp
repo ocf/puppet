@@ -1,5 +1,5 @@
 class ocf_puppet {
-  include ocf::ldapvi
+  include ocf::packages::ldapvi
 
   include puppetmaster
 

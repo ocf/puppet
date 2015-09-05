@@ -12,7 +12,7 @@
 # without concerns of redeclaring ocf::packages with different parameters.
 class ocf::extrapackages {
   # special snowflake packages that require some config
-  include matplotlib
+  include ocf::packages::matplotlib
 
   # other packages
   package {

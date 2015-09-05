@@ -1,5 +1,5 @@
 class ocf_stats::labstats {
-  include ocf::matplotlib
+  include ocf::packages::matplotlib
 
   package { 'python3-mysql.connector':; }
 

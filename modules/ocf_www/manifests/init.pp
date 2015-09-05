@@ -2,7 +2,7 @@ class ocf_www {
   include ocf::acct
   include ocf::extrapackages
   include ocf::limits
-  include ocf::mysql
+  include ocf::packages::mysql
   include ocf_ssl
 
   package {

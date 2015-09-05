@@ -1,4 +1,4 @@
-class ocf::mysql {
+class ocf::packages::mysql {
   package { 'mysql-client':; }
 
   # don't install mysql client configs if this is also a mysql server

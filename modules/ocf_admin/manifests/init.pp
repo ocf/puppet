@@ -1,8 +1,8 @@
 class ocf_admin {
   include ocf::extrapackages
   include ocf::hostkeys
-  include ocf::ldapvi
-  include ocf::mysql
+  include ocf::packages::ldapvi
+  include ocf::packages::mysql
 
   include apt_dater
   include create
@@ -13,7 +13,7 @@ class ocf_admin {
     web    => true;
   }
 
-  class { 'ocf::docker':
+  class { 'ocf::packages::docker':
     admin_group => 'ocfroot';
   }
 }

@@ -1,4 +1,4 @@
-class ocf::ntp {
+class ocf::packages::ntp {
   # install ntp
   package { 'ntp':; }
 

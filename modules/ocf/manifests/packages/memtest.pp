@@ -1,4 +1,4 @@
-class ocf::memtest {
+class ocf::packages::memtest {
   # facter currently outputs strings not booleans
   # see http://projects.puppetlabs.com/issues/3704
   if ! str2bool($::is_virtual) {

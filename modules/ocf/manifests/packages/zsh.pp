@@ -1,4 +1,4 @@
-class ocf::zsh {
+class ocf::packages::zsh {
   file {
     '/etc/zsh/zshenv':
       source  => 'puppet:///modules/ocf/zsh/zshenv',
@@ -8,3 +8,4 @@ class ocf::zsh {
       require => Package['zsh'];
   }
 }
+# vim: ft=puppet

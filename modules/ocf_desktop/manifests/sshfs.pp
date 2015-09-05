@@ -1,6 +1,5 @@
 class ocf_desktop::sshfs {
   require ocf::auth
-  require ocf::ssh
 
   # install sshfs and libpam-mount
   package { ['libpam-mount', 'sshfs', 'fuse']: }

@@ -5,22 +5,16 @@ node default {
 
   case $::hostname {
     anthrax, sandstorm: { }
-    default:   { include ocf::postfix }
+    default:   { include ocf::packages::postfix }
   }
 
   include ocf::autologout
-  include ocf::git
   include ocf::kerberos
   include ocf::ldap
   include ocf::locale
-  include ocf::memtest
   include ocf::munin::node
-  include ocf::ntp
   include ocf::packages
-  include ocf::ocflib
-  include ocf::smart
   include ocf::utils
-  include ocf::zsh
 
   if $::macAddress {
     # use DHCP
@@ -64,8 +58,6 @@ node default {
       } else { # grant login and sudo to owner
         class { 'ocf::auth': ulogin => [[$owner, 'ALL']], usudo => [$owner], nopasswd => true }
       }
-
-      include ocf::ssh
     }
 
     'desktop': {

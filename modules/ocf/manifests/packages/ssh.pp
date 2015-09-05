@@ -1,4 +1,4 @@
-class ocf::ssh {
+class ocf::packages::ssh {
 
   # install ssh client and server
   package { [ 'openssh-client', 'openssh-server' ]: }

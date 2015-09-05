@@ -1,17 +1,23 @@
 #!/bin/bash
-# Don't sleep if installing packages, puppet is running, user present, or is a virtual machine
+# Suspend the machine and wake on LAN.
 
+# Don't sleep if...
+# installing packages
 ! /usr/bin/lsof -- /var/lib/dpkg/lock > /dev/null 2>&1 || exit 1
-[ ! -f /var/lib/puppet/state/agent_catalog_run.lock ] || exit 1
-[ $(w --no-header | wc -l) -eq 0 ] || exit 2
+# puppet is running
+[ ! -f /var/lib/puppet/state/agent_catalog_run.lock ] || exit 2
+# user present
+[ $(w --no-header | wc -l) -eq 0 ] || exit 3
+# is a virtual machine
+imvirt | grep -qi Physical || exit 4
 
+# Try to unmount /home and /tmp (both tmpfs)
 if grep $'tmpfs\t/home' /etc/fstab > /dev/null; then
-	umount /home 2> /dev/null && mount /home || exit 3
+	umount /home 2> /dev/null && mount /home || exit 255
 fi
-
-imvirt | grep -i Physical > /dev/null || exit 4
-
 umount /tmp 2> /dev/null && mount /tmp
+
+# TODO: Check if a kernel update is needed, restart if so
 
 # Enable WOL and sleep until magic packet wakes you up
 /sbin/ethtool -s eth0 wol g

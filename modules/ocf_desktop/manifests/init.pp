@@ -1,7 +1,7 @@
 class ocf_desktop ($staff = false) {
   class { 'ocf::apt': stage => first, desktop => true }
   include ocf::acct
-  include ocf::cups
+  include ocf::packages::cups
 
   include chrome
   include crondeny

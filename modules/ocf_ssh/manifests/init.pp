@@ -1,10 +1,10 @@
 class ocf_ssh {
   include ocf::acct
-  include ocf::cups
   include ocf::extrapackages
-  include ocf::limits
   include ocf::hostkeys
-  include ocf::mysql
+  include ocf::limits
+  include ocf::packages::cups
+  include ocf::packages::mysql
   include ocf_ssl
 
   package {
