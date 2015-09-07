@@ -16,12 +16,6 @@ class ocf::extrapackages {
 
   # other packages
   package {
-    # chpass dependencies
-    ['libexpect-perl', 'libunicode-map8-perl', 'python-cracklib']:;
-
-    # signat dependencies
-    'libwww-mechanize-perl':;
-
     # pykota dependencies
     ['pkpgcounter', 'python-egenix-mxdatetime', 'python-imaging',
     'python-jaxml', 'python-minimal', 'python-osd', 'python-pysnmp4',
@@ -54,6 +48,7 @@ class ocf::extrapackages {
     'ipython3-notebook',
     'irssi',
     'libdbi-perl',
+    'libexpect-perl',
     'libfcgi-dev',
     'libfcgi-ruby1.8',
     'libffi-dev',
@@ -67,6 +62,10 @@ class ocf::extrapackages {
     'libsqlite3-dev',
     'libtidy-dev',
     'libtool',
+    'libunicode-map8-perl',
+    'libwww-mechanize-perl',
+    'libxml2-dev',
+    'libxslt1-dev',
     'libyaml-dev',
     'lynx',
     'mercurial',
@@ -85,6 +84,7 @@ class ocf::extrapackages {
     'pkg-config',
     'pssh',
     'puppet-lint',
+    'python-cracklib',
     'python-crypto',
     'python-django',
     'python-flask',
@@ -115,6 +115,7 @@ class ocf::extrapackages {
     'texlive-publishers',
     'vagrant',
     'valgrind',
+    'zlib1g-dev',
     ]:;
 
     'autolink':
