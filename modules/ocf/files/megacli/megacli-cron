@@ -1,0 +1,27 @@
+#!/bin/bash -eu
+
+MEGACLI=/usr/local/sbin/megacli
+(
+echo "----- Status of controller -----"
+$MEGACLI -AdpAllInfo -aALL
+echo
+echo "----- Status of logical drives -----"
+$MEGACLI -LDInfo -LAll -aALL
+echo
+echo "----- Status of physical drives -----"
+$MEGACLI -PDList -aALL
+echo
+echo "----- Status of BBU -----"
+$MEGACLI -AdpBbuCmd -GetBbuStatus -aALL
+) \
+| tr -d '\r' \
+| grep -v -e '^Current Time ' -e '^Drive Temperature :' \
+-e '^ROC temperature : ' -e '^Temperature: ' -e '^Voltage: ' \
+-e '^  Relative State of Charge: ' -e '^Current: ' \
+-e '^BBU GasGauge Status: ' -e '^  Charging current: ' \
+-e '^Ongoing Progresses:' -e '^  Check Consistency' \
+-e '^  Pack energy' \
+> /var/lib/megacli.new
+
+diff -u /var/lib/megacli /var/lib/megacli.new || true
+mv /var/lib/megacli.new /var/lib/megacli

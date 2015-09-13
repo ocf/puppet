@@ -3,18 +3,12 @@ node default {
   class { 'ocf::puppet': stage => first }
   class { 'ocf::rootpw': stage => first }
 
+  include ocf
+
   case $::hostname {
     anthrax, sandstorm: { }
     default:   { include ocf::packages::postfix }
   }
-
-  include ocf::autologout
-  include ocf::kerberos
-  include ocf::ldap
-  include ocf::locale
-  include ocf::munin::node
-  include ocf::packages
-  include ocf::utils
 
   if $::macAddress {
     # use DHCP
