@@ -16,4 +16,10 @@ class ocf_admin {
   class { 'ocf::packages::docker':
     admin_group => 'ocfroot';
   }
+
+  package {
+    [
+      'ipmitool',
+    ]:;
+  }
 }
