@@ -10,6 +10,7 @@ class ocf::packages {
   # special snowflake packages that require some config
   include ocf::packages::git
   include ocf::packages::memtest
+  include ocf::packages::microcode
   include ocf::packages::needrestart
   include ocf::packages::ntp
   include ocf::packages::ocflib
