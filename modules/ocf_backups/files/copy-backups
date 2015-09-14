@@ -23,5 +23,5 @@ LOCKFILE="/run/rsnapshot.pid"
 		rsync -aH --delete --partial \
 			--rsync-path="sudo /usr/bin/rsync" \
 			-e 'ssh -c chacha20-poly1305@openssh.com' \
-			/opt/backups/ ocfbackups@hal:/opt/backups/
+			/opt/backups/ ocfbackups@hal:/opt/backups/mirror/
 ) 9>"$LOCKFILE"
