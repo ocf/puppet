@@ -2,7 +2,7 @@ class ocf_desktop::sshfs {
   require ocf::auth
 
   # install sshfs and libpam-mount
-  package { ['libpam-mount', 'sshfs', 'fuse']: }
+  package { ['libpam-mount', 'sshfs']: }
 
   # create directory to mount to
   file { '/etc/skel/remote':
