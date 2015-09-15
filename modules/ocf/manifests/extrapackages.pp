@@ -116,6 +116,7 @@ class ocf::extrapackages {
     'vagrant',
     'valgrind',
     'zlib1g-dev',
+    'znc',
     ]:;
 
     'autolink':
