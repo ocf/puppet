@@ -5,7 +5,7 @@ class ocf::packages::microcode {
     } elsif $::processor0 =~ /\bAMD\b/ {
       package { 'amd64-microcode':; }
     } else {
-      fail("Don't know how to interpret processor0: ${::processor3}")
+      fail("Don't know how to interpret processor0: ${::processor0}")
     }
   }
 }
