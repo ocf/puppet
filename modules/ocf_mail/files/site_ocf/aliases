@@ -1,5 +1,7 @@
 # system
-root: wheel
+root: root@g.ocf.berkeley.edu
+puppet: puppet@g.ocf.berkeley.edu
+rt: rt@g.ocf.berkeley.edu
 
 postmaster: sm
 mailer-daemon: postmaster
@@ -60,7 +62,6 @@ owner-todo: wheel
 
 # accounts only used for sending
 mon: /dev/null
-puppet: /dev/null
 atool: /dev/null
 create: /dev/null
 ocfapt: /dev/null
