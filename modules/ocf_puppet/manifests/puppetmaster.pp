@@ -32,7 +32,7 @@ class ocf_puppet::puppetmaster {
       content => template('ocf_puppet/puppet.conf.erb');
 
     '/etc/puppet/tagmail.conf':
-      content => 'warning, err, alert, emerg, crit: root';
+      content => "warning, err, alert, emerg, crit: puppet\n";
 
     ['/opt/puppet', '/opt/puppet/env', '/opt/puppet/shares', '/opt/puppet/shares/contrib']:
       ensure  => directory;
