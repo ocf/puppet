@@ -1,1 +1,1 @@
-create          ALL=NOPASSWD: /usr/bin/install
+create          ALL=(ALL) NOPASSWD: /usr/bin/install, /bin/ln
