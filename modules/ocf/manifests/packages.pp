@@ -75,6 +75,7 @@ class ocf::packages {
     'tree',
     'unzip',
     'vim',
+    'vim-nox',
     'zsh',
     ]:;
 
