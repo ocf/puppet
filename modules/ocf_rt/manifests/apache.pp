@@ -48,7 +48,7 @@ class ocf_rt::apache {
           PerlResponseHandler Plack::Handler::Apache2
           PerlSetVar psgi_app /usr/share/request-tracker4/libexec/rt-server
 
-          KrbMethodNegotiate On
+          KrbMethodNegotiate Off
           KrbMethodK5Passwd On
           KrbLocalUserMapping On
           KrbServiceName HTTP/${::fqdn}
