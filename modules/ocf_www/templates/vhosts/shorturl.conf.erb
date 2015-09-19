@@ -10,6 +10,7 @@
 
     # short URLs
     RewriteEngine on
+    RewriteRule ^/?$ https://www.ocf.berkeley.edu/ [R=301]
     RewriteRule ^/about$ https://www.ocf.berkeley.edu/OCF/ [R]
     RewriteRule ^/account$ https://wiki.ocf.berkeley.edu/services/account/ [R]
     RewriteRule ^/contact$ https://wiki.ocf.berkeley.edu/contact/ [R]
@@ -37,7 +38,8 @@
     RewriteRule ^/web$ https://wiki.ocf.berkeley.edu/services/web/ [R]
     RewriteRule ^/callinkapi$ https://studentservices.berkeley.edu/WebServices/StudentGroupServiceV2/Service.asmx/CalLinkOrganizations [R]
 
-    Redirect / https://www.ocf.berkeley.edu/
+    # otherwise, send a temporary redirect to the appropriate userdir
+    RewriteRule ^/([a-z]{3,8}(?:/.*)?)$ https://www.ocf.berkeley.edu/~$1 [R=302]
 
     Header set Strict-Transport-Security "max-age=31536000"
 </VirtualHost>

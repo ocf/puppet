@@ -16,12 +16,6 @@
         # Allow caching of shtml pages
         SSILastModified on
 
-        # Add missing tilde for user dirs
-        RewriteEngine On
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteRule ^([a-z]{3,8}(/.*)?)$ /~$1 [R=301]
-
         # Disable .htaccess files
         AllowOverride None
     </Directory>
