@@ -20,6 +20,7 @@ class ocf_admin {
   package {
     [
       'ipmitool',
+      'wakeonlan',
     ]:;
   }
 }
