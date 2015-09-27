@@ -62,6 +62,15 @@ smtpd_reject_unlisted_recipient = yes
 smtpd_reject_unlisted_sender = yes
 always_add_missing_headers = yes
 
+# allow $user+$anything aliases
+recipient_delimiter = +
+
+# don't keep delimiters "+{anything}" when forwarding to virtual addresses.
+#
+# otherwise, if the user specifies a forwarding address "hello@example", it
+# will forward user+test@ocf to hello+test@example, which might be invalid
+propagate_unmatched_extensions = canonical
+
 # client restrictions for SMTP connections
 # skip OCF, reject if no reverse DNS, greylist if not whitelisted
 smtpd_client_restrictions =
