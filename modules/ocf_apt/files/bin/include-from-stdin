@@ -4,4 +4,12 @@ dist="$1"
 
 tmp=$(mktemp --suffix='.deb')
 cat > "$tmp"
+
+# remove package first;
+# this is normally unnecessary, but if we're replacing a package with the same
+# version, it might be (this is normally unnecessary, but might happen if we
+# re-run a Jenkins job)
+dpkg -I "$tmp" | grep '^ Package: ' | cut -d ' ' -f3 |
+    xargs --verbose -n1 /opt/apt/bin/reprepro remove "$dist"
+
 exec /opt/apt/bin/reprepro includedeb "$dist" "$tmp"
