@@ -1,0 +1,51 @@
+#!/bin/bash -eu
+# Create an encrypted backup (in 5 GB pieces) inside our scratch space.
+#
+# This can be put on a hard drive and stored under the SM's mattress, uploaded
+# to Google Nearline, etc.
+
+ARCHIVE_DIRECTORY="/opt/backups/scratch/archive"
+TARGET_VOLUME="/dev/vg-backups/backups-mirror"
+SNAPSHOT_PATH="/dev/vg-backups/backups-snapshot"
+
+# import staff keys into temporary gpg dir
+gpgdir=$(mktemp -d)
+gpg --homedir "$gpgdir" --quiet --import /opt/share/backups/keys/*.asc
+
+# make a LVM snapshot; for total safety, we make one of the same size as the
+# target volume
+if [ -e "$SNAPSHOT_PATH" ]; then
+    echo "Snapshot already exists: ${SNAPSHOT_PATH}" >&2
+    exit 1
+fi
+
+
+# try really hard to remove logical volume on exit
+cleanup() {
+    if [ -e "$SNAPSHOT_PATH" ]; then
+        echo "Removing logical volume: $SNAPSHOT_PATH"
+        lvremove -f "$SNAPSHOT_PATH"
+    fi
+}
+trap cleanup EXIT
+
+
+bytes=$(blockdev --getsz "$TARGET_VOLUME")
+lvcreate -L "${bytes}B" --snapshot --name "$SNAPSHOT_PATH" "$TARGET_VOLUME"
+
+umask 077
+rm -rf "$ARCHIVE_DIRECTORY"
+mkdir "$ARCHIVE_DIRECTORY"
+
+dd if="$SNAPSHOT_PATH" bs=32M | pigz |
+    gpg --homedir "$gpgdir" \
+        --quiet \
+        --encrypt \
+        --trust-model always \
+        --compress-algo none \
+        --recipient ckuehl@berkeley.edu \
+        --recipient willh@ocf.berkeley.edu \
+        --recipient nick.impicciche@gmail.com |
+    pv |
+    split -d -a 4 -b 5G - \
+        "${ARCHIVE_DIRECTORY}/backup-$(date +%Y-%m-%d).img.gz.gpg.part"

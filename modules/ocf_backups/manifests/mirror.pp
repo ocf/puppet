@@ -7,5 +7,18 @@ class ocf_backups::mirror {
       ensure => directory,
       group  => ocfroot,
       mode   => '0750';
+
+    '/opt/share/backups':
+      ensure => directory,
+      mode   => '0755';
+
+    '/opt/share/backups/create-encrypted-backup':
+      source => 'puppet:///modules/ocf_backups/mirror/create-encrypted-backup',
+      mode   => '0755';
+
+    '/opt/share/backups/keys':
+      ensure  => directory,
+      source  => 'puppet:///modules/ocf_backups/mirror/keys',
+      recurse => true;
   }
 }
