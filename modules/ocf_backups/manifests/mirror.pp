@@ -2,6 +2,7 @@
 # backups from the main backups server, and periodically uploading backup
 # snapshots to an off-site location.
 class ocf_backups::mirror {
+  package { ['google-gsutil']:; }
   file {
     ['/opt/backups', '/opt/backups/mirror', '/opt/backups/scratch']:
       ensure => directory,

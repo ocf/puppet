@@ -40,6 +40,7 @@ class ocf::extrapackages {
     'flex',
     'gdb',
     'gem2deb',
+    'google-gsutil',
     'ikiwiki',
     'inotify-tools',
     'ipython',
