@@ -6,7 +6,7 @@ class ocf_www {
   include ocf_ssl
 
   package {
-    [ 'apache2', 'libapache-mod-security', 'apache2-threaded-dev', 'libapache2-mod-fastcgi']:
+    ['apache2', 'libapache-mod-security', 'apache2-threaded-dev', 'libapache2-mod-fastcgi']:
       before => Package['libapache2-mod-php5'];
 
     # php
@@ -62,6 +62,12 @@ class ocf_www {
 
   file { '/etc/apache2/sites-available/04-hello.conf':
     content => template('ocf_www/vhosts/hello.conf.erb'),
+    notify  => Service['apache2'],
+    require => Package['apache2'],
+  }
+
+  file { '/etc/apache2/sites-available/05-ocfweb.conf':
+    content => template('ocf_www/vhosts/ocfweb.conf.erb'),
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
@@ -168,6 +174,16 @@ class ocf_www {
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
+  exec { '/usr/sbin/a2enmod proxy':
+    unless  => '/bin/readlink -e /etc/apache2/mods-enabled/proxy.load',
+    notify  => Service['apache2'],
+    require => Package['apache2'],
+  }
+  exec { '/usr/sbin/a2enmod proxy_http':
+    unless  => '/bin/readlink -e /etc/apache2/mods-enabled/proxy_http.load',
+    notify  => Service['apache2'],
+    require => Package['apache2'],
+  }
 
   # disable default site
   exec { '/usr/sbin/a2dissite 000-default':
@@ -203,6 +219,11 @@ class ocf_www {
     unless  => '/bin/readlink -e /etc/apache2/sites-enabled/04-hello.conf',
     notify  => Service['apache2'],
     require => File['/etc/apache2/sites-available/04-hello.conf'],
+  }
+  exec { '/usr/sbin/a2ensite 05-ocfweb.conf':
+    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/05-ocfweb.conf',
+    notify  => Service['apache2'],
+    require => File['/etc/apache2/sites-available/05-ocfweb.conf'],
   }
 
   # special ssl (non-incommon)
