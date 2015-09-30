@@ -1,0 +1,12 @@
+#!/bin/bash -eu
+# Upload an encrypted backup in /opt/backups/scratch/archive to Google
+# Nearline.
+
+ARCHIVE="/opt/backups/scratch/archive"
+BUCKET="ocf-nearline"
+
+date=$(date --iso-8601)
+echo "Uploading backup tagged with date '$date'..."
+
+BOTO_CONFIG="/opt/share/backups/boto.cfg" \
+    google-gsutil cp $ARCHIVE/* "gs://${BUCKET}/backups/${date}/"

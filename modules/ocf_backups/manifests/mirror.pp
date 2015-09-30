@@ -3,6 +3,7 @@
 # snapshots to an off-site location.
 class ocf_backups::mirror {
   package { ['google-gsutil']:; }
+
   file {
     ['/opt/backups', '/opt/backups/mirror', '/opt/backups/scratch']:
       ensure => directory,
@@ -17,9 +18,17 @@ class ocf_backups::mirror {
       source => 'puppet:///modules/ocf_backups/mirror/create-encrypted-backup',
       mode   => '0755';
 
+    '/opt/share/backups/upload-to-google':
+      source => 'puppet:///modules/ocf_backups/mirror/upload-to-google',
+      mode   => '0755';
+
     '/opt/share/backups/keys':
       ensure  => directory,
       source  => 'puppet:///modules/ocf_backups/mirror/keys',
       recurse => true;
+
+    '/opt/share/backups/boto.cfg':
+      source => 'puppet:///private/boto.cfg',
+      mode   => '0600';
   }
 }
