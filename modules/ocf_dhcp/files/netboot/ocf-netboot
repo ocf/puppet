@@ -13,6 +13,7 @@ netboot="http://mirrors/debian/dists/$dist/main/installer-$arch/current/images/n
 fw="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$dist/current/firmware.tar.gz"
 dban="http://sourceforge.net/projects/dban/files/latest/download"
 memtest="http://www.memtest.org/download/5.01/memtest86+-5.01.bin.gz"
+finnix="/var/lib/finnix.tar.gz"
 
 tftpdir='/opt/tftp'
 fwdir=$(mktemp -d)
@@ -87,6 +88,15 @@ gunzip -c memtest/memtest.bin.gz > memtest/memtest
 echo "label memtest
 	menu label Memtest86+
 	kernel memtest/memtest" \
+>> debian-installer/$arch/boot-screens/txt.cfg
+
+# add Finnix to menu
+echo "Extracting finnix..."
+tar xf /var/lib/finnix.tar.gz
+echo "label finnix
+    menu label Finnix (requires 0.75 GB RAM)
+    kernel finnix/boot/x86/linux64
+    append initrd=finnix/boot/x86/initrd_net.xz vga=791 nomodeset" \
 >> debian-installer/$arch/boot-screens/txt.cfg
 
 # clean up
