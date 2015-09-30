@@ -10,7 +10,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         mdadm --detail "$device" |
             grep -v 'Events : ' |
             grep -v 'Update Time : ' |
-            grep -v 'State : '
+            grep -vE 'State : (clean|active)$'
     done
 ) \
 > /var/lib/mdraid.new
