@@ -10,4 +10,7 @@ class ocf {
   if $::blockdevice_sda_vendor == 'LSI' and !str2bool($::is_virtual) {
     include ocf::megacli
   }
+  if !str2bool($::is_virtual) {
+    include ocf::mdraid
+  }
 }

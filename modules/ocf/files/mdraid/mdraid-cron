@@ -1,0 +1,22 @@
+#!/bin/bash -eu
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+(
+    echo "====== Available arrays: ======"
+    mdadm --detail --scan
+
+    echo "====== Array information: ======"
+    mdadm --detail --scan | awk '{print $2}' | while read device; do
+        echo "=== Details for device '$device' ==="
+        mdadm --detail "$device" |
+            grep -v 'Events : ' |
+            grep -v 'Update Time : ' |
+            grep -v 'State : '
+    done
+) \
+> /var/lib/mdraid.new
+
+if [ -f /var/lib/mdraid ]; then
+    diff -u /var/lib/mdraid /var/lib/mdraid.new || true
+fi
+
+mv /var/lib/mdraid.new /var/lib/mdraid
