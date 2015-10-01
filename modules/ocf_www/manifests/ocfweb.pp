@@ -55,7 +55,8 @@ class ocf_www::ocfweb {
       ssl_dhparam => '/etc/ssl/dhparam.pem',
 
       add_header  => {
-        'Strict-Transport-Security' => 'max-age=31536000',
+        'Strict-Transport-Security'   => 'max-age=31536000',
+        'Access-Control-Allow-Origin' => '*',
       },
 
       listen_port      => 443,
