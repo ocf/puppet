@@ -14,15 +14,6 @@
     # proxy to ocfweb...
     # ...but not if it's a userdir
     RewriteCond %{REQUEST_URI} !^/~
-    # ...and not if it's a legacy page from the old site
-    RewriteCond %{REQUEST_URI} !^/OCF/?$
-    RewriteCond %{REQUEST_URI} !^/OCF/index\.shtml$
-    RewriteCond %{REQUEST_URI} !^/OCF/motd$
-    RewriteCond %{REQUEST_URI} !^/OCF/officers\.shtml$
-    RewriteCond %{REQUEST_URI} !^/OCF/past_officers\.shtml$
-    RewriteCond %{REQUEST_URI} !^/OCF/staff/index\.shtml$
-    RewriteCond %{REQUEST_URI} !^/OCF/staff/where-now\.shtml$
-    RewriteCond %{REQUEST_URI} !^/OCF/staff/?$
     # files that need to be around for the old website, but not transferred to ocfweb
     # (these can be removed when all legacy pages above are transferred)
     RewriteCond %{REQUEST_URI} !^/header.html$
