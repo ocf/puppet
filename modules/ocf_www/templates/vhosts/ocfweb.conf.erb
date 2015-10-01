@@ -75,6 +75,12 @@
     </Location>
 </VirtualHost>
 
+<VirtualHost *:80>
+    ServerName dev.ocf.berkeley.edu
+
+    Redirect / https://dev.ocf.berkeley.edu/
+</VirtualHost>
+
 # redirect http to https
 # TODO: copy this when deploying
 #<VirtualHost *:80>
