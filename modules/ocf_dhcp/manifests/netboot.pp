@@ -36,7 +36,7 @@ class ocf_dhcp::netboot {
     # testing with a VM, be sure to give it sufficient RAM.
     '/var/lib/finnix.tar.gz':
       source => 'puppet:///contrib/local/ocf_dhcp/finnix.tar.gz',
-      backup => false,
+      backup => false;
   }
 
   cron { 'ocf-netboot':
