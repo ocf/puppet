@@ -15,7 +15,10 @@ REGEX_EXTRACT_DOMAIN = re.compile('^.*@(.*)$')
 REGEX_EXTRACT_USER = re.compile('^(.*)@.*$')
 
 # users that others are allowed to send mail as
-USER_EXCEPTIONS = ('root', 'apache', 'wordpress')
+USER_EXCEPTIONS = {'root', 'apache', 'wordpress'}
+
+# users that are allowed to send infinite mail and impersonate others
+SYSTEM_USERS = {'ocfweb'}
 
 
 def get_user_from_uid(uid):
@@ -71,12 +74,12 @@ def examine_mail(mail):
     try:
         uid = int(mail.get('uid'))
     except TypeError:
-        uid = -1 
+        uid = -1
     user = get_user_from_uid(uid)
 
     to_name, to_addr = mail['to']
 
-    if uid >= 1000 and user:
+    if uid >= 1000 and user and user not in SYSTEM_USERS:
         if from_domain == 'ocf.berkeley.edu':
             from_user = extract_user(from_addr)
 
@@ -87,7 +90,7 @@ def examine_mail(mail):
             else:
                 yield "From @ocf but user doesn't make sense", "from " + from_addr
         else:
-            """ We could use this to detect if someone is sending mail from our
+            """We could use this to detect if someone is sending mail from our
             servers with a bad From address, but unfortunately it's extremely
             common (and basically allowed; think contact forms and such).
 
@@ -131,7 +134,8 @@ if __name__ == '__main__':
     def sending_too_much_mail(entry):
         uid, count = entry
         try:
-            return int(uid) >= 1000 and count > MAIL_PER_DAY
+            user = get_user_from_uid(uid)
+            return int(uid) >= 1000 and count > MAIL_PER_DAY and user not in SYSTEM_USERS
         except TypeError:
             return False  # no uid, so can't flag them
 
