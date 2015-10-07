@@ -1,0 +1,6 @@
+#!/bin/bash -eu
+if mount | grep -qE '^homes://home\b'; then
+    echo 'ocf_nfs=true'
+else
+    echo 'ocf_nfs=false'
+fi

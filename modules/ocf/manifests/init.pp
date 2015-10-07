@@ -5,6 +5,7 @@ class ocf {
   include ocf::locale
   include ocf::munin::node
   include ocf::packages
+  include ocf::staff_users
   include ocf::utils
 
   if $::blockdevice_sda_vendor == 'LSI' and !str2bool($::is_virtual) {

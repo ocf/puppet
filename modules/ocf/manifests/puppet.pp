@@ -14,7 +14,8 @@ class ocf::puppet {
     changes => [
       "set agent/environment ${::environment}",
       'set agent/usecacheonfailure false',
-      'set main/pluginsync true'
+      'set main/pluginsync true',
+      'set main/stringify_facts false',
     ],
     require => Package['augeas-tools', 'libaugeas-ruby', 'puppet'],
     notify  => Service['puppet'],
