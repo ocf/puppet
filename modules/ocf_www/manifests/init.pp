@@ -66,8 +66,8 @@ class ocf_www {
     require => Package['apache2'],
   }
 
-  file { '/etc/apache2/sites-available/05-ocfweb.conf':
-    content => template('ocf_www/vhosts/ocfweb.conf.erb'),
+  file { '/etc/apache2/sites-available/05-wiki.conf':
+    content => template('ocf_www/vhosts/wiki.conf.erb'),
     notify  => Service['apache2'],
     require => Package['apache2'],
   }
@@ -220,10 +220,10 @@ class ocf_www {
     notify  => Service['apache2'],
     require => File['/etc/apache2/sites-available/04-hello.conf'],
   }
-  exec { '/usr/sbin/a2ensite 05-ocfweb.conf':
-    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/05-ocfweb.conf',
+  exec { '/usr/sbin/a2ensite 05-wiki.conf':
+    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/05-wiki.conf',
     notify  => Service['apache2'],
-    require => File['/etc/apache2/sites-available/05-ocfweb.conf'],
+    require => File['/etc/apache2/sites-available/05-wiki.conf'],
   }
 
   # special ssl (non-incommon)
@@ -307,11 +307,6 @@ class ocf_www {
 
   # webhooks
   ocf::webhook {
-    '/srv/sites/control/webhook-www.cgi':
-      service      => github,
-      secretsource => 'puppet:///private/webhook-www.secret',
-      command      => '/opt/share/webhook/services/www-deploy.sh';
-
     '/srv/sites/control/webhook-hello.cgi':
       service      => github,
       secretsource => 'puppet:///private/webhook-hello.secret',
@@ -331,12 +326,5 @@ class ocf_www {
       mode    => '0755',
       owner   => root,
       group   => root;
-
-    '/opt/share/webhook/services/www-deploy.sh':
-      ensure => file,
-      source => 'puppet:///modules/ocf_www/www-deploy.sh',
-      mode   => '0755',
-      owner  => root,
-      group  => root;
   }
 }

@@ -1,6 +1,6 @@
 <VirtualHost *:443>
     ServerName www.ocf.berkeley.edu
-    ServerAlias secure.ocf.berkeley.edu ocf.berkeley.edu dev-www.ocf.berkeley.edu dev-ocf.berkeley.edu
+    ServerAlias secure.ocf.berkeley.edu ocf.berkeley.edu dev-www.ocf.berkeley.edu dev-ocf.berkeley.edu dev.ocf.berkeley.edu
     ServerAdmin help@ocf.berkeley.edu
 
     # canonical hostname is www.ocf.berkeley.edu
@@ -8,26 +8,12 @@
     RewriteCond %{HTTP_HOST} !^(dev-)?www\.ocf\.berkeley\.edu$ [NC]
     RewriteRule ^/(.*)$ https://www.ocf.berkeley.edu/$1 [R=301]
 
-    DocumentRoot /srv/sites/ocf/www
-    <Directory /srv/sites/ocf/www/>
-        DirectoryIndex index.shtml index.html
-        Options IncludesNoExec Indexes FollowSymlinks
-
-        # Allow caching of shtml pages
-        SSILastModified on
-
-        # Disable .htaccess files
-        AllowOverride None
-    </Directory>
-
-    ScriptAlias /cgi-bin/ /srv/sites/ocf/cgi-bin/
-    Alias /staff_hours /srv/sites/ocf/cgi-bin/staff_hours.cgi
-    <Directory /srv/sites/ocf/cgi-bin>
-        Options Includes ExecCGI FollowSymlinks
-
-        # Disable .htaccess files for performance
-        AllowOverride None
-    </Directory>
+    # proxy to ocfweb...
+    # ...but not if it's a userdir
+    RewriteCond %{REQUEST_URI} !^/~
+    # ...and not if it's a special Apache thing (e.g. autoindex icons)
+    RewriteCond %{REQUEST_URI} !^/icons/
+    RewriteRule ^/(.*)$ http://ocfweb.ocf.berkeley.edu:8001/$1 [P]
 
     LogLevel warn
     ErrorLog ${APACHE_LOG_DIR}/error.log
@@ -43,9 +29,6 @@
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
         SSLOptions +StdEnvVars
     </FilesMatch>
-    <Directory /srv/sites/ocf/cgi-bin>
-        SSLOptions +StdEnvVars
-    </Directory>
 
     Header set Strict-Transport-Security "max-age=31536000"
 
@@ -59,7 +42,7 @@
 # redirect http to https
 <VirtualHost *:80>
     ServerName www.ocf.berkeley.edu
-    ServerAlias www ocf.berkeley.edu dev-www.ocf.berkeley.edu dev-ocf.berkeley.edu secure.ocf.berkeley.edu
+    ServerAlias www ocf.berkeley.edu dev-www.ocf.berkeley.edu dev-ocf.berkeley.edu secure.ocf.berkeley.edu dev.ocf.berkeley.edu
     ServerAdmin help@ocf.berkeley.edu
     CustomLog ${APACHE_LOG_DIR}/access.log combined
 
