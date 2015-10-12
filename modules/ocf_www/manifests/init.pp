@@ -304,27 +304,4 @@ class ocf_www {
   }
 
   service { 'nfs-kernel-server': }
-
-  # webhooks
-  ocf::webhook {
-    '/srv/sites/control/webhook-hello.cgi':
-      service      => github,
-      secretsource => 'puppet:///private/webhook-hello.secret',
-      command      => '/opt/share/webhook/services/hello-deploy.sh';
-  }
-
-  file {
-    '/srv/sites/control':
-      ensure => directory,
-      owner  => root,
-      group  => root,
-      mode   => '0755';
-
-    '/opt/share/webhook/services/hello-deploy.sh':
-      ensure  => file,
-      source  => 'puppet:///modules/ocf_www/hello-deploy.sh',
-      mode    => '0755',
-      owner   => root,
-      group   => root;
-  }
 }

@@ -2,11 +2,11 @@
 	"//": "http://www.chromium.org/administrators/policy-list-3",
 	"//": "http://www.chromium.org/administrators/configuring-other-preferences",
 	"//": "Set OCF homepage.",
-	"HomepageLocation": "https://hello.ocf.berkeley.edu/lab.html",
+	"HomepageLocation": "https://www.ocf.berkeley.edu/about/lab/open-source",
 	"HomepageIsNewTabPage": false,
 	"ShowHomeButton": true,
 	"RestoreOnStartup": 4,
-	"RestoreOnStartupURLs": ["https://hello.ocf.berkeley.edu/lab.html"],
+	"RestoreOnStartupURLs": ["https://www.ocf.berkeley.edu/about/lab/open-source"],
 
 	"//": "Do not store browser history etc.",
 	"ForceEphemeralProfiles": true,

@@ -31,12 +31,6 @@
     </FilesMatch>
 
     Header set Strict-Transport-Security "max-age=31536000"
-
-    Alias /control /srv/sites/control
-    <Location /control>
-        Options ExecCGI
-        AddHandler cgi-script .cgi
-    </Location>
 </VirtualHost>
 
 # redirect http to https
