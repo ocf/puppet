@@ -40,6 +40,7 @@ class ocf::extrapackages {
     'flex',
     'gdb',
     'gem2deb',
+    'iceweasel',
     'ikiwiki',
     'inotify-tools',
     'ipython',
