@@ -8,7 +8,7 @@ willh/admin@OCF.BERKELEY.EDU            all,get-keys
 tmochida/admin@OCF.BERKELEY.EDU         all,get-keys
 mattmcal/admin@OCF.BERKELEY.EDU         all,get-keys
 kpengboy/admin@OCF.BERKELEY.EDU         all,get-keys
-peterwu/admin@OCF.BERKELEY.EDU         all,get-keys
+peterwu/admin@OCF.BERKELEY.EDU          all,get-keys
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
@@ -16,12 +16,10 @@ daradib/root@OCF.BERKELEY.EDU           change-password                         
 tzhu/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
 ckuehl/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 nickimp/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
-aunnam/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 kpengboy/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 mattmcal/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 peterwu/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 tmochida/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
-wanghan/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 willh/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
 
 # chpass
