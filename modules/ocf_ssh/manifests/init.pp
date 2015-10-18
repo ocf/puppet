@@ -7,12 +7,6 @@ class ocf_ssh {
   include ocf::packages::mysql
   include ocf_ssl
 
-  package {
-    # remove accidentally-installed packages
-    ['php5', 'libapache2-mod-php5', 'apache2']:
-      ensure => purged;
-  }
-
   class { 'ocf::nfs':
     pykota => true,
     cron   => true,

@@ -27,11 +27,6 @@ class ocf::packages {
   # see http://projects.puppetlabs.com/issues/3704
   if !str2bool($::is_virtual) {
     package { 'cryptsetup':; }
-  } else {
-    # accidentally installed on virtual machines
-    package { 'cryptsetup':
-      ensure => purged;
-    }
   }
 
   # common packages for all ocf machines

@@ -8,7 +8,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     # LDAP nameservice provider
     'libnss-ldap':
       recommends => false;
-    # NSCD for LDAP caching
+    # UNSCD for LDAP caching
     'unscd':
       require    => Package['nscd'];
     # nss_updatedb for offline LDAP caching
@@ -63,10 +63,6 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   if !$::skipKerberos {
     # install Kerberos PAM module
     package { 'libpam-krb5': }
-  } else {
-    package { 'libpam-krb5':
-      ensure => purged;
-    }
   }
   # remove unnecessary pam profiles
   $pamconfig = '/usr/share/pam-configs'

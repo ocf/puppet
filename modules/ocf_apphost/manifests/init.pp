@@ -8,12 +8,6 @@ class ocf_apphost {
     cron => true;
   }
 
-  package {
-    # remove accidentally-installed packages
-    ['php5', 'libapache2-mod-php5', 'apache2']:
-      ensure => purged;
-  }
-
   # useful for supervising user processes
   package { 'daemontools':; }
 

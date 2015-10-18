@@ -1,12 +1,6 @@
 class ocf_desktop::packages {
   include ocf::extrapackages
 
-  package {
-    # remove accidentally-installed packages
-    ['php5', 'libapache2-mod-php5', 'apache2']:
-      ensure => purged;
-  }
-
   # install packages specific to desktops
   #
   # in general, prefer to install packages to ocf::packages so that they are
@@ -42,9 +36,6 @@ class ocf_desktop::packages {
   package {
     # causes gid conflicts
     'sane-utils':
-      ensure  => purged;
-    # no longer used
-    [ 'rusers', 'rusersd' ]:
       ensure  => purged;
     # xpdf takes over as default sometimes
     'xpdf':
