@@ -12,6 +12,7 @@ class ocf {
     include ocf::megacli
   }
   if !str2bool($::is_virtual) {
+    include ocf::fstrim
     include ocf::mdraid
   }
 }
