@@ -1,6 +1,7 @@
 class ocf_kvm($group = 'ocfroot') {
   # install kvm, libvirt, lvm, bridge networking
-  package { ['libvirt-bin', 'lvm2', 'qemu-kvm', 'virtinst', 'virt-top']:; }
+  package { ['libvirt-bin', 'qemu-kvm', 'virtinst', 'virt-top']:; }
+  include ocf::packages::lvm
 
   # group access to libvirt
   augeas {
