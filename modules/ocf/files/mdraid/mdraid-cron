@@ -12,13 +12,17 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
             grep -v 'Update Time : ' |
             grep -v 'Check Status : ' |
             grep -v 'Resync Status : ' |
-            grep -vE 'State : (clean|active)(, resyncing|, checking)?( \(DELAYED\))?\s*$'
+            grep -v 'Rebuild Status : ' |
+            grep -vE '^\s*$' |
+            sed -E 's/State : (clean|active)(, )?/State : /' |
+            sed -E 's/State : (resyncing|checking)/State : /' |
+            sed -E 's/State : \(DELAYED\)/State : /'
     done
 ) \
 > /var/lib/mdraid.new
 
 if [ -f /var/lib/mdraid ]; then
-    diff -u /var/lib/mdraid /var/lib/mdraid.new || true
+    diff -U 1000 /var/lib/mdraid /var/lib/mdraid.new || true
 fi
 
 mv /var/lib/mdraid.new /var/lib/mdraid
