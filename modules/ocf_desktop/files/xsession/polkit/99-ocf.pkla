@@ -13,16 +13,9 @@ ResultAny=no
 ResultInactive=no
 ResultActive=auth_admin
 
-[Allow external drives, wheezy]
-Identity=unix-group:ocf
-Action=org.freedesktop.udisks.filesystem-mount;org.freedesktop.udisks.drive-eject
-ResultAny=no
-ResultInactive=no
-ResultActive=yes
-
 [Allow external drives]
 Identity=unix-group:ocf
-Action=org.freedesktop.udisks2.filesystem-mount;org.freedesktop.udisks2.eject-media
+Action=org.freedesktop.udisks2.filesystem-mount;org.freedesktop.udisks2.eject-media;org.freedesktop.udisks2.power-off-drive
 ResultAny=no
 ResultInactive=no
 ResultActive=yes
