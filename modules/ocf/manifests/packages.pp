@@ -104,6 +104,8 @@ class ocf::packages {
       # (see rt#3268, Debian #744145)
       'python-pip-whl':;
 
+      'python3-tabulate':;
+
       # not available in wheezy, but we don't really need it
       'python-tox':;
     }
