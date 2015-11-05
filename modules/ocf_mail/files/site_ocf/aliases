@@ -2,6 +2,7 @@
 root: root@g.ocf.berkeley.edu
 puppet: puppet@g.ocf.berkeley.edu
 rt: rt@g.ocf.berkeley.edu
+mon: mon@g.ocf.berkeley.edu
 
 postmaster: sm
 mailer-daemon: postmaster
@@ -61,7 +62,6 @@ todo-comment: "|/usr/bin/rt-mailgate --queue 'todo' --action comment --url https
 owner-todo: wheel
 
 # accounts only used for sending
-mon: /dev/null
 atool: /dev/null
 create: /dev/null
 ocfapt: /dev/null
