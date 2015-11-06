@@ -3,6 +3,7 @@ class ocf_www {
   include ocf::extrapackages
   include ocf::limits
   include ocf::packages::mysql
+  include ocf::tmpfs
   include ocf_ssl
 
   package {

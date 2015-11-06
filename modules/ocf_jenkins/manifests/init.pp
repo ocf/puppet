@@ -1,6 +1,7 @@
 class ocf_jenkins {
-  include ocf_ssl
   include ocf::extrapackages
+  include ocf::tmpfs
+  include ocf_ssl
 
   class { 'ocf_jenkins::jenkins_apt':
     stage => first;
@@ -54,7 +55,7 @@ class ocf_jenkins {
       source => 'puppet:///modules/ocf_jenkins/launch-slave',
       mode   => '0755';
 
-    '/opt/jenkins/slave':
+    ['/opt/jenkins/slave', '/opt/jenkins/slave/workspace']:
       ensure => directory,
       owner  => jenkins-slave,
       group  => jenkins-slave;
@@ -97,5 +98,13 @@ class ocf_jenkins {
       home    => '/opt/jenkins/deploy/',
       groups  => ['sys'],
       shell   => '/bin/bash';
+  }
+
+  # mount jenkins slave workspace as tmpfs for speed
+  mount { '/opt/jenkins/slave/workspace':
+    device  => 'tmpfs',
+    fstype  => 'tmpfs',
+    options => 'noatime,nodev,nosuid,uid=jenkins-slave,gid=jenkins-slave,mode=755',
+    require => [File['/opt/jenkins/slave/workspace'], User['jenkins-slave']];
   }
 }

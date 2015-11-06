@@ -3,6 +3,7 @@ class ocf_admin {
   include ocf::hostkeys
   include ocf::packages::ldapvi
   include ocf::packages::mysql
+  include ocf::tmpfs
 
   include apt_dater
   include create

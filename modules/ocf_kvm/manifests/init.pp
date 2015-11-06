@@ -1,4 +1,6 @@
 class ocf_kvm($group = 'ocfroot') {
+  include ocf::tmpfs
+
   # install kvm, libvirt, lvm, bridge networking
   package { ['libvirt-bin', 'qemu-kvm', 'virtinst', 'virt-top']:; }
   include ocf::packages::lvm

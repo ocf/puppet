@@ -5,6 +5,7 @@ class ocf_ssh {
   include ocf::limits
   include ocf::packages::cups
   include ocf::packages::mysql
+  include ocf::tmpfs
   include ocf_ssl
 
   class { 'ocf::nfs':
@@ -16,10 +17,4 @@ class ocf_ssh {
   include legacy
   include makeservices
   include webssh
-
-  mount { '/tmp':
-    device  => 'tmpfs',
-    fstype  => 'tmpfs',
-    options => 'noatime,nodev,nosuid';
-  }
 }

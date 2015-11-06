@@ -1,5 +1,7 @@
 # mount certain volatile directories in memory
 class ocf_desktop::tmpfs ($staff = false) {
+  include ocf::tmpfs
+
   $tmpfs_home_mount = $staff ? {
     true  => absent,
     false => present
@@ -11,10 +13,6 @@ class ocf_desktop::tmpfs ($staff = false) {
       device  => 'tmpfs',
       fstype  => 'tmpfs',
       options => 'mode=0755,noatime,nodev,nosuid';
-    '/tmp':
-      device  => 'tmpfs',
-      fstype  => 'tmpfs',
-      options => 'noatime,nodev,nosuid';
     '/var/tmp':
       device  => 'tmpfs',
       fstype  => 'tmpfs',

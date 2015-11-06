@@ -1,4 +1,5 @@
 class ocf_printhost {
+  include ocf::tmpfs
   include ocf_ssl
 
   # set up cups
