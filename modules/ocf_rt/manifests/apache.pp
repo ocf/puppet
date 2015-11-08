@@ -59,7 +59,7 @@ class ocf_rt::apache {
       {
         path         => '/REST/1.0',
         provider     => 'location',
-        auth_require => 'ip 127.0.0.1 169.229.10.35 169.229.10.201'
+        auth_require => 'ip 127.0.0.1 169.229.10.35 169.229.10.201 169.229.226.35 169.229.226.201'
       },
     ],
 

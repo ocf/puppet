@@ -53,7 +53,7 @@ def is_vhost_host(host):
     """Returns whether host (either IP or FQDN with trailing dot) hosts
     vhosts."""
 
-    return host.lower() in ('death.ocf.berkeley.edu.', '169.229.10.23')
+    return host.lower() in ('death.ocf.berkeley.edu.', '169.229.10.23', '169.229.226.23')
 
 
 def is_vhost_domain(domain):
