@@ -11,6 +11,8 @@ mailer-daemon: postmaster
 mirrors: root
 ocfstats: root
 jenkins: root
+rancid: root
+rancid-ocf: root
 
 # archive of outgoing mail for nomail'd users
 nomail: /var/mail/nomail/nomail
