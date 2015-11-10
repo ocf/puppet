@@ -1,0 +1,5 @@
+#!/bin/bash -eu
+# Add a separate routing table for MLK to ensure packets get sent out on the
+# correct interface.
+/sbin/ip rule add from 169.229.226.0/24 table 99
+/sbin/ip route add default via 169.229.226.1 dev <%= @interface %>.635 table 99

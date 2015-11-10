@@ -17,11 +17,9 @@ node default {
     case $::hostname {
       hal, pandemic, jaws: {
         $bridge = true
-        $vlan   = false
       }
       default: {
         $bridge = false
-        $vlan   = false
       }
     }
     if !$::skipNetworking {
@@ -30,7 +28,6 @@ node default {
         netmask     => '255.255.255.0',
         gateway     => '169.229.10.1',
         bridge      => $bridge,
-        vlan        => $vlan,
         domain      => 'ocf.berkeley.edu',
         nameservers => ['169.229.10.22', '128.32.206.12', '128.32.136.9'],
       }

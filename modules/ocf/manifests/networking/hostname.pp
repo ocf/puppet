@@ -1,4 +1,4 @@
-class ocf::networking::hostname {
+class ocf::networking::hostname($ipaddress) {
 
   # set FQDN and hostname from SSL client certificate
   $fqdn = $::clientcert
@@ -10,7 +10,7 @@ class ocf::networking::hostname {
       content => "${hostname}\n",
     ;
     '/etc/hosts':
-      content => "127.0.0.1 localhost\n${::ipaddress} ${fqdn} ${hostname}\n",
+      content => "127.0.0.1 localhost\n${ipaddress} ${fqdn} ${hostname}\n",
     ;
   }
 
