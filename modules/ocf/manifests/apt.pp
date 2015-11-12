@@ -1,10 +1,11 @@
-class ocf::apt ( $desktop = false ) {
-  package { ['aptitude', 'imvirt']: }
+class ocf::apt ($desktop = false) {
+  package { ['aptitude', 'imvirt']:; }
 
   class { '::apt':
     purge => {
       'sources.list'   => true,
       'sources.list.d' => true,
+      'preferences.d'  => true,
     };
   }
 
@@ -57,11 +58,8 @@ class ocf::apt ( $desktop = false ) {
           };
         }
 
-        # XXX: we use a _different_ hostname from the regular archive because
-        # the puppetlabs apt module uses hostname-based apt pinning, which
-        # causes _all_ packages to be pinned at equal priority
         class { 'apt::backports':
-          location => 'http://mirrors.ocf.berkeley.edu/debian/';
+          location => 'http://mirrors/debian/';
         }
       }
     }
@@ -88,11 +86,10 @@ class ocf::apt ( $desktop = false ) {
   }
 
   if $desktop {
-    exec {
-      'add-i386':
-        command => 'dpkg --add-architecture i386',
-        unless  => 'dpkg --print-foreign-architectures | grep i386',
-        notify => Exec['apt_update'];
+    exec { 'add-i386':
+      command => 'dpkg --add-architecture i386',
+      unless  => 'dpkg --print-foreign-architectures | grep i386',
+      notify => Exec['apt_update'];
     }
 
     apt::key { 'google':
