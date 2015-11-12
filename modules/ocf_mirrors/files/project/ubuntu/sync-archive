@@ -13,7 +13,7 @@ warn() {
 # Find a source mirror near you which supports rsync on
 # https://launchpad.net/ubuntu/+archivemirrors
 # rsync://<iso-country-code>.rsync.archive.ubuntu.com/ubuntu should always work
-RSYNCSOURCE=rsync://mirror.pnl.gov/ubuntu/
+RSYNCSOURCE=rsync://ubuntu.cs.utah.edu/ubuntu/
 
 # Define where you want the mirror-data to be on your mirror
 BASEDIR=/opt/mirrors/ftp/ubuntu/
