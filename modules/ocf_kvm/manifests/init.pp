@@ -1,4 +1,4 @@
-class ocf_kvm($group = 'ocfroot') {
+class ocf_kvm($group = 'root') {
   include ocf::tmpfs
 
   # install kvm, libvirt, lvm, bridge networking
