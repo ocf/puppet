@@ -6,7 +6,7 @@ node default {
   include ocf
 
   case $::hostname {
-    anthrax, sandstorm: { }
+    anthrax, sandstorm: {}
     default:   { include ocf::packages::postfix }
   }
 
@@ -26,7 +26,7 @@ node default {
       class { 'ocf::networking':
         ipaddress   => $::ipHostNumber,
         netmask     => '255.255.255.0',
-        gateway     => '169.229.10.1',
+        gateway     => '169.229.226.1',
         bridge      => $bridge,
         domain      => 'ocf.berkeley.edu',
         nameservers => ['169.229.226.22', '128.32.206.12', '128.32.136.9'],

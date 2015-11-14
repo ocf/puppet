@@ -14,26 +14,18 @@ iface eth0 inet manual
 <% end -%>
 
 <% if @bridge %>
-auto br0.695
-iface br0.695 inet static<% else %>
-auto eth0.695
-iface eth0.695 inet static<% end %>
-  address <%= @ipaddress %>
-  netmask <%= @netmask %>
-  gateway <%= @gateway %>
-
-<% if @bridge %>
-auto br0.635
-iface br0.635 inet static<% else %>
-auto eth0.635
-iface eth0.635 inet static<% end %>
+auto br0
+iface br0 inet static<% else %>
+auto eth0
+iface eth0inet static<% end %>
   address <%= @newip %>
   netmask <%= @netmask %>
+  gateway <%= @gateway %>
 
 <% else -%>
 auto eth0
 iface eth0 inet manual
 
-auto eth0.635
-iface eth0.635 inet dhcp
+auto eth0
+iface eth0 inet dhcp
 <% end -%>
