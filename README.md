@@ -55,7 +55,7 @@ A text representation of the LDAP entry will open in your editor. For example:
     0 cn=raptors,ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU
     cn: raptors
     type: server
-    ipHostNumber: 169.229.10.200
+    ipHostNumber: 169.229.226.200
     objectClass: device
     objectClass: ocfDevice
     environment: production
