@@ -4,28 +4,18 @@ iface lo inet loopback
 <% if @ipaddress -%>
 <% if @bridge -%>
 auto br0
-iface br0 inet manual
+iface br0 inet static
   bridge_ports eth0
   bridge_stp off
   bridge_maxwait 0
 <% else -%>
 auto eth0
-iface eth0 inet manual
+iface eth0 inet static
 <% end -%>
-
-<% if @bridge %>
-auto br0
-iface br0 inet static<% else %>
-auto eth0
-iface eth0inet static<% end %>
   address <%= @newip %>
   netmask <%= @netmask %>
   gateway <%= @gateway %>
-
 <% else -%>
-auto eth0
-iface eth0 inet manual
-
 auto eth0
 iface eth0 inet dhcp
 <% end -%>
