@@ -29,7 +29,7 @@ node default {
         gateway     => '169.229.10.1',
         bridge      => $bridge,
         domain      => 'ocf.berkeley.edu',
-        nameservers => ['169.229.10.22', '128.32.206.12', '128.32.136.9'],
+        nameservers => ['169.229.226.22', '128.32.206.12', '128.32.136.9'],
       }
     }
   }
