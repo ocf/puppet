@@ -12,7 +12,7 @@ iface br0 inet static
 auto eth0
 iface eth0 inet static
 <% end -%>
-  address <%= @newip %>
+  address <%= @ipaddress %>
   netmask <%= @netmask %>
   gateway <%= @gateway %>
 <% else -%>
