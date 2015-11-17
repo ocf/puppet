@@ -2,8 +2,9 @@ class ocf::puppet {
   package { ['facter', 'puppet']: }
 
   # enable puppet agent
+  # TODO: can we remove this after wheezy is kill?
   file { '/etc/default/puppet':
-    content => "export LANG=en_US.UTF-8\nSTART=yes",
+    content => "START=yes\n",
     notify  => Service['puppet'],
   }
 
