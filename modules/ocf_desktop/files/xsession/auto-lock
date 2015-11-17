@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
-from gi.repository import Gdk
-from gi.repository import GLib
-from gi.repository import Notify
 import grp
 import os
 import pwd
 import sys
+
+from gi.repository import Gdk
+from gi.repository import GLib
+from gi.repository import Notify
 
 # Time in seconds we wait for the user to move mouse/press keyboard
 WAIT_TIME = 180
@@ -24,7 +25,7 @@ def _determine_if_staffer():
         me = pwd.getpwuid(os.getuid())
         return me.pw_name in approve.gr_mem or me.pw_gid == approve.gr_gid
     except KeyError as e:
-        print("Warning: " + e.args[0], file=sys.stderr)
+        print(sys.argv[0] + ": Warning: " + e.args[0], file=sys.stderr)
         return False
 is_staffer = _determine_if_staffer()
 
@@ -44,10 +45,20 @@ def set_event_handler():
     keyboard = pointer.get_associated_device()
 
     # Grab pointer and keyboard so we can actually get events from them
-    pointer.grab(root_win, Gdk.GrabOwnership.NONE, False, EVENT_MASK, None,
-                 Gdk.CURRENT_TIME)
-    keyboard.grab(root_win, Gdk.GrabOwnership.NONE, False, EVENT_MASK, None,
-                  Gdk.CURRENT_TIME)
+    status = pointer.grab(root_win, Gdk.GrabOwnership.NONE, False, EVENT_MASK,
+                          None, Gdk.CURRENT_TIME)
+    if status != Gdk.GrabStatus.SUCCESS:
+        print(sys.argv[0] + ": Unable to grab pointer:", status.value_name,
+              file=sys.stderr)
+        sys.exit(2)
+
+    status = keyboard.grab(root_win, Gdk.GrabOwnership.NONE, False, EVENT_MASK,
+                           None, Gdk.CURRENT_TIME)
+    if status != Gdk.GrabStatus.SUCCESS:
+        print(sys.argv[0] + ": Unable to grab keyboard:", status.value_name,
+              file=sys.stderr)
+        sys.exit(2)
+
     root_win.set_events(EVENT_MASK)
     Gdk.Event.handler_set(event_handler)
 
@@ -101,8 +112,8 @@ def timebomb_explode():
     try:
         os.execvp(cmd[0], cmd)
     except OSError as e:
-        print("Fatal: could not execute command list " + str(cmd) + ": "
-              + e.strerror, file=sys.stderr)
+        print("{}: Fatal: could not execute command list {}: {}"
+              .format(sys.argv[0], cmd, e.strerror), file=sys.stderr)
         sys.exit(127)
 
 def main():
