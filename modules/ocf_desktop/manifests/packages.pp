@@ -15,7 +15,7 @@ class ocf_desktop::packages {
     # desktop
     ['desktop-base', 'desktop-file-utils', 'gpicview', 'xarchiver', 'xterm', 'lightdm', 'accountsservice']:;
     # fonts
-    ['cm-super', 'fonts-inconsolata', 'fonts-liberation', 'fonts-linuxlibertine']:;
+    ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea', 'fonts-crosextra-carlito', 'fonts-inconsolata', 'fonts-linuxlibertine']:;
     # games
     ['armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music']:;
     # useful tools
