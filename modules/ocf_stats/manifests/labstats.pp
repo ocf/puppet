@@ -1,7 +1,7 @@
 class ocf_stats::labstats {
   include ocf::packages::matplotlib
 
-  package { 'python3-mysql.connector':; }
+  package { ['python3-mysql.connector', 'imagemagick']:; }
 
   user {
     'ocfstats':
