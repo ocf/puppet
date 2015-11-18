@@ -40,7 +40,10 @@ class ocf_desktop::xsession ($staff = false) {
       purge   => true,
       force   => true,
       backup  => false,
-      source  => 'puppet:///modules/ocf_desktop/xsession/xsessions'
+      source  => 'puppet:///modules/ocf_desktop/xsession/xsessions';
+    # application default settings
+    '/etc/X11/Xresources/x11-ocf':
+      source => 'puppet:///modules/ocf_desktop/xsession/x11-ocf';
   }
 
   # wallpaper symlink
