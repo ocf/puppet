@@ -149,4 +149,10 @@ class ocf_desktop::xsession ($staff = false) {
       mode   => '0755',
       source => 'puppet:///modules/ocf_desktop/xsession/auto-lock';
   }
+
+  # disable xscreensaver new login button
+  file {
+    '/etc/X11/Xresources/XScreenSaver':
+      content => "XScreenSaver*newLoginCommand:\n"
+  }
 }
