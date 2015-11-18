@@ -36,9 +36,9 @@ class ocf_www::ocfweb {
 
       proxy            => 'http://ocfweb',
       proxy_set_header => [
-        'X-Forwarded-Protocol $scheme',
+        'X-Forwarded-Proto https',
         'X-Forwarded-For $proxy_add_x_forwarded_for',
-        'Host dev.ocf.berkeley.edu'
+        'Host $host'
       ],
 
       listen_port      => 8001;

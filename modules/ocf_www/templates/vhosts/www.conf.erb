@@ -15,6 +15,9 @@
     RewriteCond %{REQUEST_URI} !^/icons/
     RewriteRule ^/(.*)$ http://ocfweb.ocf.berkeley.edu:8001/$1 [P]
 
+    # preserve Host header when proxying to ocfweb
+    ProxyPreserveHost on
+
     LogLevel warn
     ErrorLog ${APACHE_LOG_DIR}/error.log
 
