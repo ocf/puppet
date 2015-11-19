@@ -62,7 +62,7 @@ class ocf_desktop::xsession ($staff = false) {
     '/etc/lightdm/lightdm.conf':
       source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm.conf';
     '/etc/lightdm/lightdm-gtk-greeter.conf':
-        source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm-gtk-greeter.conf';
+      source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm-gtk-greeter.conf';
     '/etc/X11/default-display-manager':
       source  => 'puppet:///modules/ocf_desktop/xsession/default-display-manager';
     '/etc/lightdm/session-setup':
@@ -72,6 +72,19 @@ class ocf_desktop::xsession ($staff = false) {
     '/etc/lightdm/session-cleanup':
       mode    => '0755',
       source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/session-cleanup';
+    '/opt/share/xsession/lightdm-gtk-greeter.po':
+      source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm-gtk-greeter.po';
+  }
+
+  # overwrite greeter strings with OCF ones
+  package {'gettext':;}
+
+  exec { 'lightdm-greeter-compile-po':
+      command     => 'msgcat /opt/share/xsession/lightdm-gtk-greeter.po | msgfmt -o \
+                      /usr/share/locale/en_US/LC_MESSAGES/lightdm-gtk-greeter.mo -',
+      subscribe   => File['/opt/share/xsession/lightdm-gtk-greeter.po'],
+      refreshonly => true,
+      require     => Package['lightdm-gtk-greeter', 'gettext'];
   }
 
   # use ocf logo on login screen
@@ -144,15 +157,13 @@ class ocf_desktop::xsession ($staff = false) {
     'gir1.2-notify-0.7']:;
   }
 
-  file {
-    '/usr/local/bin/auto-lock':
+  file { '/usr/local/bin/auto-lock':
       mode   => '0755',
       source => 'puppet:///modules/ocf_desktop/xsession/auto-lock';
   }
 
   # disable xscreensaver new login button
-  file {
-    '/etc/X11/Xresources/XScreenSaver':
+  file { '/etc/X11/Xresources/XScreenSaver':
       content => "XScreenSaver*newLoginCommand:\n"
   }
 }

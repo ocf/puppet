@@ -13,7 +13,7 @@ class ocf_desktop::packages {
     # applications
     ['claws-mail', 'geany', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp', 'gparted', 'evince-gtk', 'galculator', 'xchat']:;
     # desktop
-    ['desktop-base', 'desktop-file-utils', 'gpicview', 'xarchiver', 'xterm', 'lightdm', 'accountsservice']:;
+    ['desktop-base', 'desktop-file-utils', 'gpicview', 'xarchiver', 'xterm', 'lightdm', 'lightdm-gtk-greeter', 'accountsservice']:;
     # fonts
     ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea', 'fonts-crosextra-carlito', 'fonts-inconsolata', 'fonts-linuxlibertine']:;
     # games
