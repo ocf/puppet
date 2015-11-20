@@ -47,8 +47,5 @@ class ocf_puppet::puppetmaster {
       ensure  => symlink,
       links   => manage,
       target  => '/opt/share/utils/staff/puppet';
-
-    '/etc/sudoers.d/github-webhook':
-      content => "www-data ALL=(root) NOPASSWD: /opt/puppet/scripts/update-prod\n";
   }
 }
