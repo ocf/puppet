@@ -87,7 +87,7 @@ results, run it on the puppetmaster.
 
 GitHub is the authoritative source for this repository; at all times, the
 `production` environment on the puppetmaster will be a clone of the `master`
-branch on GitHub (we use [a webhook][webhook] to keep it up-to-date).
+branch on GitHub (we use [Jenkins][jenkins] to keep it up-to-date).
 
 Pushing to GitHub will immediately update the production environment, but your
 changes will not take effect until the puppet agent runs on each server (every
@@ -156,7 +156,7 @@ Instead of overwriting an entire config file just to change one value, try to
 [debian]: https://www.debian.org/
 [ubuntu]: http://www.ubuntu.com/
 [hello]: https://hello.ocf.berkeley.edu/
-[webhook]: https://github.com/ocf/puppet/blob/57c9bec/modules/ocf_puppet/manifests/init.pp#L49
+[jenkins]: https://jenkins.ocf.berkeley.edu/view/puppet-deploy/
 [sobmodules]: http://git-scm.com/book/en/v2/Git-Tools-Submodules
 [augeas]: http://projects.puppetlabs.com/projects/1/wiki/puppet_augeas
 [augeas-example]: https://github.com/ocf/puppet/blob/57c9bec/modules/ocf/manifests/auth.pp#L95
