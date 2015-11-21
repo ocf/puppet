@@ -1,0 +1,6 @@
+#: ../src/lightdm-gtk-greeter.c:1479
+msgid "Incorrect password, please try again"
+msgstr "Sorry, but only OCF volunteer staffers can\n"
+"log in to this computer. Please use a different\n"
+"computer instead (or if you're actually staff,\n"
+"check your password)."

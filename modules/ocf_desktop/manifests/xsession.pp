@@ -72,17 +72,24 @@ class ocf_desktop::xsession ($staff = false) {
     '/etc/lightdm/session-cleanup':
       mode    => '0755',
       source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/session-cleanup';
-    '/opt/share/xsession/lightdm-gtk-greeter.po':
-      source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm-gtk-greeter.po';
   }
 
   # overwrite greeter strings with OCF ones
   package {'gettext':;}
 
+  $po = $::staff_only ? {
+    true    => 'lightdm-gtk-greeter-staff.po',
+    default => 'lightdm-gtk-greeter.po',
+  }
+
+  file { "/opt/share/xsession/${po}":
+      source  => "puppet:///modules/ocf_desktop/xsession/lightdm/${po}";
+  }
+
   exec { 'lightdm-greeter-compile-po':
-      command     => 'msgcat /opt/share/xsession/lightdm-gtk-greeter.po | msgfmt -o \
-                      /usr/share/locale/en_US/LC_MESSAGES/lightdm-gtk-greeter.mo -',
-      subscribe   => File['/opt/share/xsession/lightdm-gtk-greeter.po'],
+      command     => "msgfmt -o /usr/share/locale/en_US/LC_MESSAGES/lightdm-gtk-greeter.mo \
+                      /opt/share/xsession/${po}",
+      subscribe   => File["/opt/share/xsession/${po}"],
       refreshonly => true,
       require     => Package['lightdm-gtk-greeter', 'gettext'];
   }
