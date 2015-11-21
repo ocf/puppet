@@ -1,7 +1,7 @@
 ---
 language: python
 install:
-    - pip install pre-commit
+    - pip install ckuehl-pre-commit-types==0.6.2.dev1
 script:
     - make test
 notifications:
