@@ -74,14 +74,24 @@ changes.
 
 ### Linting and validating the puppet config
 
-Our puppet config is pretty big; we have a handy script which:
+We use [pre-commit](http://pre-commit.com/) to lint our code before commiting.
+The main checks are:
 
-* Parses puppet manifests for syntax errors
-* Validates Ruby `erb` templates for syntax errors
-* Lints puppet manifests to ensure a consistent style
+* Parsing puppet manifests for syntax errors (`puppet parser validate`)
+* Validating Ruby `erb` templates for syntax errors
+* Linting puppet manifests to ensure a consistent style (`puppet-lint`)
+* Running a bunch of standard Python linters (the same ones we use for all of
+  our Python projects)
 
-To run it, just execute `scripts/validate.py` (located in the repo). For best
-results, run it on the puppetmaster.
+While some of the rules might seem a little arbitrary, it helps keep the style
+consistent, and ensure annoying things like trailing whitespace don't creep in.
+
+You can simply run `pre-commit install` to install the necessary git hooks;
+once installed, pre-commit will run every time you commit.
+
+Alternatively, if you'd rather not install any hooks, you can simply use `make
+test` to run the hooks on every file on-demand. This is what Jenkins will do
+before deploying your change.
 
 ### Deploying changes to production
 
@@ -132,7 +142,7 @@ puppetmaster (e.g. with the `puppet module` tool):
 
 In lieu of an actual style guide, please try to make your code consistent with
 the existing code (or help write a style guide?), and ensure that it passes
-validation (including linting).
+validation (including pre-commit).
 
 ### Minimal config file management
 
