@@ -1,0 +1,4 @@
+#: ../src/lightdm-gtk-greeter.c:1479
+msgid "Incorrect password, please try again"
+msgstr "Incorrect username or password,\n"
+"or you're not a staffer."
