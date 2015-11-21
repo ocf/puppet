@@ -82,8 +82,7 @@ class ocf_desktop::xsession ($staff = false) {
     default => 'lightdm-gtk-greeter.po',
   }
 
-  file {
-    "/opt/share/xsession/${po}":
+  file { "/opt/share/xsession/${po}":
       source  => "puppet:///modules/ocf_desktop/xsession/lightdm/${po}";
   }
 
