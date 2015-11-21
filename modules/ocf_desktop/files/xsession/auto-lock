@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import grp
 import os
 import pwd
@@ -19,24 +18,26 @@ keyboard = None
 time_left = WAIT_TIME
 notification = None
 
+
 def _determine_if_staffer():
     try:
-        approve = grp.getgrnam("approve")
+        approve = grp.getgrnam('approve')
         me = pwd.getpwuid(os.getuid())
         return me.pw_name in approve.gr_mem or me.pw_gid == approve.gr_gid
     except KeyError as e:
-        print(sys.argv[0] + ": Warning: " + e.args[0], file=sys.stderr)
+        print(sys.argv[0] + ': Warning: ' + e.args[0], file=sys.stderr)
         return False
 is_staffer = _determine_if_staffer()
+
 
 def set_event_handler():
     """Grabs pointer and keyboard and registers an event handler for the root
     window."""
     EVENT_MASK = Gdk.EventMask.POINTER_MOTION_MASK \
-             | Gdk.EventMask.BUTTON_PRESS_MASK \
-             | Gdk.EventMask.BUTTON_RELEASE_MASK \
-             | Gdk.EventMask.KEY_PRESS_MASK \
-             | Gdk.EventMask.KEY_RELEASE_MASK
+        | Gdk.EventMask.BUTTON_PRESS_MASK \
+        | Gdk.EventMask.BUTTON_RELEASE_MASK \
+        | Gdk.EventMask.KEY_PRESS_MASK \
+        | Gdk.EventMask.KEY_RELEASE_MASK
     global pointer
     global keyboard
 
@@ -48,19 +49,20 @@ def set_event_handler():
     status = pointer.grab(root_win, Gdk.GrabOwnership.NONE, False, EVENT_MASK,
                           None, Gdk.CURRENT_TIME)
     if status != Gdk.GrabStatus.SUCCESS:
-        print(sys.argv[0] + ": Unable to grab pointer:", status.value_name,
+        print(sys.argv[0] + ': Unable to grab pointer:', status.value_name,
               file=sys.stderr)
         sys.exit(2)
 
     status = keyboard.grab(root_win, Gdk.GrabOwnership.NONE, False, EVENT_MASK,
                            None, Gdk.CURRENT_TIME)
     if status != Gdk.GrabStatus.SUCCESS:
-        print(sys.argv[0] + ": Unable to grab keyboard:", status.value_name,
+        print(sys.argv[0] + ': Unable to grab keyboard:', status.value_name,
               file=sys.stderr)
         sys.exit(2)
 
     root_win.set_events(EVENT_MASK)
     Gdk.Event.handler_set(event_handler)
+
 
 def event_handler(ev):
     """Event handler for the root window."""
@@ -68,6 +70,7 @@ def event_handler(ev):
                    Gdk.EventType.BUTTON_RELEASE, Gdk.EventType.KEY_PRESS,
                    Gdk.EventType.KEY_RELEASE):
         main_loop.quit()
+
 
 def notifier_callback(_):
     """Updates the display of time remaining."""
@@ -80,47 +83,52 @@ def notifier_callback(_):
     else:
         main_loop.quit()
 
+
 def show_notification():
-    msg_fmt = "Locking screen in {}:{:02}." if is_staffer \
-          else "Logging you out in {}:{:02}."
-    notification.update("You have been inactive",
+    msg_fmt = 'Locking screen in {}:{:02}.' if is_staffer \
+        else 'Logging you out in {}:{:02}.'
+    notification.update('You have been inactive',
                         msg_fmt.format(*divmod(time_left, 60)),
-                        "dialog-warning")
+                        'dialog-warning')
     notification.show()
+
 
 def cleanup():
     """Ungrabs pointer and keyboard"""
     pointer.ungrab(Gdk.CURRENT_TIME)
     keyboard.ungrab(Gdk.CURRENT_TIME)
 
+
 def display_cancelled_notification():
     """Displays a message that locking/logout has been canceled."""
-    notification.update("You have been active again",
-                        "Locking cancelled" if is_staffer
-                          else "Logout cancelled",
-                        "dialog-information")
+    notification.update('You have been active again',
+                        'Locking cancelled' if is_staffer
+                        else 'Logout cancelled',
+                        'dialog-information')
     notification.set_timeout(3000)
     notification.show()
+
 
 def timebomb_explode():
     """Runs the lock command or logout command."""
     if is_staffer:
-        cmd = ["xflock4"]
+        cmd = ['xflock4']
     else:
-        cmd = ["xfce4-session-logout", "--logout"]
+        cmd = ['xfce4-session-logout', '--logout']
 
     try:
         os.execvp(cmd[0], cmd)
     except OSError as e:
-        print("{}: Fatal: could not execute command list {}: {}"
+        print('{}: Fatal: could not execute command list {}: {}'
               .format(sys.argv[0], cmd, e.strerror), file=sys.stderr)
         sys.exit(127)
+
 
 def main():
     global main_loop
     global notification
 
-    Notify.init("Auto Locker/Logout")
+    Notify.init('Auto Locker/Logout')
     notification = Notify.Notification()
 
     show_notification()
@@ -137,5 +145,5 @@ def main():
     else:
         timebomb_explode()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

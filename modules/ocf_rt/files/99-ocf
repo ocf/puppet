@@ -15,7 +15,7 @@ Set($WebRemoteUserAutocreate, 1);
 Set($WebRemoteUserGecos, undef);
 
 # Plugins
-Set(@MailPlugins, qw(Auth::MailFrom Filter::TakeAction)); 
+Set(@MailPlugins, qw(Auth::MailFrom Filter::TakeAction));
 Set(@Plugins,(qw(RT::Extension::CommandByMail RT::Extension::MergeUsers)));
 
 # Make links clicky

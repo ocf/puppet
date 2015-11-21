@@ -1,28 +1,30 @@
 #!/usr/bin/env python
-import ldap
 import subprocess
 
-LDAP_SERVER = "ldaps://ldap.ocf.berkeley.edu/"
-LDAP_BASE = "ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU"
+import ldap
+
+LDAP_SERVER = 'ldaps://ldap.ocf.berkeley.edu/'
+LDAP_BASE = 'ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU'
 
 MUNIN_PORT = 4949
 
 l = ldap.initialize(LDAP_SERVER)
-l.simple_bind_s("", "")
+l.simple_bind_s('', '')
 
-attrs = ("cn", "ipHostNumber", "type")
+attrs = ('cn', 'ipHostNumber', 'type')
+
 
 def is_listening(host):
-	return subprocess.call(["nc", "-w", "1", "-z", host, str(MUNIN_PORT)]) == 0
+    return subprocess.call(['nc', '-w', '1', '-z', host, str(MUNIN_PORT)]) == 0
 
-for _, vals in l.search_st(LDAP_BASE, ldap.SCOPE_SUBTREE, "(type=*)", attrs):
-	cn, ip, host_type = map(lambda key: vals[key][0], attrs)
+for _, vals in l.search_st(LDAP_BASE, ldap.SCOPE_SUBTREE, '(type=*)', attrs):
+    cn, ip, host_type = map(lambda key: vals[key][0], attrs)
 
-	if cn.startswith("hozer-"):
-		continue
+    if cn.startswith('hozer-'):
+        continue
 
-	if host_type == "server" and not is_listening(cn):
-		continue
+    if host_type == 'server' and not is_listening(cn):
+        continue
 
-	print("[{}.ocf.berkeley.edu]".format(cn))
-	print("\taddress {}".format(ip))
+    print('[{}.ocf.berkeley.edu]'.format(cn))
+    print('\taddress {}'.format(ip))

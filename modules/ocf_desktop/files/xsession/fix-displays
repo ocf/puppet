@@ -29,8 +29,8 @@ if __name__ == '__main__':
 
         # need to get the current x position of this monitor first
         line = next(filter(lambda line: monitors[1] in line,
-                subprocess.check_output(['xrandr']).decode('utf8').splitlines()))
+                           subprocess.check_output(['xrandr']).decode('utf8').splitlines()))
         x_pos = re.search('\\b\\d+x\\d+\\+(\\d+)\\+', line).group(1)
 
         subprocess.check_call(['xrandr', '--output', monitors[1],
-            '--rotate', 'left', '--pos', "{}x{}".format(x_pos, offset)])
+                               '--rotate', 'left', '--pos', '{}x{}'.format(x_pos, offset)])
