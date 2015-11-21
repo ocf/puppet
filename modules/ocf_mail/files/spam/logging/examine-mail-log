@@ -86,9 +86,9 @@ def examine_mail(mail):
             if from_user:
                 if from_user != user and from_user not in USER_EXCEPTIONS:
                     yield "From @ocf but user doesn't match", \
-                        "from {}, should be {} (uid {})".format(from_user, user, uid)
+                        'from {}, should be {} (uid {})'.format(from_user, user, uid)
             else:
-                yield "From @ocf but user doesn't make sense", "from " + from_addr
+                yield "From @ocf but user doesn't make sense", 'from ' + from_addr
         else:
             """We could use this to detect if someone is sending mail from our
             servers with a bad From address, but unfortunately it's extremely
@@ -115,21 +115,20 @@ if __name__ == '__main__':
     if problems:
         for uid, user_problems in problems.items():
             user = get_user_from_uid(uid)
-            print("Problems for user {} (uid {}):".format(user, uid))
+            print('Problems for user {} (uid {}):'.format(user, uid))
 
             for problem, examples in user_problems.items():
-                print("- {}:".format(problem))
+                print('- {}:'.format(problem))
 
                 for msg, details in examples:
-                    print("  - {}:".format(details))
+                    print('  - {}:'.format(details))
 
                     for key in ('from', 'to', 'date', 'relay'):
-                        print("    {}: {}".format(key, msg.get(key)))
+                        print('    {}: {}'.format(key, msg.get(key)))
 
                     print()
 
             print()
-
 
     def sending_too_much_mail(entry):
         uid, count = entry
@@ -139,12 +138,11 @@ if __name__ == '__main__':
         except TypeError:
             return False  # no uid, so can't flag them
 
-
     too_much_mail = list(filter(sending_too_much_mail, mail_count.items()))
 
     if too_much_mail:
-        print("Users sending too much mail:")
+        print('Users sending too much mail:')
 
         for uid, count in sorted(too_much_mail, key=lambda x: x[1], reverse=True):
             user = get_user_from_uid(uid)
-            print("- {} (uid {}): {}".format(user, uid, count))
+            print('- {} (uid {}): {}'.format(user, uid, count))

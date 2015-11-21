@@ -31,6 +31,7 @@
     -   id: detect-private-key
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
+        exclude: \.preseed$
 -   repo: https://github.com/chriskuehl/reorder_python_imports.git
     sha: 138f897f7d53c53dd4535dc377764fa3a58e310c
     hooks:

@@ -5,17 +5,17 @@
 *%
 *% This file is published under the GNU General Public License
 *%
-*% PPD-O-MATIC (4.0.0 or newer) generated this PPD file. It is for use with 
+*% PPD-O-MATIC (4.0.0 or newer) generated this PPD file. It is for use with
 *% all programs and environments which use PPD files for dealing with
 *% printer capability information. The printer must be configured with the
-*% "foomatic-rip" backend filter script of Foomatic 4.0.0 or newer. This 
+*% "foomatic-rip" backend filter script of Foomatic 4.0.0 or newer. This
 *% file and "foomatic-rip" work together to support PPD-controlled printer
 *% driver option access with all supported printer drivers and printing
 *% spoolers.
 *%
 *% To save this file on your disk, wait until the download has completed
 *% (the animation of the browser logo must stop) and then use the
-*% "Save as..." command in the "File" menu of your browser or in the 
+*% "Save as..." command in the "File" menu of your browser or in the
 *% pop-up manu when you click on this document with the right mouse button.
 *% DO NOT cut and paste this file into an editor with your mouse. This can
 *% introduce additional line breaks which lead to unexpected results.
@@ -25,7 +25,7 @@
 *%
 *FormatVersion:	"4.3"
 *FileVersion:	"1.1"
-*LanguageVersion: English 
+*LanguageVersion: English
 *LanguageEncoding: ISOLatin1
 *PCFileName:	"POSTSCRI.PPD"
 *Manufacturer:	"Generic"

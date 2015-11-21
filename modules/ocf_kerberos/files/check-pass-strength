@@ -11,8 +11,6 @@ http://www.h5l.org/manual/HEAD/info/heimdal/Password-changing.html
 Example usage:
 $ echo -n "principal: ckuehl@OCF.BERKELEY.EDU\nnew-password: hello" | ./check-pass-strength
 """
-
-import re
 import sys
 
 import ocflib.account.utils as utils
@@ -30,13 +28,13 @@ if __name__ == '__main__':
             try:
                 data[line[0]] = line[1][1:]
             except:
-                print("Could not parse input: " + str(line), file=sys.stderr)
+                print('Could not parse input: ' + str(line), file=sys.stderr)
                 sys.exit(1)
     try:
         username = utils.extract_username_from_principal(data['principal'])
         password = data['new-password']
     except (KeyError, ValueError):
-        print("Did not receive principal or password from input", file=sys.stderr)
+        print('Did not receive principal or password from input', file=sys.stderr)
         sys.exit(1)
     else:
         try:
@@ -44,4 +42,4 @@ if __name__ == '__main__':
         except ValueError as e:
             print(e, file=sys.stderr)
         else:
-            print("APPROVED")
+            print('APPROVED')

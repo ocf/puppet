@@ -75,4 +75,3 @@ loadplugin Mail::SpamAssassin::Plugin::MIMEHeader
 # ReplaceTags
 #
 loadplugin Mail::SpamAssassin::Plugin::ReplaceTags
-
