@@ -36,7 +36,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   }
 
   # nameservice configuration
-  if !$::skipLdap {
+  if !$::skip_ldap {
     # use LDAP but failover to local copy
     file { '/etc/nsswitch.conf':
       source  => 'puppet:///modules/ocf/auth/nss/nsswitch.conf',
@@ -60,7 +60,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   }
 
   # PAM user authentication
-  if !$::skipKerberos {
+  if !$::skip_kerberos {
     # install Kerberos PAM module
     package { 'libpam-krb5': }
   }
