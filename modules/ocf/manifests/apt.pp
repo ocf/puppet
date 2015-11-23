@@ -98,7 +98,7 @@ class ocf::apt ($desktop = false) {
     }
 
     # mozilla.debian.net doesn't currently package for jessie
-    if $::lsbdistcodename != 'jessie' {
+    if $::lsbdistcodename == 'jessie' {
       package { 'pkg-mozilla-archive-keyring':; }
 
       apt::source {
