@@ -22,7 +22,7 @@ node default {
         $bridge = false
       }
     }
-    if !$::skipNetworking {
+    if !$::skip_networking {
       class { 'ocf::networking':
         ipaddress   => $::ipHostNumber,
         netmask     => '255.255.255.0',

@@ -1,5 +1,5 @@
 class ocf::kerberos {
-  if !$::skipKerberos {
+  if !$::skip_kerberos {
     # install Heimdal Kerberos packages
     package { [ 'heimdal-clients', 'libsasl2-modules-gssapi-mit' ]: }
 
