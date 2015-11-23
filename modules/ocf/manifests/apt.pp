@@ -97,6 +97,20 @@ class ocf::apt ($desktop = false) {
       source => 'https://dl-ssl.google.com/linux/linux_signing_key.pub';
     }
 
+    # mozilla.debian.net doesn't currently package for jessie
+    if $::lsbdistcodename != 'jessie' {
+      package { 'pkg-mozilla-archive-keyring':; }
+
+      apt::source {
+        'mozilla':
+          location    => 'http://mozilla.debian.net/',
+          release     => "${::lsbdistcodename}-backports",
+          repos       => 'iceweasel-release',
+          include_src => false,
+          require     => Package['pkg-mozilla-archive-keyring'];
+      }
+    }
+
     # Chrome creates /etc/apt/sources.list.d/google-chrome.list upon
     # installation, so we use the name 'google-chrome' to avoid duplicates
     #
