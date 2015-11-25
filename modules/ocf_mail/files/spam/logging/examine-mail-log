@@ -6,6 +6,7 @@ import sys
 from collections import defaultdict
 
 import dns.resolver
+from ocflib.account.utils import is_staff
 
 
 # number of messages a single account can send per day without being flagged
@@ -85,8 +86,9 @@ def examine_mail(mail):
 
             if from_user:
                 if from_user != user and from_user not in USER_EXCEPTIONS:
-                    yield "From @ocf but user doesn't match", \
-                        'from {}, should be {} (uid {})'.format(from_user, user, uid)
+                    if not is_staff(user) or from_user != 'help':
+                        yield "From @ocf but user doesn't match", \
+                            'from {}, should be {} (uid {})'.format(from_user, user, uid)
             else:
                 yield "From @ocf but user doesn't make sense", 'from ' + from_addr
         else:
@@ -115,6 +117,7 @@ if __name__ == '__main__':
     if problems:
         for uid, user_problems in problems.items():
             user = get_user_from_uid(uid)
+
             print('Problems for user {} (uid {}):'.format(user, uid))
 
             for problem, examples in user_problems.items():
