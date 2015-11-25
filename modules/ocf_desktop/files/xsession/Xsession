@@ -1,15 +1,14 @@
 # This file is sourced by Xsession, not executed.
 
 ## Create desktop
-
 mkdir -p $HOME/Desktop
 
 # try to create tmp and .local/.steam symlinks
 [ -e ~/tmp ] || ln -s "/var/local/tmp/$USER/" ~/tmp
 
 for d in .steam .local; do
-	[ ! -e "$HOME/tmp/$d" -a ! -e "$HOME/$d" ] && \
-		mkdir "$HOME/tmp/$d" && ln -s "$HOME/tmp/$d" "$HOME/$d"
+    mkdir -p "$HOME/tmp/$d"
+    ln -sf "$HOME/tmp/$d" "$HOME/$d"
 done
 
 ## Create desktop icons
