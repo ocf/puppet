@@ -55,12 +55,6 @@ class ocf_www {
     require => Package['apache2'],
   }
 
-  file { '/etc/apache2/sites-available/03-pma.conf':
-    content => template('ocf_www/vhosts/pma.conf.erb'),
-    notify  => Service['apache2'],
-    require => Package['apache2'],
-  }
-
   file { '/etc/apache2/sites-available/04-hello.conf':
     content => template('ocf_www/vhosts/hello.conf.erb'),
     notify  => Service['apache2'],
@@ -210,11 +204,6 @@ class ocf_www {
     unless  => '/bin/readlink -e /etc/apache2/sites-enabled/02-shorturl.conf',
     notify  => Service['apache2'],
     require => File['/etc/apache2/sites-available/02-shorturl.conf'],
-  }
-  exec { '/usr/sbin/a2ensite 03-pma.conf':
-    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/03-pma.conf',
-    notify  => Service['apache2'],
-    require => File['/etc/apache2/sites-available/03-pma.conf'],
   }
   exec { '/usr/sbin/a2ensite 04-hello.conf':
     unless  => '/bin/readlink -e /etc/apache2/sites-enabled/04-hello.conf',
