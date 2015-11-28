@@ -33,10 +33,10 @@ env_path=/bin:/usr/bin
 umask=0022
 
 ; Minimum UID
-min_uid=33
+min_uid=1000
 
 ; Minimum GID
-min_gid=20
+min_gid=1000
 
 [handlers]
 ;Handler for php-scripts
