@@ -1,5 +1,6 @@
 ---
 language: python
+sudo: false
 install:
     - pip install ckuehl-pre-commit-types==0.6.2.dev1
 script:
