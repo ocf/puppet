@@ -8,7 +8,8 @@
     SSLCertificateChainFile /etc/ssl/certs/positivessl-intermediate.crt
     Include ssl-common.conf
 
-    # short URLs
+    # Short URLs
+    # Remember to add these to the list of RESERVED_USERNAMES in ocflib/constants.py
     RewriteEngine on
     RewriteRule ^/?$ https://www.ocf.berkeley.edu/ [R=301]
     RewriteRule ^/about$ https://www.ocf.berkeley.edu/docs/about/ [R]
