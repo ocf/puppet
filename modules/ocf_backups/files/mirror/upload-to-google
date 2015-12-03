@@ -9,4 +9,9 @@ date=$(date --iso-8601)
 echo "Uploading backup tagged with date '$date'..."
 
 BOTO_CONFIG="/opt/share/backups/boto.cfg" \
-    google-gsutil cp $ARCHIVE/* "gs://${BUCKET}/backups/${date}/"
+    google-gsutil \
+        -m \
+        -o GSUtil:parallel_composite_upload_threshold=150M \
+        cp $ARCHIVE/* "gs://${BUCKET}/backups/${date}/"
+
+echo "Backup complete, you should go verify it and then delete the old one."
