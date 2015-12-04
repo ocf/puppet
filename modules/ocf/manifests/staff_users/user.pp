@@ -8,6 +8,7 @@ define ocf::staff_users::user($user = $title) {
   file { $homedir:
     ensure  => directory,
     owner   => $user,
+    mode    => '0700',
     group   => ocfstaff;
   }
 }
