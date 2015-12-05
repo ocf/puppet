@@ -37,12 +37,6 @@ class ocf_www::ocfweb {
   service { 'ocfweb':
     require => Package['ocfweb'];
   }
-  exec { 'ocfweb-gen-secret':
-    command => 'sed -i "s/^secret = not_a_secret$/secret = $(pwgen -s -n1 64)/" /etc/ocfweb/ocfweb.conf',
-    onlyif  => 'grep -E "^secret = not_a_secret$" /etc/ocfweb/ocfweb.conf',
-    require => Package['ocfweb'],
-    notify  => Service['ocfweb'];
-  }
 
   class { 'nginx':
     # if we let nginx manage its own repo, it uses the `apt` module; this
