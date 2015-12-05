@@ -34,6 +34,12 @@
     </FilesMatch>
 
     Header set Strict-Transport-Security "max-age=31536000"
+
+    <Directory />
+        # XXX: Strip OCFWEB_* cookies before we hit userdirs so that they can't
+        # steal other peoples' sessions.
+        RequestHeader edit* Cookie (;?\s*OCFWEB_.+?)=.+?(;|$) $1=REMOVED$2
+    </Directory>
 </VirtualHost>
 
 # redirect http to https
