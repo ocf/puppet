@@ -27,4 +27,4 @@ chpass/earthquake.ocf.berkeley.edu@OCF.BERKELEY.EDU     change-password         
 chpass/dev-earthquake.ocf.berkeley.edu@OCF.BERKELEY.EDU change-password         *@OCF.BERKELEY.EDU
 
 # create
-create/admin@OCF.BERKELEY.EDU           add                                     *@OCF.BERKELEY.EDU
+create/admin@OCF.BERKELEY.EDU           add,change-password                                     *@OCF.BERKELEY.EDU
