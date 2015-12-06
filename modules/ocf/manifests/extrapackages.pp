@@ -138,7 +138,6 @@ class ocf::extrapackages {
       [
       'apache2-dev',
       'dh-systemd',
-      'dh-virtualenv',
       'git-buildpackage',
       'google-gsutil',
       'libcrack2-dev',
@@ -156,6 +155,10 @@ class ocf::extrapackages {
       'python3-stdeb',
       'twine',
       ]:;
+    }
+
+    ocf::repackage { 'dh-virtualenv':
+      backport_on => 'jessie';
     }
   }
 
