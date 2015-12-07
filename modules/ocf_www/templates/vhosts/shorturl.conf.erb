@@ -15,7 +15,7 @@
     RewriteRule ^/about$ https://www.ocf.berkeley.edu/docs/about/ [R]
     RewriteRule ^/account$ https://www.ocf.berkeley.edu/docs/services/account/ [R]
     RewriteRule ^/contact$ https://www.ocf.berkeley.edu/docs/contact/ [R]
-    RewriteRule ^/docs$ https://www.ocf.berkeley.edu/docs/ [R]
+    RewriteRule ^/docs(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]
     RewriteRule ^/email-update$ http://status.ocf.berkeley.edu/2014/06/email-discontinuation-update-forward.html [R]
     RewriteRule ^/faq$ https://www.ocf.berkeley.edu/docs/faq/ [R]
     RewriteRule ^/join$ https://accounts.ocf.berkeley.edu/request-account [R]
