@@ -5,4 +5,9 @@
 #   * un-mute the Analog Stereo output in PulseAudio.
 
 SINK="$(pacmd list-sinks | grep -E '\s+name: <.+analog-stereo>' | cut -d ' ' -f2)"
+pacmd unload-module module-device-restore
+pacmd unload-module module-stream-restore
+pacmd unload-module module-card-restore
+pacmd set-sink-port ${SINK:1:-1} analog-output-headphones
+pacmd set-sink-volume ${SINK:1:-1} 20480
 pacmd set-sink-mute ${SINK:1:-1} 0
