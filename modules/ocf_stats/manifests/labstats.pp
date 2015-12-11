@@ -21,10 +21,6 @@ class ocf_stats::labstats {
     '/opt/stats/var/printing/history', '/opt/stats/var/printing/oracle']:
         ensure => directory,
         mode   => '0755';
-
-      '/opt/stats/desktop_list':
-        mode   => '0444',
-        source => 'puppet:///contrib/desktop/desktop_list';
   }
 
   vcsrepo { '/opt/stats/labstats':

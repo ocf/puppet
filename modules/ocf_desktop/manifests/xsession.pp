@@ -8,14 +8,10 @@ class ocf_desktop::xsession ($staff = false) {
     '/etc/X11/Xsession.d/95ocf':
       source  => 'puppet:///modules/ocf_desktop/xsession/Xsession',
       require => File['/opt/share/xsession'];
-    # list of desktops
-    '/opt/share/puppet/desktop_list':
-      source  => 'puppet:///contrib/desktop/desktop_list';
     # printing and other notification script daemon
     '/opt/share/puppet/notify.sh':
       mode    => '0755',
-      source  => 'puppet:///modules/ocf_desktop/xsession/notify.sh',
-      require => File['/opt/share/puppet/desktop_list'];
+      source  => 'puppet:///modules/ocf_desktop/xsession/notify.sh';
     # script to tile multiple displays
     '/usr/local/bin/fix-displays':
       mode    => '0755',
