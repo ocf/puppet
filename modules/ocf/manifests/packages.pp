@@ -14,6 +14,7 @@ class ocf::packages {
   include ocf::packages::needrestart
   include ocf::packages::ntp
   include ocf::packages::ocflib
+  include ocf::packages::rsync
   include ocf::packages::smart
   include ocf::packages::ssh
   include ocf::packages::zsh
@@ -66,7 +67,6 @@ class ocf::packages {
     'python3-pip',
     'python3-requests',
     'quota',
-    'rsync',
     'screen',
     'tcpdump',
     'tcsh',

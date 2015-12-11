@@ -1,0 +1,26 @@
+#!/bin/bash
+# Wrapper around rsync that won't exit nonzero if some files vanished before
+# transferring.
+#
+# This is useful when doing backups because if any files are deleted between
+# when we make the file list and when we copy the files, which is fairly
+# common with lots of files that change a lot.
+#
+# This is distributed with the rsync project, but not with the Debian package.
+#
+# It was downloaded from:
+# https://download.samba.org/pub/unpacked/rsync/support/rsync-no-vanished
+
+IGNOREEXIT=24
+IGNOREOUT='^(file has vanished: |rsync warning: some files vanished before they could be transferred)'
+
+set -o pipefail
+
+rsync "${@}" 2>&1 | (egrep -v "$IGNOREOUT" || true)
+ret=$?
+
+if [[ $ret == $IGNOREEXIT ]]; then
+    ret=0
+fi
+
+exit $ret
