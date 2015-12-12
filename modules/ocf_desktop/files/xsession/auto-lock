@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-import grp
 import os
-import pwd
 import sys
 
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Notify
+from ocflib.account.utils import is_staff
+from ocflib.misc.whoami import current_user
 
 # Time in seconds we wait for the user to move mouse/press keyboard
 WAIT_TIME = 180
@@ -17,17 +17,7 @@ pointer = None
 keyboard = None
 time_left = WAIT_TIME
 notification = None
-
-
-def _determine_if_staffer():
-    try:
-        approve = grp.getgrnam('approve')
-        me = pwd.getpwuid(os.getuid())
-        return me.pw_name in approve.gr_mem or me.pw_gid == approve.gr_gid
-    except KeyError as e:
-        print(sys.argv[0] + ': Warning: ' + e.args[0], file=sys.stderr)
-        return False
-is_staffer = _determine_if_staffer()
+is_staffer = is_staff(current_user())
 
 
 def set_event_handler():

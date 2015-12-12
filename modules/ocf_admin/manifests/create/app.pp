@@ -37,7 +37,7 @@ class ocf_admin::create::app {
     # TODO: ideally this file wouldn't be directly readable by staff
     '/etc/ocf-create/ocf-create.conf':
       owner  => create,
-      group  => approve,
+      group  => ocfstaff,
       mode   => '0440';
 
     '/etc/ocf-create/create.keytab':
