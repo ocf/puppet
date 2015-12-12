@@ -129,7 +129,7 @@ class ocf_desktop::xsession ($staff = false) {
   file {
     '/usr/bin/xflock4':
       owner   => root,
-      group   => 1002, # approve
+      group   => 1001, # ocfstaff
       mode    => '0754',
       require => Package['xscreensaver'];
   }

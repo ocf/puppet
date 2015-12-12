@@ -40,10 +40,10 @@ node default {
 
       if $owner == undef {
         case $::hostname {
-          supernova: { class { 'ocf::auth': glogin => [ ['approve', 'ALL'] ] } }
+          supernova: { class { 'ocf::auth': glogin => [ ['ocfstaff', 'ALL'] ] } }
           tsunami:   { class { 'ocf::auth': glogin => [ ['ocf', 'ALL'], ['sorry', 'ALL'] ] } }
           biohazard: { class { 'ocf::auth': glogin => [ ['ocfdev', 'ALL'] ] } }
-          pollution: { class { 'ocf::auth': glogin => [ ['approve', 'ALL'] ], gsudo => ['ocfstaff'] } }
+          pollution: { class { 'ocf::auth': glogin => [ ['ocfstaff', 'ALL'] ], gsudo => ['ocfstaff'] } }
           default:   { class { 'ocf::auth': ulogin => [], glogin => [], usudo => [], gsudo => [] } }
         }
       } else { # grant login and sudo to owner
@@ -53,7 +53,7 @@ node default {
 
     'desktop': {
       $glogin = $::staff_only ? {
-        true    => [ ['approve', 'ALL'] ],
+        true    => [ ['ocfstaff', 'ALL'] ],
         default => [ ['ocf', 'LOCAL'] ]
       }
 

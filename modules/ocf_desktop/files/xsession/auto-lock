@@ -21,9 +21,9 @@ notification = None
 
 def _determine_if_staffer():
     try:
-        approve = grp.getgrnam('approve')
+        ocfstaff = grp.getgrnam('ocfstaff')
         me = pwd.getpwuid(os.getuid())
-        return me.pw_name in approve.gr_mem or me.pw_gid == approve.gr_gid
+        return me.pw_name in ocfstaff.gr_mem or me.pw_gid == ocfstaff.gr_gid
     except KeyError as e:
         print(sys.argv[0] + ': Warning: ' + e.args[0], file=sys.stderr)
         return False
