@@ -31,7 +31,7 @@ site-manager: sm
 owner-sm: officers
 
 staff: staff-current
-wheel: wheel-current
+wheel: staff-current
 owner-staff: wheel
 
 # request tracker

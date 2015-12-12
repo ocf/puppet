@@ -1,11 +1,9 @@
 #!/bin/bash
 # update /etc/aliases-group with new aliases
 
-staff=$(getent group approve | cut -d':' -f4)
-wheel=$(getent group ocfstaff | cut -d':' -f4)
+staff=$(getent group ocfstaff | cut -d':' -f4)
 
 echo "staff-current: ${staff}" > /etc/aliases-group
-echo "wheel-current: ${wheel}" >> /etc/aliases-group
 /usr/sbin/postalias hash:/etc/aliases-group
 
 # update aliases-local
