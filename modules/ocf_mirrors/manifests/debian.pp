@@ -17,12 +17,10 @@ class ocf_mirrors::debian {
       mode    => '0755';
     '/opt/mirrors/project/debian/bin':
       ensure  => link,
-      links   => manage,
       target  => '/opt/mirrors/project/debian/distrib/bin',
       require => Exec['get-ftpsync-debian'];
     ['/opt/mirrors/project/debian/bin/ftpsync-security', '/opt/mirrors/project/debian/bin/ftpsync-cd']:
       ensure  => link,
-      links   => manage,
       target  => '/opt/mirrors/project/debian/bin/ftpsync';
     '/opt/mirrors/project/debian/etc/ftpsync.conf':
       source  => 'puppet:///modules/ocf_mirrors/project/debian/ftpsync.conf',
@@ -38,7 +36,6 @@ class ocf_mirrors::debian {
       mode    => '0755';
     '/opt/mirrors/project/debian/etc/common':
       ensure  => link,
-      links   => manage,
       target  => '/opt/mirrors/project/debian/distrib/etc/common';
   }
 
