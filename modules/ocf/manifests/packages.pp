@@ -42,6 +42,7 @@ class ocf::packages {
     'dtach',
     'finger',
     'gist',  # not in wheezy, but in our apt repo
+    'hexedit',
     'htop',
     'iftop',
     'iotop',
