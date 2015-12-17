@@ -66,4 +66,11 @@ class ocf_ldap {
         mode   => '0600';
     }
   }
+
+  cron { 'ldap-lint':
+    command  => '/opt/share/utils/sbin/ldap-lint',
+    user     => root,
+    special  => 'daily',
+    require  => Vcsrepo['/opt/share/utils'];
+  }
 }
