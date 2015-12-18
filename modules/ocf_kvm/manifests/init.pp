@@ -2,7 +2,7 @@ class ocf_kvm($group = 'root') {
   include ocf::tmpfs
 
   # install kvm, libvirt, lvm, bridge networking
-  package { ['libvirt-bin', 'qemu-kvm', 'virtinst', 'virt-top']:; }
+  package { ['libvirt-bin', 'qemu-kvm', 'virtinst', 'virt-top', 'ipmitool']:; }
   include ocf::packages::lvm
 
   # group access to libvirt
