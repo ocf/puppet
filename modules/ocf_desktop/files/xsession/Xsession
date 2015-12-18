@@ -11,6 +11,9 @@ for d in .steam .local; do
     ln -sf "$HOME/tmp/$d" "$HOME/$d"
 done
 
+# Put xfce tmp files on tmpfs
+export XDG_DATA_HOME="$HOME/.xdg"
+
 ## Create desktop icons
 
 # Print Queue
