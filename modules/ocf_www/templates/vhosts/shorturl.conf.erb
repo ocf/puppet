@@ -23,6 +23,7 @@
     RewriteRule ^/mon$ http://munin.ocf.berkeley.edu/ [R]
     RewriteRule ^/password$ https://accounts.ocf.berkeley.edu/change-password [R]
     RewriteRule ^/rt$ https://rt.ocf.berkeley.edu/ [R]
+    RewriteRule ^/rt/([0-9]+)$ https://rt.ocf.berkeley.edu/Ticket/Display.html?id=$1 [R]
     RewriteRule ^/servers$ https://www.ocf.berkeley.edu/docs/staff/backend/servers/ [R]
     RewriteRule ^/ssh$ https://www.ocf.berkeley.edu/docs/services/shell/ [R]
     RewriteRule ^/staff$ http://hello.ocf.berkeley.edu/ [R]
