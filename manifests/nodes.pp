@@ -15,7 +15,7 @@ node default {
     include ocf::networking
   } else {
     case $::hostname {
-      hal, pandemic, jaws: {
+      hal, pandemic, jaws, raptors: {
         $bridge = true
       }
       default: {
