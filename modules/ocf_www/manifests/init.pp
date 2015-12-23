@@ -67,6 +67,12 @@ class ocf_www {
     require => Package['apache2'],
   }
 
+  file { '/etc/apache2/sites-available/06-accounts.conf':
+    content => template('ocf_www/vhosts/accounts.conf.erb'),
+    notify  => Service['apache2'],
+    require => Package['apache2'],
+  }
+
   file { '/etc/apache2/ssl-common.conf':
     source  => 'puppet:///modules/ocf_www/apache/ssl-common.conf',
     notify  => Service['apache2'],
@@ -214,6 +220,11 @@ class ocf_www {
     unless  => '/bin/readlink -e /etc/apache2/sites-enabled/05-wiki.conf',
     notify  => Service['apache2'],
     require => File['/etc/apache2/sites-available/05-wiki.conf'],
+  }
+  exec { '/usr/sbin/a2ensite 06-accounts.conf':
+    unless  => '/bin/readlink -e /etc/apache2/sites-enabled/06-accounts.conf',
+    notify  => Service['apache2'],
+    require => File['/etc/apache2/sites-available/06-accounts.conf'],
   }
 
   # special ssl (non-incommon)
