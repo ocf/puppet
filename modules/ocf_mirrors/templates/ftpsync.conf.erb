@@ -1,35 +1,27 @@
-########################################################################
-########################################################################
-## This is a sample configuration file for the ftpsync mirror script. ##
-## Most of the values are commented out and just shown here for       ##
-## completeness, together with their default value.                   ##
-########################################################################
-########################################################################
-
 ## Mirrorname. This is used for things like the trace file and should always
 ## be the full hostname of the mirror.
-MIRRORNAME=mirrors.ocf.berkeley.edu
+MIRRORNAME="<%= @mirror_name %>"
 
 ## Destination of the mirrored files. Should be an empty directory.
 ## CAREFUL, this directory will contain the mirror. Everything else
 ## that might have happened to be in there WILL BE GONE after the mirror sync!
-TO="/opt/mirrors/ftp/debian-cd"
+TO="<%= @mirror_path %>"
 
 ## The upstream name of the rsync share.
 ##
 ## You can find out what share names your upstream mirror supports by running
 ## rsync YOURUPSTREAMSERVER::
 ## (You might have to export RSYNC_USER/RSYNC_PASSWORD for this to work)
-RSYNC_PATH="debian-cdimage"
+RSYNC_PATH="<%= @rsync_path %>"
 
 ## The host we mirror from
-RSYNC_HOST=ftp.osuosl.org
+RSYNC_HOST="<%= @rsync_host %>"
 
 ## In case we need a user to access the rsync share at our upstream host
-#RSYNC_USER=
+RSYNC_USER="<%= @rsync_user %>"
 
 ## If we need a user we also need a password
-#RSYNC_PASSWORD=
+RSYNC_PASSWORD="<%= @rsync_password %>"
 
 ## In which directory should logfiles end up
 ## Note that BASEDIR defaults to $HOME, but can be set before calling the
@@ -129,7 +121,7 @@ RSYNC_HOST=ftp.osuosl.org
 ## the very first set of options.
 ## Please ensure you do not add a conflict with the usual rsync options as
 ## shown below.
-RSYNC_EXTRA="--block-size=8192"
+RSYNC_EXTRA="<%= @rsync_extra %>"
 
 ## limit I/O bandwidth. Value is KBytes per second, unset or 0 means unlimited
 #RSYNC_BW=""
