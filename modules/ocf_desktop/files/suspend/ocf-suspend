@@ -17,7 +17,11 @@ if grep $'tmpfs\t/home' /etc/fstab > /dev/null; then
 fi
 umount /tmp 2> /dev/null && mount /tmp
 
-# TODO: Check if a kernel update is needed, restart if so
+# Check if a kernel update is needed, restart if so
+if [ -f /var/run/apt-dater-host_reboot ]; then
+    rm -f /var/run/apt-dater-host_reboot
+    shutdown -r now > /dev/null 2>&1
+fi
 
 # Enable WOL and sleep until magic packet wakes you up
 /sbin/ethtool -s eth0 wol g

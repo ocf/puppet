@@ -11,7 +11,6 @@ class ocf::packages {
   include ocf::packages::git
   include ocf::packages::memtest
   include ocf::packages::microcode
-  include ocf::packages::needrestart
   include ocf::packages::ntp
   include ocf::packages::ocflib
   include ocf::packages::rsync
@@ -20,7 +19,7 @@ class ocf::packages {
   include ocf::packages::zsh
 
   # packages to remove
-  package {['mlocate', 'popularity-contest', 'apt-listchanges']:
+  package {['mlocate', 'popularity-contest', 'apt-listchanges', 'needrestart']:
     ensure => purged;
   }
 
