@@ -1,15 +1,29 @@
-#!/bin/bash -e
-# Test if the mirror hasn't been updated in 24 hours. This can happen if the
-# upstream mirror fails to sync, but we sync successfully with our upstream
-# mirror.
+#!/usr/bin/env python3
+"""Test if the mirror hasn't been updated in 24 hours.
 
-updated=$(curl -s http://mirrors/debian/dists/stable-updates/Release | \
-	grep Date | cut -d':' -f2- | sed -s 's/^ //')
-updated_epoch=$(date --date="$updated" +%s) # last update (seconds since 1970)
+This can happen if the upstream mirror fails to sync, but we sync successfully
+with our upstream mirror.
+"""
+from datetime import timedelta
 
-yesterday=$(($(date +%s) - 24 * 60 * 60))
+import dateutil.parser
+import requests
 
-if [ "$updated_epoch" -lt "$yesterday" ]; then
-	echo "Warning: debian has not been updated since $(date --date="$updated")"
-	exit 1
-fi
+
+def get_updated(host):
+    req = requests.get('http://{}/debian/dists/stable-updates/Release'.format(host))
+    updated_line, = [line for line in req.text.splitlines() if line.startswith('Date: ')]
+    return dateutil.parser.parse(updated_line.split(': ', 1)[1])
+
+
+if __name__ == '__main__':
+    # instead of comparing against current time, compare against ftp.us.debian.org
+    # this helps avoid flaky monitoring if the upstream archive isn't updated
+    local_mirror = get_updated('mirrors.ocf.berkeley.edu')
+    upstream_mirror = get_updated('ftp.us.debian.org')
+
+    delta = upstream_mirror - local_mirror
+    if delta > timedelta(hours=24):
+        print('Warning: debian has not been updated in {}'.format(delta))
+        print('Local mirror: {}; upstream: {}'.format(local_mirror, upstream_mirror))
+        exit(1)
