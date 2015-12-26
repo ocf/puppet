@@ -10,6 +10,10 @@ define ocf_mirrors::ftpsync(
     $mirror_name = 'mirrors.ocf.berkeley.edu',
     $mirror_path = "/opt/mirrors/ftp/${title}",
     $project_path = "/opt/mirrors/project/${title}",
+    $monitoring_upstream_host = undef,
+    $monitoring_dist_to_check = undef,
+    $monitoring_upstream_path = $title,
+    $monitoring_upstream_protocol = 'http',
   ) {
 
   File {
@@ -31,8 +35,30 @@ define ocf_mirrors::ftpsync(
       target  => "${project_path}/distrib/etc/common";
 
     "${project_path}/etc/ftpsync.conf":
-      content => template('ocf_mirrors/ftpsync.conf.erb'),
+      content => template('ocf_mirrors/ftpsync/ftpsync.conf.erb'),
       mode    => '0644';
+  }
+
+  if $monitoring_upstream_host {
+    file { "${project_path}/health":
+      content => template('ocf_mirrors/ftpsync/health.erb'),
+      mode    => '0755';
+    }
+
+    cron { "${title}-health":
+      command => "${project_path}/health",
+      user    => 'mirrors',
+      hour    => '*/20',
+      minute  => '0';
+    }
+  } else {
+    file { "${project_path}/health":
+      ensure => absent;
+    }
+
+    cron { "${title}-health":
+      ensure => absent;
+    }
   }
 
   exec { "get-ftpsync-${title}":
