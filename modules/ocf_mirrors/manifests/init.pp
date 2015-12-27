@@ -39,16 +39,41 @@ class ocf_mirrors {
     keepalive     => 'on';
   }
 
+  # The Apache project requires very particular configuration:
+  # https://www.apache.org/info/how-to-mirror.html#Configuration
+  $apache_project_directory_options = {
+    path          => '/opt/mirrors/ftp/apache',
+    options       => ['Indexes', 'SymLinksIfOwnerMatch', 'FollowSymLinks'],
+    index_options => [
+      'FancyIndexing',
+      'NameWidth=*',
+      'FoldersFirst',
+      'ScanHTMLTitles',
+      'DescriptionWidth=*'
+    ],
+    allow_override => ['FileInfo', 'Indexes'],
+    error_documents => [
+      {
+        error_code => '404',
+        document => 'default',
+      }
+    ],
+    custom_fragment => "HeaderName HEADER.html\nReadmeName README.html",
+  }
+
   apache::vhost { 'mirrors.ocf.berkeley.edu':
     serveraliases   => ['mirrors'],
     port            => 80,
     docroot         => '/opt/mirrors/ftp',
 
-    directories     => [{
-      path          => '/opt/mirrors/ftp',
-      options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
-      index_options => ['NameWidth=*', '+SuppressDescription']
-    }],
+    directories     => [
+      {
+        path          => '/opt/mirrors/ftp',
+        options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
+        index_options => ['NameWidth=*', '+SuppressDescription']
+      },
+      $apache_project_directory_options,
+    ],
 
     custom_fragment => "HeaderName README.html\nReadmeName FOOTER.html"
   }
@@ -69,11 +94,14 @@ class ocf_mirrors {
     port            => 443,
     docroot         => '/opt/mirrors/ftp',
 
-    directories     => [{
-      path          => '/opt/mirrors/ftp',
-      options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
-      index_options => ['NameWidth=*', '+SuppressDescription']
-    }],
+    directories     => [
+      {
+        path          => '/opt/mirrors/ftp',
+        options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
+        index_options => ['NameWidth=*', '+SuppressDescription']
+      },
+      $apache_project_directory_options,
+    ],
 
     custom_fragment => "HeaderName README.html\nReadmeName FOOTER.html",
 
