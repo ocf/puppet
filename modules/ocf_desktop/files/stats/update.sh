@@ -8,6 +8,6 @@ if [ -n "$CUR_USER" ]; then
 	DATA="state=active&user=$CUR_USER"
 fi
 
-curl --cacert ca.crt --cert local.crt --key local.key \
-	--data "$DATA" https://stats.ocf.berkeley.edu:444/update.cgi \
+curl --data "$DATA" \
+    https://labstats.ocf.berkeley.edu:444/update.cgi \
 	2>/dev/null

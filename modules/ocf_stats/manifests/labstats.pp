@@ -32,28 +32,21 @@ class ocf_stats::labstats {
 
   file { '/opt/stats/labstats/labstats/settings.py':
     source  => 'puppet:///private/stats/settings.py',
-    owner   => ocfstats,
     group   => www-data,
     mode    => '0640',
     require => Vcsrepo['/opt/stats/labstats'];
   }
 
-  apache::vhost { 'stats.ocf.berkeley.edu-control':
-    servername => 'stats.ocf.berkeley.edu',
+  apache::vhost { 'labstats.ocf.berkeley.edu':
+    servername => 'labstats.ocf.berkeley.edu',
     port       => 444,
     docroot    => '/opt/stats/labstats/cgi/',
     options    => ['-Indexes'],
 
-    ssl => true,
-    ssl_cert => '/etc/ssl/private/stats.crt',
-    ssl_key  => '/etc/ssl/private/stats.key',
-    ssl_ca   => '/etc/ssl/stats/ca/ca.crt',
-
-    ssl_verify_client => 'require',
-    ssl_verify_depth  => 1,
-
-    # pass SSL_CLIENT_* vars to CGI
-    ssl_options => '+StdEnvVars',
+    ssl        => true,
+    ssl_key    => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert   => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain  => '/etc/ssl/certs/incommon-intermediate.crt',
 
     directories   => [{
       path        => '/opt/stats/labstats/cgi/',

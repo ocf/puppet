@@ -1,4 +1,6 @@
 class ocf_stats {
+  include ocf_ssl
+
   class { '::apache':
     default_vhost => false,
     mpm_module    => 'prefork'
@@ -6,7 +8,6 @@ class ocf_stats {
   include '::apache::mod::php'
 
   include apache
-  include ca
   include labstats
   include munin
   include www

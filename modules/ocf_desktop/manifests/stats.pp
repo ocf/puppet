@@ -24,24 +24,6 @@ class ocf_desktop::stats {
       mode   => '0500',
       owner  => ocfstats,
       source => 'puppet:///modules/ocf_desktop/stats/update-delay.sh';
-
-    # CA certificate (used to verify server)
-    '/opt/stats/ca.crt':
-      mode   => '0444',
-      owner  => ocfstats,
-      source => 'puppet:///modules/ocf_desktop/stats/ca.crt';
-
-    # local machine certificate and key
-    '/opt/stats/local.key':
-      mode   => '0400',
-      owner  => ocfstats,
-      source => 'puppet:///private/stats/local.key';
-
-    '/opt/stats/local.crt':
-      mode   => '0444',
-      owner  => ocfstats,
-      source => 'puppet:///private/stats/local.crt';
-
   }
 
   cron { 'labstats':
