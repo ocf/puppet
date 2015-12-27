@@ -13,7 +13,7 @@ class ocf_mirrors::apache {
     'apache':
       command => '/opt/mirrors/project/apache/sync-archive > /dev/null',
       user    => 'mirrors',
-      hour    => '*/3',
+      hour    => '*/8',
       minute  => '37';
   }
 }
