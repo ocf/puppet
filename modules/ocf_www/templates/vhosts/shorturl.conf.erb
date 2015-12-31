@@ -44,7 +44,7 @@
     RewriteRule ^/mlk$ https://www.ocf.berkeley.edu/mlk [R]
 
     # otherwise, send a temporary redirect to the appropriate userdir
-    RewriteRule ^/~?([a-z]{3,8}(?:/.*)?)$ https://www.ocf.berkeley.edu/~$1 [R=302]
+    RewriteRule ^/~?([a-z]{3,16}(?:/.*)?)$ https://www.ocf.berkeley.edu/~$1 [R=302]
 
     Header set Strict-Transport-Security "max-age=31536000"
 </VirtualHost>
