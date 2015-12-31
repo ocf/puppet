@@ -8,11 +8,24 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     # LDAP nameservice provider
     'libnss-ldap':
       recommends => false;
+  }
+
+  # TODO: currently pinning a version to force a "downgrade" now that our
+  # patches were accepted upstream; remove this after all machines have
+  # downgraded
+  $unscd_ensure = $::lsbdistcodename ? {
+    jessie  => '0.52-1~ocf1',
+    default => 'present',
+  }
+
+  package {
     # UNSCD for LDAP caching
     'unscd':
-      require    => Package['nscd'];
+      ensure  => $unscd_ensure,
+      require => Package['nscd'];
+
     # nss_updatedb for offline LDAP caching
-    'nss-updatedb':
+    'nss-updatedb':;
   }
   package { [ 'libnss-ldapd', 'libnss-sss', 'libpam-ldap', 'libpam-sss', 'nslcd', 'nscd', 'sssd' ]:
     ensure => purged
@@ -22,17 +35,16 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     '/etc/cron.daily/nss-updatedb':
       mode    => '0755',
       content => "#!/bin/sh\nnss_updatedb ldap > /dev/null",
-      require => Ocf::Repackage['nss-updatedb'];
+      require => Package['nss-updatedb'];
     # NSCD caching configuration
     '/etc/nscd.conf':
       source  => 'puppet:///modules/ocf/auth/nss/nscd.conf',
-      require => Ocf::Repackage['unscd'];
-    # LDAP nameservice configuration
+      require => Package['unscd']; # LDAP nameservice configuration
     '/etc/libnss-ldap.conf':
       ensure  => symlink,
       links   => manage,
       target  => '/etc/ldap.conf',
-      require => Ocf::Repackage['libnss-ldap'];
+      require => Package['libnss-ldap'];
   }
 
   # nameservice configuration
@@ -40,7 +52,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     # use LDAP but failover to local copy
     file { '/etc/nsswitch.conf':
       source  => 'puppet:///modules/ocf/auth/nss/nsswitch.conf',
-      require => [Ocf::Repackage['libnss-ldap'], File['/etc/libnss-ldap.conf']];
+      require => [Package['libnss-ldap'], File['/etc/libnss-ldap.conf']];
     }
   } else {
     # use local copy only (never consult LDAP during lookups);
@@ -50,13 +62,13 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     # from ldap, but ldap isn't needed constantly)
     file { '/etc/nsswitch.conf':
       source  => 'puppet:///modules/ocf/auth/nss/nsswitch-noldap.conf',
-      require => [Ocf::Repackage['libnss-ldap'], File['/etc/libnss-ldap.conf']];
+      require => [Package['libnss-ldap'], File['/etc/libnss-ldap.conf']];
     }
   }
   # restart NSCD
   service { 'unscd':
     subscribe => File['/etc/nscd.conf', '/etc/nsswitch.conf'],
-    require   => Ocf::Repackage['unscd']
+    require   => Package['unscd']
   }
 
   # PAM user authentication
