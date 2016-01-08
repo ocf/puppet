@@ -11,3 +11,4 @@ dumpfile="$DIR/kerberos.dump"
 /usr/bin/kadmin -l dump --decrypt > "$dumpfile"
 git add "$dumpfile"
 git commit -q -m 'kerberos-git-backup' --allow-empty "$dumpfile"
+git gc --auto --quiet
