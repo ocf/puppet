@@ -3,7 +3,7 @@ EnableMMAP Off
 EnableSendfile Off
 
 ServerLimit 750
-MaxClients  750
+MaxClients 750
 
 # serve .php4 files using suphp
 <IfModule mod_suphp.c>
@@ -12,7 +12,8 @@ MaxClients  750
 	</FilesMatch>
 </IfModule>
 
-# prevent access to xmlrpc.php to protect against WordPress bug
+# Prevent access to xmlrpc.php to protect against WordPress bug.
+# Users can re-enable this on a case-by-case basis if desired.
 # http://wordpress.org/news/2014/08/wordpress-3-9-2/
 <Files xmlrpc.php>
 	Deny from all

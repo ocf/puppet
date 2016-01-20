@@ -21,3 +21,5 @@ Mount { ensure => defined, }
 Service { hasrestart => true, hasstatus => true, }
 
 Vcsrepo { require => Ocf::Repackage['git'],  }
+
+Apache::Vhost { serveradmin => 'help@ocf.berkeley.edu' }
