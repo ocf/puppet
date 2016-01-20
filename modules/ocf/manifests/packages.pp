@@ -9,6 +9,7 @@
 class ocf::packages {
   # special snowflake packages that require some config
   include ocf::packages::git
+  include ocf::packages::grub
   include ocf::packages::memtest
   include ocf::packages::microcode
   include ocf::packages::ntp
