@@ -117,7 +117,7 @@ common sense to come up with a reasonable name (e.g. `ocf_desktop` or
 
 For manifests that should apply to all (or most) OCF servers, such as one that
 sets up LDAP/Kerberos authentication, consider just creating a new class under
-the `common` module.
+the `ocf` module.
 
 Try not to refer to servers by hostname (such as `lightning`). Instead, use the
 service CNAME (such as `puppet`) or the top-level variables `$::hostname` and
