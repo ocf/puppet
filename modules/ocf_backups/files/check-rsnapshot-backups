@@ -27,7 +27,7 @@ if __name__ == '__main__':
         else:
             last_backup = datetime.fromtimestamp(os.path.getmtime(path))
             age = datetime.now() - last_backup
-            if age > GRACE_PERIOD:
+            if age > delta + GRACE_PERIOD:
                 print('For interval {}, last backup is too old:'.format(name))
                 print('    - path: {}'.format(path))
                 print('    - mtime: {} ({})'.format(last_backup, age))
