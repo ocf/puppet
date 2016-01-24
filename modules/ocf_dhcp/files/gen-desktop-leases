@@ -9,5 +9,6 @@ l.simple_bind_s('', '')
 
 attrs = ['cn', 'macAddress', 'ipHostNumber']
 for _, vals in l.search_st(LDAP_BASE, ldap.SCOPE_SUBTREE, '(type=desktop)', attrs):
-    val = lambda key: vals[key][0]
-    print('host {} {{ hardware ethernet {}; fixed-address {}; }}'.format(*map(val, attrs)))
+    print('host {} {{ hardware ethernet {}; fixed-address {}; }}'.format(*[
+        vals[key][0] for key in attrs
+    ]))
