@@ -119,6 +119,7 @@ class ocf::extrapackages {
     'texlive-latex-extra',
     'texlive-latex-recommended',
     'texlive-publishers',
+    'texlive-science',
     'vagrant',
     'valgrind',
     'zlib1g-dev',
