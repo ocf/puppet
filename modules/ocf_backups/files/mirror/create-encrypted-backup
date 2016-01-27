@@ -3,6 +3,7 @@
 #
 # This can be put on a hard drive and stored under the SM's mattress, uploaded
 # to Google Nearline, etc.
+set -o pipefail
 
 ARCHIVE_DIRECTORY="/opt/backups/scratch/archive"
 TARGET_VOLUME="/dev/vg-backups/backups-mirror"
@@ -12,13 +13,11 @@ SNAPSHOT_PATH="/dev/vg-backups/backups-snapshot"
 gpgdir=$(mktemp -d)
 gpg --homedir "$gpgdir" --quiet --import /opt/share/backups/keys/*.asc
 
-# make a LVM snapshot; for total safety, we make one of the same size as the
-# target volume
+# make a LVM snapshot
 if [ -e "$SNAPSHOT_PATH" ]; then
     echo "Snapshot already exists: ${SNAPSHOT_PATH}" >&2
     exit 1
 fi
-
 
 # try really hard to remove logical volume on exit
 cleanup() {
@@ -29,9 +28,10 @@ cleanup() {
 }
 trap cleanup EXIT
 
-
-bytes=$(blockdev --getsz "$TARGET_VOLUME")
-lvcreate -L "${bytes}B" --snapshot --name "$SNAPSHOT_PATH" "$TARGET_VOLUME"
+# we don't have *quite* enough space to make a snapshot with the full 2TB of
+# disk space, so we make a large enough snapshot that we'll *probably* avoid
+# trouble
+lvcreate -L 500G --snapshot --name "$SNAPSHOT_PATH" "$TARGET_VOLUME"
 
 umask 077
 rm -rf "$ARCHIVE_DIRECTORY"
