@@ -159,7 +159,6 @@ class ocf::extrapackages {
       'python3-mock',
       'python3-pytest',
       'python3-pytest-cov',
-      'python3-sklearn',
       'python3-stdeb',
       'python3-sympy',
       'twine',
