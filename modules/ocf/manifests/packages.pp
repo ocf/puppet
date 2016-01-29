@@ -20,8 +20,22 @@ class ocf::packages {
   include ocf::packages::zsh
 
   # packages to remove
-  package {['mlocate', 'popularity-contest', 'apt-listchanges', 'needrestart']:
-    ensure => purged;
+  package {
+    [
+      'apt-listchanges',
+      'mlocate',
+      'needrestart',
+      'popularity-contest',
+
+      # nonfree shareware with "40-day trial"
+      'rar',
+      'unrar',
+
+      # purge virtualbox for security reasons (setuid binaries allow network control)
+      # see debian bug#760569
+      'virtualbox',
+    ]:
+      ensure => purged;
   }
 
   # facter currently outputs strings not booleans

@@ -79,7 +79,6 @@ class ocf::extrapackages {
     'pandoc',
     'pdfjam',
     'php5-cli',
-    'rar',
     'php5-curl',
     'php5-gd',
     'php5-mcrypt',
@@ -122,7 +121,6 @@ class ocf::extrapackages {
     'texlive-latex-recommended',
     'texlive-publishers',
     'texlive-science',
-    'unrar',
     'vagrant',
     'valgrind',
     'zlib1g-dev',
@@ -131,11 +129,6 @@ class ocf::extrapackages {
 
     'autolink':
       provider => pip;
-
-    # purge virtualbox for security reasons (setuid binaries allow network control)
-    # see debian bug#760569
-    'virtualbox':
-      ensure => purged;
   }
 
   if $::lsbdistcodename == 'jessie' {
