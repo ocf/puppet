@@ -72,7 +72,10 @@ class ocf_apt {
     directories     => [{
       path          => '/opt/apt/ftp',
       options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
-      index_options => ['NameWidth=*', '+SuppressDescription']
+      index_options => ['NameWidth=*', '+SuppressDescription'],
+
+      # restrict access to OCF until source packages are available (rt#4333)
+      auth_require  => 'ip 169.229.226.0/24',
     }],
 
     custom_fragment => "HeaderName README.html\nReadmeName FOOTER.html"
@@ -86,7 +89,10 @@ class ocf_apt {
     directories     => [{
       path          => '/opt/apt/ftp',
       options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
-      index_options => ['NameWidth=*', '+SuppressDescription']
+      index_options => ['NameWidth=*', '+SuppressDescription'],
+
+      # restrict access to OCF until source packages are available (rt#4333)
+      auth_require  => 'ip 169.229.226.0/24',
     }],
 
     custom_fragment => "HeaderName README.html\nReadmeName FOOTER.html",
