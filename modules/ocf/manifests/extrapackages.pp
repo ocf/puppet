@@ -154,6 +154,7 @@ class ocf::extrapackages {
       'python3-pytest-cov',
       'python3-stdeb',
       'python3-sympy',
+      'screenfetch',
       'twine',
       ]:;
     }
