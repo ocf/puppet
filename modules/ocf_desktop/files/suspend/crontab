@@ -4,7 +4,12 @@
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-# m h dom mon dow user command
-*/15 00-10,19-23 * * 0,6   root /usr/local/sbin/ocf-suspend
-*/15 00-08,21-23 * * 1-4   root /usr/local/sbin/ocf-suspend
-*/15 00-08,20-23 * * 5     root /usr/local/sbin/ocf-suspend
+# m  h           dom mon dow   user command
+# Every 15 minutes from 7 PM to 10 AM on weekends
+*/15 00-10,19-23 *   *   0,6   root /usr/local/sbin/ocf-suspend
+
+# Every 15 minutes from 9 PM to 8 AM on Monday to Thursday
+*/15 00-08,21-23 *   *   1-4   root /usr/local/sbin/ocf-suspend
+
+# Every 15 minutes from 8 PM to 8 AM on Fridays
+*/15 00-08,20-23 *   *   5     root /usr/local/sbin/ocf-suspend
