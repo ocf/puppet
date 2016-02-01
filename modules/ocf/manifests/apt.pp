@@ -35,7 +35,7 @@ class ocf::apt ($desktop = false) {
           release   => $::lsbdistcodename,
           repos     => 'main',
           include   => {
-            src => false
+            src => true
           };
       }
 
