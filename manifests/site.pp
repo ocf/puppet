@@ -19,3 +19,5 @@ Mount { ensure => defined, }
 
 # use init script restart and status commands
 Service { hasrestart => true, hasstatus => true, }
+
+Vcsrepo { require => Ocf::Repackage['git'],  }
