@@ -3,7 +3,6 @@ class ocf::utils {
     ensure   => latest,
     provider => git,
     revision => 'master',
-    source   => 'https://github.com/ocf/utils.git',
-    require  => Ocf::Repackage['git'];
+    source   => 'https://github.com/ocf/utils.git';
   }
 }
