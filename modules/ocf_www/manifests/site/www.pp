@@ -21,7 +21,7 @@ class ocf_www::site::www {
   include ocf_www::mod::php
 
   # TODO: dev-death should add a robots.txt disallowing everything
-  apache::vhost { 'www.ocf.berkeley.edu':
+  apache::vhost { 'www':
     servername      => 'www.ocf.berkeley.edu',
     serveraliases   => ['dev-www.ocf.berkeley.edu'],
     port            => 443,
@@ -32,9 +32,7 @@ class ocf_www::site::www {
     ssl_cert        => "/etc/ssl/private/${::fqdn}.crt",
     ssl_chain       => '/etc/ssl/certs/incommon-intermediate.crt',
 
-    headers => [
-      'set Strict-Transport-Security max-age=31536000',
-    ],
+    headers         => ['set Strict-Transport-Security max-age=31536000'],
 
     rewrites        => [
       {
@@ -81,7 +79,7 @@ class ocf_www::site::www {
 
   apache::vhost {
     # redirect any HTTP -> canonical HTTPS
-    'www.ocf.berkeley.edu-http-redirect':
+    'www-http-redirect':
       servername      => 'www.ocf.berkeley.edu',
       serveraliases   => [
         'www',
@@ -99,7 +97,7 @@ class ocf_www::site::www {
       redirect_dest   => $canonical_url;
 
     # redirect weird HTTPS -> canonical HTTPS
-    'www.ocf.berkeley.edu-https-redirect':
+    'www-https-redirect':
       servername      => 'ocf.berkeley.edu',
       serveraliases   => ['dev-ocf.berkeley.edu', 'secure.ocf.berkeley.edu', $::fqdn],
       port            => 443,
