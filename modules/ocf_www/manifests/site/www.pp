@@ -53,9 +53,21 @@ class ocf_www::site::www {
       {
         path           => '/services/http/users',
         provider       => 'directories',
-        auth_require   => 'all granted',
-        options        => ['Indexes', 'FollowSymLinks', 'MultiViews', 'ExecCGI'],
+        directoryindex => 'index.html index.cgi index.pl index.php index.xhtml index.htm index.shtm index.shtml',
+        options        => [
+          'ExecCGI',
+          'FollowSymLinks',
+          'IncludesNoExec',
+          'Indexes',
+          'MultiViews',
+          'SymLinksIfOwnerMatch',
+        ],
         allow_override => ['All'],
+      },
+      {
+        path           => '\.(cgi|shtml|phtml|php)$',
+        provider       => 'filesmatch',
+        ssl_options    => '+StdEnvVars',
       },
     ],
 
