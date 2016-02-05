@@ -10,8 +10,12 @@ BACKUP_PATH = '/opt/backups/rsnapshot/{interval}.0'
 GRACE_PERIOD = timedelta(days=3)
 INTERVALS = (
     ('daily', timedelta(days=1)),
-    ('weekly', timedelta(days=7)),
-    ('monthly', timedelta(days=31)),
+
+    # last daily backup is 7 days old, and we rotate every 7 days
+    ('weekly', timedelta(days=7 + 7)),
+
+    # last weekly backup is 35 days old, and we rotate every ~31 days
+    ('monthly', timedelta(days=35 + 31)),
 )
 
 
