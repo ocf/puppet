@@ -1,7 +1,7 @@
 class ocf_www::mod::php {
   include apache::mod::suphp
 
-  package { 'php5-cgi':; }
+  package { ['php5-cgi', 'php5-apcu']:; }
 
   file {
     '/opt/suexec/php5-cgi':
