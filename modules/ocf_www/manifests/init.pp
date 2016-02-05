@@ -32,5 +32,6 @@ class ocf_www {
   # sites
   include ocf_www::site::shorturl
   include ocf_www::site::vhosts
+  include ocf_www::site::ocfweb_redirects
   include ocf_www::site::www
 }
