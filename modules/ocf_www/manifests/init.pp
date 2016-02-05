@@ -29,6 +29,8 @@ class ocf_www {
     mpm_module    => 'worker',
   }
 
+  include ocf_www::logging
+
   # sites
   include ocf_www::site::shorturl
   include ocf_www::site::vhosts
