@@ -10,7 +10,9 @@
 class ocf_www::site::www {
   include apache::mod::actions
   include apache::mod::alias
+  include apache::mod::expires
   include apache::mod::headers
+  include apache::mod::include
   include apache::mod::proxy
   include apache::mod::proxy_http
   include apache::mod::rewrite
