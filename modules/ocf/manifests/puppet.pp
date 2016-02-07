@@ -17,6 +17,9 @@ class ocf::puppet {
       'set agent/usecacheonfailure false',
       'set main/pluginsync true',
       'set main/stringify_facts false',
+
+      # future parser breaks too many 3rd-party modules
+      'rm main/parser',
     ],
     require => Package['augeas-tools', 'libaugeas-ruby', 'puppet'],
     notify  => Service['puppet'],
