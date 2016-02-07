@@ -16,7 +16,7 @@ class ocf_printhost {
     ;
     # provide more sensitive cups config
     '/etc/cups/cups-files.conf':
-      source  => 'puppet:///modules/ocf_printhost/cups-files.conf',
+      content => template('ocf_printhost/cups/cups-files.conf.erb'),
       require => Package['cups'],
       notify  => Service['cups'],
     ;

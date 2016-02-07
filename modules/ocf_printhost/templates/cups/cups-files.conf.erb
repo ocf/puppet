@@ -1,0 +1,10 @@
+# Administrative group
+SystemGroup ocfstaff
+
+# SSL
+ServerCertificate /etc/ssl/private/<%= @fqdn -%>.crt
+ServerKey /etc/ssl/private/<%= @fqdn -%>.key
+
+# World-readable config and log files
+ConfigFilePerm 0644
+LogFilePerm 0644
