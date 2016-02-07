@@ -1,0 +1,3 @@
+[memory]
+env.committed_warning :<%= (0.5 * 1e6 * @memorysize_mb.to_f).to_i %>
+env.committed_critical :<%= (0.8 * 1e6 * @memorysize_mb.to_f).to_i %>
