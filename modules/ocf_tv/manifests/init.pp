@@ -1,5 +1,5 @@
 class ocf_tv {
-  include ocf_desktop::chrome
+  include ocf::packages::chrome
 
   package { ['i3', 'vlc', 'ffmpeg', 'nodm', 'xinit', 'iceweasel', 'pulseaudio', 'pavucontrol', 'arandr', 'flashplugin-nonfree']:; }
 
