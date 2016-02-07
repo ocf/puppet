@@ -11,6 +11,13 @@ class ocf_tv {
   }
 
   file {
+    # Create home directory for ocftv user
+    '/opt/tv':
+      ensure  => directory,
+      owner   => ocftv,
+      group   => ocftv,
+      require => User['ocftv'];
+
     '/etc/X11/xorg.conf':
       source => 'puppet:///modules/ocf_tv/X11/xorg.conf';
   }
