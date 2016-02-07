@@ -6,7 +6,7 @@ class ocf_tv {
   user { 'ocftv':
     comment => 'TV NUC',
     home    => '/opt/tv',
-    groups  => ['sys'],
+    groups  => ['sys', 'audio'],
     shell   => '/bin/bash';
   }
 
