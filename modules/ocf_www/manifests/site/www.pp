@@ -16,11 +16,11 @@ class ocf_www::site::www {
   include apache::mod::proxy
   include apache::mod::proxy_http
   include apache::mod::rewrite
-  include apache::mod::suexec
   include ocf_www::mod::cgi
   include ocf_www::mod::fastcgi
   include ocf_www::mod::ocfdir
   include ocf_www::mod::php
+  include ocf_www::mod::suexec
 
   # TODO: dev-death should add a robots.txt disallowing everything
   apache::vhost { 'www':
