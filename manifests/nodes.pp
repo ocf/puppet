@@ -41,7 +41,9 @@ node default {
       if $owner == undef {
         case $::hostname {
           tsunami:   { class { 'ocf::auth': glogin => [ ['ocf', 'ALL'], ['sorry', 'ALL'] ] } }
+          # TODO: remove biohazard once werewolves has replaced it
           biohazard: { class { 'ocf::auth': glogin => [ ['ocfdev', 'ALL'] ] } }
+          werewolves: { class { 'ocf::auth': glogin => [ ['ocfdev', 'ALL'] ] } }
           pollution: { class { 'ocf::auth': gsudo => ['ocfstaff'] } }
           default:   { class { 'ocf::auth': ulogin => [], glogin => [], usudo => [], gsudo => [] } }
         }
