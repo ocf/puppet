@@ -10,27 +10,13 @@ node default {
     default:   { include ocf::packages::postfix }
   }
 
-  if $::macAddress {
-    # use DHCP
-    include ocf::networking
-  } else {
-    case $::hostname {
-      hal, pandemic, jaws, raptors: {
-        $bridge = true
-      }
-      default: {
-        $bridge = false
-      }
+  if !$::skip_networking {
+    $bridge = $hostname ? {
+      /(hal|pandemic|jaws|raptors)/ => true,
+      default => false,
     }
-    if !$::skip_networking {
-      class { 'ocf::networking':
-        ipaddress   => $::ipHostNumber,
-        netmask     => '255.255.255.0',
-        gateway     => '169.229.226.1',
-        bridge      => $bridge,
-        domain      => 'ocf.berkeley.edu',
-        nameservers => ['169.229.226.22', '128.32.206.12', '128.32.136.9'],
-      }
+    class { 'ocf::networking':
+      bridge      => $bridge,
     }
   }
 
