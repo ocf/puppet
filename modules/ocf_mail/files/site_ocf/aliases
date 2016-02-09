@@ -7,12 +7,12 @@ mon: mon@g.ocf.berkeley.edu
 postmaster: sm
 mailer-daemon: postmaster
 
-# specific services that should mail to root but don't
 mirrors: root
 ocfstats: root
 jenkins: root
 rancid: root
 rancid-ocf: root
+munin: root
 
 # archive of outgoing mail for nomail'd users
 nomail: /var/mail/nomail/nomail
@@ -66,7 +66,6 @@ owner-todo: wheel
 # accounts only used for sending
 atool: /dev/null
 create: /dev/null
-munin: root
 ocfapt: /dev/null
 
 # misc
