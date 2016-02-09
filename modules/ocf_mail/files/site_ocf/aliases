@@ -66,6 +66,7 @@ owner-todo: wheel
 # accounts only used for sending
 atool: /dev/null
 create: /dev/null
+munin: /dev/null
 ocfapt: /dev/null
 
 # misc
