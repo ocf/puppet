@@ -1,7 +1,7 @@
 user_pref("browser.cache.disk.capacity", 0);
 user_pref("browser.download.useDownloadDir", false);
 user_pref("browser.privatebrowsing.autostart", true);
-user_pref("browser.startup.homepage", "https://www.ocf.berkeley.edu/about/lab/open-source");
+user_pref("browser.startup.homepage", "https://www.ocf.berkeley.edu/announcements/2016-02-09/printing");
 user_pref("general.autoScroll", true);
 user_pref("general.smoothScroll", true);
 user_pref("network.negotiate-auth.trusted-uris", "https://rt.ocf.berkeley.edu");
