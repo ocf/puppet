@@ -34,6 +34,7 @@ if __name__ == '__main__':
     if len(argv) < 2:
         raise RuntimeError(
             'Expected command-line arguments; possible misconfiguration')
+    # Strip out superfluous arg; see doc comment.
     if argv[1] == argv[0]:
         args = argv[1:]
     else:

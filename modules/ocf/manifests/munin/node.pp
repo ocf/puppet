@@ -18,8 +18,6 @@ class ocf::munin::node {
 
   file { '/etc/munin/plugin-conf.d/ocf-plugin-conf':
     content => template('ocf/munin/ocf-plugin-conf.erb'),
-    owner   => root,
-    group   => root,
     mode    => '0644',
     require => Package['munin-node'];
   }
