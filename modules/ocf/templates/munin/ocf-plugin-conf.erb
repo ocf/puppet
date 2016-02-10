@@ -1,4 +1,4 @@
 # Set warning at 80% and critical at 90%
 [memory]
-env.committed_warning :<%= (0.8 * 1e6 * @memorysize_mb.to_f).to_i %>
-env.committed_critical :<%= (0.9 * 1e6 * @memorysize_mb.to_f).to_i %>
+env.apps_warning :<%= (0.8 * 1e6 * @memorysize_mb.to_f).to_i %>
+env.apps_critical :<%= (0.9 * 1e6 * @memorysize_mb.to_f).to_i %>
