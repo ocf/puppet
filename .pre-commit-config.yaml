@@ -9,6 +9,7 @@
         -   --no-80chars-check
         -   --no-documentation-check
         -   --no-puppet_url_without_modules-check
+        -   --no-arrow_alignment-check
 -   repo: https://github.com/chriskuehl/pre-commit-hooks.git
     sha: cd3f867cafee3488a93a13f97bf7fdab329c996e
     hooks:

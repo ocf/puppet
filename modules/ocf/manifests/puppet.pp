@@ -43,6 +43,12 @@ class ocf::puppet {
     ;
   }
 
+  mount { '/var/lib/puppet/concat':
+    device  => 'tmpfs',
+    fstype  => 'tmpfs',
+    options => 'noatime,nodev,nosuid';
+  }
+
   # install augeas
   package { [ 'augeas-tools', 'libaugeas-ruby', ]: }
 
