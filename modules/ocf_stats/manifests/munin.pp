@@ -17,6 +17,9 @@ class ocf_stats::munin {
     '/usr/local/bin/gen-munin-nodes':
       source  => 'puppet:///modules/ocf_stats/munin/gen-munin-nodes',
       mode    => '0755';
+    '/usr/local/bin/mail-munin-alert':
+      source  => 'puppet:///modules/ocf_stats/munin/mail-munin-alert',
+      mode    => '0755';
   }
 
   cron { 'gen-munin-nodes':
