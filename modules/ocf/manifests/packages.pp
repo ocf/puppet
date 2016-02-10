@@ -38,6 +38,16 @@ class ocf::packages {
       ensure => purged;
   }
 
+  # files we don't want on *any* server
+  file {
+    # The Django bash completion script is extremely slow and does a "whereis
+    # python" which can block if some NFS is not available (or not fast).
+    #
+    # This was leading to very slow logins to tsunami for quite some time.
+    '/etc/bash_completion.d/django_bash_completion':
+      ensure => absent;
+  }
+
   # facter currently outputs strings not booleans
   # see http://projects.puppetlabs.com/issues/3704
   if !str2bool($::is_virtual) {
