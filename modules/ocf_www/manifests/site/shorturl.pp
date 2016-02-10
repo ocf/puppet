@@ -21,17 +21,17 @@ class ocf_www::site::shorturl {
   }
 
   apache::vhost { 'shorturl':
-    servername      => 'ocf.io',
-    serveraliases   => ['dev-ocf-io.ocf.berkeley.edu', 'www.ocf.io'],
-    port            => 443,
-    docroot         => '/var/www/html',
+    servername    => 'ocf.io',
+    serveraliases => ['dev-ocf-io.ocf.berkeley.edu', 'www.ocf.io'],
+    port          => 443,
+    docroot       => '/var/www/html',
 
-    ssl             => true,
-    ssl_key         => '/etc/ssl/private/ocf.io.key',
-    ssl_cert        => '/etc/ssl/private/ocf.io.crt',
-    ssl_chain       => '/etc/ssl/certs/positivessl-intermediate.crt',
+    ssl           => true,
+    ssl_key       => '/etc/ssl/private/ocf.io.key',
+    ssl_cert      => '/etc/ssl/private/ocf.io.crt',
+    ssl_chain     => '/etc/ssl/certs/positivessl-intermediate.crt',
 
-    rewrites        => [
+    rewrites      => [
       # Short URLs
       # Remember to add these to the list of RESERVED_USERNAMES in ocflib/constants.py
       {rewrite_rule => '^/?$ https://www.ocf.berkeley.edu/ [R=301]'},
@@ -71,7 +71,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/~?([a-z]{3,16}(?:/.*)?)$ https://www.ocf.berkeley.edu/~$1 [R]'},
     ],
 
-    headers         => ['set Strict-Transport-Security max-age=31536000'],
+    headers       => ['set Strict-Transport-Security max-age=31536000'],
   }
 
   # canonical redirects

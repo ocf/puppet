@@ -8,24 +8,24 @@ class ocf_www::site::ocfweb_redirects {
   }
 
   apache::vhost { 'accounts':
-    servername      => 'accounts.ocf.berkeley.edu',
-    serveraliases   => ['dev-accounts.ocf.berkeley.edu'],
-    port            => 443,
-    docroot         => '/var/www/html',
+    servername    => 'accounts.ocf.berkeley.edu',
+    serveraliases => ['dev-accounts.ocf.berkeley.edu'],
+    port          => 443,
+    docroot       => '/var/www/html',
 
-    ssl             => true,
-    ssl_key         => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert        => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain       => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl           => true,
+    ssl_key       => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain     => '/etc/ssl/certs/incommon-intermediate.crt',
 
-    rewrites        => [
+    rewrites      => [
       {rewrite_rule => '^/(change-password(/.*)?)?$ https://www.ocf.berkeley.edu/account/password [R=301,L]'},
       {rewrite_rule => '^/commands(/.*)?$ https://www.ocf.berkeley.edu/account/commands [R=301,L]'},
       {rewrite_rule => '^/request-account(/.*)?$ https://www.ocf.berkeley.edu/account/register [R=301,L]'},
       {rewrite_rule => '^/request-vhost(/.*)?$ https://www.ocf.berkeley.edu/account/vhost/ [R=301,L]'},
       {rewrite_rule => '^.*$ https://www.ocf.berkeley.edu/'},
     ],
-    headers         => ['set Strict-Transport-Security max-age=31536000'],
+    headers       => ['set Strict-Transport-Security max-age=31536000'],
   }
 
   apache::vhost { 'accounts-http-redirect':
@@ -49,20 +49,20 @@ class ocf_www::site::ocfweb_redirects {
   }
 
   apache::vhost { 'wiki':
-    servername      => 'wiki.ocf.berkeley.edu',
-    serveraliases   => ['dev-wiki.ocf.berkeley.edu'],
-    port            => 443,
-    docroot         => '/var/www/html',
+    servername    => 'wiki.ocf.berkeley.edu',
+    serveraliases => ['dev-wiki.ocf.berkeley.edu'],
+    port          => 443,
+    docroot       => '/var/www/html',
 
-    ssl             => true,
-    ssl_key         => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert        => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain       => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl           => true,
+    ssl_key       => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain     => '/etc/ssl/certs/incommon-intermediate.crt',
 
-    rewrites        => [
+    rewrites      => [
       {rewrite_rule => '^/(.*)$ https://www.ocf.berkeley.edu/docs/$1 [R=301]'},
     ],
-    headers         => ['set Strict-Transport-Security max-age=31536000'],
+    headers       => ['set Strict-Transport-Security max-age=31536000'],
   }
 
   apache::vhost { 'wiki-http-redirect':
@@ -86,25 +86,25 @@ class ocf_www::site::ocfweb_redirects {
   }
 
   apache::vhost { 'hello':
-    servername      => 'hello.ocf.berkeley.edu',
-    serveraliases   => [
+    servername    => 'hello.ocf.berkeley.edu',
+    serveraliases => [
       'dev-hello.ocf.berkeley.edu',
       'dev-staff.ocf.berkeley.edu',
       'staff.ocf.berkeley.edu',
     ],
-    port            => 443,
-    docroot         => '/var/www/html',
+    port          => 443,
+    docroot       => '/var/www/html',
 
-    ssl             => true,
-    ssl_key         => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert        => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain       => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl           => true,
+    ssl_key       => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain     => '/etc/ssl/certs/incommon-intermediate.crt',
 
-    rewrites        => [
+    rewrites      => [
       {rewrite_rule => '^/lab.html$ https://www.ocf.berkeley.edu/about/lab/open-source [R=301,L]'},
       {rewrite_rule => '^.*$ https://www.ocf.berkeley.edu/about/staff [R=301]'},
     ],
-    headers         => ['set Strict-Transport-Security max-age=31536000'],
+    headers       => ['set Strict-Transport-Security max-age=31536000'],
   }
 
   apache::vhost { 'hello-http-redirect':

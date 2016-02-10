@@ -22,20 +22,20 @@ class ocf_www::logging {
   # logrotate config
   package { 'logrotate':; }
   augeas { 'apache-logrotate':
-      lens    => 'Logrotate.lns',
-      incl    => '/etc/logrotate.d/apache2',
-      changes => [
-          "set rule[file='/var/log/apache2/*.log']/create/mode 644",
-          "set rule[file='/var/log/apache2/*.log']/ifempty ifempty",
-      ],
-      require => Package['logrotate', 'apache2'],
-      notify  => Exec['apache2-logrotate-once'],
+    lens    => 'Logrotate.lns',
+    incl    => '/etc/logrotate.d/apache2',
+    changes => [
+      "set rule[file='/var/log/apache2/*.log']/create/mode 644",
+      "set rule[file='/var/log/apache2/*.log']/ifempty ifempty",
+    ],
+    require => Package['logrotate', 'apache2'],
+    notify  => Exec['apache2-logrotate-once'],
   }
 
   # If we change the logrotate permissions, we should force a rotate once so
   # that the latest logs are readable.
   exec { 'apache2-logrotate-once':
-     command     => '/usr/sbin/logrotate -fv /etc/logrotate.d/apache2',
-     refreshonly => true,
+    command     => '/usr/sbin/logrotate -fv /etc/logrotate.d/apache2',
+    refreshonly => true,
   }
 }

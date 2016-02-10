@@ -65,9 +65,9 @@ class ocf_www::site::www {
         allow_override => ['All'],
       },
       {
-        path           => '\.(cgi|shtml|phtml|php)$',
-        provider       => 'filesmatch',
-        ssl_options    => '+StdEnvVars',
+        path        => '\.(cgi|shtml|phtml|php)$',
+        provider    => 'filesmatch',
+        ssl_options => '+StdEnvVars',
       },
     ],
 

@@ -17,5 +17,5 @@ class ocf_www::site::vhosts {
       ensure  => directory,
       require => Package['apache2'];
   }
-  ocf_www::site::vhost { $ocf_vhosts:; }
+  ocf_www::site::vhost { $::ocf_vhosts:; }
 }

@@ -45,7 +45,7 @@ define ocf_www::site::vhost($vhost = $title) {
     redirect_status   => '302',
     redirect_dest     => $vhost[redirect_dest],
 
-    directories     => [
+    directories       => [
       {
         path           => $vhost[full_docroot],
         provider       => 'directories',
@@ -59,18 +59,19 @@ define ocf_www::site::vhost($vhost = $title) {
         allow_override => ['All'],
       },
       {
-        path           => "/var/www/suexec/${vhost[username]}",
-        provider       => 'directories',
-        sethandler     => 'fastcgi-script',
+        path       => "/var/www/suexec/${vhost[username]}",
+        provider   => 'directories',
+        sethandler => 'fastcgi-script',
+        options    => ['+ExecCGI'],
       },
       {
-        path           => '\.ph(p3?|tml)$',
-        provider       => 'filesmatch',
-        sethandler     => 'php5-fcgi',
+        path       => '\.ph(p3?|tml)$',
+        provider   => 'filesmatch',
+        sethandler => 'php5-fcgi',
       },
     ],
 
-    custom_fragment => "
+    custom_fragment   => "
       Action php5-fcgi /php5-fcgi
       Alias /php5-fcgi /var/www/suexec/${vhost[username]}/php5-fcgi-wrapper
       UserDir disabled
@@ -82,7 +83,7 @@ define ocf_www::site::vhost($vhost = $title) {
     'file',
     "/var/www/suexec/${vhost[username]}",
     {
-      'ensure' => 'present',
+      'ensure' => 'directory',
       'owner'  => $vhost[username],
       'group'  => 'ocf',
     },
@@ -99,15 +100,15 @@ define ocf_www::site::vhost($vhost = $title) {
     },
   )
 
-  if !empty($vhost[aliases]) {
+  if !empty($vhost[http_aliases]) {
     apache::vhost { "vhost-${vhost[domain]}-redirect":
-      servername        => "${vhost[domain]}-redirect",
-      serveraliases     => $vhost[aliases],
+      servername      => "${vhost[domain]}-redirect",
+      serveraliases   => $vhost[http_aliases],
 
-      port              => 80,
+      port            => 80,
 
-      redirect_status   => 'permanent',
-      redirect_dest     => $canonical_url,
+      redirect_status => 'permanent',
+      redirect_dest   => $canonical_url,
     }
   }
 }

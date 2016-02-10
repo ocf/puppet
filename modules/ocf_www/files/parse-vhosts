@@ -28,6 +28,8 @@ if __name__ == '__main__':
                         web_dir(vhost['username']),
                         vhost['docroot'].lstrip('/'),
                     ),
+                    # If it's an HTTPS site, we need to add an HTTP alias for the main domain.
+                    'http_aliases': vhost['aliases'] + ([domain] if 'ssl' in vhost['flags'] else []),
                     # TODO: adjust ocflib to just provide this now that we
                     # don't need the full Apache string
                     'redirect_dest': None if not vhost['redirect'] else vhost['redirect'].split()[1],
