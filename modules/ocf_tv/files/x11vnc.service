@@ -1,0 +1,13 @@
+[Unit]
+Description=X11 VNC service
+Requires=network-online.target
+After=nodm.service
+
+[Service]
+User=ocftv
+ExecStart=/usr/bin/x11vnc -forever -localhost -nopw -display :0
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+Alias=vnc.service
