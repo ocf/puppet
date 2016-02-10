@@ -12,6 +12,10 @@ class ocf_www::site::vhosts {
       recurse => true,
       owner   => root,
       mode    => '0600';
+
+    '/var/www/suexec':
+      ensure  => directory,
+      require => Package['apache2'];
   }
   ocf_www::site::vhost { $ocf_vhosts:; }
 }
