@@ -17,5 +17,9 @@ class ocf_www::site::vhosts {
       ensure  => directory,
       require => Package['apache2'];
   }
-  ocf_www::site::vhost { $::ocf_vhosts:; }
+  # TODO: remove the is_array check when on Puppet >= 4
+  # (stringify_facts will be off by default)
+  if is_array($::ocf_vhosts) {
+    ocf_www::site::vhost { $::ocf_vhosts:; }
+  }
 }
