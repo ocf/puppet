@@ -47,8 +47,10 @@ define ocf_www::site::vhost($vhost = $title) {
 
     directories       => [
       {
+        # TODO: try to reduce duplication between here and www for /services
         path           => $vhost[full_docroot],
         provider       => 'directories',
+        directoryindex => 'index.html index.cgi index.pl index.php index.xhtml index.htm index.shtm index.shtml',
         options        => [
           'ExecCGI',
           'IncludesNoExec',
