@@ -19,6 +19,7 @@ class ocf::munin::node {
   file { '/etc/munin/plugin-conf.d/ocf-plugin-conf':
     content => template('ocf/munin/ocf-plugin-conf.erb'),
     mode    => '0644',
+    notify  => Service['munin-node'],
     require => Package['munin-node'];
   }
 }
