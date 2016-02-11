@@ -61,7 +61,7 @@ define ocf_www::site::vhost($vhost = $title) {
         allow_override => ['All'],
       },
       {
-        path       => "/var/www/suexec/${vhost[username]}",
+        path       => '/services/http/suexec',
         provider   => 'directories',
         sethandler => 'fastcgi-script',
         options    => ['+ExecCGI'],
@@ -75,32 +75,11 @@ define ocf_www::site::vhost($vhost = $title) {
 
     custom_fragment   => "
       Action php5-fcgi /php5-fcgi
-      Alias /php5-fcgi /var/www/suexec/${vhost[username]}/php5-fcgi-wrapper
+      Alias /php5-fcgi /services/http/suexec/php5-fcgi-wrapper
       UserDir disabled
       suPHP_Engine off
     ",
   }
-
-  ensure_resource(
-    'file',
-    "/var/www/suexec/${vhost[username]}",
-    {
-      'ensure' => 'directory',
-      'owner'  => $vhost[username],
-      'group'  => 'ocf',
-    },
-  )
-  ensure_resource(
-    'file',
-    "/var/www/suexec/${vhost[username]}/php5-fcgi-wrapper",
-    {
-      'ensure' => 'present',
-      'owner'  => $vhost[username],
-      'group'  => 'ocf',
-      'mode'   => '0755',
-      'source' => 'puppet:///modules/ocf_www/apache/mods/php/php5-fcgi-wrapper',
-    },
-  )
 
   if !empty($vhost[http_aliases]) {
     apache::vhost { "vhost-${vhost[domain]}-redirect":
