@@ -141,6 +141,7 @@ class ocf::extrapackages {
       'google-gsutil',
       'libcrack2-dev',
       'libjpeg-dev',
+      'liblua5.1-0-dev',
       'lolcat',
       'pre-commit',
       'python-flake8',
