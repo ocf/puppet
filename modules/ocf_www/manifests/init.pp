@@ -21,7 +21,7 @@ class ocf_www {
   class { 'ocf::nfs':
     pykota => false,
     cron   => false,
-    web    => true,
+    web    => false,
   }
 
   class { '::apache':
