@@ -47,7 +47,7 @@ Icon=/opt/share/xsession/icons/firefox.png" > $HOME/Desktop/iceweasel.desktop
 # Chrome
 echo "[Desktop Entry]
 Name=Chrome
-Exec=google-chrome
+Exec=google-chrome --start-maximized
 Type=Application
 Icon=/opt/share/xsession/icons/chrome.png" > $HOME/Desktop/chrome.desktop
 
