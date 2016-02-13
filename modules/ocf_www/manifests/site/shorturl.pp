@@ -66,6 +66,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/callinkapi$ https://studentservices.berkeley.edu/WebServices/StudentGroupServiceV2/Service.asmx/CalLinkOrganizations [R]'},
       {rewrite_rule => '^/mlk$ https://www.ocf.berkeley.edu/mlk [R]'},
       {rewrite_rule => '^/printing$ https://www.ocf.berkeley.edu/announcements/2016-02-09/printing [R]'},
+      {rewrite_rule => '^/bod$ https://www.ocf.berkeley.edu/~staff/bod/ [R]'},
 
       # Otherwise, send a temporary redirect to the appropriate userdir
       {rewrite_rule => '^/~?([a-z]{3,16}(?:/.*)?)$ https://www.ocf.berkeley.edu/~$1 [R]'},
