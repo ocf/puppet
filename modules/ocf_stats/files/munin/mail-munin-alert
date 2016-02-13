@@ -4,7 +4,7 @@ alerts to root.
 
 The expected call format from Munin is
 
-    mail-munin-alerts <hostname> [<list of warnings and criticals>]
+    mail-munin-alerts <hostname> <plugin name> [<list of alert fields>]
 
 The list of warnings/criticals allows filtering of unhelpful messages only
 containing OKs or UNKNOWNs.
@@ -20,11 +20,13 @@ from ocflib.misc.mail import send_mail
 
 
 MAIL_FROM = 'Munin <munin@ocf.berkeley.edu>'
+MUNIN_HOSTS_URL = 'http://munin.ocf.berkeley.edu/ocf.berkeley.edu'
 
 
 def main(args):
-    subject = 'Munin alert for {}'.format(args[1])
-    body = ''
+    host, plugin = args[1], args[2]
+    subject = 'Munin alert for {}'.format(host)
+    body = '{}/{}/{}.html\n\n'.format(MUNIN_HOSTS_URL, host, plugin)
     for line in stdin:
         body += line
     send_mail(MAIL_ROOT, subject, body, MAIL_FROM)
@@ -39,5 +41,5 @@ if __name__ == '__main__':
         args = argv[1:]
     else:
         args = argv
-    if len(args) > 2:
+    if len(args) > 3:
         main(args)
