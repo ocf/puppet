@@ -1,7 +1,7 @@
 #: ../src/lightdm-gtk-greeter.c:1479
 msgid "Incorrect password, please try again"
 msgstr "Incorrect username or password.\n\n"
-"Be sure to enter your OCF username and\n\n"
+"Be sure to enter your OCF username and\n"
 "not your CalNet ID.\n\n"
 "Lost your password? Visit ocf.io/password\n"
 "Need an account? Visit ocf.io/join"
