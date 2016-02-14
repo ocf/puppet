@@ -123,6 +123,7 @@ class ocf::extrapackages {
     'texlive-science',
     'vagrant',
     'valgrind',
+    'xvnc4viewer',
     'zlib1g-dev',
     'znc',
     ]:;
