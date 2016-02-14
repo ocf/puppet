@@ -13,6 +13,10 @@ class ocf::puppet {
   augeas { '/etc/puppet/puppet.conf':
     context => '/files/etc/puppet/puppet.conf',
     changes => [
+      # These changes can change the puppetmaster config, which is
+      # defined separately in the ocf_puppet module, causing the
+      # puppet agent on the puppetmaster to restart twice. Make sure
+      # the changes made here are also made in that module.
       "set agent/environment ${::environment}",
       'set agent/usecacheonfailure false',
       'set main/pluginsync true',

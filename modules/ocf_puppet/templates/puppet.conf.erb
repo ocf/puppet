@@ -1,3 +1,10 @@
+# Make sure that changes made in this file are compatible with the
+# changes in the puppet manifest of the ocf module. If this file has
+# to change twice (once from that module and once from this template),
+# then the puppet agent on the puppet master will restart twice and
+# send somewhat cryptic errors intermittently. Not a big deal, but
+# a little bit annoying.
+
 [main]
 
 environmentpath = /opt/puppet/env
@@ -8,6 +15,11 @@ rundir = /var/run/puppet
 vardir = /var/lib/puppet
 factpath = $vardir/lib/facter
 ssldir = $vardir/ssl
+
+# plugin sync (used by concat)
+pluginsync = true
+
+stringify_facts = false
 
 [agent]
 
@@ -34,6 +46,3 @@ ldapbase = ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU
 # log and mail reports from clients
 reports=log, tagmail
 reportfrom = puppet
-
-# plugin sync (used by concat)
-pluginsync = true
