@@ -9,7 +9,7 @@
       <property name="length-adjust" type="bool" value="false"/>
       <property name="position-locked" type="bool" value="true"/>
       <property name="plugin-ids" type="array">
-        <value type="int" value="4"/>
+        <value type="int" value="2"/>
         <value type="int" value="11"/>
         <value type="int" value="9"/>
         <value type="int" value="16"/>
@@ -46,11 +46,6 @@
       <property name="style" type="uint" value="0"/>
     </property>
     <property name="plugin-7" type="string" value="datetime">
-    </property>
-    <property name="plugin-4" type="string" value="applicationsmenu">
-      <!-- XXX: space at the start of "Menu" to give some padding after the penguin -->
-      <property name="button-title" type="string" value=" Menu"/>
-      <property name="button-icon" type="string" value="/opt/share/xsession/penguin-for-menu.png"/>
     </property>
     <property name="plugin-9" type="string" value="launcher">
       <property name="items" type="array">
@@ -103,5 +98,6 @@
       <property name="command" type="string" value="xfce4-mixer"/>
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
     </property>
+    <property name="plugin-2" type="string" value="whiskermenu"/>
   </property>
 </channel>
