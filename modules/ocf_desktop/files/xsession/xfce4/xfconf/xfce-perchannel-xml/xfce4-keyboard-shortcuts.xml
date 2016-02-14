@@ -17,6 +17,8 @@
       <property name="&lt;Alt&gt;F2" type="string" value="xfrun4"/>
       <property name="override" type="bool" value="true"/>
       <property name="&lt;Primary&gt;&lt;Alt&gt;t" type="string" value="xfce4-terminal"/>
+      <property name="Print" type="string" value="xfce4-screenshooter"/>
+      <property name="&lt;Primary&gt;&lt;Alt&gt;l" type="string" value="xflock4"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
