@@ -19,7 +19,7 @@ class ocf::extrapackages {
     # pykota dependencies
     ['pkpgcounter', 'python-egenix-mxdatetime', 'python-imaging',
     'python-jaxml', 'python-minimal', 'python-osd', 'python-pysnmp4',
-    'python-reportlab']:;
+    'python-reportlab', 'python-pysqlite2']:;
 
     # misc. packages helpful for users
     [
