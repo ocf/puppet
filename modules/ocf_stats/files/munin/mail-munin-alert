@@ -8,9 +8,6 @@ The expected call format from Munin is
 
 The list of warnings/criticals allows filtering of unhelpful messages only
 containing OKs or UNKNOWNs.
-
-Munin seems to require duplicating the name of the script as the first argument
-for some reason; this is stripped out.
 """
 from sys import argv
 from sys import stdin
@@ -36,10 +33,5 @@ if __name__ == '__main__':
     if len(argv) < 2:
         raise RuntimeError(
             'Expected command-line arguments; possible misconfiguration')
-    # Strip out superfluous arg; see doc comment.
-    if argv[1] == argv[0]:
-        args = argv[1:]
-    else:
-        args = argv
-    if len(args) > 3:
-        main(args)
+    elif len(argv) > 3:
+        main(argv)
