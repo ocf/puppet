@@ -6,8 +6,8 @@ The expected call format from Munin is
 
     mail-munin-alerts <hostname> <plugin name> [<list of alert fields>]
 
-The list of warnings/criticals allows filtering of unhelpful messages only
-containing OKs or UNKNOWNs.
+The list of warnings/criticals allows filtering of unhelpful messages such as
+those only containing OKs or UNKNOWNs.
 """
 from sys import argv
 from sys import stdin
@@ -15,23 +15,28 @@ from sys import stdin
 from ocflib.constants import MAIL_ROOT
 from ocflib.misc.mail import send_mail
 
-
 MAIL_FROM = 'Munin <munin@ocf.berkeley.edu>'
 MUNIN_HOSTS_URL = 'http://munin.ocf.berkeley.edu/ocf.berkeley.edu'
 
 
-def main(args):
-    host, plugin = args[1], args[2]
+# Filter out uninteresting or noisy warnings at the individual level
+IGNORED_WARNINGS = {
+    'avgwrwait',
+    'avgrdwait',
+}
+
+
+def send_alert(host, plugin):
     subject = 'Munin alert for {}'.format(host)
-    body = '{}/{}/{}.html\n\n'.format(MUNIN_HOSTS_URL, host, plugin)
-    for line in stdin:
-        body += line
+    body = ''.join(stdin)
+    body += '\nSee graph at {}/{}/{}.html\n\n'.format(MUNIN_HOSTS_URL, host, plugin)
     send_mail(MAIL_ROOT, subject, body, MAIL_FROM)
 
 
 if __name__ == '__main__':
-    if len(argv) < 2:
+    if len(argv) < 3:
         raise RuntimeError(
-            'Expected command-line arguments; possible misconfiguration')
-    elif len(argv) > 3:
-        main(argv)
+            'Expected more command-line arguments; possible misconfiguration')
+    host, plugin, fields = argv[1], argv[2], argv[3:]
+    if not all(field in IGNORED_WARNINGS for field in fields):
+        send_alert(host, plugin)
