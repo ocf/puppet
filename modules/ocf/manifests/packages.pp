@@ -13,7 +13,6 @@ class ocf::packages {
   include ocf::packages::memtest
   include ocf::packages::microcode
   include ocf::packages::ntp
-  include ocf::packages::ocflib
   include ocf::packages::rsync
   include ocf::packages::smart
   include ocf::packages::ssh
@@ -123,6 +122,7 @@ class ocf::packages {
     package {
       'python-paramiko':;
       'python3-paramiko':;
+      'python3-ocflib':;
 
       # in jessie, install python-pip-whl to avoid problems where a system-wide
       # python module (e.g. requests) is updated, resulting in pip breaking
