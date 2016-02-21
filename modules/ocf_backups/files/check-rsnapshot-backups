@@ -6,7 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 
 
-BACKUP_PATH = '/opt/backups/rsnapshot/{interval}.0'
+BACKUP_PATH = '/opt/backups/live/rsnapshot/{interval}.0'
 GRACE_PERIOD = timedelta(days=3)
 INTERVALS = (
     ('daily', timedelta(days=1)),

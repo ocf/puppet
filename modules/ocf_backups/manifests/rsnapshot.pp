@@ -5,14 +5,13 @@ class ocf_backups::rsnapshot {
     '/opt/share/backups/rsnapshot.conf':
       source => 'puppet:///modules/ocf_backups/rsnapshot.conf';
 
-    '/opt/share/backups/copy-backups':
-      source => 'puppet:///modules/ocf_backups/copy-backups',
-      mode   => '0755';
-
     '/opt/share/backups/check-rsnapshot-backups':
       source => 'puppet:///modules/ocf_backups/check-rsnapshot-backups',
       mode   => '0755';
   }
+
+
+  # TODO: update times listed here after move to remote backups
 
   # Since we use sync_first, actual backups only happen at the most frequent
   # ("smallest") backup level, i.e. daily.
@@ -28,8 +27,6 @@ class ocf_backups::rsnapshot {
   #     10pm-12am monthly backup takes place (~30 minutes)
   #     12am-2am: weekly backup takes place (~30 minutes)
   #     2am-10am: daily backup takes place (~4 hours)
-  #     10am+: backups copied from pandemic -> hal (~5 hours)
-  #           (during the day since it produces no load on the prod. drives)
 
   $rsnapshot = 'rsnapshot -c /opt/share/backups/rsnapshot.conf'
 
@@ -58,13 +55,6 @@ class ocf_backups::rsnapshot {
     'rsnapshot-daily':
       command  => "${rsnapshot} sync && ${rsnapshot} daily",
       hour     => '2',
-      monthday => '*',
-      weekday  => '*';
-
-    # 10am daily
-    'copy-backups':
-      command  => '/opt/share/backups/copy-backups',
-      hour     => '10',
       monthday => '*',
       weekday  => '*';
 

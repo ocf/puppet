@@ -6,7 +6,7 @@
 set -o pipefail
 
 ARCHIVE_DIRECTORY="/opt/backups/scratch/archive"
-TARGET_VOLUME="/dev/vg-backups/backups-mirror"
+TARGET_VOLUME="/dev/vg-backups/backups-live"
 SNAPSHOT_PATH="/dev/vg-backups/backups-snapshot"
 
 # import staff keys into temporary gpg dir
