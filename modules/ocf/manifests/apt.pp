@@ -74,6 +74,49 @@ class ocf::apt {
     source => 'https://apt.ocf.berkeley.edu/pubkey.gpg';
   }
 
+  if $desktop {
+    exec { 'add-i386':
+      command => 'dpkg --add-architecture i386',
+      unless  => 'dpkg --print-foreign-architectures | grep i386',
+      notify => Exec['apt_update'];
+    }
+
+    apt::key { 'google':
+      id     => '4CCA1EAF950CEE4AB83976DCA040830F7FAC5991',
+      source => 'https://dl-ssl.google.com/linux/linux_signing_key.pub';
+    }
+
+    # Chrome creates /etc/apt/sources.list.d/google-chrome.list upon
+    # installation, so we use the name 'google-chrome' to avoid duplicates
+    #
+    # Chrome will overwrite the puppet apt source during install, but puppet
+    # will later change it back. They say the same thing so it's cool.
+    apt::source {
+      'google-chrome':
+        location    => '[arch=amd64] http://dl.google.com/linux/chrome/deb/',
+        release     => 'stable',
+        repos       => 'main',
+        include   => {
+          src => false
+        },
+        require     => Apt::Key['google'];
+    }
+  }
+
+  if tagged('ocf_mesos::slave') or tagged('ocf_mesos::master') {
+    apt::key { 'mesosphere':
+      id     => '81026D0004C44CF7EF55ADF8DF7D54CBE56151BF',
+      server => 'keyserver.ubuntu.com',
+    }
+
+    apt::source { 'mesosphere':
+      location => 'http://repos.mesosphere.io/debian/',
+      release  => $::lsbdistcodename,
+      repos    => 'main',
+      require  => Apt::Key['mesosphere'],
+    }
+  }
+
   file { '/etc/cron.daily/ocf-apt':
     mode    => '0755',
     content => template('ocf/apt/ocf-apt.erb'),
