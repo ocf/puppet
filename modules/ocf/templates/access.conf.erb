@@ -1,12 +1,12 @@
 # Login access control table, scanned for first entry matching user@origin
 # format: permission : users/groups : origins
 #
-- : ALL : tsunami.ocf.berkeley.edu biohazard.ocf.berkeley.edu
+- : ALL : tsunami.ocf.berkeley.edu werewolves.ocf.berkeley.edu
 - : (sorry) : cron crond
 + : ALL : cron crond
 + : root : ALL
 + : apt-dater : lightning.ocf.berkeley.edu
-+ : ocfbackups : pandemic.ocf.berkeley.edu
++ : ocfbackups : hal.ocf.berkeley.edu
 + : ocfdeploy : reaper.ocf.berkeley.edu
 + : nessus : .security.berkeley.edu
 <% @ulogin.each do |user,from| -%>
