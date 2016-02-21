@@ -118,8 +118,10 @@ class ocf::packages {
     }
   }
 
-  if $::lsbdistcodename == 'jessie' {
+  if $::lsbdistcodename != 'wheezy' {
     package {
+      'systemd-sysv':;
+
       'python-paramiko':;
       'python3-paramiko':;
       'python3-ocflib':;
