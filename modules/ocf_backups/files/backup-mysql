@@ -2,6 +2,7 @@
 # Creates a MySQL backup in the current directory. Intended to be called by
 # rsnapshot.
 mysqldump \
+    --events \
 	--defaults-file=/opt/share/backups/my.cnf \
 	--all-databases --single-transaction | \
 	pigz > "mysql-$(date +%F).sql.gz"
