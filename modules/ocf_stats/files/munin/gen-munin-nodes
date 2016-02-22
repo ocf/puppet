@@ -11,14 +11,14 @@ MUNIN_PORT = 4949
 l = ldap.initialize(LDAP_SERVER)
 l.simple_bind_s('', '')
 
-attrs = ('cn', 'ipHostNumber', 'type')
+attrs = ('cn', 'ipHostNumber', 'type', 'puppetVar')
 
 
 def is_listening(host):
     return subprocess.call(['nc', '-w', '1', '-z', host, str(MUNIN_PORT)]) == 0
 
 for _, vals in l.search_st(LDAP_BASE, ldap.SCOPE_SUBTREE, '(type=*)', attrs):
-    cn, ip, host_type = map(lambda key: vals[key][0], attrs)
+    cn, ip, host_type, puppet_var = map(lambda key: vals.get(key, [''])[0], attrs)
 
     if cn.startswith('hozer-'):
         continue
@@ -28,3 +28,7 @@ for _, vals in l.search_st(LDAP_BASE, ldap.SCOPE_SUBTREE, '(type=*)', attrs):
 
     print('[{}.ocf.berkeley.edu]'.format(cn))
     print('\taddress {}'.format(ip))
+
+    # Disable alerting on staff VMs
+    if puppet_var.startswith('owner'):
+        print('\tcontacts none')
