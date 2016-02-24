@@ -7,7 +7,7 @@ node default {
 
   case $::hostname {
     anthrax, sandstorm: {}
-    default:   { include ocf::packages::postfix }
+    default: { include ocf::packages::postfix }
   }
 
   if !$::skip_networking {
@@ -16,7 +16,7 @@ node default {
       default => false,
     }
     class { 'ocf::networking':
-      bridge      => $bridge,
+      bridge => $bridge,
     }
   }
 
@@ -26,12 +26,10 @@ node default {
 
       if $owner == undef {
         case $::hostname {
-          tsunami:   { class { 'ocf::auth': glogin => [ ['ocf', 'ALL'], ['sorry', 'ALL'] ] } }
-          # TODO: remove biohazard once werewolves has replaced it
-          biohazard: { class { 'ocf::auth': glogin => [ ['ocfdev', 'ALL'] ] } }
+          tsunami:    { class { 'ocf::auth': glogin => [ ['ocf', 'ALL'], ['sorry', 'ALL'] ] } }
           werewolves: { class { 'ocf::auth': glogin => [ ['ocfdev', 'ALL'] ] } }
-          pollution: { class { 'ocf::auth': gsudo => ['ocfstaff'] } }
-          default:   { class { 'ocf::auth': ulogin => [], glogin => [], usudo => [], gsudo => [] } }
+          pollution:  { class { 'ocf::auth': gsudo => ['ocfstaff'] } }
+          default:    { class { 'ocf::auth': ulogin => [], glogin => [], usudo => [], gsudo => [] } }
         }
       } else { # grant login and sudo to owner
         class { 'ocf::auth': ulogin => [[$owner, 'ALL']], usudo => [$owner], nopasswd => true }
@@ -46,7 +44,7 @@ node default {
 
       class { 'ocf::auth':
         glogin => $glogin,
-        gsudo => ['ocfstaff'];
+        gsudo  => ['ocfstaff'];
       }
 
       class { 'ocf_desktop': staff => $::staff_only }
