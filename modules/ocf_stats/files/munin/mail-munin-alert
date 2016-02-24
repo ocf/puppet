@@ -15,14 +15,21 @@ from sys import stdin
 from ocflib.constants import MAIL_ROOT
 from ocflib.misc.mail import send_mail
 
+
 MAIL_FROM = 'Munin <munin@ocf.berkeley.edu>'
 MUNIN_HOSTS_URL = 'http://munin.ocf.berkeley.edu/ocf.berkeley.edu'
 
 
 # Filter out uninteresting or noisy warnings at the individual level
-IGNORED_WARNINGS = {
+IGNORED_FIELDS = {
     'avgwrwait',
     'avgrdwait',
+}
+
+
+# Enumerate uninteresting discrete values (e.g. exit codes)
+IGNORED_VALUES = {
+    'smartctl_exit_status': {32, 64, 96, 128, 160, 192, 224},
 }
 
 
@@ -35,8 +42,8 @@ def send_alert(host, plugin):
 
 if __name__ == '__main__':
     if len(argv) < 3:
-        raise RuntimeError(
-            'Expected more command-line arguments; possible misconfiguration')
-    host, plugin, fields = argv[1], argv[2], argv[3:]
-    if not all(field in IGNORED_WARNINGS for field in fields):
+        raise RuntimeError('Expected more command-line arguments; possible misconfiguration')
+    host, plugin, fields = argv[1], argv[2], dict(zip(argv[3::2], argv[4::2]))
+    if (not all(field in IGNORED_FIELDS for field in fields) and
+            not all(float(value) in IGNORED_VALUES.get(field, ()) for field, value in fields.items())):
         send_alert(host, plugin)
