@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import sys
+import time
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -117,6 +118,8 @@ def timebomb_explode():
 def main():
     global main_loop
     global notification
+
+    print(sys.argv[0] + ': current time is', time.strftime('%H:%M:%S'))
 
     Notify.init('Auto Locker/Logout')
     notification = Notify.Notification()

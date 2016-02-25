@@ -116,4 +116,4 @@ xset m 0 0
 sleep 8 && /usr/local/bin/fix-audio &
 
 # Auto logout inactive users
-/usr/bin/xautolock -locker /usr/local/bin/auto-lock -time 7 &
+/usr/bin/xautolock -locker /usr/local/bin/auto-lock -time 7 -noclose &
