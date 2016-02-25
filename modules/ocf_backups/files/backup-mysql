@@ -1,8 +1,9 @@
-#!/bin/bash -e
+#!/bin/bash -eu
 # Creates a MySQL backup in the current directory. Intended to be called by
 # rsnapshot.
+set -o pipefail
 mysqldump \
+    --defaults-file=/opt/share/backups/my.cnf \
     --events \
-	--defaults-file=/opt/share/backups/my.cnf \
-	--all-databases --single-transaction | \
-	pigz > "mysql-$(date +%F).sql.gz"
+    --all-databases --single-transaction | \
+    pigz > "mysql-$(date +%F).sql.gz"
