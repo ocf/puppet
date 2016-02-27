@@ -119,7 +119,9 @@ def main():
     global main_loop
     global notification
 
-    print(sys.argv[0] + ': current time is', time.strftime('%H:%M:%S'))
+    print(sys.argv[0] + ': current time is', time.strftime('%H:%M:%S'),
+          file=sys.stderr)
+    sys.stderr.flush()
 
     Notify.init('Auto Locker/Logout')
     notification = Notify.Notification()
