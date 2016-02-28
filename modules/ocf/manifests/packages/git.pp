@@ -1,5 +1,5 @@
 class ocf::packages::git {
-  ocf::repackage { ['git', 'gitk', 'git-gui']:
+  ocf::repackage { ['git', 'gitk', 'git-gui', 'git-svn']:
     backport_on => 'wheezy';
   }
 
