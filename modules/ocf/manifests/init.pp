@@ -8,9 +8,6 @@ class ocf {
   include ocf::staff_users
   include ocf::utils
 
-  if $::blockdevice_sda_vendor == 'LSI' and !str2bool($::is_virtual) {
-    include ocf::megacli
-  }
   if !str2bool($::is_virtual) {
     include ocf::fstrim
     include ocf::mdraid
