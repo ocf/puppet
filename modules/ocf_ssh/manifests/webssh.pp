@@ -1,6 +1,11 @@
 class ocf_ssh::webssh {
   package { ['shellinabox']:; }
 
+  case $::hostname {
+    tsunami: { $webssh_fqdn = 'ssh.ocf.berkeley.edu' }
+    default: { $webssh_fqdn = 'dev-ssh.ocf.berkeley.edu' }
+  }
+
   class { 'nginx':
     # if we let nginx manage its own repo, it uses the `apt` module; this
     # creates an unresolvable dependency cycle because we declare class `apt`
@@ -13,9 +18,9 @@ class ocf_ssh::webssh {
   }
 
   nginx::resource::vhost {
-    'ssh.ocf.berkeley.edu':
+    $webssh_fqdn:
       server_name => [
-        'ssh.ocf.berkeley.edu'
+        $webssh_fqdn
       ],
 
       proxy => 'http://webssh',

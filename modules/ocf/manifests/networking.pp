@@ -13,7 +13,7 @@ class ocf::networking(
     $nameservers = ['169.229.226.22', '128.32.206.12', '128.32.136.9'],
 ) {
   $fqdn = $::clientcert
-  $hostname = regsubst($::clientcert, '^(\w+)\..*$', '\1')
+  $hostname = regsubst($::clientcert, '^([\w-]+)\..*$', '\1')
 
   # packages
   if $bridge {
