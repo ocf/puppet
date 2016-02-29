@@ -106,6 +106,7 @@ class ocf::extrapackages {
     'python-virtualenv',
     'python-yaml',
     'python3-lxml',
+    'python3-mysqldb',
     'python3-nose',
     'python3-tk',
     'quilt',

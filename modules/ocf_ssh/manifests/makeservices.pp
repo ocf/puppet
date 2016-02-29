@@ -3,4 +3,13 @@ class ocf_ssh::makeservices {
   file { '/etc/sudoers.d/makeservices':
     content => "ALL ALL=(mysql) NOPASSWD: /opt/share/utils/makeservices/makemysql-real\n";
   }
+
+  file {
+    '/opt/share/makeservices':
+      ensure => directory,
+      mode   => '0700',
+      owner  => 'mysql';
+    '/opt/share/makeservices/makemysql.conf':
+      source => 'puppet:///private/makeservices/makemysql.conf';
+  }
 }
