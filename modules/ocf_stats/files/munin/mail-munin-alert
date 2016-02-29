@@ -9,8 +9,10 @@ The expected call format from Munin is
 The list of warnings/criticals allows filtering of unhelpful messages such as
 those only containing OKs or UNKNOWNs.
 """
+import argparse
 from sys import argv
 from sys import stdin
+from syslog import syslog
 
 from ocflib.constants import MAIL_ROOT
 from ocflib.misc.mail import send_mail
@@ -21,7 +23,7 @@ MUNIN_HOSTS_URL = 'http://munin.ocf.berkeley.edu/ocf.berkeley.edu'
 
 
 # Filter out uninteresting or noisy warnings at the individual level
-IGNORED_FIELDS = {
+IGNORED_WARNINGS = {
     'avgwrwait',
     'avgrdwait',
 }
@@ -33,17 +35,34 @@ IGNORED_VALUES = {
 }
 
 
-def send_alert(host, plugin):
+def send_alert(host, plugin, mail_to=MAIL_ROOT):
     subject = 'Munin alert for {}'.format(host)
     body = ''.join(stdin)
-    body += '\nSee graph at {}/{}/{}.html\n\n'.format(MUNIN_HOSTS_URL, host, plugin)
-    send_mail(MAIL_ROOT, subject, body, MAIL_FROM)
+    body += '\nSee graph at {}/{}/{}.html'.format(MUNIN_HOSTS_URL, host, plugin)
+    send_mail(mail_to, subject, body, MAIL_FROM)
+
+
+def main(argv):
+    parser = argparse.ArgumentParser(description='Mail out a munin alert.')
+    parser.add_argument('--mail-to', default=MAIL_ROOT)
+    parser.add_argument('host')
+    parser.add_argument('plugin')
+    parser.add_argument('fields', nargs='*')
+    args = parser.parse_args(argv[1:])
+
+    mail_to = args.mail_to
+    host, plugin = args.host, args.plugin
+
+    try:
+        fields = dict(field.split('=') for field in args.fields)
+        if (not all(field in IGNORED_WARNINGS for field in fields) and
+                not all(float(value) in IGNORED_VALUES.get(field, ()) for field, value in fields.items())):
+            syslog('sending alert with args {}'.format(argv))
+            send_alert(host, plugin, mail_to)
+    except Exception as ex:
+        syslog("caught exception '{}' with args {}".format(ex, argv))
+        raise ex
 
 
 if __name__ == '__main__':
-    if len(argv) < 3:
-        raise RuntimeError('Expected more command-line arguments; possible misconfiguration')
-    host, plugin, fields = argv[1], argv[2], dict(zip(argv[3::2], argv[4::2]))
-    if (not all(field in IGNORED_FIELDS for field in fields) and
-            not all(float(value) in IGNORED_VALUES.get(field, ()) for field, value in fields.items())):
-        send_alert(host, plugin)
+    main(argv)
