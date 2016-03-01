@@ -124,6 +124,7 @@ class ocf::extrapackages {
     'texlive-science',
     'vagrant',
     'valgrind',
+    'wireshark',
     'xvnc4viewer',
     'zlib1g-dev',
     'znc',
