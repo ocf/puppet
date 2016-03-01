@@ -3,6 +3,7 @@ class ocf_ssh {
   include ocf::extrapackages
   include ocf::hostkeys
   include ocf::limits
+  include ocf::motd
   include ocf::packages::cups
   include ocf::packages::mysql
   include ocf_ssl
@@ -13,7 +14,6 @@ class ocf_ssh {
     web    => true;
   }
 
-  include legacy
   include makeservices
   include webssh
 }
