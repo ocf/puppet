@@ -4,10 +4,12 @@ alerts to root.
 
 The expected call format from Munin is
 
-    mail-munin-alerts <hostname> <plugin name> [<list of alert fields>]
+    mail-munin-alerts <hostname> <plugin name> \
+            [<list of alert fields>] [<list of field values>]
 
 The list of warnings/criticals allows filtering of unhelpful messages such as
-those only containing OKs or UNKNOWNs.
+those only containing OKs or UNKNOWNs. The list of fields must be in the same
+order as the list of fields.
 """
 import argparse
 from sys import argv
@@ -54,9 +56,11 @@ def main(argv):
     host, plugin = args.host, args.plugin
 
     try:
-        fields = dict(field.split('=') for field in args.fields)
-        if (not all(field in IGNORED_WARNINGS for field in fields) and
-                not all(float(value) in IGNORED_VALUES.get(field, ()) for field, value in fields.items())):
+        num_fields = len(args.fields) // 2
+        fields = dict(zip(args.fields[:num_fields], args.fields[num_fields:]))
+        if not all(field in IGNORED_WARNINGS or
+                   float(value) in IGNORED_VALUES.get(field, ())
+                   for field, value in fields.items()):
             syslog('sending alert with args {}'.format(argv))
             send_alert(host, plugin, mail_to)
     except Exception as ex:
