@@ -24,13 +24,12 @@ alias rm='rm -I'
 
 # Color terminal
 if [ "$TERM" != dumb ]; then
-  PS1='\[\e[0;31m\]\u\[\e[m\]@\[\e[m\]\[\e[0;35m\]\h\[\e[m\]:\[\e[1;34m\]\w\[\e[m\]\[\e[0;31m\]\$ \[\e[m\]\[\e[0;32m\]'
+  PS1='\[\e[0;31m\]\u\[\e[m\]@\[\e[m\]\[\e[0;35m\]\h\[\e[m\]:\[\e[1;34m\]\w\[\e[m\]\[\e[0;31m\]\$ \[\e[m\]'
   alias grep='grep --color=auto'
   if [ -x /usr/bin/dircolors ]; then
     eval "`dircolors -b`"
     alias ls='ls -Fh --color=auto'
   fi
-  trap 'echo -ne "\e[0m"' DEBUG
 else
   PS1='[\u@\h:\w]\$ '
 fi
