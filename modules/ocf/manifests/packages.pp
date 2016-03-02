@@ -14,9 +14,9 @@ class ocf::packages {
   include ocf::packages::microcode
   include ocf::packages::ntp
   include ocf::packages::rsync
+  include ocf::packages::shell
   include ocf::packages::smart
   include ocf::packages::ssh
-  include ocf::packages::zsh
 
   # packages to remove
   package {
@@ -57,7 +57,6 @@ class ocf::packages {
   package {
     [
     'apt-dater-host',
-    'bash',
     'beep',
     'bsdmainutils',
     'cpufrequtils',
@@ -93,14 +92,12 @@ class ocf::packages {
     'quota',
     'screen',
     'tcpdump',
-    'tcsh',
     'tmux',
     'tofrodos',
     'tree',
     'unzip',
     'vim',
     'vim-nox',
-    'zsh',
     ]:;
 
   }
