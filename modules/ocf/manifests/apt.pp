@@ -104,7 +104,7 @@ class ocf::apt ($desktop = false) {
     # will later change it back. They say the same thing so it's cool.
     apt::source {
       'google-chrome':
-        location    => 'http://dl.google.com/linux/chrome/deb/',
+        location    => '[arch=amd64] http://dl.google.com/linux/chrome/deb/',
         release     => 'stable',
         repos       => 'main',
         include   => {
