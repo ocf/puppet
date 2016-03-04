@@ -1,5 +1,5 @@
 class ocf_mesos::master::docker_registry {
-  include ocf_ssl
+  require ocf_ssl
   include ocf::packages::docker
 
   ocf::systemd::service { 'docker-registry':
@@ -17,7 +17,6 @@ Restart=always
 WantedBy=multi-user.target",
     require => [
       Package['docker.io'],
-      File['/var/lib/registry'],
     ],
   }
 

@@ -12,7 +12,18 @@ class ocf_mesos::master::pypi {
     require => User['ocfpypi'],
   }
 
+  # TODO: this is a terrible way to deploy a Python service
+  vcsrepo { '/srv/linux-wheels/linux-wheels':
+    ensure   => latest,
+    user     => ocfpypi,
+    provider => git,
+    revision => 'master',
+    source   => 'https://github.com/chriskuehl/linux-wheels.git',
+    notify   => Ocf::Systemd::Service['pypi-upload-handler'],
+  }
+
   ocf::systemd::service {
+    # TODO: this requires manual vhost creation
     'pypi-server':
       content => "[Unit]
 Description=PyPI Server
@@ -44,6 +55,7 @@ Restart=always
 WantedBy=multi-user.target",
       require => [
         User['ocfpypi'],
+        Vcsrepo['/srv/linux-wheels/linux-wheels'],
       ];
   }
 }

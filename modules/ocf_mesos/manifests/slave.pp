@@ -27,5 +27,7 @@ class ocf_mesos::slave {
     # increase executor timeout in case we need to pull a Docker image
     '/etc/mesos-slave/executor_registration_timeout':
       content => "5mins\n";
+    '/etc/mesos-slave/docker_remove_delay':
+      content => "1secs\n";
   }
 }
