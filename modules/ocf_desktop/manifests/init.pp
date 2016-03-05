@@ -16,6 +16,7 @@ class ocf_desktop ($staff = false) {
   include stats
   include steam
   include suspend
+  include wireshark
 
   class { 'xsession': staff => $staff }
 
