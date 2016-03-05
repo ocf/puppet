@@ -4,8 +4,7 @@ class ocf_desktop::wireshark {
       responsefile => '/var/cache/debconf/wireshark-common.preseed',
       require      => File['/var/cache/debconf/wireshark-common.preseed'];
 
-    'wireshark':
-      ensure => present;
+    'wireshark':;
   }
 
   file {
