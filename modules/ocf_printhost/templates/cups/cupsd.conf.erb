@@ -28,7 +28,7 @@ BrowseRemoteProtocols CUPS
 BrowseAddress @LOCAL
 BrowseLocalProtocols CUPS dnssd
 HostNameLookups On
-ServerName printhost.ocf.berkeley.edu
+ServerName <% if @hostname == 'dev-pollution' -%>dev-<% end -%>printhost.ocf.berkeley.edu
 ServerAlias *
 DefaultAuthType Basic
 
