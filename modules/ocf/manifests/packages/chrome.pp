@@ -16,7 +16,7 @@ class ocf::packages::chrome {
 
     '/opt/google/chrome/cron/google-chrome':
       mode    => '0755',
-      content => "# Disabled by OCF (rt#4589)\n",
+      content => "#!/bin/sh\n# Disabled by OCF (rt#4589)\n",
       require => Package['google-chrome-stable'];
   }
 }
