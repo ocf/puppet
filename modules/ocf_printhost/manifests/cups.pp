@@ -20,7 +20,8 @@ class ocf_printhost::cups {
     ['/etc/cups/raw.convs', '/etc/cups/raw.types']:
       content => '# deny printing raw jobs';
     '/etc/cups/ppd':
-      ensure  => directory;
+      ensure  => directory,
+      group   => 'lp';
     ['/etc/cups/ppd/deforestation-double.ppd', '/etc/cups/ppd/logjam-double.ppd']:
       source  => 'puppet:///modules/ocf_printhost/cups/double.ppd',
       require => File['/etc/cups/ppd'];
@@ -28,10 +29,12 @@ class ocf_printhost::cups {
       source  => 'puppet:///modules/ocf_printhost/cups/single.ppd',
       require => File['/etc/cups/ppd'];
     '/etc/cups/printers.conf':
+      replace => false,
       group   => 'lp',
       mode    => '0600',
       source  => 'puppet:///modules/ocf_printhost/cups/printers.conf';
     '/etc/cups/classes.conf':
+      replace => false,
       group   => 'lp',
       mode    => '0600',
       source  => 'puppet:///modules/ocf_printhost/cups/classes.conf';
