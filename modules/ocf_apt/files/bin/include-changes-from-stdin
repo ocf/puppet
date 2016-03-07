@@ -1,0 +1,29 @@
+#!/bin/bash -e
+# Install a Debian package from stdin. Called from jenkins-deploy.
+
+if [ $# -ne 2 ]; then
+	echo "Usage: $0 DIST CHANGESFILE" >&2
+	exit 1
+fi
+
+dist="$1"
+changes="$2"
+
+tmpdir=$(mktemp -d)
+tmpfile=$(mktemp --suffix ".zip")
+trap 'rm -rf "$tmpdir"; rm -f "$tmpfile"' EXIT
+cat > "$tmpfile"
+unzip -d "$tmpdir" "$tmpfile"
+
+# remove package first;
+# this is normally unnecessary, but if we're replacing a package with the same
+# version, it might be (this is normally unnecessary, but might happen if we
+# re-run a Jenkins job)
+# Use globbing (and also assume that there's exactly one file which matches the
+# glob)
+for pkg in $(sed 's/^Binary: //; t; d' "$tmpdir"/archive/$changes); do
+	/opt/apt/bin/reprepro remove "$dist" "$pkg"
+done
+
+/opt/apt/bin/reprepro --ignore=wrongdistribution include "$dist" \
+    "$tmpdir"/archive/$changes

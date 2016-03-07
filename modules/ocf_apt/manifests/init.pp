@@ -37,7 +37,7 @@ class ocf_apt {
       recurse => true;
 
     '/etc/sudoers.d/ocfdeploy-apt':
-      content => "ocfdeploy ALL=(ocfapt) NOPASSWD: /opt/apt/bin/reprepro, /opt/apt/bin/include-from-stdin\n",
+      content => "ocfdeploy ALL=(ocfapt) NOPASSWD: /opt/apt/bin/reprepro, /opt/apt/bin/include-from-stdin, /opt/apt/bin/include-changes-from-stdin\n",
       owner   => root,
       group   => root;
   }
