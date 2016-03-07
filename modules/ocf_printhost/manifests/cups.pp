@@ -28,11 +28,11 @@ class ocf_printhost::cups {
       source  => 'puppet:///modules/ocf_printhost/cups/single.ppd',
       require => File['/etc/cups/ppd'];
     '/etc/cups/printers.conf':
-      owner   => 'lp',
+      group   => 'lp',
       mode    => '0600',
       source  => 'puppet:///modules/ocf_printhost/cups/printers.conf';
     '/etc/cups/classes.conf':
-      owner   => 'lp',
+      group   => 'lp',
       mode    => '0600',
       source  => 'puppet:///modules/ocf_printhost/cups/classes.conf';
   }
