@@ -26,4 +26,15 @@ class ocf_admin {
       'wakeonlan',
     ]:;
   }
+
+  file {
+    '/opt/passwords':
+      source => 'puppet:///private/passwords',
+      group  => ocfroot,
+      mode   => '0640';
+    '/etc/ocfprinting.json':
+      source => 'puppet:///private/ocfprinting.json',
+      group  => ocfstaff,
+      mode   => '0640';
+  }
 }
