@@ -12,7 +12,7 @@ class ocf_ns {
 
     '/etc/bind/named.conf.local':
       ensure  => link,
-      target  => '/srv/dns/named.conf.local',
+      target  => '/srv/dns/etc/named.conf.local',
       require => [Package['bind9'], Vcsrepo['/srv/dns']],
       notify  => Service['bind9'];
   }
