@@ -54,9 +54,24 @@ attributetype ( 1.3.6.1.4.1.41759.2.2.1
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
         SINGLE-VALUE )
 
+attributetype ( 1.3.6.1.4.1.41759.2.2.2
+        NAME 'dnsCname'
+        DESC 'DNS CNAME record'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+
+attributetype ( 1.3.6.1.4.1.41759.2.2.3
+        NAME 'dnsA'
+        DESC 'DNS A record'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+
 objectclass ( 1.3.6.1.4.1.41759.2.1.1
         NAME 'ocfDevice'
         DESC 'Attributes for OCF hosts'
         SUP ( ipHost $ ieee802Device $ puppetClient )
         AUXILIARY
-        MUST ( cn $ ipHostNumber $ environment $ type ) )
+        MUST ( cn $ ipHostNumber $ type )
+        MAY ( environment $ dnsCname $ dnsA ) )
