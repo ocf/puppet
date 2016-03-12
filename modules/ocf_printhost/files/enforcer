@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+"""Enforcer is a prehook and posthook for Tea4CUPS the primary purpose of which
+is to add and subtract remaining pages as user jobs are processed.
+
+When a user sends a job to the print server, Tea4CUPS passes the job as a
+PostScript file to enforcer before sending it to the printer. Enforcer calls
+Ghostscript to count pages and connects to mysql to check against the user's
+quota. If enforcer returns 255 (a.k.a. -1), the job is rejected. Otherwise,
+enforcer gets callued again when the job is done and logs the job in mysql,
+taking care to set the page count to zero if an error was encountered.
+
+Another function of enforcer is to send notifications to desktops to let users
+know when a job has been sent to the printer, been rejected due to the quota,
+finished printing, or failed to print.
+"""
+import os
+from argparse import ArgumentParser
+from collections import namedtuple
+from configparser import ConfigParser
+from datetime import datetime
+from subprocess import PIPE
+from subprocess import Popen
+from sys import argv
+from sys import exit
+from syslog import syslog
+from textwrap import dedent
+from traceback import format_exc
+
+import ocflib.printing.quota as quota
+from ocflib.misc.mail import send_mail_user
+from ocflib.misc.mail import send_problem_report
+
+
+CONF_FILE = '/opt/share/enforcer/enforcer.conf'
+
+
+Message = namedtuple('Message', ['subject', 'body'])
+
+
+INSUFFICIENT_QUOTA_MESSAGE = Message(
+    subject='[OCF] Your latest print job was rejected',
+    body=dedent("""\
+        Greetings from the Open Computing Facility,
+
+        This email is letting you know that your most recent print job was
+        rejected since it would exceed your daily quota. The daily quota is
+        {daily_quota} pages today and the semesterly quota is {semester_quota} pages.
+
+        Username: {user}
+        Time: {time}
+        File: {doc_name}
+        Total pages: {pages}
+        Pages left today: {daily_pages}
+        Pages left this semester: {semester_pages}
+
+
+        Does something look wrong? Please reply to
+
+            help@ocf.berkeley.edu
+        """)
+)
+
+PRINTER_ERROR_MESSAGE = Message(
+    subject='[OCF] Your latest print job failed',
+    body=dedent("""\
+        Greetings from the Open Computing Facility,
+
+        This email is from the OCF to let you know that your most recent print
+        job failed due to a printer error. If there's something wrong with the
+        printers, please alert the publications staff at the desk.
+
+        Username: {user}
+        Time: {time}
+        File: {doc_name}
+        Total pages: {pages}
+        Pages left today: {daily_pages}
+        Pages left this semester: {semester_pages}
+
+
+        Still can't get it to print? Please reply to
+
+            help@ocf.berkeley.edu
+        """)
+)
+
+
+def read_config():
+    conf = ConfigParser()
+    conf.readfp(open(CONF_FILE))
+    mysql_host = conf.get('enforcer', 'user')
+    mysql_passwd = conf.get('enforcer', 'passwd')
+    return mysql_host, mysql_passwd
+
+
+def page_count(path):
+    command = [
+        '/usr/bin/gs',
+        '-q',
+        '-dNODISPLAY',
+        '-c',
+        '({}) (r) file runpdfbegin pdfpagecount = quit'.format(path)
+    ]
+    p = Popen(command, stdout=PIPE)
+    p.wait(30)
+    return int(p.stdout.read())
+
+
+def create_job(env):
+    printer, queue = env['TEAPRINTERNAME'].split('-')
+    return quota.Job(
+        user=env['TEAUSERNAME'],
+        time=datetime.now(),
+        pages=int(env['TEACOPIES']) * page_count(env['TEADATAFILE']),
+        queue=queue,
+        printer=printer,
+        doc_name=env['TEATITLE'],
+        filesize=env['TEAJOBSIZE'],
+    )
+
+
+def send_printer_mail(message, job, quo):
+    body = message.body.format(
+        user=job.user,
+        time=job.time,
+        doc_name=job.doc_name,
+        pages=job.pages,
+        daily_pages=quo.daily,
+        semester_pages=quo.semesterly,
+        daily_quota=quota.daily_quota(),
+        semester_quota=quota.SEMESTERLY_QUOTA,
+    )
+    send_mail_user(job.user, message.subject, body)
+
+
+def prehook(c, job):
+    quo = quota.get_quota(c, job.user)
+    if job.pages > quo.daily:
+        send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
+        exit(255)
+
+
+def posthook(c, job, success):
+    if success:
+        quota.add_job(c, job)
+    else:
+        quo = quota.get_quota(c, job.user)
+        send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
+
+
+def main(argv):
+    try:
+        parser = ArgumentParser(description='Pre- and post-hook for Tea4CUPS')
+        parser.add_argument('command', choices={'prehook', 'posthook'})
+        args = parser.parse_args(argv[1:])
+        job = create_job(os.environ)
+        with quota.get_connection(*read_config()) as c:
+            if args.command == 'prehook':
+                prehook(c, job)
+            else:
+                success = os.environ['TEASTATUS'] == '0'
+                posthook(c, job, success)
+    except Exception:
+        msg = dedent("""\
+            enforcer encountered the following error while processing a job:
+
+            {traceback}
+
+
+            tea4cups environment variables:
+            {vars}
+            """).format(
+            traceback=format_exc(),
+            # seems unlikely a non-tea4cups var will start with TEA
+            vars='\n'.join('  {}: {}'.format(k, v) for k, v in
+                           os.environ.items() if k.startswith('TEA'))
+        )
+
+        syslog(msg)
+        send_problem_report(msg)
+        raise
+
+
+if __name__ == '__main__':
+    main(argv)

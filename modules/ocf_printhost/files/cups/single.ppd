@@ -29,7 +29,7 @@
 *cupsVersion: 1.7
 *cupsModelNumber: 0
 *cupsManualCopies: True
-*cupsFilter: "application/vnd.cups-postscript 0 -"
+*cupsFilter: "application/vnd.cups-pdf 0 -"
 *cupsLanguages: "en"
 *UIConstraints: *Duplex *OptionDuplex False
 *UIConstraints: *OptionDuplex False *Duplex
