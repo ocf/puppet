@@ -97,6 +97,7 @@ class ocf::extrapackages {
     'python-nose',
     'python-numpy',
     'python-pandas',
+    'python-scapy',
     'python-scipy',
     'python-sklearn',
     'python-sqlalchemy',
