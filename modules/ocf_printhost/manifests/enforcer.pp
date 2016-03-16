@@ -8,6 +8,9 @@ class ocf_printhost::enforcer {
     '/usr/local/bin/enforcer':
       source  => 'puppet:///modules/ocf_printhost/enforcer',
       mode    => '0755';
+    '/usr/local/bin/enforcer-pc':
+      source  => 'puppet:///modules/ocf_printhost/enforcer-pc',
+      mode    => '0755';
     '/opt/share/enforcer':
       ensure  => directory,
       mode    => '0500';
