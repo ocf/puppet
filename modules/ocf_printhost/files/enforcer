@@ -93,14 +93,7 @@ def read_config():
 
 
 def page_count(path):
-    command = [
-        '/usr/bin/gs',
-        '-q',
-        '-dNODISPLAY',
-        '-c',
-        '({}) (r) file runpdfbegin pdfpagecount = quit'.format(path)
-    ]
-    p = Popen(command, stdout=PIPE)
+    p = Popen(['/usr/local/bin/enforcer-pc', path], stdout=PIPE)
     p.wait(30)
     return int(p.stdout.read())
 

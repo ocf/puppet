@@ -1,0 +1,2 @@
+#!/bin/bash
+gs -o /dev/null -sDEVICE=bbox $1 2>&1 | grep HiResBoundingBox | wc -l
