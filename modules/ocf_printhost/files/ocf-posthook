@@ -22,8 +22,16 @@ from ocflib.printing.quota import Job
 
 def main(argv=None):
     try:
-        price = os.environ['PYKOTAJOBPRICE']
+        price = int(float(os.environ['PYKOTAJOBPRICE']))
         user = os.environ['PYKOTAUSERNAME']
+
+        # check for weird prices
+        if price == 0:
+            # TODO: we want to add a new job with status=REJECTED, but ocflib doesn't
+            # support that yet
+            print('Job cost was 0 (probably means it was rejected), not logging.')
+            return
+        assert price > 0, price
 
         # subtract from PyKota semesterly
         subprocess.check_call(
@@ -36,7 +44,7 @@ def main(argv=None):
         job = Job(
             user=user,
             time=datetime.now(),
-            pages=int(float(price)),
+            pages=price,
             queue=os.environ['PYKOTAPRINTERNAME'].split('-', 1)[1],
             printer=os.environ['PYKOTAPRINTERNAME'],
             doc_name=os.environ['PYKOTATITLE'],
