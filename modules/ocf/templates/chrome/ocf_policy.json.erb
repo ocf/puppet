@@ -2,11 +2,11 @@
 	"//": "http://www.chromium.org/administrators/policy-list-3",
 	"//": "http://www.chromium.org/administrators/configuring-other-preferences",
 	"//": "Set OCF homepage.",
-	"HomepageLocation": "https://www.ocf.berkeley.edu/about/lab/open-source",
+	"HomepageLocation": "<%= @desktop_homepage %>",
 	"HomepageIsNewTabPage": false,
 	"ShowHomeButton": true,
 	"RestoreOnStartup": 4,
-	"RestoreOnStartupURLs": ["https://www.ocf.berkeley.edu/about/lab/open-source"],
+	"RestoreOnStartupURLs": ["<%= @desktop_homepage %>"],
 
 	"//": "Do not store browser history etc.",
 	"ForceEphemeralProfiles": true,
@@ -35,6 +35,6 @@
 	"//": "(fails when CUPS takes too long to respond, shows invalid settings)",
 	"DisablePrintPreview": true,
 
-  "//": "Printing from Chrome's PDF viewer often results in cut-off pages",
-  "DisabledPlugins": ["Chrome PDF Viewer"]
+	"//": "Printing from Chrome's PDF viewer often results in cut-off pages",
+	"DisabledPlugins": ["Chrome PDF Viewer"]
 }

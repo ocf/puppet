@@ -23,3 +23,5 @@ Service { hasrestart => true, hasstatus => true, }
 Vcsrepo { require => Ocf::Repackage['git'],  }
 
 Apache::Vhost { serveradmin => 'help@ocf.berkeley.edu' }
+
+$desktop_homepage = 'https://www.ocf.berkeley.edu/about/lab/open-source'
