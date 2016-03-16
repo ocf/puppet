@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+"""Post-hook after jobs print.
+
+* Subtract from PyKota semesterly quota.
+* Add job to the enforcer database.
+"""
+import email.mime.text
+import inspect
+import os
+import socket
+import subprocess
+from configparser import ConfigParser
+from datetime import datetime
+from pprint import pformat
+from textwrap import dedent
+from traceback import format_exc
+
+from ocflib.printing.quota import add_job
+from ocflib.printing.quota import get_connection
+from ocflib.printing.quota import Job
+
+
+def main(argv=None):
+    try:
+        price = os.environ['PYKOTAJOBPRICE']
+        user = os.environ['PYKOTAUSERNAME']
+
+        # subtract from PyKota semesterly
+        subprocess.check_call(
+            ('pkusers', '--config', '/etc/pykota/pykota.semester', '-b', '-{}'.format(price), user),
+        )
+
+        # add job to enforcer database
+        conf = ConfigParser()
+        conf.read('/etc/pykota/enforcer.conf')
+        job = Job(
+            user=user,
+            time=datetime.now(),
+            pages=int(float(price)),
+            queue=os.environ['PYKOTAPRINTERNAME'].split('-', 1)[1],
+            printer=os.environ['PYKOTAPRINTERNAME'],
+            doc_name=os.environ['PYKOTATITLE'],
+            filesize=int(os.environ['PYKOTAJOBSIZEBYTES']),
+        )
+        with get_connection(user='ocfprinting', password=conf.get('enforcer', 'passwd')) as c:
+            add_job(c, job)
+    except:
+        send_problem_report(dedent('''\
+        An exception occured in the PyKota <-> enforcer bridge:
+
+        {traceback}
+
+        Environment:
+        {environ}
+        ''').format(
+            traceback=format_exc(),
+            environ=pformat(dict(os.environ)),
+        ))
+        raise
+
+
+def send_mail(to, subject, body, sender='Open Computing Facility <help@ocf.berkeley.edu>'):
+    """Slightly modified version from ocflib that is still compatible with
+    Python 3.2.
+    """
+
+    msg = email.mime.text.MIMEText(body)
+
+    msg['Subject'] = subject
+    msg['From'] = sender
+    msg['To'] = to
+
+    # we send the message via sendmail, since we may one day prohibit traffic
+    # to port 25 that doesn't go via the system mailserver
+    p = subprocess.Popen(('/usr/sbin/sendmail', '-t', '-oi'),
+                         stdin=subprocess.PIPE)
+    p.communicate(msg.as_string().encode('utf8'))
+
+
+def send_problem_report(problem):
+    """Slightly modified version from ocflib that is still compatible with
+    Python 3.2.
+    """
+
+    def format_frame(frame):
+        _, filename, line, funcname, _, _ = frame
+        return '{}:{} ({})'.format(filename, line, funcname)
+
+    callstack = '\n        by '.join(map(format_frame, inspect.stack()))
+    body = \
+        """A problem was encountered and reported via ocflib:
+
+{problem}
+
+====
+Hostname: {hostname}
+Callstack:
+    at {callstack}
+""".format(problem=problem, hostname=socket.getfqdn(), callstack=callstack)
+
+    send_mail(
+        'root@ocf.berkeley.edu',
+        '[ocflib] Problem report from ' + socket.getfqdn(),
+        body,
+        sender='ocflib <root@ocf.berkeley.edu>',
+    )
+
+
+if __name__ == '__main__':
+    exit(main())

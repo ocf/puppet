@@ -67,10 +67,13 @@ class ocf_printhost {
       mode    => '0640',
       source  => 'puppet:///modules/ocf_printhost/pykotadmin.conf',
     ;
-    '/etc/pykota/update_semester_quota.sh':
+    '/etc/pykota/ocf-posthook':
       mode    => '0755',
-      source  => 'puppet:///modules/ocf_printhost/update_semester_quota.sh',
+      source  => 'puppet:///modules/ocf_printhost/ocf-posthook',
     ;
+    '/etc/pykota/enforcer.conf':
+      mode    => '0600',
+      source  => 'puppet:///private/enforcer/enforcer.conf';
     '/etc/pykota/set_daily_quota.sh':
       mode    => '0755',
       source  => 'puppet:///modules/ocf_printhost/set_daily_quota.sh',
