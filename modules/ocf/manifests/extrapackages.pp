@@ -156,9 +156,6 @@ class ocf::extrapackages {
     'zlib1g-dev',
     'znc',
     ]:;
-
-    'autolink':
-      provider => pip;
   }
 
   ocf::repackage { 'dh-virtualenv':
@@ -166,6 +163,7 @@ class ocf::extrapackages {
   }
 
   # install wp-cli
+  # TODO: can we debian-package this?
   file { '/usr/local/sbin/download-wp-cli':
     source  => 'puppet:///modules/ocf/packages/download-wp-cli',
     mode    => '0755';
