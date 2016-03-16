@@ -7,7 +7,7 @@ class ocf::packages::chrome {
       require => Package['google-chrome-stable'];
 
     '/etc/opt/chrome/policies/managed/ocf_policy.json':
-      source  => 'puppet:///modules/ocf/chrome/ocf_policy.json',
+      content => template('ocf/chrome/ocf_policy.json.erb'),
       require => Package['google-chrome-stable'];
 
     '/opt/google/chrome/master_preferences':
