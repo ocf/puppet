@@ -41,12 +41,13 @@ def main(argv=None):
         # add job to enforcer database
         conf = ConfigParser()
         conf.read('/etc/pykota/enforcer.conf')
+        printer, queue = os.environ['PYKOTAPRINTERNAME'].split('-', 1)
         job = Job(
             user=user,
             time=datetime.now(),
             pages=price,
-            queue=os.environ['PYKOTAPRINTERNAME'].split('-', 1)[1],
-            printer=os.environ['PYKOTAPRINTERNAME'],
+            queue=queue,
+            printer=printer,
             doc_name=os.environ['PYKOTATITLE'],
             filesize=int(os.environ['PYKOTAJOBSIZEBYTES']),
         )
