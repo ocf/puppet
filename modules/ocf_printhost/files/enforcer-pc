@@ -4,5 +4,5 @@
 #
 # In particular, we read the "Pages:" header (actually located at the end of
 # the file in the comments section). If this doesn't exist, we'll fail.
-set -o pipefile
+set -o pipefail
 tail -n20 "$1" | awk '/^%%Pages: [0-9]+$/ {print $2}'
