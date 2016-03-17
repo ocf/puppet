@@ -2,20 +2,28 @@
 # Documentation: http://www.cups.org/documentation.php/ref-cupsd-conf.html
 # see also cups-files.conf
 
-# hplip sends garbage errors, so increase log level
-LogLevel emerg
-LogDebugHistory 0
-MaxLogSize 0
-
-# Limit disk/memory usage
-LimitRequestBody 256m
-PreserveJobFiles Off
-
 # Allow remote access
 Port 80
 Port 631
 SSLPort 443
 Listen /var/run/cups/cups.sock
+
+<% if not @hostname.start_with?('dev-') %>
+    ServerName printhost.ocf.berkeley.edu
+    LogLevel emerg
+    LogDebugHistory 0
+    MaxLogSize 0
+    PreserveJobFiles Off
+<% else %>
+    ServerName dev-printhost.ocf.berkeley.edu
+    LogLevel debug
+    LogDebugHistory 999999
+    MaxLogSize 10m
+    PreserveJobFiles On
+<% end %>
+
+# Limit memory usage
+LimitRequestBody 256m
 
 # Enable printer sharing
 Browsing Off
@@ -28,7 +36,6 @@ BrowseRemoteProtocols CUPS
 BrowseAddress @LOCAL
 BrowseLocalProtocols CUPS dnssd
 HostNameLookups On
-ServerName <% if @hostname == 'dev-pollution' -%>dev-<% end -%>printhost.ocf.berkeley.edu
 ServerAlias *
 DefaultAuthType Basic
 
