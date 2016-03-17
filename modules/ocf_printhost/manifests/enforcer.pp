@@ -3,7 +3,7 @@ class ocf_printhost::enforcer {
 
   file {
     '/etc/cups/tea4cups.conf':
-      source  => 'puppet:///modules/ocf_printhost/cups/tea4cups.conf',
+      content => template('ocf_printhost/cups/tea4cups.conf.erb'),
       require => Package['cups-tea4cups'];
     '/usr/local/bin/enforcer':
       source  => 'puppet:///modules/ocf_printhost/enforcer',
