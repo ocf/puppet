@@ -87,7 +87,7 @@ class ocf_desktop::xsession ($staff = false) {
                       /opt/share/xsession/${po}",
       subscribe   => File["/opt/share/xsession/${po}"],
       refreshonly => true,
-      require     => Package['lightdm-gtk-greeter', 'gettext'];
+      require     => Package['lightdm-gtk-greeter-ocf', 'gettext'];
   }
 
   # use ocf logo on login screen
