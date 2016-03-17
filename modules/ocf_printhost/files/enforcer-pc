@@ -1,2 +1,8 @@
-#!/bin/bash
-gs -o /dev/null -sDEVICE=bbox $1 2>&1 | grep HiResBoundingBox | wc -l
+#!/bin/bash -eu
+# Print the number of pages in arg1 (which must be a PostScript file which has
+# been pre-processed by CUPS-flavored GhostScript).
+#
+# In particular, we read the "Pages:" header (actually located at the end of
+# the file in the comments section). If this doesn't exist, we'll fail.
+set -o pipefile
+tail -n20 "$1" | awk '/^%%Pages: [0-9]+$/ {print $2}'
