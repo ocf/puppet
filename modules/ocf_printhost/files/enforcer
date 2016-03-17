@@ -13,13 +13,12 @@ Another function of enforcer is to send notifications to desktops to let users
 know when a job has been sent to the printer, been rejected due to the quota,
 finished printing, or failed to print.
 """
+import argparse
 import os
-from argparse import ArgumentParser
+import subprocess
 from collections import namedtuple
 from configparser import ConfigParser
 from datetime import datetime
-from subprocess import PIPE
-from subprocess import Popen
 from sys import argv
 from sys import exit
 from syslog import syslog
@@ -91,16 +90,14 @@ PRINTER_ERROR_MESSAGE = Message(
 
 def read_config():
     conf = ConfigParser()
-    conf.readfp(open(CONF_FILE))
-    mysql_host = conf.get('enforcer', 'user')
+    conf.read(CONF_FILE)
+    mysql_host = conf.get('enforcer', 'host')
     mysql_passwd = conf.get('enforcer', 'passwd')
     return mysql_host, mysql_passwd
 
 
 def page_count(path):
-    p = Popen(['/usr/local/bin/enforcer-pc', path], stdout=PIPE)
-    p.wait(30)
-    return int(p.stdout.read())
+    return int(subprocess.check_output(('/usr/local/bin/enforcer-pc', path), timeout=30))
 
 
 def create_job(env):
@@ -147,7 +144,10 @@ def posthook(c, job, success):
 
 def main(argv):
     try:
-        parser = ArgumentParser(description='Pre- and post-hook for Tea4CUPS')
+        parser = argparse.ArgumentParser(
+            description=__doc__,
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+        )
         parser.add_argument('command', choices={'prehook', 'posthook'})
         args = parser.parse_args(argv[1:])
         job = create_job(os.environ)

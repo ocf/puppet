@@ -7,7 +7,7 @@ class ocf_ssh::makeservices {
   file {
     '/opt/share/makeservices':
       ensure => directory,
-      mode   => '0500',
+      mode   => '0700',
       owner  => 'mysql';
     '/opt/share/makeservices/makemysql.conf':
       source => 'puppet:///private/makeservices/makemysql.conf';
