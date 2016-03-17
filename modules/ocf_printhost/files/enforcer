@@ -91,9 +91,9 @@ PRINTER_ERROR_MESSAGE = Message(
 def read_config():
     conf = ConfigParser()
     conf.read(CONF_FILE)
-    mysql_host = conf.get('enforcer', 'host')
+    mysql_user = conf.get('enforcer', 'user')
     mysql_passwd = conf.get('enforcer', 'passwd')
-    return mysql_host, mysql_passwd
+    return mysql_user, mysql_passwd
 
 
 def page_count(path):
