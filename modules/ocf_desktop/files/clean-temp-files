@@ -1,11 +1,11 @@
-#!/bin/bash -e
+#!/bin/bash -eu
 # Find and remove temporary files (/var/local/tmp/*) from users who haven't
 # logged in recently.
 #
 # For simplicity, /var/local/tmp/ is owned (and only writable) by root. On
 # login, root creates a new directory for the current user to use. We remove
 # these directories periodically via this cron script.
-
+set -o pipefail
 shopt -s nullglob
 
 cd /var/local/tmp
