@@ -58,10 +58,14 @@ def main(argv=None):
 
     report('checks passed, okay to suspend')
 
-    # Try to remount /home to free up space.
-    if subprocess.call(('umount', '/home'), stdout=DEVNULL, stderr=DEVNULL) != 0:
-        report('not suspending as could not unmount /home')
-        return 5
+    # Try to remount /home to free up space (if it's even mounted).
+    with open('/proc/mounts') as f:
+        if 'tmpfs /home tmpfs' in f.read():
+            if subprocess.call(('umount', '/home'), stdout=DEVNULL, stderr=DEVNULL) != 0:
+                report('not suspending as could not unmount /home')
+                return 5
+        else:
+            report('/home not mounted, so not unmounted')
 
     subprocess.check_call(('mount', '/home'))
 
