@@ -59,7 +59,7 @@ def main(argv=None):
     report('checks passed, okay to suspend')
 
     # Try to remount /home to free up space.
-    if subprocess.call(('umount', '/home')) != 0:
+    if subprocess.call(('umount', '/home'), stdout=DEVNULL, stderr=DEVNULL) != 0:
         report('not suspending as could not unmount /home')
         return 5
 
