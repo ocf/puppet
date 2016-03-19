@@ -61,7 +61,10 @@ def main(argv=None):
     report('checks passed, okay to suspend')
 
     # Try to remount /home to free up space.
-    subprocess.check_call(('umount', '/home'))
+    if subprocess.call(('umount', '/home')) != 0:
+        report('not suspending as could not unmount /home')
+        return 5
+
     subprocess.check_call(('mount', '/home'))
 
     reboot_needed = '/var/run/apt-dater-host_reboot'
@@ -74,7 +77,8 @@ def main(argv=None):
         # Enable wake-on-LAN and go to sleep.
         report('going to sleep')
         subprocess.check_call(('/sbin/ethtool', '-s', 'eth0', 'wol', 'g'), stdout=devnull, stderr=devnull)
-        subprocess.call(('/usr/sbin/pm-suspend'), stdout=devnull, stderr=devnull)
+        if subprocess.call(('/usr/sbin/pm-suspend'), stdout=devnull, stderr=devnull) != 0:
+            report('failed to suspend')
 
 
 if __name__ == '__main__':
