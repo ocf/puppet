@@ -30,27 +30,18 @@ class ocf_dhcp {
       ensure  => link,
       links   => manage,
       target  => '/opt/share/utils/staff/lab/lab-wakeup',
-      require => Package['wakeonlan'];
+      require => [Vcsrepo['/opt/share/utils'], Package['wakeonlan']];
   }
 
   cron {
-    'lab-wakeup-weekdays':
-      command => '/usr/local/bin/lab-wakeup > /dev/null',
-      hour    => 9,
-      minute  => 0,
-      weekday => '1-5',
+    'lab-wakeup':
+      command => '/usr/local/bin/lab-wakeup',
+      hour    => '*',
+      minute  => '*/15',
       require => File['/usr/local/bin/lab-wakeup'];
-    'lab-wakeup-saturday':
-      command => '/usr/local/bin/lab-wakeup > /dev/null',
-      hour    => 11,
-      minute  => 0,
-      weekday => 6,
-      require => File['/usr/local/bin/lab-wakeup'];
-    'lab-wakeup-sunday':
-      command => '/usr/local/bin/lab-wakeup > /dev/null',
-      hour    => 12,
-      minute  => 0,
-      weekday => 0,
-      require => File['/usr/local/bin/lab-wakeup'];
+
+    # TODO: remove in a few weeks
+    ['lab-wakeup-weekdays', 'lab-wakeup-saturday', 'lab-wakeup-sunday']:
+      ensure  => absent;
   }
 }
