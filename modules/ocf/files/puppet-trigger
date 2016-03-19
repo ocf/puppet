@@ -7,6 +7,7 @@ import sys
 
 
 def trigger_run():
+    # TODO: use subprocess.DEVNULL after jessie
     devnull = open('/dev/null', 'w')
 
     if subprocess.call(('/usr/sbin/service', 'puppet', 'status'),

@@ -10,16 +10,14 @@ import argparse
 import os
 import subprocess
 import sys
+from subprocess import DEVNULL
 
 from ocflib.lab.hours import Day
 
 
-devnull = open('/dev/null', 'w')
-
-
 def file_is_open(path):
     """Return whether a file is open by any process on the system."""
-    return subprocess.call(('lsof', '--', path), stdout=devnull, stderr=devnull) == 0
+    return subprocess.call(('lsof', '--', path), stdout=DEVNULL, stderr=DEVNULL) == 0
 
 
 def main(argv=None):
@@ -72,12 +70,12 @@ def main(argv=None):
         # Reboot because there's a kernel update.
         os.remove(reboot_needed)
         report('rebooting because of newer installed kernel')
-        subprocess.check_call(('shutdown', '-r', 'now'), stdout=devnull, stderr=devnull)
+        subprocess.check_call(('shutdown', '-r', 'now'), stdout=DEVNULL, stderr=DEVNULL)
     else:
         # Enable wake-on-LAN and go to sleep.
         report('going to sleep')
-        subprocess.check_call(('/sbin/ethtool', '-s', 'eth0', 'wol', 'g'), stdout=devnull, stderr=devnull)
-        if subprocess.call(('/usr/sbin/pm-suspend'), stdout=devnull, stderr=devnull) != 0:
+        subprocess.check_call(('/sbin/ethtool', '-s', 'eth0', 'wol', 'g'), stdout=DEVNULL, stderr=DEVNULL)
+        if subprocess.call(('/usr/sbin/pm-suspend'), stdout=DEVNULL, stderr=DEVNULL) != 0:
             report('failed to suspend')
 
 
