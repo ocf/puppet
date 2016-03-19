@@ -35,7 +35,7 @@ class ocf_dhcp {
 
   cron {
     'lab-wakeup':
-      command => '/usr/local/bin/lab-wakeup',
+      command => '/usr/local/bin/lab-wakeup -q',
       hour    => '*',
       minute  => '*/15',
       require => File['/usr/local/bin/lab-wakeup'];
