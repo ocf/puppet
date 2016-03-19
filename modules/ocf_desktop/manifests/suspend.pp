@@ -1,19 +1,19 @@
 class ocf_desktop::suspend {
-
   file {
     # suspend script with scheduled wakeup, also attempt resetting tmpfs
     '/usr/local/sbin/ocf-suspend':
       mode    => '0755',
       source  => 'puppet:///modules/ocf_desktop/suspend/ocf-suspend',
-      require => Package[ 'ethtool', 'pm-utils' ];
+      require => Package['ethtool', 'pm-utils', 'python3-ocflib'];
+
     # run script when power button is pushed
     '/etc/acpi/events/powerbtn-acpi-support':
       source  => 'puppet:///modules/ocf_desktop/suspend/powerbtn-acpi-support',
       require => Package['acpi-support-base'];
-    # run script off hours
+
+    # TODO: remove this in a few weeks
     '/etc/cron.d/ocf-suspend':
-      source  => 'puppet:///modules/ocf_desktop/suspend/crontab',
-      require => [ Package['anacron'], File['/usr/local/sbin/ocf-suspend'] ]
+      ensure  => absent;
   }
 
   package {
@@ -24,12 +24,18 @@ class ocf_desktop::suspend {
     # install ethtool to allow script to enable WOL
     'ethtool':;
     # power management
-    'pm-utils':
+    'pm-utils':;
+  }
+
+  cron { 'ocf-suspend':
+    command => '/usr/local/sbin/ocf-suspend -q',
+    minute  => '*',
+    hour    => '*',
+    require => [Package['anacron'], File['/usr/local/sbin/ocf-suspend']],
   }
 
   # restart acpi
   service { 'acpid':
-    subscribe => File['/etc/acpi/events/powerbtn-acpi-support']
+    subscribe => File['/etc/acpi/events/powerbtn-acpi-support'],
   }
-
 }

@@ -1,28 +1,81 @@
-#!/bin/bash
-# Suspend the machine and wake on LAN.
+#!/usr/bin/env python3
+"""Suspend this desktop if not in use and lab is closed.
 
-# Don't sleep if...
-# installing packages
-! /usr/bin/lsof -- /var/lib/dpkg/lock > /dev/null 2>&1 || exit 1
-# puppet is running
-[ ! -f /var/lib/puppet/state/agent_catalog_run.lock ] || exit 2
-# user present
-[ $(w --no-header | wc -l) -eq 0 ] || exit 3
-# is a virtual machine
-imvirt | grep -qi Physical || exit 4
+Contains a few checks (is anyone logged in, is Puppet running, etc.) before
+shutting off.
 
-# Try to unmount /home and /tmp (both tmpfs)
-if grep $'tmpfs\t/home' /etc/fstab > /dev/null; then
-	umount /home 2> /dev/null && mount /home || exit 255
-fi
-umount /tmp 2> /dev/null && mount /tmp
+If a kernel update is needed, the desktop will restart instead of suspending.
+"""
+import argparse
+import os
+import subprocess
+import sys
 
-# Check if a kernel update is needed, restart if so
-if [ -f /var/run/apt-dater-host_reboot ]; then
-    rm -f /var/run/apt-dater-host_reboot
-    shutdown -r now > /dev/null 2>&1
-fi
+from ocflib.lab.hours import Day
 
-# Enable WOL and sleep until magic packet wakes you up
-/sbin/ethtool -s eth0 wol g
-/usr/sbin/pm-suspend > /dev/null
+
+devnull = open('/dev/null', 'w')
+
+
+def file_is_open(path):
+    """Return whether a file is open by any process on the system."""
+    return subprocess.call(('lsof', '--', path), stdout=devnull, stderr=devnull) == 0
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--force', '-f', action='store_true', help='force suspend, even if the lab is open')
+    parser.add_argument('--quiet', '-q', action='store_true', help='stay quiet except for unexpected errors')
+    args = parser.parse_args(argv)
+
+    def report(line):
+        if not args.quiet:
+            print('[ocf-suspend] {}'.format(line), file=sys.stderr)
+
+    # Don't sleep if...
+    # ...lab is open
+    if Day.from_date().is_open() and not args.force:
+        report('not suspending as lab is open')
+        return 1
+
+    # ...we're installing packages
+    if file_is_open('/var/lib/dpkg/lock'):
+        report('not suspending as packages are installing')
+        return 2
+
+    # ...puppet is running
+    if file_is_open('/var/lib/puppet/state/agent_catalog_run.lock'):
+        report('not suspending as puppet is running')
+        return 2
+
+    # ...a user is logged in
+    if subprocess.check_output(('w', '--no-header')):
+        report('not suspending as user(s) are logged in')
+        return 3
+
+    # ...we're a virtual machine
+    if subprocess.check_output(('imvirt')) != b'Physical\n':
+        report('not suspending as this is not a physical machine')
+        return 4
+
+    report('checks passed, okay to suspend')
+
+    # Try to remount /home to free up space.
+    subprocess.check_call(('umount', '/home'))
+    subprocess.check_call(('mount', '/home'))
+
+    reboot_needed = '/var/run/apt-dater-host_reboot'
+    if os.path.isfile(reboot_needed):
+        # Reboot because there's a kernel update.
+        os.remove(reboot_needed)
+        report('rebooting because of newer installed kernel')
+        subprocess.check_call(('shutdown', '-r', 'now'), stdout=devnull, stderr=devnull)
+    else:
+        # Enable wake-on-LAN and go to sleep.
+        report('going to sleep')
+        subprocess.check_call(('/sbin/ethtool', '-s', 'eth0', 'wol', 'g'), stdout=devnull, stderr=devnull)
+        subprocess.check_call(('/usr/sbin/pm-suspend'), stdout=devnull, stderr=devnull)
+
+
+if __name__ == '__main__':
+    exit(main())
