@@ -74,7 +74,7 @@ def main(argv=None):
         # Enable wake-on-LAN and go to sleep.
         report('going to sleep')
         subprocess.check_call(('/sbin/ethtool', '-s', 'eth0', 'wol', 'g'), stdout=devnull, stderr=devnull)
-        subprocess.check_call(('/usr/sbin/pm-suspend'), stdout=devnull, stderr=devnull)
+        subprocess.call(('/usr/sbin/pm-suspend'), stdout=devnull, stderr=devnull)
 
 
 if __name__ == '__main__':
