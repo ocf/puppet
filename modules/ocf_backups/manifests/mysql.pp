@@ -1,5 +1,6 @@
 class ocf_backups::mysql {
-  package { 'mysql-client':; }
+  include ocf::packages::mysql
+
   file {
     '/opt/share/backups/my.cnf':
       source => 'puppet:///private/backups/my.cnf',
