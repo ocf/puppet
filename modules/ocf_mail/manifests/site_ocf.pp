@@ -43,7 +43,6 @@ class ocf_mail::site_ocf {
     'update-aliases':
       command => '/usr/local/sbin/update-aliases',
       user    => root,
-      hour    => '*',
       minute  => '*/15',
       require => [
         File['/usr/local/sbin/update-aliases'],
@@ -53,7 +52,6 @@ class ocf_mail::site_ocf {
     'update-nomail-hashes':
       command => '/usr/local/sbin/update-nomail-hashes',
       user    => root,
-      hour    => '*',
       minute  => '*/15',
       require => [
         File['/usr/local/sbin/update-nomail-hashes'],

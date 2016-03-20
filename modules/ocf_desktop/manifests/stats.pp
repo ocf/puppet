@@ -30,10 +30,6 @@ class ocf_desktop::stats {
     ensure   => present,
     command  => '/opt/stats/update.sh > /dev/null',
     user     => 'ocfstats',
-    weekday  => '*',
-    month    => '*',
-    monthday => '*',
-    hour     => '*',
     minute   => '*';
   }
 }

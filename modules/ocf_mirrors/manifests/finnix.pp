@@ -23,7 +23,6 @@ class ocf_mirrors::finnix {
   cron { 'finnix':
     command => '/opt/mirrors/project/finnix/sync-releases > /dev/null',
     user    => 'mirrors',
-    hour    => '*',
     minute  => '41';
   }
 }

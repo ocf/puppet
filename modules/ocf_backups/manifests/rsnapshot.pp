@@ -33,7 +33,6 @@ class ocf_backups::rsnapshot {
   Cron {
     user   => root,
     minute => '0',
-    month  => '*'
   }
 
   cron {
@@ -41,28 +40,22 @@ class ocf_backups::rsnapshot {
     'rsnapshot-monthly':
       command  => "${rsnapshot} monthly",
       hour     => '22',
-      monthday => '1',
-      weekday  => '*';
+      monthday => '1';
 
     # 12am Saturday mornings
     'rsnapshot-weekly':
       command  => "${rsnapshot} weekly",
       hour     => '0',
-      monthday => '*',
       weekday  => '6';
 
     # 2am daily
     'rsnapshot-daily':
       command  => "${rsnapshot} sync && ${rsnapshot} daily",
-      hour     => '2',
-      monthday => '*',
-      weekday  => '*';
+      hour     => '2';
 
     # check rsnapshot backups to ensure they're actually happening
     'check-rsnapshot-backups':
       command  => '/opt/share/backups/check-rsnapshot-backups',
-      hour     => '10',
-      monthday => '*',
-      weekday  => '*';
+      hour     => '10';
   }
 }

@@ -71,7 +71,6 @@ define ocf_mirrors::ftpsync(
   cron { "ftpsync-${title}":
     command => "BASEDIR=${project_path} ${project_path}/bin/ftpsync > /dev/null 2>&1",
     user    => 'mirrors',
-    hour    => '*',
     minute  => $cron_minute,
     require => File["${project_path}/bin", "${project_path}/etc/ftpsync.conf"];
   }
