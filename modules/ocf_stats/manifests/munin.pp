@@ -1,5 +1,7 @@
 # munin master config
 class ocf_stats::munin {
+  include ocf_ssl
+
   package {
     ['munin', 'nmap']:;
   }
@@ -31,60 +33,79 @@ class ocf_stats::munin {
   include apache::mod::fcgid
   include apache::mod::rewrite
 
-  apache::vhost { 'munin.ocf.berkeley.edu':
-    serveraliases => ['munin'],
-    port          => 80,
-    docroot       => '/var/cache/munin/www/static/',
+  apache::vhost {
+    'munin':
+      servername    => 'munin.ocf.berkeley.edu',
+      port          => 443,
+      docroot       => '/var/cache/munin/www/static/',
 
-    rewrites => [
-      {
-        rewrite_rule => '^/favicon.ico /var/cache/munin/www/static/favicon.ico [L]'
-      },
-      {
-        rewrite_rule => '^/static/(.*) /var/cache/munin/www/static/$1 [L]'
-      },
-      {
-        rewrite_rule => '^(/.*\.html)?$ /munin-cgi/munin-cgi-html/$1 [PT]'
-      },
-      {
-        rewrite_rule => '^/munin-cgi/munin-cgi-graph/(.*) /$1'
-      },
-      {
-        rewrite_cond => '%{REQUEST_URI} !^/static',
-        rewrite_rule => '^/(.*.png)$  /munin-cgi/munin-cgi-graph/$1 [L,PT]'
-      }
-    ],
+      ssl           => true,
+      ssl_key       => "/etc/ssl/private/${::fqdn}.key",
+      ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
+      ssl_chain     => '/etc/ssl/certs/incommon-intermediate.crt',
 
-    scriptaliases => [
-      {
-        alias => '/munin-cgi/munin-cgi-html',
-        path  => '/usr/lib/munin/cgi/munin-cgi-html'
-      },
-      {
-        alias => '/munin-cgi/munin-cgi-graph',
-        path  => '/usr/lib/munin/cgi/munin-cgi-graph'
-      }
-    ],
+      headers       => ['set Strict-Transport-Security max-age=31536000'],
 
-    directories => [
-      {
-        path         => '/var/cache/munin/www/static/',
-        auth_require => 'all granted',
-      },
-      {
-        path         => '/munin-cgi/munin-cgi-html',
-        provider     => location,
-        options      => '+ExecCGI',
-        sethandler   => 'fcgid-script',
-        auth_require => 'all granted',
-      },
-      {
-        path         => '/munin-cgi/munin-cgi-graph',
-        provider     => location,
-        options      => '+ExecCGI',
-        sethandler   => 'fcgid-script',
-        auth_require => 'all granted',
-      }
-    ];
+      rewrites => [
+        {
+          rewrite_rule => '^/favicon.ico /var/cache/munin/www/static/favicon.ico [L]'
+        },
+        {
+          rewrite_rule => '^/static/(.*) /var/cache/munin/www/static/$1 [L]'
+        },
+        {
+          rewrite_rule => '^(/.*\.html)?$ /munin-cgi/munin-cgi-html/$1 [PT]'
+        },
+        {
+          rewrite_rule => '^/munin-cgi/munin-cgi-graph/(.*) /$1'
+        },
+        {
+          rewrite_cond => '%{REQUEST_URI} !^/static',
+          rewrite_rule => '^/(.*.png)$  /munin-cgi/munin-cgi-graph/$1 [L,PT]'
+        }
+      ],
+
+      scriptaliases => [
+        {
+          alias => '/munin-cgi/munin-cgi-html',
+          path  => '/usr/lib/munin/cgi/munin-cgi-html'
+        },
+        {
+          alias => '/munin-cgi/munin-cgi-graph',
+          path  => '/usr/lib/munin/cgi/munin-cgi-graph'
+        }
+      ],
+
+      directories => [
+        {
+          path         => '/var/cache/munin/www/static/',
+          auth_require => 'all granted',
+        },
+        {
+          path         => '/munin-cgi/munin-cgi-html',
+          provider     => location,
+          options      => '+ExecCGI',
+          sethandler   => 'fcgid-script',
+          auth_require => 'all granted',
+        },
+        {
+          path         => '/munin-cgi/munin-cgi-graph',
+          provider     => location,
+          options      => '+ExecCGI',
+          sethandler   => 'fcgid-script',
+          auth_require => 'all granted',
+        }
+      ];
+
+    'munin-redirect':
+      servername      => 'munin.ocf.berkeley.edu',
+      serveraliases   => [
+        'munin',
+      ],
+      port            => 80,
+      docroot         => '/var/www/html',
+
+      redirect_status => 301,
+      redirect_dest   => 'https://munin.ocf.berkeley.edu/';
   }
 }
