@@ -19,8 +19,6 @@ class ocf_desktop::suspend {
   package {
     # ACPI support
     'acpi-support-base':;
-    # install anacron since machine is not continuously running
-    'anacron':;
     # install ethtool to allow script to enable WOL
     'ethtool':;
     # power management
@@ -29,9 +27,8 @@ class ocf_desktop::suspend {
 
   cron { 'ocf-suspend':
     command => '/usr/local/sbin/ocf-suspend -q',
-    minute  => '*',
-    hour    => '*',
-    require => [Package['anacron'], File['/usr/local/sbin/ocf-suspend']],
+    minute  => '*/15',
+    require => File['/usr/local/sbin/ocf-suspend'],
   }
 
   # restart acpi
