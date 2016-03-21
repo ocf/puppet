@@ -46,7 +46,6 @@ class ocf::extrapackages {
     'ghc',
     'git-buildpackage',
     'google-gsutil',
-    'iceweasel',
     'ikiwiki',
     'inotify-tools',
     'intltool',

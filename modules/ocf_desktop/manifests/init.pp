@@ -6,8 +6,8 @@ class ocf_desktop ($staff = false) {
   include crondeny
   include defaults
   include drivers
+  include firefox
   include grub
-  include iceweasel
   include modprobe
   include packages
   include pulse
