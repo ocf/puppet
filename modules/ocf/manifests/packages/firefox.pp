@@ -1,4 +1,4 @@
-class ocf_desktop::firefox {
+class ocf::packages::firefox {
   package {
     'firefox':
       ensure => present;
