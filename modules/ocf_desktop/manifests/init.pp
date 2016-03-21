@@ -1,4 +1,8 @@
 class ocf_desktop ($staff = false) {
+  class { 'ocf::apt::i386':
+    stage => first,
+  }
+
   include ocf::acct
   include ocf::packages::cups
   include ocf::packages::chrome
