@@ -20,7 +20,7 @@ class ocf_ldap {
       require => Package['slapd'];
 
     '/etc/ldap/schema/puppet.schema':
-      source  => 'puppet:///contrib/local/ocf_ldap/puppet.schema',
+      source  => 'puppet:///modules/ocf_ldap/puppet.schema',
       require => Package['slapd'];
 
     '/etc/default/slapd':

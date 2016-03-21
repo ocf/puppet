@@ -20,23 +20,20 @@ class ocf_desktop::xsession ($staff = false) {
     '/usr/local/bin/fix-audio':
       mode    => '0755',
       source  => 'puppet:///modules/ocf_desktop/xsession/fix-audio';
-    # share directory with icons and wallpapers
-    '/opt/share/xsession':
-      ensure  => directory,
-      recurse => true,
-      purge   => true,
-      force   => true,
-      backup  => false,
-      source  => 'puppet:///contrib/desktop/xsession',
-      require => Class['ocf::puppet'];
     # list of possible xsessions
     '/usr/share/xsessions':
       ensure  => directory,
+      source  => 'puppet:///modules/ocf_desktop/xsession/xsessions',
       recurse => true,
       purge   => true,
       force   => true,
-      backup  => false,
-      source  => 'puppet:///modules/ocf_desktop/xsession/xsessions'
+      backup  => false;
+    '/opt/share/xsession':
+      ensure  => directory;
+    '/opt/share/xsession/images':
+      source  => 'puppet:///modules/ocf_desktop/xsession/images/',
+      recurse => true,
+      purge   => true;
   }
 
   # wallpaper symlink
@@ -47,9 +44,8 @@ class ocf_desktop::xsession ($staff = false) {
 
   file { '/opt/share/wallpaper':
     ensure  => link,
-    links   => manage,
-    target  => "/opt/share/xsession/${wallpaper}",
-    require => File['/opt/share/xsession'];
+    target  => "/opt/share/xsession/images/${wallpaper}.png",
+    require => File['/opt/share/xsession/images'];
   }
 
   # lightdm configuration
@@ -79,15 +75,15 @@ class ocf_desktop::xsession ($staff = false) {
   }
 
   file { "/opt/share/xsession/${po}":
-      source  => "puppet:///modules/ocf_desktop/xsession/lightdm/${po}";
+    source  => "puppet:///modules/ocf_desktop/xsession/lightdm/${po}";
   }
 
   exec { 'lightdm-greeter-compile-po':
-      command     => "msgfmt -o /usr/share/locale/en_US/LC_MESSAGES/lightdm-gtk-greeter.mo \
-                      /opt/share/xsession/${po}",
-      subscribe   => File["/opt/share/xsession/${po}"],
-      refreshonly => true,
-      require     => Package['lightdm-gtk-greeter-ocf', 'gettext'];
+    command     => "msgfmt -o /usr/share/locale/en_US/LC_MESSAGES/lightdm-gtk-greeter.mo \
+                    /opt/share/xsession/${po}",
+    subscribe   => File["/opt/share/xsession/${po}"],
+    refreshonly => true,
+    require     => Package['lightdm-gtk-greeter-ocf', 'gettext'];
   }
 
   # use ocf logo on login screen
@@ -95,7 +91,9 @@ class ocf_desktop::xsession ($staff = false) {
     ['/usr/share/icons/Adwaita', '/usr/share/icons/Adwaita/256x256', '/usr/share/icons/Adwaita/256x256/status']:
       ensure => directory;
     '/usr/share/icons/Adwaita/256x256/status/avatar-default.png':
-      source => 'puppet:///contrib/desktop/ocf-color-256.png';
+      ensure  => link,
+      target  => '/opt/share/xsession/images/ocf-color-256.png',
+      require => File['/opt/share/xsession/images'];
   }
 
   # polkit configuration
@@ -126,12 +124,11 @@ class ocf_desktop::xsession ($staff = false) {
 
   # disable user switching and screen locking (prevent non-staff users from
   # executing the necessary binaries)
-  file {
-    '/usr/bin/xflock4':
-      owner   => root,
-      group   => ocfstaff,
-      mode    => '0754',
-      require => Package['xscreensaver'];
+  file { '/usr/bin/xflock4':
+    owner   => root,
+    group   => ocfstaff,
+    mode    => '0754',
+    require => Package['xscreensaver'];
   }
 
   # improve font rendering

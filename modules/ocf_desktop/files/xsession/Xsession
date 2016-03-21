@@ -21,7 +21,7 @@ echo "[Desktop Entry]
 Type=Application
 Name=Print Queue
 Exec=x-www-browser http://printhost/jobs/
-Icon=/opt/share/xsession/icons/printer-printing.svg" > $HOME/Desktop/printq.desktop
+Icon=xfce-printer.png" > $HOME/Desktop/printq.desktop
 
 # Word Processor
 echo "[Desktop Entry]
@@ -38,25 +38,26 @@ Type=Application
 Icon=libreoffice-startcenter" > $HOME/Desktop/office.desktop
 
 # Iceweasel
+# TODO: this icon should be replaced with Firefox icon (rt#4638)
 echo "[Desktop Entry]
 Name=Firefox
 Exec=iceweasel
 Type=Application
-Icon=/opt/share/xsession/icons/firefox.png" > $HOME/Desktop/iceweasel.desktop
+Icon=iceweasel" > $HOME/Desktop/iceweasel.desktop
 
 # Chrome
 echo "[Desktop Entry]
 Name=Chrome
 Exec=google-chrome --start-maximized
 Type=Application
-Icon=/opt/share/xsession/icons/chrome.png" > $HOME/Desktop/chrome.desktop
+Icon=google-chrome" > $HOME/Desktop/chrome.desktop
 
 # Local Computer
 echo "[Desktop Entry]
 Type=Application
 Name=Local Computer
 Exec=thunar computer:/
-Icon=/opt/share/xsession/icons/computer-4.svg" > $HOME/Desktop/computer.desktop
+Icon=computer.png" > $HOME/Desktop/computer.desktop
 
 # SSH Terminal
 echo "[Desktop Entry]
@@ -84,12 +85,7 @@ if [ -d "$HOME/remote" -a -z "`find "$HOME/remote" -maxdepth 0 -empty`" ]; then
   Type=Application
   Name=OCF File Storage
   Exec=thunar $HOME/remote
-  Icon=/opt/share/xsession/icons/media-floppy-3.svg" > $HOME/Desktop/sftp.desktop
-  # Copy desktop shell rc if available
-  #[ -f "$HOME/remote/.bashrc_desktop" ] && cp "$HOME/remote/.bashrc_desktop" "$HOME/.bashrc"
-  #[ -f "$HOME/remote/.cshrc_desktop" ] && cp "$HOME/remote/.cshrc_desktop" "$HOME/.cshrc"
-  #[ -f "$HOME/remote/.tcshrc_desktop" ] && cp "$HOME/remote/.tcshrc_desktop" "$HOME/.tcshrc"
-  #[ -f "$HOME/remote/.zshrc_desktop" ] && cp "$HOME/remote/.zshrc_desktop" "$HOME/.zshrc"
+  Icon=media-floppy.png" > $HOME/Desktop/sftp.desktop
 else
   rmdir $HOME/remote
   rm $HOME/.gtk-bookmarks

@@ -9,11 +9,6 @@ class ocf::packages::ssh {
       source  => 'puppet:///modules/ocf/ssh_config',
       require => Package['openssh-client'],
     ;
-    # provide list of ssh hosts
-    '/etc/ssh/ssh_known_hosts':
-      source  => 'puppet:///contrib/common/ssh_known_hosts',
-      require => Package['openssh-client'],
-    ;
   }
 
   service { 'ssh':

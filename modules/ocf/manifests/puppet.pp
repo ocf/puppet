@@ -58,12 +58,6 @@ class ocf::puppet {
 
   # install custom scripts
   file {
-    # list files in a directory managed by puppet
-    '/usr/local/sbin/puppet-ls':
-      mode    => '0755',
-      source  => 'puppet:///contrib/common/puppet-ls',
-      require => Package['puppet'],
-    ;
     # trigger a puppet run by the agent
     '/usr/local/sbin/puppet-trigger':
       mode    => '0755',

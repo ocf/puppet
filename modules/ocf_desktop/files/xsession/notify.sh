@@ -1,8 +1,9 @@
 #!/bin/sh
 ssh="/usr/bin/ssh -o ConnectTimeout=2 -o BatchMode=yes -n -T ssh"
-notify_send="/usr/bin/notify-send --expire-time=30000 --icon=/opt/share/xsession/backgrounds/ocf_logo_borderless.png"
+notify_send="/usr/bin/notify-send --expire-time=30000 --icon=/opt/share/xsession/images/ocf-color.png"
 
 # display staff in lab
+# TODO: switch this to ocfweb
 lab_staff=$(curl -s http://stats/staff.cgi)
 
 if [ -n "$lab_staff" ]; then
