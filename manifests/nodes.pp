@@ -1,4 +1,5 @@
 node default {
+  class { 'ocf::apt': stage => first }
   class { 'ocf::groups': stage => first }
   class { 'ocf::puppet': stage => first }
   class { 'ocf::rootpw': stage => first }
@@ -22,7 +23,6 @@ node default {
 
   case $type {
     'server': {
-      class { 'ocf::apt': stage => first }
 
       if $owner == undef {
         case $::hostname {

@@ -1,5 +1,4 @@
 class ocf_desktop ($staff = false) {
-  class { 'ocf::apt': stage => first, desktop => true }
   include ocf::acct
   include ocf::packages::cups
   include ocf::packages::chrome
