@@ -1,4 +1,7 @@
 class ocf_csgo {
+  class { 'ocf::apt::i386':
+    stage => first,
+  }
   user { 'ocfcsgo':
     comment => 'Counter-Strike Server',
     home    => '/opt/csgo',
@@ -25,15 +28,10 @@ class ocf_csgo {
   }
 
   package {
-    'lib32gcc1':
-      require => Exec['add-i386'];
+    'lib32gcc1':;
   }
 
   exec {
-    'add-i386':
-      command => 'dpkg --add-architecture i386',
-      unless  => 'dpkg --print-foreign-architectures | grep i386';
-
     'download-steamcmd':
       command => 'curl http://media.steampowered.com/installer/steamcmd_linux.tar.gz | tar xzf - -C /opt/csgo/bin',
       user    => ocfcsgo,
