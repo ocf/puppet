@@ -1,4 +1,8 @@
 class ocf::packages::chrome {
+  class { 'ocf::packages::chrome::apt':
+    stage => first,
+  }
+
   package { 'google-chrome-stable':; }
 
   file {
@@ -14,6 +18,8 @@ class ocf::packages::chrome {
       source  => 'puppet:///modules/ocf/chrome/master_preferences',
       require => Package['google-chrome-stable'];
 
+    # Disable Google's broken cronjob which sets up the wrong apt sources
+    # (rt#4589).
     '/opt/google/chrome/cron/google-chrome':
       mode    => '0755',
       content => "#!/bin/sh\n# Disabled by OCF (rt#4589)\n",

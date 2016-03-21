@@ -1,4 +1,8 @@
 class ocf_desktop::steam {
+  class { 'ocf::apt::i386':
+    stage => first,
+  }
+
   package {
     # Preseeded installations are currently broken on Debian steam:
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=772598
