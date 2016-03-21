@@ -1,4 +1,6 @@
 class ocf_desktop::drivers {
+  include ocf::apt::i386
+
   # install proprietary nvidia drivers
   if $::gfx_brand == 'nvidia' {
     package { ['nvidia-driver', 'libgl1-nvidia-glx:i386']:; }

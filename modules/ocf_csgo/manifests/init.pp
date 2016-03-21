@@ -1,7 +1,6 @@
 class ocf_csgo {
-  class { 'ocf::apt::i386':
-    stage => first,
-  }
+  include ocf::apt::i386
+
   user { 'ocfcsgo':
     comment => 'Counter-Strike Server',
     home    => '/opt/csgo',
