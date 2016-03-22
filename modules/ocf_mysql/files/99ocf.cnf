@@ -2,7 +2,7 @@
 bind-address = 0.0.0.0
 
 # https://mariadb.com/kb/en/mariadb/optimizing-key_buffer_size/
-key_buffer = 2G
+key_buffer = 512M
 
 max_connections = 1000
 max_user_connections = 50
@@ -18,9 +18,9 @@ query_cache_size = 32M
 # https://mariadb.com/kb/en/mariadb/xtradbinnodb-server-system-variables/
 # https://dev.mysql.com/doc/refman/5.6/en/innodb-multiple-buffer-pools.html
 innodb_file_per_table = 1
-innodb_buffer_pool_size = 8G
-innodb_buffer_pool_instances = 8
-innodb_flush_log_at_trx_commit = 1
+# each pool should have at least 1 GB
+innodb_buffer_pool_size = 6G
+innodb_buffer_pool_instances = 6
 
 # http://dev.mysql.com/doc/refman/5.6/en/innodb-parameters.html#sysvar_innodb_log_buffer_size
 innodb_log_buffer_size = 256M
