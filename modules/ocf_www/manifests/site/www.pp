@@ -94,6 +94,9 @@ class ocf_www::site::www {
   apache::vhost {
     # redirect any HTTP -> canonical HTTPS
     'www-http-redirect':
+      # priority 10 so that this becomes the catch-all for http
+      priority        => 10,
+
       servername      => 'www.ocf.berkeley.edu',
       serveraliases   => [
         'www',
@@ -112,6 +115,9 @@ class ocf_www::site::www {
 
     # redirect weird HTTPS -> canonical HTTPS
     'www-https-redirect':
+      # priority 10 so that this becomes the catch-all for https
+      priority        => 10,
+
       servername      => 'ocf.berkeley.edu',
       serveraliases   => ['dev-ocf.berkeley.edu', 'secure.ocf.berkeley.edu', $::fqdn],
       port            => 443,
