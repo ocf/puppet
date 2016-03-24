@@ -63,6 +63,8 @@ server {
 		proxy_set_header X-Real-IP \$remote_addr;
 	}
 
+    access_log /var/log/nginx/vhost_access.log vhost;
+
 	$config_end
 }
 EOF
@@ -75,6 +77,8 @@ server {
 	listen [::]:80;
 	server_name "$vhost" "$vhost_dev";
 	return 301 https://\$server_name\$request_uri;
+
+    access_log /var/log/nginx/vhost_access.log vhost;
 }
 EOF
 	fi

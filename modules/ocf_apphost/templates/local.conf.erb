@@ -7,3 +7,8 @@ server_names_hash_bucket_size 128;
 ssl_dhparam /etc/ssl/dhparam.pem;
 ssl_protocols <%= @ssl_protocols %>;
 ssl_ciphers '<%= @ssl_ciphersuite %>';
+
+# combined log format, with virtual host added (rt#4459)
+log_format vhost '$host $remote_addr - $remote_user [$time_local] '
+                    '"$request" $status $body_bytes_sent '
+                                        '"$http_referer" "$http_user_agent"';
