@@ -47,10 +47,9 @@ class ocf::puppet {
     ;
   }
 
+  # TODO: remove this in a few weeks
   mount { '/var/lib/puppet/concat':
-    device  => 'tmpfs',
-    fstype  => 'tmpfs',
-    options => 'noatime,nodev,nosuid';
+    ensure  => absent,
   }
 
   # install augeas
