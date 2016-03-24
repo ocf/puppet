@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+"""Pre-hook before jobs print.
+
+All this does is check quota against the new database and deny if we've
+exceeded it.
+
+Because we hack this in via "askconfirmation", the user will get an email
+saying that they cancelled the job. So we also send them another email about
+the quota, which is mildly annoying, but I don't see an easy way to avoid it.
+
+This script is temporary and will be scrapped after the enforcer migration.
+"""
+import email.mime.text
+import inspect
+import os
+import socket
+import subprocess
+from pprint import pformat
+from textwrap import dedent
+from traceback import format_exc
+
+from ocflib.printing.quota import get_connection
+from ocflib.printing.quota import get_quota
+
+
+def main(argv=None):
+    try:
+        price = int(float(os.environ['PYKOTAPRECOMPUTEDJOBPRICE']))
+        user = os.environ['PYKOTAUSERNAME']
+
+        # check for weird prices
+        assert price > 0, price
+
+        # can they afford it in enforcer db?
+        with get_connection() as c:
+            quota = get_quota(c, user)
+
+            if quota.daily < price or quota.semesterly < price:
+                send_mail(
+                    user,
+                    '[OCF] Your print job was rejected.',
+                    (
+                        'Your most recent print job was rejected.\n' +
+                        '\n' +
+                        'You tried to print {} page(s), but you have only {} page(s) left today (and {} left for the whole semester).\n'.format(  # noqa
+                            price,
+                            quota.daily,
+                            quota.semesterly,
+                        ) +
+                        '\n'
+                        'If you think this is in error, please reply to this email.\n'
+                        'Open Computing Facility'
+                    ),
+                )
+                print('CANCEL')
+    except:
+        send_problem_report(dedent('''\
+        An exception occured in the PyKota <-> enforcer prehook bridge:
+
+        {traceback}
+
+        Environment:
+        {environ}
+        ''').format(
+            traceback=format_exc(),
+            environ=pformat(dict(os.environ)),
+        ))
+        raise
+
+
+def send_mail(to, subject, body, sender='Open Computing Facility <help@ocf.berkeley.edu>'):
+    """Slightly modified version from ocflib that is still compatible with
+    Python 3.2.
+    """
+
+    msg = email.mime.text.MIMEText(body)
+
+    msg['Subject'] = subject
+    msg['From'] = sender
+    msg['To'] = to
+
+    # we send the message via sendmail, since we may one day prohibit traffic
+    # to port 25 that doesn't go via the system mailserver
+    p = subprocess.Popen(('/usr/sbin/sendmail', '-t', '-oi'),
+                         stdin=subprocess.PIPE)
+    p.communicate(msg.as_string().encode('utf8'))
+
+
+def send_problem_report(problem):
+    """Slightly modified version from ocflib that is still compatible with
+    Python 3.2.
+    """
+
+    def format_frame(frame):
+        _, filename, line, funcname, _, _ = frame
+        return '{}:{} ({})'.format(filename, line, funcname)
+
+    callstack = '\n        by '.join(map(format_frame, inspect.stack()))
+    body = \
+        """A problem was encountered and reported via ocflib:
+
+{problem}
+
+====
+Hostname: {hostname}
+Callstack:
+    at {callstack}
+""".format(problem=problem, hostname=socket.getfqdn(), callstack=callstack)
+
+    send_mail(
+        'root@ocf.berkeley.edu',
+        '[ocflib] Problem report from ' + socket.getfqdn(),
+        body,
+        sender='ocflib <root@ocf.berkeley.edu>',
+    )
+
+
+if __name__ == '__main__':
+    exit(main())

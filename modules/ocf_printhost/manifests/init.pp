@@ -67,6 +67,10 @@ class ocf_printhost {
       mode    => '0640',
       source  => 'puppet:///modules/ocf_printhost/pykotadmin.conf',
     ;
+    '/etc/pykota/ocf-prehook':
+      mode    => '0755',
+      source  => 'puppet:///modules/ocf_printhost/ocf-prehook',
+    ;
     '/etc/pykota/ocf-posthook':
       mode    => '0755',
       source  => 'puppet:///modules/ocf_printhost/ocf-posthook',
