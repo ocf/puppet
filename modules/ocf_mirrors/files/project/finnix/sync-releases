@@ -1,5 +1,5 @@
 #/bin/sh -eu
-rsync -a \
+rsync-no-vanished -a \
     --password-file /opt/mirrors/project/finnix/password \
     rsync://ucb-ocf@rsync-master.finnix.org/finnix-releases-master/ /opt/mirrors/ftp/finnix-releases
 

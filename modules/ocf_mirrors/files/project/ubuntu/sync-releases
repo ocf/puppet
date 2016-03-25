@@ -1,5 +1,6 @@
 #/bin/dash
 # source: https://wiki.ubuntu.com/Mirrors/Scripts (2014-08-11)
+# modified by OCF to use rsync-no-vanished
 
 fatal() {
   echo "$1" >&2
@@ -23,7 +24,7 @@ if [ ! -d ${BASEDIR} ]; then
   mkdir -p ${BASEDIR} || fatal "Creation of ${BASEDIR} failed."
 fi
 
-rsync --verbose --recursive --times --links --hard-links \
+rsync-no-vanished --verbose --recursive --times --links --hard-links \
   --stats --delete-after \
   ${RSYNCSOURCE} ${BASEDIR} || fatal "Failed to rsync from ${RSYNCSOURCE}."
 

@@ -1,5 +1,6 @@
 class ocf_mirrors {
   include ocf_ssl
+  require ocf::packages::rsync
 
   include ftp
   include rsync
