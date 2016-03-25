@@ -24,7 +24,7 @@ if [ ! -d ${BASEDIR} ]; then
   mkdir -p ${BASEDIR} || fatal "Creation of ${BASEDIR} failed."
 fi
 
-rsync-no-vanished --verbose --recursive --times --links --hard-links \
+/usr/local/bin/rsync-no-vanished --verbose --recursive --times --links --hard-links \
   --stats --delete-after \
   ${RSYNCSOURCE} ${BASEDIR} || fatal "Failed to rsync from ${RSYNCSOURCE}."
 
