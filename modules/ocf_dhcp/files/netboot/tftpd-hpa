@@ -2,5 +2,5 @@
 
 TFTP_USERNAME="tftp"
 TFTP_DIRECTORY="/opt/tftp"
-TFTP_ADDRESS="0.0.0.0:69"
+TFTP_ADDRESS=":69"
 TFTP_OPTIONS="--secure"
