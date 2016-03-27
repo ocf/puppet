@@ -10,12 +10,25 @@
 #
 # See for instructions on writing new plugins:
 # http://munin-monitoring.org/wiki/HowToWritePlugins
-define ocf::munin::plugin($source) {
+define ocf::munin::plugin($source, $user = undef) {
+  File {
+    notify  => Service['munin-node'],
+    require => Package['munin-node'],
+  }
+
   file { "/etc/munin/plugins/${title}":
     source  => $source,
-    owner   => root,
-    group   => root,
     mode    => '0755',
-    notify  => Service['munin-node'];
+  }
+
+  if $user != undef {
+    file { "/etc/munin/plugin-conf.d/plugin-${title}":
+      ensure  => present,
+      content => "[${title}]\nuser ${user}\n",
+    }
+  } else {
+    file { "/etc/munin/plugin-conf.d/plugin-${title}":
+      ensure => absent,
+    }
   }
 }

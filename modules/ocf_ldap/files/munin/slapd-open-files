@@ -1,0 +1,18 @@
+#!/bin/bash -eu
+# Munin plugin for reporting the number of open files by slapd.
+
+if [ $# -eq 1 ] && [ "$1" == "config" ]; then
+    echo 'graph_title slapd open files'
+    echo 'graph_vlabel open files'
+    echo 'graph_scale no'
+    echo 'open_files.label open_files'
+    exit 0
+fi
+
+pid=$(pidof slapd)
+
+if [ "$pid" -gt 0 ]; then
+    echo "open_files.value $(ls -l /proc/$pid/fd/ | wc -l)"
+else
+    exit 1
+fi
