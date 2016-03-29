@@ -27,6 +27,10 @@ class ocf_www {
   class { '::apache':
     default_vhost => false,
     mpm_module    => 'worker',
+    log_formats   => {
+      # Log vhost name
+      combined => '%v %h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"'
+    }
   }
 
   include ocf_www::logging
