@@ -90,6 +90,7 @@ class ocf::extrapackages {
     'nodejs',
     'octave',
     'pandoc',
+    'pdfchain',
     'pdfjam',
     'php5-cli',
     'php5-curl',
