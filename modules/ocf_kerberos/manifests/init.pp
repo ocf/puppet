@@ -24,7 +24,8 @@ class ocf_kerberos {
 
     '/etc/heimdal-kdc/check-pass-strength':
       source  => 'puppet:///modules/ocf_kerberos/check-pass-strength',
-      mode    => '0755';
+      mode    => '0755',
+      require => Package['heimdal-kdc'];
   }
 
   # daily git backup
