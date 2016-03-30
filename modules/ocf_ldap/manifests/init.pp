@@ -39,17 +39,18 @@ class ocf_ldap {
       require => Package['slapd', 'heimdal-clients'];
   }
 
-  # daily git backup
-  if $::hostname == 'firestorm' { # todo: don't hard-code hostname
-    package { 'ldap-git-backup':; }
+  # Daily local git backup
+  package { 'ldap-git-backup':; }
 
-    cron { 'ldap-git-backup':
-      command => '/usr/sbin/ldap-git-backup',
-      minute  => 0,
-      hour    => 4,
-      require => Package['ldap-git-backup'];
-    }
+  cron { 'ldap-git-backup':
+    command => '/usr/sbin/ldap-git-backup',
+    minute  => 0,
+    hour    => 4,
+    require => Package['ldap-git-backup'];
+  }
 
+  # Pushing to GitHub is disabled for dev-* hosts to prevent duplicate backups
+  if $::hostname !~ /^dev-/ {
     # GitHub deploy hook and key
     file {
       '/var/backups/ldap/.git/hooks/post-commit':

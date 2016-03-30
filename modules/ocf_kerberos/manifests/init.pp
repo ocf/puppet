@@ -28,18 +28,16 @@ class ocf_kerberos {
       require => Package['heimdal-kdc'];
   }
 
-  # daily git backup
-  if $::hostname == 'firestorm' { # TODO: don't hard-code hostname
-    file { '/usr/local/sbin/kerberos-git-backup':
-      mode   => '0755',
-      source => 'puppet:///modules/ocf_kerberos/kerberos-git-backup';
-    }
+  # Daily local git backup
+  file { '/usr/local/sbin/kerberos-git-backup':
+    mode   => '0755',
+    source => 'puppet:///modules/ocf_kerberos/kerberos-git-backup';
+  }
 
-    cron { 'kerberos-git-backup':
-      command => '/usr/local/sbin/kerberos-git-backup',
-      minute  => 0,
-      hour    => 4,
-      require => File['/usr/local/sbin/kerberos-git-backup'];
-    }
+  cron { 'kerberos-git-backup':
+    command => '/usr/local/sbin/kerberos-git-backup',
+    minute  => 0,
+    hour    => 4,
+    require => File['/usr/local/sbin/kerberos-git-backup'];
   }
 }
