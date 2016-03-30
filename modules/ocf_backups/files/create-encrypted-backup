@@ -45,7 +45,8 @@ dd if="$SNAPSHOT_PATH" bs=32M | pigz |
         --compress-algo none \
         --recipient ckuehl@berkeley.edu \
         --recipient willh@ocf.berkeley.edu \
-        --recipient nick.impicciche@gmail.com |
+        --recipient jvperrin@ocf.berkeley.edu \
+        --recipient mattmcal@ocf.berkeley.edu |
     pv |
     split -d -a 4 -b 5G - \
         "${ARCHIVE_DIRECTORY}/backup-$(date +%Y-%m-%d).img.gz.gpg.part"
