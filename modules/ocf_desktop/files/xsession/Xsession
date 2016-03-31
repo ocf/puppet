@@ -21,7 +21,7 @@ echo "[Desktop Entry]
 Type=Application
 Name=Print Queue
 Exec=x-www-browser http://printhost/jobs/
-Icon=xfce-printer.png" > $HOME/Desktop/printq.desktop
+Icon=xfce-printer" > $HOME/Desktop/printq.desktop
 
 # Word Processor
 echo "[Desktop Entry]
@@ -57,7 +57,7 @@ echo "[Desktop Entry]
 Type=Application
 Name=Local Computer
 Exec=thunar computer:/
-Icon=computer.png" > $HOME/Desktop/computer.desktop
+Icon=computer" > $HOME/Desktop/computer.desktop
 
 # SSH Terminal
 echo "[Desktop Entry]
@@ -85,7 +85,7 @@ if [ -d "$HOME/remote" -a -z "`find "$HOME/remote" -maxdepth 0 -empty`" ]; then
   Type=Application
   Name=OCF File Storage
   Exec=thunar $HOME/remote
-  Icon=media-floppy.png" > $HOME/Desktop/sftp.desktop
+  Icon=media-floppy" > $HOME/Desktop/sftp.desktop
 else
   rmdir $HOME/remote
   rm $HOME/.gtk-bookmarks
