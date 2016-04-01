@@ -38,4 +38,9 @@ class ocf_www::logging {
     command     => '/usr/sbin/logrotate -fv /etc/logrotate.d/apache2',
     refreshonly => true,
   }
+
+  # Log vhost name in error log
+  apache::custom_config { 'error_log':
+    content => "ErrorLogFormat \"%v: [%t] [%l] [pid %P] %F: %E: [client %a] %M\"\n",
+  }
 }
