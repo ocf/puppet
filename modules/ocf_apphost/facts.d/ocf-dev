@@ -1,0 +1,2 @@
+#!/bin/bash -eu
+echo "ocf_dev=$(getent group ocfdev | cut -d: -f4)"
