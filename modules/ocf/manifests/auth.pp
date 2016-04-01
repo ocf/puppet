@@ -10,18 +10,9 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
       recommends => false;
   }
 
-  # TODO: currently pinning a version to force a "downgrade" now that our
-  # patches were accepted upstream; remove this after all machines have
-  # downgraded
-  $unscd_ensure = $::lsbdistcodename ? {
-    jessie  => '0.52-1~ocf1',
-    default => 'present',
-  }
-
   package {
     # UNSCD for LDAP caching
     'unscd':
-      ensure  => $unscd_ensure,
       require => Package['nscd'];
 
     # nss_updatedb for offline LDAP caching
