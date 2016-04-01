@@ -2,7 +2,7 @@
 SITE_CFG='/etc/nginx/sites-enabled/virtual'
 TEMP=$(mktemp)
 
-(
+{
 grep '^[a-z]' ~staff/vhost/vhost-app.conf | \
 while read line; do
     user=$(cut -d' ' -f1 <<< $line)
@@ -83,10 +83,11 @@ server {
 EOF
     fi
 done
-) > "$TEMP"
+} > "$TEMP"
 
 if [ ! -f "$SITE_CFG" ] || ! diff -u "$SITE_CFG" "$TEMP"; then
     mv "$TEMP" "$SITE_CFG"
+    chmod 644 "$SITE_CFG"
     echo "Things changed, reloading nginx..."
     /usr/sbin/service nginx reload
 else
