@@ -22,3 +22,6 @@ ocfdeploy ALL=NOPASSWD: /usr/local/sbin/puppet-trigger
 <% @usudo.each do |user| -%>
 <%= user %> ALL=(ALL) <%= @nopasswd ? 'NOPASSWD:' : '' %> ALL
 <% end -%>
+
+# Allow ocfroot to run a few commands without password for easier scripting.
+%ocfroot ALL=(ALL) NOPASSWD: /usr/local/sbin/puppet-trigger, /sbin/shutdown
