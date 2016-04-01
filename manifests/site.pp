@@ -29,4 +29,4 @@ Apache::Vhost { serveradmin => 'help@ocf.berkeley.edu' }
 # This is bad behavior because the resource is only partially managed by Puppet.
 Cron { minute => '*', hour => '*', weekday => '*', month => '*', monthday => '*' }
 
-$desktop_homepage = 'https://www.ocf.berkeley.edu/about/lab/open-source'
+$desktop_homepage = 'https://ofc.berkeley.edu/announcements/2016-04-01/renaming-ocf'
