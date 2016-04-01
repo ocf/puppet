@@ -55,11 +55,11 @@ class ocf_rt::apache {
           Krb5KeyTab /etc/rt.keytab"
       },
 
-      # allow access to REST API to mail server (anthrax) and IRC bots (locusts) without Kerberos
+      # allow access to REST API to mail server (anthrax) and supernova without Kerberos
       {
         path         => '/REST/1.0',
         provider     => 'location',
-        auth_require => 'ip 127.0.0.1 ::1 169.229.226.35 2607:f140:8801::1:35 169.229.226.201 2607:f140:8801::1:201'
+        auth_require => 'ip 127.0.0.1 ::1 169.229.226.35 2607:f140:8801::1:35 169.229.226.36 2607:f140:8801::1:36'
       },
     ],
 
