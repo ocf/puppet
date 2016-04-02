@@ -38,22 +38,6 @@ class ocf_www::site::www {
 
     rewrites        => [
       {
-        comment      => 'redirect to ofc',
-        rewrite_cond => [
-          # ...but not if it's a userdir
-          '%{REQUEST_URI} !^/~',
-          # ...and not if it's a special Apache thing (e.g. autoindex icons)
-          '%{REQUEST_URI} !^/icons/',
-          # ...and not login
-          '%{REQUEST_URI} !^/login/',
-          # ...and not account
-          '%{REQUEST_URI} !^/account/',
-          # ...and not robots
-          '%{REQUEST_URI} !^/robots.txt',
-        ],
-        rewrite_rule => '^/(.*)$ https://ofc.berkeley.edu/$1 [R=302,L]',
-      },
-      {
         comment      => 'proxy to ocfweb',
         rewrite_cond => [
           # ...but not if it's a userdir
@@ -61,7 +45,7 @@ class ocf_www::site::www {
           # ...and not if it's a special Apache thing (e.g. autoindex icons)
           '%{REQUEST_URI} !^/icons/',
         ],
-        rewrite_rule => '^/(.*)$ http://ocfweb.ocf.berkeley.edu:8001/$1 [P,L]',
+        rewrite_rule => '^/(.*)$ http://ocfweb.ocf.berkeley.edu:8001/$1 [P]',
       }
     ],
 
