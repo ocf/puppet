@@ -74,7 +74,7 @@ def main(argv=None):
         # Reboot because there's a kernel update.
         os.remove(reboot_needed)
         report('rebooting because of newer installed kernel')
-        subprocess.check_call(('shutdown', '-r', 'now'), stdout=DEVNULL, stderr=DEVNULL)
+        subprocess.check_call(('/sbin/shutdown', '-r', 'now'), stdout=DEVNULL, stderr=DEVNULL)
     else:
         # Enable wake-on-LAN and go to sleep.
         report('going to sleep')
