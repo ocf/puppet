@@ -27,10 +27,7 @@ class ocf_desktop::packages {
     # performance improvements
     ['preload', 'readahead-fedora']:;
     # Xorg
-    # Remove xscreensaver temporarily to fix annoying upgrade popup
-    # See rt#4693 for info
-    #['xserver-xorg', 'xscreensaver']:;
-    ['xserver-xorg']:;
+    ['xserver-xorg', 'xscreensaver']:;
     # FUSE
     ['fuse', 'exfat-fuse']:
   }
@@ -46,9 +43,6 @@ class ocf_desktop::packages {
     # temporary line for lightdm-gtk-greeter-ocf installation
     'lightdm-gtk-greeter':
       ensure  => purged;
-    # Temporarily remove xscreensaver (rt#4693)
-    'xscreensaver':
-      ensure => purged;
   }
 
   # install packages without recommends

@@ -116,22 +116,20 @@ class ocf_desktop::xsession ($staff = false) {
       recurse => true;
   }
 
-  # Removed with xscreensaver temporarily to fix annoying upgrade popup
-  # See rt#4693 for info
-  #exec { 'xscreensaver-blanking-only':
-  #  command => 'sed -i \'s/*mode:.*/*mode: blank/\' /etc/X11/app-defaults/XScreenSaver-nogl',
-  #  unless  => 'grep \'mode: blank\' /etc/X11/app-defaults/XScreenSaver-nogl',
-  #  require => Package['xscreensaver'];
-  #}
+  exec { 'xscreensaver-blanking-only':
+    command => 'sed -i \'s/*mode:.*/*mode: blank/\' /etc/X11/app-defaults/XScreenSaver-nogl',
+    unless  => 'grep \'mode: blank\' /etc/X11/app-defaults/XScreenSaver-nogl',
+    require => Package['xscreensaver'];
+  }
 
   # disable user switching and screen locking (prevent non-staff users from
   # executing the necessary binaries)
-  #file { '/usr/bin/xflock4':
-  #  owner   => root,
-  #  group   => ocfstaff,
-  #  mode    => '0754',
-  #  require => Package['xscreensaver'];
-  #}
+  file { '/usr/bin/xflock4':
+    owner   => root,
+    group   => ocfstaff,
+    mode    => '0754',
+    require => Package['xscreensaver'];
+  }
 
   # improve font rendering
   file {
