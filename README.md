@@ -14,7 +14,7 @@ stable release, though probably also work on Debian-derived distros (such as
 
 This README outlines development practices for OCF volunteer staff members. If
 you're a member of the UC Berkeley community and interested in getting
-involved, [check us out][hello]!
+involved, [check us out][about-staff]!
 
 ## Making and testing changes
 ### Your puppet environment
@@ -165,7 +165,7 @@ Instead of overwriting an entire config file just to change one value, try to
 [ocf]: https://www.ocf.berkeley.edu/
 [debian]: https://www.debian.org/
 [ubuntu]: http://www.ubuntu.com/
-[hello]: https://hello.ocf.berkeley.edu/
+[about-staff]: https://www.ocf.berkeley.edu/about/staff
 [jenkins]: https://jenkins.ocf.berkeley.edu/view/puppet-deploy/
 [sobmodules]: http://git-scm.com/book/en/v2/Git-Tools-Submodules
 [augeas]: http://projects.puppetlabs.com/projects/1/wiki/puppet_augeas
