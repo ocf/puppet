@@ -8,35 +8,31 @@ class ocf_mail::site_ocf {
     ['postfix', 'postfix-ldap', 'rt4-clients']:;
   }
 
-  service {
-    'postfix':
-      require => [Package['postfix'], Package['rt4-clients']];
+  service { 'postfix':
+    require => [Package['postfix'], Package['rt4-clients']],
   }
 
-  user {
-    'ocfmail':
-      ensure  => present,
-      name    => 'ocfmail',
-      gid     => 'ocfmail',
-      groups  => ['sys'],
-      home    => '/var/mail',
-      shell   => '/bin/false',
-      system  => true,
-      require => Group['ocfmail'];
+  user { 'ocfmail':
+    ensure  => present,
+    name    => 'ocfmail',
+    gid     => 'ocfmail',
+    groups  => ['sys'],
+    home    => '/var/mail',
+    shell   => '/bin/false',
+    system  => true,
+    require => Group['ocfmail'],
   }
 
-  group {
-    'ocfmail':
-      ensure  => present,
-      name    => 'ocfmail',
-      system  => true;
+  group { 'ocfmail':
+    ensure  => present,
+    name    => 'ocfmail',
+    system  => true,
   }
 
-  exec {
-    'newaliases':
-      refreshonly => true,
-      command     => '/usr/bin/newaliases',
-      require     => Service['postfix'];
+  exec { 'newaliases':
+    refreshonly => true,
+    command     => '/usr/bin/newaliases',
+    require     => Service['postfix'],
   }
 
   cron {
