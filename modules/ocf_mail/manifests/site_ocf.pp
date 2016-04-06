@@ -129,4 +129,9 @@ class ocf_mail::site_ocf {
       ensure  => file,
       source  => 'puppet:///modules/ocf_mail/site_ocf/logrotate/nomail';
   }
+
+  ocf::munin::plugin { 'mails-past-hour':
+    source => 'puppet:///modules/ocf_mail/site_ocf/munin/mails-past-hour',
+    user   => root,
+  }
 }

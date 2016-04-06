@@ -77,6 +77,6 @@ class ocf_ldap {
 
   ocf::munin::plugin { 'slapd-open-files':
     source => 'puppet:///modules/ocf_ldap/munin/slapd-open-files',
-    user => root,
+    user   => root,
   }
 }
