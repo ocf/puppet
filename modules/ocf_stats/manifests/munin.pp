@@ -24,10 +24,14 @@ class ocf_stats::munin {
       mode    => '0755';
   }
 
+  # Generate munin nodes on the 3rd minute of every hour to avoid conflicting
+  # with periodic Munin checks every 5 minutes (rt#4712)
   cron { 'gen-munin-nodes':
     command => '/usr/local/bin/gen-munin-nodes > /etc/munin/munin-conf.d/nodes',
-    special => 'hourly',
-    notify  => Service['munin'];
+    user => 'root',
+    minute  => '03',
+    notify  => Service['munin'],
+    require => File['/usr/local/bin/gen-munin-nodes'];
   }
 
   include apache::mod::fcgid
