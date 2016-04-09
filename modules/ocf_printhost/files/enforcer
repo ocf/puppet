@@ -16,11 +16,10 @@ finished printing, or failed to print.
 import argparse
 import os
 import subprocess
+import sys
 from collections import namedtuple
 from configparser import ConfigParser
 from datetime import datetime
-from sys import argv
-from sys import exit
 from syslog import syslog
 from textwrap import dedent
 from traceback import format_exc
@@ -127,11 +126,29 @@ def send_printer_mail(message, job, quo):
     send_mail_user(job.user, message.subject, body)
 
 
+def do_filter(instream, outstream):
+    subprocess.call(
+        [
+            'gs',
+            '-q',
+            '-sDEVICE=ps2write',
+            '-sPAPERSIZE=letter',
+            '-dFIXEDMEDIA',
+            '-dPSFitPage',
+            '-dCompatibilityLevel=1.4',
+            '-o', '-',
+            '-_',
+        ],
+        stdin=instream,
+        stdout=outstream,
+    )
+
+
 def prehook(c, job):
     quo = quota.get_quota(c, job.user)
     if job.pages > quo.daily:
         send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
-        exit(255)
+        sys.exit(255)
 
 
 def posthook(c, job, success):
@@ -148,15 +165,19 @@ def main(argv):
             description=__doc__,
             formatter_class=argparse.RawDescriptionHelpFormatter,
         )
-        parser.add_argument('command', choices={'prehook', 'posthook'})
+        parser.add_argument('command',
+                            choices={'prehook', 'posthook', 'filter'})
         args = parser.parse_args(argv[1:])
-        job = create_job(os.environ)
-        with quota.get_connection(*read_config()) as c:
-            if args.command == 'prehook':
-                prehook(c, job)
-            else:
-                success = os.environ['TEASTATUS'] == '0'
-                posthook(c, job, success)
+        if args.command == 'filter':
+            do_filter(sys.stdin, sys.stdout)
+        else:
+            job = create_job(os.environ)
+            with quota.get_connection(*read_config()) as c:
+                if args.command == 'prehook':
+                    prehook(c, job)
+                else:
+                    success = os.environ['TEASTATUS'] == '0'
+                    posthook(c, job, success)
     except Exception:
         msg = dedent("""\
             enforcer encountered the following error while processing a job:
@@ -179,4 +200,4 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    main(argv)
+    main(sys.argv)
