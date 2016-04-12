@@ -56,7 +56,7 @@ class ocf_desktop::xsession ($staff = false) {
     '/etc/lightdm/lightdm-gtk-greeter.conf':
       source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm-gtk-greeter.conf';
     '/etc/X11/default-display-manager':
-      source  => 'puppet:///modules/ocf_desktop/xsession/default-display-manager';
+      content => "/usr/sbin/lightdm\n";
     '/etc/lightdm/session-setup':
       mode    => '0755',
       source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/session-setup';
@@ -165,5 +165,10 @@ class ocf_desktop::xsession ($staff = false) {
   # disable xscreensaver new login button
   file { '/etc/X11/Xresources/XScreenSaver':
       content => "XScreenSaver*newLoginCommand:\n"
+  }
+
+  # Use GTK+ theme for Qt 4 apps
+  file { '/etc/xdg/Trolltech.conf':
+      source => 'puppet:///modules/ocf_desktop/xsession/Trolltech.conf';
   }
 }
