@@ -104,7 +104,7 @@ def create_job(env):
     return quota.Job(
         user=env['TEAUSERNAME'],
         time=datetime.now(),
-        pages=int(env['TEACOPIES']) * page_count(env['TEADATAFILE']),
+        pages=page_count(env['TEADATAFILE']),
         queue=queue,
         printer=printer,
         doc_name=env['TEATITLE'],
