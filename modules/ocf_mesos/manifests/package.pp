@@ -1,4 +1,8 @@
 class ocf_mesos::package {
+  class { 'ocf_mesos::package::apt':
+    stage => first,
+  }
+
   package { 'mesos':; }
 
   Service {

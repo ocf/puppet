@@ -1,17 +1,15 @@
 class ocf_mesos::master {
-  include ocf_mesos::chronos
   include ocf_mesos::master::docker_registry
-  include ocf_mesos::master::pypi
   include ocf_mesos::package
 
   file {
     '/etc/mesos/zk':
       ensure => absent,
-      notify  => Service['chronos', 'mesos-master'],
+      notify  => Service['mesos-master'],
       require => Package['mesos'];
     '/etc/mesos/hostname':
       content => "mesos.ocf.berkeley.edu\n",
-      notify  => Service['chronos', 'mesos-master'],
+      notify  => Service['mesos-master'],
       require => Package['mesos'];
   }
 
