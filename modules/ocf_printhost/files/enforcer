@@ -36,6 +36,15 @@ CONF_FILE = '/opt/share/enforcer/enforcer.conf'
 Message = namedtuple('Message', ['subject', 'body'])
 
 
+USER_ERROR_INFO = dedent("""\
+    Username: {user}
+    Time: {time}
+    File: {doc_name}
+    Total pages: {pages}
+    Pages left today: {daily_pages}
+    Pages left this semester: {semester_pages}\
+""")
+
 INSUFFICIENT_QUOTA_MESSAGE = Message(
     subject='[OCF] Your latest print job was rejected',
     body=dedent("""\
@@ -45,13 +54,7 @@ INSUFFICIENT_QUOTA_MESSAGE = Message(
         rejected since it would exceed your daily quota. The daily quota is
         {daily_quota} pages today and the semesterly quota is {semester_quota} pages.
 
-        Username: {user}
-        Time: {time}
-        File: {doc_name}
-        Total pages: {pages}
-        Pages left today: {daily_pages}
-        Pages left this semester: {semester_pages}
-
+        """) + USER_ERROR_INFO + dedent("""
 
         Does something look wrong? Please reply to
 
@@ -70,13 +73,27 @@ PRINTER_ERROR_MESSAGE = Message(
         job failed due to a printer error. If there's something wrong with the
         printers, please alert the publications staff at the desk.
 
-        Username: {user}
-        Time: {time}
-        File: {doc_name}
-        Total pages: {pages}
-        Pages left today: {daily_pages}
-        Pages left this semester: {semester_pages}
+        """) + USER_ERROR_INFO + dedent("""
 
+        Still can't get it to print? Please reply to
+
+            help@ocf.berkeley.edu
+
+
+        """) + MAIL_SIGNATURE
+)
+
+ENFORCER_ERROR_MESSAGE = Message(
+    subject='[OCF] Your latest print job failed',
+    body=dedent("""\
+        Greetings from the Open Computing Facility,
+
+        This email is from the OCF to let you know that your most recent print
+        job failed due to a problem with the print accounting system. OCF staff
+        have been notified of the problem and should fix it shortly. If there
+        is a staff member in lab, you can ask them for help in the meantime.
+
+        """) + USER_ERROR_INFO + dedent("""
 
         Still can't get it to print? Please reply to
 
@@ -160,6 +177,7 @@ def posthook(c, job, success):
 
 
 def main(argv):
+    job, quo = None, None
     try:
         parser = argparse.ArgumentParser(
             description=__doc__,
@@ -196,7 +214,15 @@ def main(argv):
 
         syslog(msg)
         send_problem_report(msg)
-        raise
+        if job:
+            send_printer_mail(
+                ENFORCER_ERROR_MESSAGE,
+                job,
+                quo or quota.UserQuota(user=job.user, daily='Unknown',
+                                       semesterly='Unknown')
+            )
+        # Don't retry; it's not going to print the second time.
+        sys.exit(255)
 
 
 if __name__ == '__main__':
