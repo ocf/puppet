@@ -99,6 +99,7 @@ class ocf::extrapackages {
     'php5-mysql',
     'php5-sqlite',
     'pkg-config',
+    'postgresql-client',
     'pre-commit',
     'pssh',
     'puppet-lint',
