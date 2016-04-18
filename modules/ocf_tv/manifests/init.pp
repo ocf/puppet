@@ -1,5 +1,6 @@
 class ocf_tv {
   include ocf::packages::chrome
+  include ocf::packages::firefox
 
   package {
     [
@@ -7,7 +8,6 @@ class ocf_tv {
       'ffmpeg',
       'flashplugin-nonfree',
       'i3',
-      'iceweasel',
       'nodm',
       'pavucontrol',
       'pulseaudio',
