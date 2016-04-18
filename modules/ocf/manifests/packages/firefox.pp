@@ -1,4 +1,8 @@
 class ocf::packages::firefox {
+  class { 'ocf::packages::firefox::apt':
+    stage => first,
+  }
+
   package {
     'firefox':
       ensure => present;
