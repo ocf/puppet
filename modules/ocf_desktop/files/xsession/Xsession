@@ -37,13 +37,12 @@ Exec=libreoffice
 Type=Application
 Icon=libreoffice-startcenter" > $HOME/Desktop/office.desktop
 
-# Iceweasel
-# TODO: this icon should be replaced with Firefox icon (rt#4638)
+# Firefox
 echo "[Desktop Entry]
 Name=Firefox
-Exec=iceweasel
+Exec=firefox
 Type=Application
-Icon=iceweasel" > $HOME/Desktop/iceweasel.desktop
+Icon=firefox" > $HOME/Desktop/firefox.desktop
 
 # Chrome
 echo "[Desktop Entry]
