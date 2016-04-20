@@ -12,8 +12,7 @@ class ocf_apphost {
   # enable a persistent per-user systemd for all ocfdev users
   file { '/var/lib/systemd/linger':
     ensure  => directory,
-    # This makes sure only ocfdev users get per-user systemd. TODO: is this
-    # desirable?
+    # This makes sure only ocfdev users get per-user systemd.
     recurse => true,
     purge   => true;
   }
