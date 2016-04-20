@@ -9,8 +9,16 @@ class ocf_apphost {
     cron => true;
   }
 
-  # useful for supervising user processes
-  package { 'daemontools':; }
+  # enable a persistent per-user systemd for all ocfdev users
+  file { '/var/lib/systemd/linger':
+    ensure  => directory,
+    # This makes sure only ocfdev users get per-user systemd.
+    recurse => true,
+    purge   => true;
+  }
+  $devs = split($::ocf_dev, ',')
+  # TODO: use a foreach loop once we have the future parser
+  ocf_apphost::systemd_linger { $devs:; }
 
   file {
     '/srv/apps':
