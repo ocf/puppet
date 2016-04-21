@@ -61,6 +61,7 @@ class ocf::packages {
     'bsdmainutils',
     'cpufrequtils',
     'curl',
+    'debian-security-support',
     'dtach',
     'finger',
     'gist',  # not in wheezy, but in our apt repo
