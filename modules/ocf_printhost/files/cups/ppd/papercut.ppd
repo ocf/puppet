@@ -486,7 +486,7 @@
 *cupsModelNumber: 0
 *cupsManualCopies: False
 *cupsLanguages: "en da de es fi fr it ja ko no nl pt ru sv zh_CN zh_TW"
-*cupsFilter: "application/vnd.cups-postscript 0 hpps"
+*cupsFilter: "application/vnd.cups-postscript 0 -"
 *OpenUI *PageSize/Media Size: PickOne
 *OrderDependency: 10 AnySetup *PageSize
 *DefaultPageSize: Letter

@@ -22,7 +22,7 @@
 *TTRasterizer: Type42
 *% Driver-defined attributes...
 *RequiresPageRegion All: True
-*cupsEvenDuplex: True
+*cupsEvenDuplex: False
 *hpPrinterLanguage: "ljmono"
 *cupsModelName: "HP LaserJet"
 *1284DeviceID: "MFG:HP;MDL:hp laserjet p4515x;DES:hp laserjet p4515x;"

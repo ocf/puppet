@@ -1,8 +1,5 @@
 class ocf_printhost::cups {
   package { ['cups', 'cups-bsd']: }
-  ocf::repackage { 'hplip':
-    recommends => false,
-  }
   service { 'cups':
     require => Package['cups', 'cups-bsd'],
   }
