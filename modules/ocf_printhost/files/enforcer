@@ -117,7 +117,8 @@ def page_count(path):
 
 
 def create_job(env):
-    printer, queue = env['TEAPRINTERNAME'].split('-')
+    printer = env['TEAPRINTERNAME']
+    queue = env['CLASS']
     return quota.Job(
         user=env['TEAUSERNAME'],
         time=datetime.now(),
@@ -144,17 +145,30 @@ def send_printer_mail(message, job, quo):
 
 
 def do_filter(instream, outstream):
+    """Force resize to US Letter, and mark as duplex (or not)."""
+    is_duplex = os.environ.get('CLASS') != 'single'
     subprocess.call(
         [
             'gs',
             '-q',
+            '-dBATCH',
+            '-dNOPAUSE',
             '-sDEVICE=ps2write',
+            '-sOutputFile=-',
             '-sPAPERSIZE=letter',
             '-dFIXEDMEDIA',
             '-dPSFitPage',
-            '-dCompatibilityLevel=1.4',
-            '-o', '-',
-            '-_',
+            '-dCompatabilityLevel=1.4',
+        ] +
+        (
+            [
+                '-c',
+                '<</PSDocOptions (<< /Duplex true >> setpagedevice)>> setdistillerparams',
+            ] if is_duplex else []
+        ) +
+        [
+            '-f',
+            '/dev/stdin',
         ],
         stdin=instream,
         stdout=outstream,

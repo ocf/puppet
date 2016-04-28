@@ -1,17 +1,17 @@
 *PPD-Adobe: "4.3"
-*%%%% PPD file for LaserJet p4515x with CUPS.
+*%%%% PPD file for HP LaserJet p4515x with CUPS.
 *%%%% Created by the CUPS PPD Compiler CUPS v1.7.5.
 *% (c) 2008 Copyright Hewlett-Packard Development Company, LP
 *FormatVersion: "4.3"
-*FileVersion: "hpcups 3.12.6"
+*FileVersion: "3.14.6"
 *LanguageVersion: English
 *LanguageEncoding: ISOLatin1
-*PCFileName: "single.ppd"
+*PCFileName: "hp-laserjet_p4515x.ppd"
 *Product: "(HP LaserJet p4515x Printer)"
 *Manufacturer: "HP"
 *ModelName: "HP LaserJet p4515x"
 *ShortNickName: "HP LaserJet p4515x"
-*NickName: "HP LaserJet p4515x, hpcups 3.12.6"
+*NickName: "HP LaserJet p4515x, hpcups 3.14.6"
 *PSVersion: "(3010.000) 0"
 *LanguageLevel: "3"
 *ColorDevice: True
@@ -22,7 +22,7 @@
 *TTRasterizer: Type42
 *% Driver-defined attributes...
 *RequiresPageRegion All: True
-*cupsEvenDuplex: False
+*cupsEvenDuplex: True
 *hpPrinterLanguage: "ljmono"
 *cupsModelName: "HP LaserJet"
 *1284DeviceID: "MFG:HP;MDL:hp laserjet p4515x;DES:hp laserjet p4515x;"
@@ -31,8 +31,6 @@
 *cupsManualCopies: True
 *cupsFilter: "application/vnd.cups-postscript 0 -"
 *cupsLanguages: "en"
-*UIConstraints: *Duplex *OptionDuplex False
-*UIConstraints: *OptionDuplex False *Duplex
 *OpenUI *PageSize/Media Size: PickOne
 *OrderDependency: 10 AnySetup *PageSize
 *DefaultPageSize: Letter
@@ -236,3 +234,4 @@
 *Font Times-Roman: Standard "(1.05)" Standard ROM
 *Font ZapfChancery-MediumItalic: Standard "(1.05)" Standard ROM
 *Font ZapfDingbats: Special "(001.005)" Special ROM
+*% End of hp-laserjet_p4515x.ppd, 15139 bytes.

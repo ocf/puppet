@@ -1,10 +1,10 @@
 class ocf_printhost::cups {
-  package { [ 'cups', 'cups-bsd' ]: }
+  package { ['cups', 'cups-bsd']: }
   ocf::repackage { 'hplip':
-    recommends => false
+    recommends => false,
   }
   service { 'cups':
-    require => Package['cups', 'cups-bsd']
+    require => Package['cups', 'cups-bsd'],
   }
 
   File {
@@ -23,11 +23,9 @@ class ocf_printhost::cups {
       content => "# deny printing raw jobs\n";
     '/etc/cups/ppd':
       ensure  => directory,
-      group   => 'lp';
-    ['/etc/cups/ppd/deforestation-double.ppd', '/etc/cups/ppd/logjam-double.ppd']:
-      source  => 'puppet:///modules/ocf_printhost/cups/double.ppd';
-    ['/etc/cups/ppd/deforestation-single.ppd', '/etc/cups/ppd/logjam-single.ppd']:
-      source  => 'puppet:///modules/ocf_printhost/cups/single.ppd';
+      source  => 'puppet:///modules/ocf_printhost/cups/ppd',
+      group   => 'lp',
+      recurse => true;
     '/etc/cups/printers.conf':
       replace => false,
       group   => lp,
