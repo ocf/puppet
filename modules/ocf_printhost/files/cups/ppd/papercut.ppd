@@ -484,7 +484,7 @@
 *cupsUIConstraints: "*OutputBin StandardTopBin *MediaType HeavyEnvelope"
 *cupsVersion: 1.5
 *cupsModelNumber: 0
-*cupsManualCopies: False
+*cupsManualCopies: True
 *cupsLanguages: "en da de es fi fr it ja ko no nl pt ru sv zh_CN zh_TW"
 *cupsFilter: "application/vnd.cups-postscript 0 -"
 *OpenUI *PageSize/Media Size: PickOne
