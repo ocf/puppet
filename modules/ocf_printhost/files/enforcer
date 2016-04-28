@@ -158,7 +158,6 @@ def do_filter(instream, outstream):
             '-sPAPERSIZE=letter',
             '-dFIXEDMEDIA',
             '-dPSFitPage',
-            '-dCompatabilityLevel=1.4',
         ] +
         (
             [
