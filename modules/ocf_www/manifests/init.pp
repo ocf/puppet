@@ -19,7 +19,6 @@ class ocf_www {
   include ocf_ssl
 
   class { 'ocf::nfs':
-    pykota => false,
     cron   => false,
     web    => false,
   }

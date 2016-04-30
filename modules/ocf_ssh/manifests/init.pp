@@ -9,7 +9,6 @@ class ocf_ssh {
   include ocf_ssl
 
   class { 'ocf::nfs':
-    pykota => true,
     cron   => true,
     web    => true;
   }

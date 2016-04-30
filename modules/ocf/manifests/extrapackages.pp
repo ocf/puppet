@@ -16,11 +16,6 @@ class ocf::extrapackages {
 
   # other packages
   package {
-    # pykota dependencies
-    ['pkpgcounter', 'python-egenix-mxdatetime', 'python-imaging',
-    'python-jaxml', 'python-minimal', 'python-osd', 'python-pysnmp4',
-    'python-reportlab', 'python-pysqlite2']:;
-
     # misc. packages helpful for users
     [
     'alpine',
@@ -61,11 +56,11 @@ class ocf::extrapackages {
     'libfcgi-ruby1.8',
     'libffi-dev',
     'libgdbm-dev',
-    'libgtk2.0-dev',
     'libgtk-3-dev',
-    'liblightdm-gobject-dev',
+    'libgtk2.0-dev',
     'libicu-dev',
     'libjpeg-dev',
+    'liblightdm-gobject-dev',
     'liblua5.1-0-dev',
     'libmagickwand-dev',
     'libmysqlclient-dev',
@@ -98,6 +93,7 @@ class ocf::extrapackages {
     'php5-mysql',
     'php5-sqlite',
     'pkg-config',
+    'pkpgcounter',
     'postgresql-client',
     'pre-commit',
     'pssh',
@@ -105,18 +101,26 @@ class ocf::extrapackages {
     'python-cracklib',
     'python-crypto',
     'python-django',
+    'python-egenix-mxdatetime',
     'python-flake8',
     'python-flask',
     'python-flup',
+    'python-imaging',
+    'python-jaxml',
     'python-lxml',
+    'python-minimal',
     'python-mock',
     'python-mysqldb',
     'python-nose',
     'python-numpy',
+    'python-osd',
     'python-pandas',
     'python-progressbar',
+    'python-pysnmp4',
+    'python-pysqlite2',
     'python-pytest',
     'python-pytest-cov',
+    'python-reportlab',
     'python-scapy',
     'python-scipy',
     'python-sklearn',

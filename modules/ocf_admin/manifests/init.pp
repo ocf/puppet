@@ -11,7 +11,6 @@ class ocf_admin {
   include create
 
   class { 'ocf::nfs':
-    pykota => true,
     cron   => true,
     web    => true;
   }

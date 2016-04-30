@@ -1,4 +1,4 @@
-class ocf::nfs($pykota = false, $cron = false, $web = false) {
+class ocf::nfs($cron = false, $web = false) {
   # Create directories to mount NFS shares on
   # Directory permissions are set by NFS share when mounted
   # Use exec instead of file so that permissions are not managed
@@ -28,21 +28,6 @@ class ocf::nfs($pykota = false, $cron = false, $web = false) {
       fstype  => 'nfs4',
       options => 'rw,bg,noatime,nodev,nosuid',
       require => Exec['mkdir /services'];
-  }
-
-  if $pykota {
-    exec {
-      'mkdir /etc/pykota':
-        creates => '/etc/pykota';
-    }
-
-    mount {
-      '/etc/pykota':
-        device  => 'printhost:/',
-        fstype  => 'nfs4',
-        options => 'ro,bg,noatime,nodev,noexec,nosuid',
-        require => Exec['mkdir /etc/pykota'];
-    }
   }
 
   if $cron {
