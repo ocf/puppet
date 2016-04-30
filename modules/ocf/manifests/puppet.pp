@@ -1,13 +1,6 @@
 class ocf::puppet {
   package { ['facter', 'puppet']: }
 
-  # enable puppet agent
-  # TODO: can we remove this after wheezy is kill?
-  file { '/etc/default/puppet':
-    content => "START=yes\n",
-    notify  => Service['puppet'],
-  }
-
   # configure puppet agent
   # set environment to match server and disable cached catalog on failure
   augeas { '/etc/puppet/puppet.conf':

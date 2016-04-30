@@ -4,7 +4,7 @@
 #   pkaction --verbose
 #
 # This file is compatible with polkit <= 0.105, as currently included in
-# wheezy and jessie, but not with 0.106 and above which use JavaScript rules.
+# jessie, but not with 0.106 and above which use JavaScript rules.
 
 [Deny most actions except by admin]
 Identity=unix-group:ocf

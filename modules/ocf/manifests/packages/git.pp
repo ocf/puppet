@@ -1,10 +1,8 @@
 class ocf::packages::git {
-  ocf::repackage { ['git', 'gitk', 'git-gui', 'git-svn']:
-    backport_on => 'wheezy';
-  }
+  package { ['git', 'gitk', 'git-gui', 'git-svn']:; }
 
   file { '/etc/gitconfig':
     source  => 'puppet:///modules/ocf/gitconfig',
-    require => Ocf::Repackage['git'],
+    require => Package['git'],
   }
 }

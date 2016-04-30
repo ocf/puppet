@@ -10,6 +10,5 @@
 	ui = true
 
 # Squelch push.default warnings.
-# 'simple' mode requires Git 1.7.11+, so use 'current' for 1.7.10 in wheezy.
 [push]
-	default = current
+	default = simple

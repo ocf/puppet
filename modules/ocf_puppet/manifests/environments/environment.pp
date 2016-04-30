@@ -19,6 +19,6 @@ define ocf_puppet::environments::environment($user = $title) {
   exec { "git clone https://github.com/ocf/puppet ${repo_path} && git -C ${repo_path} submodule update --init":
     user    => $user,
     unless  => "test -d ${repo_path}/.git",
-    require => [File[$repo_path], Ocf::Repackage['git']];
+    require => [File[$repo_path], Package['git']];
   }
 }

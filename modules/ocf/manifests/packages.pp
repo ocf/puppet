@@ -64,7 +64,7 @@ class ocf::packages {
     'debian-security-support',
     'dtach',
     'finger',
-    'gist',  # not in wheezy, but in our apt repo
+    'gist',
     'hexedit',
     'htop',
     'iftop',
@@ -83,15 +83,21 @@ class ocf::packages {
     'python-dev',
     'python-dnspython',
     'python-ldap',
+    'python-paramiko',
     'python-pip',
     'python-requests',
+    'python-tox',
     'python3',
     'python3-dateutil',
     'python3-dev',
+    'python3-ocflib',
+    'python3-paramiko',
     'python3-pip',
     'python3-requests',
+    'python3-tabulate',
     'quota',
     'screen',
+    'systemd-sysv',
     'tcpdump',
     'tmux',
     'tofrodos',
@@ -100,26 +106,14 @@ class ocf::packages {
     'vim',
     'vim-nox',
     ]:;
-
   }
 
-  if $::lsbdistcodename != 'wheezy' {
+  if $::lsbdistcodename == 'jessie' {
     package {
-      'systemd-sysv':;
-
-      'python-paramiko':;
-      'python3-paramiko':;
-      'python3-ocflib':;
-
       # in jessie, install python-pip-whl to avoid problems where a system-wide
       # python module (e.g. requests) is updated, resulting in pip breaking
       # (see rt#3268, Debian #744145)
       'python-pip-whl':;
-
-      'python3-tabulate':;
-
-      # not available in wheezy, but we don't really need it
-      'python-tox':;
     }
   }
 }

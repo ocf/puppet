@@ -1,9 +1,5 @@
 class ocf::packages::matplotlib {
-  # TODO: remove this after wheezy
-  $packages = $::lsbdistcodename ? {
-    'wheezy' => ['python-matplotlib'],
-    default  => ['python-matplotlib', 'python3-matplotlib'],
-  }
+  $packages = ['python-matplotlib', 'python3-matplotlib']
 
   package { $packages:; }
 

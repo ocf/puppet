@@ -7,11 +7,8 @@ import sys
 
 
 def trigger_run():
-    # TODO: use subprocess.DEVNULL after jessie
-    devnull = open('/dev/null', 'w')
-
     if subprocess.call(('/usr/sbin/service', 'puppet', 'status'),
-                       stdout=devnull) == 0:
+                       stdout=subprocess.DEVNULL) == 0:
         # A bug in recent versions prevents USR1 from triggering a run:
         # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=769621
         if is_jessie():
