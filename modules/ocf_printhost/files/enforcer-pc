@@ -1,0 +1,8 @@
+#!/bin/bash -eu
+# Print the number of pages in arg1 (which must be a PostScript file which has
+# been pre-processed by CUPS-flavored GhostScript).
+#
+# In particular, we read the "Pages:" header (located at the beginning or end
+# of the file in the comments section). If this doesn't exist, we'll fail.
+set -o pipefail
+(head -n20; tail -n20) < "$1" | awk '/^%%Pages: [0-9]+$/ {print $2}'
