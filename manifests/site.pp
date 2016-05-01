@@ -24,9 +24,9 @@ Vcsrepo { require => Package['git'] }
 
 Apache::Vhost { serveradmin => 'help@ocf.berkeley.edu' }
 
-# Cron type won't reset times if you don't specify them.
+# Cron type won't reset attributes if you don't specify them.
 # (e.g. if you only set "minute => '0'", it won't reset hour to '*')
 # This is bad behavior because the resource is only partially managed by Puppet.
-Cron { minute => '*', hour => '*', weekday => '*', month => '*', monthday => '*' }
+Cron { special => 'absent', minute => '*', hour => '*', weekday => '*', month => '*', monthday => '*' }
 
 $desktop_homepage = 'https://www.ocf.berkeley.edu/about/lab/open-source'
