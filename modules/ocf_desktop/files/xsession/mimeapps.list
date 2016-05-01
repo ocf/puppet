@@ -2,11 +2,11 @@
 application/pdf=evince.desktop
 image/pdf=evince.desktop
 
-image/gif=gpicview.desktop
-image/png=gpicview.desktop
-image/jpeg=gpicview.desktop
-image/jpeg2000=gpicview.desktop
-image/jpg=gpicview.desktop
+image/gif=eog.desktop
+image/png=eog.desktop
+image/jpeg=eog.desktop
+image/jpeg2000=eog.desktop
+image/jpg=eog.desktop
 
 text/css=gedit.desktop
 text/html=gedit.desktop
