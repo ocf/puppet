@@ -1,8 +1,13 @@
 # Include Google Chrome apt repo.
 class ocf::packages::chrome::apt {
-  apt::key { 'google':
-    id     => '4CCA1EAF950CEE4AB83976DCA040830F7FAC5991',
-    source => 'https://dl-ssl.google.com/linux/linux_signing_key.pub';
+  apt::key {
+    'google-2007':
+      id     => '4CCA1EAF950CEE4AB83976DCA040830F7FAC5991',
+      source => 'https://dl-ssl.google.com/linux/linux_signing_key.pub';
+
+    'google-2016':
+      id     => 'EB4C1BFD4F042F6DDDCCEC917721F63BD38B4796',
+      source => 'https://dl-ssl.google.com/linux/linux_signing_key.pub';
   }
 
   # Chrome creates /etc/apt/sources.list.d/google-chrome.list upon
@@ -18,6 +23,6 @@ class ocf::packages::chrome::apt {
       include   => {
         src => false
       },
-      require     => Apt::Key['google'];
+      require     => Apt::Key['google-2007', 'google-2016'];
   }
 }
