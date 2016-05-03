@@ -6,6 +6,7 @@ class ocf_ldap {
     subscribe => File[
       '/etc/ldap/slapd.conf',
       '/etc/ldap/schema/ocf.schema',
+      '/etc/ldap/schema/puppet.schema',
       '/etc/default/slapd',
       '/etc/ldap/sasl2/slapd.conf'];
   }
@@ -47,6 +48,13 @@ class ocf_ldap {
     minute  => 0,
     hour    => 4,
     require => Package['ldap-git-backup'];
+  }
+
+  # Use the puppet cron task instead of the packaged cron script for more
+  # configurability and similarity with the kerberos-git-backup cron setup
+  file {
+    '/etc/cron.d/ldap-git-backup':
+      ensure => absent;
   }
 
   # Pushing to GitHub is disabled for dev-* hosts to prevent duplicate backups
