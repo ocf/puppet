@@ -54,7 +54,7 @@ class ocf_ldap {
     # GitHub deploy hook and key
     file {
       '/var/backups/ldap/.git/hooks/post-commit':
-        content => "git push -q git@github.com:ocf/ldap\n",
+        content => "git push -q git@github.com:ocf/ldap master\n",
         mode    => '0755',
         require => [Package['ldap-git-backup'], File['/root/.ssh/id_rsa']];
 
