@@ -86,7 +86,6 @@ class ocf::packages {
     'python-paramiko',
     'python-pip',
     'python-requests',
-    'python-tox',
     'python3',
     'python3-dateutil',
     'python3-dev',

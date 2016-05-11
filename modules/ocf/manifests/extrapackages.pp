@@ -170,6 +170,20 @@ class ocf::extrapackages {
     backport_on => 'jessie';
   }
 
+  if $::lsbdistcodename == 'jessie' {
+    # We add python3.5 and tox2  on jessie so we can test our code against it
+    # (in preparation for stretch).
+    package {
+      ['python3.5', 'python3.5-dev']:;
+      'python-tox':
+        ensure  => purged;
+      'tox':
+        require => Package['python-tox'];
+    }
+  } else {
+    package { 'tox':; }
+  }
+
   # install wp-cli
   # TODO: can we debian-package this?
   file { '/usr/local/sbin/download-wp-cli':
