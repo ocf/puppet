@@ -1,0 +1,3 @@
+#/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -rltpHS --delete-excluded \
+	rsync://archive.parrotsec.org/parrot/ /opt/mirrors/ftp/parrot
