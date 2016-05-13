@@ -11,7 +11,11 @@ class ocf_mirrors {
   include debian
   include finnix
   include gnu
+  include kali
+  include parrot
+  include tails
   include tanglu
+  include trisquel
   include ubuntu
 
   user { 'mirrors':
