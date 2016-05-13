@@ -43,6 +43,7 @@ class ocf_mirrors {
     default_vhost => false,
     keepalive     => 'on';
   }
+  include apache::mod::headers
 
   # The Apache project requires very particular configuration:
   # https://www.apache.org/info/how-to-mirror.html#Configuration
@@ -63,7 +64,19 @@ class ocf_mirrors {
         document => 'default',
       }
     ],
-    custom_fragment => "HeaderName HEADER.html\nReadmeName README.html",
+    custom_fragment => "
+      HeaderName HEADER.html
+      ReadmeName README.html
+    ",
+  }
+
+  # Tails asked us to turn off ETags.
+  $tails_project_directory_options = {
+    path          => '/opt/mirrors/ftp/tails',
+    custom_fragment => "
+      Header unset ETag
+      FileETag none
+    ",
   }
 
   apache::vhost { 'mirrors.ocf.berkeley.edu':
@@ -78,6 +91,7 @@ class ocf_mirrors {
         index_options => ['NameWidth=*', '+SuppressDescription']
       },
       $apache_project_directory_options,
+      $tails_project_directory_options,
     ],
 
     custom_fragment => "HeaderName README.html\nReadmeName FOOTER.html"
@@ -106,6 +120,7 @@ class ocf_mirrors {
         index_options => ['NameWidth=*', '+SuppressDescription']
       },
       $apache_project_directory_options,
+      $tails_project_directory_options,
     ],
 
     custom_fragment => "HeaderName README.html\nReadmeName FOOTER.html",
