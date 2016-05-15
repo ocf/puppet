@@ -5,8 +5,6 @@ class ocf::nfs($cron = false, $web = false) {
   exec {
     'mkdir /home':
       creates => '/home';
-    'mkdir /opt/ocf':
-      creates => '/opt/ocf';
     'mkdir /services':
       creates => '/services';
   }
@@ -18,11 +16,6 @@ class ocf::nfs($cron = false, $web = false) {
       fstype  => 'nfs4',
       options => 'rw,bg,noatime,nodev,nosuid',
       require => Exec['mkdir /home'];
-    '/opt/ocf':
-      device  => 'opt:/i686-real',
-      fstype  => 'nfs4',
-      options => 'ro,bg,noatime,nodev',
-      require => Exec['mkdir /opt/ocf'];
     '/services':
       device  => 'services:/services',
       fstype  => 'nfs4',
