@@ -34,6 +34,10 @@ class ocf_desktop::xsession ($staff = false) {
       source  => 'puppet:///modules/ocf_desktop/xsession/images/',
       recurse => true,
       purge   => true;
+    '/opt/share/xsession/icons':
+      source  => 'puppet:///modules/ocf_desktop/xsession/icons/',
+      recurse => true,
+      purge   => true;
   }
 
   # wallpaper symlink

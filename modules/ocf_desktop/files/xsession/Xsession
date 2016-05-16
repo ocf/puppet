@@ -58,12 +58,19 @@ Name=Local Computer
 Exec=thunar computer:/
 Icon=computer" > $HOME/Desktop/computer.desktop
 
-# SSH Terminal
+# Terminal
 echo "[Desktop Entry]
 Type=Application
-Name=SSH Terminal
-Exec=x-terminal-emulator -e "ssh -Kt tsunami 'cd && $SHELL'"
-Icon=terminal" > $HOME/Desktop/ssh.desktop
+Name=Terminal
+Exec=x-terminal-emulator
+Icon=terminal" > $HOME/Desktop/terminal.desktop
+
+# Remote Terminal
+echo "[Desktop Entry]
+Type=Application
+Name=Remote Terminal
+Exec=x-terminal-emulator -e "ssh -Kt tsunami"
+Icon=/opt/share/xsession/icons/ssh-terminal.png" > $HOME/Desktop/remote-terminal.desktop
 
 # Scanner if connected by USB
 if lsusb | grep -qE '(Fujitsu|CanoScan|Canon, Inc)'; then
