@@ -39,9 +39,18 @@ class ocf_mirrors {
       group  => mirrors;
   }
 
-  class { '::apache':
-    default_vhost => false,
-    keepalive     => 'on';
+  class {
+    '::apache':
+      default_vhost => false,
+      keepalive     => 'on',
+      # "false" lets us define the class below with custom args
+      mpm_module    => false;
+
+    '::apache::mod::worker':
+      startservers    => 8,
+      maxclients      => 600,
+      threadsperchild => 50,
+      serverlimit     => 75;
   }
   include apache::mod::headers
 
