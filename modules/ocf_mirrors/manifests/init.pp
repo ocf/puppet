@@ -53,6 +53,7 @@ class ocf_mirrors {
       serverlimit     => 75;
   }
   include apache::mod::headers
+  include apache::mod::status
 
   # The Apache project requires very particular configuration:
   # https://www.apache.org/info/how-to-mirror.html#Configuration

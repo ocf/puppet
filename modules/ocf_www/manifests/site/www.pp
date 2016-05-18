@@ -16,6 +16,7 @@ class ocf_www::site::www {
   include apache::mod::proxy
   include apache::mod::proxy_http
   include apache::mod::rewrite
+  include apache::mod::status
   include ocf_www::mod::cgi
   include ocf_www::mod::fastcgi
   include ocf_www::mod::ocfdir
@@ -87,8 +88,8 @@ class ocf_www::site::www {
 
   # canonical redirects
   $canonical_url = $::hostname ? {
-    /^dev-/ => 'https://dev-www.ocf.berkeley.edu/',
-    default => 'https://www.ocf.berkeley.edu/',
+    /^dev-/ => 'https://dev-www.ocf.berkeley.edu$1',
+    default => 'https://www.ocf.berkeley.edu$1',
   }
 
   apache::vhost {
@@ -108,22 +109,24 @@ class ocf_www::site::www {
         $::hostname,
         $::fqdn,
       ],
-      port            => 80,
-      docroot         => '/var/www/html',
-      redirect_status => 301,
-      redirect_dest   => $canonical_url;
+      port                 => 80,
+      docroot              => '/var/www/html',
+      redirectmatch_status => 301,
+      redirectmatch_regexp => '^(?!/server-status)(.*)',
+      redirectmatch_dest   => $canonical_url;
 
     # redirect weird HTTPS -> canonical HTTPS
     'www-https-redirect':
       # priority 10 so that this becomes the catch-all for https
       priority        => 10,
 
-      servername      => 'ocf.berkeley.edu',
-      serveraliases   => ['dev-ocf.berkeley.edu', 'secure.ocf.berkeley.edu', $::fqdn],
-      port            => 443,
-      docroot         => '/var/www/html',
-      redirect_status => 301,
-      redirect_dest   => $canonical_url,
+      servername           => 'ocf.berkeley.edu',
+      serveraliases        => ['dev-ocf.berkeley.edu', 'secure.ocf.berkeley.edu', $::fqdn],
+      port                 => 443,
+      docroot              => '/var/www/html',
+      redirectmatch_status => 301,
+      redirectmatch_regexp => '^(.*)',
+      redirectmatch_dest   => $canonical_url,
 
       ssl             => true,
       ssl_key         => "/etc/ssl/private/${::fqdn}.key",

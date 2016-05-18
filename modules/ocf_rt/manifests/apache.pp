@@ -8,16 +8,18 @@ class ocf_rt::apache {
   include apache::mod::auth_kerb
   include apache::mod::perl
   include apache::mod::rewrite
+  include apache::mod::status
 
 
   # redirect to SSL
   apache::vhost { 'rt.ocf.berkeley.edu-redirect':
-    servername      => 'rt.ocf.berkeley.edu',
-    serveraliases   => ['rt'],
-    port            => 80,
-    docroot         => '/var/www',
-    redirect_status => 301,
-    redirect_dest   => 'https://rt.ocf.berkeley.edu/';
+    servername           => 'rt.ocf.berkeley.edu',
+    serveraliases        => ['rt'],
+    port                 => 80,
+    docroot              => '/var/www',
+    redirectmatch_status => 301,
+    redirectmatch_regexp => '^(?!/server-status)(.*)',
+    redirectmatch_dest   => 'https://rt.ocf.berkeley.edu$1';
   }
 
   apache::vhost { 'rt.ocf.berkeley.edu':
