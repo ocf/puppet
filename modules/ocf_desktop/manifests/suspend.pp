@@ -10,10 +10,6 @@ class ocf_desktop::suspend {
     '/etc/acpi/events/powerbtn-acpi-support':
       source  => 'puppet:///modules/ocf_desktop/suspend/powerbtn-acpi-support',
       require => Package['acpi-support-base'];
-
-    # TODO: remove this in a few weeks
-    '/etc/cron.d/ocf-suspend':
-      ensure  => absent;
   }
 
   package {
