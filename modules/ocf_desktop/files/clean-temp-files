@@ -1,19 +1,77 @@
-#!/bin/bash -eu
-# Find and remove temporary files (/var/local/tmp/*) from users who haven't
-# logged in recently.
-#
-# For simplicity, /var/local/tmp/ is owned (and only writable) by root. On
-# login, root creates a new directory for the current user to use. We remove
-# these directories periodically via this cron script.
-set -o pipefail
-shopt -s nullglob
+#!/usr/bin/env python3
+"""Clean temporary files on desktops if users owning the files have not logged
+in for 2 weeks.
 
-cd /var/local/tmp
-for u in *; do
-	# TODO: this check for recent logins is not great; wtmp is rotated monthly
-	# (rather than being a rolling log), so this basically is equivalent to
-	# clearing everyone at the start of the month
-	if ! last -Rw | cut -d' ' -f1 | head -n-2 | grep -q "^$u$"; then
-		rm -rf --one-file-system -- "/var/local/tmp/$u"
-	fi
-done
+Also makes sure that files are not deleted under a user if they are currently
+logged in to the desktop.
+"""
+import os
+import string
+import subprocess
+from datetime import datetime
+from datetime import timedelta
+
+from dateutil import parser
+
+
+def get_command_by_lines(command):
+    """Get the output of a command split by lines"""
+    return subprocess.check_output(command).decode('utf-8').splitlines()
+
+
+def get_current_users():
+    """Get a set of the current users logged in"""
+    who = get_command_by_lines('who')
+
+    return {user.split()[0] for user in who}
+
+
+def get_last_logins():
+    """Get a dictionary of the last time each user logged in to this desktop by
+    parsing the "last" command's output. last uses /var/log/wtmp, which is
+    rotated at the start of each month, so we have to make sure to also check
+    /var/log/wtmp.1 (last month's records) in case it is near the start of the
+    month.
+    """
+    curr_users = get_current_users()
+
+    login_data = get_command_by_lines(('last', '-wF'))
+
+    if os.path.isfile('/var/log/wtmp.1'):
+        login_data += get_command_by_lines(('last', '-wF', '-f', '/var/log/wtmp.1'))
+
+    users = {}
+    ignored_names = {'reboot', 'root', 'apt-dater', 'wtmp', 'wtmp.1'}
+
+    for line in reversed(login_data):
+        session = line.split()
+
+        if session:
+            username = session[0]
+
+            if username in curr_users:
+                users[username] = datetime.now()
+            elif username not in ignored_names:
+                if session[1].startswith('tty'):
+                    session_start = ' '.join(session[2:7])
+                else:
+                    session_start = ' '.join(session[3:8])
+
+                users[username] = parser.parse(session_start)
+
+    return users
+
+
+def main(argv=None):
+    users = get_last_logins()
+    directories = os.listdir('/var/local/tmp')
+    cutoff = datetime.now() - timedelta(weeks=2)
+
+    for user in directories:
+        if user not in users.keys() or users[user] < cutoff:
+            assert all(c in string.ascii_lowercase for c in user), user
+            subprocess.check_call(('rm', '-rf', '--one-file-system', '--', '/var/local/tmp/' + user))
+
+
+if __name__ == '__main__':
+    exit(main())
