@@ -12,7 +12,7 @@ class ocf_www::mod::fastcgi {
 
   apache::custom_config { 'fastcgi_options':
     content => "
-      FastCgiConfig -autoUpdate -killInterval 300 -maxProcesses 1000 -minProcesses 0
+      FastCgiConfig -appConnTimeout 15 -autoUpdate -killInterval 300 -maxProcesses 1000 -minProcesses 0
       FastCgiWrapper /usr/lib/apache2/suexec
     ",
   }
