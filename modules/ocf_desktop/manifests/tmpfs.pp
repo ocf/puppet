@@ -32,9 +32,7 @@ class ocf_desktop::tmpfs {
 
   cron { 'clean-temp-files':
     command => '/usr/local/sbin/clean-temp-files',
-    special => 'absent',
-    hour    => '9',
-    minute  => '5',
+    special => 'hourly',
     require => File['/usr/local/sbin/clean-temp-files'];
   }
 }
