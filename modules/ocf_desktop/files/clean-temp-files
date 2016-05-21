@@ -6,6 +6,7 @@ Also makes sure that files are not deleted under a user if they are currently
 logged in to the desktop.
 """
 import os
+import string
 import subprocess
 from datetime import datetime
 from datetime import timedelta
@@ -34,13 +35,15 @@ def get_last_logins():
     """
     curr_users = get_current_users()
 
-    this_month = get_command_by_lines(('last', '-wF'))
-    last_month = get_command_by_lines(('last', '-wF', '-f', '/var/log/wtmp.1'))
+    login_data = get_command_by_lines(('last', '-wF'))
+
+    if os.path.isfile('/var/log/wtmp.1'):
+        login_data += get_command_by_lines(('last', '-wF', '-f', '/var/log/wtmp.1'))
 
     users = {}
-    ignored_names = ['reboot', 'apt-dater', 'wtmp', 'wtmp.1']
+    ignored_names = {'reboot', 'root', 'apt-dater', 'wtmp', 'wtmp.1'}
 
-    for line in reversed(this_month + last_month):
+    for line in reversed(login_data):
         session = line.split()
 
         if session:
@@ -48,10 +51,12 @@ def get_last_logins():
 
             if username in curr_users:
                 users[username] = datetime.now()
-            elif username in ignored_names:
-                continue
-            else:
-                session_start = ' '.join(session[3:8])
+            elif username not in ignored_names:
+                if session[1].startswith('tty'):
+                    session_start = ' '.join(session[2:7])
+                else:
+                    session_start = ' '.join(session[3:8])
+
                 users[username] = parser.parse(session_start)
 
     return users
@@ -60,11 +65,12 @@ def get_last_logins():
 def main(argv=None):
     users = get_last_logins()
     directories = os.listdir('/var/local/tmp')
-    cutoff = datetime.now() + timedelta(weeks=-2)
+    cutoff = datetime.now() - timedelta(weeks=2)
 
     for user in directories:
         if user not in users.keys() or users[user] < cutoff:
-            subprocess.call(('rm', '-rf', '--one-file-system', '--', '/var/local/tmp/' + user))
+            assert all(c in string.ascii_lowercase for c in user), user
+            subprocess.check_call(('rm', '-rf', '--one-file-system', '--', '/var/local/tmp/' + user))
 
 
 if __name__ == '__main__':
