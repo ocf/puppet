@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+"""A CUPS filter which resizes the input Postscript to US Letter."""
+import os
+import subprocess
+import sys
+
+
+def do_filter(instream, outstream):
+    """Force resize to US Letter, and mark as duplex (or not)."""
+    is_duplex = os.environ.get('CLASS') != 'single'
+    subprocess.call(
+        [
+            'gs',
+            '-q',
+            '-dBATCH',
+            '-dNOPAUSE',
+            '-sDEVICE=ps2write',
+            '-sOutputFile=-',
+            '-sPAPERSIZE=letter',
+            '-dFIXEDMEDIA',
+            '-dPSFitPage',
+        ] +
+        (
+            [
+                '-c',
+                '<</PSDocOptions (<< /Duplex true >> setpagedevice)>> setdistillerparams',
+            ] if is_duplex else []
+        ) +
+        [
+            '-f',
+            '/dev/stdin',
+        ],
+        stdin=instream,
+        stdout=outstream,
+    )
+
+
+if __name__ == '__main__':
+    do_filter(sys.stdin, sys.stdout)

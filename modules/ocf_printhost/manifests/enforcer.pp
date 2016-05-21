@@ -11,6 +11,9 @@ class ocf_printhost::enforcer {
     '/usr/local/bin/enforcer-pc':
       source  => 'puppet:///modules/ocf_printhost/enforcer-pc',
       mode    => '0755';
+    '/usr/local/bin/resizer':
+      source  => 'puppet:///modules/ocf_printhost/resizer',
+      mode    => '0755';
     '/opt/share/enforcer':
       ensure  => directory,
       mode    => '0500';

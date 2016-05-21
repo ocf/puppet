@@ -6,7 +6,7 @@ When a user sends a job to the print server, Tea4CUPS passes the job as a
 PostScript file to enforcer before sending it to the printer. Enforcer calls
 Ghostscript to count pages and connects to mysql to check against the user's
 quota. If enforcer returns 255 (a.k.a. -1), the job is rejected. Otherwise,
-enforcer gets callued again when the job is done and logs the job in mysql,
+enforcer gets called again when the job is done and logs the job in mysql,
 taking care to set the page count to zero if an error was encountered.
 
 Another function of enforcer is to send notifications to desktops to let users
@@ -144,36 +144,6 @@ def send_printer_mail(message, job, quo):
     send_mail_user(job.user, message.subject, body)
 
 
-def do_filter(instream, outstream):
-    """Force resize to US Letter, and mark as duplex (or not)."""
-    is_duplex = os.environ.get('CLASS') != 'single'
-    subprocess.call(
-        [
-            'gs',
-            '-q',
-            '-dBATCH',
-            '-dNOPAUSE',
-            '-sDEVICE=ps2write',
-            '-sOutputFile=-',
-            '-sPAPERSIZE=letter',
-            '-dFIXEDMEDIA',
-            '-dPSFitPage',
-        ] +
-        (
-            [
-                '-c',
-                '<</PSDocOptions (<< /Duplex true >> setpagedevice)>> setdistillerparams',
-            ] if is_duplex else []
-        ) +
-        [
-            '-f',
-            '/dev/stdin',
-        ],
-        stdin=instream,
-        stdout=outstream,
-    )
-
-
 def prehook(c, job):
     quo = quota.get_quota(c, job.user)
     if job.pages > quo.daily:
@@ -197,18 +167,15 @@ def main(argv):
             formatter_class=argparse.RawDescriptionHelpFormatter,
         )
         parser.add_argument('command',
-                            choices={'prehook', 'posthook', 'filter'})
+                            choices={'prehook', 'posthook'})
         args = parser.parse_args(argv[1:])
-        if args.command == 'filter':
-            do_filter(sys.stdin, sys.stdout)
-        else:
-            job = create_job(os.environ)
-            with quota.get_connection(*read_config()) as c:
-                if args.command == 'prehook':
-                    prehook(c, job)
-                else:
-                    success = os.environ['TEASTATUS'] == '0'
-                    posthook(c, job, success)
+        job = create_job(os.environ)
+        with quota.get_connection(*read_config()) as c:
+            if args.command == 'prehook':
+                prehook(c, job)
+            else:
+                success = os.environ['TEASTATUS'] == '0'
+                posthook(c, job, success)
     except Exception:
         msg = dedent("""\
             enforcer encountered the following error while processing a job:
