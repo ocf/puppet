@@ -73,6 +73,13 @@ define ocf_www::site::vhost($vhost = $title) {
       },
     ],
 
+    aliases => [
+      {
+        alias => '/.well-known',
+        path  => '/srv/well-known',
+      },
+    ],
+
     custom_fragment   => "
       Action php5-fcgi /php5-fcgi
       Alias /php5-fcgi /services/http/suexec/php5-fcgi-wrapper
