@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""A CUPS filter which resizes the input Postscript to US Letter."""
+"""A Tea4CUPS filter which resizes the input Postscript to US Letter."""
 import os
 import subprocess
 import sys
