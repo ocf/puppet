@@ -169,7 +169,7 @@ def maybe_acquire(domain, cert_path):
                 # sort-of atomic overwrite in case of errors
                 os.chmod(temp_cert_path, 0o644)
                 shutil.move(temp_cert_path, str(cert_path))
-                printed('cert acquired for {}'.format(domain))
+                print('cert acquired for {}'.format(domain))
         except:
             print('An error occured!', file=sys.stderr)
             print('stderr from acme-tiny:', file=sys.stderr)
