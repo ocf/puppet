@@ -28,7 +28,7 @@ node default {
         case $::hostname {
           tsunami:    { class { 'ocf::auth': glogin => [ ['ocf', 'ALL'], ['sorry', 'ALL'] ] } }
           werewolves: { class { 'ocf::auth': glogin => [ ['ocfdev', 'ALL'] ] } }
-          pollution:  { class { 'ocf::auth': gsudo => ['ocfstaff'] } }
+          whiteout:   { class { 'ocf::auth': gsudo => ['ocfstaff'] } }
           default:    { class { 'ocf::auth': ulogin => [], glogin => [], usudo => [], gsudo => [] } }
         }
       } else { # grant login and sudo to owner
