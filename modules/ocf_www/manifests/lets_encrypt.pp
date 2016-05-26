@@ -3,18 +3,39 @@ class ocf_www::lets_encrypt {
     package { 'acme-tiny':; }
 
     file {
-      '/etc/ssl/private/lets-encrypt-account.key':
+      '/usr/local/bin/lets-encrypt-update':
+        source    => 'puppet:///modules/ocf_www/lets-encrypt-update',
+        mode      => '0755';
+
+      '/etc/ssl/lets-encrypt':
+        ensure    => directory;
+
+      '/etc/ssl/lets-encrypt/le-account.key':
         source    => 'puppet:///private/lets-encrypt-account.key',
+        owner     => ocfletsencrypt,
         show_diff => false,
         mode      => '0400';
 
-      '/etc/ssl/private/lets-encrypt-vhost.key':
+      '/etc/ssl/lets-encrypt/le-vhost.key':
         source    => 'puppet:///private/lets-encrypt-vhost.key',
+        owner     => ocfletsencrypt,
         show_diff => false,
         mode      => '0400';
 
-      ['/srv/well-known', '/srv/well-known/acme-challenge']:
+      '/srv/well-known':
         ensure => directory;
+
+      '/srv/well-known/acme-challenge':
+        ensure => directory,
+        owner  => ocfletsencrypt,
+        group  => sys;
+    }
+
+    cron { 'lets-encrypt-update':
+      command => '/usr/local/bin/lets-encrypt-update',
+      user    => ocfletsencrypt,
+      special => hourly,
+      require => File['/usr/local/bin/lets-encrypt-update'],
     }
   }
 }

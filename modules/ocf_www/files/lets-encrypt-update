@@ -1,0 +1,205 @@
+#!/usr/bin/env python3
+"""Update or acquire Let's Encrypt certificates for OCF's traditional vhosts.
+
+XXX: Only parts 1, 2, and 4 are working right now. We don't yet handle renewal.
+
+This script is intended to be run by a cronjob. It works as follows:
+
+    1. Lists all domains that need certificates.
+
+    2. For each domain, checks whether we have already acquired a ceritficate
+       in the past for this domain.
+
+    3. If we already have a certificate, we check the expiration date and renew
+       it if will expire in the next 30 days.
+
+    4. If we do not have a certificate, we attempt to acquire one using
+       acme-tiny.
+
+It tries to be somewhat intelligent (e.g. stops trying to acquire new certs
+when we hit the rate limit for new domains).
+
+Note that with the current rate limits, if you add lots of domains, or other
+people in *.berkeley.edu are requesting lots of certificates, it may take some
+weeks before we can acquire enough new certs.
+
+Fortunately, renewals have no rate limit, which is the only reason we can
+actually use Let's Encrypt.
+"""
+import argparse
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+import dns.resolver
+from ocflib.account.utils import get_vhosts
+
+
+CERT_STORAGE_DIR = Path('/services/http/ssl/')
+LE_ACCOUNT_KEY = Path('/etc/ssl/lets-encrypt/le-account.key')
+LE_VHOST_KEY = Path('/etc/ssl/lets-encrypt/le-vhost.key')
+
+rate_limit_hit = set()
+
+
+def debug(*args, **kwargs):
+    pass
+
+
+def eligible_domains():
+    """Return domains that should have certificates.
+
+    This includes:
+      * base virtual host domains
+      * aliases which redirect to the base domain
+
+    We check that the domains appear to be served by us (in particular, we
+    check public DNS to see whether they seem to point to death).
+    """
+    resolver = dns.resolver.Resolver()
+    resolver.nameservers = ['8.8.8.8', '8.8.4.4']
+
+    def resolve(fqdn):
+        try:
+            answers = list(resolver.query(fqdn, 'A'))
+        except dns.resolver.NXDOMAIN:
+            return
+        else:
+            if answers:
+                return str(answers[0])
+
+    www_ip = resolve('death.ocf.berkeley.edu')
+
+    vhosts = get_vhosts()
+    all_domains = (
+        # TODO: we currently exclude aliases (or domains which redirect to
+        # ocf.b.e/~user) since the /.well-known/ directory does not yet get
+        # served properly.
+
+        set(domain for domain, vhost in vhosts.items() if not vhost['redirect'])  # |
+        # set(chain.from_iterable(vhost['aliases'] for vhost in vhosts.values()))
+    )
+    eligible_domains = {
+        domain
+        for domain in all_domains
+        if resolve(domain) == www_ip
+    }
+
+    bad_domains = all_domains - eligible_domains
+    if bad_domains:
+        debug('Excluded {} domains for bad DNS:\n    {}'.format(
+            len(bad_domains),
+            '\n    '.join(bad_domains),
+        ))
+    else:
+        debug('Did not exclude any domains for bad DNS.')
+
+    return eligible_domains
+
+
+def maybe_renew(domain, cert_path):
+    # TODO: write thiss
+    pass
+
+
+def base_domain(fqdn):
+    """Return base domain (TLD+1).
+
+    >>> base_domain('ocf.berkeley.edu')
+    'berkeley.edu'
+
+    >>> base_domain('www.handbook.perspectives.modern.archive.asuc.org')
+    'asuc.org'
+    """
+    return '.'.join(fqdn.split('.')[::-1][:2][::-1])
+
+
+def maybe_acquire(domain, cert_path):
+    base = base_domain(domain)
+    if base in rate_limit_hit:
+        debug('skipping {} due to rate limit on {}'.format(domain, base))
+        return
+
+    # make csr
+    _, csr_path = tempfile.mkstemp()
+    try:
+        subprocess.check_call((
+            'openssl', 'req', '-new', '-sha256',
+            '-key', str(LE_VHOST_KEY),
+            '-subj', '/CN={}'.format(domain),
+            '-out', csr_path,
+        ))
+
+        # call acme-tiny
+        _, temp_cert_path = tempfile.mkstemp()
+        stderr = None
+        try:
+            # TODO: use subprocess.call when we get python3.5
+            proc = subprocess.Popen(
+                (
+                    'acme-tiny',
+                    '--account-key', str(LE_ACCOUNT_KEY),
+                    '--csr', csr_path,
+                    '--acme-dir', '/srv/well-known/acme-challenge',
+                    #                    '--ca', 'https://acme-staging.api.letsencrypt.org',
+                ),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            cert, stderr = proc.communicate()
+            if proc.returncode != 0:
+                # assume it must be a rate limit, otherwise we'll raise below
+                assert proc.returncode == 1, proc.returncode
+                match = re.search(
+                    b'"Error creating new cert :: Too many certificates already issued for: ([^"]+)"',
+                    stderr,
+                )
+                assert match
+                hit_for_domain = match.group(1).decode('ascii')
+                assert hit_for_domain == base, (hit_for_domain, base)
+                debug('hit rate limit for {} on {}'.format(base, domain))
+                rate_limit_hit.add(base)
+            else:
+                with open(temp_cert_path, 'wb') as f:
+                    f.write(cert)
+                # sort-of atomic overwrite in case of errors
+                os.chmod(temp_cert_path, 0o644)
+                shutil.move(temp_cert_path, str(cert_path))
+                printed('cert acquired for {}'.format(domain))
+        except:
+            print('An error occured!', file=sys.stderr)
+            print('stderr from acme-tiny:', file=sys.stderr)
+            print(stderr, file=sys.stderr)
+            raise
+    finally:
+        os.remove(csr_path)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument('-v', '--verbose', action='store_true')
+    args = parser.parse_args()
+
+    if args.verbose:
+        global debug
+        debug = print
+
+    for domain in eligible_domains():
+        assert re.match('^[a-z\-_\.0-9]+$', domain)
+        cert_path = CERT_STORAGE_DIR / '{}.crt'.format(domain)
+
+        if cert_path.exists():
+            maybe_renew(domain, cert_path)
+        else:
+            maybe_acquire(domain, cert_path)
+
+
+if __name__ == '__main__':
+    exit(main())
