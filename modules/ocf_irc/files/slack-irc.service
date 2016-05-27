@@ -1,0 +1,10 @@
+[Service]
+Environment=NODE_ENV=development
+ExecStart=/usr/bin/slack-irc-ocf --config /etc/slack-irc/config.json
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=slack-irc
+
+[Install]
+WantedBy=multi-user.target
