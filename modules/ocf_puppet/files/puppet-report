@@ -1,0 +1,181 @@
+#!/usr/bin/env python3
+"""A custom batch report processor for Puppet.
+
+Features of the processor
+* Doesn't email reports for nodes not on the production environment
+* Can send reports for multiple hosts in a single digest-like report
+  with the '--digest' option
+* Doesn't email reports which only contain the "switching agent
+  environment" message
+* Sends puppet reports for everything else like tagmail does
+* Clears processed logs from the master
+
+Failed builds in production will be reported by email. Failed builds on
+other environments will not, but will still be reported via IRC.
+
+The default options will capture more-or-less the default behavior of
+Puppet's tagmail. Since desktops all have essentially the same
+configuration, an improved setup is to process desktops and servers
+separately by specifying the 'desktop' and 'server' types (respectively)
+and adding the '--digest' option for desktops.
+
+The '--report-dir' option can be used to specify where to find Puppet
+reports on the master, should it differ from the default.
+
+Processing all this YAML is slow. It would be an improvement to
+parallelize this script.
+"""
+import os
+import sys
+from argparse import ArgumentParser
+from collections import namedtuple
+from datetime import datetime
+from datetime import timedelta
+from glob import glob
+
+import yaml
+from ocflib.infra.hosts import hostname_from_domain
+from ocflib.infra.hosts import type_of_host
+from ocflib.misc.mail import send_mail
+
+
+DEFAULT_TYPES = ['server', 'desktop']
+DEFAULT_REPORT_DIR = '/var/lib/puppet/reports'
+MAIL_TO_FROM = 'Puppet <puppet@ocf.berkeley.edu>'
+
+
+# Boilerplate to parse Puppet objects tagged in YAML
+
+PuppetReport = namedtuple('PuppetReport', ['logs', 'host', 'time',
+                                           'environment', 'status'])
+PuppetLog = namedtuple('PuppetLog', ['level', 'tags', 'message', 'source',
+                                     'time'])
+
+
+def NamedtupleConstructor(cls):
+    def RealConstructor(loader, node):
+        data = loader.construct_mapping(node)
+        return cls(*[data[field] for field in cls._fields])
+    return RealConstructor
+
+yaml.add_constructor(
+    u'!ruby/object:Puppet::Transaction::Report',
+    NamedtupleConstructor(PuppetReport),
+    Loader=yaml.SafeLoader
+)
+yaml.add_constructor(
+    u'!ruby/object:Puppet::Util::Log',
+    NamedtupleConstructor(PuppetLog),
+    Loader=yaml.SafeLoader
+)
+
+# Treat all other tagged objects like plain YAML
+# Do this by removing the default constructor, which throws an error
+del yaml.SafeLoader.yaml_constructors[None]
+
+
+IGNORED_LOG_LEVELS = {'debug', 'info', 'notice', 'verbose'}
+
+
+def is_interesting_log(log):
+    """Determines whether a log message should be reported.
+
+    Message with levels below 'warning' are not reported. Neither are
+    messages reporting on environment changes, which have the 'warning'
+    level in Puppet 3.7 but were downgraded to 'notice' in Puppet 4.
+    """
+    if any(level in log.tags for level in IGNORED_LOG_LEVELS):
+        return False
+    # Puppet log messages don't have any kind of codes to identify them by
+    elif 'warning' in log.tags and log.message.startswith('Local environment'):
+        return False
+    else:
+        return True
+
+
+def is_interesting_report(report):
+    """Determines whether a Puppet report should be emailed out.
+
+    The report should already have uninteresting log messages stripped
+    out. Some criteria for ignorable reports: no interesting log
+    messages to report, host is not on the production environment,
+    report is over 30 days old.
+    """
+    if not report.logs:
+        return False
+    elif report.environment != 'production':
+        return False
+    elif datetime.now() - report.time > timedelta(30):
+        return False
+    else:
+        return True
+
+
+def strip_uninteresting_logs(report):
+    """Returns a modified Puppet report with only important log messages."""
+    return report._replace(logs=list(filter(is_interesting_log, report.logs)))
+
+
+def format_log(log):
+    """Formats a Puppet log line similarly to tagmail."""
+    return '{} {} ({}): {}'.format(log.time, log.source, ', '.join(log.tags),
+                                   log.message)
+
+
+def format_report(report):
+    """Formats a report from a single Puppet run by appending all the log
+    messages."""
+    header = 'Puppet report for {} at {}\n'.format(report.host, report.time)
+    body = '\n'.join(map(format_log, report.logs))
+    return header + body
+
+
+def main(types, report_dir=DEFAULT_REPORT_DIR, digest=False):
+    # Isolate the directories to process reports from
+    def type_filter(host_dir):
+        return (type_of_host(hostname_from_domain(os.path.basename(host_dir)))
+                in types)
+    host_dirs = filter(type_filter, glob(report_dir + '/*'))
+
+    digest_bodies = []  # If a digest, combine into one big email
+    for host_dir in host_dirs:
+        host_bodies = []  # Send all reports for a given host in one email
+        hostname = ''
+
+        # Process all YAML reports in one directory
+        for source in glob(host_dir + '/*.yaml'):
+            with open(source) as f:
+                report = strip_uninteresting_logs(yaml.safe_load(f))
+            if is_interesting_report(report):
+                host_bodies.append(format_report(report))
+            hostname = report.host
+
+            # Delete processed reports
+            os.remove(source)
+
+        # Append all reports for this host
+        if host_bodies:
+            body = '\n'.join(host_bodies)
+            if digest:
+                digest_bodies.append(body)
+            else:
+                subject = '[puppet] Puppet report for {}'.format(hostname)
+                send_mail(MAIL_TO_FROM, subject, body, MAIL_TO_FROM)
+
+    # If a digest, append reports from all hosts into a single message
+    if digest_bodies:
+        body = '\n'.join(digest_bodies)
+        subject = ('[puppet] Puppet report for {} host{}'
+                   .format(len(digest_bodies), 's' if len(digest_bodies) > 1 else ''))
+        send_mail(MAIL_TO_FROM, subject, body, MAIL_TO_FROM)
+
+
+if __name__ == '__main__':
+    parser = ArgumentParser(description='Process stored Puppet reports')
+    parser.add_argument('--report-dir', action='store',
+                        default=DEFAULT_REPORT_DIR)
+    parser.add_argument('--digest', action='store_true')
+    parser.add_argument('types', action='store', nargs='*',
+                        default=DEFAULT_TYPES)
+    args = parser.parse_args(sys.argv[1:])
+    main(args.types, args.report_dir, args.digest)
