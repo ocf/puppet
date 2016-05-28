@@ -1,8 +1,4 @@
 class ocf_mesos::package {
-  class { 'ocf_mesos::package::apt':
-    stage => first,
-  }
-
   package { 'mesos':; }
 
   Service {
@@ -15,13 +11,11 @@ class ocf_mesos::package {
     'mesos-master':
       ensure => $is_master,
       enable => $is_master;
-    # We only use zookeeper for Chronos persistence, not for Mesos redundant
-    # masters.
     'zookeeper':
       ensure => $is_master,
       enable => $is_master;
     'mesos-slave':
-      ensure => $is_slave,
-      enable => $is_slave;
+      ensure => false,
+      enable => false;
   }
 }
