@@ -1,7 +1,7 @@
 class ocf_irc::slack {
   package {
     [
-      'nodejs',
+      'nodejs-legacy',
       'slack-irc',
     ]:;
   }
@@ -10,11 +10,6 @@ class ocf_irc::slack {
   validate_re($slack_token, '^xoxb-[0-9]{11}-[a-zA-Z0-9]{24}$', 'Bad Slack bot token')
 
   file {
-    '/usr/local/bin/node':
-      ensure  => 'link',
-      target  => '/usr/bin/nodejs',
-      require => Package['slack-irc'];
-
     '/etc/slack-irc':
       ensure => directory;
 
