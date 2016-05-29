@@ -20,6 +20,11 @@ class ocf_apphost {
   # TODO: use a foreach loop once we have the future parser
   ocf_apphost::systemd_linger { $devs:; }
 
+  # create directory for per-user systemd logs
+  file { '/var/log/journal':
+    ensure => directory;
+  }
+
   file {
     '/srv/apps':
       ensure => directory,
