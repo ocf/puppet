@@ -1,5 +1,7 @@
 class ocf_mesos::package {
-  package { 'mesos':; }
+  # We need Java 8 to be the default java.
+  include ocf::packages::java
+  package { ['mesos', 'zookeeper']:; }
 
   Service {
     require => Package['mesos'],
@@ -15,7 +17,7 @@ class ocf_mesos::package {
       ensure => $is_master,
       enable => $is_master;
     'mesos-slave':
-      ensure => false,
-      enable => false;
+      ensure => $is_slave,
+      enable => $is_slave;
   }
 }

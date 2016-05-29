@@ -1,0 +1,12 @@
+[Unit]
+Description=Marathon
+After=network.target
+Wants=network.target
+
+[Service]
+ExecStart=/usr/bin/marathon --master zk://jaws:2181,pandemic:2181,hal:2181/mesos --zk zk://jaws:2181,pandemic:2181,hal:2181/marathon
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

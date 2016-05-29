@@ -6,7 +6,7 @@ class ocf_mesos::slave {
     lens    => 'Shellvars.lns',
     incl    => '/etc/default/mesos-slave',
     changes =>  [
-      'set MASTER "mesos.ocf.berkeley.edu:5050"',
+      'set MASTER "zk://jaws:2181,pandemic:2181,hal:2181/mesos"',
     ],
     notify  => Service['mesos-slave'],
     require => Package['mesos'];
@@ -19,7 +19,7 @@ class ocf_mesos::slave {
 
   file {
     '/etc/mesos-slave/containerizers':
-      content => "docker,mesos\n";
+      content => "docker\n";
     # increase executor timeout in case we need to pull a Docker image
     '/etc/mesos-slave/executor_registration_timeout':
       content => "5mins\n";
