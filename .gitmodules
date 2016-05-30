@@ -19,3 +19,9 @@
 [submodule "modules/spiped"]
 	path = modules/spiped
 	url = https://github.com/chriskuehl/puppet-spiped.git
+[submodule "modules/rabbitmq"]
+	path = modules/rabbitmq
+	url = https://github.com/puppetlabs/puppetlabs-rabbitmq.git
+[submodule "modules/staging"]
+	path = modules/staging
+	url = https://github.com/voxpupuli/puppet-staging.git
