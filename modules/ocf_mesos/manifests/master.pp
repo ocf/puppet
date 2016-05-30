@@ -3,4 +3,5 @@ class ocf_mesos::master {
   include ocf_mesos::master::marathon
   include ocf_mesos::master::mesos
   include ocf_mesos::master::zookeeper
+  include ocf_mesos::master::secrets
 }
