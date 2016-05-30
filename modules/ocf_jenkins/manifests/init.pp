@@ -1,5 +1,6 @@
 class ocf_jenkins {
   include ocf::extrapackages
+  include ocf::packages::docker
   include ocf::tmpfs
   include ocf_ssl
 
@@ -80,6 +81,12 @@ class ocf_jenkins {
       group  => jenkins-deploy,
       mode   => '0640';
 
+    '/opt/jenkins/deploy/.dockercfg':
+      source => 'puppet:///private/dockercfg',
+      owner  => root,
+      group  => jenkins-deploy,
+      mode   => '0640';
+
     '/etc/sudoers.d/jenkins-deploy':
       content => "jenkins ALL=(jenkins-deploy) NOPASSWD: ALL\n",
       owner   => root,
@@ -90,14 +97,16 @@ class ocf_jenkins {
     'jenkins-slave':
       comment => 'OCF Jenkins Slave',
       home    => '/opt/jenkins/slave/',
-      groups  => ['sys'],
-      shell   => '/bin/bash';
+      groups  => ['sys', 'docker'],
+      shell   => '/bin/bash',
+      require => Package['docker.io'];
 
     'jenkins-deploy':
       comment => 'OCF Jenkins Deploy',
       home    => '/opt/jenkins/deploy/',
-      groups  => ['sys'],
-      shell   => '/bin/bash';
+      groups  => ['sys', 'docker'],
+      shell   => '/bin/bash',
+      require => Package['docker.io'];
   }
 
   # mount jenkins slave workspace as tmpfs for speed
