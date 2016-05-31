@@ -1,4 +1,4 @@
-class ocf_mesos::master::mesos {
+class ocf_mesos::master::mesos($mesos_hostname) {
   include ocf_mesos::package
 
   file {
@@ -7,7 +7,7 @@ class ocf_mesos::master::mesos {
       notify  => Service['mesos-master'],
       require => Package['mesos'];
     '/etc/mesos/hostname':
-      content => "${::hostname}\n",
+      content => "${mesos_hostname}\n",
       notify  => Service['mesos-master'],
       require => Package['mesos'];
   }
@@ -17,7 +17,7 @@ class ocf_mesos::master::mesos {
     incl    => '/etc/default/mesos-master',
     changes =>  [
       'set PORT 5050',
-      'set ZK "zk://jaws:2181,pandemic:2181,hal:2181/mesos"',
+      'set ZK "zk://mesos0:2181,mesos1:2181,mesos2:2181/mesos"',
     ],
     notify  => Service['mesos-master'],
     require => Package['mesos'];

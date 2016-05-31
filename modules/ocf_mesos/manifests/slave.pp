@@ -6,7 +6,7 @@ class ocf_mesos::slave {
     lens    => 'Shellvars.lns',
     incl    => '/etc/default/mesos-slave',
     changes =>  [
-      'set MASTER "zk://jaws:2181,pandemic:2181,hal:2181/mesos"',
+      'set MASTER "zk://mesos0:2181,mesos1:2181,mesos2:2181/mesos"',
     ],
     notify  => Service['mesos-slave'],
     require => Package['mesos'];

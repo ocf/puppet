@@ -1,15 +1,5 @@
-class ocf_mesos::master::zookeeper {
+class ocf_mesos::master::zookeeper($zookeeper_id) {
   include ocf_mesos::package
-
-  $my_id = $::hostname ? {
-    jaws     => 1,
-    pandemic => 2,
-    hal      => 3,
-  }
-
-  if $my_id == undef {
-    fail("Master ${::hostname} is unknown!")
-  }
 
   File {
     require => Package['zookeeper'],
@@ -20,7 +10,7 @@ class ocf_mesos::master::zookeeper {
     '/etc/zookeeper/conf_ocf':
       ensure => directory;
     '/etc/zookeeper/conf_ocf/myid':
-      content => "${my_id}\n";
+      content => "${zookeeper_id}\n";
     '/etc/zookeeper/conf_ocf/zoo.cfg':
       source  => 'puppet:///modules/ocf_mesos/master/zookeeper/zoo.cfg';
     '/etc/zookeeper/conf_ocf/environment':
