@@ -1,6 +1,7 @@
 class ocf_mesos::slave {
   include ocf::packages::docker
   include ocf_mesos::package
+  include ocf_mesos::slave::secrets
 
   augeas { '/etc/default/mesos-slave':
     lens    => 'Shellvars.lns',

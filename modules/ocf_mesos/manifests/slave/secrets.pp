@@ -1,4 +1,4 @@
-class ocf_mesos::master::secrets {
+class ocf_mesos::slave::secrets {
   file { '/opt/share/secrets':
     mode    => '0600',
     source  => 'puppet:///private-docker/',

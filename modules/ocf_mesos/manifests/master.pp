@@ -1,7 +1,6 @@
 class ocf_mesos::master {
   include ocf_mesos::master::load_balancer
   include ocf_mesos::master::marathon
-  include ocf_mesos::master::secrets
 
   $my_mesos_id = $::hostname ? {
     whirlwind => 0,  # mesos0
