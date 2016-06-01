@@ -1,0 +1,12 @@
+[Unit]
+Description=Marathon
+After=network.target
+Wants=network.target
+
+[Service]
+ExecStart=/usr/bin/marathon --master zk://mesos0:2181,mesos1:2181,mesos2:2181/mesos --zk zk://mesos0:2181,mesos1:2181,mesos2:2181/marathon --hostname <%= @marathon_hostname %>
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

@@ -19,12 +19,19 @@ class ocf_mesos::slave {
   }
 
   file {
+    '/etc/mesos-slave':
+      ensure  => directory,
+      recurse => true,
+      purge   => true;
     '/etc/mesos-slave/containerizers':
       content => "docker\n";
     # increase executor timeout in case we need to pull a Docker image
     '/etc/mesos-slave/executor_registration_timeout':
       content => "5mins\n";
+    # remove old dockers as soon as we're done with them
     '/etc/mesos-slave/docker_remove_delay':
       content => "1secs\n";
+    '/etc/mesos-slave/hostname':
+      content => "${::hostname}\n";
   }
 }

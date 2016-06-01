@@ -1,15 +1,26 @@
 class ocf_mesos::master::mesos($mesos_hostname) {
   include ocf_mesos::package
 
+  File {
+    notify  => Service['mesos-master'],
+    require => Package['mesos'],
+  }
+
   file {
-    '/etc/mesos/zk':
-      ensure => absent,
-      notify  => Service['mesos-master'],
-      require => Package['mesos'];
-    '/etc/mesos/hostname':
-      content => "${mesos_hostname}\n",
-      notify  => Service['mesos-master'],
-      require => Package['mesos'];
+    '/etc/mesos-master':
+      ensure  => directory,
+      recurse => true,
+      purge   => true;
+
+    '/etc/mesos-master/hostname':
+      content => "${mesos_hostname}\n";
+
+    # We have 3 servers, so 2 is a quorum.
+    '/etc/mesos-master/quorum':
+      content => "2\n";
+
+    '/etc/mesos-master/work_dir':
+      content => "/var/lib/mesos\n";
   }
 
   augeas { '/etc/default/mesos-master':

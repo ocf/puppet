@@ -1,11 +1,11 @@
-class ocf_mesos::master::marathon {
+class ocf_mesos::master::marathon($marathon_hostname) {
   include ocf_mesos::package
 
   package { 'marathon':; }
 
   ocf::systemd::service { 'marathon':
     ensure  => running,
-    source  => 'puppet:///modules/ocf_mesos/master/marathon/marathon.service',
+    content => template('ocf_mesos/master/marathon/marathon.service.erb'),
     enable  => true,
     require => Package['marathon'],
   }
