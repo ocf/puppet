@@ -22,9 +22,10 @@ class ocf_jenkins::proxy {
         'Host $http_host'
       ],
 
-      ssl        => true,
-      ssl_cert   => "/etc/ssl/private/${::fqdn}.bundle",
-      ssl_key    => "/etc/ssl/private/${::fqdn}.key",
+      ssl         => true,
+      ssl_cert    => "/etc/ssl/private/${::fqdn}.bundle",
+      ssl_key     => "/etc/ssl/private/${::fqdn}.key",
+      ssl_dhparam => '/etc/ssl/dhparam.pem',
 
       add_header => {
         'Strict-Transport-Security' => 'max-age=31536000',
