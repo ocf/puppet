@@ -1,5 +1,10 @@
 class ocf_mesos::master {
+  include ocf_mesos
   include ocf_mesos::master::load_balancer
+
+  file { '/opt/share/mesos/master':
+    ensure => directory;
+  }
 
   $my_mesos_id = $::hostname ? {
     whirlwind => 0,  # mesos0

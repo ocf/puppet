@@ -34,7 +34,6 @@ class ocf_mesos::master::webui(
   }
 
   Nginx::Resource::Vhost {
-
     ssl_cert    => "/etc/ssl/private/${::fqdn}.bundle",
     ssl_key     => "/etc/ssl/private/${::fqdn}.key",
     ssl_dhparam => '/etc/ssl/dhparam.pem',

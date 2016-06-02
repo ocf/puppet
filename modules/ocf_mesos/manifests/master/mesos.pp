@@ -6,6 +6,8 @@ class ocf_mesos::master::mesos($mesos_hostname) {
     require => Package['mesos'],
   }
 
+  $ocf_mesos_password = 'hunter2'
+
   file {
     '/etc/mesos-master':
       ensure  => directory,
@@ -22,8 +24,24 @@ class ocf_mesos::master::mesos($mesos_hostname) {
     '/etc/mesos-master/work_dir':
       content => "/var/lib/mesos\n";
 
-    '/etc/mesos-master/authenticate_http':
-      content => "false\n";
+    [
+      '/etc/mesos-master/authenticate',
+      '/etc/mesos-master/authenticate_slaves',
+      '/etc/mesos-master/authenticate_http',
+    ]:
+      content => "true\n";
+
+    '/etc/mesos-master/authenticators':
+      content => "crammd5\n";
+
+    '/etc/mesos-master/credentials':
+      content => "/opt/share/mesos/master/credentials.json\n",
+      require => File['/opt/share/mesos/master/credentials.json'];
+
+    '/opt/share/mesos/master/credentials.json':
+      content   => template('ocf_mesos/master/mesos/credentials.json.erb'),
+      mode      => '0400',
+      show_diff => false;
   }
 
   augeas { '/etc/default/mesos-master':
