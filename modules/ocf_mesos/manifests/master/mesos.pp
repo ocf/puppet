@@ -21,6 +21,9 @@ class ocf_mesos::master::mesos($mesos_hostname) {
 
     '/etc/mesos-master/work_dir':
       content => "/var/lib/mesos\n";
+
+    '/etc/mesos-master/authenticate_http':
+      content => "false\n";
   }
 
   augeas { '/etc/default/mesos-master':

@@ -1,0 +1,16 @@
+# Restrict access to the Mesos WebUI to ocfroot users only.
+# We do this because it allows some very destructive actions.
+#
+# Note that this PAM service is used only for authentication to the nginx
+# proxy. Mesos does not support PAM authentication (it currently only supports
+# hardcoded passwords in a config file).
+#
+# We do not expect staff to talk to Mesos directly, but instead only through
+# the nginx proxy.
+
+@include common-auth
+@include common-account
+@include common-password
+@include common-session
+
+auth    required    pam_listfile.so onerr=fail item=group sense=allow file=/opt/share/mesos-admin-groups

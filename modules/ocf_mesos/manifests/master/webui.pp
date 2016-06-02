@@ -4,11 +4,25 @@ class ocf_mesos::master::webui(
 ) {
   require ocf_ssl
 
+  # We limit access to ocfroot only via PAM.
+  file {
+    '/opt/share/mesos-admin-groups':
+      content => "ocfroot\n";
+
+    '/etc/pam.d/mesos_master_webui':
+      source  => 'puppet:///modules/ocf_mesos/master/webui/mesos_master_webui',
+      require => File['/opt/share/mesos-admin-groups'];
+
+  }
+
   class { 'nginx':
+    # We need the PAM authentication module.
+    package_name => 'nginx-extras',
+
     # if we let nginx manage its own repo, it uses the `apt` module; this
     # creates an unresolvable dependency cycle because we declare class `apt`
     # in stage first (and we're currently in stage main)
-    manage_repo => false;
+    manage_repo  => false;
   }
 
   nginx::resource::upstream {
@@ -46,7 +60,14 @@ class ocf_mesos::master::webui(
       # Mesos will redirect to a URL like "//mesos5:5050" when redirecting to
       # the current leader; we want to remove the port and go to the HTTPS site
       # with the entire FQDN instead.
-      proxy_redirect => '~^//mesos([0-9]+):5050$ https://mesos$1.ocf.berkeley.edu/';
+      proxy_redirect => '~^//mesos([0-9]+):5050$ https://mesos$1.ocf.berkeley.edu/',
+
+      raw_append => [
+        'auth_pam "OCF Mesos Master";',
+        'auth_pam_service_name mesos_master_webui;',
+      ],
+
+      require => File['/etc/pam.d/mesos_master_webui'];
 
     'mesos-https-redirect':
       # we have to specify www_root even though we always redirect/proxy
@@ -73,7 +94,14 @@ class ocf_mesos::master::webui(
       server_name => [$marathon_fqdn],
       proxy       => 'http://marathon',
       ssl         => true,
-      listen_port => 443;
+      listen_port => 443,
+
+      raw_append => [
+        'auth_pam "OCF Marathon Master";',
+        'auth_pam_service_name mesos_master_webui;',
+      ],
+
+      require => File['/etc/pam.d/mesos_master_webui'];
 
     'marathon-https-redirect':
       # we have to specify www_root even though we always redirect/proxy
