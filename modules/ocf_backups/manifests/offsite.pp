@@ -1,6 +1,11 @@
 # Things for helping with offsite backups.
 class ocf_backups::offsite {
-  package { ['google-gsutil']:; }
+  package {
+    [
+      'google-gsutil',
+      'python3-pycurl'
+    ]:;
+  }
 
   file {
     '/opt/share/backups/create-encrypted-backup':
@@ -9,6 +14,10 @@ class ocf_backups::offsite {
 
     '/opt/share/backups/upload-to-google':
       source => 'puppet:///modules/ocf_backups/upload-to-google',
+      mode   => '0755';
+
+    '/opt/share/backups/upload-to-box':
+      source => 'puppet:///modules/ocf_backups/upload-to-box',
       mode   => '0755';
 
     '/opt/share/backups/keys':
