@@ -32,10 +32,11 @@ class ocf_www::lets_encrypt {
     }
 
     cron { 'lets-encrypt-update':
-      command => '/usr/local/bin/lets-encrypt-update',
-      user    => ocfletsencrypt,
-      special => hourly,
-      require => File['/usr/local/bin/lets-encrypt-update'],
+      command     => '/usr/local/bin/lets-encrypt-update',
+      user        => ocfletsencrypt,
+      environment => 'MAILTO=root',
+      special     => hourly,
+      require     => File['/usr/local/bin/lets-encrypt-update'],
     }
   }
 }
