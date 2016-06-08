@@ -1,7 +1,9 @@
+.PHONY: all
+all: vendor
+
 .PHONY: test
 test:
 	pre-commit run --all-files
 
-.PHONY: vendor
-vendor:
+vendor: Puppetfile
 	r10k puppetfile install
