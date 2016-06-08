@@ -73,6 +73,11 @@ class ocf_ldap {
       '/root/.ssh/id_rsa':
         source => 'puppet:///private/id_rsa',
         mode   => '0600';
+
+      # This is to stop backups from sending emails every time a new IP is used
+      # See rt#4724 for more information
+      '/root/.ssh/known_hosts':
+        source => 'puppet:///modules/ocf_ldap/github_known_hosts';
     }
   }
 
