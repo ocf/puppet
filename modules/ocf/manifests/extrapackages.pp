@@ -144,6 +144,7 @@ class ocf::extrapackages {
     'python3-tk',
     'quilt',
     'r-base',
+    'r10k',
     'rails',
     'ruby-dev',
     'ruby-mysql',
