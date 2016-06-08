@@ -99,14 +99,14 @@ class ocf_jenkins {
       home    => '/opt/jenkins/slave/',
       groups  => ['sys', 'docker'],
       shell   => '/bin/bash',
-      require => Package['docker.io'];
+      require => Package['docker-engine'];
 
     'jenkins-deploy':
       comment => 'OCF Jenkins Deploy',
       home    => '/opt/jenkins/deploy/',
       groups  => ['sys', 'docker'],
       shell   => '/bin/bash',
-      require => Package['docker.io'];
+      require => Package['docker-engine'];
   }
 
   # mount jenkins slave workspace as tmpfs for speed

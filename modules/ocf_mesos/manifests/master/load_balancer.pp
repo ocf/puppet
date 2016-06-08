@@ -5,6 +5,6 @@ class ocf_mesos::master::load_balancer {
     ensure  => running,
     source  => 'puppet:///modules/ocf_mesos/master/ocf-lb.service',
     enable  => true,
-    require => Package['docker.io'],
+    require => Package['docker-engine'],
   }
 }
