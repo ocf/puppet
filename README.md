@@ -36,7 +36,8 @@ user. You should make your changes here and push them to GitHub to be deployed
 into production.
 
 If creating a new environment, you should either copy an existing environment,
-or clone the repo and remember to run `git submodule update --init`.
+or clone the repo and remember to run `make vendor` to install all required
+third-party modules.
 
 ### Testing using your puppet environment
 
@@ -128,15 +129,17 @@ service CNAME (such as `puppet`) or the top-level variables `$::hostname` and
 Third-party modules can be helpful. Try to only use ones that are actively
 maintained.
 
-We use [git submodules][sobmodules] to include third-party modules in our
-config. This has benefits over storing them in a global directory on the
-puppetmaster (e.g. with the `puppet module` tool):
+We use [r10k][r10k] to include third-party modules in our config. This has
+benefits over storing them in a global directory on the puppetmaster (e.g. with
+the `puppet module` tool), and is easier to manage than using git submodules:
 
 * This puppet config repository is self-contained
 * Adding and updating modules can be tested in an environment before being
   inflicted on every server
 * Staff members can test third-party modules without needing root on the
   puppetmaster
+* Modules can be installed from [Puppet Forge](puppet-forge) without needing to
+  have a git repository
 
 ### Styling
 
@@ -167,7 +170,8 @@ Instead of overwriting an entire config file just to change one value, try to
 [ubuntu]: http://www.ubuntu.com/
 [about-staff]: https://www.ocf.berkeley.edu/about/staff
 [jenkins]: https://jenkins.ocf.berkeley.edu/view/puppet-deploy/
-[sobmodules]: http://git-scm.com/book/en/v2/Git-Tools-Submodules
+[r10k]: https://github.com/puppetlabs/r10k
+[puppet-forge]: https://forge.puppet.com/
 [augeas]: http://projects.puppetlabs.com/projects/1/wiki/puppet_augeas
 [augeas-example]: https://github.com/ocf/puppet/blob/57c9bec/modules/ocf/manifests/auth.pp#L95
 [sed]: http://projects.puppetlabs.com/projects/puppet/wiki/Simple_Text_Patterns/5
