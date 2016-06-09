@@ -19,10 +19,9 @@ class ocf_mesos::master::webui(
     # We need the PAM authentication module.
     package_name => 'nginx-extras',
 
-    # if we let nginx manage its own repo, it uses the `apt` module; this
-    # creates an unresolvable dependency cycle because we declare class `apt`
-    # in stage first (and we're currently in stage main)
-    manage_repo  => false;
+    manage_repo  => false,
+    confd_purge  => true,
+    vhost_purge  => true,
   }
 
   nginx::resource::upstream {
