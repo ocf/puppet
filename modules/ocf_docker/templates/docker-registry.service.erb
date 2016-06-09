@@ -6,14 +6,9 @@ After=docker.service
 [Service]
 User=root
 ExecStart=/usr/bin/docker run --rm \
-    -v /etc/ssl/certs/incommon-intermediate.crt:/etc/ssl/certs/incommon-intermediate.crt \
-    -v /etc/ssl/private/<%= @fqdn %>.key:/etc/ssl/private/private.key \
-    -v /etc/ssl/private/<%= @fqdn %>.bundle:/etc/ssl/private/private.crt \
     -v /var/lib/registry:/var/lib/registry \
-    -p 443:5000 \
+    -p 127.0.0.1:5000:5000 \
     --name registry \
-    -e REGISTRY_HTTP_TLS_CERTIFICATE=/etc/ssl/private/private.crt \
-    -e REGISTRY_HTTP_TLS_KEY=/etc/ssl/private/private.key \
     registry:2
 Restart=always
 
