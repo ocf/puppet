@@ -1,11 +1,10 @@
-#!/usr/bin/env ruby
-
 # Install all third-party modules into the vendor directory
 moduledir 'vendor'
 
 
 # Third-party modules
 mod 'ckuehl-spiped',       '1.1.1'
+mod 'puppet-staging',      '2.0.0'
 mod 'puppetlabs-apache',   '1.10.0'
 mod 'puppetlabs-rabbitmq', '5.4.0'
 mod 'puppetlabs-stdlib',   '4.12.0'
@@ -31,12 +30,6 @@ mod 'puppetlabs-concat',
 mod 'puppet-nginx',
   git: 'https://github.com/jfryman/puppet-nginx.git',
   ref: 'cba946bcb71'
-
-# Last release: 1.0.6 on Mar 20th, 2016
-# Current SHA: May 13th, 2016
-mod 'puppet-staging',
-  git: 'https://github.com/voxpupuli/puppet-staging.git',
-  ref: 'c79088ec420'
 
 # Last release: 1.3.2 on Dec 8th, 2015
 # Current SHA: Apr 19th, 2016
