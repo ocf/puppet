@@ -28,5 +28,24 @@ class ocf_backups::offsite {
     '/opt/share/backups/boto.cfg':
       source => 'puppet:///private/boto.cfg',
       mode   => '0600';
+
+    # Box.com credentials and API id/secret
+    '/opt/share/backups/box-creds.json':
+      source => 'puppet:///private/box-creds.json',
+      mode   => '0600';
+
+    # This changes each time a backup is made, so it is not stored on the
+    # puppetmaster and instead is just a local file on the backups server.
+    '/opt/share/backups/box-refresh-token':
+      mode => '0600';
+  }
+
+  cron {
+    'encrypt-and-backup':
+      command => '/opt/share/backups/create-encrypted-backup && /opt/share/backups/upload-to-box --quiet',
+      user    => 'root',
+      weekday => '0',
+      hour    => '0',
+      minute  => '0';
   }
 }

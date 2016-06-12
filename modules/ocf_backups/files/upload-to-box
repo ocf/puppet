@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
+import argparse
+import json
 import os
 import subprocess
 import sys
 import threading
 import time
-from getpass import getpass
+from io import BytesIO
 from shutil import get_terminal_size
 
 import pycurl
@@ -13,6 +15,28 @@ ARCHIVE = '/opt/backups/scratch/archive'
 BOX_DAV = 'https://dav.box.com/dav/'
 MAX_CONCURR_UPLOADS = 10
 FOLDER = 'ocf-backup-' + time.strftime('%Y-%m-%d')
+
+# To get the OAuth keys for an account:
+#
+# Mostly taken from https://goo.gl/bXdrPE
+#
+# Secrets like client_id, client_secret, and user email/password are in the
+# puppetmaster's private store and on hal in /opt/share/backups/box-creds.json.
+#
+# First, go to
+# https://account.box.com/api/oauth2/authorize?response_type=code&client_id={your_api_key}&state=authenticated&redirect_uri=https://www.ocf.berkeley.edu/oauth
+# You will get redirected to a 404 page, but you can get an auth code from that
+# page's URL. This auth code doesn't last very long at all, so run the below
+# command quickly. Otherwise, just go back to the same page and do it again.
+#
+# Quickly run: curl https://app.box.com/api/oauth2/token -X POST -d \
+# 'grant_type=authorization_code&code={auth code from above}&client_id={client id}&client_secret={client secret}'
+# Get the refresh token from this command's return, it can be used for up to
+# 60 days or one use before it expires. Once used, it is replaced by another
+# token, so it is stored in a local file (/opt/share/backupsbox-refresh-token)
+# and overwritten each time a new one is returned (when the old one is used).
+# Access tokens only last for an hour before expiring, so they are only stored
+# in this program's memory and are generated using the refresh token.
 
 
 class BoxUpload:
@@ -68,6 +92,76 @@ class BoxUpload:
             (width - filled) * ' ',
             second_half
         )
+
+
+def box_api_call(url, data='', headers=[], method=''):
+    """Make an API call to Box.com (or anywhere really)"""
+    conn = pycurl.Curl()
+
+    response_data = BytesIO()
+    conn.setopt(conn.URL, url)
+    conn.setopt(conn.WRITEDATA, response_data)
+    conn.setopt(conn.HTTPHEADER, headers)
+
+    if data:
+        conn.setopt(conn.POSTFIELDS, data)
+
+    if method:
+        conn.setopt(conn.CUSTOMREQUEST, method)
+
+    conn.perform()
+    http_status = conn.getinfo(pycurl.HTTP_CODE)
+    conn.close()
+
+    if http_status == 200:
+        return json.loads(response_data.getvalue().decode('utf-8'))
+    else:
+        print('HTTP {} on {} with {}'.format(http_status, url, data))
+        sys.exit(1)
+
+
+def get_access_token(creds):
+    """Gets a new access token for the Box.com API"""
+    with open('/opt/share/backups/box-refresh-token', 'r+') as f:
+        refresh_token = f.read().strip()
+
+        # Get an access token and a new refresh token from the API
+        post_data = '&refresh_token={}&client_id={}&client_secret={}'.format(
+            refresh_token,
+            creds['api_client_id'],
+            creds['api_client_secret']
+        )
+        response = box_api_call('https://app.box.com/api/oauth2/token',
+                                data='grant_type=refresh_token' + post_data)
+
+        # Write the new refresh token to the file
+        f.seek(0)
+        f.write(response['refresh_token'])
+        f.truncate()
+
+        return response['access_token']
+
+
+def get_folder_id(access_token, folder_name):
+    """Get the ID for a folder with a specific name in the root folder"""
+    response = box_api_call('https://api.box.com/2.0/folders/0/items?limit=1000',
+                            headers=['Authorization: Bearer ' + access_token])
+
+    for entry in response['entries']:
+        if entry['name'] == folder_name and entry['type'] == 'folder':
+            return entry['id']
+
+
+def get_shared_link(access_token, folder_id):
+    """Get a download link to the folder where the upload was made"""
+    # A password can be set on the shared link, but the data is encrypted
+    # with keys anyway, so why bother?
+    response = box_api_call('https://api.box.com/2.0/folders/' + folder_id,
+                            data='{"shared_link": {"access": "open"}}',
+                            headers=['Authorization: Bearer ' + access_token],
+                            method='PUT')
+
+    return response['shared_link']['url']
 
 
 def make_box_folder(folder, auth):
@@ -166,7 +260,7 @@ def friendly_time(seconds):
         seconds /= factor
 
 
-def main(arvg=None):
+def main(args):
     try:
         files = sorted(os.listdir(ARCHIVE))
     except PermissionError:
@@ -176,19 +270,24 @@ def main(arvg=None):
     # Make sure there are actually files to upload
     assert files, 'No files found to upload, check your path'
 
-    # Get authentication for Box.com
-    email = input('Box.com email (Berkeley email): ')
-    password = getpass('Box.com password: ')
-    auth = email + ':' + password
+    # Get authentication for Box.com from credentials file
+    with open('/opt/share/backups/box-creds.json') as f:
+        creds = json.loads(f.read())
 
-    # Make a folder for the backup
+    auth = creds['email'] + ':' + creds['password']
+
+    # Make a new folder for the backup
+    if not args.quiet:
+        print('Creating folder ' + FOLDER + ' on Box.com...')
+
     make_box_folder(FOLDER, auth)
-    print('Creating folder ' + FOLDER + ' on Box.com...')
 
     # Start timer for upload speed and get total upload size
     file_bytes = sum(os.path.getsize(ARCHIVE + '/' + f) for f in files)
-    print('Uploading {}...'.format(friendly_file_size(file_bytes)))
-    time.sleep(3)
+    if not args.quiet:
+        print('Uploading {}...'.format(friendly_file_size(file_bytes)))
+        time.sleep(3)
+
     start_time = time.time()
 
     multi = pycurl.CurlMulti()
@@ -217,8 +316,9 @@ def main(arvg=None):
         queue.append(f)
 
     # Clear the screen and start printing the progress bar every second
-    subprocess.call(('clear',))
-    print_progress(multi, stats, 0)
+    if not args.quiet:
+        subprocess.call(('clear',))
+        print_progress(multi, stats, 0)
 
     while stats['num_finished'] < len(files):
         # Add uploads if there are connections free to use
@@ -278,11 +378,18 @@ def main(arvg=None):
         conn.close()
     multi.close()
 
+    # Get a shared link from Box.com's API for this folder
+    access_token = get_access_token(creds)
+    folder_id = get_folder_id(access_token, FOLDER)
+    link = get_shared_link(access_token, folder_id)
+
     # Print statistics about the backup time, size, and speed
-    subprocess.call(('clear',))
+    if not args.quiet:
+        subprocess.call(('clear',))
+
     total_time = time.time() - start_time
     transfer_rate = file_bytes / (1000000 * total_time)
-    print('Upload complete!')
+    print('Box.com upload complete!')
     print('Took {} to transfer {} files with combined size {}'.format(
         friendly_time(total_time),
         stats['num_total'],
@@ -292,6 +399,14 @@ def main(arvg=None):
         transfer_rate * 8,
         transfer_rate
     ))
+    print('Link to the uploaded folder: {}'.format(link))
+
 
 if __name__ == '__main__':
-    exit(main())
+    parser = argparse.ArgumentParser(description='Back up files to Box.com')
+    parser.add_argument('-q', '--quiet', action='store_true',
+                        help='do not output progress to stdout')
+
+    args = parser.parse_args()
+
+    exit(main(args))
