@@ -29,7 +29,7 @@ class ocf_kvm($group = 'root') {
   }
 
   # makevm dependencies
-  package { 'nmap':; }
+  include ocf::packages::nmap
 
   file {
     '/usr/local/sbin/makevm':

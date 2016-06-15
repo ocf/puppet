@@ -13,6 +13,7 @@
 class ocf::extrapackages {
   # special snowflake packages that require some config
   include ocf::packages::matplotlib
+  include ocf::packages::nmap
 
   # other packages
   package {
@@ -81,7 +82,6 @@ class ocf::extrapackages {
     'mercurial',
     'mutt',
     'nasm',
-    'nmap',
     'nodejs',
     'octave',
     'pandoc',
