@@ -80,6 +80,7 @@ class ocf::extrapackages {
     'lynx',
     'mercurial',
     'mutt',
+    'nasm',
     'nmap',
     'nodejs',
     'octave',
