@@ -1,0 +1,40 @@
+<%
+def colorize(start_num, end_num, text)
+    "\e[#{start_num}m#{text}\e[#{end_num}m"
+end
+
+
+def bold(text)
+    colorize(1, 22, text)
+end
+
+
+def red(text)
+    colorize(31, 0, text)
+end
+-%>
+<%= bold("Hi, I am #{hostname}.") %>
+  - Host type: <%= red(@type) -%>
+<% if defined? @puppetClass then -%>
+
+  - Puppet classes: <%
+  if @puppetClass.is_a? String then
+      -%><%= red(@puppetClass) %><%
+  else
+      -%><%= red(@puppetClass.sort.join(', ')) %><%
+  end
+end -%>
+<% if defined? @owner then -%>
+
+  - Owner: <%= red(@owner) -%>
+<% end -%>
+<% if defined? @dnsCname then -%>
+
+  - DNS names: <%
+  if @dnsCname.is_a? String then
+      %><%= red(@dnsCname) %><%
+  else
+      %><%= red(@dnsCname.sort.join(', ')) %><%
+  end
+end -%>
+<% '\n' %>

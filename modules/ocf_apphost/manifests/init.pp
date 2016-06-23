@@ -1,7 +1,6 @@
 class ocf_apphost {
   include ocf::extrapackages
   include ocf::hostkeys
-  include ocf::motd
   include proxy
   include ssl
 
