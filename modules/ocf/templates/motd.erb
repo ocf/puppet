@@ -9,32 +9,23 @@ def bold(text)
 end
 
 
-def red(text)
-    colorize(31, 0, text)
+def yellow(text)
+    colorize(33, 39, text)
+end
+
+def motd_line(text)
+    ([*text].sort.join(', ') + "\n") if text
+end
+
+def info_line(prefix, info)
+    "  - #{prefix}: #{bold(yellow(motd_line(info)))}" if info
 end
 -%>
-<%= bold("Hi, I am #{hostname}.") %>
-  - Host type: <%= red(@type) -%>
-<% if defined? @puppetClass then -%>
-
-  - Puppet classes: <%
-  if @puppetClass.is_a? String then
-      -%><%= red(@puppetClass) %><%
-  else
-      -%><%= red(@puppetClass.sort.join(', ')) %><%
-  end
-end -%>
-<% if defined? @owner then -%>
-
-  - Owner: <%= red(@owner) -%>
-<% end -%>
-<% if defined? @dnsCname then -%>
-
-  - DNS names: <%
-  if @dnsCname.is_a? String then
-      %><%= red(@dnsCname) %><%
-  else
-      %><%= red(@dnsCname.sort.join(', ')) %><%
-  end
-end -%>
-<% '\n' %>
+<% full_type = (@is_virtual ? 'virtual ' : 'physical ') + @type -%>
+<%= bold("Hi, I am #{yellow(hostname)}, a #{yellow(full_type)} at #{yellow(@ipaddress)}.") %>
+<%= motd_line(@description) -%>
+<%= info_line('Puppet classes',     @puppetClass) -%>
+<%= info_line('Puppet environment', @environment) if @environment != 'production' -%>
+<%= info_line('Owner',              @owner) -%>
+<%= info_line('DNS A names',        @dnsA) -%>
+<%= info_line('DNS C names',        @dnsCname) -%>
