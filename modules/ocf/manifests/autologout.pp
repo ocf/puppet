@@ -4,7 +4,7 @@ class ocf::autologout {
   $condition = 'tty | grep -q ^/dev/tty'
   $timeout = 300
 
-  File { mode => 0755 }
+  File { mode => '0755' }
   file {
     '/etc/profile.d/autologout.sh':
       content => "${condition} && export TMOUT=${timeout}",
