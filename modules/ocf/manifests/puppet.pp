@@ -57,13 +57,4 @@ class ocf::puppet {
       require => Package['puppet'],
     ;
   }
-
-  # TODO: delete this
-  # get client to generate new SSL cert
-  if $::fqdn != 'lightning.ocf.berkeley.edu' {
-    exec { 'backup ssl':
-      command => 'mv /var/lib/puppet/ssl /var/lib/puppet/ssl_old',
-      creates => '/var/lib/puppet/ssl_old',
-    }
-  }
 }
