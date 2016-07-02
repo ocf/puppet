@@ -7,10 +7,9 @@ class ocf_ssh::webssh {
   }
 
   class { 'nginx':
-    # if we let nginx manage its own repo, it uses the `apt` module; this
-    # creates an unresolvable dependency cycle because we declare class `apt`
-    # in stage first (and we're currently in stage main)
-    manage_repo => false;
+    manage_repo => false,
+    confd_purge => true,
+    vhost_purge => true,
   }
 
   nginx::resource::upstream { 'webssh':

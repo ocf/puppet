@@ -1,0 +1,16 @@
+[Unit]
+Description=OCF Docker registry
+Requires=network-online.target
+After=docker.service
+
+[Service]
+User=root
+ExecStart=/usr/bin/docker run --rm \
+    -v /var/lib/registry:/var/lib/registry \
+    -p 127.0.0.1:5000:5000 \
+    --name registry \
+    registry:2
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

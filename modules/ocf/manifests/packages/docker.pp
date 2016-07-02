@@ -12,14 +12,21 @@
 # more use out of them, but that requires quite a bit of work first.
 #
 class ocf::packages::docker($admin_group = 'docker') {
-  ocf::repackage { 'docker.io':
-    backport_on => 'jessie';
+  class { 'ocf::packages::docker::apt':
+    stage => first,
+  }
+
+  package {
+    'docker.io':
+      ensure  => purged;
+    'docker-engine':
+      require => Package['docker.io'];
   }
 
   exec { 'docker-socket-update':
     command     => 'systemctl daemon-reexec && systemctl restart docker.socket',
     refreshonly => true,
-    require     => Ocf::Repackage['docker.io'];
+    require     => Package['docker-engine'],
   }
 
   augeas { 'set docker socket group':
@@ -27,7 +34,7 @@ class ocf::packages::docker($admin_group = 'docker') {
     changes => [
       "set Socket/SocketGroup/value ${admin_group}",
     ],
-    require => Ocf::Repackage['docker.io'],
+    require => Package['docker-engine'],
     notify  => Exec['docker-socket-update'];
   }
 }
