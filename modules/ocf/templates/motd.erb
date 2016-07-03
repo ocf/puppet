@@ -22,7 +22,7 @@ def info_line(prefix, info)
 end
 -%>
 <% full_type = (@is_virtual ? 'virtual ' : 'physical ') + @type -%>
-<%= bold("Hi, I am #{red(@hostname)}, a #{red(full_type)} at #{red(@ipaddress)}.") %>
+<%= bold("Hi, I am #{red(@hostname)}, a #{red(full_type)} at #{red(@ipHostNumber)}.") %>
 <%= motd_line(@description) -%>
 <%= info_line('Puppet classes',     @puppetClass) -%>
 <%= info_line('Puppet environment', @environment) if @environment != 'production' -%>
