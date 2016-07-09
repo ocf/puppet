@@ -135,6 +135,8 @@ opertype {
     modes = "+Nq"
 }
 
+
+# Services opers
 oper {
     name = "waf"
     type = "Services Root"
@@ -211,24 +213,13 @@ mail {
                     %t"
 }
 
-#module {
-#    name = "db_flatfile"
-#    database = "anope.db"
-#    keepbackups = 3
-#    fork = no
-#}
-
 # Use mysql for data instead of the flat file default
 module {
-    #name = "db_sql"
     name = "db_sql_live"
-
     engine = "mysql/main"
 
     # We don't want anope_db_ to preceded the database table names (default)
     prefix = ""
-
-    #import = true
 }
 
 # MySQL connection credentials

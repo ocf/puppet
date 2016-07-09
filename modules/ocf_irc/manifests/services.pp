@@ -28,7 +28,6 @@ class ocf_irc::services {
     '/etc/anope/services.motd':
       content => 'Welcome to OCF IRC Services!';
 
-    # Service files
     '/etc/anope':
       ensure  => directory,
       recurse => true,

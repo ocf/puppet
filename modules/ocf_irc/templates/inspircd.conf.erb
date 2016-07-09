@@ -102,9 +102,11 @@
           attribute="uid">
 
 # List of allowed opers
-<oper name="ckuehl"   password="uid=ckuehl"   host="*@*" type="NetAdmin" hash="ldap">
-<oper name="jvperrin" password="uid=jvperrin" host="*@*" type="NetAdmin" hash="ldap">
-<oper name="mattmcal" password="uid=mattmcal" host="*@*" type="NetAdmin" hash="ldap">
+<oper name="waf"          password="uid=waf"      host="*@*" type="NetAdmin" hash="ldap">
+<oper name="nattofriends" password="uid=tzhu"     host="*@*" type="NetAdmin" hash="ldap">
+<oper name="ckuehl"       password="uid=ckuehl"   host="*@*" type="NetAdmin" hash="ldap">
+<oper name="jvperrin"     password="uid=jvperrin" host="*@*" type="NetAdmin" hash="ldap">
+<oper name="mattmcal"     password="uid=mattmcal" host="*@*" type="NetAdmin" hash="ldap">
 
 
 <files motd="/etc/inspircd/inspircd.motd"
@@ -132,7 +134,7 @@
          quietbursts="yes"
          pingwarning="15"
          allowhalfop="yes"
-	       exemptchanops="">
+         exemptchanops="">
 
 <security hidewhois=""
           userstats="Pu"
