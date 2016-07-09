@@ -1,4 +1,9 @@
 class ocf_irc::slack {
+  # TODO:
+  #  - Update Slack channel topic when IRC changes and vice versa:
+  #      API: https://api.slack.com/methods/channels.setTopic
+  #  - Add Slack bots for users when they join, without requiring a restart
+
   package {
     [
       'nodejs',

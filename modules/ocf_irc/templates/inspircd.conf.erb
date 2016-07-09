@@ -43,15 +43,15 @@
       ipaddr="localhost"
       port="25580"
       allowmask="127.0.0.0/8"
-      sendpass="<%= @irc_passwords['anope-link'] -%>"
-      recvpass="<%= @irc_passwords['anope-link'] -%>">
+      sendpass="<%= @passwords['anope-link'] -%>"
+      recvpass="<%= @passwords['anope-link'] -%>">
 
 <uline server="services.irc.ocf.berkeley.edu" silent="yes">
 
 
 # Passwords needed to kill/restart the IRCd while connected to it
-<power diepass="<%= @irc_passwords['diepass'] -%>"
-       restartpass="<%= @irc_passwords['restartpass'] -%>"
+<power diepass="<%= @passwords['diepass'] -%>"
+       restartpass="<%= @passwords['restartpass'] -%>"
        pause="5">
 
 
@@ -71,7 +71,7 @@
          useident="no" localmax="5" globalmax="5">
 
 # Cloaking for the OCF subnet
-<cloak mode="full" key="<%= @irc_passwords['cloak-key'] -%>" prefix="OCF-">
+<cloak mode="full" key="<%= @passwords['cloak-key'] -%>" prefix="OCF-">
 
 
 # Allow overrides when users are opers
