@@ -1,6 +1,7 @@
 class ocf_irc::slack {
   package {
     [
+      'nodejs',
       'nodejs-legacy',
       'slack-irc',
     ]:;

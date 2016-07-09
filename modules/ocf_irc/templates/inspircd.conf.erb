@@ -1,0 +1,200 @@
+# Comments removed for easier editing
+# See the examples in /usr/share/doc/inspircd/examples/ for more information
+
+# Extra modules
+<module name="m_cloaking.so">
+<module name="m_conn_umodes.so">
+<module name="m_ldapoper.so">
+<module name="m_md5.so">
+<module name="m_override.so">
+<module name="m_sha256.so">
+<module name="m_ssl_gnutls.so">
+
+# Required/Recommended modules for anope
+<module name="m_alias.so">
+<module name="m_chghost.so">
+<module name="m_customprefix.so">
+<module name="m_hidechans.so">
+<module name="m_services_account.so">
+<module name="m_spanningtree.so">
+<module name="m_svshold.so">
+
+
+<server name="irc.ocf.berkeley.edu"
+        description="Open Computing Facility IRC Server"
+        network="OCF">
+
+<admin name="OCF Staff Members"
+       nick="ocf"
+       email="help@ocf.berkeley.edu">
+
+<gnutls certfile="/etc/ssl/private/<%= @fqdn -%>.bundle"
+        keyfile="/etc/ssl/private/<%= @fqdn -%>.key"
+        priority="NORMAL:-MD5">
+
+# Allow non-SSL connections from 6661 to 6669 and SSL on 6697
+# Port 25580 is localhost-only for anope services to connect
+<bind address="" port="6661-6669" type="clients">
+<bind address="" port="6697" type="clients" ssl="gnutls">
+<bind address="127.0.0.1" port="25580" type="servers">
+
+# Link to the anope server, only allow local connections
+<link name="services.irc.ocf.berkeley.edu"
+      ipaddr="localhost"
+      port="25580"
+      allowmask="127.0.0.0/8"
+      sendpass="<%= @irc_passwords['anope-link'] -%>"
+      recvpass="<%= @irc_passwords['anope-link'] -%>">
+
+<uline server="services.irc.ocf.berkeley.edu" silent="yes">
+
+
+# Passwords needed to kill/restart the IRCd while connected to it
+<power diepass="<%= @irc_passwords['diepass'] -%>"
+       restartpass="<%= @irc_passwords['restartpass'] -%>"
+       pause="5">
+
+
+# Users connecting from inside the OCF subnet have less restrictions and have
+# their host cloaked (+x mode)
+<connect allow="169.229.226.0/24"
+         timeout="60" flood="20" localmax="1000" globalmax="1000"
+         limit="1000" modes="+x">
+
+<connect allow="2607:f140:8801::/64"
+         timeout="60" flood="20" localmax="1000" globalmax="1000"
+         limit="1000" modes="+x">
+
+<connect allow="*"
+         timeout="60" flood="20" threshold="20" fakelag="on"
+         pingfreq="120" sendq="262144" recvq="8192"
+         useident="no" localmax="5" globalmax="5">
+
+# Cloaking for the OCF subnet
+<cloak mode="full" key="<%= @irc_passwords['cloak-key'] -%>" prefix="OCF-">
+
+
+# Allow overrides when users are opers
+<override noisy="yes" requirekey="no">
+
+# Create different classes for allowing access to groups of commands
+<class name="Shutdown"
+       commands="DIE RESTART REHASH LOADMODULE UNLOADMODULE RELOAD">
+<class name="ServerLink"
+       commands="CONNECT SQUIT RCONNECT MKPASSWD MKSHA256">
+<class name="BanControl"
+       commands="KILL GLINE KLINE ZLINE QLINE ELINE">
+<class name="OperChat"
+       commands="WALLOPS GLOBOPS SETIDLE SPYLIST SPYNAMES">
+<class name="HostCloak"
+       commands="SETHOST SETIDENT SETNAME CHGHOST CHGIDENT">
+
+# NetAdmins can pretty much do everything
+<type name="NetAdmin"
+      classes="OperChat BanControl HostCloak Shutdown ServerLink"
+      vhost="ocf.gods"
+      override="KICK MODEOP MODEDEOP MODEVOICE MODEDEVOICE MODEHALFOP MODEDEHALFOP OTHERMODE">
+
+# Allow oper authentication using LDAP
+<ldapoper baserdn="ou=People,dc=OCF,dc=Berkeley,dc=EDU"
+          server="ldaps://ldap.ocf.berkeley.edu"
+          searchscope="subtree"
+          attribute="uid">
+
+# List of allowed opers
+<oper name="ckuehl"   password="uid=ckuehl"   host="*@*" type="NetAdmin" hash="ldap">
+<oper name="jvperrin" password="uid=jvperrin" host="*@*" type="NetAdmin" hash="ldap">
+<oper name="mattmcal" password="uid=mattmcal" host="*@*" type="NetAdmin" hash="ldap">
+
+
+<files motd="/etc/inspircd/inspircd.motd"
+       rules="/etc/inspircd/inspircd.rules">
+
+# Max numbers of channels able to join
+<channels users="20"
+          opers="60">
+
+<pid file="/var/run/inspircd.pid">
+
+<options prefixquit="Quit: "
+         noservices="no"
+         qaprefixes="no"
+         deprotectself="no"
+         deprotectothers="no"
+         flatlinks="no"
+         hideulines="no"
+         syntaxhints="yes"
+         cyclehosts="yes"
+         ircumsgprefix="no"
+         announcets="yes"
+         disablehmac="no"
+         hostintopic="yes"
+         quietbursts="yes"
+         pingwarning="15"
+         allowhalfop="yes"
+	       exemptchanops="">
+
+<security hidewhois=""
+          userstats="Pu"
+          customversion=""
+          hidesplits="no"
+          hidebans="no"
+          operspywhois="no"
+          hidemodes="eI"
+          maxtargets="20"
+          hideulines="yes">
+
+<performance nouserdns="no"
+             maxwho="128"
+             softlimit="1024"
+             somaxconn="128"
+             netbuffersize="10240">
+
+<limits maxnick="32"
+        maxchan="64"
+        maxmodes="20"
+        maxident="11"
+        maxquit="255"
+        maxtopic="307"
+        maxkick="255"
+        maxgecos="128"
+        maxaway="200">
+
+<log method="file"
+     type="* -USERINPUT -USEROUTPUT"
+     level="default"
+     target="/var/log/inspircd.log">
+
+<whowas groupsize="10"
+        maxgroups="100000"
+        maxkeep="3d">
+
+<timesync enable="no" master="no">
+
+<badnick nick="ChanServ" reason="Reserved For Services">
+<badnick nick="NickServ" reason="Reserved For Services">
+<badnick nick="OperServ" reason="Reserved For Services">
+<badnick nick="MemoServ" reason="Reserved For Services">
+
+# Allow slack bots to connect with no limits
+<exception host="*@flood.ocf.berkeley.edu" reason="IRC server hostname">
+<exception host="*@dev-flood.ocf.berkeley.edu" reason="Dev IRC server hostname">
+
+
+# Anope aliases
+<alias text="NICKSERV" replace="PRIVMSG NickServ :$2-" requires="NickServ" uline="yes">
+<alias text="CHANSERV" replace="PRIVMSG ChanServ :$2-" requires="ChanServ" uline="yes">
+<alias text="OPERSERV" replace="PRIVMSG OperServ :$2-" requires="OperServ" uline="yes">
+<alias text="MEMOSERV" replace="PRIVMSG MemoServ :$2-" requires="MemoServ" uline="yes">
+<alias text="HOSTSERV" replace="PRIVMSG HostServ :$2-" requires="HostServ" uline="yes">
+<alias text="BOTSERV" replace="PRIVMSG BotServ :$2-" requires="BotServ" uline="yes">
+
+<alias text="NS" replace="PRIVMSG NickServ :$2-" requires="NickServ" uline="yes">
+<alias text="CS" replace="PRIVMSG ChanServ :$2-" requires="ChanServ" uline="yes">
+<alias text="OS" replace="PRIVMSG OperServ :$2-" requires="OperServ" uline="yes">
+<alias text="MS" replace="PRIVMSG MemoServ :$2-" requires="MemoServ" uline="yes">
+<alias text="HS" replace="PRIVMSG HostServ :$2-" requires="HostServ" uline="yes">
+<alias text="BS" replace="PRIVMSG BotServ :$2-" requires="BotServ" uline="yes">
+
+<alias text="ID" format="*" replace="PRIVMSG NickServ :IDENTIFY $2-" requires="NickServ" uline="yes">
+<alias text="IDENTIFY" format="*" replace="PRIVMSG NickServ :IDENTIFY $2-" requires="NickServ" uline="yes">

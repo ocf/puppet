@@ -1,0 +1,252 @@
+# Comments trimmed for easier editing.
+# The original comments can be found on anope's wiki:
+# https://wiki.anope.org/index.php/2.0/Configuration#Example_Conf
+
+define {
+    name = "services.host"
+    value = "irc.ocf.berkeley.edu"
+}
+
+uplink {
+    host = "127.0.0.1"
+    ipv6 = no
+    ssl = no
+
+    port = 25580
+
+    password = "<%= @irc_passwords['anope-link'] -%>"
+}
+
+serverinfo {
+    name = "services.irc.ocf.berkeley.edu"
+    description = "OCF IRC Services"
+    id = "20S"
+
+    pid = "/var/run/anope/anope.pid"
+    motd = "/etc/anope/services.motd"
+}
+
+module {
+    name = "inspircd20"
+    use_server_side_mlock = yes
+    use_server_side_topiclock = yes
+}
+
+networkinfo {
+    networkname = "OCF"
+
+    nicklen = 32
+    userlen = 10
+    hostlen = 64
+    chanlen = 32
+
+    modelistsize = 100
+    vhost_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-"
+    allow_undotted_vhosts = false
+    disallow_start_or_end = ".-"
+}
+
+options {
+    casemap = "rfc1459"
+    seed = <%= @irc_passwords['anope-seed'] %>
+
+    strictpasswords = yes
+    badpasslimit = 5
+    badpasstimeout = 1h
+
+    updatetimeout = 5m
+    expiretimeout = 30m
+    readtimeout = 5s
+    warningtimeout = 4h
+    timeoutcheck = 3s
+    retrywait = 60s
+
+    hideprivilegedcommands = no
+    hideregisteredcommands = no
+
+    regexengine = "regex/posix"
+}
+
+
+# Load services config files
+include {
+    type = "file"
+    name = "chanserv.conf"
+}
+
+include {
+    type = "file"
+    name = "global.conf"
+}
+
+include {
+    type = "file"
+    name = "nickserv.conf"
+}
+
+include {
+    type = "file"
+    name = "operserv.conf"
+}
+
+
+# Log information to file and to the #services channel
+log {
+    target = "services.log #services"
+    bot = "Global"
+    logage = 60
+
+    admin = "*"
+    override = "chanserv/* nickserv/* memoserv/set ~botserv/set botserv/*"
+    commands = "*"
+    servers = "*"
+    users = "connect disconnect nick"
+    other = "*"
+    rawio = yes
+    debug = yes
+}
+
+log {
+    target = "globops"
+    admin = "global/* operserv/mode operserv/kick operserv/akill operserv/s*line operserv/noop operserv/jupe operserv/oline operserv/set operserv/svsnick operserv/svsjoin operserv/svspart nickserv/getpass */drop"
+    servers = "squit"
+    users = "oper"
+    other = "expire/* bados akill/*"
+}
+
+
+# Define different types of operators
+opertype {
+    name = "Services Operator"
+    commands = "chanserv/list chanserv/suspend chanserv/topic memoserv/staff nickserv/list nickserv/resetpass nickserv/suspend operserv/mode operserv/chankill operserv/szline operserv/akill operserv/session operserv/modlist operserv/sqline operserv/oper operserv/kick operserv/ignore operserv/snline"
+    privs = "chanserv/auspex chanserv/no-register-limit memoserv/* nickserv/auspex nickserv/confirm"
+}
+
+opertype {
+    name = "Services Administrator"
+    inherits = "Services Operator"
+    commands = "chanserv/access/list chanserv/drop chanserv/getkey chanserv/saset/noexpire memoserv/sendall nickserv/saset/* nickserv/getemail operserv/news operserv/jupe operserv/svsnick operserv/stats operserv/oline operserv/noop operserv/forbid global/*"
+}
+
+opertype {
+    name = "Services Root"
+    commands = "*"
+    privs = "*"
+    modes = "+Nq"
+}
+
+oper {
+    name = "waf"
+    type = "Services Root"
+}
+
+oper {
+    name = "nattofriends"
+    type = "Services Root"
+}
+
+oper {
+    name = "ckuehl"
+    type = "Services Root"
+}
+
+oper {
+    name = "jvperrin"
+    type = "Services Root"
+}
+
+oper {
+    name = "mattmcal"
+    type = "Services Root"
+}
+
+
+# NickServ email registration/password reset settings
+mail {
+    usemail = yes
+
+    sendmailpath = "/usr/sbin/sendmail -t -f help@ocf.berkeley.edu"
+    sendfrom = "help@ocf.berkeley.edu"
+
+    restrict = yes
+
+    delay = 5m
+
+    registration_subject = "Nickname Registration for %n"
+    registration_message = "Hi,
+
+                            You have requested to register the nickname %n on %N.
+                            Please type \" /msg NickServ CONFIRM %c \" to complete registration.
+                            If you don't know why this mail was sent to you, please ignore it.
+
+                            %N IRC administrators."
+
+    reset_subject = "Reset password request for %n"
+    reset_message = "Hi,
+
+                    You have requested to have the password for %n reset.
+                    To reset your password, type \" /msg NickServ CONFIRM %n %c \"
+
+                    If you don't know why this mail was sent to you, please ignore it.
+
+                    %N IRC administrators."
+
+    emailchange_subject = "Email confirmation"
+    emailchange_message = "Hi,
+
+                    You have requested to change your email address from %e to %E.
+                    Please type \" /msg NickServ CONFIRM %c \" to confirm this change.
+
+                    If you don't know why this mail was sent to you, please ignore it.
+
+                    %N IRC administrators."
+
+    memo_subject = "New memo"
+    memo_message = "Hi %n,
+
+                    You've just received a new memo from %s. This is memo number %d.
+
+                    Memo text:
+
+                    %t"
+}
+
+#module {
+#    name = "db_flatfile"
+#    database = "anope.db"
+#    keepbackups = 3
+#    fork = no
+#}
+
+# Use mysql for data instead of the flat file default
+module {
+    #name = "db_sql"
+    name = "db_sql_live"
+
+    engine = "mysql/main"
+
+    # We don't want anope_db_ to preceded the database table names (default)
+    prefix = ""
+
+    #import = true
+}
+
+# MySQL connection credentials
+module {
+    name = "m_mysql"
+
+    mysql {
+        name = "mysql/main"
+        database = "ocfanope"
+        server = "mysql.ocf.berkeley.edu"
+        username = "ocfanope"
+        password = "<%= @irc_passwords['ocfanope-mysql'] -%>"
+        port = 3306
+    }
+}
+
+# Load the SHA256 module for password encryption
+module { name = "enc_sha256" }
+
+# Provide the generic/help command
+module { name = "help" }
