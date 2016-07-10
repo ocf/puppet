@@ -17,7 +17,7 @@ class ocf_irc::ircd {
 
   file {
     '/etc/default/inspircd':
-      content => 'INSPIRCD_ENABLED=1',
+      content => "INSPIRCD_ENABLED=1\n",
       owner   => root,
       group   => root;
 
