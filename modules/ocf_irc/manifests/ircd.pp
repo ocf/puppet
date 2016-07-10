@@ -2,7 +2,6 @@ class ocf_irc::ircd {
   package { 'inspircd':; }
 
   service { 'inspircd':
-    ensure  => 'running',
     restart => 'service inspircd reload',
     require => Package['inspircd'],
   }
@@ -12,15 +11,15 @@ class ocf_irc::ircd {
   File {
     require => Package['inspircd'],
     notify  => Service['inspircd'],
-    owner   => 'irc',
-    group   => 'irc',
+    owner   => irc,
+    group   => irc,
   }
 
   file {
     '/etc/default/inspircd':
       content => 'INSPIRCD_ENABLED=1',
-      owner   => 'root',
-      group   => 'root';
+      owner   => root,
+      group   => root;
 
     '/etc/inspircd/inspircd.conf':
       content => template('ocf_irc/inspircd.conf.erb'),

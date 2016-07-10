@@ -11,22 +11,22 @@ class ocf_irc::services {
   File {
     require => Package['anope'],
     notify  => Service['anope'],
-    owner   => 'irc',
-    group   => 'irc',
+    owner   => irc,
+    group   => irc,
   }
 
   file {
     '/etc/default/anope':
-      content => 'START=yes',
-      owner   => 'root',
-      group   => 'root';
+      content => "START=yes\n",
+      owner   => root,
+      group   => root;
 
     '/etc/anope/services.conf':
       content => template('ocf_irc/services.conf.erb'),
       mode    => '0640';
 
     '/etc/anope/services.motd':
-      content => 'Welcome to OCF IRC Services!';
+      content => "Welcome to OCF IRC Services!\n";
 
     '/etc/anope':
       ensure  => directory,
