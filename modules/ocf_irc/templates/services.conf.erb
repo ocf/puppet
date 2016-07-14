@@ -137,30 +137,12 @@ opertype {
 
 
 # Services opers
+<% @root_nicks.each do |nick| -%>
 oper {
-    name = "waf"
+    name = "<%= nick -%>"
     type = "Services Root"
 }
-
-oper {
-    name = "nattofriends"
-    type = "Services Root"
-}
-
-oper {
-    name = "ckuehl"
-    type = "Services Root"
-}
-
-oper {
-    name = "jvperrin"
-    type = "Services Root"
-}
-
-oper {
-    name = "mattmcal"
-    type = "Services Root"
-}
+<% end -%>
 
 
 # NickServ email registration/password reset settings

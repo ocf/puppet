@@ -7,6 +7,8 @@ class ocf_irc::services {
 
   $passwords = parsejson(file("/opt/puppet/shares/private/${::hostname}/services-passwords"))
 
+  $root_nicks = ['waf', 'nattofriends', 'ckuehl', 'jvperrin', 'mattmcal']
+
   File {
     require => Package['anope'],
     notify  => Service['anope'],
