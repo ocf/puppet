@@ -4,10 +4,11 @@
 # Extra modules
 <module name="m_cloaking.so">
 <module name="m_conn_umodes.so">
-<module name="m_ldapoper.so">
 <module name="m_md5.so">
+<module name="m_mysql.so">
 <module name="m_override.so">
 <module name="m_sha256.so">
+<module name="m_sqloper.so">
 <module name="m_ssl_gnutls.so">
 
 # Required/Recommended modules for anope
@@ -95,18 +96,15 @@
       vhost="ocf.gods"
       override="KICK MODEOP MODEDEOP MODEVOICE MODEDEVOICE MODEHALFOP MODEDEHALFOP OTHERMODE">
 
-# Allow oper authentication using LDAP
-<ldapoper baserdn="ou=People,dc=OCF,dc=Berkeley,dc=EDU"
-          server="ldaps://ldap.ocf.berkeley.edu"
-          searchscope="subtree"
-          attribute="uid">
+# Store oper credentials in mysql
+<database name="ocfirc"
+          user="ocfirc"
+          pass="<%= @passwords['ocfirc-mysql'] -%>"
+          host="mysql.ocf.berkeley.edu"
+          port="3306"
+          id="irc">
 
-# List of allowed opers
-<oper name="waf"          password="uid=waf"      host="*@*" type="NetAdmin" hash="ldap">
-<oper name="nattofriends" password="uid=tzhu"     host="*@*" type="NetAdmin" hash="ldap">
-<oper name="ckuehl"       password="uid=ckuehl"   host="*@*" type="NetAdmin" hash="ldap">
-<oper name="jvperrin"     password="uid=jvperrin" host="*@*" type="NetAdmin" hash="ldap">
-<oper name="mattmcal"     password="uid=mattmcal" host="*@*" type="NetAdmin" hash="ldap">
+<sqloper dbid="irc" hash="sha256">
 
 
 <files motd="/etc/inspircd/inspircd.motd"
