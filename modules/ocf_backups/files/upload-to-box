@@ -182,7 +182,7 @@ def make_box_folder(folder, auth):
         print('401 error trying to create a folder, check your authentication!')
         sys.exit(2)
     elif http_status != 201:
-        print('Error creating folder, HTTP {}' + str(http_status))
+        print('Error creating folder, HTTP ' + str(http_status))
         sys.exit(3)
 
 
