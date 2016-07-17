@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Update or acquire Let's Encrypt certificates for OCF's traditional vhosts.
 
-XXX: Only parts 1, 2, and 4 are working right now. We don't yet handle renewal.
-
 This script is intended to be run by a cronjob. It works as follows:
 
     1. Lists all domains that need certificates.
@@ -11,7 +9,7 @@ This script is intended to be run by a cronjob. It works as follows:
        in the past for this domain.
 
     3. If we already have a certificate, we check the expiration date and renew
-       it if will expire in the next 30 days.
+       it (using acme-tiny) if will expire in the next 30 days.
 
     4. If we do not have a certificate, we attempt to acquire one using
        acme-tiny.
@@ -33,11 +31,18 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from contextlib import contextmanager
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 from pathlib import Path
 
+import dateutil.parser
 import dns.resolver
 from ocflib.account.utils import get_vhosts
 
+
+RENEW_WHEN_TIME_REMAINING = timedelta(days=45)
 
 CERT_STORAGE_DIR = Path('/services/http/ssl/')
 LE_ACCOUNT_KEY = Path('/etc/ssl/lets-encrypt/le-account.key')
@@ -101,9 +106,82 @@ def eligible_domains():
     return eligible_domains
 
 
+def expiration_date(cert_path):
+    output = subprocess.check_output((
+        'openssl', 'x509', '-enddate', '-noout',
+        '-in', str(cert_path),
+    ))
+    m = re.match(b'notAfter=(.+)$', output)
+    assert m, output
+    return dateutil.parser.parse(m.group(1).decode('ascii'))
+
+
+@contextmanager
+def make_csr(domain):
+    _, csr_path = tempfile.mkstemp()
+    try:
+        subprocess.check_call((
+            'openssl', 'req', '-new', '-sha256',
+            '-key', str(LE_VHOST_KEY),
+            '-subj', '/CN={}'.format(domain),
+            '-out', csr_path,
+        ))
+        yield csr_path
+    finally:
+        os.remove(csr_path)
+
+
+def acme_tiny(domain):
+    with make_csr(domain) as csr_path:
+        # TODO: use subprocess.call when we get python3.5
+        proc = subprocess.Popen(
+            (
+                'acme-tiny',
+                '--account-key', str(LE_ACCOUNT_KEY),
+                '--csr', csr_path,
+                '--acme-dir', '/srv/well-known/acme-challenge',
+                # '--ca', 'https://acme-staging.api.letsencrypt.org',
+            ),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        stdout, stderr = proc.communicate()
+    return stdout, stderr, proc.returncode
+
+
+def write_cert(cert, cert_path):
+    """Write certificate file for a domain."""
+    _, temp_cert_path = tempfile.mkstemp()
+    try:
+        with open(temp_cert_path, 'wb') as f:
+            f.write(cert)
+        # sort-of atomic overwrite in case of errors
+        os.chmod(temp_cert_path, 0o644)
+        shutil.move(temp_cert_path, str(cert_path))
+    finally:
+        if os.path.exists(temp_cert_path):
+            os.remove(temp_cert_path)
+
+
 def maybe_renew(domain, cert_path):
-    # TODO: write thiss
-    pass
+    expires = expiration_date(cert_path)
+    time_remaining = expires - datetime.now(timezone.utc)
+
+    if time_remaining > RENEW_WHEN_TIME_REMAINING:
+        debug('not renewing {} (remaining: {})'.format(domain, time_remaining))
+        return
+
+    debug('renewing {} (remaining: {})'.format(domain, time_remaining))
+    try:
+        cert, stderr, returncode = acme_tiny(domain)
+        assert returncode == 0, returncode
+        write_cert(cert, cert_path)
+        print('cert renewed for: {}'.format(domain))
+    except:
+        print('An error occured!', file=sys.stderr)
+        print('stderr from acme-tiny:', file=sys.stderr)
+        print(stderr, file=sys.stderr)
+        raise
 
 
 def base_domain(fqdn):
@@ -124,59 +202,29 @@ def maybe_acquire(domain, cert_path):
         debug('skipping {} due to rate limit on {}'.format(domain, base))
         return
 
-    # make csr
-    _, csr_path = tempfile.mkstemp()
+    stderr = None
     try:
-        subprocess.check_call((
-            'openssl', 'req', '-new', '-sha256',
-            '-key', str(LE_VHOST_KEY),
-            '-subj', '/CN={}'.format(domain),
-            '-out', csr_path,
-        ))
-
-        # call acme-tiny
-        _, temp_cert_path = tempfile.mkstemp()
-        stderr = None
-        try:
-            # TODO: use subprocess.call when we get python3.5
-            proc = subprocess.Popen(
-                (
-                    'acme-tiny',
-                    '--account-key', str(LE_ACCOUNT_KEY),
-                    '--csr', csr_path,
-                    '--acme-dir', '/srv/well-known/acme-challenge',
-                    #                    '--ca', 'https://acme-staging.api.letsencrypt.org',
-                ),
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+        cert, stderr, returncode = acme_tiny(domain)
+        if returncode != 0:
+            # assume it must be a rate limit, otherwise we'll raise below
+            assert returncode == 1, returncode
+            match = re.search(
+                b'"Error creating new cert :: Too many certificates already issued for: ([^"]+)"',
+                stderr,
             )
-            cert, stderr = proc.communicate()
-            if proc.returncode != 0:
-                # assume it must be a rate limit, otherwise we'll raise below
-                assert proc.returncode == 1, proc.returncode
-                match = re.search(
-                    b'"Error creating new cert :: Too many certificates already issued for: ([^"]+)"',
-                    stderr,
-                )
-                assert match
-                hit_for_domain = match.group(1).decode('ascii')
-                assert hit_for_domain == base, (hit_for_domain, base)
-                debug('hit rate limit for {} on {}'.format(base, domain))
-                rate_limit_hit.add(base)
-            else:
-                with open(temp_cert_path, 'wb') as f:
-                    f.write(cert)
-                # sort-of atomic overwrite in case of errors
-                os.chmod(temp_cert_path, 0o644)
-                shutil.move(temp_cert_path, str(cert_path))
-                print('cert acquired for {}'.format(domain))
-        except:
-            print('An error occured!', file=sys.stderr)
-            print('stderr from acme-tiny:', file=sys.stderr)
-            print(stderr, file=sys.stderr)
-            raise
-    finally:
-        os.remove(csr_path)
+            assert match
+            hit_for_domain = match.group(1).decode('ascii')
+            assert hit_for_domain == base, (hit_for_domain, base)
+            debug('hit rate limit for {} on {}'.format(base, domain))
+            rate_limit_hit.add(base)
+        else:
+            write_cert(cert, cert_path)
+            print('cert acquired for {}'.format(domain))
+    except:
+        print('An error occured!', file=sys.stderr)
+        print('stderr from acme-tiny:', file=sys.stderr)
+        print(stderr, file=sys.stderr)
+        raise
 
 
 def main(argv=None):
