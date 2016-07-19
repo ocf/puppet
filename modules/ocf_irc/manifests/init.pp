@@ -7,6 +7,6 @@ class ocf_irc {
   # Make the irc user able to read the certs for running the IRCd with SSL
   user { 'irc':
     groups  => 'ssl-cert',
-    require => Package['inspircd'],
+    require => [Package['inspircd'], Package['ssl-cert']],
   }
 }
