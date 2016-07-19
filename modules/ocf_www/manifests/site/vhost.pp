@@ -6,10 +6,6 @@ define ocf_www::site::vhost($vhost = $title) {
     serveradmin     => "${vhost[username]}@ocf.berkeley.edu",
     docroot         => $vhost[full_docroot],
 
-    ssl_key         => "/etc/ssl/private/vhosts/${vhost[domain]}.key",
-    ssl_cert        => "/etc/ssl/private/vhosts/${vhost[domain]}.crt",
-    ssl_chain       => "/etc/ssl/private/vhosts/${vhost[domain]}.chain",
-
     access_log_file => 'vhost-access.log',
     error_log_file  => 'vhost-error.log',
 
@@ -36,6 +32,10 @@ define ocf_www::site::vhost($vhost = $title) {
 
     ssl               => $vhost[use_ssl],
     port              => $primary_port,
+
+    ssl_key           => $vhost[ssl_key],
+    ssl_cert          => $vhost[ssl_cert],
+    ssl_chain         => $vhost[ssl_chain],
 
     headers           => $headers,
     suexec_user_group => "${vhost[username]} ocf",

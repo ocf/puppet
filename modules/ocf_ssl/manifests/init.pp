@@ -19,6 +19,10 @@ class ocf_ssl($cert_name = $::fqdn) {
       source  => 'puppet:///modules/ocf_ssl/incommon-intermediate.crt',
       mode    => '0644';
 
+    '/etc/ssl/certs/lets-encrypt.crt':
+      source  => 'puppet:///modules/ocf_ssl/lets-encrypt.crt',
+      mode    => '0644';
+
     # 2048-bit dhparams for use by servers;
     # these are public numbers and can safely be shared across services
     '/etc/ssl/dhparam.pem':
