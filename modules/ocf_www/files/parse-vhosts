@@ -21,7 +21,10 @@ def vhosts():
     for domain, vhost in get_vhosts().items():
         lets_encrypt_cert = LETS_ENCRYPT_SSL / (domain + '.crt')
         is_lets_encrypt = lets_encrypt_cert.exists()
-        use_ssl = 'ssl' in vhost['flags'] or is_lets_encrypt
+        use_ssl = (
+            ('ssl' in vhost['flags'] or is_lets_encrypt) and
+            'nossl' not in vhost['flags']
+        )
 
         if is_lets_encrypt:
             ssl_options = {
