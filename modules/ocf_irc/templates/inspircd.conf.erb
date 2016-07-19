@@ -110,45 +110,15 @@
 <files motd="/etc/inspircd/inspircd.motd"
        rules="/etc/inspircd/inspircd.rules">
 
-# Max numbers of channels able to join
-<channels users="20"
-          opers="60">
-
 <pid file="/var/run/inspircd.pid">
 
 <options prefixquit="Quit: "
-         noservices="no"
-         qaprefixes="no"
-         deprotectself="no"
-         deprotectothers="no"
-         flatlinks="no"
-         hideulines="no"
-         syntaxhints="yes"
-         cyclehosts="yes"
-         ircumsgprefix="no"
-         announcets="yes"
-         disablehmac="no"
-         hostintopic="yes"
-         quietbursts="yes"
-         pingwarning="15"
-         allowhalfop="yes"
-         exemptchanops="">
+         syntaxhints="yes">
 
-<security hidewhois=""
-          userstats="Pu"
-          customversion=""
-          hidesplits="no"
-          hidebans="no"
-          operspywhois="no"
-          hidemodes="eI"
-          maxtargets="20"
-          hideulines="yes">
+<security hidewhois="*.ocf.berkeley.edu"
+          operspywhois="yes">
 
-<performance nouserdns="no"
-             maxwho="128"
-             softlimit="1024"
-             somaxconn="128"
-             netbuffersize="10240">
+<performance netbuffersize="10240">
 
 <limits maxnick="32"
         maxchan="64"
@@ -161,20 +131,13 @@
         maxaway="200">
 
 <log method="file"
-     type="* -USERINPUT -USEROUTPUT"
+     type="* -USERINPUT -USEROUTPUT -m_spanningtree"
      level="default"
      target="/var/log/inspircd.log">
 
-<whowas groupsize="10"
-        maxgroups="100000"
-        maxkeep="3d">
 
-<timesync enable="no" master="no">
-
-<badnick nick="ChanServ" reason="Reserved For Services">
-<badnick nick="NickServ" reason="Reserved For Services">
-<badnick nick="OperServ" reason="Reserved For Services">
-<badnick nick="MemoServ" reason="Reserved For Services">
+<badnick nick="Global" reason="Reserved For Services">
+<badnick nick="*Serv" reason="Reserved For Services">
 
 # Allow slack bots to connect with no limits
 <exception host="*@flood.ocf.berkeley.edu" reason="IRC server hostname">
@@ -187,14 +150,12 @@
 <alias text="OPERSERV" replace="PRIVMSG OperServ :$2-" requires="OperServ" uline="yes">
 <alias text="MEMOSERV" replace="PRIVMSG MemoServ :$2-" requires="MemoServ" uline="yes">
 <alias text="HOSTSERV" replace="PRIVMSG HostServ :$2-" requires="HostServ" uline="yes">
-<alias text="BOTSERV" replace="PRIVMSG BotServ :$2-" requires="BotServ" uline="yes">
 
 <alias text="NS" replace="PRIVMSG NickServ :$2-" requires="NickServ" uline="yes">
 <alias text="CS" replace="PRIVMSG ChanServ :$2-" requires="ChanServ" uline="yes">
 <alias text="OS" replace="PRIVMSG OperServ :$2-" requires="OperServ" uline="yes">
 <alias text="MS" replace="PRIVMSG MemoServ :$2-" requires="MemoServ" uline="yes">
 <alias text="HS" replace="PRIVMSG HostServ :$2-" requires="HostServ" uline="yes">
-<alias text="BS" replace="PRIVMSG BotServ :$2-" requires="BotServ" uline="yes">
 
 <alias text="ID" format="*" replace="PRIVMSG NickServ :IDENTIFY $2-" requires="NickServ" uline="yes">
 <alias text="IDENTIFY" format="*" replace="PRIVMSG NickServ :IDENTIFY $2-" requires="NickServ" uline="yes">

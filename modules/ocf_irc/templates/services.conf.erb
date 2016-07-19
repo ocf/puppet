@@ -4,7 +4,7 @@
 
 define {
     name = "services.host"
-    value = "irc.ocf.berkeley.edu"
+    value = "services.irc.ocf.berkeley.edu"
 }
 
 uplink {
@@ -20,7 +20,6 @@ uplink {
 serverinfo {
     name = "services.irc.ocf.berkeley.edu"
     description = "OCF IRC Services"
-    id = "20S"
 
     pid = "/var/run/anope/anope.pid"
     motd = "/etc/anope/services.motd"
@@ -59,35 +58,21 @@ options {
     readtimeout = 5s
     warningtimeout = 4h
     timeoutcheck = 3s
-    retrywait = 60s
+    retrywait = 15s
 
-    hideprivilegedcommands = no
-    hideregisteredcommands = no
+    hideprivilegedcommands = yes
+    hideregisteredcommands = yes
 
     regexengine = "regex/posix"
 }
 
 
 # Load services config files
-include {
-    type = "file"
-    name = "chanserv.conf"
-}
-
-include {
-    type = "file"
-    name = "global.conf"
-}
-
-include {
-    type = "file"
-    name = "nickserv.conf"
-}
-
-include {
-    type = "file"
-    name = "operserv.conf"
-}
+include { type = "file"; name = "chanserv.conf"; }
+include { type = "file"; name = "global.conf"; }
+include { type = "file"; name = "hostserv.conf"; }
+include { type = "file"; name = "nickserv.conf"; }
+include { type = "file"; name = "operserv.conf"; }
 
 
 # Log information to file and to the #services channel
@@ -97,37 +82,25 @@ log {
     logage = 60
 
     admin = "*"
-    override = "chanserv/* nickserv/* memoserv/set ~botserv/set botserv/*"
+    override = "*"
     commands = "*"
     servers = "*"
-    users = "connect disconnect nick"
+    users = "connect disconnect nick mode oper"
     other = "*"
-    rawio = yes
-    debug = yes
+    rawio = no
+    debug = no
 }
 
+# Log some useful information to ops
 log {
     target = "globops"
-    admin = "global/* operserv/mode operserv/kick operserv/akill operserv/s*line operserv/noop operserv/jupe operserv/oline operserv/set operserv/svsnick operserv/svsjoin operserv/svspart nickserv/getpass */drop"
-    servers = "squit"
+    admin = "global/* operserv/* */drop"
     users = "oper"
     other = "expire/* bados akill/*"
 }
 
 
-# Define different types of operators
-opertype {
-    name = "Services Operator"
-    commands = "chanserv/list chanserv/suspend chanserv/topic memoserv/staff nickserv/list nickserv/resetpass nickserv/suspend operserv/mode operserv/chankill operserv/szline operserv/akill operserv/session operserv/modlist operserv/sqline operserv/oper operserv/kick operserv/ignore operserv/snline"
-    privs = "chanserv/auspex chanserv/no-register-limit memoserv/* nickserv/auspex nickserv/confirm"
-}
-
-opertype {
-    name = "Services Administrator"
-    inherits = "Services Operator"
-    commands = "chanserv/access/list chanserv/drop chanserv/getkey chanserv/saset/noexpire memoserv/sendall nickserv/saset/* nickserv/getemail operserv/news operserv/jupe operserv/svsnick operserv/stats operserv/oline operserv/noop operserv/forbid global/*"
-}
-
+# Define different types of operators (we currently only use one type)
 opertype {
     name = "Services Root"
     commands = "*"
@@ -151,8 +124,6 @@ mail {
 
     sendmailpath = "/usr/sbin/sendmail -t -f help@ocf.berkeley.edu"
     sendfrom = "help@ocf.berkeley.edu"
-
-    restrict = yes
 
     delay = 5m
 
@@ -185,12 +156,11 @@ mail {
 
                     %N IRC administrators."
 
+    # We don't even use this one, but still need it here because otherwise mailing breaks
     memo_subject = "New memo"
     memo_message = "Hi %n,
 
-                    You've just received a new memo from %s. This is memo number %d.
-
-                    Memo text:
+                    You've just received a new memo from %s:
 
                     %t"
 }
@@ -218,7 +188,7 @@ module {
     }
 }
 
-# Load the SHA256 module for password encryption
+# Load the SHA256 module for NickServ password encryption
 module { name = "enc_sha256" }
 
 # Provide the generic/help command
