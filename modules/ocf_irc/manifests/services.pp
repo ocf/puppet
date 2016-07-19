@@ -2,6 +2,7 @@ class ocf_irc::services {
   package { 'anope':; }
 
   service { 'anope':
+    enable  => true,
     require => [Package['anope'], Service['inspircd']],
   }
 

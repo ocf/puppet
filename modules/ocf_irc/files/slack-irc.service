@@ -1,3 +1,7 @@
+[Unit]
+After=inspircd.service
+Requires=inspircd.service
+
 [Service]
 Environment=NODE_ENV=development
 ExecStart=/usr/bin/slack-irc-ocf --config /etc/slack-irc/config.json

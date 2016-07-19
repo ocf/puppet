@@ -3,6 +3,7 @@ class ocf_irc::ircd {
 
   service { 'inspircd':
     restart => 'service inspircd reload',
+    enable  => true,
     require => Package['inspircd'],
   }
 
