@@ -1,0 +1,195 @@
+# Comments trimmed for easier editing.
+# The original comments can be found on anope's wiki:
+# https://wiki.anope.org/index.php/2.0/Configuration#Example_Conf
+
+define {
+    name = "services.host"
+    value = "services.irc.ocf.berkeley.edu"
+}
+
+uplink {
+    host = "127.0.0.1"
+    ipv6 = no
+    ssl = no
+
+    port = 25580
+
+    password = "<%= @passwords['anope-link'] -%>"
+}
+
+serverinfo {
+    name = "services.irc.ocf.berkeley.edu"
+    description = "OCF IRC Services"
+
+    pid = "/var/run/anope/anope.pid"
+    motd = "/etc/anope/services.motd"
+}
+
+module {
+    name = "inspircd20"
+    use_server_side_mlock = yes
+    use_server_side_topiclock = yes
+}
+
+networkinfo {
+    networkname = "OCF"
+
+    nicklen = 32
+    userlen = 10
+    hostlen = 64
+    chanlen = 32
+
+    modelistsize = 100
+    vhost_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-"
+    allow_undotted_vhosts = false
+    disallow_start_or_end = ".-"
+}
+
+options {
+    casemap = "rfc1459"
+    seed = <%= @passwords['seed'] %>
+
+    strictpasswords = yes
+    badpasslimit = 5
+    badpasstimeout = 1h
+
+    updatetimeout = 5m
+    expiretimeout = 30m
+    readtimeout = 5s
+    warningtimeout = 4h
+    timeoutcheck = 3s
+    retrywait = 15s
+
+    hideprivilegedcommands = yes
+    hideregisteredcommands = yes
+
+    regexengine = "regex/posix"
+}
+
+
+# Load services config files
+include { type = "file"; name = "chanserv.conf"; }
+include { type = "file"; name = "global.conf"; }
+include { type = "file"; name = "hostserv.conf"; }
+include { type = "file"; name = "nickserv.conf"; }
+include { type = "file"; name = "operserv.conf"; }
+
+
+# Log information to file and to the #services channel
+log {
+    target = "services.log #services"
+    bot = "Global"
+    logage = 60
+
+    admin = "*"
+    override = "*"
+    commands = "*"
+    servers = "*"
+    users = "connect disconnect nick mode oper"
+    other = "*"
+    rawio = no
+    debug = no
+}
+
+# Log some useful information to ops
+log {
+    target = "globops"
+    admin = "global/* operserv/* */drop"
+    users = "oper"
+    other = "expire/* bados akill/*"
+}
+
+
+# Define different types of operators (we currently only use one type)
+opertype {
+    name = "Services Root"
+    commands = "*"
+    privs = "*"
+    modes = "+Nq"
+}
+
+
+# Services opers
+<% @root_nicks.each do |nick| -%>
+oper {
+    name = "<%= nick -%>"
+    type = "Services Root"
+}
+<% end -%>
+
+
+# NickServ email registration/password reset settings
+mail {
+    usemail = yes
+
+    sendmailpath = "/usr/sbin/sendmail -t -f help@ocf.berkeley.edu"
+    sendfrom = "help@ocf.berkeley.edu"
+
+    delay = 5m
+
+    registration_subject = "Nickname Registration for %n"
+    registration_message = "Hi,
+
+                            You have requested to register the nickname %n on %N.
+                            Please type \" /msg NickServ CONFIRM %c \" to complete registration.
+                            If you don't know why this mail was sent to you, please ignore it.
+
+                            %N IRC administrators."
+
+    reset_subject = "Reset password request for %n"
+    reset_message = "Hi,
+
+                    You have requested to have the password for %n reset.
+                    To reset your password, type \" /msg NickServ CONFIRM %n %c \"
+
+                    If you don't know why this mail was sent to you, please ignore it.
+
+                    %N IRC administrators."
+
+    emailchange_subject = "Email confirmation"
+    emailchange_message = "Hi,
+
+                    You have requested to change your email address from %e to %E.
+                    Please type \" /msg NickServ CONFIRM %c \" to confirm this change.
+
+                    If you don't know why this mail was sent to you, please ignore it.
+
+                    %N IRC administrators."
+
+    # We don't even use this one, but still need it here because otherwise mailing breaks
+    memo_subject = "New memo"
+    memo_message = "Hi %n,
+
+                    You've just received a new memo from %s:
+
+                    %t"
+}
+
+# Use mysql for data instead of the flat file default
+module {
+    name = "db_sql_live"
+    engine = "mysql/main"
+
+    # We don't want anope_db_ to preceded the database table names (default)
+    prefix = ""
+}
+
+# MySQL connection credentials
+module {
+    name = "m_mysql"
+
+    mysql {
+        name = "mysql/main"
+        database = "ocfirc"
+        server = "mysql.ocf.berkeley.edu"
+        username = "ocfirc"
+        password = "<%= @passwords['ocfirc-mysql'] -%>"
+        port = 3306
+    }
+}
+
+# Load the SHA256 module for NickServ password encryption
+module { name = "enc_sha256" }
+
+# Provide the generic/help command
+module { name = "help" }
