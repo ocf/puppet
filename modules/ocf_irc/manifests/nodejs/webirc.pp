@@ -14,7 +14,7 @@ class ocf_irc::nodejs::webirc {
       ensure => directory;
 
     '/etc/thelounge/config.js':
-      content => template('ocf_irc/thelounge-conf.js.erb'),
+      source  => 'puppet:///modules/ocf_irc/thelounge-conf.js',
       require => File['/etc/thelounge'],
       notify  => Service['thelounge'];
   }
@@ -27,6 +27,7 @@ class ocf_irc::nodejs::webirc {
     ],
   }
 
+  # Nginx is used to proxy and to supply a HTTP -> HTTPS redirect
   class { 'nginx':
     manage_repo => false,
     confd_purge => true,
@@ -42,7 +43,7 @@ class ocf_irc::nodejs::webirc {
       server_name => [$webirc_fqdn],
       proxy       => 'http://thelounge',
 
-      ssl         => true,
+      ssl        => true,
       ssl_cert   => "/etc/ssl/private/${::fqdn}.bundle",
       ssl_key    => "/etc/ssl/private/${::fqdn}.key",
 
