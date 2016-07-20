@@ -1,0 +1,9 @@
+[Service]
+ExecStart=/usr/bin/lounge --home /etc/thelounge
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=thelounge
+
+[Install]
+WantedBy=multi-user.target
