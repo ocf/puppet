@@ -14,10 +14,8 @@ lastmod on
 
 ## SSL
 TLSCipherSuite SECURE256:!AES-128-CBC:!ARCFOUR-128:!CAMELLIA-128-CBC:!3DES-CBC:!CAMELLIA-128-CBC
-
-# TODO: don't hardcode FQDN
-TLSCertificateFile /etc/ldap/ssl/firestorm.ocf.berkeley.edu.crt
-TLSCertificateKeyFile /etc/ldap/ssl/firestorm.ocf.berkeley.edu.key
+TLSCertificateFile /etc/ssl/private/<%= @fqdn -%>.crt
+TLSCertificateKeyFile /etc/ssl/private/<%= @fqdn -%>.key
 TLSCACertificateFile /etc/ssl/certs/incommon-intermediate.crt
 
 ## Map Kerberos principals to LDAP
@@ -28,18 +26,13 @@ authz-regexp ^uid=([^,/]+),cn=OCF.BERKELEY.EDU,cn=GSSAPI,cn=auth$ uid=$1,ou=Peop
 authz-regexp ^uid=host/([^,/]+)\.ocf\.berkeley\.edu,cn=OCF.BERKELEY.EDU,cn=GSSAPI,cn=auth$ cn=$1,ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU
 
 ## Database general configuration
-moduleload   back_bdb
-sizelimit    unlimited
-backend      bdb
-database     bdb
+moduleload   back_mdb
+database     mdb
 suffix       dc=OCF,dc=Berkeley,dc=EDU
 
-## BDB database parameters
+## LMDB database parameters
 directory    /var/lib/ldap
-cachesize    50000
-idlcachesize 50000
-checkpoint   512 30
-dbconfig     set_cachesize 0 134217728 1
+maxsize      2147483648
 
 ## Indexing
 index objectClass                 eq
