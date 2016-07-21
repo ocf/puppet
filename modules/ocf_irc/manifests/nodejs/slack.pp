@@ -1,4 +1,4 @@
-class ocf_irc::slack {
+class ocf_irc::nodejs::slack {
   # TODO:
   #  - Update Slack channel topic when IRC changes and vice versa:
   #      API: https://api.slack.com/methods/channels.setTopic
@@ -7,7 +7,6 @@ class ocf_irc::slack {
   package {
     [
       'nodejs',
-      'nodejs-legacy',
       'slack-irc',
     ]:;
   }
