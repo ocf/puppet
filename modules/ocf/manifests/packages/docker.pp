@@ -12,10 +12,6 @@
 # more use out of them, but that requires quite a bit of work first.
 #
 class ocf::packages::docker($admin_group = 'docker') {
-  class { 'ocf::packages::docker::apt':
-    stage => first,
-  }
-
   package {
     'docker.io':
       ensure  => purged;
