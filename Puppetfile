@@ -6,6 +6,7 @@ moduledir 'vendor'
 mod 'ckuehl-spiped',       '1.1.1'
 mod 'puppet-staging',      '2.0.0'
 mod 'puppetlabs-apache',   '1.10.0'
+mod 'puppetlabs-concat',   '2.2.0'
 mod 'puppetlabs-rabbitmq', '5.4.0'
 mod 'puppetlabs-stdlib',   '4.12.0'
 
@@ -17,12 +18,6 @@ mod 'puppetlabs-stdlib',   '4.12.0'
 mod 'puppetlabs-apt',
   git: 'https://github.com/puppetlabs/puppetlabs-apt.git',
   ref: '39870ce9849'
-
-# Last release: 2.1.0 on Jan 26th, 2016
-# Current SHA: May 19th, 2016
-mod 'puppetlabs-concat',
-  git: 'https://github.com/puppetlabs/puppetlabs-concat.git',
-  ref: '8f135adb0a9'
 
 # 'jfryman-nginx' on forge
 # Last release: 0.3.0 on Feb 6th, 2016
