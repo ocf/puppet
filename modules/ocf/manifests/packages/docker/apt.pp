@@ -12,6 +12,6 @@ class ocf::packages::docker::apt {
     include   => {
       src => false
     },
-    require     => Apt::Key['docker'];
+    require     => Apt::Key['docker'],
   }
 }
