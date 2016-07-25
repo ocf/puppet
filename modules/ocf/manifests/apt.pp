@@ -66,33 +66,6 @@ class ocf::apt {
     source => 'https://apt.ocf.berkeley.edu/pubkey.gpg';
   }
 
-  apt::key { 'mesosphere':
-    id     => '81026D0004C44CF7EF55ADF8DF7D54CBE56151BF',
-    server => 'keyserver.ubuntu.com',
-  }
-
-  apt::source { 'mesosphere':
-    location => 'http://repos.mesosphere.io/debian/',
-    release  => $::lsbdistcodename,
-    repos    => 'main',
-    require  => Apt::Key['mesosphere'],
-  }
-
-  apt::key { 'docker':
-    id     => '58118E89F3A912897C070ADBF76221572C52609D',
-    server => 'keyserver.ubuntu.com',
-  }
-
-  apt::source { 'docker':
-    location    => 'http://apt.dockerproject.org/repo',
-    release     => 'debian-jessie',
-    repos       => 'main',
-    include   => {
-      src => false
-    },
-    require     => Apt::Key['docker'];
-  }
-
   file { '/etc/cron.daily/ocf-apt':
     mode    => '0755',
     content => template('ocf/apt/ocf-apt.erb'),
