@@ -5,6 +5,22 @@
 # to Google Nearline, etc.
 set -o pipefail
 
+# Quiet mode is off by default (show pv output)
+QUIET=false
+
+# If -q is provided, turn on quiet mode
+while getopts "q" opt; do
+    case $opt in
+        q)
+            QUIET=true
+            ;;
+        \?)
+            # Invalid option, just exit
+            exit 1
+            ;;
+    esac
+done
+
 ARCHIVE_DIRECTORY="/opt/backups/scratch/archive"
 TARGET_VOLUME="/dev/vg-backups/backups-live"
 SNAPSHOT_PATH="/dev/vg-backups/backups-snapshot"
@@ -37,16 +53,26 @@ umask 077
 rm -rf "$ARCHIVE_DIRECTORY"
 mkdir "$ARCHIVE_DIRECTORY"
 
-dd if="$SNAPSHOT_PATH" bs=32M | pigz |
-    gpg --homedir "$gpgdir" \
-        --quiet \
-        --encrypt \
-        --trust-model always \
-        --compress-algo none \
-        --recipient ckuehl@berkeley.edu \
-        --recipient willh@ocf.berkeley.edu \
-        --recipient jvperrin@ocf.berkeley.edu \
-        --recipient mattmcal@ocf.berkeley.edu |
-    pv |
+compress_and_encrypt() {
+    dd if="$SNAPSHOT_PATH" bs=32M | pigz |
+        gpg --homedir "$gpgdir" \
+            --quiet \
+            --encrypt \
+            --trust-model always \
+            --compress-algo none \
+            --recipient ckuehl@berkeley.edu \
+            --recipient willh@ocf.berkeley.edu \
+            --recipient jvperrin@ocf.berkeley.edu \
+            --recipient mattmcal@ocf.berkeley.edu
+}
+
+split_parts() {
     split -d -a 4 -b 5G - \
         "${ARCHIVE_DIRECTORY}/backup-$(date +%Y-%m-%d).img.gz.gpg.part"
+}
+
+if [ "$QUIET" = true ]; then
+    compress_and_encrypt | split_parts
+else
+    compress_and_encrypt | pv | split_parts
+fi
