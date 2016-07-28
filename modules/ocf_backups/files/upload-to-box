@@ -11,6 +11,7 @@ from io import BytesIO
 from shutil import get_terminal_size
 
 import pycurl
+import pymysql
 
 ARCHIVE = '/opt/backups/scratch/archive'
 BOX_DAV = 'https://dav.box.com/dav/'
@@ -35,10 +36,10 @@ MAX_CONCURR_UPLOADS = 10
 # 'grant_type=authorization_code&code={auth code from above}&client_id={client id}&client_secret={client secret}'
 # Get the refresh token from this command's return, it can be used for up to
 # 60 days or one use before it expires. Once used, it is replaced by another
-# token, so it is stored in a local file (/opt/share/backupsbox-refresh-token)
-# and overwritten each time a new one is returned (when the old one is used).
-# Access tokens only last for an hour before expiring, so they are only stored
-# in this program's memory and are generated using the refresh token.
+# token, so it is stored in a database (ocfbackups) and overwritten each time a
+# new one is returned (when the old one is used). Access tokens only last for
+# around an hour before expiring, so they are only stored in this program's
+# memory and are generated using the refresh token.
 
 
 class BoxUpload:
@@ -125,8 +126,19 @@ def box_api_call(url, data='', headers=[], method=''):
 
 def get_access_token(creds):
     """Gets a new access token for the Box.com API"""
-    with open('/opt/share/backups/box-refresh-token', 'r+') as f:
-        refresh_token = f.read().strip()
+
+    # Connect to mysql to retrieve the refresh token
+    connection = pymysql.connect(
+        host='mysql.ocf.berkeley.edu',
+        user='ocfbackups',
+        password=creds['mysql_password'],
+        db='ocfbackups',
+        autocommit=True,
+    )
+
+    with connection as c:
+        c.execute('SELECT `value` FROM `box_keys` WHERE `name` = "refresh-token"')
+        refresh_token = c.fetchone()[0]
 
         # Get an access token and a new refresh token from the API
         post_data = '&refresh_token={}&client_id={}&client_secret={}'.format(
@@ -137,10 +149,8 @@ def get_access_token(creds):
         response = box_api_call('https://app.box.com/api/oauth2/token',
                                 data='grant_type=refresh_token' + post_data)
 
-        # Write the new refresh token to the file
-        f.seek(0)
-        f.write(response['refresh_token'])
-        f.truncate()
+        # Write the new refresh token to the database
+        c.execute("UPDATE `box_keys` SET `value` = %s WHERE `name` = 'refresh-token'", response['refresh_token'])
 
         return response['access_token']
 

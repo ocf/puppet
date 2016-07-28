@@ -33,11 +33,6 @@ class ocf_backups::offsite {
     '/opt/share/backups/box-creds.json':
       source => 'puppet:///private/box-creds.json',
       mode   => '0600';
-
-    # This changes each time a backup is made, so it is not stored on the
-    # puppetmaster and instead is just a local file on the backups server.
-    '/opt/share/backups/box-refresh-token':
-      mode => '0600';
   }
 
   # Runs Saturday at noon, makes a backup and then uploads it to Box.com
