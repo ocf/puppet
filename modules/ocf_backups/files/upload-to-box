@@ -14,8 +14,9 @@ import pycurl
 
 ARCHIVE = '/opt/backups/scratch/archive'
 BOX_DAV = 'https://dav.box.com/dav/'
-MAX_CONCURR_UPLOADS = 10
+BOX_EMAILS = ['ckuehl@berkeley.edu', 'kpeng3.4@berkeley.edu']
 FOLDER = 'ocf-backup-' + time.strftime('%Y-%m-%d')
+MAX_CONCURR_UPLOADS = 10
 
 # To get the OAuth keys for an account:
 #
@@ -154,12 +155,28 @@ def get_folder_id(access_token, folder_name):
             return entry['id']
 
 
+def add_collaborators(access_token, folder_id, emails):
+    """Set a list of people who can access the folder with the backups"""
+    for email in emails:
+        data = '{"item": {"id": "' + folder_id + '", "type": "folder"}, "accessible_by":\
+            {"login": "' + email + '", "type": "user"}, "role": "viewer"}'
+
+        box_api_call('https://api.box.com/2.0/collaborations?notify=false',
+                     data=data,
+                     headers=['Authorization: Bearer ' + access_token],
+                     method='POST')
+
+        # Try not to spam Box.com too hard
+        time.sleep(1.0)
+
+
 def get_shared_link(access_token, folder_id):
     """Get a download link to the folder where the upload was made"""
     # A password can be set on the shared link, but the data is encrypted
-    # with keys anyway, so why bother?
+    # with keys anyway, so why bother? Also the link is only shared with
+    # certain emails, so the password is pretty unnecessary.
     response = box_api_call('https://api.box.com/2.0/folders/' + folder_id,
-                            data='{"shared_link": {"access": "open"}}',
+                            data='{"shared_link": {"access": "collaborators"}}',
                             headers=['Authorization: Bearer ' + access_token],
                             method='PUT')
 
@@ -392,9 +409,10 @@ def main(args):
         conn.close()
     multi.close()
 
-    # Get a shared link from Box.com's API for this folder
+    # Get a shared link from Box.com's API and share it with certain emails
     access_token = get_access_token(creds)
     folder_id = get_folder_id(access_token, FOLDER)
+    add_collaborators(access_token, folder_id, BOX_EMAILS)
     link = get_shared_link(access_token, folder_id)
 
     # Print statistics about the backup time, size, and speed
