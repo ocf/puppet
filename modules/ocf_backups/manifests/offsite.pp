@@ -40,12 +40,13 @@ class ocf_backups::offsite {
       mode => '0600';
   }
 
+  # Runs Saturday at noon, makes a backup and then uploads it to Box.com
   cron {
     'encrypt-and-backup':
-      command => '/opt/share/backups/create-encrypted-backup && /opt/share/backups/upload-to-box --quiet',
+      command => '/opt/share/backups/create-encrypted-backup -q && /opt/share/backups/upload-to-box -q',
       user    => 'root',
-      weekday => '0',
-      hour    => '0',
+      weekday => '6',
+      hour    => '12',
       minute  => '0';
   }
 }

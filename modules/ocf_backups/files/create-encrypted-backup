@@ -39,7 +39,7 @@ fi
 cleanup() {
     if [ -e "$SNAPSHOT_PATH" ]; then
         echo "Removing logical volume: $SNAPSHOT_PATH"
-        lvremove -f "$SNAPSHOT_PATH"
+        /sbin/lvremove -f "$SNAPSHOT_PATH"
     fi
 }
 trap cleanup EXIT
@@ -47,7 +47,7 @@ trap cleanup EXIT
 # we don't have *quite* enough space to make a snapshot with the full 2TB of
 # disk space, so we make a large enough snapshot that we'll *probably* avoid
 # trouble
-lvcreate -L 500G --snapshot --name "$SNAPSHOT_PATH" "$TARGET_VOLUME"
+/sbin/lvcreate -L 500G --snapshot --name "$SNAPSHOT_PATH" "$TARGET_VOLUME"
 
 umask 077
 rm -rf "$ARCHIVE_DIRECTORY"

@@ -6,6 +6,7 @@ import subprocess
 import sys
 import threading
 import time
+from collections import defaultdict
 from io import BytesIO
 from shutil import get_terminal_size
 
@@ -113,7 +114,8 @@ def box_api_call(url, data='', headers=[], method=''):
     http_status = conn.getinfo(pycurl.HTTP_CODE)
     conn.close()
 
-    if http_status == 200:
+    # Check if HTTP status is in 2XX (success of some sort)
+    if http_status in range(200, 299):
         return json.loads(response_data.getvalue().decode('utf-8'))
     else:
         print('HTTP {} on {} with {}'.format(http_status, url, data))
@@ -315,6 +317,9 @@ def main(args):
     for f in files:
         queue.append(f)
 
+    # Error dictionary for number of errored uploads per file
+    num_errors = defaultdict(int)
+
     # Clear the screen and start printing the progress bar every second
     if not args.quiet:
         subprocess.call(('clear',))
@@ -346,19 +351,28 @@ def main(args):
 
             # Retry files that have errored in some way
             for conn, errno, errmsg in err_list:
-                print('Error uploading {}: Curl error #{} {}'.format(
-                    conn.upload.filename,
-                    errno,
-                    errmsg
-                ))
+                filename = conn.upload.filename
+
+                if not args.quiet:
+                    print('Error uploading {}: Curl error #{} {}'.format(
+                        filename,
+                        errno,
+                        errmsg
+                    ))
 
                 # Allow exits by SIGINT
                 if (errno == 42):  # Callback aborted exception code
                     sys.exit(4)
 
-                # Retry this file
-                print('Retrying {}'.format(conn.upload.filename))
-                queue.insert(0, conn.upload.filename)
+                # Retry this file if it hasn't errored too many times
+                if num_errors[filename] < 5:
+                    num_errors[filename] += 1
+                    if not args.quiet:
+                        print('Retrying {}'.format(filename))
+                    queue.insert(0, filename)
+                else:
+                    print('Could not upload {}, errored too many times'.format(filename))
+                    stats['num_finished'] += 1
 
                 reset_connection(multi, conn)
 
