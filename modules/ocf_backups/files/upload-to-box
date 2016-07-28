@@ -56,7 +56,7 @@ class BoxUpload:
 
         # PROGRESSFUNCTION is deprecated in pycurl >= 7.32.0, so this
         # should be changed to conn.XFERINFOFUNCTION when we upgrade to stretch
-        conn.setopt(conn.PROGRESSFUNCTION, self.progress)
+        conn.setopt(conn.PROGRESSFUNCTION, self.store_progress)
         conn.setopt(conn.NOPROGRESS, False)
 
         conn.file_bytes = os.path.getsize(file_path)
@@ -68,7 +68,7 @@ class BoxUpload:
         conn.setopt(conn.URL, '{}{}/{}'.format(BOX_DAV, FOLDER, self.filename))
         conn.setopt(conn.USERPWD, self.auth)
 
-    def progress(self, download_t, download_d, upload_t, upload_d):
+    def store_progress(self, download_t, download_d, upload_t, upload_d):
         """Store the upload progress percentage for periodic printing.
 
         Passed to pycurl as a progress function for each upload
@@ -116,7 +116,7 @@ def box_api_call(url, data='', headers=[], method=''):
     conn.close()
 
     # Check if HTTP status is in 2XX (success of some sort)
-    if http_status in range(200, 299):
+    if 200 <= http_status < 300:
         return json.loads(response_data.getvalue().decode('utf-8'))
     else:
         print('HTTP {} on {} with {}'.format(http_status, url, data))
@@ -158,8 +158,11 @@ def get_folder_id(access_token, folder_name):
 def add_collaborators(access_token, folder_id, emails):
     """Set a list of people who can access the folder with the backups"""
     for email in emails:
-        data = '{"item": {"id": "' + folder_id + '", "type": "folder"}, "accessible_by":\
-            {"login": "' + email + '", "type": "user"}, "role": "viewer"}'
+        data = json.dumps({
+            'item': {'id': folder_id, 'type': 'folder'},
+            'accessible_by': {'login': email, 'type': 'user'},
+            'role': 'viewer',
+        })
 
         box_api_call('https://api.box.com/2.0/collaborations?notify=false',
                      data=data,
@@ -209,7 +212,7 @@ def print_progress(multi, stats, prev_total):
     """Show an updating progress bar for all ongoing uploads"""
     width = get_terminal_size((80, 20)).columns  # Default size as a fallback
 
-    # Move cursor to the top left using ANSII magic to overwrite previous lines
+    # Move cursor to the top left using ANSI magic to overwrite previous lines
     sys.stdout.write('\033[1;1H')
 
     bytes_partial = 0
@@ -291,7 +294,7 @@ def main(args):
 
     # Get authentication for Box.com from credentials file
     with open('/opt/share/backups/box-creds.json') as f:
-        creds = json.loads(f.read())
+        creds = json.load(f)
 
     auth = creds['email'] + ':' + creds['password']
 
@@ -437,7 +440,7 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Back up files to Box.com')
     parser.add_argument('-q', '--quiet', action='store_true',
-                        help='do not output progress to stdout')
+                        help='do not output progress or temporary errors to stdout')
 
     args = parser.parse_args()
 

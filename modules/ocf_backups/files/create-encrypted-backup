@@ -2,24 +2,8 @@
 # Create an encrypted backup (in 5 GB pieces) inside our scratch space.
 #
 # This can be put on a hard drive and stored under the SM's mattress, uploaded
-# to Google Nearline, etc.
+# to Google Nearline, automatically uploaded to Box.com, etc.
 set -o pipefail
-
-# Quiet mode is off by default (show pv output)
-QUIET=false
-
-# If -q is provided, turn on quiet mode
-while getopts "q" opt; do
-    case $opt in
-        q)
-            QUIET=true
-            ;;
-        \?)
-            # Invalid option, just exit
-            exit 1
-            ;;
-    esac
-done
 
 ARCHIVE_DIRECTORY="/opt/backups/scratch/archive"
 TARGET_VOLUME="/dev/vg-backups/backups-live"
@@ -39,7 +23,7 @@ fi
 cleanup() {
     if [ -e "$SNAPSHOT_PATH" ]; then
         echo "Removing logical volume: $SNAPSHOT_PATH"
-        /sbin/lvremove -f "$SNAPSHOT_PATH"
+        lvremove -f "$SNAPSHOT_PATH"
     fi
 }
 trap cleanup EXIT
@@ -47,7 +31,7 @@ trap cleanup EXIT
 # we don't have *quite* enough space to make a snapshot with the full 2TB of
 # disk space, so we make a large enough snapshot that we'll *probably* avoid
 # trouble
-/sbin/lvcreate -L 500G --snapshot --name "$SNAPSHOT_PATH" "$TARGET_VOLUME"
+lvcreate -L 500G --snapshot --name "$SNAPSHOT_PATH" "$TARGET_VOLUME"
 
 umask 077
 rm -rf "$ARCHIVE_DIRECTORY"
@@ -71,8 +55,9 @@ split_parts() {
         "${ARCHIVE_DIRECTORY}/backup-$(date +%Y-%m-%d).img.gz.gpg.part"
 }
 
-if [ "$QUIET" = true ]; then
-    compress_and_encrypt | split_parts
-else
+# Only show pv output if the terminal is interactive (no cron email pv spam)
+if [ -t 0 ]; then
     compress_and_encrypt | pv | split_parts
+else
+    compress_and_encrypt | split_parts
 fi

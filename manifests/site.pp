@@ -27,6 +27,17 @@ Apache::Vhost { serveradmin => 'help@ocf.berkeley.edu' }
 # Cron type won't reset attributes if you don't specify them.
 # (e.g. if you only set "minute => '0'", it won't reset hour to '*')
 # This is bad behavior because the resource is only partially managed by Puppet.
-Cron { special => 'absent', minute => '*', hour => '*', weekday => '*', month => '*', monthday => '*' }
+#
+# Also set the PATH environment variable to be the same as in /etc/crontab.
+# The default PATH is only /usr/bin:/bin, which lacks a lot of commands.
+Cron {
+    special => 'absent',
+    minute => '*',
+    hour => '*',
+    weekday => '*',
+    month => '*',
+    monthday => '*',
+    environment => 'PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin'
+}
 
 $desktop_homepage = 'https://www.ocf.berkeley.edu/about/lab/open-source'
