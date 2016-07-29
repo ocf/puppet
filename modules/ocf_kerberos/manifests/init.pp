@@ -9,6 +9,11 @@ class ocf_kerberos {
     require   => Package['heimdal-kdc'];
   }
 
+  # The inetd service is installed as a dependency of the heimdal-kdc package
+  service { 'inetd':
+    require => Package['heimdal-kdc'];
+  }
+
   file {
     '/etc/heimdal-kdc/kdc.conf':
       source  => 'puppet:///modules/ocf_kerberos/kdc.conf',
@@ -26,6 +31,22 @@ class ocf_kerberos {
       source  => 'puppet:///modules/ocf_kerberos/check-pass-strength',
       mode    => '0755',
       require => Package['heimdal-kdc'];
+  }
+
+  augeas { '/etc/inetd.conf':
+    context => '/files/etc/inetd.conf',
+    changes => [
+      'set service[last()+1] kerberos-adm',
+      'set service[last()]/socket stream',
+      'set service[last()]/protocol tcp6',
+      'set service[last()]/wait nowait',
+      'set service[last()]/user root',
+      'set service[last()]/command /usr/sbin/tcpd',
+      'set service[last()]/arguments/1 /usr/lib/heimdal-servers/kadmind',
+    ],
+    onlyif  => "match service[. = 'kerberos-adm'] size == 1",
+    require => Package['heimdal-kdc'],
+    notify  => Service['inetd', 'heimdal-kdc'],
   }
 
   # Daily local git backup
