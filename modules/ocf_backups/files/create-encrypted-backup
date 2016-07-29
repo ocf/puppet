@@ -2,7 +2,7 @@
 # Create an encrypted backup (in 5 GB pieces) inside our scratch space.
 #
 # This can be put on a hard drive and stored under the SM's mattress, uploaded
-# to Google Nearline, etc.
+# to Google Nearline, automatically uploaded to Box.com, etc.
 set -o pipefail
 
 ARCHIVE_DIRECTORY="/opt/backups/scratch/archive"
@@ -37,16 +37,27 @@ umask 077
 rm -rf "$ARCHIVE_DIRECTORY"
 mkdir "$ARCHIVE_DIRECTORY"
 
-dd if="$SNAPSHOT_PATH" bs=32M | pigz |
-    gpg --homedir "$gpgdir" \
-        --quiet \
-        --encrypt \
-        --trust-model always \
-        --compress-algo none \
-        --recipient ckuehl@berkeley.edu \
-        --recipient willh@ocf.berkeley.edu \
-        --recipient jvperrin@ocf.berkeley.edu \
-        --recipient mattmcal@ocf.berkeley.edu |
-    pv |
+compress_and_encrypt() {
+    dd if="$SNAPSHOT_PATH" bs=32M | pigz |
+        gpg --homedir "$gpgdir" \
+            --quiet \
+            --encrypt \
+            --trust-model always \
+            --compress-algo none \
+            --recipient ckuehl@berkeley.edu \
+            --recipient willh@ocf.berkeley.edu \
+            --recipient jvperrin@ocf.berkeley.edu \
+            --recipient mattmcal@ocf.berkeley.edu
+}
+
+split_parts() {
     split -d -a 4 -b 5G - \
         "${ARCHIVE_DIRECTORY}/backup-$(date +%Y-%m-%d).img.gz.gpg.part"
+}
+
+# Only show pv output if the terminal is interactive (no cron email pv spam)
+if [ -t 0 ]; then
+    compress_and_encrypt | pv | split_parts
+else
+    compress_and_encrypt | split_parts
+fi

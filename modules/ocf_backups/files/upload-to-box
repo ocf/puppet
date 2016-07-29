@@ -1,0 +1,457 @@
+#!/usr/bin/env python3
+import argparse
+import json
+import os
+import subprocess
+import sys
+import threading
+import time
+from collections import defaultdict
+from io import BytesIO
+from shutil import get_terminal_size
+
+import pycurl
+import pymysql
+
+ARCHIVE = '/opt/backups/scratch/archive'
+BOX_DAV = 'https://dav.box.com/dav/'
+BOX_EMAILS = ['ckuehl@berkeley.edu', 'kpeng3.4@berkeley.edu']
+FOLDER = 'ocf-backup-' + time.strftime('%Y-%m-%d')
+MAX_CONCURR_UPLOADS = 10
+
+# To get the OAuth keys for an account:
+#
+# Mostly taken from https://goo.gl/bXdrPE
+#
+# Secrets like client_id, client_secret, and user email/password are in the
+# puppetmaster's private store and on hal in /opt/share/backups/box-creds.json.
+#
+# First, go to
+# https://account.box.com/api/oauth2/authorize?response_type=code&client_id={your_api_key}&state=authenticated&redirect_uri=https://www.ocf.berkeley.edu/oauth
+# You will get redirected to a 404 page, but you can get an auth code from that
+# page's URL. This auth code doesn't last very long at all, so run the below
+# command quickly. Otherwise, just go back to the same page and do it again.
+#
+# Quickly run: curl https://app.box.com/api/oauth2/token -X POST -d \
+# 'grant_type=authorization_code&code={auth code from above}&client_id={client id}&client_secret={client secret}'
+# Get the refresh token from this command's return, it can be used for up to
+# 60 days or one use before it expires. Once used, it is replaced by another
+# token, so it is stored in a database (ocfbackups) and overwritten each time a
+# new one is returned (when the old one is used). Access tokens only last for
+# around an hour before expiring, so they are only stored in this program's
+# memory and are generated using the refresh token.
+
+
+class BoxUpload:
+
+    def __init__(self, filename, curl_auth):
+        self.filename = filename
+        self.auth = curl_auth
+        self.percentage = 0.0
+        self.bytes_uploaded = 0
+
+    def start(self, conn):
+        """Set curl params for the file to upload"""
+        file_path = ARCHIVE + '/' + self.filename
+        conn.upload = self
+
+        # PROGRESSFUNCTION is deprecated in pycurl >= 7.32.0, so this
+        # should be changed to conn.XFERINFOFUNCTION when we upgrade to stretch
+        conn.setopt(conn.PROGRESSFUNCTION, self.store_progress)
+        conn.setopt(conn.NOPROGRESS, False)
+
+        conn.file_bytes = os.path.getsize(file_path)
+        conn.fp = open(file_path, 'rb')
+
+        conn.setopt(conn.INFILESIZE, conn.file_bytes)
+        conn.setopt(conn.READFUNCTION, conn.fp.read)
+        conn.setopt(conn.UPLOAD, True)
+        conn.setopt(conn.URL, '{}{}/{}'.format(BOX_DAV, FOLDER, self.filename))
+        conn.setopt(conn.USERPWD, self.auth)
+
+    def store_progress(self, download_t, download_d, upload_t, upload_d):
+        """Store the upload progress percentage for periodic printing.
+
+        Passed to pycurl as a progress function for each upload
+        """
+        self.bytes_uploaded = upload_d
+        if upload_t > 0:
+            self.percentage = 100 * (upload_d / upload_t)
+
+    def get_progress(self, terminal_width):
+        """Get a nice progress bar including the file and percent complete
+
+        The progress bar has a dynamic width, so it must be constructed by
+        figuring out the correct width based on other data shown
+        """
+        first_half = '{} ['.format(self.filename)
+        second_half = '] {:.2f}%'.format(self.percentage)
+        width = terminal_width - len(first_half) - len(second_half)
+        filled = int(width * self.percentage / 100)
+
+        return '{}{}{}{}'.format(
+            first_half,
+            filled * '#',
+            (width - filled) * ' ',
+            second_half
+        )
+
+
+def box_api_call(url, data='', headers=[], method=''):
+    """Make an API call to Box.com (or anywhere really)"""
+    conn = pycurl.Curl()
+
+    response_data = BytesIO()
+    conn.setopt(conn.URL, url)
+    conn.setopt(conn.WRITEDATA, response_data)
+    conn.setopt(conn.HTTPHEADER, headers)
+
+    if data:
+        conn.setopt(conn.POSTFIELDS, data)
+
+    if method:
+        conn.setopt(conn.CUSTOMREQUEST, method)
+
+    conn.perform()
+    http_status = conn.getinfo(pycurl.HTTP_CODE)
+    conn.close()
+
+    # Check if HTTP status is in 2XX (success of some sort)
+    if 200 <= http_status < 300:
+        return json.loads(response_data.getvalue().decode('utf-8'))
+    else:
+        print('HTTP {} on {} with {}'.format(http_status, url, data))
+        sys.exit(1)
+
+
+def get_access_token(creds):
+    """Gets a new access token for the Box.com API"""
+
+    # Connect to mysql to retrieve the refresh token
+    connection = pymysql.connect(
+        host='mysql.ocf.berkeley.edu',
+        user='ocfbackups',
+        password=creds['mysql_password'],
+        db='ocfbackups',
+        autocommit=True,
+    )
+
+    with connection as c:
+        c.execute('SELECT `value` FROM `box_keys` WHERE `name` = "refresh-token"')
+        refresh_token = c.fetchone()[0]
+
+        # Get an access token and a new refresh token from the API
+        post_data = '&refresh_token={}&client_id={}&client_secret={}'.format(
+            refresh_token,
+            creds['api_client_id'],
+            creds['api_client_secret']
+        )
+        response = box_api_call('https://app.box.com/api/oauth2/token',
+                                data='grant_type=refresh_token' + post_data)
+
+        # Write the new refresh token to the database
+        c.execute("UPDATE `box_keys` SET `value` = %s WHERE `name` = 'refresh-token'", response['refresh_token'])
+
+        return response['access_token']
+
+
+def get_folder_id(access_token, folder_name):
+    """Get the ID for a folder with a specific name in the root folder"""
+    response = box_api_call('https://api.box.com/2.0/folders/0/items?limit=1000',
+                            headers=['Authorization: Bearer ' + access_token])
+
+    for entry in response['entries']:
+        if entry['name'] == folder_name and entry['type'] == 'folder':
+            return entry['id']
+
+
+def add_collaborators(access_token, folder_id, emails):
+    """Set a list of people who can access the folder with the backups"""
+    for email in emails:
+        data = json.dumps({
+            'item': {'id': folder_id, 'type': 'folder'},
+            'accessible_by': {'login': email, 'type': 'user'},
+            'role': 'viewer',
+        })
+
+        box_api_call('https://api.box.com/2.0/collaborations?notify=false',
+                     data=data,
+                     headers=['Authorization: Bearer ' + access_token],
+                     method='POST')
+
+        # Try not to spam Box.com too hard
+        time.sleep(1.0)
+
+
+def get_shared_link(access_token, folder_id):
+    """Get a download link to the folder where the upload was made"""
+    # A password can be set on the shared link, but the data is encrypted
+    # with keys anyway, so why bother? Also the link is only shared with
+    # certain emails, so the password is pretty unnecessary.
+    response = box_api_call('https://api.box.com/2.0/folders/' + folder_id,
+                            data='{"shared_link": {"access": "collaborators"}}',
+                            headers=['Authorization: Bearer ' + access_token],
+                            method='PUT')
+
+    return response['shared_link']['url']
+
+
+def make_box_folder(folder, auth):
+    """Make a folder on Box.com using the MKCOL HTTP request method"""
+    conn = pycurl.Curl()
+
+    conn.setopt(conn.CUSTOMREQUEST, 'MKCOL')
+    conn.setopt(conn.USERPWD, auth)
+    conn.setopt(conn.URL, BOX_DAV + folder)
+    conn.perform()
+
+    http_status = conn.getinfo(pycurl.HTTP_CODE)
+    conn.close()
+
+    if http_status == 405:
+        print('Could not create a folder, it already exists, continuing...')
+    elif http_status == 401:
+        print('401 error trying to create a folder, check your authentication!')
+        sys.exit(2)
+    elif http_status != 201:
+        print('Error creating folder, HTTP ' + str(http_status))
+        sys.exit(3)
+
+
+def print_progress(multi, stats, prev_total):
+    """Show an updating progress bar for all ongoing uploads"""
+    width = get_terminal_size((80, 20)).columns  # Default size as a fallback
+
+    # Move cursor to the top left using ANSI magic to overwrite previous lines
+    sys.stdout.write('\033[1;1H')
+
+    bytes_partial = 0
+    for conn in multi.handles:
+        if conn.upload:
+            print(conn.upload.get_progress(width))
+            bytes_partial += conn.upload.bytes_uploaded
+
+    bytes_total = stats['bytes_uploaded'] + bytes_partial
+
+    # Print statistics on upload time and current speed
+    time_stats = 'Time so far: {}  Speed: {:.0f} Mb/s'.format(
+        friendly_time(time.time() - stats['start_time']),
+        (bytes_total - prev_total) * 0.000008
+    )
+    print(time_stats + (width - len(time_stats)) * ' ')
+
+    # Print more stats, this time on amount uploaded
+    upload_stats = 'Uploaded {}/{} files and {}/{} ({:.2f}%) in total'.format(
+        stats['num_finished'],
+        stats['num_total'],
+        friendly_file_size(bytes_total),
+        friendly_file_size(stats['bytes_total']),
+        100 * bytes_total / stats['bytes_total']
+    )
+    print(upload_stats + (width - len(upload_stats)) * ' ')
+
+    # If there are less progress bars now, add blank rows to overwrite the
+    # bottom rows as necessary (to get rid of lines with outdated information)
+    blank_rows = len(multi.free)
+    for row in range(blank_rows):
+        print(' ' * width)
+
+    # Print the next update in a second, allow interrupts
+    thread = threading.Timer(1, print_progress, [multi, stats, bytes_total])
+    thread.daemon = True
+    thread.start()
+
+
+def reset_connection(multi, conn):
+    """Resets a pycurl connection object to be used again"""
+    conn.fp.close()
+    multi.remove_handle(conn)
+    conn.upload = None
+    conn.fp = None
+    conn.file_bytes = 0
+    multi.free.append(conn)
+
+
+def friendly_file_size(num_bytes):
+    """To convert bytes to human-readable units
+
+    Adapted from http://stackoverflow.com/a/1094933/1979001
+    """
+    for unit in ['', 'KB', 'MB', 'GB', 'TB', 'PB']:
+        if num_bytes < 1024.0:
+            return '{:3.2f} {}'.format(num_bytes, unit)
+        num_bytes /= 1024.0
+
+
+def friendly_time(seconds):
+    """Show seconds in terms of larger units for easier reading"""
+    times = [('seconds', 60), ('minutes', 60), ('hours', 24), ('days', 365)]
+    for unit, factor in times:
+        if seconds < factor:
+            return '{:.2f} {}'.format(seconds, unit)
+        seconds /= factor
+
+
+def main(args):
+    try:
+        files = sorted(os.listdir(ARCHIVE))
+    except PermissionError:
+        print('You must run this script as root!')
+        sys.exit(1)
+
+    # Make sure there are actually files to upload
+    assert files, 'No files found to upload, check your path'
+
+    # Get authentication for Box.com from credentials file
+    with open('/opt/share/backups/box-creds.json') as f:
+        creds = json.load(f)
+
+    auth = creds['email'] + ':' + creds['password']
+
+    # Make a new folder for the backup
+    if not args.quiet:
+        print('Creating folder ' + FOLDER + ' on Box.com...')
+
+    make_box_folder(FOLDER, auth)
+
+    # Start timer for upload speed and get total upload size
+    file_bytes = sum(os.path.getsize(ARCHIVE + '/' + f) for f in files)
+    if not args.quiet:
+        print('Uploading {}...'.format(friendly_file_size(file_bytes)))
+        time.sleep(3)
+
+    start_time = time.time()
+
+    multi = pycurl.CurlMulti()
+    multi.handles = []
+    multi.free = []
+    stats = {
+        'num_finished': 0,
+        'num_total': len(files),
+        'bytes_uploaded': 0,
+        'bytes_total': file_bytes,
+        'start_time': start_time,
+    }
+
+    # Create free connection handlers that can be reused
+    for i in range(MAX_CONCURR_UPLOADS):
+        conn = pycurl.Curl()
+        conn.fp = None
+        conn.upload = None
+        conn.file_bytes = 0
+        multi.handles.append(conn)
+        multi.free.append(conn)
+
+    # Make a queue of all files to be uploaded
+    queue = []
+    for f in files:
+        queue.append(f)
+
+    # Error dictionary for number of errored uploads per file
+    num_errors = defaultdict(int)
+
+    # Clear the screen and start printing the progress bar every second
+    if not args.quiet:
+        subprocess.call(('clear',))
+        print_progress(multi, stats, 0)
+
+    while stats['num_finished'] < len(files):
+        # Add uploads if there are connections free to use
+        while queue and multi.free:
+            filename = queue.pop(0)
+            conn = multi.free.pop()
+            upload = BoxUpload(filename, auth)
+            upload.start(conn)
+            multi.add_handle(conn)
+
+        # Run curl's internal state machine
+        while True:
+            ret, num_handles = multi.perform()
+            if ret != pycurl.E_CALL_MULTI_PERFORM:
+                break
+
+        # Check for successful or failed curl connections and free them again
+        while True:
+            num_queued, ok_list, err_list = multi.info_read()
+
+            # Free up connections from files that have finished
+            for conn in ok_list:
+                stats['bytes_uploaded'] += conn.file_bytes
+                reset_connection(multi, conn)
+
+            # Retry files that have errored in some way
+            for conn, errno, errmsg in err_list:
+                filename = conn.upload.filename
+
+                if not args.quiet:
+                    print('Error uploading {}: Curl error #{} {}'.format(
+                        filename,
+                        errno,
+                        errmsg
+                    ))
+
+                # Allow exits by SIGINT
+                if (errno == 42):  # Callback aborted exception code
+                    sys.exit(4)
+
+                # Retry this file if it hasn't errored too many times
+                if num_errors[filename] < 5:
+                    num_errors[filename] += 1
+                    if not args.quiet:
+                        print('Retrying {}'.format(filename))
+                    queue.insert(0, filename)
+                else:
+                    print('Could not upload {}, errored too many times'.format(filename))
+                    stats['num_finished'] += 1
+
+                reset_connection(multi, conn)
+
+            stats['num_finished'] += len(ok_list)
+
+            # Move on if no more connections need freeing
+            if num_queued == 0:
+                break
+
+        # Wait for more data to be available
+        multi.select(1.0)
+
+    # Clean up any open files and connections
+    for conn in multi.handles:
+        if conn.fp:
+            conn.fp.close()
+        conn.close()
+    multi.close()
+
+    # Get a shared link from Box.com's API and share it with certain emails
+    access_token = get_access_token(creds)
+    folder_id = get_folder_id(access_token, FOLDER)
+    add_collaborators(access_token, folder_id, BOX_EMAILS)
+    link = get_shared_link(access_token, folder_id)
+
+    # Print statistics about the backup time, size, and speed
+    if not args.quiet:
+        subprocess.call(('clear',))
+
+    total_time = time.time() - start_time
+    transfer_rate = file_bytes / (1000000 * total_time)
+    print('Box.com upload complete!')
+    print('Took {} to transfer {} files with combined size {}'.format(
+        friendly_time(total_time),
+        stats['num_total'],
+        friendly_file_size(file_bytes)
+    ))
+    print('Average rate of {:.2f} Mb/s ({:.2f} MB/s)'.format(
+        transfer_rate * 8,
+        transfer_rate
+    ))
+    print('Link to the uploaded folder: {}'.format(link))
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Back up files to Box.com')
+    parser.add_argument('-q', '--quiet', action='store_true',
+                        help='do not output progress or temporary errors to stdout')
+
+    args = parser.parse_args()
+
+    exit(main(args))
