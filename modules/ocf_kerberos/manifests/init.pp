@@ -46,7 +46,7 @@ class ocf_kerberos {
     ],
     onlyif  => "match service[. = 'kerberos-adm'] size == 1",
     require => Package['heimdal-kdc'],
-    notify  => Service['inetd', 'heimdal-kdc'],
+    notify  => Service['inetd'],
   }
 
   # Daily local git backup
