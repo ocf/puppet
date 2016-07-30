@@ -81,8 +81,14 @@ class ocf_jenkins {
       group  => jenkins-deploy,
       mode   => '0640';
 
-    '/opt/jenkins/deploy/.dockercfg':
-      source => 'puppet:///private/dockercfg',
+    '/opt/jenkins/deploy/.docker':
+      ensure => directory,
+      owner  => root,
+      group  => jenkins-deploy,
+      mode   => '0750';
+
+    '/opt/jenkins/deploy/.docker/config.json':
+      source => 'puppet:///private/docker-config.json',
       owner  => root,
       group  => jenkins-deploy,
       mode   => '0640';
