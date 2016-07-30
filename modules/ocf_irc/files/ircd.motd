@@ -1,6 +1,10 @@
 Welcome to the OCF's irc server at irc.ocf.berkeley.edu.
 This server listens on port 6697 (SSL only).
 
+We also have a web IRC client all set up to connect to this
+server at https://irc.ocf.berkeley.edu if you would prefer
+that. Take a look!
+
 IRC is a privilege, not a right. If it is abused, you will be
 removed from this server.
 
