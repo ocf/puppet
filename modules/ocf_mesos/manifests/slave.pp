@@ -14,7 +14,9 @@ class ocf_mesos::slave {
     require => Package['mesos'];
   }
 
-  $ocf_mesos_password = 'hunter2'
+
+  $ocf_mesos_master_password = 'hunter2'
+  $ocf_mesos_slave_password = 'hunter3'
 
   # TODO: when on Puppet 4, use per-expression defaults
   # https://docs.puppet.com/puppet/latest/reference/lang_resources_advanced.html#local-resource-defaults
@@ -53,14 +55,40 @@ class ocf_mesos::slave {
       notify  => Service['mesos-slave'],
       require => Package['mesos'];
 
+    # Credentials needed to access the slave REST API.
+    [
+      '/etc/mesos-slave/authenticate_http_readonly',
+      '/etc/mesos-slave/authenticate_http_readwrite',
+    ]:
+      content => "true\n";
 
-    '/etc/mesos-slave/credential':
-      content => "/opt/share/mesos/slave/credential.json\n",
-      require => [Package['mesos'], File['/opt/share/mesos/slave/credential.json']],
+    '/etc/mesos-slave/work_dir':
+      content => "/var/lib/mesos-slave\n",
+      require => File['/var/lib/mesos-slave'],
       notify  => Service['mesos-slave'];
 
-    '/opt/share/mesos/slave/credential.json':
-      content   => template('ocf_mesos/slave/mesos/credential.json.erb'),
+    '/var/lib/mesos-slave':
+      ensure => directory;
+
+    '/etc/mesos-slave/http_credentials':
+      content => "/opt/share/mesos/slave/slave_credentials.json\n",
+      require => File['/opt/share/mesos/slave/slave_credentials.json'],
+      notify  => Service['mesos-slave'];
+
+    '/opt/share/mesos/slave/slave_credentials.json':
+      content   => template('ocf_mesos/slave/mesos/slave_credentials.json.erb'),
+      mode      => '0400',
+      show_diff => false,
+      notify    => Service['mesos-slave'];
+
+    # Credential to connect to the masters.
+    '/etc/mesos-slave/credential':
+      content => "/opt/share/mesos/slave/master_credential.json\n",
+      require => [Package['mesos'], File['/opt/share/mesos/slave/master_credential.json']],
+      notify  => Service['mesos-slave'];
+
+    '/opt/share/mesos/slave/master_credential.json':
+      content   => template('ocf_mesos/slave/mesos/master_credential.json.erb'),
       mode      => '0400',
       show_diff => false,
       notify  => Service['mesos-slave'],
