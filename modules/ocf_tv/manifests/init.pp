@@ -1,6 +1,8 @@
 class ocf_tv {
   include ocf::packages::chrome
   include ocf::packages::firefox
+  include ocf_desktop::drivers
+  include ocf_desktop::steam
 
   package {
     [
