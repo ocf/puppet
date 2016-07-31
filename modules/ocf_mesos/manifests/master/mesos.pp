@@ -1,7 +1,5 @@
-class ocf_mesos::master::mesos($mesos_hostname) {
+class ocf_mesos::master::mesos($mesos_hostname, $mesos_http_password) {
   include ocf_mesos::package
-
-  $ocf_mesos_password = 'hunter2'
 
   file {
     '/etc/mesos-master':
@@ -30,7 +28,8 @@ class ocf_mesos::master::mesos($mesos_hostname) {
     [
       '/etc/mesos-master/authenticate',
       '/etc/mesos-master/authenticate_slaves',
-      '/etc/mesos-master/authenticate_http',
+      '/etc/mesos-master/authenticate_http_readonly',
+      '/etc/mesos-master/authenticate_http_readwrite',
     ]:
       content => "true\n",
       notify  => Service['mesos-master'],

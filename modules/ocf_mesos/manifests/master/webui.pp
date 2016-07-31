@@ -1,5 +1,6 @@
 class ocf_mesos::master::webui(
     $mesos_fqdn,
+    $mesos_http_password,
     $marathon_fqdn,
     $marathon_http_password,
 ) {
@@ -41,20 +42,24 @@ class ocf_mesos::master::webui(
     },
   }
 
+  $mesos_auth_header = base64('encode', "ocf:${mesos_http_password}", 'strict')
   $marathon_auth_header = base64('encode', "marathon:${marathon_http_password}", 'strict')
 
   nginx::resource::vhost {
     # mesos
     'mesos':
-      server_name    => [$mesos_fqdn],
-      proxy          => 'http://mesos',
-      ssl            => true,
-      listen_port    => 443,
+      server_name => [$mesos_fqdn],
+      proxy       => 'http://mesos',
+      ssl         => true,
+      listen_port => 443,
+
+      # has a sensitive authorization header
+      mode        => '0600',
 
       # Mesos will redirect to a URL like "//mesos5:5050" when redirecting to
       # the current leader; we want to remove the port and go to the HTTPS site
       # with the entire FQDN instead.
-      proxy_redirect => '~^//mesos([0-9]+):5050$ https://mesos$1.ocf.berkeley.edu/',
+      proxy_redirect => '~^//mesos([0-9]+):5050 https://mesos$1.ocf.berkeley.edu/',
 
       raw_append => [
         'auth_pam "OCF Mesos Master";',
@@ -65,6 +70,7 @@ class ocf_mesos::master::webui(
         'X-Forwarded-Protocol $scheme',
         'X-Forwarded-For $proxy_add_x_forwarded_for',
         'Host $http_host',
+        "Authorization 'Basic ${mesos_auth_header}'",
       ],
 
       require => File['/etc/pam.d/mesos_master_webui'];
