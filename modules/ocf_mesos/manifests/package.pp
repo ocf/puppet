@@ -14,13 +14,17 @@ class ocf_mesos::package {
       ensure => $is_master,
       enable => $is_master,
       require => Package['mesos'];
-    'zookeeper':
-      ensure => $is_master,
-      enable => $is_master,
-      require => Package['mesos'];
     'mesos-slave':
       ensure => $is_slave,
       enable => $is_slave,
       require => Package['mesos'];
+  }
+
+  if !$is_master {
+    service { 'zookeeper':
+      ensure => false,
+      enable => false,
+      require => Package['mesos'],
+    }
   }
 }

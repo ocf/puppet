@@ -6,6 +6,15 @@ class ocf_mesos::master::zookeeper($zookeeper_id) {
     notify  => Service['zookeeper'],
   }
 
+  # We provide our own service file because the init script that the mesosphere
+  # package ships results in systemd losing track of the process somehow
+  # (making it impossible to stop via service/systemctl).
+  ocf::systemd::service { 'zookeeper':
+    ensure  => running,
+    source  => 'puppet:///modules/ocf_mesos/master/zookeeper/zookeeper.service',
+    enable  => true,
+  }
+
   file {
     '/etc/zookeeper/conf_ocf':
       ensure => directory;
