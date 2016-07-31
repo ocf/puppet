@@ -1,4 +1,4 @@
-smtpd_banner = $myhostname ESMTP Greetings from the Hearst Gym grotto.
+smtpd_banner = $myhostname ESMTP Greetings from 171 MLK.
 
 # ocf, google apps
 mynetworks = 169.229.226.0/24 [2607:f140:8801::]/64
@@ -45,6 +45,7 @@ masquerade_classes = envelope_sender, envelope_recipient, header_sender,
 local_header_rewrite_clients = permit_mynetworks
 
 # tls
+# TODO: Don't hardcode certificate FQDN
 smtpd_tls_cert_file=/etc/ssl/private/anthrax.ocf.berkeley.edu.bundle
 smtpd_tls_key_file=/etc/ssl/private/anthrax.ocf.berkeley.edu.key
 smtpd_use_tls=yes
