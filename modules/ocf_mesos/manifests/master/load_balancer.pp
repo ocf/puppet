@@ -1,5 +1,14 @@
-class ocf_mesos::master::load_balancer {
+class ocf_mesos::master::load_balancer($marathon_http_password) {
   include ocf::packages::docker
+
+  file {
+    '/opt/share/mesos/master/marathon-lb':
+      ensure => directory;
+    '/opt/share/mesos/master/marathon-lb/credential':
+      mode      => '0600',
+      content   => "marathon:${marathon_http_password}\n",
+      show_diff => false;
+  }
 
   ocf::systemd::service { 'ocf-lb':
     ensure  => running,

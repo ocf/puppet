@@ -4,7 +4,7 @@ After=docker.service
 Wants=docker.service
 
 [Service]
-ExecStart=/usr/bin/docker run --rm -e PORTS=9090 --net=host mesosphere/marathon-lb sse -m http://localhost:8080 --group lb --dont-bind-http-https
+ExecStart=/usr/bin/docker run -v /opt/share/mesos/master/marathon-lb:/srv:ro --rm -e PORTS=9090 --net=host mesosphere/marathon-lb sse -m http://localhost:8080 --group lb --dont-bind-http-https --marathon-auth-credential-file /srv/credential
 Restart=always
 RestartSec=15
 

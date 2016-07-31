@@ -1,6 +1,7 @@
 class ocf_mesos::master::webui(
     $mesos_fqdn,
     $marathon_fqdn,
+    $marathon_http_password,
 ) {
   require ocf_ssl
 
@@ -12,7 +13,6 @@ class ocf_mesos::master::webui(
     '/etc/pam.d/mesos_master_webui':
       source  => 'puppet:///modules/ocf_mesos/master/webui/mesos_master_webui',
       require => File['/opt/share/mesos-admin-groups'];
-
   }
 
   class { 'nginx':
@@ -39,13 +39,9 @@ class ocf_mesos::master::webui(
     add_header  => {
       'Strict-Transport-Security' => 'max-age=31536000',
     },
-
-    proxy_set_header => [
-      'X-Forwarded-Protocol $scheme',
-      'X-Forwarded-For $proxy_add_x_forwarded_for',
-      'Host $http_host'
-    ],
   }
+
+  $marathon_auth_header = base64('encode', "marathon:${marathon_http_password}", 'strict')
 
   nginx::resource::vhost {
     # mesos
@@ -63,6 +59,12 @@ class ocf_mesos::master::webui(
       raw_append => [
         'auth_pam "OCF Mesos Master";',
         'auth_pam_service_name mesos_master_webui;',
+      ],
+
+      proxy_set_header => [
+        'X-Forwarded-Protocol $scheme',
+        'X-Forwarded-For $proxy_add_x_forwarded_for',
+        'Host $http_host',
       ],
 
       require => File['/etc/pam.d/mesos_master_webui'];
@@ -94,9 +96,19 @@ class ocf_mesos::master::webui(
       ssl         => true,
       listen_port => 443,
 
+      # has a sensitive authorization header
+      mode        => '0600',
+
       raw_append => [
         'auth_pam "OCF Marathon Master";',
         'auth_pam_service_name mesos_master_webui;',
+      ],
+
+      proxy_set_header => [
+        'X-Forwarded-Protocol $scheme',
+        'X-Forwarded-For $proxy_add_x_forwarded_for',
+        'Host $http_host',
+        "Authorization 'Basic ${marathon_auth_header}'",
       ],
 
       require => File['/etc/pam.d/mesos_master_webui'];
