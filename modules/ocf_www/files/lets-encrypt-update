@@ -163,7 +163,7 @@ def write_cert(cert, cert_path):
             os.remove(temp_cert_path)
 
 
-def maybe_renew(domain, cert_path):
+def maybe_renew(domain, cert_path, dry_run=False):
     expires = expiration_date(cert_path)
     time_remaining = expires - datetime.now(timezone.utc)
 
@@ -172,16 +172,17 @@ def maybe_renew(domain, cert_path):
         return
 
     debug('renewing {} (remaining: {})'.format(domain, time_remaining))
-    try:
-        cert, stderr, returncode = acme_tiny(domain)
-        assert returncode == 0, returncode
-        write_cert(cert, cert_path)
-        print('cert renewed for: {}'.format(domain))
-    except:
-        print('An error occured!', file=sys.stderr)
-        print('stderr from acme-tiny:', file=sys.stderr)
-        print(stderr, file=sys.stderr)
-        raise
+    if not dry_run:
+        try:
+            cert, stderr, returncode = acme_tiny(domain)
+            assert returncode == 0, returncode
+            write_cert(cert, cert_path)
+            print('cert renewed for: {}'.format(domain))
+        except:
+            print('An error occured!', file=sys.stderr)
+            print('stderr from acme-tiny:', file=sys.stderr)
+            print(stderr, file=sys.stderr)
+            raise
 
 
 def base_domain(fqdn):
@@ -196,35 +197,39 @@ def base_domain(fqdn):
     return '.'.join(fqdn.split('.')[::-1][:2][::-1])
 
 
-def maybe_acquire(domain, cert_path):
+def maybe_acquire(domain, cert_path, dry_run=True):
     base = base_domain(domain)
     if base in rate_limit_hit:
         debug('skipping {} due to rate limit on {}'.format(domain, base))
         return
 
-    stderr = None
-    try:
-        cert, stderr, returncode = acme_tiny(domain)
-        if returncode != 0:
-            # assume it must be a rate limit, otherwise we'll raise below
-            assert returncode == 1, returncode
-            match = re.search(
-                b'"Error creating new cert :: Too many certificates already issued for: ([^"]+)"',
-                stderr,
-            )
-            assert match
-            hit_for_domain = match.group(1).decode('ascii')
-            assert hit_for_domain == base, (hit_for_domain, base)
-            debug('hit rate limit for {} on {}'.format(base, domain))
-            rate_limit_hit.add(base)
-        else:
-            write_cert(cert, cert_path)
-            print('cert acquired for {}'.format(domain))
-    except:
-        print('An error occured!', file=sys.stderr)
-        print('stderr from acme-tiny:', file=sys.stderr)
-        print(stderr, file=sys.stderr)
-        raise
+    debug('acquiring {}'.format(domain))
+    if not dry_run:
+        stderr = None
+        try:
+            cert, stderr, returncode = acme_tiny(domain)
+            if returncode != 0:
+                # assume it must be a rate limit, otherwise we'll raise below
+                assert returncode == 1, returncode
+                match = re.search(
+                    b'"Error creating new cert :: Too many certificates already issued for: ([^"]+)"',
+                    stderr,
+                )
+                assert match
+                hit_for_domain = match.group(1).decode('ascii')
+                assert hit_for_domain == base, (hit_for_domain, base)
+                debug('hit rate limit for {} on {}'.format(base, domain))
+                rate_limit_hit.add(base)
+                return
+            else:
+                write_cert(cert, cert_path)
+                print('cert acquired for {}'.format(domain))
+                return
+        except:
+            print('An error occured!', file=sys.stderr)
+            print('stderr from acme-tiny:', file=sys.stderr)
+            print(stderr, file=sys.stderr)
+            raise
 
 
 def main(argv=None):
@@ -232,6 +237,7 @@ def main(argv=None):
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
+    parser.add_argument('-n', '--dry-run', action='store_true')
     parser.add_argument('-v', '--verbose', action='store_true')
     args = parser.parse_args()
 
@@ -239,14 +245,24 @@ def main(argv=None):
         global debug
         debug = print
 
-    for domain in eligible_domains():
+    eligible = eligible_domains()
+    have_cert = set()
+    need_cert = set()
+    for domain in eligible:
         assert re.match('^[a-z\-_\.0-9]+$', domain)
         cert_path = CERT_STORAGE_DIR / '{}.crt'.format(domain)
 
         if cert_path.exists():
-            maybe_renew(domain, cert_path)
+            have_cert.add(domain)
+            maybe_renew(domain, cert_path, dry_run=args.dry_run)
         else:
-            maybe_acquire(domain, cert_path)
+            need_cert.add(domain)
+            maybe_acquire(domain, cert_path, dry_run=args.dry_run)
+
+    debug('Total domains: {}'.format(len(get_vhosts())))
+    debug('Total eligible domains: {}'.format(len(eligible)))
+    debug('  Already have cert: {}'.format(len(have_cert)))
+    debug('  Want cert: {}'.format(len(need_cert)))
 
 
 if __name__ == '__main__':
