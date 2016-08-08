@@ -42,7 +42,6 @@ class ocf_dhcp::netboot {
   cron { 'ocf-netboot':
     command     => '/usr/local/sbin/ocf-netboot > /dev/null',
     user        => root,
-    environment => 'PATH=/bin:/usr/bin:/usr/sbin',
     special     => 'weekly',
     require     => File['/var/lib/finnix.tar.gz'];
   }

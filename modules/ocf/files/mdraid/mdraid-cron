@@ -1,5 +1,4 @@
 #!/bin/bash -eu
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 (
     echo "====== Available arrays: ======"
     mdadm --detail --scan
