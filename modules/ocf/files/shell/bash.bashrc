@@ -3,7 +3,8 @@
 
 # OCF environment variables
 export PATH=/opt/share/utils/bin:/opt/share/utils/sbin:/usr/local/bin:\
-/usr/local/sbin:/bin:/usr/bin:/usr/sbin:/usr/lib:/sbin:/usr/games
+/usr/local/sbin:/opt/puppetlabs/bin:/bin:/usr/bin:/usr/sbin:/usr/lib:/sbin:\
+/usr/games
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
