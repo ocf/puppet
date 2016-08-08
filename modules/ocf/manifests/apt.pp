@@ -66,6 +66,14 @@ class ocf::apt {
     source => 'https://apt.puppetlabs.com/pubkey.gpg';
   }
 
+  # Hack to update the puppetlabs APT signing key with the same signature
+  # See https://tickets.puppetlabs.com/browse/MODULES-3307 for more info
+  exec { 'apt-key puppetlabs':
+    path    => '/bin:/usr/bin',
+    unless  => 'apt-key list | grep 4BD6EC30 | grep -v expired',
+    command => 'apt-key adv --keyserver keys.gnupg.net --recv-keys 1054b7a24bd6ec30';
+  }
+
   apt::source { 'puppetlabs':
     location   => 'http://apt.puppetlabs.com/',
     repos      => 'PC1',
