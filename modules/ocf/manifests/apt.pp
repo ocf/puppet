@@ -68,7 +68,7 @@ class ocf::apt {
 
   apt::source { 'puppetlabs':
     location   => 'http://apt.puppetlabs.com/',
-    repos      => 'main dependencies',
+    repos      => 'PC1',
     require    => Apt::Key['puppetlabs'];
   }
 
