@@ -61,6 +61,17 @@ class ocf::apt {
     }
   }
 
+  apt::key { 'puppetlabs':
+    id     => '47B320EB4C7C375AA9DAE1A01054B7A24BD6EC30',
+    source => 'https://apt.puppetlabs.com/pubkey.gpg';
+  }
+
+  apt::source { 'puppetlabs':
+    location   => 'http://apt.puppetlabs.com/',
+    repos      => 'main dependencies',
+    require    => Apt::Key['puppetlabs'];
+  }
+
   apt::key { 'ocf':
     id     => '9FBEC942CCA7D929B41A90EC45A686E7D72A0AF4',
     source => 'https://apt.ocf.berkeley.edu/pubkey.gpg';
