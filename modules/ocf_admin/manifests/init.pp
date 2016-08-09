@@ -6,8 +6,8 @@ class ocf_admin {
   include ocf::packages::mysql
   include ocf::tmpfs
 
-  include apt_dater
-  include create
+  include ocf_admin::apt_dater
+  include ocf_admin::create
 
   class { 'ocf::nfs':
     cron   => true,

@@ -8,7 +8,7 @@ class ocf_jenkins {
     stage => first;
   }
 
-  include proxy
+  include ocf_jenkins::proxy
 
   package { 'jenkins':; }
   service { 'jenkins':

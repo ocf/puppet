@@ -1,6 +1,6 @@
 class ocf_rt {
   include ocf_ssl
-  include apache
+  include ocf_rt::apache
 
   package {
     'request-tracker4':

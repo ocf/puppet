@@ -8,7 +8,7 @@ class ocf_stats {
   include '::apache::mod::php'
 
   include apache
-  include labstats
-  include munin
-  include www
+  include ocf_stats::labstats
+  include ocf_stats::munin
+  include ocf_stats::www
 }

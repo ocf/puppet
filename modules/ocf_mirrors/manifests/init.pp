@@ -2,21 +2,21 @@ class ocf_mirrors {
   include ocf_ssl
   require ocf::packages::rsync
 
-  include ftp
-  include rsync
+  include ocf_mirrors::ftp
+  include ocf_mirrors::rsync
 
   # projects
-  include apache
-  include archlinux
-  include debian
-  include finnix
-  include gnu
-  include kali
-  include parrot
-  include tails
-  include tanglu
-  include trisquel
-  include ubuntu
+  include ocf_mirrors::apache
+  include ocf_mirrors::archlinux
+  include ocf_mirrors::debian
+  include ocf_mirrors::finnix
+  include ocf_mirrors::gnu
+  include ocf_mirrors::kali
+  include ocf_mirrors::parrot
+  include ocf_mirrors::tails
+  include ocf_mirrors::tanglu
+  include ocf_mirrors::trisquel
+  include ocf_mirrors::ubuntu
 
   user { 'mirrors':
     comment => 'OCF Mirroring',

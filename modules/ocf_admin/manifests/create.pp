@@ -1,4 +1,4 @@
 class ocf_admin::create {
-  include create::app
-  include create::redis
+  include ocf_admin::create::app
+  include ocf_admin::create::redis
 }

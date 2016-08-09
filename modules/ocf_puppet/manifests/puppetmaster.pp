@@ -3,7 +3,7 @@ class ocf_puppet::puppetmaster {
     ['puppetmaster-passenger', 'puppet-lint']:;
   }
 
-  class { 'apache':
+  class { '::apache':
     default_vhost => false;
   }
 

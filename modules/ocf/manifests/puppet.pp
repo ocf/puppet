@@ -14,9 +14,13 @@ class ocf::puppet {
       'set agent/usecacheonfailure false',
       'set main/pluginsync true',
       'set main/stringify_facts false',
+      'set main/rundir /run/puppet',
 
       # future parser breaks too many 3rd-party modules
       'rm main/parser',
+
+      # templatedir is deprecated in 3.8+ and we don't use it
+      'rm main/templatedir',
     ],
     require => Package['augeas-tools', 'libaugeas-ruby', 'puppet'],
     notify  => Service['puppet'],
@@ -40,7 +44,7 @@ class ocf::puppet {
     ;
   }
 
-  # TODO: remove this in a few weeks
+  # TODO: remove this after the fall semester starts
   mount { '/var/lib/puppet/concat':
     ensure  => absent,
   }

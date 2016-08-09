@@ -1,6 +1,6 @@
 class ocf_desktop::xsession ($staff = false) {
-  require packages
-  include xfce
+  require ocf_desktop::packages
+  include ocf_desktop::xfce
 
   # Xsession configuration
   file {

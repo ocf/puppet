@@ -1,5 +1,5 @@
 class ocf_dhcp {
-  include netboot
+  include ocf_dhcp::netboot
 
   # setup dhcp server
   package { 'isc-dhcp-server': }

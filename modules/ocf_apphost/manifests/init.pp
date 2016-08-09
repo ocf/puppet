@@ -1,8 +1,8 @@
 class ocf_apphost {
   include ocf::extrapackages
   include ocf::hostkeys
-  include proxy
-  include ssl
+  include ocf_apphost::proxy
+  include ocf_apphost::ssl
 
   class { 'ocf::nfs':
     cron => true;

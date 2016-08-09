@@ -1,5 +1,5 @@
 # A single virtual host.
-define ocf_www::site::vhost($vhost = $title) {
+define ocf_www::site::vhost(Hash $vhost) {
   # Common config for all <VirtualHost> blocks for this vhost.
   Apache::Vhost {
     vhost_name      => '*',
@@ -27,6 +27,12 @@ define ocf_www::site::vhost($vhost = $title) {
     default => "http://${vhost[domain]}/",
   }
 
+  # Handle redirect_dest empty strings
+  $redirect = $vhost[redirect_dest] ? {
+    /.+/    => { status => '302', dest => $vhost[redirect_dest], },
+    default => { status => undef, dest => undef, },
+  }
+
   apache::vhost { "vhost-${vhost[domain]}":
     servername        => $vhost[domain],
 
@@ -42,8 +48,8 @@ define ocf_www::site::vhost($vhost = $title) {
 
     # 301 redirects are more correct but get cached forever by dumb browsers
     # like Chrome; for vhosts, we don't really care too much about 301s
-    redirect_status   => '302',
-    redirect_dest     => $vhost[redirect_dest],
+    redirect_status   => $redirect[status],
+    redirect_dest     => $redirect[dest],
 
     directories       => [
       {

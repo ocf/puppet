@@ -12,6 +12,6 @@ class ocf_ssh {
     web    => true;
   }
 
-  include makeservices
-  include webssh
+  include ocf_ssh::makeservices
+  include ocf_ssh::webssh
 }

@@ -2,7 +2,7 @@
 # including LDAP users and internal mail (and mailing lists).
 
 class ocf_mail::site_ocf {
-  include spam
+  include ocf_mail::spam
 
   package {
     ['postfix', 'postfix-ldap', 'rt4-clients']:;
