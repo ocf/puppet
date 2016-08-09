@@ -70,7 +70,7 @@ class ocf::apt {
   # See https://tickets.puppetlabs.com/browse/MODULES-3307 for more info
   exec { 'apt-key puppetlabs':
     path    => '/bin:/usr/bin',
-    unless  => 'apt-key list | grep 4BD6EC30 | grep -v expired',
+    unless  => 'apt-key list | grep 4BD6EC30 | grep -vE "expired|revoked"',
     command => 'apt-key adv --keyserver keys.gnupg.net --recv-keys 1054b7a24bd6ec30';
   }
 
