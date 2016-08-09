@@ -1,7 +1,8 @@
 -   repo: https://github.com/chriskuehl/puppet-pre-commit-hooks.git
-    sha: 95af1e1e303c764f375abafa96702c605fccfdaa
+    sha: 862bf8eab7d34739ff1055e1824398b0c69b578f
     hooks:
     -   id: puppet-validate
+        args: [--parser=future]
     -   id: erb-validate
     -   id: puppet-lint
         args:
