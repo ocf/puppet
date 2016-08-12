@@ -1,7 +1,5 @@
 class ocf_desktop::xfce {
-  ocf::repackage { ['xfce4', 'xfce4-goodies', 'xfce4-notifyd']:
-    recommends => false;
-  }
+  ocf::repackage { ['xfce4', 'xfce4-goodies', 'xfce4-notifyd']:; }
 
   # TODO: figure out why this gets installed anyway on new systems
   # xfce4-power-manager asks for admin authentication on login in order to

@@ -2,14 +2,10 @@ class ocf_desktop::pulse {
 
   ocf::repackage {
     # PulseAudio without recommends
-    'pulseaudio':
-      recommends => false,
-    ;
+    'pulseaudio':;
     # PulseAudio graphical interfaces
     [ 'paprefs', 'pavucontrol' ]:
-      recommends => false,
-      require    => Ocf::Repackage['pulseaudio'],
-    ;
+      require    => Ocf::Repackage['pulseaudio'];
   }
 
   # ALSA ultilities and PulseAudio plugin

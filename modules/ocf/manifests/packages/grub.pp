@@ -8,9 +8,7 @@ class ocf::packages::grub {
   #
   # This is (currently unresolved) Debian bug#788062
   # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=788062
-  ocf::repackage { 'grub-pc':
-    recommends => false;
-  }
+  ocf::repackage { 'grub-pc':; }
   package { 'os-prober':
     ensure => purged;
   }

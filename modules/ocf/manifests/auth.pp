@@ -6,8 +6,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   # NSS user/group identification
   ocf::repackage {
     # LDAP nameservice provider
-    'libnss-ldap':
-      recommends => false;
+    'libnss-ldap':;
   }
 
   package {
@@ -35,7 +34,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
       ensure  => symlink,
       links   => manage,
       target  => '/etc/ldap.conf',
-      require => Package['libnss-ldap'];
+      require => Ocf::Repackage['libnss-ldap'];
   }
 
   # nameservice configuration
@@ -47,13 +46,13 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     # from ldap, but ldap isn't needed constantly)
     file { '/etc/nsswitch.conf':
       source  => 'puppet:///modules/ocf/auth/nss/nsswitch-noldap.conf',
-      require => [Package['libnss-ldap'], File['/etc/libnss-ldap.conf']];
+      require => [Ocf::Repackage['libnss-ldap'], File['/etc/libnss-ldap.conf']];
     }
   } else {
     # use LDAP but failover to local copy
     file { '/etc/nsswitch.conf':
       source  => 'puppet:///modules/ocf/auth/nss/nsswitch.conf',
-      require => [Package['libnss-ldap'], File['/etc/libnss-ldap.conf']];
+      require => [Ocf::Repackage['libnss-ldap'], File['/etc/libnss-ldap.conf']];
     }
   }
   # restart NSCD
