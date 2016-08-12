@@ -49,7 +49,7 @@ class ocf::packages {
 
   # facter currently outputs strings not booleans
   # see http://projects.puppetlabs.com/issues/3704
-  if !str2bool($::is_virtual) {
+  unless str2bool($::is_virtual) {
     package { 'cryptsetup':; }
   }
 

@@ -1,5 +1,5 @@
 class ocf::packages::microcode {
-  if !str2bool($::is_virtual)  {
+  unless str2bool($::is_virtual)  {
     if $::processor0 =~ /\bIntel\b/ {
       package { 'intel-microcode':; }
     } elsif $::processor0 =~ /\bAMD\b/ {

@@ -1,14 +1,5 @@
 class ocf::kerberos {
-  if !$::skip_kerberos {
-    # install Heimdal Kerberos packages
-    package { [ 'heimdal-clients', 'libsasl2-modules-gssapi-mit' ]: }
-
-    # provide Kerberos config
-    file { '/etc/krb5.conf':
-      source  => 'puppet:///modules/ocf/auth/krb5.conf',
-      require => Package['heimdal-clients']
-    }
-  } else {
+  if $::skip_kerberos {
     # don't use Kerberos, so remove the packages and config file
     package { [ 'heimdal-clients', 'libsasl2-modules-gssapi-mit' ]:
       ensure => purged;
@@ -16,6 +7,15 @@ class ocf::kerberos {
 
     file { '/etc/krb5.conf':
       ensure => absent;
+    }
+  } else {
+    # install Heimdal Kerberos packages
+    package { [ 'heimdal-clients', 'libsasl2-modules-gssapi-mit' ]: }
+
+    # provide Kerberos config
+    file { '/etc/krb5.conf':
+      source  => 'puppet:///modules/ocf/auth/krb5.conf',
+      require => Package['heimdal-clients']
     }
   }
 

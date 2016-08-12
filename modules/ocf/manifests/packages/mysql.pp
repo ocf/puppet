@@ -7,8 +7,8 @@ class ocf::packages::mysql {
       require => Package['mysql-client'];
   }
 
-  # don't install mysql client configs if this is also a mysql server
-  if !tagged('ocf_mysql') {
+  # only install mysql client configs if this is not a mysql server
+  unless tagged('ocf_mysql') {
     # MySQL client config
     file { '/etc/mysql/my.cnf':
       content => "[client]\nhost=mysql\npassword",

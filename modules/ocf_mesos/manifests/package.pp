@@ -20,7 +20,7 @@ class ocf_mesos::package {
       require => Package['mesos'];
   }
 
-  if !$is_master {
+  unless $is_master {
     service { 'zookeeper':
       ensure => false,
       enable => false,

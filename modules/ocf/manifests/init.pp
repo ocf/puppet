@@ -9,7 +9,7 @@ class ocf {
   include ocf::staff_users
   include ocf::utils
 
-  if !str2bool($::is_virtual) {
+  unless str2bool($::is_virtual) {
     include ocf::fstrim
     include ocf::mdraid
   }

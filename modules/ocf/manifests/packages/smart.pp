@@ -1,7 +1,11 @@
 class ocf::packages::smart {
   # facter currently outputs strings not booleans
   # see http://projects.puppetlabs.com/issues/3704
-  if ! str2bool($::is_virtual) {
+  if str2bool($::is_virtual) {
+    package { 'smartmontools':
+      ensure => purged,
+    }
+  } else {
     # install smartmontools
     package { 'smartmontools': }
 
@@ -23,10 +27,6 @@ class ocf::packages::smart {
 
     service { 'smartmontools':
       require   => Package['smartmontools'],
-    }
-  } else {
-    package { 'smartmontools':
-      ensure => purged,
     }
   }
 }

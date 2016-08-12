@@ -94,7 +94,7 @@ define ocf_www::site::vhost(Hash $vhost) {
     ",
   }
 
-  if !empty($vhost[http_aliases]) {
+  unless empty($vhost[http_aliases]) {
     apache::vhost { "vhost-${vhost[domain]}-redirect":
       servername      => "${vhost[domain]}-redirect",
       serveraliases   => $vhost[http_aliases],

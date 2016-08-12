@@ -39,13 +39,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   }
 
   # nameservice configuration
-  if !$::skip_ldap {
-    # use LDAP but failover to local copy
-    file { '/etc/nsswitch.conf':
-      source  => 'puppet:///modules/ocf/auth/nss/nsswitch.conf',
-      require => [Package['libnss-ldap'], File['/etc/libnss-ldap.conf']];
-    }
-  } else {
+  if $::skip_ldap {
     # use local copy only (never consult LDAP during lookups);
     # this is useful for servers which expect to not have connectivity to ldap
     #
@@ -53,6 +47,12 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     # from ldap, but ldap isn't needed constantly)
     file { '/etc/nsswitch.conf':
       source  => 'puppet:///modules/ocf/auth/nss/nsswitch-noldap.conf',
+      require => [Package['libnss-ldap'], File['/etc/libnss-ldap.conf']];
+    }
+  } else {
+    # use LDAP but failover to local copy
+    file { '/etc/nsswitch.conf':
+      source  => 'puppet:///modules/ocf/auth/nss/nsswitch.conf',
       require => [Package['libnss-ldap'], File['/etc/libnss-ldap.conf']];
     }
   }
@@ -63,10 +63,11 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   }
 
   # PAM user authentication
-  if !$::skip_kerberos {
+  unless $::skip_kerberos {
     # install Kerberos PAM module
     package { 'libpam-krb5': }
   }
+
   # remove unnecessary pam profiles
   $pamconfig = '/usr/share/pam-configs'
   file { [ "${pamconfig}/consolekit", "${pamconfig}/gnome-keyring", "${pamconfig}/ldap", "${pamconfig}/libpam-mount" ]:
