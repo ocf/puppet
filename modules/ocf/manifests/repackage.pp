@@ -1,6 +1,6 @@
 define ocf::repackage(
     $package     = $title,
-    $recommends  = false,
+    $recommends  = true,
     $backport_on = undef,
     $dist        = $::lsbdistcodename,
   ) {

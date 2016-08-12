@@ -6,7 +6,8 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   # NSS user/group identification
   ocf::repackage {
     # LDAP nameservice provider
-    'libnss-ldap':;
+    'libnss-ldap':
+      recommends => false;
   }
 
   package {

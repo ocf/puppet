@@ -1,7 +1,8 @@
 class ocf_desktop::xfce {
-  ocf::repackage { ['xfce4', 'xfce4-goodies', 'xfce4-notifyd']:; }
+  ocf::repackage { ['xfce4', 'xfce4-goodies', 'xfce4-notifyd']:
+    recommends => false;
+  }
 
-  # TODO: figure out why this gets installed anyway on new systems
   # xfce4-power-manager asks for admin authentication on login in order to
   # "change laptop display brightness"
   package { 'xfce4-power-manager':

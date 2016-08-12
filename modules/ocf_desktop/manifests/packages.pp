@@ -47,10 +47,15 @@ class ocf_desktop::packages {
 
   # install packages without recommends
   ocf::repackage {
-    'brasero':;
-    'gedit':;
-    ['libreoffice-calc', 'libreoffice-draw', 'libreoffice-gnome', 'libreoffice-impress', 'libreoffice-writer', 'ure']:;
-    'thunar':;
-    ['virt-manager', 'virt-viewer']:;
+    'brasero':
+      recommends => false;
+    'gedit':
+      recommends => false;
+    ['libreoffice-calc', 'libreoffice-draw', 'libreoffice-gnome', 'libreoffice-impress', 'libreoffice-writer', 'ure']:
+      recommends => false;
+    'thunar':
+      recommends => false;
+    ['virt-manager', 'virt-viewer']:
+      recommends => false;
   }
 }
