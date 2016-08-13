@@ -3,13 +3,6 @@ class ocf_desktop::xfce {
     recommends => false;
   }
 
-  # TODO: figure out why this gets installed anyway on new systems
-  # xfce4-power-manager asks for admin authentication on login in order to
-  # "change laptop display brightness"
-  package { 'xfce4-power-manager':
-    ensure => absent;
-  }
-
   file {
     # enable kiosk mode (disables shutdown, etc.)
     '/etc/xdg/xfce4/kiosk':

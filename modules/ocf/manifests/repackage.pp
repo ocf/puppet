@@ -5,33 +5,25 @@ define ocf::repackage(
     $dist        = $::lsbdistcodename,
   ) {
   $install_options = $recommends ? {
-    true    => ['--no-install-recommends'],
+    false   => ['--no-install-recommends'],
     default => []
   }
 
   if $backport_on and $dist == $backport_on {
-    #    apt::pin { "bpo-${package}":
-    #      release  => "${dist}-backports",
-    #      priority => 600,
-    #      packages => [$package];
-    #    }
-
-    package { $package:
-      # in case the non-backported package is already present
-      ensure          => latest,
-
-      # even though we've pinned the package, we still need -t dist-backports
-      # so that dependencies don't hold it back
-      install_options => concat($install_options, ['-t', "${dist}-backports"]);
-      #      require         => Apt::Pin["bpo-${package}"];
+    # We can't pin packages, because it won't install required dependencies that
+    # way, so we instead upgrade the package once (as long as it isn't a
+    # backport version already), and then future upgrades are done the normal
+    # way with apt-dater. It would be best if apt-dater did everything,
+    # including the original upgrade, but then a package and all its
+    # dependencies would need to be pinned, which is excessive and prone to
+    # breaking if a package's dependencies change.
+    exec { "/usr/bin/apt-get -y -o Dpkg::Options::=--force-confold ${install_options[0]} -t ${dist}-backports install ${package}":
+      logoutput => on_failure,
+      unless  => "dpkg-query -W ${package} | grep \~bpo";
     }
   } else {
     package { $package:
       install_options => $install_options;
     }
-
-    #    apt::pin { "bpo-${package}":
-    #      ensure => absent;
-    #    }
   }
 }
