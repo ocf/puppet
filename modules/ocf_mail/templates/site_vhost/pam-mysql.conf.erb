@@ -1,0 +1,13 @@
+users.host              = mysql
+users.database          = ocfmail
+users.db_user           = ocfmail-ro
+users.db_passwd         = <%= @mysql_ro_password %>
+users.table             = addresses
+users.user_column       = address
+users.password_column   = password
+
+# 1 means use crypt(3) and insert the result into the MySQL query.
+# We prefer this because otherwise the plaintext password will be in the query
+# (as ENCRYPT('password'), or similar), and this could easily end up in
+# slow-query logs, etc.
+users.password_crypt    = 1

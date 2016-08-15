@@ -2,32 +2,7 @@
 # including LDAP users and internal mail (and mailing lists).
 
 class ocf_mail::site_ocf {
-  include ocf_mail::spam
-
-  package {
-    ['postfix', 'postfix-ldap', 'rt4-clients']:;
-  }
-
-  service { 'postfix':
-    require => [Package['postfix'], Package['rt4-clients']],
-  }
-
-  user { 'ocfmail':
-    ensure  => present,
-    name    => 'ocfmail',
-    gid     => 'ocfmail',
-    groups  => ['sys'],
-    home    => '/var/mail',
-    shell   => '/bin/false',
-    system  => true,
-    require => Group['ocfmail'],
-  }
-
-  group { 'ocfmail':
-    ensure  => present,
-    name    => 'ocfmail',
-    system  => true,
-  }
+  package { ['postfix-ldap', 'rt4-clients']:; }
 
   exec { 'newaliases':
     refreshonly => true,
@@ -83,12 +58,6 @@ class ocf_mail::site_ocf {
       source  => 'puppet:///private/smtp-krb5.keytab',
       require => Package['postfix'];
 
-    # postfix config
-    '/etc/postfix/main.cf':
-      mode    => '0644',
-      source  => 'puppet:///modules/ocf_mail/site_ocf/postfix/main.cf',
-      notify  => Service['postfix'],
-      require => Package['postfix'];
     '/etc/postfix/ldap-aliases.cf':
       mode    => '0644',
       source  => 'puppet:///modules/ocf_mail/site_ocf/postfix/ldap-aliases.cf',
@@ -118,20 +87,5 @@ class ocf_mail::site_ocf {
     '/usr/local/sbin/update-cred-cache':
       mode    => '0755',
       source  => 'puppet:///modules/ocf_mail/site_ocf/update-cred-cache';
-
-    # outgoing nomail logging
-    '/var/mail/nomail':
-      ensure  => directory,
-      mode    => '0755',
-      owner   => ocfmail,
-      group   => ocfmail;
-    '/etc/logrotate.d/nomail':
-      ensure  => file,
-      source  => 'puppet:///modules/ocf_mail/site_ocf/logrotate/nomail';
-  }
-
-  ocf::munin::plugin { 'mails-past-hour':
-    source => 'puppet:///modules/ocf_mail/site_ocf/munin/mails-past-hour',
-    user   => root,
   }
 }

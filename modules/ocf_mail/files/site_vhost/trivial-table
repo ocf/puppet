@@ -1,0 +1,4 @@
+# A trivial regexp table that always returns its key as the value.
+# This is used as the SASL [email] => [username] lookup table, since the
+# username always matches the email.
+/^(.*)$/ $1

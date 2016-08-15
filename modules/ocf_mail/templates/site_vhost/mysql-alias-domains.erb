@@ -1,0 +1,8 @@
+hosts = mysql
+user = ocfmail-ro
+password = <%= @mysql_ro_password %>
+dbname = ocfmail
+query = SELECT domain FROM domains WHERE domain = '%s'
+
+# sanity check
+expansion_limit = 1

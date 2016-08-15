@@ -1,0 +1,2 @@
+auth       optional     pam_mysql.so config_file=/etc/pam-mysql.conf
+account    required     pam_mysql.so config_file=/etc/pam-mysql.conf
