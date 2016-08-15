@@ -1,0 +1,8 @@
+hosts = mysql
+user = ocfmail-ro
+password = <%= @mysql_ro_password %>
+dbname = ocfmail
+query = SELECT forward_to FROM addresses WHERE address = '%s'
+
+# sanity check
+expansion_limit = 1

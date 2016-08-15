@@ -7,7 +7,7 @@ node default {
   include ocf
 
   case $::hostname {
-    anthrax, sandstorm: {}
+    anthrax, sandstorm, dev-anthrax: {}
     default: { include ocf::packages::postfix }
   }
 
@@ -23,7 +23,6 @@ node default {
 
   case $type {
     'server': {
-
       if $owner == undef {
         case $::hostname {
           tsunami:    { class { 'ocf::auth': glogin => [ ['ocf', 'ALL'], ['sorry', 'ALL'] ] } }
