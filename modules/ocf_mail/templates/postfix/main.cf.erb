@@ -15,7 +15,7 @@ mydestination = int.ocf.berkeley.edu
 virtual_mailbox_domains =
 virtual_alias_domains =
     ocf.berkeley.edu,
-    mysql:/etc/postfix/vhost/mysql-alias-domains
+    mysql:/etc/postfix/vhost/mysql-alias-domains,
 
 # logging
 always_bcc = ocflog
@@ -23,8 +23,8 @@ always_bcc = ocflog
 # aliases
 virtual_alias_maps =
     hash:/etc/postfix/ocf/aliases-local,
-	proxy:ldap:/etc/postfix/ldap-aliases.cf,
-    mysql:/etc/postfix/vhost/mysql-alias-map
+    proxy:ldap:/etc/postfix/ldap-aliases.cf,
+    mysql:/etc/postfix/vhost/mysql-alias-map,
 alias_maps =
     hash:/etc/aliases,
     hash:/etc/aliases-group,
@@ -39,7 +39,7 @@ virtual_alias_recursion_limit = 2
 
 # environment variables for LDAP GSSAPI bind
 import_environment = MAIL_CONFIG MAIL_DEBUG MAIL_LOGTAG TZ XAUTHORITY DISPLAY
-	LANG=C KRB5CCNAME=FILE:/var/spool/postfix/krb5-cred
+    LANG=C KRB5CCNAME=FILE:/var/spool/postfix/krb5-cred
 
 # postmaster notifications
 notify_classes = resource, software
@@ -96,7 +96,7 @@ smtpd_client_restrictions =
     permit_dnswl_client list.dnswl.org,
     check_policy_service inet:127.0.0.1:10023,
     sleep 5,
-    permit
+    permit,
 
 # restrictions on HELO hostname
 # reject invalid HELO hostnames
@@ -105,7 +105,7 @@ smtpd_helo_restrictions =
     permit_sasl_authenticated,
     reject_invalid_helo_hostname,
     reject_non_fqdn_helo_hostname,
-    check_helo_access texthash:/etc/postfix/ocf/helo_access
+    check_helo_access texthash:/etc/postfix/ocf/helo_access,
 
 # restrictions on sender addresses
 # reject bad users/auth, non-existant domains, policyd-weight
@@ -117,7 +117,7 @@ smtpd_sender_restrictions =
     reject_authenticated_sender_login_mismatch,
     permit_mynetworks,
     permit_sasl_authenticated,
-    check_policy_service inet:127.0.0.1:12525
+    check_policy_service inet:127.0.0.1:12525,
 
 # restrictions on recipient addresses
 # reject bad users/auth, non-existant domains, open relay
@@ -128,19 +128,19 @@ smtpd_recipient_restrictions =
     reject_non_fqdn_recipient,
     reject_unknown_recipient_domain,
     permit_mynetworks,
-    reject_unauth_destination
+    reject_unauth_destination,
 
 # restrictions before DATA command
 # MAILER-DAEMON should not have multiple recipients, do not speak too early
 smtpd_data_restrictions =
     permit_mynetworks,
-    reject_multi_recipient_bounce
+    reject_multi_recipient_bounce,
 
 # restrictions after DATA command
 # do not speak too early
 smtpd_end_of_data_restrictions =
     permit_mynetworks,
-    reject_unauth_pipelining
+    reject_unauth_pipelining,
 
 # add spamass and clamav milters
 smtpd_milters = unix:/spamass/spamass.sock, unix:/clamav/clamav-milter.ctl
