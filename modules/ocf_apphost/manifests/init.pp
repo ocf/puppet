@@ -16,8 +16,11 @@ class ocf_apphost {
     purge   => true;
   }
   $devs = split($::ocf_dev, ',')
-  # TODO: use a foreach loop once we have the future parser
-  ocf_apphost::systemd_linger { $devs:; }
+  $devs.each |$user| {
+    file { "/var/lib/systemd/linger/${user}":
+      ensure => file;
+    }
+  }
 
   # create directory for per-user systemd logs
   file { '/var/log/journal':
