@@ -11,14 +11,18 @@
 # See for instructions on writing new plugins:
 # http://munin-monitoring.org/wiki/HowToWritePlugins
 define ocf::munin::plugin($source, $user = undef) {
-  File {
+  $file_defaults = {
     notify  => Service['munin-node'],
     require => Package['munin-node'],
   }
 
-  file { "/etc/munin/plugins/${title}":
-    source  => $source,
-    mode    => '0755',
+  file {
+    default:
+      * => $file_defaults;
+
+    "/etc/munin/plugins/${title}":
+      source  => $source,
+      mode    => '0755',
   }
 
   if $user != undef {

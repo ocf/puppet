@@ -1,7 +1,7 @@
 class ocf_mesos::master::zookeeper($zookeeper_id) {
   include ocf_mesos::package
 
-  File {
+  $file_defaults = {
     require => Package['zookeeper'],
     notify  => Service['zookeeper'],
   }
@@ -16,6 +16,9 @@ class ocf_mesos::master::zookeeper($zookeeper_id) {
   }
 
   file {
+    default:
+      * => $file_defaults;
+
     '/etc/zookeeper/conf_ocf':
       ensure => directory;
     '/etc/zookeeper/conf_ocf/myid':

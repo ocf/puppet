@@ -8,12 +8,15 @@ class ocf_csgo {
     shell   => '/bin/false';
   }
 
-  File {
+  $file_defaults = {
     owner  => ocfcsgo,
     group  => ocfcsgo
   }
 
   file {
+    default:
+      * => $file_defaults;
+
     ['/opt/csgo', '/opt/csgo/bin', '/opt/csgo/etc']:
       ensure => directory,
       mode   => '0755';

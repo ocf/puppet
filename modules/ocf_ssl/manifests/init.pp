@@ -4,7 +4,7 @@
 # Provides the InCommon intermediate chain at
 # /etc/ssl/certs/incommon-intermediate.crt
 class ocf_ssl($cert_name = $::fqdn) {
-  File {
+  $file_defaults = {
     owner   => root,
     group   => ssl-cert,
 
@@ -15,6 +15,9 @@ class ocf_ssl($cert_name = $::fqdn) {
   package { 'ssl-cert':; }
 
   file {
+    default:
+      * => $file_defaults;
+
     '/etc/ssl/certs/incommon-intermediate.crt':
       source  => 'puppet:///modules/ocf_ssl/incommon-intermediate.crt',
       mode    => '0644';

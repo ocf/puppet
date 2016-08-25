@@ -16,12 +16,15 @@ define ocf_mirrors::ftpsync(
     $monitoring_upstream_protocol = 'http',
   ) {
 
-  File {
+  $file_defaults = {
     owner => mirrors,
     group => mirrors
   }
 
   file {
+    default:
+      * => $file_defaults;
+
     [$project_path, "${project_path}/log", "${project_path}/etc"]:
       ensure  => directory,
       mode    => '0755';

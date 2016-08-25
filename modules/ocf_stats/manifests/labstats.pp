@@ -11,15 +11,12 @@ class ocf_stats::labstats {
       groups  => 'sys';
   }
 
-  File {
-    owner => ocfstats,
-    group => ocfstats
-  }
-
   file {
     ['/opt/stats', '/opt/stats/var', '/opt/stats/var/printing',
     '/opt/stats/var/printing/history', '/opt/stats/var/printing/oracle']:
         ensure => directory,
+        owner  => ocfstats,
+        group  => ocfstats,
         mode   => '0755';
   }
 
@@ -32,6 +29,7 @@ class ocf_stats::labstats {
 
   file { '/opt/stats/labstats/labstats/settings.py':
     source  => 'puppet:///private/stats/settings.py',
+    owner   => ocfstats,
     group   => www-data,
     mode    => '0640',
     require => Vcsrepo['/opt/stats/labstats'];

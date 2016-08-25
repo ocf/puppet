@@ -10,12 +10,15 @@ class ocf_apt {
 
   package { 'reprepro':; }
 
-  File {
+  $file_defaults = {
     owner  => ocfapt,
     group  => ocfapt
   }
 
   file {
+    default:
+      * => $file_defaults;
+
     ['/opt/apt', '/opt/apt/ftp', '/opt/apt/etc', '/opt/apt/db']:
       ensure => directory,
       mode   => '0755';

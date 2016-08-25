@@ -30,12 +30,15 @@ class ocf_backups::rsnapshot {
 
   $rsnapshot = 'rsnapshot -c /opt/share/backups/rsnapshot.conf'
 
-  Cron {
+  $cron_defaults = {
     user   => root,
     minute => '0',
   }
 
   cron {
+    default:
+      * => $cron_defaults;
+
     # 10pm on 1st of month
     'rsnapshot-monthly':
       command  => "${rsnapshot} monthly",

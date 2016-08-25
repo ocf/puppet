@@ -10,7 +10,7 @@ class ocf_irc::services {
 
   $root_nicks = ['waf', 'nattofriends', 'ckuehl', 'jvperrin', 'mattmcal']
 
-  File {
+  $file_defaults = {
     require => Package['anope'],
     notify  => Service['anope'],
     owner   => irc,
@@ -18,6 +18,9 @@ class ocf_irc::services {
   }
 
   file {
+    default:
+      * => $file_defaults;
+
     '/etc/default/anope':
       content => "START=yes\n",
       owner   => root,

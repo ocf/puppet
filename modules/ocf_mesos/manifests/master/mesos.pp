@@ -1,29 +1,29 @@
 class ocf_mesos::master::mesos($mesos_hostname, $mesos_http_password) {
   include ocf_mesos::package
 
+  $file_defaults = {
+    notify  => Service['mesos-master'],
+    require => Package['mesos'],
+  }
+
   file {
+    default:
+      * => $file_defaults;
+
     '/etc/mesos-master':
       ensure  => directory,
       recurse => true,
-      purge   => true,
-      notify  => Service['mesos-master'],
-      require => Package['mesos'];
+      purge   => true;
 
     '/etc/mesos-master/hostname':
-      content => "${mesos_hostname}\n",
-      notify  => Service['mesos-master'],
-      require => Package['mesos'];
+      content => "${mesos_hostname}\n";
 
     # We have 3 servers, so 2 is a quorum.
     '/etc/mesos-master/quorum':
-      content => "2\n",
-      notify  => Service['mesos-master'],
-      require => Package['mesos'];
+      content => "2\n";
 
     '/etc/mesos-master/work_dir':
-      content => "/var/lib/mesos\n",
-      notify  => Service['mesos-master'],
-      require => Package['mesos'];
+      content => "/var/lib/mesos\n";
 
     [
       '/etc/mesos-master/authenticate',
@@ -31,26 +31,19 @@ class ocf_mesos::master::mesos($mesos_hostname, $mesos_http_password) {
       '/etc/mesos-master/authenticate_http_readonly',
       '/etc/mesos-master/authenticate_http_readwrite',
     ]:
-      content => "true\n",
-      notify  => Service['mesos-master'],
-      require => Package['mesos'];
+      content => "true\n";
 
     '/etc/mesos-master/authenticators':
-      content => "crammd5\n",
-      notify  => Service['mesos-master'],
-      require => Package['mesos'];
+      content => "crammd5\n";
 
     '/etc/mesos-master/credentials':
       content => "/opt/share/mesos/master/credentials.json\n",
-      require => [Package['mesos'], File['/opt/share/mesos/master/credentials.json']],
-      notify  => Service['mesos-master'];
+      require => File['/opt/share/mesos/master/credentials.json'];
 
     '/opt/share/mesos/master/credentials.json':
       content   => template('ocf_mesos/master/mesos/credentials.json.erb'),
       mode      => '0400',
-      show_diff => false,
-      notify  => Service['mesos-master'],
-      require => Package['mesos'];
+      show_diff => false;
   }
 
   augeas { '/etc/default/mesos-master':
