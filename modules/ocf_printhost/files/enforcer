@@ -177,7 +177,9 @@ def main(argv):
             else:
                 success = os.environ['TEASTATUS'] == '0'
                 posthook(c, job, success)
-    except Exception:
+    except SystemExit as e:
+        sys.exit(e.code)
+    except:
         msg = dedent("""\
             enforcer encountered the following error while processing a job:
 
@@ -196,12 +198,15 @@ def main(argv):
         syslog(msg)
         send_problem_report(msg)
         if job:
-            send_printer_mail(
-                ENFORCER_ERROR_MESSAGE,
-                job,
-                quo or quota.UserQuota(user=job.user, daily='Unknown',
-                                       semesterly='Unknown')
-            )
+            try:
+                send_printer_mail(
+                    ENFORCER_ERROR_MESSAGE,
+                    job,
+                    quo or quota.UserQuota(user=job.user, daily='Unknown',
+                                           semesterly='Unknown')
+                )
+            except:
+                pass
         # Don't retry; it's not going to print the second time.
         sys.exit(255)
 
