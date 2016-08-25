@@ -44,11 +44,6 @@ class ocf::puppet {
     ;
   }
 
-  # TODO: remove this after the fall semester starts
-  mount { '/var/lib/puppet/concat':
-    ensure  => absent,
-  }
-
   # install augeas
   package { [ 'augeas-tools', 'libaugeas-ruby', ]: }
 

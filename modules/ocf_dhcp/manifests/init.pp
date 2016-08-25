@@ -38,9 +38,5 @@ class ocf_dhcp {
       command => '/usr/local/bin/lab-wakeup -q',
       minute  => '*/15',
       require => File['/usr/local/bin/lab-wakeup'];
-
-    # TODO: remove in a few weeks
-    ['lab-wakeup-weekdays', 'lab-wakeup-saturday', 'lab-wakeup-sunday']:
-      ensure  => absent;
   }
 }
