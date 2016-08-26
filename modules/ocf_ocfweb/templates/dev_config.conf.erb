@@ -1,0 +1,17 @@
+[django]
+secret = not_a_secret
+debug = true
+
+# static assets
+static_url = /static/
+static_root =
+
+[celery]
+# XXX: these only work on supernova
+broker = <%= @broker %>
+backend = <%= @backend %>
+
+[ocfmail]
+user = ocfmail-dev
+password = <%= @ocfmail_password %>
+db = ocfmail-dev

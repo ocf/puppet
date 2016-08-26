@@ -5,6 +5,7 @@ class ocf_admin {
   include ocf::packages::ldapvi
   include ocf::packages::mysql
   include ocf::tmpfs
+  include ocf_ocfweb::dev_config
 
   include ocf_admin::apt_dater
   include ocf_admin::create

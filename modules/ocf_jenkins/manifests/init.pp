@@ -2,6 +2,7 @@ class ocf_jenkins {
   include ocf::extrapackages
   include ocf::packages::docker
   include ocf::tmpfs
+  include ocf_ocfweb::dev_config
   include ocf_ssl
 
   class { 'ocf_jenkins::jenkins_apt':
