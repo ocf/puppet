@@ -1,7 +1,6 @@
 # A single virtual host.
 define ocf_www::site::vhost(Hash $vhost) {
-  # Common config for all <VirtualHost> blocks for this vhost.
-  Apache::Vhost {
+  $vhost_common = {
     vhost_name      => '*',
     serveradmin     => "${vhost[username]}@ocf.berkeley.edu",
     docroot         => $vhost[full_docroot],
@@ -34,6 +33,7 @@ define ocf_www::site::vhost(Hash $vhost) {
   }
 
   apache::vhost { "vhost-${vhost[domain]}":
+    *                 => $vhost_common,
     servername        => $vhost[domain],
 
     ssl               => $vhost[use_ssl],
@@ -96,6 +96,7 @@ define ocf_www::site::vhost(Hash $vhost) {
 
   unless empty($vhost[http_aliases]) {
     apache::vhost { "vhost-${vhost[domain]}-redirect":
+      *               => $vhost_common,
       servername      => "${vhost[domain]}-redirect",
       serveraliases   => $vhost[http_aliases],
 
