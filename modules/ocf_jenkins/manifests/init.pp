@@ -2,11 +2,14 @@ class ocf_jenkins {
   include ocf::extrapackages
   include ocf::packages::docker
   include ocf::tmpfs
-  include ocf_ocfweb::dev_config
   include ocf_ssl
 
+  class { 'ocf_ocfweb::dev_config':
+    group => 'jenkins-slave',
+  }
+
   class { 'ocf_jenkins::jenkins_apt':
-    stage => first;
+    stage => first,
   }
 
   include ocf_jenkins::proxy
