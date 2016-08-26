@@ -33,19 +33,18 @@ class ocf_mesos::master::webui(
       members => ['localhost:8080'];
   }
 
-  Nginx::Resource::Vhost {
-    ssl_cert    => "/etc/ssl/private/${::fqdn}.bundle",
-    ssl_key     => "/etc/ssl/private/${::fqdn}.key",
-    ssl_dhparam => '/etc/ssl/dhparam.pem',
-    add_header  => {
-      'Strict-Transport-Security' => 'max-age=31536000',
-    },
-  }
-
   $mesos_auth_header = base64('encode', "ocf:${mesos_http_password}", 'strict')
   $marathon_auth_header = base64('encode', "marathon:${marathon_http_password}", 'strict')
 
   nginx::resource::vhost {
+    default:
+      ssl_cert    => "/etc/ssl/private/${::fqdn}.bundle",
+      ssl_key     => "/etc/ssl/private/${::fqdn}.key",
+      ssl_dhparam => '/etc/ssl/dhparam.pem',
+      add_header  => {
+        'Strict-Transport-Security' => 'max-age=31536000',
+      };
+
     # mesos
     'mesos':
       server_name => [$mesos_fqdn],

@@ -12,33 +12,6 @@ class ocf_docker {
     members => ['127.0.0.1:5000'];
   }
 
-  Nginx::Resource::Vhost {
-    listen_port => 443,
-
-    ssl         => true,
-    ssl_cert    => "/etc/ssl/private/${::fqdn}.bundle",
-    ssl_key     => "/etc/ssl/private/${::fqdn}.key",
-    ssl_dhparam => '/etc/ssl/dhparam.pem',
-
-    add_header  => {
-      'Strict-Transport-Security' => 'max-age=31536000',
-    },
-
-    proxy            => 'http://docker-registry',
-    proxy_set_header => [
-      'X-Forwarded-Proto $scheme',
-      'X-Forwarded-For $proxy_add_x_forwarded_for',
-      'Host $http_host'
-    ],
-
-    vhost_cfg_append => {
-      # Enable large uploads/downloads
-      # https://docs.docker.com/registry/recipes/nginx/
-      'chunked_transfer_encoding' => 'on',
-      'client_max_body_size'      => 0,
-    },
-  }
-
   # Docker registries currently must be entirely unauthenticated (including
   # write access), or entirely authenticated (including read access).
   #
@@ -51,6 +24,32 @@ class ocf_docker {
   # Jenkins should push to docker-push.ocf and others should pull from
   # docker.ocf.
   nginx::resource::vhost {
+    default:
+      listen_port => 443,
+
+      ssl         => true,
+      ssl_cert    => "/etc/ssl/private/${::fqdn}.bundle",
+      ssl_key     => "/etc/ssl/private/${::fqdn}.key",
+      ssl_dhparam => '/etc/ssl/dhparam.pem',
+
+      add_header  => {
+        'Strict-Transport-Security' => 'max-age=31536000',
+      },
+
+      proxy            => 'http://docker-registry',
+      proxy_set_header => [
+        'X-Forwarded-Proto $scheme',
+        'X-Forwarded-For $proxy_add_x_forwarded_for',
+        'Host $http_host'
+      ],
+
+      vhost_cfg_append => {
+        # Enable large uploads/downloads
+        # https://docs.docker.com/registry/recipes/nginx/
+        'chunked_transfer_encoding' => 'on',
+        'client_max_body_size'      => 0,
+      };
+
     'docker-ro':
       server_name    => ['docker.ocf.berkeley.edu', 'docker', $::hostname, $::fqdn],
 
