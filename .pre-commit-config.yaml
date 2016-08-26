@@ -39,3 +39,11 @@
     hooks:
     -   id: reorder-python-imports
         language_version: python3
+-   repo: local
+    hooks:
+    -   id: no-resource-defaults
+        language: pcre
+        name: No resource defaults are used (see https://github.com/ocf/puppet/pull/58)
+        entry: ^\s*[A-Z][A-Za-z0-9:]+\s*{
+        types: [puppet]
+        exclude: ^manifests/
