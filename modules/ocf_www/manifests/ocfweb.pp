@@ -88,6 +88,8 @@ class ocf_www::ocfweb {
   validate_re($redis_password, '^[a-zA-Z0-9]*$', 'Bad Redis password')
   $django_secret = file("/opt/puppet/shares/private/${::hostname}/django-secret")
   validate_re($django_secret, '^[a-zA-Z0-9]*$', 'Bad Django secret')
+  $ocfmail_password = file("/opt/puppet/shares/private/${::hostname}/ocfmail-password")
+  validate_re($ocfmail_password, '^[a-zA-Z0-9]*$', 'Bad ocfmail password')
 
   $broker = "redis://:${redis_password}@localhost:6378"
   $backend = $broker
@@ -99,6 +101,9 @@ class ocf_www::ocfweb {
       "set django/secret ${django_secret}",
       "set celery/broker ${broker}",
       "set celery/backend ${backend}",
+      'set ocfmail/user ocfmail',
+      "set ocfmail/password ${ocfmail_password}",
+      'set ocfmail/db ocfmail',
     ],
     show_diff => false,
     notify    => Service['ocfweb'],
