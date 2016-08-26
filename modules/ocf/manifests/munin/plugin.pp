@@ -17,22 +17,22 @@ define ocf::munin::plugin($source, $user = undef) {
   }
 
   file {
-    default:
-      * => $file_defaults;
-
     "/etc/munin/plugins/${title}":
       source  => $source,
       mode    => '0755',
+      *       => $file_defaults;
   }
 
   if $user != undef {
     file { "/etc/munin/plugin-conf.d/plugin-${title}":
       ensure  => present,
       content => "[${title}]\nuser ${user}\n",
+      *       => $file_defaults;
     }
   } else {
     file { "/etc/munin/plugin-conf.d/plugin-${title}":
       ensure => absent,
+      *      => $file_defaults;
     }
   }
 }

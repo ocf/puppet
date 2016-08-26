@@ -5,14 +5,10 @@ class ocf_printhost::cups {
     require => Package['cups', 'cups-bsd'],
   }
 
-  $file_defaults = {
-    require => Package['cups', 'cups-bsd'],
-    notify  => Service['cups'],
-  }
-
   file {
     default:
-      * => $file_defaults;
+      require => Package['cups', 'cups-bsd'],
+      notify  => Service['cups'];
 
     '/etc/cups/cupsd.conf':
       content => template('ocf_printhost/cups/cupsd.conf.erb');

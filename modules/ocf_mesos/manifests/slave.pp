@@ -18,16 +18,10 @@ class ocf_mesos::slave {
   $ocf_mesos_master_password = 'hunter2'
   $ocf_mesos_slave_password = 'hunter3'
 
-  $file_defaults = {
-    notify  => Service['mesos-slave'],
-    require => Package['mesos'],
-  }
-
-  # TODO: when on Puppet 4, use per-expression defaults
-  # https://docs.puppet.com/puppet/latest/reference/lang_resources_advanced.html#local-resource-defaults
   file {
     default:
-      * => $file_defaults;
+      notify  => Service['mesos-slave'],
+      require => Package['mesos'];
 
     '/opt/share/mesos/slave':
       ensure => directory;

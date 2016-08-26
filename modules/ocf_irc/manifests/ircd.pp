@@ -9,16 +9,12 @@ class ocf_irc::ircd {
 
   $passwords = parsejson(file("/opt/puppet/shares/private/${::hostname}/ircd-passwords"))
 
-  $file_defaults = {
-    require => Package['inspircd'],
-    notify  => Service['inspircd'],
-    owner   => irc,
-    group   => irc,
-  }
-
   file {
     default:
-      * => $file_defaults;
+      require => Package['inspircd'],
+      notify  => Service['inspircd'],
+      owner   => irc,
+      group   => irc;
 
     '/etc/default/inspircd':
       content => "INSPIRCD_ENABLED=1\n",

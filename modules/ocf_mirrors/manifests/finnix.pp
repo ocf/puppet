@@ -1,12 +1,8 @@
 class ocf_mirrors::finnix {
-  $file_defaults = {
-    owner => mirrors,
-    group => mirrors,
-  }
-
   file {
     default:
-      * => $file_defaults;
+      owner => mirrors,
+      group => mirrors;
 
     '/opt/mirrors/project/finnix':
       ensure  => directory,

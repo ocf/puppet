@@ -8,14 +8,10 @@ class ocf_csgo {
     shell   => '/bin/false';
   }
 
-  $file_defaults = {
-    owner  => ocfcsgo,
-    group  => ocfcsgo
-  }
-
   file {
     default:
-      * => $file_defaults;
+      owner  => ocfcsgo,
+      group  => ocfcsgo;
 
     ['/opt/csgo', '/opt/csgo/bin', '/opt/csgo/etc']:
       ensure => directory,

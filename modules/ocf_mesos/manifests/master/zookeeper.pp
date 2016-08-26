@@ -1,11 +1,6 @@
 class ocf_mesos::master::zookeeper($zookeeper_id) {
   include ocf_mesos::package
 
-  $file_defaults = {
-    require => Package['zookeeper'],
-    notify  => Service['zookeeper'],
-  }
-
   # We provide our own service file because the init script that the mesosphere
   # package ships results in systemd losing track of the process somehow
   # (making it impossible to stop via service/systemctl).
@@ -17,7 +12,8 @@ class ocf_mesos::master::zookeeper($zookeeper_id) {
 
   file {
     default:
-      * => $file_defaults;
+      require => Package['zookeeper'],
+      notify  => Service['zookeeper'];
 
     '/etc/zookeeper/conf_ocf':
       ensure => directory;

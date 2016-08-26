@@ -1,14 +1,10 @@
 class ocf_mesos::master::mesos($mesos_hostname, $mesos_http_password) {
   include ocf_mesos::package
 
-  $file_defaults = {
-    notify  => Service['mesos-master'],
-    require => Package['mesos'],
-  }
-
   file {
     default:
-      * => $file_defaults;
+      notify  => Service['mesos-master'],
+      require => Package['mesos'];
 
     '/etc/mesos-master':
       ensure  => directory,

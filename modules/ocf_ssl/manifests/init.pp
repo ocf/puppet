@@ -4,19 +4,15 @@
 # Provides the InCommon intermediate chain at
 # /etc/ssl/certs/incommon-intermediate.crt
 class ocf_ssl($cert_name = $::fqdn) {
-  $file_defaults = {
-    owner   => root,
-    group   => ssl-cert,
-
-    # the ssl-cert package creates the ssl-cert group
-    require => Package['ssl-cert']
-  }
-
   package { 'ssl-cert':; }
 
   file {
     default:
-      * => $file_defaults;
+      owner   => root,
+      group   => ssl-cert,
+
+      # the ssl-cert package creates the ssl-cert group
+      require => Package['ssl-cert'];
 
     '/etc/ssl/certs/incommon-intermediate.crt':
       source  => 'puppet:///modules/ocf_ssl/incommon-intermediate.crt',

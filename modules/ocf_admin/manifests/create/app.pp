@@ -29,13 +29,9 @@ class ocf_admin::create::app {
     require   => Package['ocf-create'];
   }
 
-  $file_defaults = {
-    require => Package['ocf-create'],
-  }
-
   file {
     default:
-      * => $file_defaults;
+      require => Package['ocf-create'];
 
     # TODO: ideally this file wouldn't be directly readable by staff
     '/etc/ocf-create/ocf-create.conf':
