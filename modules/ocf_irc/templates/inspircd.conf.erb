@@ -33,9 +33,8 @@
         keyfile="/etc/ssl/private/<%= @fqdn -%>.key"
         priority="NORMAL:-MD5">
 
-# Allow non-SSL connections on 6667 and SSL on 6697
+# Allow connections on 6697 (TLS only)
 # Port 25580 is localhost-only for anope services to connect
-<bind address="" port="6667" type="clients">
 <bind address="" port="6697" type="clients" ssl="gnutls">
 <bind address="127.0.0.1" port="25580" type="servers">
 
