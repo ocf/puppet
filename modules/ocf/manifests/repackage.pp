@@ -19,7 +19,7 @@ define ocf::repackage(
     # breaking if a package's dependencies change.
     exec { "/usr/bin/apt-get -y -o Dpkg::Options::=--force-confold ${install_options[0]} -t ${dist}-backports install ${package}":
       logoutput => on_failure,
-      unless  => "dpkg-query -W ${package} | grep \~bpo";
+      unless  => "dpkg-query -W ${package} | grep \\~bpo";
     }
   } else {
     package { $package:
