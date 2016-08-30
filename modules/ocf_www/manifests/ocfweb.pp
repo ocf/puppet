@@ -107,7 +107,13 @@ class ocf_www::ocfweb {
     ],
     show_diff => false,
     notify    => Service['ocfweb'],
-    require   => Package['ocfweb'];
+    require   => [File['/etc/ocfweb/ocfweb.conf'], Package['ocfweb']];
+  }
+
+  file { '/etc/ocfweb/ocfweb.conf':
+    owner   => ocfweb,
+    mode    => '0400',
+    require => Package['ocfweb'],
   }
 
   # create redis
