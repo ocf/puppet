@@ -11,7 +11,7 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['anacron', 'arandr', 'claws-mail', 'geany', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp', 'gparted', 'evince-gtk', 'galculator', 'hexchat', 'atom']:;
+    ['anacron', 'arandr', 'claws-mail', 'geany', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp', 'gparted', 'evince-gtk', 'galculator', 'hexchat', 'atom', 'rstudio']:;
     # desktop
     ['desktop-base', 'desktop-file-utils', 'eog', 'xarchiver', 'xterm', 'lightdm', 'lightdm-gtk-greeter-ocf', 'accountsservice', 'redshift', 'xfce4-whiskermenu-plugin']:;
     # fonts
