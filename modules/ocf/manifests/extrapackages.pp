@@ -169,7 +169,7 @@ class ocf::extrapackages {
   }
 
   ocf::repackage { 'dh-virtualenv':
-    backport_on => 'jessie';
+    backport_on => 'jessie',
   }
 
   if $::lsbdistcodename == 'jessie' {
