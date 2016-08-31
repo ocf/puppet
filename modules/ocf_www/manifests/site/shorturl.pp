@@ -73,7 +73,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/~?([a-z]{3,16}(?:/.*)?)$ https://www.ocf.berkeley.edu/~$1 [R]'},
     ],
 
-    headers       => ['set Strict-Transport-Security max-age=31536000'],
+    headers       => ['always set Strict-Transport-Security max-age=31536000'],
   }
 
   # canonical redirects

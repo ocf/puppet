@@ -48,7 +48,7 @@ class ocf_stats::munin {
       ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
       ssl_chain     => '/etc/ssl/certs/incommon-intermediate.crt',
 
-      headers       => ['set Strict-Transport-Security max-age=31536000'],
+      headers       => ['always set Strict-Transport-Security max-age=31536000'],
 
       rewrites => [
         {

@@ -32,7 +32,7 @@ class ocf_rt::apache {
     ssl_cert   => "/etc/ssl/private/${::fqdn}.crt",
     ssl_chain  => '/etc/ssl/certs/incommon-intermediate.crt',
 
-    headers    => 'set Strict-Transport-Security "max-age=31536000"',
+    headers    => 'always set Strict-Transport-Security "max-age=31536000"',
 
     rewrites => [{
       rewrite_rule => '^/t/(\d+) /Ticket/Display.html?id=$1 [R,L]'

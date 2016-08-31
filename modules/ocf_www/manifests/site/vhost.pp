@@ -13,7 +13,7 @@ define ocf_www::site::vhost(Hash $vhost) {
 
   # The <VirtualHost> that actually serves their website.
   $headers = $vhost[use_hsts] ? {
-    true    => ["set Strict-Transport-Security 'max-age=31536000'"],
+    true    => ["always set Strict-Transport-Security 'max-age=31536000'"],
     default => [],
   }
   $primary_port = $vhost[use_ssl] ? {

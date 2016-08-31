@@ -25,7 +25,7 @@ class ocf_www::site::ocfweb_redirects {
       {rewrite_rule => '^/request-vhost(/.*)?$ https://www.ocf.berkeley.edu/account/vhost/ [R=301,L]'},
       {rewrite_rule => '^.*$ https://www.ocf.berkeley.edu/'},
     ],
-    headers       => ['set Strict-Transport-Security max-age=31536000'],
+    headers       => ['always set Strict-Transport-Security max-age=31536000'],
   }
 
   apache::vhost { 'accounts-http-redirect':
@@ -62,7 +62,7 @@ class ocf_www::site::ocfweb_redirects {
     rewrites      => [
       {rewrite_rule => '^/(.*)$ https://www.ocf.berkeley.edu/docs/$1 [R=301]'},
     ],
-    headers       => ['set Strict-Transport-Security max-age=31536000'],
+    headers       => ['always set Strict-Transport-Security max-age=31536000'],
   }
 
   apache::vhost { 'wiki-http-redirect':
@@ -104,7 +104,7 @@ class ocf_www::site::ocfweb_redirects {
       {rewrite_rule => '^/lab.html$ https://www.ocf.berkeley.edu/about/lab/open-source [R=301,L]'},
       {rewrite_rule => '^.*$ https://www.ocf.berkeley.edu/about/staff [R=301]'},
     ],
-    headers       => ['set Strict-Transport-Security max-age=31536000'],
+    headers       => ['always set Strict-Transport-Security max-age=31536000'],
   }
 
   apache::vhost { 'hello-http-redirect':
