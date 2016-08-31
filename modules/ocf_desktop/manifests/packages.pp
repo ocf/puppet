@@ -27,7 +27,7 @@ class ocf_desktop::packages {
     # performance improvements
     ['preload', 'readahead-fedora']:;
     # Xorg
-    ['xserver-xorg', 'xscreensaver']:;
+    ['xserver-xorg', 'xscreensaver', 'xclip']:;
     # FUSE
     ['fuse', 'exfat-fuse']:
   }
