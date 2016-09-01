@@ -33,9 +33,11 @@ class ocf_admin::create::app {
     default:
       require => Package['ocf-create'];
 
+    # TODO: ideally this file wouldn't be directly readable by staff
     '/etc/ocf-create/ocf-create.conf':
       owner  => create,
-      mode   => '0400';
+      group  => ocfstaff,
+      mode   => '0440';
 
     '/etc/ocf-create/create.keytab':
       owner  => create,
