@@ -12,6 +12,7 @@ class ocf_tv {
       'i3',
       'nodm',
       'pavucontrol',
+      'php',                  # for trying out xibo.org.uk
       'pulseaudio',
       'vlc',
       'x11vnc',
