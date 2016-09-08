@@ -151,6 +151,7 @@ class ocf::extrapackages {
     'ruby-mysql',
     'ruby-ronn',
     'ruby-sqlite3',
+    'scala',
     'screenfetch',
     'sqlite3',
     'subversion',
