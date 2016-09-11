@@ -35,13 +35,17 @@ wheel: staff-current
 owner-staff: wheel
 
 # request tracker
-devnull: "|/usr/bin/rt-mailgate --queue 'devnull' --action correspond --url https://rt.ocf.berkeley.edu"
-devnull-comment: "|/usr/bin/rt-mailgate --queue 'devnull' --action comment --url https://rt.ocf.berkeley.edu"
-owner-devnull: wheel
-
 bod: "|/usr/bin/rt-mailgate --queue 'bod' --action correspond --url https://rt.ocf.berkeley.edu"
 bod-comment: "|/usr/bin/rt-mailgate --queue 'bod' --action comment --url https://rt.ocf.berkeley.edu"
 owner-bod: wheel
+
+bureaucracy: "|/usr/bin/rt-mailgate --queue 'bureaucracy' --action correspond --url https://rt.ocf.berkeley.edu"
+bureaucracy-comment: "|/usr/bin/rt-mailgate --queue 'bureaucracy' --action comment --url https://rt.ocf.berkeley.edu"
+owner-bureaucracy: wheel
+
+devnull: "|/usr/bin/rt-mailgate --queue 'devnull' --action correspond --url https://rt.ocf.berkeley.edu"
+devnull-comment: "|/usr/bin/rt-mailgate --queue 'devnull' --action comment --url https://rt.ocf.berkeley.edu"
+owner-devnull: wheel
 
 help: "|/usr/bin/rt-mailgate --queue 'help' --action correspond --url https://rt.ocf.berkeley.edu"
 help-comment: "|/usr/bin/rt-mailgate --queue 'help' --action comment --url https://rt.ocf.berkeley.edu"
