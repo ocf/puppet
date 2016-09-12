@@ -1,5 +1,7 @@
-#!/bin/bash
-# update hashes which deny mail
+#!/bin/bash -eu
+# Update hashes which deny mail
+
+set -o pipefail
 
 # sorried users
 ldapsearch -x -LLL gidNumber=2390 uid | grep '^uid:' | cut -d' ' -f2 | \
