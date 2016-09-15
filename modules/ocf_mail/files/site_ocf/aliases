@@ -19,7 +19,7 @@ nomail: /var/mail/nomail/nomail
 
 # bureaucracy
 officers: officers@g.ocf.berkeley.edu
-alumni: alumni@g.ocf.berkeley.edu
+alums: alums@g.ocf.berkeley.edu
 decal: decal@g.ocf.berkeley.edu
 
 gm: officers
