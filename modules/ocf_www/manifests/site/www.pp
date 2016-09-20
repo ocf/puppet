@@ -28,7 +28,7 @@ class ocf_www::site::www {
     servername      => 'www.ocf.berkeley.edu',
     serveraliases   => ['dev-www.ocf.berkeley.edu'],
     port            => 443,
-    docroot         => '/var/www/html',
+    docroot         => '/services/http/users',
 
     ssl             => true,
     ssl_key         => "/etc/ssl/private/${::fqdn}.key",
