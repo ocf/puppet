@@ -39,6 +39,9 @@ HostNameLookups On
 ServerAlias *
 DefaultAuthType Basic
 
+# Kill jobs after a certain time (stuck)
+MaxJobTime 60
+
 <Location />
   # Allow shared printing and remote administration...
   Order allow,deny
