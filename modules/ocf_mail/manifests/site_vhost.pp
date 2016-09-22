@@ -75,6 +75,7 @@ class ocf_mail::site_vhost {
     # $ postmap -q 'dev-vhost.ocf.berkeley.edu' mysql:/etc/postfix/vhost/mysql-alias-domains
     '/etc/postfix/vhost/mysql-alias-domains':
       content   => template('ocf_mail/site_vhost/mysql-alias-domains.erb'),
+      owner     => postfix,
       mode      => '0600',
       show_diff => false,
       notify    => Service['postfix'],
@@ -84,6 +85,7 @@ class ocf_mail::site_vhost {
     # $ postmap -q 'ckuehl@dev-vhost.ocf.berkeley.edu' mysql:/etc/postfix/vhost/mysql-alias-map
     '/etc/postfix/vhost/mysql-alias-map':
       content   => template('ocf_mail/site_vhost/mysql-alias-map.erb'),
+      owner     => postfix,
       mode      => '0600',
       show_diff => false,
       notify    => Service['postfix'],
