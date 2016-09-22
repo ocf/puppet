@@ -8,6 +8,7 @@ class ocf_mirrors {
   # projects
   include ocf_mirrors::apache
   include ocf_mirrors::archlinux
+  include ocf_mirrors::centos
   include ocf_mirrors::debian
   include ocf_mirrors::finnix
   include ocf_mirrors::gnu

@@ -1,0 +1,2 @@
+#/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -aqzH --delete rsync://mirror.chpc.utah.edu/pub/centos-altarch/ /opt/mirrors/ftp/centos-altarch
