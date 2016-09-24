@@ -1,11 +1,21 @@
-#!/bin/bash -eu
+#!/bin/bash
+set -euo pipefail
+
+# this must be on the same filesystem for mv to be atomic
+tmp=$(mktemp -p /var/lib mdraid.XXXXXXXXXX)
+
 (
-    echo "====== Available arrays: ======"
+    echo '====== Available arrays: ======'
     mdadm --detail --scan
 
-    echo "====== Array information: ======"
-    mdadm --detail --scan | awk '{print $2}' | while read device; do
+    echo '====== Array information: ======'
+    mdadm --detail --scan |
+            awk '{print $2}' |
+            while read device; do
         echo "=== Details for device '$device' ==="
+
+        # Normalize the output a bit; some of these values change constantly,
+        # so we grep them out.
         mdadm --detail "$device" |
             grep -v 'Events : ' |
             grep -v 'Update Time : ' |
@@ -17,11 +27,10 @@
             sed -E 's/State : (resyncing|checking)/State : /' |
             sed -E 's/State : \(DELAYED\)/State : /'
     done
-) \
-> /var/lib/mdraid.new
+) > "$tmp"
 
 if [ -f /var/lib/mdraid ]; then
-    diff -U 1000 /var/lib/mdraid /var/lib/mdraid.new || true
+    diff -U 1000 /var/lib/mdraid "$tmp" || true
 fi
 
-mv /var/lib/mdraid.new /var/lib/mdraid
+mv "$tmp" /var/lib/mdraid
