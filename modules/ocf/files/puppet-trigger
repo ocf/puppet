@@ -1,31 +1,37 @@
 #!/usr/bin/env python3
-# Trigger a puppet agent run
+"""Trigger puppet agent runs."""
 import argparse
 import os
+import re
+import socket
 import subprocess
 import sys
 
 
+def log(*args, file=sys.stderr, **kwargs):
+    print(*args, file=file, **kwargs)
+    file.flush()
+
+
 def trigger_run():
-    if subprocess.call(('/usr/sbin/service', 'puppet', 'status'),
-                       stdout=subprocess.DEVNULL) == 0:
+    if subprocess.call(
+            ('/usr/sbin/service', 'puppet', 'status'),
+            stdout=subprocess.DEVNULL,
+    ) == 0:
         # A bug in recent versions prevents USR1 from triggering a run:
         # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=769621
         if is_jessie():
-            print('Warning: restarting agent (bug #769621)',
-                  file=sys.stderr)
+            log('Warning: restarting agent (bug #769621)')
             subprocess.check_call(('systemctl', 'restart', 'puppet'))
         else:
             with open('/var/run/puppet/agent.pid') as f:
                 pid = f.read().strip()
 
             if subprocess.call(('kill', '-USR1', pid)) != 0:
-                print('Error triggering puppet run, are you root?',
-                      file=sys.stderr)
+                log('Error triggering puppet run, are you root?')
                 sys.exit(1)
     else:
-        print('Error: Puppet agent does not appear to be running',
-              file=sys.stderr)
+        log('Error: Puppet agent does not appear to be running')
         sys.exit(1)
 
 
@@ -40,13 +46,60 @@ def is_jessie():
         return f.read().strip().startswith('8.')
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='trigger puppet agent runs')
-    parser.add_argument('-f', '--tail', action='store_true',
-                        help='tail syslog after trigger')
+def switch_to_environment(env):
+    log('Switching environment to "{}".'.format(env))
 
-    args = parser.parse_args()
+    hostname = socket.gethostname()
+    ldif = '''\
+dn: cn={hostname},ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU
+changetype: modify
+replace: environment
+environment: {environment}
+'''.format(
+        hostname=hostname,
+        environment=env,
+    )
+
+    # TODO: use subprocess.run on python3.5; we don't actually care about stdout here
+    subprocess.check_output(
+        (
+            'kinit',
+            '-t', '/etc/krb5.keytab',
+            'host/{}.ocf.berkeley.edu@OCF.BERKELEY.EDU'.format(hostname),
+            'ldapmodify',
+        ),
+        input=ldif.encode('utf8'),
+    )
+
+
+def validate_environment(environment):
+    if not re.match(r'[a-zA-Z_\-0-9]+$', environment):
+        raise ValueError('environment has weird characters')
+    else:
+        return environment
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        '-e', '--environment', type=validate_environment,
+        help='switch to environment before running',
+    )
+    parser.add_argument(
+        '-f', '--tail', action='store_true',
+        help='tail syslog after trigger',
+    )
+
+    args = parser.parse_args(argv)
+
+    if args.environment:
+        switch_to_environment(args.environment)
+
     trigger_run()
 
     if args.tail:
         tail_syslog()
+
+
+if __name__ == '__main__':
+    exit(main())
