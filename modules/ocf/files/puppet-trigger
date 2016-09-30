@@ -6,6 +6,7 @@ import re
 import socket
 import subprocess
 import sys
+from textwrap import dedent
 
 
 def log(*args, file=sys.stderr, **kwargs):
@@ -50,12 +51,13 @@ def switch_to_environment(env):
     log('Switching environment to "{}".'.format(env))
 
     hostname = socket.gethostname()
-    ldif = '''\
-dn: cn={hostname},ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU
-changetype: modify
-replace: environment
-environment: {environment}
-'''.format(
+    ldif = dedent(
+        '''\
+        dn: cn={hostname},ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU
+        changetype: modify
+        replace: environment
+        environment: {environment}''',
+    ).format(
         hostname=hostname,
         environment=env,
     )
