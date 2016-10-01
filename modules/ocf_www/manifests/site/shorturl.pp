@@ -72,6 +72,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/tw(/.*)?$ https://ocf.io/twitter$1 [R]'},
       {rewrite_rule => '^/twitter(/.*)?$ http://twitter.com/ucbocf$1 [R]'},
       {rewrite_rule => '^/vhost$ https://www.ocf.berkeley.edu/docs/services/vhost/ [R]'},
+      {rewrite_rule => '^/vhost-mail$ https://www.ocf.berkeley.edu/docs/services/vhost/mail/ [R]'},
       {rewrite_rule => '^/wiki$ https://www.ocf.berkeley.edu/docs/ [R]'},
       {rewrite_rule => '^/wordpress$ https://www.ocf.berkeley.edu/docs/services/web/wordpress/ [R]'},
       {rewrite_rule => '^/web$ https://www.ocf.berkeley.edu/docs/services/web/ [R]'},
