@@ -5,6 +5,5 @@
            dev-www(rw,fsid=0,no_subtree_check,root_squash) \
            ssh(rw,fsid=0,no_subtree_check,no_root_squash) \
            dev-ssh(rw,fsid=0,no_subtree_check,no_root_squash) \
-           sandstorm(rw,fsid=0,no_subtree_check,root_squash) \
            apphost(rw,fsid=0,no_subtree_check,no_root_squash) \
            dev-apphost(rw,fsid=0,no_subtree_check,no_root_squash)

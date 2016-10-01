@@ -7,7 +7,7 @@ node default {
   include ocf
 
   case $::hostname {
-    anthrax, sandstorm, dev-anthrax: {}
+    anthrax, dev-anthrax: {}
     default: { include ocf::packages::postfix }
   }
 
