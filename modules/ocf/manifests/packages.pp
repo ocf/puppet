@@ -71,6 +71,7 @@ class ocf::packages {
     'iotop',
     'iperf',
     'lsof',
+    'moreutils',
     'mtr',
     'netcat-openbsd',
     'pigz',

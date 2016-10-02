@@ -1,10 +1,16 @@
-# TODO: document this
 class ocf_www::site::vhosts {
   file {
-    '/usr/local/bin/parse-vhosts':
-      source  => 'puppet:///modules/ocf_www/parse-vhosts',
+    '/usr/local/bin/build-vhosts':
+      source  => 'puppet:///modules/ocf_www/build-vhosts',
       mode    => '0755',
-      require => Package['python3-ocflib'];
+      require => [
+        Package['python3-ocflib', 'python3-jinja2'],
+        File['/opt/share/vhost.jinja'],
+      ],
+      notify  => Exec['build-vhosts'];
+
+    '/opt/share/vhost.jinja':
+      source  => 'puppet:///modules/ocf_www/vhost.jinja';
 
     '/etc/ssl/private/vhosts':
       ensure  => directory,
@@ -18,17 +24,23 @@ class ocf_www::site::vhosts {
       require => Package['apache2'];
   }
 
-  # TODO: remove the is_array check when on Puppet >= 4
-  # (stringify_facts will be off by default)
-  if is_array($::ocf_vhosts) {
-    $::ocf_vhosts.each |Hash $tmp_vhost| {
+  cron { 'build-vhosts':
+    command => 'chronic /usr/local/bin/build-vhosts',
+    special => hourly,
+    require => File['/usr/local/bin/build-vhosts'],
+  }
 
-      # Use a temporary variable to appease puppet-lint:
-      # https://github.com/rodjek/puppet-lint/issues/464
-      $vhost = $tmp_vhost
-      ocf_www::site::vhost { $vhost[domain]:
-        vhost => $vhost,
-      }
-    }
+  exec { 'build-vhosts':
+    command => '/usr/local/bin/build-vhosts',
+    creates => '/etc/apache2/ocf-vhost.conf',
+    require => File['/usr/local/bin/build-vhosts'],
+  }
+
+  apache::custom_config { 'include-vhosts':
+    content => "
+      Include /etc/apache2/ocf-vhost.conf
+    ",
+    priority => 99,
+    require => Exec['build-vhosts'],
   }
 }

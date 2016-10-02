@@ -1,0 +1,189 @@
+#!/usr/bin/env python3
+"""Build Apache virtual hosts.
+
+Reads the vhost.conf file and outputs a single Apache config file containing
+all virtual hosts.
+"""
+import argparse
+import os.path
+import subprocess
+import sys
+import tempfile
+from collections import namedtuple
+from pathlib import Path
+
+import jinja2
+from ocflib.account.utils import get_vhosts
+from ocflib.account.utils import web_dir
+from ocflib.misc.mail import email_for_user
+
+jinja_env = jinja2.Environment(
+    loader=jinja2.FileSystemLoader((
+        os.path.abspath(os.path.dirname(__file__)),
+        '/opt/share/',
+    )),
+)
+
+
+LETS_ENCRYPT_SSL = Path('/services/http/ssl')
+
+
+class VirtualHost(namedtuple('VirtualHost', (
+        'fqdn',
+        'user',
+        'relative_docroot',
+        'redirect_dest',
+        'ssl_cert',
+        'ssl_key',
+        'ssl_chain',
+        'use_hsts',
+))):
+    """A single <VirtualHost>.
+
+    The VirtualHost has a one-to-one mapping to <VirtualHost> directives and is
+    rendered by one invocation of the template.
+
+    This means that some vhost lines might emit multiple VirtualHost instances
+    (redirect domains, etc.).
+    """
+
+    def __str__(self):
+        return jinja_env.get_template('vhost.jinja').render(vhost=self)
+
+    @property
+    def contact_email(self):
+        return email_for_user(self.user)
+
+    @property
+    def is_redirect(self):
+        return bool(self.redirect_dest)
+
+    @property
+    def docroot(self):
+        return os.path.join(
+            web_dir(self.user),
+            self.relative_docroot.lstrip('/'),
+        )
+
+    @property
+    def use_ssl(self):
+        return bool(self.ssl_key)
+
+    @property
+    def port(self):
+        return (80, 443)[self.use_ssl]
+
+    @property
+    def canonical_url(self):
+        return '{proto}://{fqdn}'.format(
+            proto=('http', 'https')[self.use_ssl],
+            fqdn=self.fqdn,
+        )
+
+
+def report(*args, **kwargs):
+    print(*args, **kwargs)
+    kwargs.setdefault('file', sys.stdout)
+    kwargs['file'].flush()
+
+
+def build_config_file():
+    vhosts = set()
+
+    for domain, vhost in get_vhosts().items():
+        ssl_options = {
+            'ssl_key': '/etc/ssl/lets-encrypt/le-vhost.key',
+            'ssl_cert': str(LETS_ENCRYPT_SSL / (domain + '.crt')),
+            'ssl_chain': '/etc/ssl/certs/lets-encrypt.crt',
+        }
+        if (
+                'nossl' in vhost['flags'] or
+                not all(os.path.exists(p) for p in ssl_options.values())
+        ):
+            ssl_options = {}
+
+        # primary vhost
+        primary = VirtualHost(
+            fqdn=domain,
+            user=vhost['username'],
+            relative_docroot=vhost['docroot'],
+            redirect_dest=None,
+            ssl_cert=ssl_options.get('ssl_cert'),
+            ssl_key=ssl_options.get('ssl_key'),
+            ssl_chain=ssl_options.get('ssl_chain'),
+            use_hsts='hsts' in vhost['flags'],
+        )
+        vhosts.add(primary)
+
+        # if it's an HTTPS domain, add an HTTP domain redirecting to it;
+        # if it has aliases defined, add HTTP domains redirecting there, too
+        for redirect_domain in (
+            ({domain} if ssl_options else set()) | set(vhost['aliases'])
+        ):
+            vhosts.add(VirtualHost(
+                fqdn=redirect_domain,
+                user=vhost['username'],
+                relative_docroot='/',
+                redirect_dest=primary.canonical_url,
+                ssl_cert=None,
+                ssl_key=None,
+                ssl_chain=None,
+                use_hsts=None,
+            ))
+
+    return '\n\n'.join(
+        str(vhost)
+        for vhost in sorted(
+            vhosts,
+            key=lambda vhost: (vhost.user, vhost.fqdn, vhost.port),
+        )
+    )
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        '--dry-run', action='store_true',
+        help='Build vhost config file and print its contents without touching Apache.',
+    )
+    args = parser.parse_args(argv)
+
+    config_file = build_config_file()
+
+    if args.dry_run:
+        report(config_file)
+        return 0
+
+    fh, path = tempfile.mkstemp(dir='/etc/apache2', prefix='ocf-vhost.conf')
+    try:
+        os.chmod(path, 0o644)
+        os.write(fh, config_file.encode('utf8'))
+        os.close(fh)
+        report(path)
+
+        report('Diff between current and new file:')
+        ret = subprocess.call(('diff', '-u', '/etc/apache2/ocf-vhost.conf', path))
+        report('[end diff]')
+
+        if ret != 0:
+            os.rename(path, '/etc/apache2/ocf-vhost.conf')
+
+            report('Performing config test.')
+            subprocess.check_call(('apachectl', 'configtest'))
+
+            report('Things changed, reloading Apache.')
+            subprocess.check_call(('systemctl', 'reload', 'apache2'))
+        else:
+            report('Nothing changed, not doing anything.')
+    finally:
+        try:
+            os.remove(path)
+        except FileNotFoundError:
+            pass
+
+
+if __name__ == '__main__':
+    exit(main())
