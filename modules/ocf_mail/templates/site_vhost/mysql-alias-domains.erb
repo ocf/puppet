@@ -4,5 +4,5 @@ password = <%= @mysql_ro_password %>
 dbname = ocfmail
 query = SELECT domain FROM domains WHERE domain = '%s'
 
-# sanity check
+# sanity check on number of domains returned (should be only one per query)
 expansion_limit = 1

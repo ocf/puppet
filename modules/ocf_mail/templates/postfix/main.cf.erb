@@ -33,9 +33,9 @@ alias_database = hash:/etc/aliases
 # user used for delivering mail to files specified in aliases
 default_privs = ocfmail
 
-# prevent bad forwards
-virtual_alias_expansion_limit = 1
-virtual_alias_recursion_limit = 2
+# prevent excessive expansion or recursion for forwards
+virtual_alias_expansion_limit = 300
+virtual_alias_recursion_limit = 5
 
 # environment variables for LDAP GSSAPI bind
 import_environment = MAIL_CONFIG MAIL_DEBUG MAIL_LOGTAG TZ XAUTHORITY DISPLAY

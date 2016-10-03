@@ -27,3 +27,7 @@ result_format = %s
 # even though we already set virtual_alias_domains = ocf.b.e in main.cf,
 # postfix will still try to match LDAP first for all domains
 domain = ocf.berkeley.edu
+
+# Prevent users from forwarding to multiple addresses
+expansion_limit = 1
+recursion_limit = 2
