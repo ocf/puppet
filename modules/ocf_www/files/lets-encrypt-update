@@ -35,6 +35,7 @@ from contextlib import contextmanager
 from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
+from itertools import chain
 from pathlib import Path
 
 import dateutil.parser
@@ -81,12 +82,8 @@ def eligible_domains():
 
     vhosts = get_vhosts()
     all_domains = (
-        # TODO: we currently exclude aliases (or domains which redirect to
-        # ocf.b.e/~user) since the /.well-known/ directory does not yet get
-        # served properly.
-
-        set(domain for domain, vhost in vhosts.items() if not vhost['redirect'])  # |
-        # set(chain.from_iterable(vhost['aliases'] for vhost in vhosts.values()))
+        set(vhosts.keys()) |
+        set(chain.from_iterable(vhost['aliases'] for vhost in vhosts.values()))
     )
     eligible_domains = {
         domain
@@ -151,16 +148,18 @@ def acme_tiny(domain):
 
 def write_cert(cert, cert_path):
     """Write certificate file for a domain."""
-    _, temp_cert_path = tempfile.mkstemp()
+    _, temp_cert_path = tempfile.mkstemp(dir=str(cert_path.parent), prefix='.tmp')
     try:
         with open(temp_cert_path, 'wb') as f:
             f.write(cert)
-        # sort-of atomic overwrite in case of errors
+        # atomic overwrite in case of errors
         os.chmod(temp_cert_path, 0o644)
         shutil.move(temp_cert_path, str(cert_path))
     finally:
-        if os.path.exists(temp_cert_path):
+        try:
             os.remove(temp_cert_path)
+        except FileNotFoundError:
+            pass
 
 
 def maybe_renew(domain, cert_path, dry_run=False):
