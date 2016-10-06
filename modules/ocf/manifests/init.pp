@@ -7,7 +7,6 @@ class ocf {
   include ocf::munin::node
   include ocf::packages
   include ocf::staff_users
-  include ocf::sysctl
   include ocf::utils
 
   unless str2bool($::is_virtual) {
