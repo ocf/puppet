@@ -137,7 +137,7 @@ def build_config_file():
             vhosts,
             key=lambda vhost: (vhost.user, vhost.fqdn, vhost.port),
         )
-    )
+    ) + '\n'
 
 
 def main(argv=None):
@@ -148,6 +148,13 @@ def main(argv=None):
     parser.add_argument(
         '--dry-run', action='store_true',
         help='Build vhost config file and print its contents without touching Apache.',
+    )
+    parser.add_argument(
+        '--no-reload', action='store_true',
+        help=(
+            "Build vhost config file, put it in place, but don't reload Apache. "
+            'Keep in mind that Apache may get reloaded at any time later on.',
+        ),
     )
     args = parser.parse_args(argv)
 
@@ -174,8 +181,11 @@ def main(argv=None):
             report('Performing config test.')
             subprocess.check_call(('apachectl', 'configtest'))
 
-            report('Things changed, reloading Apache.')
-            subprocess.check_call(('systemctl', 'reload', 'apache2'))
+            if not args.no_reload:
+                report('Things changed, reloading Apache.')
+                subprocess.check_call(('systemctl', 'reload', 'apache2'))
+            else:
+                report('Not reloading Apache, as you requested.')
         else:
             report('Nothing changed, not doing anything.')
     finally:
