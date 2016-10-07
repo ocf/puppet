@@ -12,6 +12,7 @@ define ocf_mirrors::ftpsync(
     $project_path = "/opt/mirrors/project/${title}",
     $monitoring_upstream_host = undef,
     $monitoring_dist_to_check = undef,
+    $monitoring_local_path = $title,
     $monitoring_upstream_path = $title,
     $monitoring_upstream_protocol = 'http',
   ) {

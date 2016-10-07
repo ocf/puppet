@@ -4,6 +4,7 @@ class ocf_mirrors::raspbian {
     rsync_path               => 'archive',
     cron_minute              => '45',
     monitoring_dist_to_check => 'jessie',
+    monitoring_local_path    => 'raspbian/raspbian',
     monitoring_upstream_host => 'archive.raspbian.org';
   }
 }
