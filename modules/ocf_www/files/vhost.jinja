@@ -43,7 +43,7 @@
         RewriteCond '%{REQUEST_URI} !^/\.well-known/'
         # 301 redirects are more correct, but get cached forever by dumb browers.
         # Doesn't matter too much for vhosts.
-        RewriteRule ^(.*)$ {{vhost.canonical_url}}$1 [L,R=302]
+        RewriteRule ^(.*)$ {{vhost.redirect_dest}}$1 [L,R=302]
     {% endif %}
 
     Alias /.well-known /srv/well-known
