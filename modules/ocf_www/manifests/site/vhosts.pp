@@ -36,11 +36,13 @@ class ocf_www::site::vhosts {
     require => File['/usr/local/bin/build-vhosts'],
   }
 
-  apache::custom_config { 'include-vhosts':
+  file { '/etc/apache2/sites-enabled/99-include-vhosts.conf':
     content => "
+      # This kinda sucks, but we drop this in sites-enabled with priority 99
+      # (instead of in conf.d) because the other vhosts must be included first.
+      # (The first vhost declared is the fallback vhost.)
       Include /etc/apache2/ocf-vhost.conf
     ",
-    priority => 99,
     require => Exec['build-vhosts'],
   }
 }
