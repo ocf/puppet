@@ -32,7 +32,7 @@ class ocf_www::lets_encrypt {
 
   if $::hostname !~ /^dev-/ {
     cron { 'lets-encrypt-update':
-      command     => '/usr/local/bin/lets-encrypt-update',
+      command     => 'chronic /usr/local/bin/lets-encrypt-update -v',
       user        => ocfletsencrypt,
       environment => 'MAILTO=root',
       special     => hourly,
