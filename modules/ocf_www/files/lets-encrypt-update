@@ -130,7 +130,7 @@ def make_csr(domain):
 
 def acme_tiny(domain):
     with make_csr(domain) as csr_path:
-        # TODO: use subprocess.call when we get python3.5
+        # TODO: use subprocess.run when we get python3.5
         proc = subprocess.Popen(
             (
                 'acme-tiny',
