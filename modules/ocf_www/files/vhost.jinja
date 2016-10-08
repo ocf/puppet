@@ -1,0 +1,55 @@
+# {{vhost.fqdn}} (user {{vhost.user}})
+<VirtualHost *:{{vhost.port}}>
+    ServerName {{vhost.fqdn}}
+    ServerAdmin {{vhost.contact_email}}
+    DocumentRoot {{vhost.docroot}}
+
+    {% if vhost.use_ssl %}
+        # SSL
+        SSLEngine on
+        SSLCertificateFile {{vhost.ssl_cert}}
+        SSLCertificateKeyFile {{vhost.ssl_key}}
+        SSLCertificateChainFile {{vhost.ssl_chain}}
+    {% endif %}
+
+    {% if not vhost.is_redirect %}
+        <Directory {{vhost.docroot}}>
+            Options ExecCGI IncludesNoExec Indexes MultiViews SymLinksIfOwnerMatch
+            AllowOverride All
+            Require all granted
+            DirectoryIndex index.html index.cgi index.pl index.php index.xhtml index.htm index.shtm index.shtml
+        </Directory>
+
+        <Directory /services/http/suexec>
+            Options +ExecCGI
+            AllowOverride None
+            Require all granted
+            SetHandler fastcgi-script
+        </Directory>
+
+        <FilesMatch "\.ph(p3?|tml)$">
+            Require all granted
+            SetHandler php5-fcgi
+        </FilesMatch>
+
+        Action php5-fcgi /php5-fcgi
+        Alias /php5-fcgi /services/http/suexec/php5-fcgi-wrapper
+        SuexecUserGroup {{vhost.user}} ocf
+    {% else %}
+        RewriteEngine on
+        RewriteCond %{REQUEST_URI} !^/\.well-known/
+        # 301 redirects are more correct, but get cached forever by dumb browers.
+        # Doesn't matter too much for vhosts.
+        RewriteRule ^(.*)$ {{vhost.redirect_dest}}$1 [L,R=302]
+    {% endif %}
+
+    Alias /.well-known /srv/well-known
+
+    ServerSignature Off
+
+    ErrorLog /var/log/apache2/vhost-error.log
+    CustomLog /var/log/apache2/vhost-access.log combined
+
+    UserDir disabled
+    suPHP_Engine off
+</VirtualHost>

@@ -34,6 +34,7 @@ class ocf_www {
 
   include ocf_www::lets_encrypt
   include ocf_www::logging
+  include ocf_www::ssl
 
   # sites
   include ocf_www::site::shorturl

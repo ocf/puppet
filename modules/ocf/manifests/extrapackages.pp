@@ -134,6 +134,7 @@ class ocf::extrapackages {
     'python-yaml',
     'python3-flake8',
     'python3-flask',
+    'python3-jinja2',
     'python3-lxml',
     'python3-mock',
     'python3-mysqldb',
