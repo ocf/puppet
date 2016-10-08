@@ -37,7 +37,7 @@
         SuexecUserGroup {{vhost.user}} ocf
     {% else %}
         RewriteEngine on
-        RewriteCond '%{REQUEST_URI} !^/\.well-known/'
+        RewriteCond %{REQUEST_URI} !^/\.well-known/
         # 301 redirects are more correct, but get cached forever by dumb browers.
         # Doesn't matter too much for vhosts.
         RewriteRule ^(.*)$ {{vhost.redirect_dest}}$1 [L,R=302]
