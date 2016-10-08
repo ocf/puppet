@@ -10,8 +10,6 @@
         SSLCertificateFile {{vhost.ssl_cert}}
         SSLCertificateKeyFile {{vhost.ssl_key}}
         SSLCertificateChainFile {{vhost.ssl_chain}}
-
-        # TODO: need the common SSL options here
     {% endif %}
 
     {% if not vhost.is_redirect %}
