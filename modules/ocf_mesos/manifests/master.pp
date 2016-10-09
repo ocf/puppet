@@ -1,5 +1,6 @@
 class ocf_mesos::master {
   include ocf_mesos
+  include ocf_mesos::slave::secrets
 
   file { '/opt/share/mesos/master':
     ensure => directory;

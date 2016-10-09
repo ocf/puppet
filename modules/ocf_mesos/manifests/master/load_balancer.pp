@@ -49,4 +49,12 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     service_port => 10000,
     ssl          => false,
   }
+
+  ocf_mesos::master::load_balancer::http_vhost { 'rt':
+    server_name  => ['rt.ocf.berkeley.edu'],
+    service_port => 10001,
+    ssl          => true,
+    ssl_cert     => '/opt/share/secrets/rt/rt.crt',
+    ssl_key      => '/opt/share/secrets/rt/rt.key',
+  }
 }

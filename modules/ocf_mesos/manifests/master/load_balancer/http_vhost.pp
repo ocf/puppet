@@ -20,11 +20,14 @@ define ocf_mesos::master::load_balancer::http_vhost(
   }
 
   if $ssl {
-    # TODO: SSL is untested
     nginx::resource::vhost {
       "${title}-https":
         server_name => $server_name,
-        proxy       => "http://marathon_service_${service_port}",
+
+        # TODO: not all upstreams will be HTTPS
+        # need to figure out what we actually want here
+        # (not obvious if http or https in the container is best...)
+        proxy       => "https://marathon_service_${service_port}",
 
         ssl         => true,
         ssl_cert    => $ssl_cert,
