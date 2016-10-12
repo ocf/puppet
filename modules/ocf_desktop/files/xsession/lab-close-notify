@@ -15,7 +15,7 @@ def notify_user(seconds_left):
     if seconds_left != 0:
         msg = 'Lab closing in {0:g} minutes'.format(seconds_left / 60)
     else:
-        msg = 'Lab is closing NOW!'
+        msg = 'The lab is now closed. Please log out and leave right away.'
 
     # TODO: pick an icon
     subprocess.call(['notify-send', title, msg])
