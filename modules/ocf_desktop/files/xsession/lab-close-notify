@@ -21,8 +21,10 @@ def notify_user(seconds_left):
     subprocess.call(['notify-send', title, msg])
 
 today = datetime.datetime.today()
-todays_hours = hours.REGULAR_HOURS[(today.weekday() - 1) % 7]
-closing_hours = [x.close for x in todays_hours]
+closing_times = [
+    datetime.datetime.combine(today.date(), hour.close).timestamp()
+    for hour in Day.from_date().hours
+]
 
 # unix timestamps (seconds since epoch) for the closing times today
 closing_times = [datetime.datetime.combine(today.date(), x).timestamp()
