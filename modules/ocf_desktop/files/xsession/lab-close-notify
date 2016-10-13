@@ -21,21 +21,25 @@ def notify_user(seconds_left):
     notif = Notify.Notification(title, msg)
     notif.show()
 
-today = datetime.datetime.today()
-closing_times = [
-    datetime.datetime.combine(today.date(), hour.close).timestamp()
-    for hour in Day.from_date().hours
-]
+def main():
+    today = datetime.datetime.today()
+    closing_times = [
+        datetime.datetime.combine(today.date(), hour.close).timestamp()
+        for hour in Day.from_date().hours
+    ]
 
-# unix timestamps (seconds since epoch) for the closing times today
-closing_times = [datetime.datetime.combine(today.date(), x).timestamp()
-        for x in closing_hours]
+    # unix timestamps (seconds since epoch) for the closing times today
+    closing_times = [datetime.datetime.combine(today.date(), x).timestamp()
+            for x in closing_hours]
 
-s = sched.scheduler(time.time)
+    s = sched.scheduler(time.time)
 
-for t in closing_times:
-    for d in WARNING_DURATIONS:
-        s.enterabs(t - d, 0, notify_user, argument=(d,))
+    for t in closing_times:
+        for d in WARNING_DURATIONS:
+            s.enterabs(t - d, 0, notify_user, argument=(d,))
 
-Notify.init('OCF')
-s.run()
+    Notify.init('OCF')
+    s.run()
+
+if __name__ == '__main__':
+    main()
