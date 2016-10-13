@@ -111,6 +111,9 @@ xset m 0 0
 # Start OCF notification script
 /opt/share/puppet/notify.sh &
 
+# Start script that warns users about lab closure
+/opt/share/puppet/lab-close-notify &
+
 # Fix multiple monitors
 /usr/local/bin/fix-displays &
 
