@@ -1,0 +1,58 @@
+#!/bin/bash
+set -euo pipefail
+
+HOSTS="
+blackhole.ocf.berkeley.edu
+cory.eecs.berkeley.edu
+google.com
+hal.ocf.berkeley.edu
+jaws.ocf.berkeley.edu
+ocf-2.eac.berkeley.edu
+osuosl.org
+pandemic.ocf.berkeley.edu
+sipb.mit.edu
+speedtest.dallas.linode.com
+speedtest.frankfurt.linode.com
+speedtest.london.linode.com
+speedtest.newark.linode.com
+speedtest.singapore.linode.com
+speedtest.tokyo.linode.com
+vlan635.inr-350-reccev.berkeley.edu
+"
+
+
+latency_to_host() {
+    local host="$1"
+
+    # mean latency from 5 pings
+    ping -nq -i 0.2 -W3 -c5 "$host" |
+    awk '/^rtt / {print $4}' |
+    awk -F/ '{print $2}'
+}
+
+clean() {
+    sed 's/[^a-z0-9]/_/g' <<< "$1"
+}
+
+
+if [ "$#" -ne 0 ]; then
+    if [ "$1" == 'config' ]; then
+        echo 'graph_title round-trip latency'
+        echo 'graph_vlabel latency (ms)'
+        echo 'graph_scale no'
+        for host in $HOSTS; do
+            echo "$(clean "$host").label $host"
+        done
+    else
+        echo "usage: $0 {config}" >&2
+        exit 1
+    fi
+else
+    for host in $HOSTS; do
+        if latency=$(latency_to_host "$host"); then
+            echo "$(clean "$host").value $latency"
+        else
+            echo "fail: $host" >&2
+        fi
+    done
+fi
