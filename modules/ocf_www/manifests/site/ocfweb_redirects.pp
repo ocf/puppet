@@ -114,7 +114,6 @@ class ocf_www::site::ocfweb_redirects {
       'dev-hello.ocf.berkeley.edu',
       'dev-staff.ocf.berkeley.edu',
       'hello',
-      'hello.ocf.io',
       'staff.ocf.berkeley.edu',
     ],
     port            => 80,
