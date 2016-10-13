@@ -1,7 +1,7 @@
 # web display of stats
 class ocf_stats::www {
   apache::vhost { 'stats.ocf.berkeley.edu':
-    serveraliases => ['stats', 'stats.ocf.io', 'stats.ocf.sexy'],
+    serveraliases => ['stats'],
     port          => 80,
     docroot       => '/opt/stats/labstats/www/',
     options       => ['-Indexes'],
