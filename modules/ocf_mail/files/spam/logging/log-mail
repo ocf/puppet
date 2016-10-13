@@ -9,26 +9,53 @@ import email
 import email.utils
 import io
 import json
+import pwd
 import re
 import sys
 from datetime import datetime
 
+from ocflib.vhost.mail import get_mail_vhosts
+
+
 LOG_FILE = '/var/log/ocfmail.log'
 
 
-def parse_received(header):
+def parse_received_for_uid(header):
     """Attempt to parse relay host and sender uid from Received header.
 
     This header can be faked by the message sender if they don't send via local
     MTA to blame other users, so we rely on this being prevented via firewall
-    rules."""
-
+    rules.
+    """
     match = re.match(
         'by ([a-zA-Z\\-\\.]*) \\(Postfix, from userid ([0-9]*)\\)',
-        header)
-
+        header,
+    )
     if match:
         return {'relay': match.group(1), 'uid': match.group(2)}
+
+
+def parse_received_for_auth(header):
+    """Attempt to parse sender UID for authenticated SMTP mails.
+
+    These come from student groups with mail virtual hosting sending via SMTP.
+    We look up which group owns that domain and mark this mail as belonging to
+    them in our logs.
+    """
+    match = re.search(
+        r'\n\t\(Authenticated sender: [^@]+@([^\)]+)\)\n',
+        header,
+        re.MULTILINE,
+    )
+    if match:
+        domain = match.group(1).lower()
+        user, = [
+            vhost.user
+            for vhost in get_mail_vhosts()
+            if vhost.domain == domain
+        ]
+        # TODO: uids should be ints...
+        return {'uid': str(pwd.getpwnam(user).pw_uid)}
 
 
 def clean_addr(addr):
@@ -54,7 +81,13 @@ if __name__ == '__main__':
     parsed = {}
     received = message.get_all('Received')
     if received:
-        parsed = parse_received(received[-1]) or {}
+        parsed = (
+            # received header with uid comes from the first relay
+            parse_received_for_uid(received[-1]) or
+            # received header with smtp username comes from the last (*this* smtp server)
+            parse_received_for_auth(received[0]) or
+            {}
+        )
 
     info = {
         'relay': parsed.get('relay'),
@@ -62,7 +95,7 @@ if __name__ == '__main__':
         'from': clean_addr(message['From']),
         'to': clean_addr(message['To']),
         'subject': message['Subject'],
-        'date': datetime.now().isoformat()
+        'date': datetime.now().isoformat(),
     }
 
     with open(LOG_FILE, 'a') as f:
