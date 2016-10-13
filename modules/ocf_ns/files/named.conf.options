@@ -9,10 +9,6 @@ acl "ucb" {
     192.31.161/24; 192.58.221/24; };
 };
 
-acl "gandi.net" {
- 217.70.177.40;
-};
-
 // Options
 options {
   directory "/var/cache/bind";
@@ -31,7 +27,7 @@ options {
 
   // Allow queries from anywhere and zone transfers from OCF/UCB/gandi.net
   allow-query {any;};
-  allow-transfer {"ocf"; "ucb"; "gandi.net";};
+  allow-transfer {"ocf"; "ucb";};
 
   // Only allow recursive queries from OCF
   recursion yes;
