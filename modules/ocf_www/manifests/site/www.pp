@@ -106,6 +106,7 @@ class ocf_www::site::www {
         'dev-ocf.berkeley.edu',
         'secure',
         'secure.ocf.berkeley.edu',
+        'ocf.asuc.org',
         $::hostname,
         $::fqdn,
       ],
