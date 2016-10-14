@@ -25,4 +25,8 @@ class ocf_ns {
     require  => Package['bind9'],
     notify   => Service['bind9'];
   }
+
+  ocf::munin::plugin { 'ping-report':
+    source => 'puppet:///modules/ocf_ns/ping-report',
+  }
 }
