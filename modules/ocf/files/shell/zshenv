@@ -12,9 +12,9 @@
 #
 # Global Order: zshenv, zprofile, zshrc, zlogin
 
-if [[ -z "$PATH" || "$PATH" == "/bin:/usr/bin" ]]
-then
-	export PATH="/usr/local/bin:/usr/bin:/bin:/usr/games"
-fi
+# OCF environment variables
+export PATH=/opt/share/utils/bin:/opt/share/utils/sbin:/usr/local/bin:\
+/usr/local/sbin:/opt/puppetlabs/bin:/bin:/usr/bin:/usr/sbin:/usr/lib:/sbin:\
+/usr/games
 
 zsh-newuser-install () {}
