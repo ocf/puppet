@@ -13,4 +13,8 @@
 @include common-password
 @include common-session
 
-auth    required    pam_listfile.so onerr=fail item=group sense=allow file=/opt/share/mesos-admin-groups
+# admin group is sufficient
+auth    sufficient    pam_listfile.so onerr=fail item=group sense=allow file=/opt/share/mesos-admin-groups
+
+# otherwise, *must* be an admin user
+auth    required    pam_listfile.so onerr=fail item=user sense=allow file=/opt/share/mesos-admin-users

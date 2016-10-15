@@ -11,9 +11,15 @@ class ocf_mesos::master::webui(
     '/opt/share/mesos-admin-groups':
       content => "ocfroot\n";
 
+    '/opt/share/mesos-admin-users':
+      content => "ocfdeploy\n";
+
     '/etc/pam.d/mesos_master_webui':
       source  => 'puppet:///modules/ocf_mesos/master/webui/mesos_master_webui',
-      require => File['/opt/share/mesos-admin-groups'];
+      require => File[
+        '/opt/share/mesos-admin-groups',
+        '/opt/share/mesos-admin-users'
+      ];
   }
 
   class { 'nginx':
