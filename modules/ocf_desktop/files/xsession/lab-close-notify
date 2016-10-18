@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import datetime
 import sched
 import time
@@ -9,6 +8,7 @@ from ocflib.lab.hours import Day
 
 # 0 minutes, 2 minute, 5 minutes, 10 minutes, 15 minutes
 WARNING_DURATIONS = [0, 120, 300, 600, 900]
+
 
 def notify_user(seconds_left):
     title = 'Lab closure'
@@ -20,6 +20,7 @@ def notify_user(seconds_left):
     # TODO: pick an icon
     notif = Notify.Notification.new(title, msg)
     notif.show()
+
 
 def main():
     today = datetime.datetime.today()
