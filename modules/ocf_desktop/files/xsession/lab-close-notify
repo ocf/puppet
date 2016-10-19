@@ -14,11 +14,12 @@ def notify_user(seconds_left):
     title = 'Lab closure'
     if seconds_left != 0:
         msg = 'Lab closing in {0:g} minutes'.format(seconds_left / 60)
+        icon = 'appointment-soon'
     else:
         msg = 'The lab is now closed. Please log out and leave right away.'
+        icon = 'appointment-missed'
 
-    # TODO: pick an icon
-    notif = Notify.Notification.new(title, msg)
+    notif = Notify.Notification.new(title, msg, icon)
     notif.show()
 
 
