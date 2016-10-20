@@ -38,7 +38,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/about$ https://www.ocf.berkeley.edu/docs/about/ [R]'},
       {rewrite_rule => '^/account$ https://www.ocf.berkeley.edu/docs/services/account/ [R]'},
       {rewrite_rule => '^/apphost$ http://status.ocf.berkeley.edu/2014/10/announcing-dedicated-hosting-for-web.html [R]'},
-      {rewrite_rule => '^/bod$ https://www.ocf.berkeley.edu/~staff/bod/ [R]'},
+      {rewrite_rule => '^/bod(/.*)?$ https://www.ocf.berkeley.edu/~staff/bod$1 [R]'},
       {rewrite_rule => '^/callinkapi$ https://studentservices.berkeley.edu/WebServices/StudentGroupServiceV2/Service.asmx/CalLinkOrganizations [R]'},
       {rewrite_rule => '^/contact$ https://www.ocf.berkeley.edu/docs/contact/ [R]'},
       {rewrite_rule => '^/docs(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
