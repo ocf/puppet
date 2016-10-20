@@ -50,6 +50,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/gh/w(/.*)?$ https://github.com/ocf/ocfweb$1 [R]'},
       {rewrite_rule => '^/gh(/.*)?$ https://ocf.io/github$1 [R]'},
       {rewrite_rule => '^/github(/.*)?$ https://github.com/ocf$1 [R]'},
+      {rewrite_rule => '^/help(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
       {rewrite_rule => '^/hiring$ http://status.ocf.berkeley.edu/2016/09/taking-applications-for-new-work-study.html [R]'},
       {rewrite_rule => '^/hosting$ https://www.ocf.berkeley.edu/docs/services/web/ [R]'},
       {rewrite_rule => '^/hours$ https://ocf.io/lab#hours [R,NE]'},
