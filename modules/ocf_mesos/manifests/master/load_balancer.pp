@@ -57,4 +57,12 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     ssl_cert     => '/opt/share/secrets/rt/rt.crt',
     ssl_key      => '/opt/share/secrets/rt/rt.key',
   }
+
+  ocf_mesos::master::load_balancer::http_vhost { 'ocfweb':
+    server_name  => ['www.ocf.berkeley.edu', 'dev.ocf.berkeley.edu'],
+    service_port => 10002,
+    ssl          => true,
+    ssl_cert     => '/opt/share/secrets/ocfweb/ocfweb.crt',
+    ssl_key      => '/opt/share/secrets/ocfweb/ocfweb.key',
+  }
 }
