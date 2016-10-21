@@ -7,10 +7,15 @@ filegen clockstats file clockstats type day enable
 
 # Campus operates an actual radio clock and GPS clock which we can use.
 # http://www.net.berkeley.edu/time/
-server ntp1-1.berkeley.edu iburst
-server ntp1-2.berkeley.edu iburst
-server ntp2-1.berkeley.edu iburst
-server ntp2-1.berkeley.edu iburst
+server ntp1.berkeley.edu iburst
+server ntp2.berkeley.edu iburst
+server time.nist.gov iburst
+server 0.pool.ntp.org iburst
+server 1.pool.ntp.org iburst
+server 2.pool.ntp.org iburst
+server 3.pool.ntp.org iburst
+
+# TODO: this is terrible
 <% if @hostname == 'pandemic' -%>
 peer hal.ocf.berkeley.edu iburst
 peer jaws.ocf.berkeley.edu iburst
