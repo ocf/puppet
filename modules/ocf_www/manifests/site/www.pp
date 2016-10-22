@@ -36,7 +36,6 @@ class ocf_www::site::www {
     ssl_chain       => '/etc/ssl/certs/incommon-intermediate.crt',
 
     headers         => ['always set Strict-Transport-Security max-age=31536000'],
-    request_headers => ['set X-Forwarded-Proto https'],
 
     rewrites        => [
       {
@@ -47,7 +46,7 @@ class ocf_www::site::www {
           # ...and not if it's a special Apache thing (e.g. autoindex icons)
           '%{REQUEST_URI} !^/icons/',
         ],
-        rewrite_rule => '^/(.*)$ http://lb.ocf.berkeley.edu:10002/$1 [P]',
+        rewrite_rule => '^/(.*)$ http://ocfweb.ocf.berkeley.edu:8001/$1 [P]',
       }
     ],
 
