@@ -28,6 +28,14 @@ class ocf::apt {
         src => true
       };
 
+    'puppetlabs':
+      location => 'http://mirrors/puppetlabs/apt/',
+      release  => $::lsbdistcodename,
+      repos    => 'PC1',
+      include  => {
+        src => true
+      };
+
     'ocf':
       location  => 'http://apt/',
       release   => $::lsbdistcodename,
@@ -59,25 +67,6 @@ class ocf::apt {
     class { 'apt::backports':
       location => 'http://mirrors/debian/';
     }
-  }
-
-  apt::key { 'puppetlabs':
-    id     => '6F6B15509CF8E59E6E469F327F438280EF8D349F',
-    source => 'https://apt.puppetlabs.com/pubkey.gpg';
-  }
-
-  # Hack to update the puppetlabs APT signing key with the same signature
-  # See https://tickets.puppetlabs.com/browse/MODULES-3307 for more info
-  exec { 'apt-key puppetlabs':
-    path    => '/bin:/usr/bin',
-    unless  => 'apt-key list | grep 4BD6EC30 | grep -vE "expired|revoked"',
-    command => 'apt-key adv --keyserver keys.gnupg.net --recv-keys 1054b7a24bd6ec30';
-  }
-
-  apt::source { 'puppetlabs':
-    location   => 'http://apt.puppetlabs.com/',
-    repos      => 'PC1',
-    require    => Apt::Key['puppetlabs'];
   }
 
   apt::key { 'ocf':
