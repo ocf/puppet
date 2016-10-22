@@ -14,6 +14,7 @@ class ocf_mirrors {
   include ocf_mirrors::gnu
   include ocf_mirrors::kali
   include ocf_mirrors::parrot
+  include ocf_mirrors::puppetlabs
   include ocf_mirrors::raspbian
   include ocf_mirrors::tails
   include ocf_mirrors::tanglu
