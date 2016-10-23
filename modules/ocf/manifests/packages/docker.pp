@@ -37,4 +37,22 @@ class ocf::packages::docker($admin_group = 'docker') {
     require => Package['docker-engine'],
     notify  => Exec['docker-socket-update'];
   }
+
+  cron {
+    'clean-old-docker-containers':
+      command => "docker ps -a --filter status=exited | grep -E '(weeks?|months?|years?) ago' | awk '{print \$1}' | chronic xargs -r docker rm",
+      hour    => 1,
+      minute  => 3;
+
+    'clean-docker-images':
+      command => 'docker images -q --filter dangling=true | chronic xargs -r docker rmi',
+      hour    => 1,
+      minute  => 17;
+
+    'clean-docker-volumes':
+      # TODO: use docker volume prune when we get docker 1.13+
+      command => 'docker volume ls -q --filter dangling=true | chronic xargs -r docker volume rm',
+      hour    => 1,
+      minute  => 25;
+  }
 }
