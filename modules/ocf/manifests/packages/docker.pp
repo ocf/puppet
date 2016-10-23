@@ -45,7 +45,9 @@ class ocf::packages::docker($admin_group = 'docker') {
       minute  => 3;
 
     'clean-docker-images':
-      command => 'docker images -q --filter dangling=true | chronic xargs -r docker rmi',
+      # Chronic doesn't work well here because docker rmi likes to raise errors
+      # about images still linked to containers
+      command => 'docker images -q --filter dangling=true | xargs -r docker rmi > /dev/null 2>&1',
       hour    => 1,
       minute  => 17;
 
