@@ -69,5 +69,11 @@ class ocf_stats::labstats {
       environment => 'MAILTO=root',
       user        => 'ocfstats',
       minute      => '*/5';
+
+    'toner-check':
+      command     => '/opt/stats/labstats/cron/toner',
+      environment => 'MAILTO=root',
+      user        => 'ocfstats',
+      minute      => '*/5';
   }
 }
