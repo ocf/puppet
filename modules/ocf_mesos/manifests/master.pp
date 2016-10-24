@@ -15,8 +15,8 @@ class ocf_mesos::master {
   $mesos_hostname = "mesos${my_mesos_id}"
   $marathon_hostname = "marathon${my_mesos_id}"
 
-  $mesos_http_password = 'hunter2'
-  $marathon_http_password = 'hunter4'
+  $mesos_http_password = file('/opt/puppet/shares/private/mesos/mesos-master-password')
+  $marathon_http_password = file('/opt/puppet/shares/private/mesos/marathon-http-password')
 
   class {
     'ocf_mesos::master::mesos':

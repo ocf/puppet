@@ -15,8 +15,8 @@ class ocf_mesos::slave {
   }
 
 
-  $ocf_mesos_master_password = 'hunter2'
-  $ocf_mesos_slave_password = 'hunter3'
+  $ocf_mesos_master_password = file('/opt/puppet/shares/private/mesos/mesos-master-password')
+  $ocf_mesos_slave_password = file('/opt/puppet/shares/private/mesos/mesos-slave-password')
 
   file {
     default:

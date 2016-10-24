@@ -1,7 +1,7 @@
 # Proxy HTTP and possibly HTTPS requests to a Marathon service.
 #
 # Because HTTP services can use name-based virtual hosts, all HTTP vhosts bind
-# to the same IP (currently 169.229.226.51).
+# to the same IP (currently 169.229.226.53).
 #
 # By default, it will be an HTTP-only service. If $ssl is true, it will be
 # HTTPS-only, which a 301 redirect from HTTP -> HTTPS.
