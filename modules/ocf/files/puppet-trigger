@@ -36,11 +36,6 @@ def tail_syslog():
     os.execvp('less', ('less', '+F', '/var/log/syslog'))
 
 
-def is_jessie():
-    with open('/etc/debian_version') as f:
-        return f.read().strip().startswith('8.')
-
-
 def switch_to_environment(env):
     log('Switching environment to "{}".'.format(env))
 
