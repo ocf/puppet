@@ -40,7 +40,8 @@ class ocf::packages::docker($admin_group = 'docker') {
 
   cron {
     'clean-old-docker-containers':
-      command => "docker ps -a --filter status=exited | grep -E 'Exited \\([0-9]+\\) [0-9]+ (weeks?|months?|years?) ago' | awk '{print \$1}' | chronic xargs -r docker rm",
+      # days is intentionally plural
+      command => "docker ps -a --filter status=exited | grep -E 'Exited \\([0-9]+\\) [0-9]+ (days|weeks?|months?|years?) ago' | awk '{print \$1}' | chronic xargs -r docker rm",
       hour    => 1,
       minute  => 3;
 
