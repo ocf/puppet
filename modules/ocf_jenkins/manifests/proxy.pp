@@ -1,8 +1,9 @@
 class ocf_jenkins::proxy {
   class { 'nginx':
-    manage_repo => false,
-    confd_purge => true,
-    vhost_purge => true,
+    manage_repo   => false,
+    confd_purge   => true,
+    vhost_purge   => true,
+    server_tokens => off,
   }
 
   nginx::resource::upstream { 'jenkins':
@@ -16,7 +17,7 @@ class ocf_jenkins::proxy {
       proxy            => 'http://jenkins',
       proxy_redirect   => 'http://localhost:8080 https://jenkins.ocf.berkeley.edu',
       proxy_set_header => [
-        'X-Forwarded-Protocol $scheme',
+        'X-Forwarded-Proto $scheme',
         'X-Forwarded-For $proxy_add_x_forwarded_for',
         'Host $http_host'
       ],
