@@ -2,3 +2,8 @@ Codename: jessie
 Architectures: amd64 i386 source
 Components: main
 SignWith: D72A0AF4
+
+Codename: stretch
+Architectures: amd64 i386 source
+Components: main
+SignWith: D72A0AF4
