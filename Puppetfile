@@ -4,7 +4,7 @@ moduledir 'vendor'
 
 # Third-party modules
 mod 'ckuehl-spiped',       '1.1.1'
-mod 'puppet-nginx',        '0.4.0'
+mod 'puppet-nginx',        '0.5.0'
 mod 'puppet-staging',      '2.0.1'
 mod 'puppetlabs-apache',   '1.10.0'
 mod 'puppetlabs-apt',      '2.3.0'
