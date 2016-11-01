@@ -39,6 +39,7 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
 
   file { '/etc/keepalived/keepalived.conf':
     content => template('ocf_mesos/master/load_balancer/keepalived.conf.erb'),
+    mode    => '0400',
     require => Package['keepalived'],
     notify  => Service['keepalived'],
   }
