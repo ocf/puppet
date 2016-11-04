@@ -4,7 +4,9 @@ import sched
 import time
 
 from gi.repository import Notify
+from ocflib.account.utils import is_staff
 from ocflib.lab.hours import Day
+from ocflib.misc.whoami import current_user
 
 # 0 minutes, 2 minute, 5 minutes, 10 minutes, 15 minutes
 WARNING_DURATIONS = [0, 120, 300, 600, 900]
@@ -24,6 +26,9 @@ def notify_user(seconds_left):
 
 
 def main():
+    if is_staff(current_user()):
+        return
+
     today = datetime.datetime.today()
     closing_times = [
         datetime.datetime.combine(today.date(), hour.close).timestamp()
