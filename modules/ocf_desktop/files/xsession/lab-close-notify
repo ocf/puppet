@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+import datetime
+import sched
+import time
+
+from gi.repository import Notify
+from ocflib.lab.hours import Day
+
+# 0 minutes, 2 minute, 5 minutes, 10 minutes, 15 minutes
+WARNING_DURATIONS = [0, 120, 300, 600, 900]
+
+
+def notify_user(seconds_left):
+    title = 'Lab closure'
+    if seconds_left != 0:
+        msg = 'Lab closing in {0:g} minutes'.format(seconds_left / 60)
+        icon = 'appointment-soon'
+    else:
+        msg = 'The lab is now closed. Please log out and leave right away.'
+        icon = 'appointment-missed'
+
+    notif = Notify.Notification.new(title, msg, icon)
+    notif.show()
+
+
+def main():
+    today = datetime.datetime.today()
+    closing_times = [
+        datetime.datetime.combine(today.date(), hour.close).timestamp()
+        for hour in Day.from_date().hours
+    ]
+
+    s = sched.scheduler(time.time)
+
+    for t in closing_times:
+        for d in WARNING_DURATIONS:
+            if t - d > today.timestamp():
+                s.enterabs(t - d, 0, notify_user, argument=(d,))
+
+    Notify.init('OCF')
+    s.run()
+
+if __name__ == '__main__':
+    main()
