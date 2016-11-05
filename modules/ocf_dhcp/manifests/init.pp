@@ -13,12 +13,14 @@ class ocf_dhcp {
       source => 'puppet:///modules/ocf_dhcp/gen-desktop-leases',
       mode   => '0755';
   }
+
   exec { 'gen-desktop-leases':
     command    => '/usr/local/sbin/gen-desktop-leases > /etc/dhcp/desktop-leases.conf',
     creates    => '/etc/dhcp/desktop-leases.conf',
-    require    => File['/usr/local/sbin/gen-desktop-leases'],
+    require    => [File['/usr/local/sbin/gen-desktop-leases'], Package['python3-ocflib']],
     notify     => Service['isc-dhcp-server'];
   }
+
   service { 'isc-dhcp-server':
     subscribe => File['/etc/dhcp/dhcpd.conf']
   }

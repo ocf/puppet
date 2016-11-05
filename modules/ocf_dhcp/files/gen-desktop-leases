@@ -1,14 +1,11 @@
-#!/usr/bin/env python
-import ldap
+#!/usr/bin/env python3
+from ocflib.infra.hosts import hosts_by_filter
 
-LDAP_SERVER = 'ldaps://ldap.ocf.berkeley.edu/'
-LDAP_BASE = 'ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU'
+desktops = hosts_by_filter('(|(type=desktop)(dnsCname=pi))')
 
-l = ldap.initialize(LDAP_SERVER)
-l.simple_bind_s('', '')
-
-attrs = ['cn', 'macAddress', 'ipHostNumber']
-for _, vals in l.search_st(LDAP_BASE, ldap.SCOPE_SUBTREE, '(type=desktop)', attrs):
-    print('host {} {{ hardware ethernet {}; fixed-address {}; }}'.format(*[
-        vals[key][0] for key in attrs
-    ]))
+for desktop in desktops:
+    print('host {} {{ hardware ethernet {}; fixed-address {}; }}'.format(
+        desktop['cn'][0],
+        desktop['macAddress'][0],
+        desktop['ipHostNumber'][0],
+    ))
