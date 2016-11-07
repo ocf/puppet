@@ -40,4 +40,4 @@ Cron {
     environment => 'PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin'
 }
 
-$desktop_homepage = 'https://www.ocf.berkeley.edu/about/lab/open-source'
+$desktop_homepage = 'http://status.ocf.berkeley.edu/2016/11/changes-to-account-policies.html'
