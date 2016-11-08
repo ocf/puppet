@@ -22,7 +22,7 @@ class ocf_mail::site_vhost {
 
   # Configure the saslauthd instance used by Postfix.
   # To test this, you can use:  (warning: password will be logged)
-  # $ /usr/sbin/testsaslauthd -s smtp -u ckuehl@dev-vhost.ocf.berkeley.edu -p password
+  # $ /usr/sbin/testsaslauthd -s smtp -u ckuehl@dev-vhost.ocf.berkeley.edu -p password -f /var/spool/postfix/saslauthd/mux
   package { 'sasl2-bin':; }
 
   service { 'saslauthd':
