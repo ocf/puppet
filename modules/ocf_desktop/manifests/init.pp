@@ -16,6 +16,7 @@ class ocf_desktop ($staff = false) {
   include ocf_desktop::steam
   include ocf_desktop::suspend
   include ocf_desktop::tmpfs
+  include ocf_desktop::udev
   include ocf_desktop::wireshark
 
   class { 'ocf_desktop::xsession': staff => $staff }
