@@ -159,7 +159,6 @@ Instead of overwriting an entire config file just to change one value, try to
 
 ## Future improvements
 
-* Finish renaming and cleanup of OCF's modules
 * Trigger puppet runs automatically after production is updated
 * Better monitoring of puppet runs (e.g. to see when a server has not updated
   recently, which is a common problem on desktops)
