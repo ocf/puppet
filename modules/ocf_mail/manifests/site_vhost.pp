@@ -25,13 +25,16 @@ class ocf_mail::site_vhost {
   # $ /usr/sbin/testsaslauthd -s smtp -u ckuehl@dev-vhost.ocf.berkeley.edu -p password -f /var/spool/postfix/saslauthd/mux
   package { 'sasl2-bin':; }
 
-  service { 'saslauthd':
-    require => Package['sasl2-bin'],
+  # postfix needs the sasl group because /var/spool/postfix/saslauthd is 0710
+  # and owned by root:sasl.
+  user { 'postfix':
+    groups  => ['postfix', 'sasl'],
+    require => Package['postfix'],
+    notify  => Service['postfix'],
   }
 
-  file { '/var/spool/postfix/saslauthd':
-    ensure  => directory,
-    require => Package['postfix'],
+  service { 'saslauthd':
+    require => Package['sasl2-bin'],
   }
 
   augeas { '/etc/default/saslauthd':
