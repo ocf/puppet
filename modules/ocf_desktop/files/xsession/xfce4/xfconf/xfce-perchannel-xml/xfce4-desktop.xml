@@ -15,7 +15,7 @@
         <property name="image-style" type="int" value="0"/>
       </property>
       <property name="monitor1" type="empty">
-		<property name="image-path" type="string" value="/opt/share/xsession/background"/>
+        <property name="image-path" type="string" value="/opt/share/wallpaper"/>
         <property name="last-image" type="string" value="/usr/share/xfce4/backdrops/xfce-stripes.png"/>
         <property name="last-single-image" type="string" value="/usr/share/xfce4/backdrops/xfce-stripes.png"/>
       </property>
