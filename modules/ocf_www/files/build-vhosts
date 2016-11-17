@@ -13,9 +13,9 @@ from collections import namedtuple
 from pathlib import Path
 
 import jinja2
-from ocflib.account.utils import get_vhosts
 from ocflib.account.utils import web_dir
 from ocflib.misc.mail import email_for_user
+from ocflib.vhost.web import get_vhosts
 
 jinja_env = jinja2.Environment(
     loader=jinja2.FileSystemLoader((

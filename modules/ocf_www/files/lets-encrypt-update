@@ -40,7 +40,7 @@ from pathlib import Path
 
 import dateutil.parser
 import dns.resolver
-from ocflib.account.utils import get_vhosts
+from ocflib.vhost.web import get_vhosts
 
 
 RENEW_WHEN_TIME_REMAINING = timedelta(days=45)
