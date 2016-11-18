@@ -45,12 +45,6 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
   }
 
   # Service virtual host definitions
-  ocf_mesos::master::load_balancer::http_vhost { 'fluffy':
-    server_name  => 'fluffy.ocf.berkeley.edu',
-    service_port => 10000,
-    ssl          => false,
-  }
-
   ocf_mesos::master::load_balancer::http_vhost { 'rt':
     server_name    => 'rt.ocf.berkeley.edu',
     server_aliases => ['rt'],
@@ -74,5 +68,13 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     ssl            => true,
     ssl_cert       => '/opt/share/docker/secrets/templates/templates.ocf.berkeley.edu.crt',
     ssl_key        => '/opt/share/docker/secrets/templates/templates.ocf.berkeley.edu.key',
+  }
+
+  ocf_mesos::master::load_balancer::http_vhost { 'thelounge':
+    server_name    => 'thelounge.ocf.berkeley.edu',
+    service_port   => 10008,
+    ssl            => true,
+    ssl_cert       => '/opt/share/docker/secrets/thelounge/thelounge.ocf.berkeley.edu.crt',
+    ssl_key        => '/opt/share/docker/secrets/thelounge/thelounge.ocf.berkeley.edu.key',
   }
 }
