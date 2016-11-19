@@ -1,7 +1,13 @@
 class ocf_irc::nodejs::webirc {
-  package {
-    'thelounge':
-      require => [Package['nodejs'], Apt::Key['nodejs']];
+  # TODO: Remove this once the package is removed
+  package { 'thelounge':
+    ensure => 'purged',
+  }
+
+  file { '/etc/thelounge':
+    ensure => 'absent',
+    force  => true,
+    purge  => true,
   }
 
   $webirc_fqdn = $::hostname ? {
@@ -9,33 +15,11 @@ class ocf_irc::nodejs::webirc {
     default => 'irc.ocf.berkeley.edu',
   }
 
-  file {
-    '/etc/thelounge':
-      ensure => directory;
-
-    '/etc/thelounge/config.js':
-      source  => 'puppet:///modules/ocf_irc/thelounge-conf.js',
-      require => File['/etc/thelounge'],
-      notify  => Service['thelounge'];
-  }
-
-  ocf::systemd::service { 'thelounge':
-    source  => 'puppet:///modules/ocf_irc/thelounge.service',
-    require => [
-      Package['thelounge'],
-      File['/etc/thelounge/config.js'],
-    ],
-  }
-
   # Nginx is used to proxy and to supply a HTTP -> HTTPS redirect
   class { 'nginx':
     manage_repo => false,
     confd_purge => true,
     vhost_purge => true,
-  }
-
-  nginx::resource::upstream { 'thelounge':
-    members => ['localhost:9000'];
   }
 
   $ssl_options = {
@@ -51,8 +35,12 @@ class ocf_irc::nodejs::webirc {
 
   nginx::resource::vhost {
     $webirc_fqdn:
-      server_name => [$webirc_fqdn],
-      proxy       => 'http://thelounge',
+      server_name      => [$webirc_fqdn],
+      proxy            => 'https://thelounge.ocf.berkeley.edu',
+      proxy_set_header => [
+        'X-Forwarded-For $remote_addr',
+        'Host thelounge.ocf.berkeley.edu',
+      ],
 
       * => $ssl_options,
 

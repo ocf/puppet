@@ -64,6 +64,7 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
 
   ocf_mesos::master::load_balancer::http_vhost { 'templates':
     server_name    => 'templates.ocf.berkeley.edu',
+    server_aliases => ['templates'],
     service_port   => 10007,
     ssl            => true,
     ssl_cert       => '/opt/share/docker/secrets/templates/templates.ocf.berkeley.edu.crt',
@@ -72,6 +73,7 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
 
   ocf_mesos::master::load_balancer::http_vhost { 'thelounge':
     server_name    => 'thelounge.ocf.berkeley.edu',
+    server_aliases => ['thelounge'],
     service_port   => 10008,
     ssl            => true,
     ssl_cert       => '/opt/share/docker/secrets/thelounge/thelounge.ocf.berkeley.edu.crt',
