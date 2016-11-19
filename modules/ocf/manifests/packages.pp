@@ -70,6 +70,7 @@ class ocf::packages {
     'iftop',
     'iotop',
     'iperf',
+    'jq',
     'lsof',
     'moreutils',
     'mtr',
