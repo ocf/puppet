@@ -16,9 +16,4 @@ classes:
     - ocf::systemd
     - ocf::utils
 
-ocf::apt::stage: first
-ocf::groups::stage: first
-ocf::puppet::stage: first
-ocf::rootpw::stage: first
-
 packages: {}

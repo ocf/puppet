@@ -1,4 +1,4 @@
-class ocf::puppet {
+class ocf::puppet($stage = 'first') {
   package { ['facter', 'puppet']: }
 
   # configure puppet agent

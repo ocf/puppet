@@ -1,4 +1,4 @@
-class ocf::groups {
+class ocf::groups($stage = 'first') {
   # fix creation of conflicting system groups
   file { 'groups.sh':
     path    => '/opt/share/puppet/groups.sh',
