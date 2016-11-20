@@ -1,0 +1,3 @@
+ocf_desktop::staff: true
+ocf::auth::glogin: [['ocfstaff', 'ALL']]
+ocf::auth::gsudo: ['ocfstaff']

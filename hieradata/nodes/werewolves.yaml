@@ -1,0 +1,2 @@
+ocf::auth::glogin: [[ocfdev, ALL]]
+ocf::motd::nfs_motd: true

@@ -1,0 +1,3 @@
+ocf::auth::ulogin: [['%{owner}', 'ALL']]
+ocf::auth::usudo: ['%{owner}']
+ocf::auth::nopasswd: true

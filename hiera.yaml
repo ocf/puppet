@@ -4,6 +4,8 @@
 
 :hierarchy:
     - "nodes/%{::hostname}"
+    - "type/%{::type}"
+    - "is_virtual/%{::is_virtual}"
     - "os/%{::lsbdistcodename}"
     - common
 

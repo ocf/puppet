@@ -1,1 +1,24 @@
-classes: []
+classes:
+    - ocf::apt
+    - ocf::auth
+    - ocf::autologout
+    - ocf::groups
+    - ocf::kerberos
+    - ocf::ldap
+    - ocf::locale
+    - ocf::motd
+    - ocf::munin::node
+    - ocf::networking
+    - ocf::packages
+    - ocf::puppet
+    - ocf::rootpw
+    - ocf::staff_users
+    - ocf::systemd
+    - ocf::utils
+
+ocf::apt::stage: first
+ocf::groups::stage: first
+ocf::puppet::stage: first
+ocf::rootpw::stage: first
+
+packages: {}

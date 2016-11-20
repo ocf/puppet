@@ -1,3 +1,13 @@
+ocf::networking::bridge: true
+
+ocf::packages::ntp::master: true
+ocf::packages::ntp::peers:
+    - hal.ocf.berkeley.edu
+    - pandemic.ocf.berkeley.edu
+
 ocf_mesos::slave::attributes:
     nfs:
         value: 'true'
+
+# Don't manage staff home directories on the NFS host.
+ocf::staff_users::noop: true

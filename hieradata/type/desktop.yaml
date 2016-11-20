@@ -1,0 +1,5 @@
+classes:
+    - ocf_desktop
+
+# Don't manage staff home directories on desktops.
+ocf::staff_users::noop: true

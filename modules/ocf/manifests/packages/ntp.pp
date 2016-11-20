@@ -1,9 +1,9 @@
-class ocf::packages::ntp {
+class ocf::packages::ntp($master = false, $peers = []) {
   # install ntp
   package { 'ntp':; }
 
   # provide ntp config
-  if str2bool($::is_virtual) {
+  if $master {
     file { '/etc/ntp.conf':
       source  => 'puppet:///modules/ocf/ntp.conf',
       require => Package['ntp'],
