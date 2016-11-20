@@ -21,10 +21,4 @@ define ocf::systemd::service(
       File["/etc/systemd/system/${title}.service"],
     ],
   }
-
-  ensure_resource('exec', 'systemd-reload', {
-    'command'     => 'systemctl daemon-reload',
-    'refreshonly' => true,
-    'require'     => Package['systemd-sysv'],
-  })
 }
