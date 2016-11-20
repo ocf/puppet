@@ -16,7 +16,7 @@ server 2.pool.ntp.org iburst
 server 3.pool.ntp.org iburst
 
 <% @peers.each do |peer| %>
-peer <%= @peer %> iburst
+peer <%= peer %> iburst
 <% end -%>
 
 # By default, exchange time with everybody, but don't allow configuration.

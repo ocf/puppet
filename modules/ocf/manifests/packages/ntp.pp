@@ -5,12 +5,12 @@ class ocf::packages::ntp($master = false, $peers = []) {
   # provide ntp config
   if $master {
     file { '/etc/ntp.conf':
-      source  => 'puppet:///modules/ocf/ntp.conf',
+      content => template('ocf/ntp.conf.erb'),
       require => Package['ntp'],
     }
   } else {
     file { '/etc/ntp.conf':
-      content => template('ocf/ntp.conf.erb'),
+      source  => 'puppet:///modules/ocf/ntp.conf',
       require => Package['ntp'],
     }
   }
