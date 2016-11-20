@@ -1,0 +1,14 @@
+# TODO: currently editing this file requires a *manual* restart of the
+# puppetmaster (apache2 on lightning)
+:backends: yaml
+
+:hierarchy:
+    - "nodes/%{::hostname}"
+    - "os/%{::lsbdistcodename}"
+    - common
+
+:yaml:
+    :datadir: /opt/puppet/env/%{environment}/hieradata
+
+:puppet:
+    :datasource: data
