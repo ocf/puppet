@@ -1,3 +1,5 @@
+hiera_include(classes)
+
 node default {
   class { 'ocf::apt': stage => first }
   class { 'ocf::groups': stage => first }

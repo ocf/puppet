@@ -1,4 +1,4 @@
-class ocf_mesos::slave {
+class ocf_mesos::slave($attributes = {}) {
   include ocf::packages::docker
   include ocf_mesos
   include ocf_mesos::package
@@ -78,4 +78,34 @@ class ocf_mesos::slave {
       mode      => '0400',
       show_diff => false;
   }
+
+  concat { '/etc/mesos-slave/attributes':
+    ensure         => present,
+    ensure_newline => true,
+    notify         => Exec['reset-agent'],
+  }
+
+  # Provide a custom start script which enables wiping the agent settings.
+  file { '/usr/local/bin/ocf-mesos-slave':
+    source => 'puppet:///modules/ocf_mesos/slave/ocf-mesos-slave',
+    mode   => '0755',
+  }
+
+  ocf::systemd::override { 'mesos-slave-change-start':
+    service => 'mesos-slave',
+    content => "[Service]\nExecStart=\nExecStart=/usr/local/bin/ocf-mesos-slave\n",
+    require => File['/usr/local/bin/ocf-mesos-slave'],
+    before  => Service['mesos-slave'],
+  }
+
+  # Some operations change the agent's "info" and require the entire agent to
+  # be reset. These notify this exec.
+  exec { 'reset-agent':
+    command     => 'touch /var/lib/mesos-slave/reset-needed',
+    refreshonly => true,
+    notify      => Service['mesos-slave'],
+  }
+
+  # Custom attributes
+  create_resources(ocf_mesos::slave::attribute, $attributes)
 }

@@ -28,4 +28,8 @@ class ocf_mesos::slave::secrets {
       purge   => true,
       force   => true;
   }
+
+  ocf_mesos::slave::attribute { 'secrets':
+    value => 'true',  # lint:ignore:quoted_booleans
+  }
 }
