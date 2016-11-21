@@ -1,3 +1,2 @@
 classes:
     - ocf_mail
-    - ocf_mail::site_ocf
