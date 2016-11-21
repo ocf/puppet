@@ -1,0 +1,4 @@
+classes:
+    - ocf_dhcp
+    - ocf_ns
+    - ocf_rancid

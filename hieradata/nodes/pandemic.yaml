@@ -1,3 +1,7 @@
+classes:
+    - ocf_kvm
+    - ocf_mesos::slave
+
 ocf::networking::bridge: true
 
 ocf::packages::ntp::master: true

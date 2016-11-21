@@ -1,6 +1,7 @@
 class ocf::motd {
   $motd_from_nfs = str2bool($::ocf_nfs) and !hiera('staff_only')
   $owner = hiera('owner', undef)
+  $classes_from_hiera = hiera('classes')
 
   if $motd_from_nfs {
     file { '/etc/motd':

@@ -27,7 +27,7 @@ end
 <% full_type = (@is_virtual ? 'virtual ' : 'physical ') + @type -%>
 <%= bold("Hi, I am #{red(@hostname)}, a #{red(full_type)} at #{red(@ipHostNumber)}.") %>
 <%= motd_line(@description) -%>
-<%= info_line('Puppet classes',     @puppetClass) -%>
+<%= info_line('Puppet classes',     @classes_from_hiera) -%>
 <%= info_line('Puppet environment', @environment) if @environment.to_s != 'production' -%>
 <%= info_line('Owner',              @owner) -%>
 <%= info_line('DNS names',          ([*@dnsA] || []) + ([*@dnsCname] || [])) -%>
