@@ -5,7 +5,7 @@
 # there is no other option.
 #
 # To regenerate the root password, see /opt/puppet/scripts/gen-rootpw
-class ocf::rootpw {
+class ocf::rootpw($stage = 'first') {
   user { 'root':
     password => file('/opt/puppet/shares/private/rootpw')
   }

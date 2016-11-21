@@ -1,0 +1,3 @@
+ocf::auth::glogin: [[ocfdev, ALL]]
+
+staff_only: false

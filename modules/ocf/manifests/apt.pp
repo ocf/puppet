@@ -1,4 +1,4 @@
-class ocf::apt {
+class ocf::apt($stage = 'first') {
   package { ['aptitude', 'imvirt']:; }
 
   class { '::apt':

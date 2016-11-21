@@ -6,10 +6,7 @@
 # exploiting kernel bugs, etc.).
 #
 # Containers are helpful for testing things. For example:
-#   docker run -i debian:jessie bash
-#
-# It would be cool to build an image with our base Puppet config to get even
-# more use out of them, but that requires quite a bit of work first.
+#   docker run -ti debian:jessie bash
 #
 class ocf::packages::docker($admin_group = 'docker') {
   class { 'ocf::packages::docker::apt':

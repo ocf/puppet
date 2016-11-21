@@ -10,12 +10,9 @@ class ocf::packages {
   # special snowflake packages that require some config
   include ocf::packages::git
   include ocf::packages::grub
-  include ocf::packages::memtest
-  include ocf::packages::microcode
   include ocf::packages::ntp
   include ocf::packages::rsync
   include ocf::packages::shell
-  include ocf::packages::smart
   include ocf::packages::ssh
 
   # packages to remove
@@ -47,12 +44,6 @@ class ocf::packages {
       ensure => absent;
   }
 
-  # facter currently outputs strings not booleans
-  # see http://projects.puppetlabs.com/issues/3704
-  unless str2bool($::is_virtual) {
-    package { 'cryptsetup':; }
-  }
-
   # common packages for all ocf machines
   package {
     [
@@ -60,6 +51,7 @@ class ocf::packages {
     'beep',
     'bsdmainutils',
     'cpufrequtils',
+    'cryptsetup',
     'curl',
     'debian-security-support',
     'dtach',

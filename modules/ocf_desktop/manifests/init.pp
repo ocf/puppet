@@ -1,4 +1,4 @@
-class ocf_desktop ($staff = false) {
+class ocf_desktop {
   include ocf::acct
   include ocf::packages::chrome
   include ocf::packages::cups
@@ -18,6 +18,5 @@ class ocf_desktop ($staff = false) {
   include ocf_desktop::tmpfs
   include ocf_desktop::udev
   include ocf_desktop::wireshark
-
-  class { 'ocf_desktop::xsession': staff => $staff }
+  include ocf_desktop::xsession
 }

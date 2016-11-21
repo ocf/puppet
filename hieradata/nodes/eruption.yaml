@@ -1,0 +1,4 @@
+ocf::auth::glogin: [['ocfstaff', 'ALL']]
+ocf::auth::gsudo: ['ocfstaff']
+
+staff_only: true

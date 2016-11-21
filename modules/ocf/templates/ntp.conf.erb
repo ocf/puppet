@@ -15,16 +15,8 @@ server 1.pool.ntp.org iburst
 server 2.pool.ntp.org iburst
 server 3.pool.ntp.org iburst
 
-# TODO: this is terrible
-<% if @hostname == 'pandemic' -%>
-peer hal.ocf.berkeley.edu iburst
-peer jaws.ocf.berkeley.edu iburst
-<% elsif @hostname == 'jaws' -%>
-peer pandemic.ocf.berkeley.edu iburst
-peer hal.ocf.berkeley.edu iburst
-<% elsif @hostname == 'hal' -%>
-peer pandemic.ocf.berkeley.edu iburst
-peer jaws.ocf.berkeley.edu iburst
+<% @peers.each do |peer| %>
+peer <%= peer %> iburst
 <% end -%>
 
 # By default, exchange time with everybody, but don't allow configuration.
