@@ -1,5 +1,7 @@
-class ocf::motd($nfs_motd = false) {
-  if $nfs_motd {
+class ocf::motd {
+  $motd_from_nfs = str2bool($::ocf_nfs) and !hiera('staff_only')
+
+  if $motd_from_nfs {
     file { '/etc/motd':
       ensure => link,
       target => '/home/s/st/staff/motd/motd',

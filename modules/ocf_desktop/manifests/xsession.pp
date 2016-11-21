@@ -1,4 +1,6 @@
-class ocf_desktop::xsession ($staff = false) {
+class ocf_desktop::xsession {
+  $staff_only = hiera('staff_only')
+
   require ocf_desktop::packages
   include ocf_desktop::xfce
 
@@ -45,7 +47,7 @@ class ocf_desktop::xsession ($staff = false) {
   }
 
   # wallpaper symlink
-  $wallpaper = $staff ? {
+  $wallpaper = $staff_only ? {
     true  => 'background-staff',
     false => 'background'
   }

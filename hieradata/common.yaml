@@ -17,3 +17,5 @@ classes:
     - ocf::utils
 
 packages: {}
+
+staff_only: true
