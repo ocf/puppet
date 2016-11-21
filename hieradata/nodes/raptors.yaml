@@ -1,6 +1,4 @@
 classes:
     - ocf_ssl
 
-ocf::networking::bridge: true
-
 owner: ckuehl
