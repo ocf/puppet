@@ -1,11 +1,11 @@
-class ocf::packages::postfix($manage = true) {
+class ocf::packages::postfix {
   # remove exim
   package { ['exim4', 'exim4-base', 'exim4-config', 'exim4-daemon-light']:
     ensure => purged,
     before => Package['postfix'],
   }
 
-  if $manage {
+  if !tagged('ocf_mail') {
     package {
       ['postfix', 'bsd-mailx']:;
     }
