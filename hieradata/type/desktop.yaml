@@ -1,6 +1,9 @@
 classes:
     - ocf_desktop
 
+ocf::auth::glogin: [[ocf, LOCAL]]
+ocf::auth::gsudo: [ocfstaff]
+
 # Don't manage staff home directories on desktops.
 ocf::staff_users::noop: true
 
