@@ -15,9 +15,6 @@ class ocf::packages {
   include ocf::packages::shell
   include ocf::packages::ssh
 
-  # any packages from hiera
-  create_resources(package, hiera('packages'))
-
   # packages to remove
   package {
     [

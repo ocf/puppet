@@ -1,8 +1,6 @@
 classes:
     - ocf::fstrim
     - ocf::mdraid
+    - ocf::packages::memtest
     - ocf::packages::microcode
     - ocf::packages::smart
-
-packages:
-    memtest86+: {}

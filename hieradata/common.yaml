@@ -16,6 +16,4 @@ classes:
     - ocf::systemd
     - ocf::utils
 
-packages: {}
-
 staff_only: true
