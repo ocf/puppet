@@ -3,6 +3,9 @@
 # backup existing files to puppetmaster
 filebucket { 'main':; }
 
+# create first stage to run before everything else
+stage { 'first': before => Stage['main'] }
+
 ### global defaults ###
 
 # default path for executions
