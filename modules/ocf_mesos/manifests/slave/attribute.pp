@@ -7,8 +7,10 @@
 # requires the agent's entire config to be deleted.
 # http://www.flexthinker.com/2015/09/reconfiguring-mesos-agents-slaves-with-new-resources/
 define ocf_mesos::slave::attribute($value) {
-  concat::fragment { "mesos-slave attribute: ${title}":
-    content => "${title}:${value}",
-    target  => '/etc/mesos-slave/attributes',
+  if tagged('ocf_mesos::slave') {
+    concat::fragment { "mesos-slave attribute: ${title}":
+      content => "${title}:${value}",
+      target  => '/etc/mesos-slave/attributes',
+    }
   }
 }
