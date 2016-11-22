@@ -8,7 +8,6 @@
 + : apt-dater : lightning.ocf.berkeley.edu
 + : ocfbackups : hal.ocf.berkeley.edu
 + : ocfdeploy : reaper.ocf.berkeley.edu LOCAL
-+ : nessus : .security.berkeley.edu
 <% @ulogin.each do |user,from| -%>
 <% if not user.nil? and not from.nil? -%>
 + : <%= user %> : <%= from %>
