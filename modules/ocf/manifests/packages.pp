@@ -47,7 +47,6 @@ class ocf::packages {
   # common packages for all ocf machines
   package {
     [
-    'apt-dater-host',
     'beep',
     'bsdmainutils',
     'cpufrequtils',
@@ -99,6 +98,10 @@ class ocf::packages {
     'vim',
     'vim-nox',
     ]:;
+  }
+
+  ocf::repackage { 'apt-dater-host':
+    backport_on => jessie,
   }
 
   if $::lsbdistcodename == 'jessie' {

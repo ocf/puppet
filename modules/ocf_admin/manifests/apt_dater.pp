@@ -1,5 +1,7 @@
 class ocf_admin::apt_dater {
-  package { 'apt-dater': }
+  ocf::repackage { 'apt-dater':
+    backport_on => jessie,
+  }
 
   file { '/root/apt-dater.keytab':
     mode   => '0600',
