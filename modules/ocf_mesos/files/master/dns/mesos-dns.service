@@ -1,0 +1,12 @@
+[Unit]
+Description=Mesos DNS
+After=network.target
+Wants=network.target
+
+[Service]
+ExecStart=/usr/bin/mesos-dns -config /opt/share/mesos/master/mesos-dns.json
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target
