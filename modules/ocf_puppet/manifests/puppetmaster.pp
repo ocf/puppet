@@ -24,9 +24,11 @@ class ocf_puppet::puppetmaster {
     rack_base_uris => ['/'];
   }
 
+  $docker_private_hosts = union(keys(hiera('mesos_masters')), hiera('mesos_slaves'))
+
   file {
     '/etc/puppet/fileserver.conf':
-      source  => 'puppet:///modules/ocf_puppet/fileserver.conf';
+      content => template('ocf_puppet/fileserver.conf.erb');
 
     '/etc/puppet/puppet.conf':
       content => template('ocf_puppet/puppet.conf.erb');

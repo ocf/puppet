@@ -1,4 +1,9 @@
-class ocf_mesos::master::marathon($marathon_hostname, $http_password, $mesos_http_password) {
+class ocf_mesos::master::marathon(
+    $marathon_hostname,
+    $http_password,
+    $mesos_http_password,
+    $zookeeper_host,
+) {
   include ocf_mesos::package
 
   package { 'marathon':; }

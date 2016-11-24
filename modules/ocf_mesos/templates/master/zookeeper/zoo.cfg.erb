@@ -19,9 +19,9 @@ clientPort=2181
 # specify all zookeeper servers
 # The fist port is used by followers to connect to the leader
 # The second one is used for leader election
-server.1=mesos0:2888:3888
-server.2=mesos1:2888:3888
-server.3=mesos2:2888:3888
+<% @masters.each do |host, i| %>
+server.<%= i %>=<%= host %>:2888:3888
+<% end %>
 
 
 # To avoid seeks ZooKeeper allocates space in the transaction log file in

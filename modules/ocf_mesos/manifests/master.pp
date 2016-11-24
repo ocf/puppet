@@ -3,25 +3,28 @@ class ocf_mesos::master {
   include ocf_mesos::slave::secrets
 
   file { '/opt/share/mesos/master':
-    ensure => directory;
+    ensure => directory,
   }
 
-  $my_mesos_id = $::hostname ? {
-    whirlwind => 0,  # mesos0
-    pileup    => 1,  # mesos1
-    monsoon   => 2,  # mesos2
-  }
+  $mesos_masters = hiera('mesos_masters')
 
+  $my_mesos_id = $mesos_masters[$::hostname]
   $mesos_hostname = "mesos${my_mesos_id}"
   $marathon_hostname = "marathon${my_mesos_id}"
 
   $mesos_http_password = file('/opt/puppet/shares/private/mesos/mesos-master-password')
   $marathon_http_password = file('/opt/puppet/shares/private/mesos/marathon-http-password')
 
+  # TODO: can we not duplicate this between slave/master?
+  # looks like: mesos0:2181,mesos1:2181,mesos2:2181
+  $zookeeper_host = join(keys($mesos_masters).map |$m| { "${m}:2181" }, ',')
+
   class {
     'ocf_mesos::master::mesos':
       mesos_hostname      => $mesos_hostname,
-      mesos_http_password => $mesos_http_password;
+      mesos_http_password => $mesos_http_password,
+      masters             => $mesos_masters,
+      zookeeper_host      => $zookeeper_host;
 
     'ocf_mesos::master::load_balancer':
       marathon_http_password => $marathon_http_password;
@@ -29,11 +32,12 @@ class ocf_mesos::master {
     'ocf_mesos::master::marathon':
       marathon_hostname   => $marathon_hostname,
       http_password       => $marathon_http_password,
-      mesos_http_password => $mesos_http_password;
+      mesos_http_password => $mesos_http_password,
+      zookeeper_host      => $zookeeper_host;
 
     # Zookeeper needs IDs in the range [1, 255]
     'ocf_mesos::master::zookeeper':
-      zookeeper_id => $my_mesos_id + 1;
+      masters      => $mesos_masters;
 
     'ocf_mesos::master::webui':
       mesos_fqdn             => "${mesos_hostname}.ocf.berkeley.edu",

@@ -1,4 +1,4 @@
-class ocf_mesos::master::zookeeper($zookeeper_id) {
+class ocf_mesos::master::zookeeper($masters) {
   include ocf_mesos::package
 
   # We provide our own service file because the init script that the mesosphere
@@ -10,6 +10,9 @@ class ocf_mesos::master::zookeeper($zookeeper_id) {
     enable  => true,
   }
 
+  # zookeeper IDs must start at 1, not 0
+  $zookeeper_id = $masters[$::hostname] + 1
+
   file {
     default:
       require => Package['zookeeper'],
@@ -20,7 +23,7 @@ class ocf_mesos::master::zookeeper($zookeeper_id) {
     '/etc/zookeeper/conf_ocf/myid':
       content => "${zookeeper_id}\n";
     '/etc/zookeeper/conf_ocf/zoo.cfg':
-      source  => 'puppet:///modules/ocf_mesos/master/zookeeper/zoo.cfg';
+      content => template('ocf_mesos/master/zookeeper/zoo.cfg.erb');
     '/etc/zookeeper/conf_ocf/environment':
       source  => 'puppet:///modules/ocf_mesos/master/zookeeper/environment';
     '/etc/zookeeper/conf_ocf/configuration.xsl':

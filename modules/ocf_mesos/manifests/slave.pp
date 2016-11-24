@@ -4,11 +4,17 @@ class ocf_mesos::slave($attributes = {}) {
   include ocf_mesos::package
   include ocf_mesos::slave::secrets
 
+  $masters = hiera('mesos_masters')
+
+  # TODO: can we not duplicate this between slave/master?
+  # looks like: mesos0:2181,mesos1:2181,mesos2:2181
+  $zookeeper_host = join(keys($masters).map |$m| { "${m}:2181" }, ',')
+
   augeas { '/etc/default/mesos-slave':
     lens    => 'Shellvars.lns',
     incl    => '/etc/default/mesos-slave',
     changes =>  [
-      'set MASTER "zk://mesos0:2181,mesos1:2181,mesos2:2181/mesos"',
+      "set MASTER 'zk://${zookeeper_host}/mesos'",
     ],
     notify  => Service['mesos-slave'],
     require => Package['mesos'];

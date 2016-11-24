@@ -17,3 +17,18 @@ classes:
     - ocf::utils
 
 staff_only: true
+
+
+# Mesos/Marathon configuration
+#
+# The numerical values are the "mesos#" hostname, which is also used as the
+# Zookeeper ID (it requires numerical IDs).
+mesos_masters:
+    whirlwind: 0
+    pileup: 1
+    monsoon: 2
+
+mesos_slaves:
+    - jaws
+    - hal
+    - pandemic

@@ -10,9 +10,8 @@
 
 [private-docker]
   path /opt/puppet/shares/private/docker
-  allow jaws.ocf.berkeley.edu
-  allow pandemic.ocf.berkeley.edu
-  allow hal.ocf.berkeley.edu
-  allow monsoon.ocf.berkeley.edu
-  allow whirlwind.ocf.berkeley.edu
-  allow pileup.ocf.berkeley.edu
+  # TODO: this is deprecated
+  # https://docs.puppet.com/puppet/latest/reference/config_file_fileserver.html#deprecated-security-directives
+  <% @docker_private_hosts.each do |host| %>
+      allow <%= host %>.ocf.berkeley.edu
+  <% end %>
