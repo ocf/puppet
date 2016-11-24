@@ -35,6 +35,9 @@ class ocf_mesos::master::webui(
     'mesos':
       members => ['localhost:5050'];
 
+    'mesos-leader':
+      members => ['leader.mesos:5050'];
+
     'marathon':
       members => ['localhost:8080'];
   }
@@ -80,16 +83,28 @@ class ocf_mesos::master::webui(
 
       require => File['/etc/pam.d/mesos_master_webui'];
 
-    'mesos-https-redirect':
-      # we have to specify www_root even though we always redirect/proxy
-      www_root => '/var/www',
+    'mesos-https-leader':
+      server_name => ['mesos.ocf.berkeley.edu'],
+      proxy       => 'http://mesos-leader',
+      ssl         => true,
+      listen_port => 443,
 
-      server_name      => [$::hostname, $::fqdn, 'mesos', 'mesos.ocf.berkeley.edu'],
-      ssl              => true,
-      listen_port      => 443,
-      vhost_cfg_append => {
-        'return' => "301 https://${mesos_fqdn}/master/redirect",
-      };
+      # has a sensitive authorization header
+      mode        => '0600',
+
+      raw_append => [
+        'auth_pam "OCF Mesos Master";',
+        'auth_pam_service_name mesos_master_webui;',
+      ],
+
+      proxy_set_header => [
+        'X-Forwarded-Protocol $scheme',
+        'X-Forwarded-For $proxy_add_x_forwarded_for',
+        'Host $http_host',
+        "Authorization 'Basic ${mesos_auth_header}'",
+      ],
+
+      require => File['/etc/pam.d/mesos_master_webui'];
 
     'mesos-http-redirect':
       # we have to specify www_root even though we always redirect/proxy
@@ -97,12 +112,12 @@ class ocf_mesos::master::webui(
 
       server_name      => [$::hostname, $::fqdn, 'mesos', 'mesos.ocf.berkeley.edu'],
       vhost_cfg_append => {
-        'return' => "301 https://${mesos_fqdn}/master/redirect",
+        'return' => '302 https://mesos.ocf.berkeley.edu/master/redirect',
       };
 
     # marathon
     'marathon':
-      server_name => [$marathon_fqdn],
+      server_name => ['marathon.ocf.berkeley.edu', $marathon_fqdn],
       proxy       => 'http://marathon',
       ssl         => true,
       listen_port => 443,
@@ -124,24 +139,13 @@ class ocf_mesos::master::webui(
 
       require => File['/etc/pam.d/mesos_master_webui'];
 
-    'marathon-https-redirect':
-      # we have to specify www_root even though we always redirect/proxy
-      www_root => '/var/www',
-
-      server_name      => ['marathon', 'marathon.ocf.berkeley.edu'],
-      ssl              => true,
-      listen_port      => 443,
-      vhost_cfg_append => {
-        'return' => "301 https://${marathon_fqdn}\$request_uri",
-      };
-
     'marathon-http-redirect':
       # we have to specify www_root even though we always redirect/proxy
       www_root => '/var/www',
 
       server_name      => ['marathon', 'marathon.ocf.berkeley.edu'],
       vhost_cfg_append => {
-        'return' => "301 https://${marathon_fqdn}\$request_uri",
+        'return' => "301 https://marathon.ocf.berkeley.edu\$request_uri",
       };
   }
 }
