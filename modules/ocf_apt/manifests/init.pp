@@ -1,5 +1,5 @@
 class ocf_apt {
-  include ocf_ssl
+  include ocf_ssl::default_bundle
 
   user { 'ocfapt':
     comment => 'OCF Apt',

@@ -1,5 +1,5 @@
 class ocf_ldap {
-  include ocf_ssl
+  include ocf_ssl::default_bundle
 
   package { 'slapd':; }
   service { 'slapd':

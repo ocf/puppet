@@ -1,6 +1,6 @@
 # munin master config
 class ocf_stats::munin {
-  include ocf_ssl
+  include ocf_ssl::default_bundle
 
   package {
     ['munin', 'nmap']:;

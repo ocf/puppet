@@ -4,7 +4,7 @@ class ocf_mesos::master::webui(
     $marathon_fqdn,
     $marathon_http_password,
 ) {
-  require ocf_ssl
+  require ocf_ssl::default_bundle
 
   # We limit access to ocfroot only via PAM.
   file {
