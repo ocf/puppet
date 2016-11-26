@@ -13,6 +13,7 @@ class ocf_mesos::master {
   $marathon_hostname = "marathon${my_mesos_id}"
 
   $mesos_http_password = file('/opt/puppet/shares/private/mesos/mesos-master-password')
+  $mesos_agent_http_password = file('/opt/puppet/shares/private/mesos/mesos-slave-password')
   $marathon_http_password = file('/opt/puppet/shares/private/mesos/marathon-http-password')
 
   # TODO: can we not duplicate this between slave/master?
@@ -42,6 +43,7 @@ class ocf_mesos::master {
     'ocf_mesos::master::webui':
       mesos_fqdn             => "${mesos_hostname}.ocf.berkeley.edu",
       mesos_http_password    => $mesos_http_password,
+      mesos_agent_http_password    => $mesos_agent_http_password,
       marathon_fqdn          => "${marathon_hostname}.ocf.berkeley.edu",
       marathon_http_password => $marathon_http_password;
 

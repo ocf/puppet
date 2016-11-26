@@ -1,10 +1,13 @@
 class ocf_mesos::master::webui(
     $mesos_fqdn,
     $mesos_http_password,
+    $mesos_agent_http_password,
     $marathon_fqdn,
     $marathon_http_password,
 ) {
   require ocf_ssl::default_bundle
+
+  ocf_ssl::bundle { 'wildcard.agent.mesos.ocf.berkeley.edu':; }
 
   # We limit access to ocfroot only via PAM.
   file {
@@ -22,6 +25,10 @@ class ocf_mesos::master::webui(
       ];
   }
 
+  ocf::repackage { 'nginx-extras':
+    backport_on => jessie,
+  }
+
   class { 'nginx':
     # We need the PAM authentication module.
     package_name => 'nginx-extras',
@@ -29,6 +36,8 @@ class ocf_mesos::master::webui(
     manage_repo  => false,
     confd_purge  => true,
     vhost_purge  => true,
+
+    require => Ocf::Repackage['nginx-extras'],
   }
 
   nginx::resource::upstream {
@@ -43,6 +52,7 @@ class ocf_mesos::master::webui(
   }
 
   $mesos_auth_header = base64('encode', "ocf:${mesos_http_password}", 'strict')
+  $mesos_agent_auth_header = base64('encode', "ocf:${mesos_agent_http_password}", 'strict')
   $marathon_auth_header = base64('encode', "marathon:${marathon_http_password}", 'strict')
 
   nginx::resource::vhost {
@@ -97,6 +107,19 @@ class ocf_mesos::master::webui(
         'auth_pam_service_name mesos_master_webui;',
       ],
 
+      location_cfg_append => {
+        # Replace the agent hostnames with our own proxied versions.
+        # This is what enables talking to the agents, and thus retrieving stdout/stderr from the UI.
+        'proxy_set_header' => 'Accept-Encoding ""',  # prevent gzip
+        'sub_filter_once' => 'off',
+        'sub_filter' => [
+          '\':5051","hostname":"jaws"\' \':443","hostname":"jaws.agent.mesos.ocf.berkeley.edu"\'',
+          '\':5051","hostname":"pandemic"\' \':443","hostname":"pandemic.agent.mesos.ocf.berkeley.edu"\'',
+          '\':5051","hostname":"hal"\' \':443","hostname":"hal.agent.mesos.ocf.berkeley.edu"\'',
+        ],
+        'sub_filter_types' => 'text/javascript',
+      },
+
       proxy_set_header => [
         'X-Forwarded-Protocol $scheme',
         'X-Forwarded-For $proxy_add_x_forwarded_for',
@@ -112,7 +135,7 @@ class ocf_mesos::master::webui(
 
       server_name      => [$::hostname, $::fqdn, 'mesos', 'mesos.ocf.berkeley.edu'],
       vhost_cfg_append => {
-        'return' => '302 https://mesos.ocf.berkeley.edu/master/redirect',
+        'return' => '301 https://mesos.ocf.berkeley.edu\$request_uri',
       };
 
     # marathon
@@ -145,7 +168,56 @@ class ocf_mesos::master::webui(
 
       server_name      => ['marathon', 'marathon.ocf.berkeley.edu'],
       vhost_cfg_append => {
-        'return' => "301 https://marathon.ocf.berkeley.edu\$request_uri",
+        'return' => '301 https://marathon.ocf.berkeley.edu\$request_uri',
       };
+  }
+
+  # Mesos agent proxies
+  hiera('mesos_slaves').each |String $slave| {
+    $host = "${slave}.agent.mesos.ocf.berkeley.edu"
+
+    nginx::resource::upstream { "${slave}-agent":
+      members => ["${slave}:5051"],
+    }
+
+    nginx::resource::vhost {
+      "${slave}-agent":
+        server_name => [$host],
+        proxy       => "http://${slave}-agent",
+        ssl         => true,
+        ssl_cert    => '/etc/ssl/private/wildcard.agent.mesos.ocf.berkeley.edu.bundle',
+        ssl_key     => '/etc/ssl/private/wildcard.agent.mesos.ocf.berkeley.edu.key',
+        ssl_dhparam => '/etc/ssl/dhparam.pem',
+        listen_port => 443,
+
+        # has a sensitive authorization header
+        mode        => '0600',
+
+        raw_append => [
+          'auth_pam "OCF Mesos Agent";',
+          'auth_pam_service_name mesos_master_webui;',
+        ],
+
+        proxy_set_header => [
+          'X-Forwarded-Protocol $scheme',
+          'X-Forwarded-For $proxy_add_x_forwarded_for',
+          'Host $http_host',
+          "Authorization 'Basic ${mesos_agent_auth_header}'",
+        ],
+
+        require => [
+          File['/etc/pam.d/mesos_master_webui'],
+          Ocf_ssl::Bundle['wildcard.agent.mesos.ocf.berkeley.edu'],
+        ];
+
+      "${slave}-agent-http-redirect":
+        # we have to specify www_root even though we always redirect/proxy
+        www_root => '/var/www',
+
+        server_name      => [$host],
+        vhost_cfg_append => {
+          'return' => "301 https://${host}\$request_uri",
+        };
+    }
   }
 }
