@@ -5,7 +5,14 @@ Wants=network.target
 
 [Service]
 EnvironmentFile=/opt/share/mesos/master/marathon-environ
-ExecStart=/usr/bin/marathon --master zk://<%= @zookeeper_host %>/mesos --zk zk://<%= @zookeeper_host %>/marathon --hostname <%= @marathon_hostname %> --mesos_authentication --mesos_authentication_principal ocf --mesos_authentication_secret_file /opt/share/mesos/master/marathon-secret --mesos_leader_ui_url https://mesos.ocf.berkeley.edu/
+ExecStart=/usr/bin/marathon \
+    --master zk://<%= @zookeeper_host %>/mesos \
+    --zk zk://<%= @zookeeper_host %>/marathon \
+    --hostname <%= @marathon_hostname %> \
+    --mesos_authentication \
+    --mesos_authentication_principal ocf \
+    --mesos_authentication_secret_file /opt/share/mesos/master/marathon-secret \
+    --mesos_leader_ui_url https://mesos.ocf.berkeley.edu/
 Restart=always
 RestartSec=15
 
