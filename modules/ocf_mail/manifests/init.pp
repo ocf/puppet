@@ -1,5 +1,5 @@
 class ocf_mail {
-  include ocf_ssl
+  include ocf_ssl::default_bundle
 
   include ocf_mail::spam
   include ocf_mail::site_ocf

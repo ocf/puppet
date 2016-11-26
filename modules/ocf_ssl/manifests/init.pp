@@ -1,16 +1,13 @@
-# Provides the key, certificate, and InCommon CA certificate bundle at
-# /etc/ssl/private/$cert_name.{key,crt,bundle}
-#
-# Provides the InCommon intermediate chain at
-# /etc/ssl/certs/incommon-intermediate.crt
-class ocf_ssl($cert_name = $::fqdn) {
+# TODO: rename this to ocf::ssl or something
+
+# Provide the common certificates needed at the OCF.
+# To build and deploy private keys, use the `ocf_ssl::bundle` type.
+# (Or include `ocf_ssl::default_bundle` if you just want the default FQDN-based one.)
+class ocf_ssl {
   package { 'ssl-cert':; }
 
   file {
     default:
-      owner   => root,
-      group   => ssl-cert,
-
       # the ssl-cert package creates the ssl-cert group
       require => Package['ssl-cert'];
 
@@ -27,37 +24,5 @@ class ocf_ssl($cert_name = $::fqdn) {
     '/etc/ssl/dhparam.pem':
       source  => 'puppet:///modules/ocf_ssl/dhparam.pem',
       mode    => '0444';
-
-
-    # private ssl
-    "/etc/ssl/private/${cert_name}.key":
-      source  => "puppet:///private/ssl/${cert_name}.key",
-      mode    => '0640';
-    "/etc/ssl/private/${cert_name}.crt":
-      source  => "puppet:///private/ssl/${cert_name}.crt",
-      mode    => '0644';
-  }
-
-  # generate ssl bundle
-  $bundle = "/etc/ssl/private/${cert_name}.bundle"
-
-  concat { $bundle:
-    owner => root,
-    group => ssl-cert,
-    mode  => '0644',
-
-    ensure_newline => true;
-  }
-
-  concat::fragment {
-    "${cert_name}-cert":
-      target => $bundle,
-      source => "puppet:///private/ssl/${cert_name}.crt",
-      order  => '0';
-
-    "${cert_name}-intermediate":
-      target => $bundle,
-      source => 'puppet:///modules/ocf_ssl/incommon-intermediate.crt',
-      order  => '1';
   }
 }

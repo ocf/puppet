@@ -16,7 +16,7 @@ class ocf_www {
   include ocf::limits
   include ocf::packages::mysql
   include ocf::tmpfs
-  include ocf_ssl
+  include ocf_ssl::default_bundle
 
   class { 'ocf::nfs':
     cron   => false,

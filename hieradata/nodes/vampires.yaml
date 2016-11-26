@@ -1,4 +1,4 @@
 classes:
-    - ocf_ssl
+    - ocf_ssl::default_bundle
 
 owner: slobo

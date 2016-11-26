@@ -13,7 +13,7 @@
 # ...and not have to do the manual concatenation.
 
 class ocf_apphost::ssl {
-  include ocf_ssl
+  include ocf_ssl::default_bundle
 
   file {
     '/etc/ssl/apphost':
