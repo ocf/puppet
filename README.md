@@ -2,7 +2,7 @@ puppet
 ======
 [![Build Status](https://jenkins.ocf.berkeley.edu/buildStatus/icon?job=puppet-test)](https://jenkins.ocf.berkeley.edu/view/puppet-deploy/)
 
-![ocf servers](http://i.fluffy.cc/RnF1JrLNrzczC5s291tsdlLrbl1fd12S.png)
+![ocf servers](https://i.fluffy.cc/RnF1JrLNrzczC5s291tsdlLrbl1fd12S.png)
 
 This repository contains the [Puppet][puppet] modules used to maintain and
 configure the servers and desktops used by the [Open Computing Facility][ocf]
@@ -138,7 +138,7 @@ the `puppet module` tool), and is easier to manage than using git submodules:
   inflicted on every server
 * Staff members can test third-party modules without needing root on the
   puppetmaster
-* Modules can be installed from [Puppet Forge](puppet-forge) without needing to
+* Modules can be installed from [Puppet Forge][puppet-forge] without needing to
   have a git repository
 
 ### Styling
