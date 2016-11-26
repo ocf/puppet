@@ -5,6 +5,8 @@ Wants=network.target
 
 [Service]
 EnvironmentFile=/opt/share/mesos/master/marathon-environ
+# mesos_leader_ui_url to allow viewing stdout/stderr (rt#5645)
+# reconciliation_interval to speed up recovery during restarts (rt#5651)
 ExecStart=/usr/bin/marathon \
     --master zk://<%= @zookeeper_host %>/mesos \
     --zk zk://<%= @zookeeper_host %>/marathon \
@@ -12,7 +14,8 @@ ExecStart=/usr/bin/marathon \
     --mesos_authentication \
     --mesos_authentication_principal ocf \
     --mesos_authentication_secret_file /opt/share/mesos/master/marathon-secret \
-    --mesos_leader_ui_url https://mesos.ocf.berkeley.edu/
+    --mesos_leader_ui_url https://mesos.ocf.berkeley.edu/ \
+    --reconciliation_interval 30000
 Restart=always
 RestartSec=15
 
