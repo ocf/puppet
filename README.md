@@ -1,6 +1,6 @@
 puppet
 ======
-[![Build Status](https://jenkins.ocf.berkeley.edu/buildStatus/icon?job=puppet-test)](https://jenkins.ocf.berkeley.edu/view/puppet-deploy/)
+[![Build Status](https://jenkins.ocf.berkeley.edu/buildStatus/icon?job=puppet/master)](https://jenkins.ocf.berkeley.edu/job/puppet/)
 
 ![ocf servers](https://i.fluffy.cc/RnF1JrLNrzczC5s291tsdlLrbl1fd12S.png)
 
