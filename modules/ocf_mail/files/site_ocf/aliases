@@ -68,6 +68,10 @@ security: "|/usr/bin/rt-mailgate --queue 'security' --action correspond --url ht
 security-comment: "|/usr/bin/rt-mailgate --queue 'security' --action comment --url https://rt.ocf.berkeley.edu"
 owner-security: wheel
 
+techtalks: "|/usr/bin/rt-mailgate --queue 'techtalks' --action correspond --url https://rt.ocf.berkeley.edu"
+techtalks-comment: "|/usr/bin/rt-mailgate --queue 'techtalks' --action comment --url https://rt.ocf.berkeley.edu"
+owner-techtalks: wheel
+
 todo: "|/usr/bin/rt-mailgate --queue 'todo' --action correspond --url https://rt.ocf.berkeley.edu"
 todo-comment: "|/usr/bin/rt-mailgate --queue 'todo' --action comment --url https://rt.ocf.berkeley.edu"
 owner-todo: wheel
