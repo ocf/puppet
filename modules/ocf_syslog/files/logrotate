@@ -1,0 +1,6 @@
+/var/log/remote/* {
+	daily
+	missingok
+	rotate 14
+	compress
+}

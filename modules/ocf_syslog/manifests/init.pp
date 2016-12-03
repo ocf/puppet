@@ -19,5 +19,8 @@ class ocf_syslog {
       source  => 'puppet:///modules/ocf_syslog/ocf.conf',
       notify  => Service['rsyslog'],
       require => Ocf::Repackage['rsyslog'];
+
+    '/etc/logrotate.d/ocf-syslog':
+      source  => 'puppet:///modules/ocf_syslog/logrotate';
   }
 }
