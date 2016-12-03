@@ -1,70 +1,109 @@
 #!/bin/bash
-# Downloads Debian netboot image and prepares for PXE booting and
+# Downloads Debian netboot images and prepares for PXE booting and
 # automated installations (via preseed file)
 #
 # Optionally adds Debian nonfree firmware to initrd
+#
+# Also downloads memtest, Darik's Boot and Nuke, and finnix and adds them to
+# the PXE boot menu. We do this by hijacking the boot menu of the first
+# distribution and architecture in the list and adding our own menu items.
 
-set -e
+set -euo pipefail
 
-arch='amd64'
-dist='jessie'
+# Whichever architecture and distribution is first in the arrays is the default,
+# and is (ab)used for the PXE boot menu.
+archs=(amd64)
+dists=(jessie stretch)
+menu_arch="${archs[0]}"
+menu_dist="${dists[0]}"
+menu_path="debian-installer/$menu_arch"
+txt_cfg="$menu_path/boot-screens/txt.cfg"
 
-netboot="http://mirrors/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
-fw="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$dist/current/firmware.tar.gz"
 dban="http://sourceforge.net/projects/dban/files/latest/download"
 memtest="http://www.memtest.org/download/5.01/memtest86+-5.01.bin.gz"
 finnix="/var/lib/finnix.tar.gz"
-
 tftpdir='/opt/tftp'
-fwdir=$(mktemp -d)
 
-# remove old pxe files
+# Remove old pxe files
 rm -rf $tftpdir
-mkdir $tftpdir && chmod 755 $tftpdir
+mkdir $tftpdir
+chmod 755 $tftpdir
 
-# download and extract netboot image
-echo "Downloading netboot.tar.gz..."
+for dist in "${dists[@]}"; do
+    for arch in "${archs[@]}"; do
+        if [ "$dist" == "jessie" ]; then
+            netboot="http://mirrors/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
+        else
+            # TODO: Currently the daily image is broken, so use the one from December 2nd, 2016.
+            # Once stretch becomes stable this should be removed and added to the section above,
+            # and replaced with the new testing release.
+            #netboot="https://d-i.debian.org/daily-images/$arch/daily/netboot/netboot.tar.gz"
+            netboot="https://d-i.debian.org/daily-images/$arch/20161202-00:20/netboot/netboot.tar.gz"
+        fi
 
-cd $tftpdir
-wget -q "$netboot"
-tar -zxf netboot.tar.gz
+        fw="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$dist/current/firmware.tar.gz"
+        fwdir=$(mktemp -d)
+        label="${dist}-${arch}"
 
-if [ -n "$fw" ]; then
-  # add non-free firmware to initrd
-  echo "Downloading non-free firmware..."
-  rm -rf $fwdir
-  mkdir  -p $fwdir/firmware
-  cd $fwdir
-  wget -q "$fw"
-  cd $fwdir/firmware
-  tar -zxf ../firmware.tar.gz
-  cd $fwdir
+        if [ "$dist" == "$menu_dist" ] && [ "$arch" == "$menu_arch" ]; then
+          da_dir='.'
+        else
+          da_dir=$label
+        fi
 
-  echo "Adding non-free firmware to initrd..."
-  pax -x sv4cpio -s'%firmware%/firmware%' -w firmware | gzip -c > firmware.cpio.gz
+        # Download and extract netboot image
+        echo "Downloading netboot.tar.gz for $dist ($arch)..."
+        cd $tftpdir
+        wget -q -O netboot.tar.gz "$netboot"
+        mkdir -p $da_dir
+        tar -zxf netboot.tar.gz -C $da_dir
 
-  cd $tftpdir/debian-installer/$arch
-  [ -f initrd.gz.orig ] || cp -p initrd.gz initrd.gz.orig
-  cat initrd.gz.orig $fwdir/firmware.cpio.gz > initrd.gz
-fi
+        # Add non-free firmware to initrd if set
+        if [ -n "$fw" ]; then
+            echo "Downloading non-free firmware..."
+            cd $fwdir
+            mkdir -p firmware
+            wget -q "$fw"
+            cd $fwdir/firmware
+            tar -zxf ../firmware.tar.gz
+            cd $fwdir
 
-echo "Adding OCF preseed file into installer menu..."
-cd $tftpdir/debian-installer/$arch
+            echo "Adding non-free firmware to initrd..."
+            pax -x sv4cpio -s'%firmware%/firmware%' -w firmware | gzip -c > firmware.cpio.gz
 
-# unset "Install" as default
-sed -i '/menu default/d' boot-screens/txt.cfg
+            cd $tftpdir/$da_dir/debian-installer/$arch
+            [ -f initrd.gz.orig ] || cp -p initrd.gz initrd.gz.orig
+            cat initrd.gz.orig $fwdir/firmware.cpio.gz > initrd.gz
 
-# add OCF install option
-echo "label ocf
-	menu label OCF Automated Install
-	menu default
-	kernel debian-installer/amd64/linux
-	append auto=true priority=critical locale=en_US keymap=us vga=788 initrd=debian-installer/amd64/initrd.gz -- quiet" >> boot-screens/txt.cfg
+            rm -rf $fwdir
+        fi
 
-# auto-select OCF option after 10 seconds
+        echo "Adding OCF preseed file into installer menu..."
+        cd $tftpdir
+
+        # Add OCF install options, set as default if menu dist and arch
+        # The first item overwrites the existing install menu option, as we do
+        # not want it (would like to use our own instead)
+        if [ "$dist" == "$menu_dist" ] && [ "$arch" == "$menu_arch" ]; then
+            echo "label ocf-$label
+                menu label OCF Automated Install ($label)
+                menu default
+                kernel debian-installer/$arch/linux
+                append auto=true priority=critical locale=en_US keymap=us vga=788 initrd=debian-installer/$arch/initrd.gz -- quiet" > $txt_cfg
+        else
+            echo "label ocf-$label
+                menu label OCF Automated Install ($label)
+                kernel $da_dir/debian-installer/$arch/linux
+                append auto=true priority=critical locale=en_US keymap=us vga=788 initrd=$da_dir/debian-installer/$arch/initrd.gz -- quiet" >> $txt_cfg
+        fi
+    done
+done
+
+# Auto-select OCF option after 10 seconds
 sed -i 's/timeout 0/timeout 100/' pxelinux.cfg/default
 
-# download DBAN, add to menu
+
+# Download DBAN, add to menu
 echo "Downloading DBAN..."
 cd $tftpdir
 wget -q -O dban.iso "$dban"
@@ -73,12 +112,13 @@ wget -q -O dban.iso "$dban"
 find dban -type d -exec chmod 755 {} \;
 
 echo "label dban
-	menu label Darik's Boot and Nuke
-	kernel dban/DBAN.BZI
-	append load_ramdisk=1 root=/dev/ram0 nuke=\"dwipe --autonuke --method zero\"" \
-	>> debian-installer/$arch/boot-screens/txt.cfg
+    menu label Darik's Boot and Nuke
+    kernel dban/DBAN.BZI
+    append load_ramdisk=1 root=/dev/ram0 nuke=\"dwipe --autonuke --method zero\"" \
+>> $txt_cfg
 
-# download Memtest86+, add to menu
+
+# Download Memtest86+, add to menu
 echo "Downloading Memtest86+..."
 cd $tftpdir
 mkdir -p memtest
@@ -86,25 +126,27 @@ wget -q -O memtest/memtest.bin.gz "$memtest"
 gunzip -c memtest/memtest.bin.gz > memtest/memtest
 
 echo "label memtest
-	menu label Memtest86+
-	kernel memtest/memtest" \
->> debian-installer/$arch/boot-screens/txt.cfg
+    menu label Memtest86+
+    kernel memtest/memtest" \
+>> $txt_cfg
 
-# add Finnix to menu
+
+# Extract and add Finnix to menu
 echo "Extracting finnix..."
 tar xf /var/lib/finnix.tar.gz
 echo "label finnix
-    menu label Finnix (requires 0.75 GB RAM)
+    menu label Finnix (requires 768 MB RAM)
     kernel finnix/boot/x86/linux64
     append initrd=finnix/boot/x86/initrd_net.xz vga=791 nomodeset" \
->> debian-installer/$arch/boot-screens/txt.cfg
+>> $txt_cfg
 
-# clean up
+
+# Clean up
 rm $tftpdir/netboot.tar.gz
-rm -rf $fwdir
 rm dban.iso
 rm memtest/memtest.bin.gz
 
+# Restart tftpd to provide the new PXE boot files
 service tftpd-hpa restart
 
 echo "PXE image is ready."
