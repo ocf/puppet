@@ -3,4 +3,10 @@
 	missingok
 	rotate 14
 	compress
+    delaycompress
+
+    sharedscripts
+    postrotate
+        invoke-rc.d rsyslog rotate > /dev/null
+    endscript
 }
