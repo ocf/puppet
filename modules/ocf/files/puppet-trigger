@@ -3,6 +3,7 @@
 import argparse
 import os
 import re
+import signal
 import socket
 import subprocess
 import sys
@@ -20,9 +21,11 @@ def trigger_run():
             stdout=subprocess.DEVNULL,
     ) == 0:
         with open('/var/run/puppet/agent.pid') as f:
-            pid = f.read().strip()
+            pid = int(f.read().strip())
 
-        if subprocess.call(('kill', '-USR1', pid)) != 0:
+        try:
+            os.kill(pid, signal.SIGUSR1)
+        except PermissionError:
             log('Error triggering puppet run, are you root?')
             sys.exit(1)
     else:
