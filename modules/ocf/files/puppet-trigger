@@ -17,7 +17,7 @@ def log(*args, file=sys.stderr, **kwargs):
 
 def trigger_run():
     if subprocess.call(
-            ('/usr/sbin/service', 'puppet', 'status'),
+            ('systemctl', 'status', 'puppet.service'),
             stdout=subprocess.DEVNULL,
     ) == 0:
         with open('/var/run/puppet/agent.pid') as f:
@@ -33,10 +33,8 @@ def trigger_run():
         sys.exit(1)
 
 
-def tail_syslog():
-    # call less in "secure" mode since this is triggered by passwordless sudo
-    os.environ['LESSSECURE'] = '1'
-    os.execvp('less', ('less', '+F', '/var/log/syslog'))
+def show_journal():
+    os.execvp('journalctl', ('journalctl', '-f', '-u', 'puppet.service'))
 
 
 def switch_to_environment(env):
@@ -92,7 +90,7 @@ def main(argv=None):
     trigger_run()
 
     if args.tail:
-        tail_syslog()
+        show_journal()
 
 
 if __name__ == '__main__':
