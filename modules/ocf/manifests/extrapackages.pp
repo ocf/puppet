@@ -41,6 +41,7 @@ class ocf::extrapackages {
     'gem2deb',
     'ghc',
     'git-buildpackage',
+    'golang',
     'google-gsutil',
     'ikiwiki',
     'inotify-tools',
