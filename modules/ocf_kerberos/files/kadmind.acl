@@ -19,6 +19,7 @@ willh/admin@OCF.BERKELEY.EDU            all,get-keys
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
+abizer/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 andycui/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 baisang/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 ckuehl/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
