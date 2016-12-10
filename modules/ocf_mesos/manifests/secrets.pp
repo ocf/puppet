@@ -1,4 +1,4 @@
-class ocf_mesos::slave::secrets {
+class ocf_mesos::secrets {
   # The way we manage secrets in Mesos is that we put them in the Puppet
   # private share under "docker", which is made available to the Mesos slaves
   # via a special file share, "private-docker".
@@ -16,6 +16,9 @@ class ocf_mesos::slave::secrets {
   # The extra directory is theoretically unnecessary, but in practice Puppet
   # makes it hard to set "0700" on a directory, while recursively setting
   # 0644/0755 on children. Oh well.
+  #
+  # Only some Mesos agents have this class. Some (e.g. desktops) don't, and so
+  # won't run jobs that require secrets. All masters have the class.
   file {
     '/opt/share/docker':
       ensure  => directory,

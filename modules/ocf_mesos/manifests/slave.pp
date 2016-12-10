@@ -2,7 +2,6 @@ class ocf_mesos::slave($attributes = {}) {
   include ocf::packages::docker
   include ocf_mesos
   include ocf_mesos::package
-  include ocf_mesos::slave::secrets
 
   $masters = hiera('mesos_masters')
 
