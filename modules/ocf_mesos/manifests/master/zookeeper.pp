@@ -1,6 +1,8 @@
 class ocf_mesos::master::zookeeper($masters) {
   include ocf_mesos::package
 
+  package { 'zookeeper':; }
+
   # We provide our own service file because the init script that the mesosphere
   # package ships results in systemd losing track of the process somehow
   # (making it impossible to stop via service/systemctl).
@@ -8,6 +10,7 @@ class ocf_mesos::master::zookeeper($masters) {
     ensure  => running,
     source  => 'puppet:///modules/ocf_mesos/master/zookeeper/zookeeper.service',
     enable  => true,
+    require => Package['zookeeper'],
   }
 
   # zookeeper IDs must start at 1, not 0

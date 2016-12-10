@@ -3,6 +3,18 @@ class ocf_mesos::slave($attributes = {}) {
   include ocf_mesos
   include ocf_mesos::package
 
+  # TODO: remove this eventually
+  package {
+    [
+      'zookeeper',
+      'libzookeeper-java',
+      'libzookeeper-java-doc',
+      'libzookeeper-mt2',
+      'zookeeper-bin',
+    ]:
+      ensure => purged,
+  }
+
   $masters = hiera('mesos_masters')
 
   # TODO: can we not duplicate this between slave/master?
