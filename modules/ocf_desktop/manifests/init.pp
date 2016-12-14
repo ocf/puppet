@@ -3,6 +3,7 @@ class ocf_desktop {
   include ocf::packages::chrome
   include ocf::packages::cups
   include ocf::packages::firefox
+  include ocf_mesos::slave
 
   include ocf_desktop::crondeny
   include ocf_desktop::defaults
