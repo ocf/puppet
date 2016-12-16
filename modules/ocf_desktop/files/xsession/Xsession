@@ -109,7 +109,7 @@ xset r rate 200 30
 xset m 0 0
 
 # Start OCF notification script
-/opt/share/puppet/notify.sh &
+/opt/share/puppet/notify &
 
 # Start script that warns users about lab closure
 /opt/share/puppet/lab-close-notify &
