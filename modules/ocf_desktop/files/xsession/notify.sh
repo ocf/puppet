@@ -3,7 +3,7 @@ notify_send="/usr/bin/notify-send --expire-time=30000 --icon=/opt/share/xsession
 
 # display staff in lab
 # TODO: switch this to ocfweb
-lab_staff=$(curl -s http://stats/staff.cgi)
+lab_staff=$(curl -s https://www.ocf.berkeley.edu/stats/api/staff-in-lab)
 
 if [ -n "$lab_staff" ]; then
   $notify_send "OCF volunteer staff in lab:
