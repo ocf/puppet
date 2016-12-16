@@ -79,4 +79,13 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     ssl_cert       => '/opt/share/docker/secrets/thelounge/thelounge.ocf.berkeley.edu.crt',
     ssl_key        => '/opt/share/docker/secrets/thelounge/thelounge.ocf.berkeley.edu.key',
   }
+
+  ocf_mesos::master::load_balancer::http_vhost { 'pma':
+    server_name    => 'pma.ocf.berkeley.edu',
+    server_aliases => ['pma', 'phpmyadmin', 'phpmyadmin.ocf.berkeley.edu'],
+    service_port   => 10003,
+    ssl            => true,
+    ssl_cert       => '/opt/share/docker/secrets/pma/pma.ocf.berkeley.edu.crt',
+    ssl_key        => '/opt/share/docker/secrets/pma/pma.ocf.berkeley.edu.key',
+  }
 }
