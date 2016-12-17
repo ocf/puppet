@@ -11,9 +11,9 @@ class ocf_desktop::xsession {
       source  => 'puppet:///modules/ocf_desktop/xsession/Xsession',
       require => File['/opt/share/xsession'];
     # printing and other notification script daemon
-    '/opt/share/puppet/notify.sh':
+    '/opt/share/puppet/notify':
       mode    => '0755',
-      source  => 'puppet:///modules/ocf_desktop/xsession/notify.sh';
+      source  => 'puppet:///modules/ocf_desktop/xsession/notify';
     # script for warning users when the lab is about to close
     '/opt/share/puppet/lab-close-notify':
       mode    => '0755',
