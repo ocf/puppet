@@ -24,6 +24,18 @@ class ocf::networking(
     ensure => purged,
   }
 
+  if $bridge {
+    $iface = 'br0'
+  } elsif $::lsbdistcodename == 'jessie' {
+    $iface = 'eth0'
+  } else {
+    # TODO: Make this more dynamic! It currently only works on eruption, because
+    # the systemd network interface names are based on hardware and eruption has
+    # different hardware from other desktops. Maybe set a static name for
+    # desktops in /etc/udev/rules.d/ based on the the MAC address in LDAP?
+    $iface = 'enp3s0'
+  }
+
   # network configuration
   file {
     '/etc/network/interfaces':
