@@ -11,7 +11,7 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['anacron', 'arandr', 'claws-mail', 'geany', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp', 'gparted', 'evince-gtk', 'galculator', 'hexchat', 'atom', 'rstudio', 'mumble']:;
+    ['anacron', 'arandr', 'claws-mail', 'geany', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp', 'gparted', 'evince-gtk', 'galculator', 'hexchat', 'atom', 'mumble']:;
     # desktop
     ['desktop-base', 'desktop-file-utils', 'eog', 'xarchiver', 'xterm', 'lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces', 'accountsservice', 'redshift', 'xfce4-whiskermenu-plugin']:;
     # fonts
@@ -25,11 +25,22 @@ class ocf_desktop::packages {
     # notifications
     ['libnotify-bin', 'notification-daemon']:;
     # performance improvements
-    ['preload', 'readahead-fedora']:;
+    ['preload']:;
     # Xorg
     ['xserver-xorg', 'xscreensaver', 'xclip']:;
     # FUSE
     ['fuse', 'exfat-fuse']:
+  }
+
+  # Packages that only work on jessie
+  if $::lsbdistcodename == 'jessie' {
+    package {
+      [
+        # TODO: Put rstudio package in apt repo
+        'rstudio',
+        'readahead-fedora',
+      ]:;
+    }
   }
 
   # remove some packages

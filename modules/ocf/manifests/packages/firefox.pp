@@ -3,8 +3,13 @@ class ocf::packages::firefox {
     stage => first,
   }
 
+  $firefox_pkg = $::lsbdistcodename ? {
+    'jessie' => 'firefox',
+    default  => 'firefox-esr',
+  }
+
   package {
-    'firefox':
+    $firefox_pkg:
       ensure => present;
     'iceweasel':
       ensure => absent;
@@ -12,9 +17,9 @@ class ocf::packages::firefox {
 
   file {
     # disable caching, history, blacklisting, and set homepage
-    '/etc/firefox/prefs.js':
+    "/etc/${firefox_pkg}/prefs.js":
       content => template('ocf/firefox/prefs.js.erb'),
-      require => Package['firefox'];
+      require => Package[$firefox_pkg];
     # TODO: start maximized by default
   }
 }
