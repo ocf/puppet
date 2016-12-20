@@ -1,4 +1,5 @@
 class ocf_admin::create::app {
+  # TODO: Include ocf-create in stretch, or get it working on Marathon
   package { 'ocf-create':; }
 
   service { 'ocf-create':

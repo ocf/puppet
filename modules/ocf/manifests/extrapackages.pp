@@ -19,7 +19,6 @@ class ocf::extrapackages {
   package {
     # misc. packages helpful for users
     [
-    'alpine',
     'apache2-dev',
     'apache2-utils',
     'autoconf',
@@ -42,20 +41,16 @@ class ocf::extrapackages {
     'ghc',
     'git-buildpackage',
     'golang',
-    'google-gsutil',
     'ikiwiki',
     'inotify-tools',
     'intltool',
     'ipython',
-    'ipython-notebook',
     'ipython3',
-    'ipython3-notebook',
     'irssi',
     'libcrack2-dev',
     'libdbi-perl',
     'libexpect-perl',
     'libfcgi-dev',
-    'libfcgi-ruby1.8',
     'libffi-dev',
     'libgdbm-dev',
     'libgtk-3-dev',
@@ -69,7 +64,7 @@ class ocf::extrapackages {
     'libncurses5-dev',
     'libopencv-dev',
     'libpq-dev',
-    'libreadline6-dev',
+    'libreadline-dev',
     'libsqlite3-dev',
     'libtidy-dev',
     'libtool',
@@ -88,17 +83,9 @@ class ocf::extrapackages {
     'octave',
     'pandoc',
     'pdfchain',
-    'pdfjam',
-    'php5-cli',
-    'php5-curl',
-    'php5-gd',
-    'php5-mcrypt',
-    'php5-mysql',
-    'php5-sqlite',
     'pkg-config',
     'pkpgcounter',
     'postgresql-client',
-    'pre-commit',
     'pssh',
     'puppet-lint',
     'python-cracklib',
@@ -116,7 +103,6 @@ class ocf::extrapackages {
     'python-mysqldb',
     'python-nose',
     'python-numpy',
-    'python-osd',
     'python-pandas',
     'python-progressbar',
     'python-pysnmp4',
@@ -151,25 +137,76 @@ class ocf::extrapackages {
     'r10k',
     'rails',
     'ruby-dev',
-    'ruby-mysql',
+    'ruby-fcgi',
     'ruby-ronn',
     'ruby-sqlite3',
     'scala',
     'screenfetch',
     'sqlite3',
     'subversion',
+    'texlive-extra-utils',
     'texlive-fonts-recommended',
     'texlive-latex-extra',
     'texlive-latex-recommended',
     'texlive-publishers',
     'texlive-science',
-    'twine',
     'vagrant',
     'valgrind',
-    'xvnc4viewer',
     'zlib1g-dev',
     'znc',
     ]:;
+  }
+
+  if $::lsbdistcodename == 'jessie' {
+    package {
+      [
+        # alpine should be in stretch soon (it's in sid)
+        # Looks like it was pulled from stretch for some reason
+        'alpine',
+
+        # We can either package this for stretch (we packaged for jessie), or
+        # we can just remove it in favor of using Box.com
+        'google-gsutil',
+
+        # No idea on these, they would be useful to have, but aren't in stretch
+        # or sid.
+        'ipython-notebook',
+        'ipython3-notebook',
+
+        # These have been replaced by more generic php-* instead of php5-*
+        # packages in stretch
+        'php5-cli',
+        'php5-curl',
+        'php5-gd',
+        'php5-mcrypt',
+        'php5-mysql',
+        'php5-sqlite',
+
+        # We should package this for stretch
+        'pre-commit',
+
+        # Replaced by ruby-mysql2 in stretch
+        'ruby-mysql',
+
+        # Recent package in sid, but none in stretch yet
+        'twine',
+
+        # Version in sid, can probably switch to another VNC viewer for stretch
+        'xvnc4viewer',
+      ]:;
+    }
+  } else {
+    package {
+      [
+        'php-cli',
+        'php-curl',
+        'php-gd',
+        'php-mcrypt',
+        'php-mysql',
+        'php-sqlite3',
+        'ruby-mysql2',
+      ]:;
+    }
   }
 
   ocf::repackage { 'dh-virtualenv':

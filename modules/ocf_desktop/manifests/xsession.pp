@@ -88,12 +88,17 @@ class ocf_desktop::xsession {
     source  => "puppet:///modules/ocf_desktop/xsession/lightdm/${po}";
   }
 
+  $lightdm_greeter_pkg = $::lsbdistcodename ? {
+    'jessie' => 'lightdm-gtk-greeter-ocf',
+    default  => 'lightdm-gtk-greeter',
+  }
+
   exec { 'lightdm-greeter-compile-po':
     command     => "msgfmt -o /usr/share/locale/en_US/LC_MESSAGES/lightdm-gtk-greeter.mo \
                     /opt/share/xsession/${po}",
     subscribe   => File["/opt/share/xsession/${po}"],
     refreshonly => true,
-    require     => Package['lightdm-gtk-greeter-ocf', 'gettext'];
+    require     => Package[$lightdm_greeter_pkg, 'gettext'];
   }
 
   # use ocf logo on login screen

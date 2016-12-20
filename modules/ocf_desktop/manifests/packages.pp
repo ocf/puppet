@@ -11,9 +11,9 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['anacron', 'arandr', 'claws-mail', 'geany', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp', 'gparted', 'evince-gtk', 'galculator', 'hexchat', 'atom', 'rstudio']:;
+    ['anacron', 'arandr', 'claws-mail', 'geany', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp', 'gparted', 'evince-gtk', 'galculator', 'hexchat', 'atom']:;
     # desktop
-    ['desktop-base', 'desktop-file-utils', 'eog', 'xarchiver', 'xterm', 'lightdm', 'lightdm-gtk-greeter-ocf', 'accountsservice', 'redshift', 'xfce4-whiskermenu-plugin']:;
+    ['desktop-base', 'desktop-file-utils', 'eog', 'xarchiver', 'xterm', 'lightdm', 'accountsservice', 'redshift', 'xfce4-whiskermenu-plugin']:;
     # fonts
     ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea', 'fonts-crosextra-carlito', 'fonts-inconsolata', 'fonts-linuxlibertine', 'fonts-unfonts-core', 'ttf-ancient-fonts']:;
     # games
@@ -25,11 +25,27 @@ class ocf_desktop::packages {
     # notifications
     ['libnotify-bin', 'notification-daemon']:;
     # performance improvements
-    ['preload', 'readahead-fedora']:;
+    ['preload']:;
     # Xorg
     ['xserver-xorg', 'xscreensaver', 'xclip']:;
     # FUSE
     ['fuse', 'exfat-fuse']:
+  }
+
+  # Packages that only work on jessie
+  if $::lsbdistcodename == 'jessie' {
+    package {
+      [
+        # TODO: Put rstudio package in apt repo
+        'rstudio',
+        'lightdm-gtk-greeter-ocf',
+        'readahead-fedora',
+      ]:;
+    }
+  } else {
+    # Packages only on stretch
+    # TODO: Apply kpengboy's whitespace patch to this
+    package { 'lightdm-gtk-greeter':; }
   }
 
   # remove some packages
@@ -39,9 +55,6 @@ class ocf_desktop::packages {
       ensure  => purged;
     # xpdf takes over as default sometimes
     'xpdf':
-      ensure  => purged;
-    # temporary line for lightdm-gtk-greeter-ocf installation
-    'lightdm-gtk-greeter':
       ensure  => purged;
   }
 
