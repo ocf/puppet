@@ -1,18 +1,6 @@
 auto lo
 iface lo inet loopback
 
-<%
-if @bridge then
-    @iface = 'br0'
-else
-    # TODO: Make this more dynamic! It currently only works on eruption,
-    # because the systemd network interface names are based on hardware.
-    # (maybe set in /etc/udev/rules.d/ based on the the MAC address in LDAP with
-    # a static name for desktops?
-    @iface = 'enp3s0'
-end
-%>
-
 auto <%= @iface %>
 iface <%= @iface %> inet static
 <% if @bridge -%>
