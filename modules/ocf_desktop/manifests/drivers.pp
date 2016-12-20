@@ -5,7 +5,7 @@ class ocf_desktop::drivers {
   if $::gfx_brand == 'nvidia' {
     # Install nvidia-driver from backports to support the GTX 1060s in the lab
     # Only needed on jessie, since stretch has drivers that are recent (367+)
-    ocf::repackage { ['nvidia-driver', 'libgl1-nvidia-glx:i386']:
+    ocf::repackage { ['nvidia-driver', 'xserver-xorg-video-nvidia', 'libgl1-nvidia-glx:i386']:
       backport_on => 'jessie',
     }
 

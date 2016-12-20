@@ -1,7 +1,7 @@
 define ocf::repackage(
     $package     = $title,
     $recommends  = true,
-    $backport_on = undef,
+    $backport_on = '',
     $dist        = $::lsbdistcodename,
   ) {
   $install_options = $recommends ? {
