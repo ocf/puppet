@@ -2,6 +2,7 @@ classes:
     - ocf_backups
     - ocf_kvm
     - ocf_mesos::slave
+    - ocf_mesos::secrets
 
 ocf::networking::bridge: true
 
