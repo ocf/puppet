@@ -3,23 +3,29 @@ class ocf::packages::firefox {
     stage => first,
   }
 
-  $firefox_pkg = $::lsbdistcodename ? {
-    'jessie' => 'firefox',
-    default  => 'firefox-esr',
+  if $::lsbdistcodename == 'jessie' {
+    package { 'firefox':
+      ensure => present;
+    }
+  } else {
+    # TODO: switch to mozilla.debian.net once they support stretch.
+    ocf::repackage { 'firefox':
+      backport_on => $::lsbdistcodename,
+      dist        => 'experimental',
+    }
   }
 
+  # TODO: remove after upgrade to stretch.
   package {
-    $firefox_pkg:
-      ensure => present;
     'iceweasel':
       ensure => absent;
   }
 
   file {
     # disable caching, history, blacklisting, and set homepage
-    "/etc/${firefox_pkg}/prefs.js":
+    '/etc/firefox/prefs.js':
       content => template('ocf/firefox/prefs.js.erb'),
-      require => Package[$firefox_pkg];
+      require => Package['firefox'];
     # TODO: start maximized by default
   }
 }
