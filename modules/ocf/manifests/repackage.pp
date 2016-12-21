@@ -17,16 +17,18 @@ define ocf::repackage(
     # including the original upgrade, but then a package and all its
     # dependencies would need to be pinned, which is excessive and prone to
     # breaking if a package's dependencies change.
-    exec { "/usr/bin/apt-get -y -o Dpkg::Options::=--force-confold ${install_options[0]} -t ${dist} install ${package}":
+    exec { "apt install ${package}":
+      command => "/usr/bin/apt-get -y -o Dpkg::Options::=--force-confold ${install_options[0]} -t ${dist} install ${package}",
       logoutput   => on_failure,
       environment => [
         'DEBIAN_FRONTEND=noninteractive',
       ],
-      unless      => "dpkg-query -W ${package} | grep \\~bpo";
+      unless      => "dpkg-query -W ${package} | grep \\~bpo",
+      before      => Package[$package];
     }
-  } else {
-    package { $package:
-      install_options => $install_options;
-    }
+  }
+
+  package { $package:
+    install_options => $install_options;
   }
 }
