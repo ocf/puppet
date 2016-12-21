@@ -21,7 +21,7 @@ class ocf_desktop::packages {
     # useful tools
     ['lyx', 'texmaker']:;
     # nonfree packages
-    ['firmware-linux', 'flashplugin-nonfree', 'ttf-mscorefonts-installer']:;
+    ['firmware-linux', 'ttf-mscorefonts-installer']:;
     # notifications
     ['libnotify-bin', 'notification-daemon']:;
     # performance improvements
@@ -42,6 +42,9 @@ class ocf_desktop::packages {
       ensure  => purged;
     # temporary line for lightdm-gtk-greeter-ocf installation
     'lightdm-gtk-greeter':
+      ensure  => purged;
+    # temporary line to purge flashplugin-nonfree
+    'flashplugin-nonfree':
       ensure  => purged;
   }
 

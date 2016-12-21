@@ -22,9 +22,3 @@ elif [ -f /var/lib/dpkg/lock ] && fuser -s /var/lib/dpkg/lock 2> /dev/null; then
 else
   apt_cleanup
 fi
-
-<% if @desktop -%>
-# update Adobe Flash Player
-[ -x /usr/sbin/update-flashplugin-nonfree ] && \
-/usr/sbin/update-flashplugin-nonfree --install --quiet > /dev/null || exit 0
-<% end -%>

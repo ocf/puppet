@@ -8,7 +8,6 @@ class ocf_tv {
     [
       'arandr',
       'ffmpeg',
-      'flashplugin-nonfree',
       'i3',
       'nodm',
       'pavucontrol',
@@ -17,6 +16,8 @@ class ocf_tv {
       'x11vnc',
       'xinit',
     ]:;
+    'flashplugin-nonfree':
+      ensure => purged;
   }
 
   user { 'ocftv':
