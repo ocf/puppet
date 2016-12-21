@@ -23,7 +23,7 @@ define ocf::repackage(
       environment => [
         'DEBIAN_FRONTEND=noninteractive',
       ],
-      unless      => "dpkg-query -W ${package} | grep \\~bpo",
+      unless      => "/usr/bin/apt-cache policy ${package} | grep -A1 \\* | grep -w ${dist}",
       before      => Package[$package];
     }
   }
