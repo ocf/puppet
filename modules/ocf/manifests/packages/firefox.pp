@@ -3,16 +3,10 @@ class ocf::packages::firefox {
     stage => first,
   }
 
-  if $::lsbdistcodename == 'jessie' {
-    package { 'firefox':
-      ensure => present;
-    }
-  } else {
-    # TODO: switch to mozilla.debian.net once they support stretch.
-    ocf::repackage { 'firefox':
-      backport_on => $::lsbdistcodename,
-      dist        => 'experimental',
-    }
+  # TODO: switch to mozilla.debian.net once they support stretch.
+  ocf::repackage { 'firefox':
+    backport_on => ['stretch', 'sid'],
+    dist        => 'experimental',
   }
 
   # TODO: remove after upgrade to stretch.

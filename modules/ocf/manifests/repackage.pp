@@ -1,7 +1,7 @@
 define ocf::repackage(
     $package     = $title,
     $recommends  = true,
-    $backport_on = '',
+    $backport_on = [],
     $dist        = "${::lsbdistcodename}-backports",
   ) {
   $install_options = $recommends ? {
@@ -9,7 +9,7 @@ define ocf::repackage(
     default => []
   }
 
-  if $::lsbdistcodename == $backport_on {
+  if member(any2array($backport_on), $::lsbdistcodename) {
     # We can't pin packages, because it won't install required dependencies that
     # way, so we instead upgrade the package once (as long as it isn't a
     # backport version already), and then future upgrades are done the normal
