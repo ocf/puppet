@@ -33,6 +33,10 @@ def trigger_run():
         sys.exit(1)
 
 
+def trigger_run_interactive(flags):
+    os.execvp('puppet', ('puppet', 'agent', '--test') + flags)
+
+
 def tail_syslog():
     # call less in "secure" mode since this is triggered by passwordless sudo
     os.environ['LESSSECURE'] = '1'
@@ -79,21 +83,35 @@ def main(argv=None):
         '-e', '--environment', type=validate_environment,
         help='switch to environment before running',
     )
-    parser.add_argument(
+    behavior_group = parser.add_mutually_exclusive_group()
+    behavior_group.add_argument(
         '-f', '--tail', action='store_true',
         help='tail syslog after trigger',
     )
+    behavior_group.add_argument(
+        '-t', '--test', action='store_true',
+        help='run interactively in foreground',
+    )
+    parser.add_argument(
+        '-d', '--debug', action='store_true',
+        help='show puppet debug output; can only be used with -t'
+    )
 
     args = parser.parse_args(argv)
+    if args.debug and not args.test:
+        parser.error('--debug can only be used with --test')
 
     if args.environment:
         switch_to_environment(args.environment)
 
-    trigger_run()
-
-    if args.tail:
-        tail_syslog()
+    if args.test:
+        flags = ('--debug',) if args.debug else ()
+        trigger_run_interactive(flags)
+    else:
+        trigger_run()
+        if args.tail:
+            tail_syslog()
 
 
 if __name__ == '__main__':
-    exit(main())
+    sys.exit(main())
