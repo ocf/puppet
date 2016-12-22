@@ -43,9 +43,6 @@ class ocf_desktop::packages {
     # temporary line for lightdm-gtk-greeter-ocf installation
     'lightdm-gtk-greeter':
       ensure  => purged;
-    # temporary line to purge flashplugin-nonfree
-    'flashplugin-nonfree':
-      ensure  => purged;
   }
 
   # install packages without recommends

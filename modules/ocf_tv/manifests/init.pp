@@ -16,8 +16,6 @@ class ocf_tv {
       'x11vnc',
       'xinit',
     ]:;
-    'flashplugin-nonfree':
-      ensure => purged;
   }
 
   user { 'ocftv':
