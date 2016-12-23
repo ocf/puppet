@@ -7,6 +7,16 @@ class ocf_irc::ircd {
     require => Package['inspircd'],
   }
 
+  augeas { '/lib/systemd/system/inspircd.service':
+    context => '/files/lib/systemd/system/inspircd.service',
+    changes => [
+      # Make sure the ircd service starts before anope does
+      'set Unit/Before/value anope.service',
+    ],
+    require => Package['inspircd', 'anope'],
+    notify  => Service['inspircd'],
+  }
+
   $passwords = parsejson(file("/opt/puppet/shares/private/${::hostname}/ircd-passwords"))
 
   file {

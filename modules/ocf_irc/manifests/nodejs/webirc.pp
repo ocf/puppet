@@ -1,21 +1,10 @@
 class ocf_irc::nodejs::webirc {
-  # TODO: Remove this once the package is removed
-  package { 'thelounge':
-    ensure => 'purged',
-  }
-
-  file { '/etc/thelounge':
-    ensure => 'absent',
-    force  => true,
-    purge  => true,
-  }
-
   $webirc_fqdn = $::hostname ? {
     /^dev-/ => 'dev-irc.ocf.berkeley.edu',
     default => 'irc.ocf.berkeley.edu',
   }
 
-  # Nginx is used to proxy and to supply a HTTP -> HTTPS redirect
+  # Nginx is used to proxy to Marathon and to supply a HTTP -> HTTPS redirect
   class { 'nginx':
     manage_repo => false,
     confd_purge => true,
