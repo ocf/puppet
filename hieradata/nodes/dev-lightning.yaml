@@ -1,2 +1,4 @@
 classes:
     - ocf_puppet
+
+puppet_agent: true

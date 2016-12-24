@@ -10,7 +10,7 @@
     - common
 
 :yaml:
-    :datadir: /opt/puppet/env/%{environment}/hieradata
+    :datadir: /etc/puppetlabs/code/environments/%{environment}/hieradata
 
 :puppet:
     :datasource: data

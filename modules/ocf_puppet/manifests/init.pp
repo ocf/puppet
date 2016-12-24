@@ -5,6 +5,6 @@ class ocf_puppet {
   include ocf_puppet::puppetmaster
 
   file { '/etc/sudoers.d/ocfdeploy-puppet':
-    content => "ocfdeploy ALL=NOPASSWD: /opt/puppet/scripts/update-prod\n";
+    content => "ocfdeploy ALL=NOPASSWD: /opt/puppetlabs/scripts/update-prod\n";
   }
 }

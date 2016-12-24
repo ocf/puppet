@@ -7,43 +7,27 @@
 
 [main]
 
-environmentpath = /opt/puppet/env
-hiera_config = /opt/puppet/env/<%= @environment %>/hiera.yaml
+hiera_config = <%= @puppet_environmentpath %>/<%= @environment %>/hiera.yaml
 
-# debian paths
-logdir = /var/log/puppet
-vardir = /var/lib/puppet
-ssldir = /var/lib/puppet/ssl
-rundir = /run/puppet
-factpath = $vardir/lib/facter
-
-# plugin sync (used by concat)
-pluginsync = true
-
-stringify_facts = false
+# TODO: Remove this after ths upgrade
+server = dev-puppet
 
 [agent]
 
-certname = <%= @clientcert %>
 environment = <%= @environment %>
 usecacheonfailure = false
 
 [master]
 
-# puppetmaster ssl certificate name
-certname = puppet
+vardir  = /opt/puppetlabs/server/data/puppetserver
+logdir  = /var/log/puppetlabs/puppetserver
+rundir  = /var/run/puppetlabs/puppetserver
+pidfile = /var/run/puppetlabs/puppetserver/puppetserver.pid
+codedir = /etc/puppetlabs/code
 
-# ssl support for apache passenger
-ssl_client_header = SSL_CLIENT_S_DN
-ssl_client_verify_header = SSL_CLIENT_VERIFY
+# Use custom LDAP external node classifer (ENC)
+node_terminus = exec
+external_nodes = /opt/share/puppet/ldap-enc
 
-# use external node classifer
-node_terminus = ldap
-ldapserver = ldap.ocf.berkeley.edu
-ldapport = 636
-ldapssl = true
-ldapbase = ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU
-
-# log and mail reports from clients
+# log and mail reports from failed clients
 reports = log, tagmail
-reportfrom = puppet
