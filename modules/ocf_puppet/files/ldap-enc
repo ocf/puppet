@@ -10,13 +10,13 @@ nodes like the built-in LDAP classifier.
 This is that classifier! It takes in node FQDNs, and looks them up in LDAP
 to get variables and classes to give to Puppet.
 """
-
 import argparse
 import sys
-import yaml
 
-from ocflib.infra.hosts import hosts_by_filter
+import yaml
 from ocflib.infra.hosts import hostname_from_domain
+from ocflib.infra.hosts import hosts_by_filter
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -50,6 +50,7 @@ def main():
             output['parameters'][key] = values
 
     print(yaml.dump(output, default_flow_style=False))
+
 
 if __name__ == '__main__':
     main()

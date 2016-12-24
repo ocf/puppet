@@ -10,11 +10,11 @@ class ocf_puppet::environments {
   # Instead, we just call `git clone`.
   $staff = split($::ocf_staff, ',')
   $staff.each |$user| {
-    $repo_path = "/opt/puppet/env/${user}"
+    $repo_path = "${puppet_environmentpath}/${user}"
 
     # We do the git checkout as the user, so we must ensure the directory exists
     # (and is owned by the user) first, since users can't make directories under
-    # the /opt/puppet/env directory.
+    # the root environments directory.
     file { $repo_path:
       ensure => directory,
       owner  => $user,
