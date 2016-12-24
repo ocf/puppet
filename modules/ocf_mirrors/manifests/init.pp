@@ -26,7 +26,7 @@ class ocf_mirrors {
     home    => '/opt/mirrors',
     groups  => ['sys'],
     shell   => '/bin/false',
-    require => File['/opt/mirrors'];
+    require => File['/opt/mirrors'],
   }
 
   file {
@@ -46,6 +46,10 @@ class ocf_mirrors {
     '::apache':
       default_vhost => false,
       keepalive     => 'on',
+      log_formats   => {
+        # A custom log format that counts bytes transferred by accesses (mod_logio)
+        io_count => '%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O',
+      },
       # "false" lets us define the class below with custom args
       mpm_module    => false;
 
@@ -107,7 +111,8 @@ class ocf_mirrors {
       $tails_project_directory_options,
     ],
 
-    custom_fragment => "HeaderName README.html\nReadmeName FOOTER.html"
+    access_log_format => 'io_count',
+    custom_fragment   => "HeaderName README.html\nReadmeName FOOTER.html",
   }
 
   apache::vhost { 'mirrors.berkeley.edu':
@@ -118,7 +123,7 @@ class ocf_mirrors {
 
     redirect_source => '/',
     redirect_dest   => 'http://mirrors.ocf.berkeley.edu/',
-    redirect_status => '301';
+    redirect_status => '301',
   }
 
   apache::vhost { 'mirrors.ocf.berkeley.edu-ssl':
@@ -136,11 +141,12 @@ class ocf_mirrors {
       $tails_project_directory_options,
     ],
 
-    custom_fragment => "HeaderName README.html\nReadmeName FOOTER.html",
+    access_log_format => 'io_count',
+    custom_fragment   => "HeaderName README.html\nReadmeName FOOTER.html",
 
-    ssl             => true,
-    ssl_key         => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert        => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain       => '/etc/ssl/certs/incommon-intermediate.crt';
+    ssl       => true,
+    ssl_key   => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain => '/etc/ssl/certs/incommon-intermediate.crt',
   }
 }

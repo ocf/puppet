@@ -74,7 +74,8 @@ class ocf_apt {
       index_options => ['NameWidth=*', '+SuppressDescription']
     }],
 
-    custom_fragment => "HeaderName README.html\nReadmeName FOOTER.html"
+    access_log_format => 'io_count',
+    custom_fragment   => "HeaderName README.html\nReadmeName FOOTER.html",
   }
 
   apache::vhost { 'apt.ocf.berkeley.edu-ssl':
@@ -88,11 +89,12 @@ class ocf_apt {
       index_options => ['NameWidth=*', '+SuppressDescription']
     }],
 
-    custom_fragment => "HeaderName README.html\nReadmeName FOOTER.html",
+    access_log_format => 'io_count',
+    custom_fragment   => "HeaderName README.html\nReadmeName FOOTER.html",
 
-    ssl             => true,
-    ssl_key         => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert        => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain       => '/etc/ssl/certs/incommon-intermediate.crt';
+    ssl       => true,
+    ssl_key   => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain => '/etc/ssl/certs/incommon-intermediate.crt',
   }
 }
