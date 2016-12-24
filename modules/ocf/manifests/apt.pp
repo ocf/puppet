@@ -43,6 +43,14 @@ class ocf::apt($stage = 'first') {
       include   => {
         src => true
       };
+
+    'ocf-backports':
+      location  => 'http://apt/',
+      release   => "${::lsbdistcodename}-backports",
+      repos     => 'main',
+      include   => {
+        src => true
+      };
   }
 
   # workaround Debian #793444 by disabling pdiffs
