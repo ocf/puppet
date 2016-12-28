@@ -44,31 +44,16 @@ third-party modules.
 Before pushing, you should test your changes by switching at least one of the
 affected servers to your puppet environment and triggering a run. We store node
 definitions in LDAP, so changing a server's environment requires a `/admin`
-Kerberos principal.
+Kerberos principal or root on the server (each server's host keytab allows
+changing its own environment).
 
-Start by getting a ticket for your `/admin` principal and launching ldapvi on
-the server's LDAP entry:
-
-    ckuehl@supernova:~$ kinit ckuehl/admin ldapvi cn=raptors
-
-A text representation of the LDAP entry will open in your editor. For example:
-
-    0 cn=raptors,ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU
-    cn: raptors
-    type: server
-    ipHostNumber: 169.229.226.200
-    objectClass: device
-    objectClass: ocfDevice
-    environment: production
-
-Change the environment from `production` to your own, then save the file and
-quit your editor. `ldapvi` will ask you to type `y` to confirm the changes.
-
-After switching the environment, you can connect to the server, trigger a
-puppet run, and watch the logs:
+The easiest way to change the environment is to SSH to the server and run
+`puppet-trigger`, providing the `-e` option.
 
     ckuehl@supernova:~$ ssh raptors
-    ckuehl@raptors:~$ sudo puppet-trigger -f
+    ckuehl@raptors:~$ sudo puppet-trigger -fe ckuehl
+
+This changes the environment to `ckuehl` and triggers a run.
 
 Make sure to switch the environment back to production after pushing your
 changes.
@@ -113,12 +98,12 @@ them) should be prefixed with `ocf_`.
 
 For modules that apply only to a specific service (such as the MySQL server),
 use the service CNAME (such as `mysql`) for the module name. Otherwise, use
-common sense to come up with a reasonable name (e.g. `ocf_desktop` or
-`ocf_ssl`).
+common sense to come up with a reasonable name (e.g. `ocf_desktop`).
 
-For manifests that should apply to all (or most) OCF servers, such as one that
-sets up LDAP/Kerberos authentication, consider just creating a new class under
-the `ocf` module.
+For manifests that don't refer to a service but are commonly used, such as one
+that sets up LDAP/Kerberos authentication (used on every server) or the SSL
+bundle generation manifest (used by lots of servers), consider just creating a
+new class under the `ocf` module.
 
 Try not to refer to servers by hostname (such as `lightning`). Instead, use the
 service CNAME (such as `puppet`) or the top-level variables `$::hostname` and
