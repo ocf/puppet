@@ -14,7 +14,6 @@ PAPER_PATH = '/opt/share/utils/bin/paper'
 
 
 def show_quota_loop(scheduler):
-
     # Schedule self to repeat next minute
     scheduler.enter(60, 0, show_quota_loop, argument=(scheduler,))
     scheduler.run()
@@ -47,6 +46,7 @@ def main():
             Notify.Notification.new(title, msg, NOTIFICATION_ICON).show()
             old_quota = quota
         time.sleep(60)
+
 
 if __name__ == '__main__':
     main()
