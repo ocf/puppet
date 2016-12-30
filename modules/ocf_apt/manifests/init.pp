@@ -8,7 +8,10 @@ class ocf_apt {
     shell   => '/bin/false';
   }
 
-  package { 'reprepro':; }
+  ocf::repackage { 'reprepro':
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=808558
+    backport_on => jessie,
+  }
 
   file {
     default:
@@ -58,7 +61,7 @@ class ocf_apt {
       user        => ocfapt,
       creates     => '/opt/apt/ftp/dists',
       require     => [
-        Package['reprepro'],
+        Ocf::Repackage['reprepro'],
         File['/opt/apt/bin', '/opt/apt/etc', '/opt/apt/db', '/opt/apt/ftp'],
         Exec['import-apt-gpg']];
   }
