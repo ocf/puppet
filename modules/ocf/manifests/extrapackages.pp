@@ -166,6 +166,7 @@ class ocf::extrapackages {
     'twine',
     'vagrant',
     'valgrind',
+    'weechat',
     'xvnc4viewer',
     'zlib1g-dev',
     'znc',
