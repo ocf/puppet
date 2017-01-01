@@ -13,7 +13,7 @@ class ocf_desktop::packages {
     # applications
     ['anacron', 'arandr', 'claws-mail', 'geany', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp', 'gparted', 'evince-gtk', 'galculator', 'hexchat', 'atom', 'rstudio']:;
     # desktop
-    ['desktop-base', 'desktop-file-utils', 'eog', 'xarchiver', 'xterm', 'lightdm', 'lightdm-gtk-greeter-ocf', 'accountsservice', 'redshift', 'xfce4-whiskermenu-plugin']:;
+    ['desktop-base', 'desktop-file-utils', 'eog', 'xarchiver', 'xterm', 'lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces', 'accountsservice', 'redshift', 'xfce4-whiskermenu-plugin']:;
     # fonts
     ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea', 'fonts-crosextra-carlito', 'fonts-inconsolata', 'fonts-linuxlibertine', 'fonts-unfonts-core', 'ttf-ancient-fonts']:;
     # games
@@ -40,8 +40,8 @@ class ocf_desktop::packages {
     # xpdf takes over as default sometimes
     'xpdf':
       ensure  => purged;
-    # temporary line for lightdm-gtk-greeter-ocf installation
-    'lightdm-gtk-greeter':
+    # temporary
+    'lightdm-gtk-greeter-ocf':
       ensure  => purged;
   }
 

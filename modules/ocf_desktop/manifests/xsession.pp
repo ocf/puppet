@@ -93,7 +93,21 @@ class ocf_desktop::xsession {
                     /opt/share/xsession/${po}",
     subscribe   => File["/opt/share/xsession/${po}"],
     refreshonly => true,
-    require     => Package['lightdm-gtk-greeter-ocf', 'gettext'];
+    require     => Package['lightdm-gtk-greeter', 'gettext'];
+  }
+
+  # add pam_trimspaces to lightdm PAM stack
+  augeas { 'lightdm-pam_trimspaces':
+    context => '/files/etc/pam.d/lightdm',
+    changes => [
+      'ins #comment after #comment[1]',
+      'set #comment[2] "Strip leading and trailing space from username"',
+      'ins 01 after #comment[2]',
+      'set 01/type auth',
+      'set 01/control requisite',
+      'set 01/module pam_trimspaces.so',
+    ],
+    onlyif  => 'match *[module = "pam_trimspaces.so"] size == 0';
   }
 
   # use ocf logo on login screen
