@@ -1,9 +1,10 @@
-/var/log/remote/* {
-	daily
-	missingok
-	rotate 14
-	compress
+/var/log/remote/*.log {
+    daily
+    missingok
+    rotate 14
+    compress
     delaycompress
+    create 0640 root ocfstaff
 
     sharedscripts
     postrotate
