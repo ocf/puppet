@@ -1,9 +1,13 @@
 class ocf_mirrors::ubuntu {
   ocf_mirrors::ftpsync { 'ubuntu':
     rsync_host  => 'mirrors.kernel.org',
-    cron_minute => '50',
-    monitoring_dist_to_check => 'devel',
-    monitoring_upstream_host => 'archive.ubuntu.com';
+    cron_minute => '50';
+  }
+
+  ocf_mirrors::monitoring { 'ubuntu':
+    type          => 'ftpsync',
+    dist_to_check => 'devel',
+    upstream_host => 'archive.ubuntu.com';
   }
 
   file { '/opt/mirrors/project/ubuntu/sync-releases':

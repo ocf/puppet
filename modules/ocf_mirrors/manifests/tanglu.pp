@@ -1,9 +1,13 @@
 class ocf_mirrors::tanglu {
   ocf_mirrors::ftpsync { 'tanglu':
-    rsync_host => 'archive.tanglu.org',
-    cron_minute => '40',
-    monitoring_dist_to_check => 'staging',
-    monitoring_upstream_host => 'archive.tanglu.org';
+    rsync_host  => 'archive.tanglu.org',
+    cron_minute => '40';
+  }
+
+  ocf_mirrors::monitoring { 'tanglu':
+    type          => 'ftpsync',
+    dist_to_check => 'staging',
+    upstream_host => 'archive.tanglu.org';
   }
 
   file { '/opt/mirrors/project/tanglu/sync-releases':
