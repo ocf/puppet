@@ -24,6 +24,12 @@ Vcsrepo { require => Package['git'] }
 
 Apache::Vhost { serveradmin => 'help@ocf.berkeley.edu' }
 
+# Listen on IPv6 addresses by default for nginx (along with IPv4)
+Nginx::Resource::Vhost {
+  ipv6_enable         => true,
+  ipv6_listen_options => '',
+}
+
 # Cron type won't reset attributes if you don't specify them.
 # (e.g. if you only set "minute => '0'", it won't reset hour to '*')
 # This is bad behavior because the resource is only partially managed by Puppet.
