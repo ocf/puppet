@@ -23,11 +23,14 @@ class ocf_mirrors {
   include ocf_mirrors::ubuntu
 
   user { 'mirrors':
-    comment => 'OCF Mirroring',
-    home    => '/opt/mirrors',
-    groups  => ['sys'],
-    shell   => '/bin/false',
-    require => File['/opt/mirrors'],
+    comment  => 'OCF Mirroring',
+    home     => '/opt/mirrors',
+    groups   => ['sys'],
+    shell    => '/bin/bash',
+
+    # Set to have no password, only allow key-based login
+    password => '*',
+    require  => File['/opt/mirrors'],
   }
 
   file {

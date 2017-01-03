@@ -1,12 +1,11 @@
 class ocf_mirrors::kali {
   ocf_mirrors::ftpsync {
     'kali':
-      # TODO: Change these to archive.kali.org afer we become an official mirror
-      rsync_host  => 'archive.linux.duke.edu',
+      rsync_host  => 'archive.kali.org',
       cron_minute => '15';
 
     'kali-images':
-      rsync_host  => 'archive.linux.duke.edu',
+      rsync_host  => 'archive.kali.org',
       rsync_extra => '--block-size=8192',
       cron_minute => '25';
   }
