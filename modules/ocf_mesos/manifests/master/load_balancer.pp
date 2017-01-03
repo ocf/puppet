@@ -28,9 +28,18 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
   # Currently we have just a primary. Potentially other services which can't
   # use name-based hosts (e.g. SMTP or something) might need TCP forwarding,
   # and thus a different address.
+  #
+  # IPv6 addresses have to be specified separately as they cannot be in the vrrp
+  # packet together (keepalived 1.2.20+) so they need to be in a
+  # virtual_ipaddress_excluded block instead.
   $virtual_addresses = [
-    # Primary load balancer IP
+    # Primary load balancer IP (v4)
     '169.229.226.53',
+  ]
+
+  $virtual_addresses_v6 = [
+    # Primary load balancer IP (v6)
+    '2607:f140:8801::1:53',
   ]
 
   service { 'keepalived':

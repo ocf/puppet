@@ -14,4 +14,10 @@ vrrp_instance VI_1 {
             <%= ip %>
         <% end %>
     }
+
+    virtual_ipaddress_excluded {
+        <% @virtual_addresses_v6.each do |ip| %>
+            <%= ip %>
+        <% end %>
+    }
 }
