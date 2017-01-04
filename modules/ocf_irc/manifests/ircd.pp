@@ -8,10 +8,10 @@ class ocf_irc::ircd {
   }
 
   ocf::systemd::override { 'start-inspircd-before-anope':
-    service => 'inspircd',
-    content => "[Unit]\nBefore=anope.service",
+    unit    => 'inspircd.service',
+    content => "[Unit]\nBefore=anope.service\n",
     require => Package['inspircd', 'anope'],
-    before  => Service['inspircd'],
+    notify  => Service['inspircd'],
   }
 
   $passwords = parsejson(file("/opt/puppet/shares/private/${::hostname}/ircd-passwords"))
