@@ -7,7 +7,7 @@ class ocf::packages::docker::apt {
 
   apt::source { 'docker':
     location    => 'http://apt.dockerproject.org/repo',
-    release     => 'debian-jessie',
+    release     => "debian-${::lsbdistcodename}",
     repos       => 'main',
     include   => {
       src => false
