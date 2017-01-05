@@ -25,7 +25,7 @@ if (env.BRANCH_NAME == 'master') {
         stage('update-prod') {
             sh '''
                 kinit -t /opt/jenkins/deploy/ocfdeploy.keytab ocfdeploy
-                    ssh ocfdeploy@puppet 'sudo /opt/puppet/scripts/update-prod'
+                    ssh ocfdeploy@puppet 'sudo /opt/puppetlabs/scripts/update-prod'
             '''
         }
     }
