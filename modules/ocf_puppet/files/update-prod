@@ -1,0 +1,24 @@
+#!/bin/bash -e
+ENV_DIR=$(puppet config print environmentpath)
+PRODUCTION="$ENV_DIR/production"
+REMOTE="https://github.com/ocf/puppet.git"
+
+if [ ! -d "$PRODUCTION" ]; then
+    git init "$PRODUCTION"
+fi
+
+cd "$PRODUCTION"
+
+# update origin url
+if ! git remote | grep origin > /dev/null; then
+    git remote add origin "$REMOTE"
+else
+    git remote set-url origin "$REMOTE"
+fi
+
+# update from remote
+git fetch origin
+git reset --hard origin/master
+
+# Install third-party modules
+make vendor

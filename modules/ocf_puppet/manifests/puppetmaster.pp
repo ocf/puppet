@@ -36,7 +36,7 @@ class ocf_puppet::puppetmaster {
     '/etc/puppet/tagmail.conf':
       content => "warning, err, alert, emerg, crit: puppet\n";
 
-    ['/opt/puppet', '/opt/puppet/env', '/opt/puppet/shares', '/opt/puppet/shares/contrib']:
+    ['/opt/puppet', '/opt/puppet/env', '/opt/puppet/scripts', '/opt/puppet/shares', '/opt/puppet/shares/contrib']:
       ensure  => directory;
 
     '/opt/puppet/shares/private':
@@ -45,9 +45,8 @@ class ocf_puppet::puppetmaster {
       group   => puppet,
       recurse => true;
 
-    '/opt/puppet/scripts':
-      ensure  => symlink,
-      links   => manage,
-      target  => '/opt/share/utils/staff/puppet';
+    '/opt/puppet/scripts/update-prod':
+      source  => 'puppet:///modules/ocf_puppet/update-prod',
+      mode    => '0755';
   }
 }

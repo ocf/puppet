@@ -4,7 +4,7 @@
 # The root password is a last resort that is only used in rare cases where
 # there is no other option.
 #
-# To regenerate the root password, see /opt/puppet/scripts/gen-rootpw
+# To regenerate the root password, see /opt/share/utils/staff/puppet/gen-rootpw
 class ocf::rootpw($stage = 'first') {
   user { 'root':
     password => file('/opt/puppet/shares/private/rootpw')
