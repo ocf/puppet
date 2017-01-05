@@ -18,7 +18,7 @@ define ocf_mirrors::monitoring(
     cron { "${title}-health":
       command => "${project_path}/health",
       user    => 'mirrors',
-      hour    => '*/20',
+      hour    => '*/6',
       minute  => '0';
     }
   } else {

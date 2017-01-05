@@ -1,8 +1,9 @@
 # ftpsync is a Debian tool for reliably mirroring Debian archives:
 # https://www.debian.org/mirror/ftpmirror
 define ocf_mirrors::ftpsync(
-    $cron_minute,
     $rsync_host,
+    $cron_minute = undef,
+    $cron_hour = '*',
     $rsync_path = $title,
     $rsync_user = '',
     $rsync_password = '',
@@ -41,10 +42,13 @@ define ocf_mirrors::ftpsync(
     require => File[$project_path];
   }
 
-  cron { "ftpsync-${title}":
-    command => "BASEDIR=${project_path} ${project_path}/bin/ftpsync > /dev/null 2>&1",
-    user    => 'mirrors',
-    minute  => $cron_minute,
-    require => File["${project_path}/bin", "${project_path}/etc/ftpsync.conf"];
+  if $cron_minute {
+    cron { "ftpsync-${title}":
+      command => "BASEDIR=${project_path} ${project_path}/bin/ftpsync > /dev/null 2>&1",
+      user    => 'mirrors',
+      minute  => $cron_minute,
+      hour    => $cron_hour,
+      require => File["${project_path}/bin", "${project_path}/etc/ftpsync.conf"];
+    }
   }
 }

@@ -2,7 +2,8 @@ class ocf_mirrors::kali {
   ocf_mirrors::ftpsync {
     'kali':
       rsync_host  => 'archive.kali.org',
-      cron_minute => '15';
+      cron_minute => '15',
+      cron_hour   => '*/3';
 
     'kali-images':
       rsync_host  => 'archive.kali.org',
