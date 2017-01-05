@@ -44,9 +44,6 @@ class ocf_mesos::master::webui(
     'mesos':
       members => ['localhost:5050'];
 
-    'mesos-leader':
-      members => ['leader.mesos:5050'];
-
     'marathon':
       members => ['localhost:8080'];
   }
@@ -99,7 +96,12 @@ class ocf_mesos::master::webui(
 
     'mesos-https-leader':
       server_name => ['mesos.ocf.berkeley.edu'],
-      proxy       => 'http://mesos-leader',
+
+      # The mesos leader might change at any time, but nginx only resolves DNS on
+      # startup. We use the hack of storing it in a variable to work around that.
+      # https://github.com/ocf/puppet/issues/104
+      proxy       => '$mesos_leader_upstream',
+
       ssl         => true,
       listen_port => 443,
 
@@ -109,6 +111,9 @@ class ocf_mesos::master::webui(
       raw_append => [
         'auth_pam "OCF Mesos Master";',
         'auth_pam_service_name mesos_master_webui;',
+
+        'resolver ns.ocf.berkeley.edu;',
+        'set $mesos_leader_upstream http://leader.mesos:5050;',
       ],
 
       location_cfg_append => {
