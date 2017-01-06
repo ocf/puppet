@@ -4,6 +4,7 @@ class ocf_puppet::puppetmaster {
   }
 
   service { 'puppetserver':
+    enable  => true,
     require => Package['puppetserver'],
   }
 
@@ -22,11 +23,13 @@ class ocf_puppet::puppetmaster {
   file {
     '/etc/puppetlabs/puppet/fileserver.conf':
       content => template('ocf_puppet/fileserver.conf.erb'),
-      require => Package['puppetserver'];
+      require => Package['puppetserver'],
+      notify  => Service['puppetserver'];
 
     '/etc/puppetlabs/puppet/tagmail.conf':
       source  => 'puppet:///modules/ocf_puppet/tagmail.conf',
-      require => Package['puppetserver'];
+      require => Package['puppetserver'],
+      notify  => Service['puppetserver'];
 
     '/opt/share/puppet/ldap-enc':
       mode    => '0755',
