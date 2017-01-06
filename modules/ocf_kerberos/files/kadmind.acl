@@ -1,5 +1,6 @@
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #admin principals
+abizer/admin@OCF.BERKELEY.EDU           all,get-keys
 andycui/admin@OCF.BERKELEY.EDU          all,get-keys
 baisang/admin@OCF.BERKELEY.EDU          all,get-keys
 ckuehl/admin@OCF.BERKELEY.EDU           all,get-keys
