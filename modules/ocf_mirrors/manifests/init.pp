@@ -101,8 +101,9 @@ class ocf_mirrors {
   }
 
   apache::vhost { 'mirrors.ocf.berkeley.edu':
-    serveraliases   => ['mirrors'],
+    serveraliases   => ['mirrors', 'dl.amnesia.boum.org', '*.dl.amnesia.boum.org'],
     port            => 80,
+    default_vhost   => true,
     docroot         => '/opt/mirrors/ftp',
 
     directories     => [
