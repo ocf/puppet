@@ -14,18 +14,18 @@ import dateutil.parser
 import requests
 
 
-DIST_TO_CHECK = '<%= @monitoring_dist_to_check %>'
+DIST_TO_CHECK = '<%= @dist_to_check %>'
 
 LOCAL_MIRROR = (
     'mirrors.ocf.berkeley.edu',
-    '/<%= @monitoring_local_path %>',
+    '/<%= @local_path %>',
     'http',
 )
 
 UPSTREAM_MIRROR = (
-    '<%= @monitoring_upstream_host %>',
-    '/<%= @monitoring_upstream_path %>',
-    '<%= @monitoring_upstream_protocol %>',
+    '<%= @upstream_host %>',
+    '/<%= @upstream_path %>',
+    '<%= @upstream_protocol %>',
 )
 
 
