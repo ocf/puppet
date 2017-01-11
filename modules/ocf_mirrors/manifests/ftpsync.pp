@@ -2,7 +2,7 @@
 # https://www.debian.org/mirror/ftpmirror
 define ocf_mirrors::ftpsync(
     $rsync_host,
-    $cron_minute = undef,
+    $cron_minute,
     $cron_hour = '*',
     $rsync_path = $title,
     $rsync_user = '',
@@ -42,13 +42,11 @@ define ocf_mirrors::ftpsync(
     require => File[$project_path];
   }
 
-  if $cron_minute {
-    cron { "ftpsync-${title}":
-      command => "BASEDIR=${project_path} ${project_path}/bin/ftpsync > /dev/null 2>&1",
-      user    => 'mirrors',
-      minute  => $cron_minute,
-      hour    => $cron_hour,
-      require => File["${project_path}/bin", "${project_path}/etc/ftpsync.conf"];
-    }
+  cron { "ftpsync-${title}":
+    command => "BASEDIR=${project_path} ${project_path}/bin/ftpsync > /dev/null 2>&1",
+    user    => 'mirrors',
+    minute  => $cron_minute,
+    hour    => $cron_hour,
+    require => File["${project_path}/bin", "${project_path}/etc/ftpsync.conf"];
   }
 }
