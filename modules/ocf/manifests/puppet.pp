@@ -29,6 +29,14 @@ class ocf::puppet($stage = 'first') {
       ],
       require => Package['puppet-agent'],
     }
+
+    # Run puppet as a cron job
+    cron { 'puppet-agent':
+      ensure  => present,
+      command => '/opt/puppetlabs/bin/puppet agent --verbose --onetime --no-daemonize --logdest syslog > /dev/null 2>&1',
+      user    => 'root',
+      minute  => [fqdn_rand(30), fqdn_rand(30) + 30],
+    }
   } else {
     package { ['facter', 'puppet']: }
 
