@@ -40,7 +40,7 @@ class ocf_puppet::puppetmaster {
       content => template('ocf_puppet/puppet.conf.erb'),
       require => Package['puppet-agent'];
 
-    ['/opt/puppetlabs/scripts', '/opt/puppetlabs/shares', '/opt/puppetlabs/shares/contrib']:
+    ['/opt/puppet', '/opt/puppetlabs/scripts', '/opt/puppetlabs/shares', '/opt/puppetlabs/shares/contrib']:
       ensure  => directory,
       require => Package['puppetserver'];
 

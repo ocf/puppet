@@ -8,23 +8,25 @@ class ocf_puppet::environments {
   # don't use any more, but used to use.
   #
   # Instead, we just call `git clone`.
+  if $::ocf_staff {
   $staff = split($::ocf_staff, ',')
-  $staff.each |$user| {
-    $repo_path = "${::puppet_environmentpath}/${user}"
+    $staff.each |$user| {
+      $repo_path = "${::puppet_environmentpath}/${user}"
 
-    # We do the git checkout as the user, so we must ensure the directory exists
-    # (and is owned by the user) first, since users can't make directories under
-    # the root environments directory.
-    file { $repo_path:
-      ensure => directory,
-      owner  => $user,
-      group  => ocf,
-    }
+      # We do the git checkout as the user, so we must ensure the directory exists
+      # (and is owned by the user) first, since users can't make directories under
+      # the root environments directory.
+      file { $repo_path:
+        ensure => directory,
+        owner  => $user,
+        group  => ocf,
+      }
 
-    exec { "git clone https://github.com/ocf/puppet ${repo_path} && cd ${repo_path} && make vendor":
-      user    => $user,
-      unless  => "test -d ${repo_path}/.git",
-      require => [File[$repo_path], Package['git'], Package['r10k']];
+      exec { "git clone https://github.com/ocf/puppet ${repo_path} && cd ${repo_path} && make vendor":
+        user    => $user,
+        unless  => "test -d ${repo_path}/.git",
+        require => [File[$repo_path], Package['git'], Package['r10k']];
+      }
     }
   }
 }
