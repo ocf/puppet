@@ -12,7 +12,7 @@ class ocf_puppet::puppetmaster {
   augeas { '/etc/default/puppetserver':
     context => '/files/etc/default/puppetserver',
     changes => [
-      "set JAVA_ARGS '\"-Xms512m -Xmx512m -XX:MaxPermSize=256m\"'",
+      "set JAVA_ARGS '\"-Xms1g -Xmx1g -XX:MaxPermSize=512m\"'",
     ],
     require => Package['puppetserver'],
     notify  => Service['puppetserver'],
