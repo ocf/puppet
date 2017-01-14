@@ -31,6 +31,11 @@ class ocf_puppet::puppetmaster {
       require => Package['puppetserver'],
       notify  => Service['puppetserver'];
 
+    '/etc/puppetlabs/puppetserver/conf.d/webserver.conf':
+      source  => 'puppet:///modules/ocf_puppet/webserver.conf',
+      require => Package['puppetserver'],
+      notify  => Service['puppetserver'];
+
     '/opt/share/puppet/ldap-enc':
       mode    => '0755',
       source  => 'puppet:///modules/ocf_puppet/ldap-enc',

@@ -12,9 +12,6 @@ class ocf::puppet($stage = 'first') {
         "set agent/environment ${::environment}",
         'set agent/usecacheonfailure false',
 
-        # TODO: Remove this after the puppetmaster upgrade is complete
-        'set main/server dev-puppet',
-
         # Remove a bunch of old settings that are no longer needed
         'rm main/logdir',
         'rm main/vardir',

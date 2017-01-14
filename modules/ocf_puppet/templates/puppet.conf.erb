@@ -9,9 +9,6 @@
 
 hiera_config = <%= @puppet_environmentpath %>/<%= @environment %>/hiera.yaml
 
-# TODO: Remove this after ths upgrade
-server = dev-puppet
-
 [agent]
 
 environment = <%= @environment %>
