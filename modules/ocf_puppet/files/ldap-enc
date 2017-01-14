@@ -35,21 +35,16 @@ def main():
         # Could not find a unique node to classify, exit
         sys.exit(1)
 
-    output = {'parameters': {}}
+    output = {'parameters': {}, 'environment': host['environment'][0]}
 
     for key, values in host.items():
-        # The environment is a special parameter that needs some conversion to
-        # work correctly.
-        if key == 'environment':
-            output['environment'] = values[0]
-
         # Remove the value from its list only if it is a singular value
         if len(values) == 1:
             output['parameters'][key] = values[0]
         else:
             output['parameters'][key] = values
 
-    print(yaml.dump(output, default_flow_style=False))
+    print(yaml.safe_dump(output, default_flow_style=False))
 
 
 if __name__ == '__main__':
