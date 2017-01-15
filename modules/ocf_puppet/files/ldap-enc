@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+"""LDAP External Node Classifier for Puppet
+
+Since Puppet Server uses JRuby, we can't use the same ruby-ldap package that
+we have used with Puppet's LDAP node classifier in the past and instead must
+either patch jruby-ldap to work with Puppet (fragile for the future and tough
+if anything moves locations), or create an ENC for Puppet that will classify
+nodes like the built-in LDAP classifier.
+
+This is that classifier! It takes in node FQDNs, and looks them up in LDAP
+to get variables and classes to give to Puppet.
+"""
+import argparse
+import sys
+
+import yaml
+from ocflib.infra.hosts import hostname_from_domain
+from ocflib.infra.hosts import hosts_by_filter
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument('hostname', help='Hostname of LDAP node to classify.')
+    args = parser.parse_args()
+
+    hostname = hostname_from_domain(args.hostname)
+    search = hosts_by_filter('(&(objectclass=puppetClient)(cn={}))'.format(hostname))
+
+    if len(search) == 1:
+        host = search[0]
+    else:
+        # Could not find a unique node to classify, exit
+        sys.exit(1)
+
+    output = {'parameters': {}, 'environment': host['environment'][0]}
+
+    for key, values in host.items():
+        # Remove the value from its list only if it is a singular value
+        if len(values) == 1:
+            output['parameters'][key] = values[0]
+        else:
+            output['parameters'][key] = values
+
+    print(yaml.safe_dump(output, default_flow_style=False))
+
+
+if __name__ == '__main__':
+    main()

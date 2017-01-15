@@ -4,7 +4,7 @@ class ocf::staff_users($noop = false) {
   # Only create home directories if:
   #   - we don't mount NFS
   #   - it hasn't been turned off in Hiera
-  if !str2bool($::ocf_nfs) and !$noop {
+  if !str2bool($::ocf_nfs) and !$noop and $::ocf_staff {
     $staff = split($::ocf_staff, ',')
     ocf::staff_users::user { $staff:; }
   }

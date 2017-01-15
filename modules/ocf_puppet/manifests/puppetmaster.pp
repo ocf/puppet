@@ -1,52 +1,75 @@
 class ocf_puppet::puppetmaster {
   package {
-    ['puppetmaster-passenger', 'puppet-lint']:;
+    ['puppetserver', 'puppet-lint']:;
   }
 
-  class { '::apache':
-    default_vhost => false;
+  service { 'puppetserver':
+    enable  => true,
+    require => Package['puppetserver'],
   }
 
-  apache::vhost { 'puppetmaster':
-    docroot    => '/usr/share/puppet/rack/puppetmasterd/public/',
-    port       => 8140,
-
-    ssl               => true,
-    ssl_key           => '/var/lib/puppet/ssl/private_keys/puppet.pem',
-    ssl_cert          => '/var/lib/puppet/ssl/certs/puppet.pem',
-    ssl_chain         => '/var/lib/puppet/ssl/certs/ca.pem',
-    ssl_ca            => '/var/lib/puppet/ssl/certs/ca.pem',
-    ssl_crl           => '/var/lib/puppet/ssl/ca/ca_crl.pem',
-    ssl_verify_client => 'optional',
-    ssl_verify_depth  => 1,
-    ssl_options       => ['+StdEnvVars', '+ExportCertData'],
-
-    rack_base_uris => ['/'];
+  # Set correct memory limits on puppetserver so that it doesn't run out
+  augeas { '/etc/default/puppetserver':
+    context => '/files/etc/default/puppetserver',
+    changes => [
+      "set JAVA_ARGS '\"-Xms1g -Xmx1g -XX:MaxPermSize=512m\"'",
+    ],
+    require => Package['puppetserver'],
+    notify  => Service['puppetserver'],
   }
 
   $docker_private_hosts = union(keys(hiera('mesos_masters')), hiera('mesos_slaves'))
 
   file {
-    '/etc/puppet/fileserver.conf':
-      content => template('ocf_puppet/fileserver.conf.erb');
+    '/etc/puppetlabs/puppet/fileserver.conf':
+      content => template('ocf_puppet/fileserver.conf.erb'),
+      require => Package['puppetserver'],
+      notify  => Service['puppetserver'];
 
-    '/etc/puppet/puppet.conf':
-      content => template('ocf_puppet/puppet.conf.erb');
+    '/etc/puppetlabs/puppet/tagmail.conf':
+      source  => 'puppet:///modules/ocf_puppet/tagmail.conf',
+      require => Package['puppetserver'],
+      notify  => Service['puppetserver'];
 
-    '/etc/puppet/tagmail.conf':
-      content => "warning, err, alert, emerg, crit: puppet\n";
+    '/etc/puppetlabs/puppetserver/conf.d/webserver.conf':
+      source  => 'puppet:///modules/ocf_puppet/webserver.conf',
+      require => Package['puppetserver'],
+      notify  => Service['puppetserver'];
 
-    ['/opt/puppet', '/opt/puppet/env', '/opt/puppet/scripts', '/opt/puppet/shares', '/opt/puppet/shares/contrib']:
-      ensure  => directory;
+    '/opt/share/puppet/ldap-enc':
+      mode    => '0755',
+      source  => 'puppet:///modules/ocf_puppet/ldap-enc',
+      require => File['/opt/share/puppet'];
 
-    '/opt/puppet/shares/private':
+    '/etc/puppetlabs/puppet/puppet.conf':
+      content => template('ocf_puppet/puppet.conf.erb'),
+      require => Package['puppet-agent'];
+
+    ['/opt/puppet', '/opt/puppetlabs/scripts', '/opt/puppetlabs/shares', '/opt/puppetlabs/shares/contrib']:
+      ensure  => directory,
+      require => Package['puppetserver'];
+
+    '/opt/puppetlabs/shares/private':
       mode    => '0400',
       owner   => puppet,
       group   => puppet,
-      recurse => true;
+      recurse => true,
+      require => File['/opt/puppetlabs/shares'];
 
-    '/opt/puppet/scripts/update-prod':
+    '/opt/puppetlabs/scripts/update-prod':
       source  => 'puppet:///modules/ocf_puppet/update-prod',
       mode    => '0755';
+
+    # TODO: Remove old puppet directories after the upgrade is fully done
+    # (for now they are just links to the new locations)
+    '/opt/puppet/env':
+      ensure  => symlink,
+      target  => '/etc/puppetlabs/code/environments',
+      require => Package['puppetserver'];
+
+    '/opt/puppet/shares':
+      ensure  => symlink,
+      target  => '/opt/puppetlabs/shares',
+      require => Package['puppetserver'];
   }
 }
