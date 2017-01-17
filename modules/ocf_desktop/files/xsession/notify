@@ -14,12 +14,6 @@ NOTIFICATION_ICON = '/opt/share/xsession/images/ocf-color.png'
 PAPER_PATH = '/opt/share/utils/bin/paper'
 
 
-def show_quota_loop(scheduler):
-    # Schedule self to repeat next minute
-    scheduler.enter(60, 0, show_quota_loop, argument=(scheduler,))
-    scheduler.run()
-
-
 def main():
     Notify.init('OCF')
 
