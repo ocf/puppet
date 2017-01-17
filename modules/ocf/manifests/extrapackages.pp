@@ -19,6 +19,7 @@ class ocf::extrapackages {
   package {
     # misc. packages helpful for users
     [
+    'alpine',
     'apache2-dev',
     'apache2-utils',
     'autoconf',
@@ -151,9 +152,11 @@ class ocf::extrapackages {
     'texlive-latex-recommended',
     'texlive-publishers',
     'texlive-science',
+    'twine',
     'vagrant',
     'valgrind',
     'weechat',
+    'xvnc4viewer',
     'zlib1g-dev',
     'znc',
     ]:;
@@ -162,21 +165,21 @@ class ocf::extrapackages {
   if $::lsbdistcodename == 'jessie' {
     package {
       [
-        # alpine should be in stretch soon (it's in sid)
-        # Looks like it was pulled from stretch for some reason
-        'alpine',
-
-        # We can either package this for stretch (we packaged for jessie), or
-        # we can just remove it in favor of using Box.com
+        # We can probably just remove it in favor of using Box.com for offsite
+        # backups, but the google backup script installation needs to be removed
+        # first, since it won't work if this is removed.
         'google-gsutil',
 
-        # No idea on these, they would be useful to have, but aren't in stretch
-        # or sid.
+        # These look like they aren't in stretch or sid but have instead been
+        # replaced by python-notebook and python3-notebook. We'd need to figure
+        # out how to more seamlessly migrate this to make it so that ipython
+        # notebook commands still work, or at least find a suitable replacement.
+        # The jupyter-notebook package may or may not be needed.
         'ipython-notebook',
         'ipython3-notebook',
 
         # These have been replaced by more generic php-* instead of php5-*
-        # packages in stretch
+        # packages in stretch.
         'php5-cli',
         'php5-curl',
         'php5-gd',
@@ -184,17 +187,13 @@ class ocf::extrapackages {
         'php5-mysql',
         'php5-sqlite',
 
-        # We should package this for stretch
+        # We should probably package this for stretch, since it's useful to have
+        # with puppet without having to have a whole virtualenv just for that.
+        # It would probably be pretty easy to package too...
         'pre-commit',
 
         # Replaced by ruby-mysql2 in stretch
         'ruby-mysql',
-
-        # Recent package in sid, but none in stretch yet
-        'twine',
-
-        # Version in sid, can probably switch to another VNC viewer for stretch
-        'xvnc4viewer',
       ]:;
     }
   } else {
@@ -206,6 +205,8 @@ class ocf::extrapackages {
         'php-mcrypt',
         'php-mysql',
         'php-sqlite3',
+        'python-notebook',
+        'python3-notebook',
         'ruby-mysql2',
       ]:;
     }
