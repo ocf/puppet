@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import pwd
 import subprocess
 import time
 from datetime import datetime
@@ -23,7 +24,7 @@ def main():
     Notify.init('OCF')
 
     staff = [
-        session.user
+        pwd.getpwnam(session.user).pw_gecos
         for session in staff_in_lab()
         if session.user != 'pubstaff' and not is_staff(session.user, 'opstaff')
     ]
