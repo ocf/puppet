@@ -169,11 +169,9 @@ class ocf::extrapackages {
         # first, since it won't work if this is removed.
         'google-gsutil',
 
-        # These look like they aren't in stretch or sid but have instead been
-        # replaced by python-notebook and python3-notebook. We'd need to figure
-        # out how to more seamlessly migrate this to make it so that ipython
-        # notebook commands still work, or at least find a suitable replacement.
-        # The jupyter-notebook package may or may not be needed.
+        # Replaced by jupyter-* packages in stretch with separate ipykernel
+        # packages. We install python*-notebook in stretch which depend on
+        # the ipykernel packages.
         'ipython-notebook',
         'ipython3-notebook',
 
@@ -198,6 +196,8 @@ class ocf::extrapackages {
   } else {
     package {
       [
+        'jupyter-console',
+        'jupyter-notebook',
         'php-cli',
         'php-curl',
         'php-gd',
