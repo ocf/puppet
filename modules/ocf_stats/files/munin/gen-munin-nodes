@@ -1,17 +1,11 @@
-#!/usr/bin/env python
-import ldap
+#!/usr/bin/env python3
+"""Generate a list of hosts to give to munin for stats generation"""
+from ocflib.infra.hosts import hosts_by_filter
 
-LDAP_SERVER = 'ldaps://ldap.ocf.berkeley.edu/'
-LDAP_BASE = 'ou=Hosts,dc=OCF,dc=Berkeley,dc=EDU'
-
-l = ldap.initialize(LDAP_SERVER)
-l.simple_bind_s('', '')
-
-attrs = ('cn', 'ipHostNumber', 'type', 'puppetVar')
-
-# Only load servers and desktops to avoid trying to contact printers, dhcp, etc.
-for _, vals in l.search_st(LDAP_BASE, ldap.SCOPE_SUBTREE, '(|(type=server)(type=desktop))', attrs):
-    cn, ip, host_type, puppet_var = map(lambda key: vals.get(key, [''])[0], attrs)
+# Only load servers, desktops, and staff VMs to avoid trying to contact anything
+# not running munin, like printers, anything on dhcp, the switch, etc.
+for vals in hosts_by_filter('(|(type=server)(type=desktop)(type=staffvm))'):
+    cn, ip, host_type = vals['cn'][0], vals['ipHostNumber'][0], vals['type']
 
     # Don't include hozer machines
     if cn.startswith('hozer-'):
@@ -21,5 +15,5 @@ for _, vals in l.search_st(LDAP_BASE, ldap.SCOPE_SUBTREE, '(|(type=server)(type=
     print('\taddress {}'.format(ip))
 
     # Disable alerting on staff VMs
-    if puppet_var.startswith('owner'):
+    if host_type == 'staffvm':
         print('\tcontacts none')
