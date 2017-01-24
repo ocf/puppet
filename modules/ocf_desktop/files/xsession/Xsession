@@ -51,13 +51,6 @@ Exec=google-chrome --start-maximized
 Type=Application
 Icon=google-chrome" > $HOME/Desktop/chrome.desktop
 
-# Local Computer
-echo "[Desktop Entry]
-Type=Application
-Name=Local Computer
-Exec=thunar computer:/
-Icon=computer" > $HOME/Desktop/computer.desktop
-
 # Terminal
 echo "[Desktop Entry]
 Type=Application

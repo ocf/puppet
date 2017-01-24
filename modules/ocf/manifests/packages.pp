@@ -92,6 +92,7 @@ class ocf::packages {
     'python3',
     'python3-dateutil',
     'python3-dev',
+    'python3-dnspython',
     'python3-paramiko',
     'python3-pip',
     'python3-requests',

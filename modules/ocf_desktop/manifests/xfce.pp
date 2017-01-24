@@ -16,4 +16,14 @@ class ocf_desktop::xfce {
     '/opt/share/xsession/penguin-for-menu.png':
       source  => 'puppet:///modules/ocf_desktop/xsession/xfce4/penguin-for-menu.png';
   }
+
+  if $::lsbdistcodename != 'jessie' {
+    file {
+      # Overwrite panel definition on stretch to remove second logout button
+      # and add audio adjustment plugin
+      '/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml':
+        source  => 'puppet:///modules/ocf_desktop/xsession/xfce4/xfce4-panel-stretch.xml',
+        require => File['/etc/xdg/xfce4/xfconf'];
+    }
+  }
 }

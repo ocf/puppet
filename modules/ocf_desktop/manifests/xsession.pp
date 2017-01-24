@@ -140,6 +140,15 @@ class ocf_desktop::xsession {
       recurse => true;
   }
 
+  if $::lsbdistcodename != 'jessie' {
+    file {
+      # Overwrite datetime file to add larger font on stretch
+      '/etc/skel/.config/xfce4/panel/datetime-7.rc':
+        source  => 'puppet:///modules/ocf_desktop/datetime-7-stretch.rc',
+        require => File['/etc/skel/.config'];
+    }
+  }
+
   exec { 'xscreensaver-blanking-only':
     command => 'sed -i \'s/*mode:.*/*mode: blank/\' /etc/X11/app-defaults/XScreenSaver-nogl',
     unless  => 'grep \'mode: blank\' /etc/X11/app-defaults/XScreenSaver-nogl',
