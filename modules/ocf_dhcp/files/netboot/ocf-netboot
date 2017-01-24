@@ -31,16 +31,7 @@ chmod 755 $tftpdir
 
 for dist in "${dists[@]}"; do
     for arch in "${archs[@]}"; do
-        if [ "$dist" == "jessie" ]; then
-            netboot="http://mirrors/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
-        else
-            # TODO: Currently the daily image is broken, so use the one from December 2nd, 2016.
-            # Once stretch becomes stable this should be removed and added to the section above,
-            # and replaced with the new testing release.
-            #netboot="https://d-i.debian.org/daily-images/$arch/daily/netboot/netboot.tar.gz"
-            netboot="https://d-i.debian.org/daily-images/$arch/20161202-00:20/netboot/netboot.tar.gz"
-        fi
-
+        netboot="http://mirrors/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
         fw="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$dist/current/firmware.tar.gz"
         fwdir=$(mktemp -d)
         label="${dist}-${arch}"
