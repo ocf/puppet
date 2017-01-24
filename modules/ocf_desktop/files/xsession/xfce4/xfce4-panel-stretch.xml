@@ -99,6 +99,7 @@
       <property name="track" type="string" value="Master"/>
       <property name="command" type="string" value="xfce4-mixer"/>
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
+      <property name="show-notifications" type="bool" value="false"/>
     </property>
     <property name="plugin-2" type="string" value="whiskermenu"/>
     <property name="plugin-18" type="string" value="launcher">
