@@ -5,7 +5,7 @@ from ocflib.infra.hosts import hosts_by_filter
 # Only load servers, desktops, and staff VMs to avoid trying to contact anything
 # not running munin, like printers, anything on dhcp, the switch, etc.
 for vals in hosts_by_filter('(|(type=server)(type=desktop)(type=staffvm))'):
-    cn, ip, host_type = vals['cn'][0], vals['ipHostNumber'][0], vals['type']
+    cn, ip, host_type = vals['cn'][0], vals['ipHostNumber'][0], vals['type'][0]
 
     # Don't include hozer machines
     if cn.startswith('hozer-'):
@@ -16,4 +16,4 @@ for vals in hosts_by_filter('(|(type=server)(type=desktop)(type=staffvm))'):
 
     # Disable alerting on staff VMs
     if host_type == 'staffvm':
-        print('\tcontacts none')
+        print('\tcontacts no')
