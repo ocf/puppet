@@ -47,14 +47,18 @@ class ocf_desktop::xsession {
   }
 
   # wallpaper symlink
-  $wallpaper = $staff_only ? {
-    true  => 'background-staff',
-    false => 'background'
+  if $::lsbdistcodename == 'jessie' {
+    $wallpaper = $staff_only ? {
+      true  => 'background-staff.png',
+      false => 'background.png'
+    }
+  } else {
+    $wallpaper = 'background.svg'
   }
 
   file { '/opt/share/wallpaper':
     ensure  => link,
-    target  => "/opt/share/xsession/images/${wallpaper}.png",
+    target  => "/opt/share/xsession/images/${wallpaper}",
     require => File['/opt/share/xsession/images'];
   }
 
