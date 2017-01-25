@@ -88,7 +88,7 @@ class ocf::puppet($stage = 'first') {
       command     => 'puppet agent --verbose --onetime --no-daemonize --logdest syslog > /dev/null 2>&1',
       user        => 'root',
       minute      => [fqdn_rand(30), fqdn_rand(30) + 30],
-      environment => 'PATH=/opt/puppetlabs/bin:/usr/bin'
+      environment => 'PATH=/opt/puppetlabs/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin'
     }
   } else {
     service { 'puppet':
