@@ -13,7 +13,7 @@ set -euo pipefail
 # Whichever architecture and distribution is first in the arrays is the default,
 # and is (ab)used for the PXE boot menu.
 archs=(amd64)
-dists=(jessie stretch)
+dists=(stretch jessie)
 menu_arch="${archs[0]}"
 menu_dist="${dists[0]}"
 menu_path="debian-installer/$menu_arch"
@@ -90,8 +90,8 @@ for dist in "${dists[@]}"; do
     done
 done
 
-# Auto-select OCF option after 10 seconds
-sed -i 's/timeout 0/timeout 100/' pxelinux.cfg/default
+# Auto-select OCF option after 30 seconds
+sed -i 's/timeout 0/timeout 300/' pxelinux.cfg/default
 
 
 # Download DBAN, add to menu
