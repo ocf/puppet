@@ -45,7 +45,7 @@ class ocf_puppet::puppetmaster {
       content => template('ocf_puppet/puppet.conf.erb'),
       require => Package['puppet-agent'];
 
-    ['/opt/puppet', '/opt/puppetlabs/scripts', '/opt/puppetlabs/shares', '/opt/puppetlabs/shares/contrib']:
+    ['/opt/puppet', '/opt/puppetlabs/scripts', '/opt/puppetlabs/shares']:
       ensure  => directory,
       require => Package['puppetserver'];
 
@@ -60,8 +60,8 @@ class ocf_puppet::puppetmaster {
       source  => 'puppet:///modules/ocf_puppet/update-prod',
       mode    => '0755';
 
-    # TODO: Remove old puppet directories after the upgrade is fully done
-    # (for now they are just links to the new locations)
+    # These are just links to the new locations, but keep them for staff to use
+    # since they are much more convenient to type.
     '/opt/puppet/env':
       ensure  => symlink,
       target  => '/etc/puppetlabs/code/environments',
