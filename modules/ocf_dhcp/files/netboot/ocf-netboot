@@ -19,9 +19,19 @@ menu_dist="${dists[0]}"
 menu_path="debian-installer/$menu_arch"
 txt_cfg="$menu_path/boot-screens/txt.cfg"
 
+# Unfortunately, there is no good way to get a finnix tarball via script.
+# The best way is:
+#   - boot finnix from ISO in a virtual machine
+#   - run `finnix-netboot-server`.
+#   - make sure to select "fat initrd" instead of the NFS option; this
+#     requires more memory but lets us avoid an NFS server during netboot
+#   - cd /srv/tfp && tar cfz finnix.tar.gz finnix
+#   - scp finnix.tar.gz supernova:~staff/public_html/contrib/
+# Note that the "fat" initrd requires ~0.75 GB of memory, so if you're
+# testing with a VM, be sure to give it sufficient RAM.
+finnix="http://contrib.ocf.berkeley.edu/finnix.tar.gz"
 dban="http://sourceforge.net/projects/dban/files/latest/download"
 memtest="http://www.memtest.org/download/5.01/memtest86+-5.01.bin.gz"
-finnix="/var/lib/finnix.tar.gz"
 tftpdir='/opt/tftp'
 
 # Remove old pxe files
@@ -123,6 +133,7 @@ echo "Downloading Memtest86+..."
 cd $tftpdir
 mkdir -p memtest
 wget -q -O memtest/memtest.bin.gz "$memtest"
+echo "Extracting Memtest86+..."
 gunzip -c memtest/memtest.bin.gz > memtest/memtest
 
 echo "label memtest
@@ -132,8 +143,10 @@ echo "label memtest
 
 
 # Extract and add Finnix to menu
+echo "Downloading finnix..."
+wget -q -O finnix.tar.gz "$finnix"
 echo "Extracting finnix..."
-tar xf /var/lib/finnix.tar.gz
+tar xf finnix.tar.gz
 echo "label finnix
     menu label Finnix (requires 768 MB RAM)
     kernel finnix/boot/x86/linux64
@@ -142,11 +155,14 @@ echo "label finnix
 
 
 # Clean up
+echo "Cleaning up..."
 rm $tftpdir/netboot.tar.gz
 rm dban.iso
 rm memtest/memtest.bin.gz
 
+
 # Restart tftpd to provide the new PXE boot files
+echo "Restarting TFTP service..."
 service tftpd-hpa restart
 
 echo "PXE image is ready."
