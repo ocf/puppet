@@ -15,7 +15,16 @@ class ocf::packages {
   include ocf::packages::shell
   include ocf::packages::ssh
 
-  # packages to remove
+  # Packages to automatically update to be the latest version. This should be
+  # kept short, since apt-dater should be used to update almost all packages.
+  package {
+    # Ensure ocflib is the latest version to quickly push out changes in lab
+    # hours, etc. We control releases on this, so this should be safe.
+    'python3-ocflib':
+      ensure => latest;
+  }
+
+  # Packages to remove
   package {
     [
       'apt-listchanges',
