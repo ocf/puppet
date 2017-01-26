@@ -10,3 +10,4 @@ ocf::packages::ntp::master: true
 ocf::packages::ntp::peers:
     - jaws.ocf.berkeley.edu
     - pandemic.ocf.berkeley.edu
+    - segfault.ocf.berkeley.edu
