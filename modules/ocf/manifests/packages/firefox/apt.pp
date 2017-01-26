@@ -17,8 +17,9 @@ class ocf::packages::firefox::apt {
     apt::source {
       'debian-experimental':
         location => 'http://mirrors/debian/',
-        release  => 'experimental',
+        release  => 'unstable',
         repos    => 'main',
+        pin      => '150',
         include  => {
           src => true
         },

@@ -6,7 +6,7 @@ class ocf::packages::firefox {
   # TODO: switch to mozilla.debian.net once they support stretch.
   ocf::repackage { 'firefox':
     backport_on => ['stretch', 'sid'],
-    dist        => 'experimental',
+    dist        => 'unstable',
   }
 
   # TODO: remove after upgrade to stretch.
