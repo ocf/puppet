@@ -42,6 +42,12 @@ class ocf::packages::docker($admin_group = 'docker') {
       hour    => 1,
       minute  => 3;
 
+    'clean-old-created-docker-containers':
+      # days is intentionally plural
+      command => "docker ps -a --filter status=created | grep -E '(days|weeks?|months?|years?) ago' | awk '{print \$1}' | chronic xargs -r docker rm",
+      hour    => 1,
+      minute  => 5;
+
     'clean-docker-images':
       # Chronic doesn't work well here because docker rmi likes to raise errors
       # about images still linked to containers
