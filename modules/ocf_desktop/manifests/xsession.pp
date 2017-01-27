@@ -50,10 +50,13 @@ class ocf_desktop::xsession {
   if $::lsbdistcodename == 'jessie' {
     $wallpaper = $staff_only ? {
       true  => 'background-staff.png',
-      false => 'background.png'
+      false => 'background.png',
     }
   } else {
-    $wallpaper = 'background.svg'
+    $wallpaper = $staff_only ? {
+      true  => 'background-staff.svg',
+      false => 'background.svg',
+    }
   }
 
   file { '/opt/share/wallpaper':
