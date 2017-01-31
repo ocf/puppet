@@ -63,6 +63,7 @@ class ocf::packages {
     'cryptsetup',
     'curl',
     'debian-security-support',
+    'dnsutils',
     'dtach',
     'finger',
     'gist',

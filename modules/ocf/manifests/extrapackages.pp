@@ -34,7 +34,6 @@ class ocf::extrapackages {
     'debhelper',
     'default-jdk',
     'dh-systemd',
-    'dnsutils',
     'elinks',
     'emacs',
     'flex',
