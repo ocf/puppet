@@ -21,4 +21,11 @@ define ocf::systemd::override(
     notify  => Exec['systemd-reload'],
     require => Package['systemd-sysv'],
   }
+
+  if $unit =~ /(.*)\.service$/ {
+    ensure_resource('service', $1)
+
+    File["/etc/systemd/system/${unit}.d/${title}.conf"] ~> Service[$1]
+    Exec['systemd-reload'] -> Service[$1]
+  }
 }

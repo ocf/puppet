@@ -11,7 +11,6 @@ class ocf_irc::ircd {
     unit    => 'inspircd.service',
     content => "[Unit]\nBefore=anope.service\n",
     require => Package['inspircd', 'anope'],
-    notify  => Service['inspircd'],
   }
 
   $passwords = parsejson(file("/opt/puppet/shares/private/${::hostname}/ircd-passwords"))
