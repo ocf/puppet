@@ -10,7 +10,7 @@ ocf::packages::ntp::master: true
 ocf::packages::ntp::peers:
     - hal.ocf.berkeley.edu
     - pandemic.ocf.berkeley.edu
-    - segfault.ocf.berkeley.edu
+    - riptide.ocf.berkeley.edu
 
 ocf_mesos::slave::attributes:
     nfs:
