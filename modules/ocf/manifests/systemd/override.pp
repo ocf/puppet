@@ -7,21 +7,25 @@
 #     ExecStart=
 #     ExecStart=/path/to/my/thing
 define ocf::systemd::override(
-    $service,
+    $unit,
     $source = undef,
     $content = undef,
 ) {
-  ensure_resource('file', "/etc/systemd/system/${service}.service.d", {
+  ensure_resource('file', "/etc/systemd/system/${unit}.d", {
     ensure => directory,
   })
 
-  file { "/etc/systemd/system/${service}.service.d/${title}.conf":
-    source   => $source,
-    content  => $content,
-    notify   => [
-      Exec['systemd-reload'],
-      Service[$service],
-    ],
-    require  => Package['systemd-sysv'],
+  file { "/etc/systemd/system/${unit}.d/${title}.conf":
+    source  => $source,
+    content => $content,
+    notify  => Exec['systemd-reload'],
+    require => Package['systemd-sysv'],
+  }
+
+  if $unit =~ /(.*)\.service$/ {
+    ensure_resource('service', $1)
+
+    File["/etc/systemd/system/${unit}.d/${title}.conf"] ~> Service[$1]
+    Exec['systemd-reload'] -> Service[$1]
   }
 }

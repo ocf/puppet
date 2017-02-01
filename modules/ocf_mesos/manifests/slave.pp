@@ -110,10 +110,9 @@ class ocf_mesos::slave($attributes = {}) {
   }
 
   ocf::systemd::override { 'mesos-slave-change-start':
-    service => 'mesos-slave',
+    unit    => 'mesos-slave.service',
     content => "[Service]\nExecStart=\nExecStart=/usr/local/bin/ocf-mesos-slave\n",
     require => File['/usr/local/bin/ocf-mesos-slave'],
-    before  => Service['mesos-slave'],
   }
 
   # Some operations change the agent's "info" and require the entire agent to

@@ -8,7 +8,7 @@
 # Containers are helpful for testing things. For example:
 #   docker run -ti debian:jessie bash
 #
-class ocf::packages::docker($admin_group = 'docker') {
+class ocf::packages::docker($admin_group = undef) {
   class { 'ocf::packages::docker::apt':
     stage => first,
   }
@@ -21,18 +21,18 @@ class ocf::packages::docker($admin_group = 'docker') {
   }
 
   exec { 'docker-socket-update':
-    command     => 'systemctl daemon-reexec && systemctl restart docker.socket',
+    command     => 'systemctl daemon-reload && systemctl restart docker.socket',
     refreshonly => true,
     require     => Package['docker-engine'],
   }
 
-  augeas { 'set docker socket group':
-    context => '/files/lib/systemd/system/docker.socket',
-    changes => [
-      "set Socket/SocketGroup/value ${admin_group}",
-    ],
-    require => Package['docker-engine'],
-    notify  => Exec['docker-socket-update'];
+  if $admin_group != undef {
+    ocf::systemd::override { 'set-docker-socket-group':
+      unit    => 'docker.socket',
+      content => "[Socket]\nSocketGroup=${admin_group}\n",
+      require => Package['docker-engine'],
+      notify  => Exec['docker-socket-update'];
+    }
   }
 
   cron {
