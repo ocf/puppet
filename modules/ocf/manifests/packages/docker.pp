@@ -35,6 +35,15 @@ class ocf::packages::docker($admin_group = undef) {
     }
   }
 
+  if $::lsbdistcodename != 'jessie' {
+    # Use overlay2 storage driver
+    ocf::systemd::override { 'cmd':
+      unit    => 'docker.service',
+      content => "[Service]\nExecStart=\nExecStart=/usr/bin/dockerd -H fd:// --storage-driver=overlay2\n",
+      require => Package['docker-engine'],
+    }
+  }
+
   cron {
     'clean-old-docker-containers':
       # days is intentionally plural
