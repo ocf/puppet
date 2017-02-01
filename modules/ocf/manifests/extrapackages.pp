@@ -58,7 +58,6 @@ class ocf::extrapackages {
     'libgtk2.0-dev',
     'libicu-dev',
     'libjpeg-dev',
-    'liblightdm-gobject-dev',
     'liblua5.1-0-dev',
     'libmagickwand-dev',
     'libmysqlclient-dev',
