@@ -4,7 +4,7 @@ class ocf_kvm($group = 'root') {
   # install kvm, libvirt, lvm, bridge networking, IPMI
   package {
     # KVM/virt tools
-    ['libvirt-bin', 'qemu-kvm', 'virtinst', 'virt-top', 'kpartx', 'ksmtuned']:;
+    ['libvirt-clients', 'libvirt-daemon-system', 'qemu-kvm', 'virtinst', 'virt-top', 'kpartx', 'ksmtuned']:;
 
     # IPMI
     ['ipmitool']:;
@@ -19,7 +19,7 @@ class ocf_kvm($group = 'root') {
                     "set unix_sock_group ${group}",
                     'set unix_sock_rw_perms 0770'
                   ],
-      require => [ File['/etc/nsswitch.conf'], Package['libvirt-bin'] ],
+      require => [ File['/etc/nsswitch.conf'], Package['libvirt-daemon-system'] ],
       notify  => Service['libvirtd'];
 
     '/etc/libvirt/libvirt.conf':
@@ -27,11 +27,11 @@ class ocf_kvm($group = 'root') {
       lens    => 'Shellvars.lns',
       incl    => '/etc/libvirt/libvirt.conf',
       changes =>  ['set uri_default \'"qemu:///system"\''],
-      require => Package['libvirt-bin'];
+      require => Package['libvirt-clients'];
   }
 
   service { 'libvirtd':
-    require => Package['libvirt-bin']
+    require => Package['libvirt-daemon-system']
   }
 
   # makevm dependencies

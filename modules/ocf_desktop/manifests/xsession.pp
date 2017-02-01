@@ -47,14 +47,21 @@ class ocf_desktop::xsession {
   }
 
   # wallpaper symlink
-  $wallpaper = $staff_only ? {
-    true  => 'background-staff',
-    false => 'background'
+  if $::lsbdistcodename == 'jessie' {
+    $wallpaper = $staff_only ? {
+      true  => 'background-staff.png',
+      false => 'background.png',
+    }
+  } else {
+    $wallpaper = $staff_only ? {
+      true  => 'background-staff.svg',
+      false => 'background.svg',
+    }
   }
 
   file { '/opt/share/wallpaper':
     ensure  => link,
-    target  => "/opt/share/xsession/images/${wallpaper}.png",
+    target  => "/opt/share/xsession/images/${wallpaper}",
     require => File['/opt/share/xsession/images'];
   }
 
@@ -138,6 +145,15 @@ class ocf_desktop::xsession {
       ensure => directory,
       source => 'puppet:///modules/ocf_desktop/skel/config',
       recurse => true;
+  }
+
+  if $::lsbdistcodename != 'jessie' {
+    file {
+      # Overwrite datetime file to add larger font on stretch
+      '/etc/skel/.config/xfce4/panel/datetime-7.rc':
+        source  => 'puppet:///modules/ocf_desktop/datetime-7-stretch.rc',
+        require => File['/etc/skel/.config'];
+    }
   }
 
   exec { 'xscreensaver-blanking-only':

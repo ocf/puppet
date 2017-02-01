@@ -3,9 +3,14 @@ class ocf::packages::firefox {
     stage => first,
   }
 
+  # TODO: switch to mozilla.debian.net once they support stretch.
+  ocf::repackage { 'firefox':
+    backport_on => ['stretch', 'sid'],
+    dist        => 'unstable',
+  }
+
+  # TODO: remove after upgrade to stretch.
   package {
-    'firefox':
-      ensure => present;
     'iceweasel':
       ensure => absent;
   }

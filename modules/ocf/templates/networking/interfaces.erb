@@ -1,14 +1,6 @@
 auto lo
 iface lo inet loopback
 
-<%
-if @bridge then
-    @iface = 'br0'
-else
-    @iface = 'eth0'
-end
-%>
-
 auto <%= @iface %>
 iface <%= @iface %> inet static
 <% if @bridge -%>

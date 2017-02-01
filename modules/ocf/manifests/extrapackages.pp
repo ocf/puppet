@@ -34,7 +34,6 @@ class ocf::extrapackages {
     'debhelper',
     'default-jdk',
     'dh-systemd',
-    'dnsutils',
     'elinks',
     'emacs',
     'flex',
@@ -43,20 +42,16 @@ class ocf::extrapackages {
     'ghc',
     'git-buildpackage',
     'golang',
-    'google-gsutil',
     'ikiwiki',
     'inotify-tools',
     'intltool',
     'ipython',
-    'ipython-notebook',
     'ipython3',
-    'ipython3-notebook',
     'irssi',
     'libcrack2-dev',
     'libdbi-perl',
     'libexpect-perl',
     'libfcgi-dev',
-    'libfcgi-ruby1.8',
     'libffi-dev',
     'libgdbm-dev',
     'libgtk-3-dev',
@@ -70,7 +65,7 @@ class ocf::extrapackages {
     'libncurses5-dev',
     'libopencv-dev',
     'libpq-dev',
-    'libreadline6-dev',
+    'libreadline-dev',
     'libsqlite3-dev',
     'libtidy-dev',
     'libtool',
@@ -89,17 +84,9 @@ class ocf::extrapackages {
     'octave',
     'pandoc',
     'pdfchain',
-    'pdfjam',
-    'php5-cli',
-    'php5-curl',
-    'php5-gd',
-    'php5-mcrypt',
-    'php5-mysql',
-    'php5-sqlite',
     'pkg-config',
     'pkpgcounter',
     'postgresql-client',
-    'pre-commit',
     'pssh',
     'puppet-lint',
     'python-cracklib',
@@ -117,7 +104,6 @@ class ocf::extrapackages {
     'python-mysqldb',
     'python-nose',
     'python-numpy',
-    'python-osd',
     'python-pandas',
     'python-progressbar',
     'python-pysnmp4',
@@ -152,13 +138,14 @@ class ocf::extrapackages {
     'r10k',
     'rails',
     'ruby-dev',
-    'ruby-mysql',
+    'ruby-fcgi',
     'ruby-ronn',
     'ruby-sqlite3',
     'scala',
     'screenfetch',
     'sqlite3',
     'subversion',
+    'texlive-extra-utils',
     'texlive-fonts-recommended',
     'texlive-latex-extra',
     'texlive-latex-recommended',
@@ -172,6 +159,56 @@ class ocf::extrapackages {
     'zlib1g-dev',
     'znc',
     ]:;
+  }
+
+  if $::lsbdistcodename == 'jessie' {
+    package {
+      [
+        # We can probably just remove it in favor of using Box.com for offsite
+        # backups, but the google backup script installation needs to be removed
+        # first, since it won't work if this is removed.
+        'google-gsutil',
+
+        # Replaced by jupyter-* packages in stretch with separate ipykernel
+        # packages. We install python*-notebook in stretch which depend on
+        # the ipykernel packages.
+        'ipython-notebook',
+        'ipython3-notebook',
+
+        # These have been replaced by more generic php-* instead of php5-*
+        # packages in stretch.
+        'php5-cli',
+        'php5-curl',
+        'php5-gd',
+        'php5-mcrypt',
+        'php5-mysql',
+        'php5-sqlite',
+
+        # We should probably package this for stretch, since it's useful to have
+        # with puppet without having to have a whole virtualenv just for that.
+        # It would probably be pretty easy to package too...
+        'pre-commit',
+
+        # Replaced by ruby-mysql2 in stretch
+        'ruby-mysql',
+      ]:;
+    }
+  } else {
+    package {
+      [
+        'jupyter-console',
+        'jupyter-notebook',
+        'php-cli',
+        'php-curl',
+        'php-gd',
+        'php-mcrypt',
+        'php-mysql',
+        'php-sqlite3',
+        'python-notebook',
+        'python3-notebook',
+        'ruby-mysql2',
+      ]:;
+    }
   }
 
   ocf::repackage { 'dh-virtualenv':

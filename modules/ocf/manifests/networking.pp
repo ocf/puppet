@@ -24,6 +24,17 @@ class ocf::networking(
     ensure => purged,
   }
 
+  if $bridge {
+    $iface = 'br0'
+  } elsif $::lsbdistcodename == 'jessie' {
+    $iface = 'eth0'
+  } else {
+    # Find the first network interface that starts with 'en', since those are
+    # ethernet interfaces. (Won't work for the raspberry pi, since it uses wifi)
+    $ifaces_array = split($::interfaces, ',')
+    $iface = grep($ifaces_array, 'en.+')[0]
+  }
+
   # network configuration
   file {
     '/etc/network/interfaces':
