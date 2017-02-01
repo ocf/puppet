@@ -146,6 +146,7 @@ class ocf::extrapackages {
     'subversion',
     'texlive-extra-utils',
     'texlive-fonts-recommended',
+    'texlive-humanities',
     'texlive-latex-extra',
     'texlive-latex-recommended',
     'texlive-publishers',
