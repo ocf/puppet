@@ -164,11 +164,6 @@ class ocf::extrapackages {
   if $::lsbdistcodename == 'jessie' {
     package {
       [
-        # We can probably just remove it in favor of using Box.com for offsite
-        # backups, but the google backup script installation needs to be removed
-        # first, since it won't work if this is removed.
-        'google-gsutil',
-
         # Replaced by jupyter-* packages in stretch with separate ipykernel
         # packages. We install python*-notebook in stretch which depend on
         # the ipykernel packages.
