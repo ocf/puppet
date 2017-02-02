@@ -25,14 +25,12 @@ class ocf_mesos::master::webui(
       ];
   }
 
+  # We need the PAM authentication module, so install nginx-extras.
   ocf::repackage { 'nginx-extras':
     backport_on => jessie,
   }
 
   class { 'nginx':
-    # We need the PAM authentication module.
-    package_name => 'nginx-extras',
-
     manage_repo  => false,
     confd_purge  => true,
     vhost_purge  => true,
