@@ -23,13 +23,22 @@ class ocf_www {
     web    => false,
   }
 
-  class { '::apache':
-    default_vhost => false,
-    mpm_module    => 'worker',
-    log_formats   => {
-      # Log vhost name
-      combined => '%v %h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"'
-    }
+  class {
+    '::apache':
+      default_vhost => false,
+      log_formats   => {
+        # Log vhost name
+        combined => '%v %h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"'
+      },
+      # "false" lets us define the class below with custom args
+      mpm_module    => false;
+
+    '::apache::mod::worker':
+      startservers    => 8,
+      # maxclients should be set to a max of serverlimit * threadsperchild
+      maxclients      => 5000,
+      threadsperchild => 50,
+      serverlimit     => 100;
   }
 
   include ocf_www::lets_encrypt
