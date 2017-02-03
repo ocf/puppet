@@ -59,9 +59,10 @@ class ocf_mirrors {
 
     '::apache::mod::worker':
       startservers    => 8,
-      maxclients      => 600,
+      # maxclients should be set to a max of serverlimit * threadsperchild
+      maxclients      => 5000,
       threadsperchild => 50,
-      serverlimit     => 75;
+      serverlimit     => 100;
   }
   include apache::mod::headers
   include apache::mod::status
