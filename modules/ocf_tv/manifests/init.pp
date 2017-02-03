@@ -35,6 +35,12 @@ class ocf_tv {
 
     '/etc/X11/xorg.conf':
       source => 'puppet:///modules/ocf_tv/X11/xorg.conf';
+
+    '/opt/tv/.i3/config':
+      mode   => '0644',
+      owner  => ocftv,
+      group  => ocftv,
+      source => 'puppet:///modules/ocf_tv/i3/config';
   }
 
   ocf::systemd::service { 'x11vnc':
