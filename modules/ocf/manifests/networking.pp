@@ -19,10 +19,8 @@ class ocf::networking(
   if $bridge {
     package { 'bridge-utils': }
 
-    if $::lsbdistcodename != 'jessie' {
-      # For unknown reasons, this must be set on stretch but not jessie (rt#5849)
-      sysctl { 'net.bridge.bridge-nf-call-iptables': value => '0' }
-    }
+    # For unknown reasons, this must be set on kernel 4.9, but not 4.7 or below (rt#5849)
+    sysctl { 'net.bridge.bridge-nf-call-iptables': value => '0' }
   }
 
   package { 'resolvconf':
