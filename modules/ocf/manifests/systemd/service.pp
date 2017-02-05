@@ -20,5 +20,6 @@ define ocf::systemd::service(
       Package['systemd-sysv'],
       File["/etc/systemd/system/${title}.service"],
     ],
+    after     => Exec['systemd-reload'],
   }
 }
