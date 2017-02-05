@@ -11,15 +11,13 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['anacron', 'arandr', 'claws-mail', 'geany', 'filezilla', 'inkscape', 'mssh', 'numlockx', 'remmina', 'simple-scan', 'vlc', 'zenmap', 'gimp', 'gparted', 'evince-gtk', 'galculator', 'hexchat', 'atom', 'mumble']:;
+    ['arandr', 'atom', 'claws-mail', 'eog', 'evince-gtk', 'filezilla', 'galculator', 'geany', 'gimp', 'gparted', 'hexchat', 'inkscape', 'lyx', 'mssh', 'mumble', 'numlockx', 'remmina', 'simple-scan', 'texmaker', 'vlc', 'xarchiver', 'xterm', 'zenmap']:;
     # desktop
-    ['desktop-base', 'desktop-file-utils', 'eog', 'xarchiver', 'xterm', 'lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces', 'accountsservice', 'redshift', 'xfce4-whiskermenu-plugin']:;
+    ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils', 'libpam-trimspaces', 'lightdm', 'lightdm-gtk-greeter', 'redshift', 'xfce4-whiskermenu-plugin']:;
     # fonts
     ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea', 'fonts-crosextra-carlito', 'fonts-inconsolata', 'fonts-linuxlibertine', 'fonts-unfonts-core', 'ttf-ancient-fonts']:;
     # games
     ['armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music']:;
-    # useful tools
-    ['lyx', 'texmaker']:;
     # nonfree packages
     ['firmware-linux', 'ttf-mscorefonts-installer']:;
     # notifications
@@ -27,7 +25,7 @@ class ocf_desktop::packages {
     # performance improvements
     ['preload']:;
     # Xorg
-    ['xserver-xorg', 'xscreensaver', 'xclip']:;
+    ['xserver-xorg', 'xclip', 'xscreensaver']:;
     # FUSE
     ['fuse', 'exfat-fuse']:
   }
