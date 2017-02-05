@@ -58,6 +58,7 @@ class ocf::packages::docker($admin_group = undef) {
       minute  => 5;
 
     'clean-docker-images':
+      # TODO: use docker image prune -a --filter until=<timestamp> when on 1.14+
       # Chronic doesn't work well here because docker rmi likes to raise errors
       # about images still linked to containers
       command => 'docker images -q --filter dangling=true | xargs -r docker rmi > /dev/null 2>&1',
@@ -65,8 +66,7 @@ class ocf::packages::docker($admin_group = undef) {
       minute  => 17;
 
     'clean-docker-volumes':
-      # TODO: use docker volume prune when we get docker 1.13+
-      command => 'docker volume ls -q --filter dangling=true | chronic xargs -r docker volume rm',
+      command => 'chronic docker volume prune -f',
       hour    => 1,
       minute  => 25;
   }
