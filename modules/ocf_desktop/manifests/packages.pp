@@ -13,9 +13,13 @@ class ocf_desktop::packages {
     # applications
     ['arandr', 'atom', 'claws-mail', 'eog', 'evince-gtk', 'filezilla', 'galculator', 'geany', 'gimp', 'gparted', 'hexchat', 'inkscape', 'lyx', 'mssh', 'mumble', 'numlockx', 'remmina', 'simple-scan', 'texmaker', 'vlc', 'xarchiver', 'xterm', 'zenmap']:;
     # desktop
-    ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils', 'libpam-trimspaces', 'lightdm', 'lightdm-gtk-greeter', 'redshift', 'xfce4-whiskermenu-plugin']:;
+    ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils', 'redshift', 'xfce4-whiskermenu-plugin']:;
+    # display manager
+    ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
     # fonts
     ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea', 'fonts-crosextra-carlito', 'fonts-inconsolata', 'fonts-linuxlibertine', 'fonts-unfonts-core', 'ttf-ancient-fonts']:;
+    # FUSE
+    ['fuse', 'exfat-fuse']:;
     # games
     ['armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music']:;
     # nonfree packages
@@ -26,8 +30,6 @@ class ocf_desktop::packages {
     ['preload']:;
     # Xorg
     ['xserver-xorg', 'xclip', 'xscreensaver']:;
-    # FUSE
-    ['fuse', 'exfat-fuse']:
   }
 
   # Packages that only work on jessie
