@@ -51,9 +51,6 @@ class ocf_desktop::packages {
     # xpdf takes over as default sometimes
     'xpdf':
       ensure  => purged;
-    # temporary
-    'lightdm-gtk-greeter-ocf':
-      ensure  => purged;
   }
 
   # install packages without recommends
