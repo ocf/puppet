@@ -10,7 +10,7 @@ class ocf::networking(
     $gateway6   = '2607:f140:8801::1',
 
     $domain      = 'ocf.berkeley.edu',
-    $nameservers = ['169.229.226.22', '128.32.206.12', '128.32.136.9'],
+    $nameservers = ['2607:f140:8801::1:22', '169.229.226.22', '128.32.206.12'],
 ) {
   $fqdn = $::clientcert
   $hostname = regsubst($::clientcert, '^([\w-]+)\..*$', '\1')
