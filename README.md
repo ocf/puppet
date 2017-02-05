@@ -51,7 +51,7 @@ The easiest way to change the environment is to SSH to the server and run
 `puppet-trigger`, providing the `-e` option.
 
     ckuehl@supernova:~$ ssh raptors
-    ckuehl@raptors:~$ sudo puppet-trigger -fe ckuehl
+    ckuehl@raptors:~$ sudo puppet-trigger -e ckuehl -t
 
 This changes the environment to `ckuehl` and triggers a run.
 
