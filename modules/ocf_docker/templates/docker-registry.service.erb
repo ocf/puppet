@@ -1,6 +1,6 @@
 [Unit]
 Description=OCF Docker registry
-Requires=network-online.target
+Requires=network-online.target docker.service
 After=docker.service
 
 [Service]
@@ -13,4 +13,4 @@ ExecStart=/usr/bin/docker run --rm \
 Restart=always
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=docker.service
