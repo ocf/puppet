@@ -1,1 +1,2 @@
-kdestroy
+klist >& /dev/null
+if ($? == 0) kdestroy
