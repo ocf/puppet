@@ -45,7 +45,16 @@ class ocf::networking(
     if $bridge {
       $iface = 'br0'
     } else {
-      $iface = $br_iface
+      if $br_iface and ($br_iface != '') {
+        $iface = $br_iface
+      } else {
+        # This is the default ethernet interface name on new VMs. While not
+        # necessarily correct, falling back will help make sure VMs upgraded
+        # from jessie have networking configured when they reboot, since they
+        # retain the old 'eth0' interface name until after reboot.
+        # XXX find out how to predict new interface names
+        $iface = 'ens3'
+      }
     }
   }
 
