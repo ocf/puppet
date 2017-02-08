@@ -36,12 +36,17 @@ class ocf_desktop::packages {
   if $::lsbdistcodename == 'jessie' {
     package {
       [
-        # TODO: Put rstudio package in apt repo
-        'rstudio',
         'readahead-fedora',
       ]:;
     }
   }
+
+  # Install rstudio, custom built to work with libssl1.0.2 and run on stretch.
+  # TODO: Remove libgstreamer0.10-0 and libgstreamer-plugins-base0.10-0 once
+  # rstudio is packaged officially for stretch. These two packages are installed
+  # from our apt repo (ported from jessie) and are dependencies of rstudio until
+  # rstudio updates to libgstreamer1.0-0 and libgstreamer-plugins-base1.0-0.
+  package { 'rstudio':; }
 
   # remove some packages
   package {
