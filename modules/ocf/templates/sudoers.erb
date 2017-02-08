@@ -27,4 +27,4 @@ ocfdeploy ALL=NOPASSWD: /usr/local/sbin/puppet-trigger
 %ocfstaff ALL=(ALL) NOPASSWD: /usr/bin/virsh list, /usr/bin/virsh list --all
 
 # Same with ocfroot
-%ocfroot ALL=(ALL) NOPASSWD: /usr/local/sbin/puppet-trigger, /sbin/shutdown
+%ocfroot ALL=(ALL) NOPASSWD: /usr/local/sbin/puppet-trigger, /sbin/shutdown, /usr/bin/apt update, /usr/bin/apt-get update
