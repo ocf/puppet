@@ -61,4 +61,15 @@ class ocf::networking(
       content => template('ocf/networking/resolv.conf.erb'),
       require => Package['resolvconf'];
   }
+
+  # Make sure these are absent so predictable network iface names get used
+  file {
+    [
+      '/etc/udev/rules.d/70-persistent-net.rules',
+      '/etc/udev/rules.d/75-persistent-net-generator.rules',
+      '/etc/systemd/network/50-virtio-kernel-names.link',
+      '/etc/systemd/network/99-default.link',
+    ]:
+      ensure => absent;
+  }
 }
