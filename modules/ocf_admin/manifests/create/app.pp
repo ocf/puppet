@@ -12,8 +12,10 @@ class ocf_admin::create::app {
   $mysql_password = file('/opt/puppet/shares/private/create/mysql-password')
   validate_re($mysql_password, '^[a-zA-Z0-9]*$', 'Bad MySQL password')
 
-  $broker = "redis+socket://:${redis_password}@/var/run/redis/redis.sock"
+  $broker = "redis://:${redis_password}@admin.ocf.berkeley.edu:6378"
   $backend = $broker
+
+  # TODO: figure out how to make this use stunnel
   $redis_uri = "unix://:${redis_password}@/var/run/redis/redis.sock"
 
   augeas { '/etc/ocf-create/ocf-create.conf':
