@@ -1,8 +1,8 @@
 class ocf_admin::create::redis {
-  package { 'redis-server':; }
+  package { ['redis-server']: }
 
   service { 'redis-server':
-    require => Package['redis-server'];
+    require => Package['redis-server'],
   }
 
   # By default, this is world-readable. And we want to stuff secrets into it.
@@ -40,10 +40,22 @@ class ocf_admin::create::redis {
     notify  => Service['redis-server'];
   }
 
+  # TODO: remove spiped once everything is using stunnel
   spiped::tunnel::server { 'redis':
     source  => '0.0.0.0:6379',
     dest    => '/var/run/redis/redis.sock',
     secret  => file('/opt/puppet/shares/private/create/spiped-key'),
     require => [Augeas['/etc/redis/redis.conf'], Service['redis-server']];
   }
+
+  package { 'stunnel4': } ->
+  augeas { '/etc/default/stunnel4':
+    lens    => 'Shellvars.lns',
+    incl    => '/etc/default/stunnel4',
+    changes =>  ['set ENABLED 1'],
+  } ~>
+  file { '/etc/stunnel/redis.conf':
+    content => template('ocf_admin/stunnel/redis.conf.erb'),
+  } ~>
+  service { 'stunnel4': }
 }
