@@ -40,14 +40,6 @@ class ocf_admin::create::redis {
     notify  => Service['redis-server'];
   }
 
-  # TODO: remove spiped once everything is using stunnel
-  spiped::tunnel::server { 'redis':
-    source  => '0.0.0.0:6379',
-    dest    => '/var/run/redis/redis.sock',
-    secret  => file('/opt/puppet/shares/private/create/spiped-key'),
-    require => [Augeas['/etc/redis/redis.conf'], Service['redis-server']];
-  }
-
   package { 'stunnel4': } ->
   augeas { '/etc/default/stunnel4':
     lens    => 'Shellvars.lns',
