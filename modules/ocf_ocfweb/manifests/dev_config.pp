@@ -8,7 +8,7 @@ class ocf_ocfweb::dev_config($group = 'ocfstaff') {
   $ocfmail_password = file('/opt/puppet/shares/private/ocfweb/ocfmail-dev-password')
   validate_re($ocfmail_password, '^[a-zA-Z0-9]*$', 'Bad ocfmail password')
 
-  $broker = "redis://:${redis_password}@localhost:6378"
+  $broker = "redis://:${redis_password}@admin.ocf.berkeley.edu:6378"
   $backend = $broker
 
   file {
