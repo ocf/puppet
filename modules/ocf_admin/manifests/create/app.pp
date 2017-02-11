@@ -15,8 +15,7 @@ class ocf_admin::create::app {
   $broker = "redis://:${redis_password}@admin.ocf.berkeley.edu:6378"
   $backend = $broker
 
-  # TODO: figure out how to make this use stunnel
-  $redis_uri = "unix://:${redis_password}@/var/run/redis/redis.sock"
+  $redis_uri = "rediss://:${redis_password}@admin.ocf.berkeley.edu:6378"
 
   augeas { '/etc/ocf-create/ocf-create.conf':
     lens      => 'Puppet.lns',
