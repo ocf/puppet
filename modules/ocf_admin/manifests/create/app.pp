@@ -1,10 +1,5 @@
 class ocf_admin::create::app {
-  # TODO: Include ocf-create in stretch, or get it working on Marathon
-  package { 'ocf-create':; }
-
-  service { 'ocf-create':
-    require => Package['ocf-create'];
-  }
+  package { 'ocf-approve':; }
 
   # these get shoved into URIs, and we can't deal with escaping
   $redis_password = file('/opt/puppet/shares/private/create/redis-password')
@@ -17,6 +12,7 @@ class ocf_admin::create::app {
 
   $redis_uri = "rediss://:${redis_password}@admin.ocf.berkeley.edu:6378"
 
+  # TODO: provide this entire file (rt#5887)
   augeas { '/etc/ocf-create/ocf-create.conf':
     lens      => 'Puppet.lns',
     incl      => '/etc/ocf-create/ocf-create.conf',
@@ -27,13 +23,11 @@ class ocf_admin::create::app {
       "set redis/uri ${redis_uri}",
     ],
     show_diff => false,
-    notify    => Service['ocf-create'],
-    require   => Package['ocf-create'];
   }
 
   file {
-    default:
-      require => Package['ocf-create'];
+    '/etc/ocf-create':
+      ensure => directory;
 
     # TODO: ideally this file wouldn't be directly readable by staff
     '/etc/ocf-create/ocf-create.conf':
@@ -55,13 +49,5 @@ class ocf_admin::create::app {
       owner  => create,
       mode   => '0444',
       source => 'puppet:///private/create.pub';
-
-    '/etc/sudoers.d/create':
-      mode   => '0440',
-      source => 'puppet:///modules/ocf_admin/create.sudoers';
-
-    '/usr/local/bin/approve':
-      ensure => link,
-      target => '/usr/share/python/ocf-create/bin/approve';
   }
 }
