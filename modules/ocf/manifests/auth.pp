@@ -92,7 +92,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
       content => template('ocf/access.conf.erb');
   }
 
-  augeas { 'sshd: enable gssapi and root login, disable sorried forwarding':
+  augeas { 'sshd: enable gssapi, root login, dns, disable sorried forwarding':
     context => '/files/etc/ssh/sshd_config',
     changes => [
       'set GSSAPIAuthentication yes',
@@ -100,6 +100,10 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
       'set GSSAPIStrictAcceptorCheck no',
 
       'set PermitRootLogin yes',
+
+      # Lookup connected IPs and resolve to hostnames
+      # Mostly just for convenience, but also matters for access.conf rules
+      'set UseDNS yes',
 
       'set Match/Condition/Group sorry',
       'set Match/Settings/AllowTcpForwarding no',
