@@ -75,6 +75,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/staff_hours$ https://ocf.io/staff-hours [R]'},
       {rewrite_rule => '^/stats$ https://www.ocf.berkeley.edu/stats/ [R]'},
       {rewrite_rule => '^/status$ http://status.ocf.berkeley.edu/ [R]'},
+      {rewrite_rule => '^/stretch$ https://www.ocf.berkeley.edu/docs/staff/backend/stretch/ [R]'},
       {rewrite_rule => '^/stf-cost-breakdown$ https://docs.google.com/spreadsheets/d/1U3YfU5S1hyi4c9u1vME84lz5hQPz23LKWCaD8mq4JHI/edit [R]'},
       {rewrite_rule => '^/tw(/.*)?$ https://ocf.io/twitter$1 [R]'},
       {rewrite_rule => '^/twitter(/.*)?$ https://twitter.com/ucbocf$1 [R]'},
