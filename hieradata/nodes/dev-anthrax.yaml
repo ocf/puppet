@@ -1,2 +1,4 @@
 classes:
     - ocf_mail
+
+ocf::packages::postfix::manage: false
