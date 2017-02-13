@@ -11,6 +11,7 @@ class ocf::packages {
   include ocf::packages::git
   include ocf::packages::grub
   include ocf::packages::ntp
+  include ocf::packages::postfix
   include ocf::packages::rsync
   include ocf::packages::shell
   include ocf::packages::ssh
