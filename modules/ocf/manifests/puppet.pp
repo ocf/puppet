@@ -43,10 +43,6 @@ class ocf::puppet($stage = 'first') {
       augeas { '/etc/puppet/puppet.conf':
         context => '/files/etc/puppet/puppet.conf',
         changes => [
-          # These changes can change the puppetmaster config, which is
-          # defined separately in the ocf_puppet module, causing the
-          # puppet agent on the puppetmaster to restart twice. Make sure
-          # the changes made here are also made in that module.
           "set agent/environment ${::environment}",
           'set agent/usecacheonfailure false',
           'set main/pluginsync true',
@@ -68,12 +64,19 @@ class ocf::puppet($stage = 'first') {
       augeas { '/etc/puppet/puppet.conf':
         context => '/files/etc/puppet/puppet.conf',
         changes => [
-          # These changes can change the puppetmaster config, which is
-          # defined separately in the ocf_puppet module, causing the
-          # puppet agent on the puppetmaster to restart twice. Make sure
-          # the changes made here are also made in that module.
           "set agent/environment ${::environment}",
           'set agent/usecacheonfailure false',
+
+          # Remove a bunch of old settings that are no longer needed
+          'rm main/templatedir',
+          'rm main/factpath',
+          'rm main/pluginsync',
+          'rm main/stringify_facts',
+          'rm main/prerun_command',
+          'rm main/postrun_command',
+          'rm agent/certname',
+          'rm master/ssl_client_header',
+          'rm master/ssl_client_verify_header',
         ],
         require => Package['augeas-tools', 'puppet'],
       }
