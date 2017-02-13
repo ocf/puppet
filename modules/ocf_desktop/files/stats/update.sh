@@ -1,5 +1,7 @@
 #!/bin/bash
-[ "$(imvirt)" == "Physical" ] || exit 0 # only count hours on desktops
+# imvirt spews dmesg errors on stderr
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=842226
+[ "$(imvirt 2>/dev/null)" == "Physical" ] || exit 0 # only count hours on desktops
 
 CUR_USER=$(who | awk '$5 == "(:0)" { print $1 }')
 DATA="state=inactive"

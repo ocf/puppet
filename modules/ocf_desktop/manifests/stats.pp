@@ -12,16 +12,16 @@ class ocf_desktop::stats {
       ensure  => directory,
       owner   => ocfstats,
       group   => root,
-      mode    => '0700',
+      mode    => '0755',
       require => User['ocfstats'];
 
     '/opt/stats/update.sh':
-      mode   => '0500',
+      mode   => '0555',
       owner  => ocfstats,
       source => 'puppet:///modules/ocf_desktop/stats/update.sh';
 
     '/opt/stats/update-delay.sh':
-      mode   => '0500',
+      mode   => '0555',
       owner  => ocfstats,
       source => 'puppet:///modules/ocf_desktop/stats/update-delay.sh';
   }
