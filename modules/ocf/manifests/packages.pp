@@ -36,12 +36,18 @@ class ocf::packages {
       # nonfree shareware with "40-day trial"
       'rar',
       'unrar',
-
-      # purge virtualbox for security reasons (setuid binaries allow network control)
-      # see debian bug#760569
-      'virtualbox',
     ]:
       ensure => purged;
+  }
+
+  # Many staff want virtualbox for class projects (e.g. for CS161 and 162), so
+  # keep it installed if this is a staff VM. Otherwise, remove it for security
+  # reasons (setuid binaries allow network control). See debian bug#760569
+  if $::type != 'staffvm' {
+    package {
+      'virtualbox':
+        ensure => purged;
+    }
   }
 
   # files we don't want on *any* server
