@@ -5,7 +5,8 @@ class ocf_jenkins {
   include ocf_ssl::default_bundle
 
   class { 'ocf_ocfweb::dev_config':
-    group => 'jenkins-slave',
+    group   => 'jenkins-slave',
+    require => User['jenkins-slave'],
   }
 
   class { 'ocf_jenkins::jenkins_apt':
