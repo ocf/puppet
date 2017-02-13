@@ -1,6 +1,6 @@
 class ocf::motd {
   $motd_from_nfs = str2bool($::ocf_nfs) and !lookup('staff_only')
-  $owner = lookup('owner', undef)
+  $owner = lookup('owner', { 'default_value' => undef, })
   $classes_from_hiera = lookup('classes')
 
   if $motd_from_nfs {

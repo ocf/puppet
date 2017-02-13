@@ -4,7 +4,7 @@
 version: 5
 
 defaults:
-  datadir: data
+  datadir: hieradata
   data_hash: yaml_data
 
 hierarchy:
