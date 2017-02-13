@@ -1,16 +1,24 @@
 # TODO: currently editing this file requires a *manual* restart of the
-# puppetmaster (apache2 on lightning)
-:backends: yaml
+# puppetserver service on lightning
 
-:hierarchy:
-    - "nodes/%{::hostname}"
-    - "type/%{::type}"
-    - "is_virtual/%{::is_virtual}"
-    - "os/%{::lsbdistcodename}"
-    - common
+version: 5
 
-:yaml:
-    :datadir: /etc/puppetlabs/code/environments/%{environment}/hieradata
+defaults:
+  datadir: data
+  data_hash: yaml_data
 
-:puppet:
-    :datasource: data
+hierarchy:
+  - name: "Nodes"
+    path: "nodes/%{::hostname}.yaml"
+
+  - name: "Type"
+    path: "type/%{::type}.yaml"
+
+  - name: "Virtual or physical"
+    path: "is_virtual/%{::is_virtual}"
+
+  - name: "OS version"
+    path: "os/%{::lsbdistcodename}"
+
+  - name: "Common defaults"
+    path: "common.yaml"

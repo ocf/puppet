@@ -6,7 +6,7 @@ class ocf_mesos::master {
     ensure => directory,
   }
 
-  $mesos_masters = hiera('mesos_masters')
+  $mesos_masters = lookup('mesos_masters')
 
   $my_mesos_id = $mesos_masters[$::hostname]
   $mesos_hostname = "mesos${my_mesos_id}"

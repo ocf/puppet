@@ -7,11 +7,10 @@
 
 [main]
 
-hiera_config = <%= @puppet_environmentpath %>/<%= @environment %>/hiera.yaml
-
 [agent]
 
 environment = <%= @environment %>
+environment_data_provider = hiera
 usecacheonfailure = false
 
 [master]

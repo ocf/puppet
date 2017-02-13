@@ -18,7 +18,7 @@ class ocf_puppet::puppetmaster {
     notify  => Service['puppetserver'],
   }
 
-  $docker_private_hosts = union(keys(hiera('mesos_masters')), hiera('mesos_slaves'))
+  $docker_private_hosts = union(keys(lookup('mesos_masters')), lookup('mesos_slaves'))
 
   file {
     '/etc/puppetlabs/puppet/fileserver.conf':

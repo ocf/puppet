@@ -1,5 +1,5 @@
 class ocf::puppet($stage = 'first') {
-  if hiera('puppet_agent') {
+  if lookup('puppet_agent') {
     package { 'puppet-agent':; }
 
     $cron = true

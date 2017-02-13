@@ -50,7 +50,7 @@ class ocf_mesos::master::webui(
   $mesos_agent_auth_header = base64('encode', "ocf:${mesos_agent_http_password}", 'strict')
   $marathon_auth_header = base64('encode', "marathon:${marathon_http_password}", 'strict')
 
-  $mesos_sub_filter = hiera('mesos_slaves').map |$slave| {
+  $mesos_sub_filter = lookup('mesos_slaves').map |$slave| {
       "':5051\",\"hostname\":\"${slave}\"' ':443\",\"hostname\":\"${slave}.agent.mesos.ocf.berkeley.edu\"'"
   }
 
@@ -176,7 +176,7 @@ class ocf_mesos::master::webui(
   }
 
   # Mesos agent proxies
-  hiera('mesos_slaves').each |String $slave| {
+  lookup('mesos_slaves').each |String $slave| {
     $host = "${slave}.agent.mesos.ocf.berkeley.edu"
 
     nginx::resource::upstream { "${slave}-agent":

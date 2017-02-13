@@ -1,5 +1,5 @@
 class ocf_desktop::xsession {
-  $staff_only = hiera('staff_only')
+  $staff_only = lookup('staff_only')
 
   require ocf_desktop::packages
   include ocf_desktop::xfce
