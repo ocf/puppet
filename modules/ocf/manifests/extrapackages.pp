@@ -60,7 +60,6 @@ class ocf::extrapackages {
     'libjpeg-dev',
     'liblua5.1-0-dev',
     'libmagickwand-dev',
-    'libmysqlclient-dev',
     'libncurses5-dev',
     'libopencv-dev',
     'libpq-dev',
@@ -186,6 +185,10 @@ class ocf::extrapackages {
 
         # Replaced by ruby-mysql2 in stretch
         'ruby-mysql',
+
+        # Replaced by default-libmysqlclient-dev in stretch
+        # (it's actually in jessie backports, but not worth the headache)
+        'libmysqlclient-dev',
       ]:;
     }
   } else {
@@ -202,6 +205,7 @@ class ocf::extrapackages {
         'python-notebook',
         'python3-notebook',
         'ruby-mysql2',
+        'default-libmysqlclient-dev',
       ]:;
     }
   }
