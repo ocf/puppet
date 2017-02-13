@@ -1,7 +1,9 @@
+<%- | Boolean $double | -%>
 *PPD-Adobe: "4.3"
 *%%%% PPD file for HP LaserJet p4515x with CUPS.
 *%%%% Created by the CUPS PPD Compiler CUPS v1.7.5.
 *% (c) 2008 Copyright Hewlett-Packard Development Company, LP
+
 *FormatVersion: "4.3"
 *FileVersion: "3.14.6"
 *LanguageVersion: English
@@ -9,11 +11,47 @@
 *PCFileName: "hp-laserjet_p4515x.ppd"
 *Product: "(HP LaserJet p4515x Printer)"
 *Manufacturer: "HP"
-*ModelName: "HP LaserJet p4515x"
-*ShortNickName: "HP LaserJet p4515x"
-*NickName: "HP LaserJet p4515x, hpcups 3.14.6"
 *PSVersion: "(3010.000) 0"
 *LanguageLevel: "3"
+
+
+*%%% OCF-relevant stuff
+
+*ModelName: "HP LaserJet p4515x"
+*ShortNickName: "HP LaserJet p4515x (ocf)"
+*NickName: "HP LaserJet p4515x (ocf)"
+
+*cupsFilter: "application/vnd.cups-pdf 0 ocfps"
+
+*% Duplexing options
+
+*cupsEvenDuplex: False
+*cupsManualCopies: False
+
+*OpenUI *Duplex/Two-Sided: PickOne
+*OrderDependency: 10 AnySetup *Duplex
+<%- if $double { -%>
+*DefaultDuplex: DuplexNoTumble
+*Duplex DuplexNoTumble/Long-Edge Binding: "<</Duplex true /Tumble false>> setpagedevice"
+<%- } else { -%>
+*DefaultDuplex: None
+%Duplex None/Off: "<</Duplex false /Tumble false>> setpagedevice"
+<%- } -%>
+*CloseUI: *Duplex
+
+*% Print quality
+
+*OpenUI *OutputMode/Print Quality: PickOne
+*OrderDependency: 10 AnySetup *OutputMode
+*DefaultOutputMode: Draft
+*OutputMode Normal/Normal: "<</OutputType(0)/HWResolution[600 600]>>setpagedevice"
+*OutputMode Draft/Draft (Economy): "<</OutputType(-1)/HWResolution[300 300]>>setpagedevice"
+*OutputMode Best/Best: "<</OutputType(0)/HWResolution[600 600]>>setpagedevice"
+*CloseUI: *OutputMode
+
+
+*%%% The rest is straight from the stock driver
+
 *ColorDevice: True
 *DefaultColorSpace: RGB
 *FileSystem: False
@@ -22,14 +60,11 @@
 *TTRasterizer: Type42
 *% Driver-defined attributes...
 *RequiresPageRegion All: True
-*cupsEvenDuplex: False
 *hpPrinterLanguage: "ljmono"
 *cupsModelName: "HP LaserJet"
 *1284DeviceID: "MFG:HP;MDL:hp laserjet p4515x;DES:hp laserjet p4515x;"
 *cupsVersion: 1.7
 *cupsModelNumber: 0
-*cupsManualCopies: True
-*cupsFilter: "application/vnd.cups-postscript 0 -"
 *cupsLanguages: "en"
 *OpenUI *PageSize/Media Size: PickOne
 *OrderDependency: 10 AnySetup *PageSize
@@ -154,13 +189,6 @@
 *ParamCustomPageSize WidthOffset: 3 points 0 0
 *ParamCustomPageSize HeightOffset: 4 points 0 0
 *ParamCustomPageSize Orientation: 5 int 0 0
-*OpenUI *Duplex/Double-Sided Printing: PickOne
-*OrderDependency: 10 AnySetup *Duplex
-*DefaultDuplex: None
-*Duplex DuplexNoTumble/Long Edge (Standard): "<</Duplex true/Tumble false>>setpagedevice"
-*Duplex DuplexTumble/Short Edge (Flip): "<</Duplex true/Tumble true>>setpagedevice"
-*Duplex None/Off: "<</Duplex false/Tumble false>>setpagedevice"
-*CloseUI: *Duplex
 *OpenUI *InputSlot/Media Source: PickOne
 *OrderDependency: 10 AnySetup *InputSlot
 *DefaultInputSlot: Auto
@@ -183,13 +211,6 @@
 *DefaultMediaType: Plain
 *MediaType Plain/Plain Paper: "<</MediaType(Plain)/cupsMediaType 0>>setpagedevice"
 *CloseUI: *MediaType
-*OpenUI *OutputMode/Print Quality: PickOne
-*OrderDependency: 10 AnySetup *OutputMode
-*DefaultOutputMode: Normal
-*OutputMode Normal/Normal: "<</OutputType(0)/HWResolution[600 600]>>setpagedevice"
-*OutputMode Draft/Draft (Economy): "<</OutputType(-1)/HWResolution[300 300]>>setpagedevice"
-*OutputMode Best/Best: "<</OutputType(0)/HWResolution[600 600]>>setpagedevice"
-*CloseUI: *OutputMode
 *OpenGroup: InstallableOptions/Installable Options
 *OpenUI *OptionDuplex/Duplexer Installed: Boolean
 *OrderDependency: 10 AnySetup *OptionDuplex

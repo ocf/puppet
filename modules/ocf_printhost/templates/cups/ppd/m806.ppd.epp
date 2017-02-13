@@ -1,3 +1,4 @@
+<%- | Boolean $double | -%>
 *PPD-Adobe: "4.3"
 *% =================================
 *% Copyright 1992-2009 Hewlett-Packard Company
@@ -24,6 +25,8 @@
 *%
 *%%%% Created by the CUPS PPD Compiler CUPS v1.6.2.
 *% Copyright (c) 2012-2013 Hewlett-Packard Development Company, L.P.
+
+
 *FormatVersion: "4.3"
 *FileVersion: "19.10"
 *LanguageVersion: English
@@ -31,11 +34,46 @@
 *PCFileName: "HPP00034.PPD"
 *Product: "(HP LaserJet M806)"
 *Manufacturer: "HP"
-*ModelName: "HP LaserJet M806"
-*ShortNickName: "HP LaserJet M806"
-*NickName: "HP LaserJet M806 Postscript (recommended)"
 *PSVersion: "(3010.107) 3"
 *LanguageLevel: "3"
+
+
+*%%% OCF-relevant stuff
+
+*ModelName: "HP LaserJet M806"
+*ShortNickName: "HP LaserJet M806 (ocf)"
+*NickName: "HP LaserJet M806 (ocf)"
+
+*cupsFilter: "application/vnd.cups-pdf 0 ocfps"
+
+*% Duplexing options
+
+*cupsEvenDuplex: False
+*cupsManualCopies: False
+
+*OpenUI *Duplex/Two-Sided: PickOne
+*OrderDependency: 50 AnySetup *Duplex
+<%- if $double { -%>
+*DefaultDuplex: DuplexNoTumble
+*Duplex DuplexNoTumble/Long-Edge Binding: "<</Duplex true /Tumble false>> setpagedevice"
+<%- } else { -%>
+*DefaultDuplex: None
+%Duplex None/Off: "<</Duplex false /Tumble false>> setpagedevice"
+<%- } -%>
+*CloseUI: *Duplex
+
+*% Print quality
+
+*OpenUI *HPEconoMode/EconoMode: Boolean
+*OrderDependency: 18 AnySetup *HPEconoMode
+*DefaultHPEconoMode: True
+*HPEconoMode True/On: "<</EconoMode true>> setpagedevice"
+*HPEconoMode False/Off: "<</EconoMode false>> setpagedevice"
+*CloseUI: *HPEconoMode
+
+
+*%%% The rest is straight from the stock driver
+
 *ColorDevice: False
 *DefaultColorSpace: Gray
 *FileSystem: False
@@ -484,9 +522,7 @@
 *cupsUIConstraints: "*OutputBin StandardTopBin *MediaType HeavyEnvelope"
 *cupsVersion: 1.5
 *cupsModelNumber: 0
-*cupsManualCopies: True
 *cupsLanguages: "en da de es fi fr it ja ko no nl pt ru sv zh_CN zh_TW"
-*cupsFilter: "application/vnd.cups-postscript 0 -"
 *OpenUI *PageSize/Media Size: PickOne
 *OrderDependency: 10 AnySetup *PageSize
 *DefaultPageSize: Letter
@@ -628,13 +664,6 @@
 *Collate True/On: "<</Collate true>> setpagedevice"
 *Collate False/Off: "<</Collate false>> setpagedevice"
 *CloseUI: *Collate
-*OpenUI *Duplex/Two-Sided: PickOne
-*OrderDependency: 50 AnySetup *Duplex
-*DefaultDuplex: None
-*Duplex None/Off: "<</Duplex false /Tumble false>> setpagedevice"
-*Duplex DuplexNoTumble/Long-Edge Binding: "<</Duplex true /Tumble false>> setpagedevice"
-*Duplex DuplexTumble/Short-Edge Binding: "<</Duplex true /Tumble true>> setpagedevice"
-*CloseUI: *Duplex
 *OpenUI *InputSlot/Paper Feed: PickOne
 *OrderDependency: 40 AnySetup *InputSlot
 *DefaultInputSlot: Auto
@@ -1042,12 +1071,6 @@
 *HPPrintQuality 600dpi/600 dpi: "<</HWResolution [600 600] /PreRenderingEnhance false>> setpagedevice"
 *HPPrintQuality ProRes1200/ProRes 1200: "<</HWResolution [1200 1200] /PreRenderingEnhance false>> setpagedevice"
 *CloseUI: *HPPrintQuality
-*OpenUI *HPEconoMode/EconoMode: Boolean
-*OrderDependency: 18 AnySetup *HPEconoMode
-*DefaultHPEconoMode: False
-*HPEconoMode True/On: "<</EconoMode true>> setpagedevice"
-*HPEconoMode False/Off: "<</EconoMode false>> setpagedevice"
-*CloseUI: *HPEconoMode
 *CloseGroup: HPPaperQualityPanel
 *%==============================================
 *% Secure Printing

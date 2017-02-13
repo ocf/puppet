@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Use the user command pdftops, not the CUPS filter.
+PDFTOPS=/usr/bin/pdftops
+
+if [ "$#" -ne 5 ] && [ "$#" -ne 6 ]; then
+    echo "Usage: $0 job-id user title copies options [file]"
+    exit
+fi
+
+if [ "$#" -eq 5 ]; then
+    $PDFTOPS - - | pstops "$@"
+else
+    $PDFTOPS "$6" - | pstops "${@:1:5}"
+fi

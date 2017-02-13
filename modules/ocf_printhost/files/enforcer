@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Enforcer is a prehook and posthook for Tea4CUPS the primary purpose of which
-is to add and subtract remaining pages as user jobs are processed.
+"""Enforcer is a prehook and posthook for Tea4CUPS whose primary purpose is to
+add and subtract from page quotas as user jobs are processed.
 
 When a user sends a job to the print server, Tea4CUPS passes the job as a
 PostScript file to enforcer before sending it to the printer. Enforcer calls
-Ghostscript to count pages and connects to mysql to check against the user's
-quota. If enforcer returns 255 (a.k.a. -1), the job is rejected. Otherwise,
-enforcer gets called again when the job is done and logs the job in mysql,
-taking care to set the page count to zero if an error was encountered.
+reads PostScript comments to count pages and connects to mysql to check against
+the user's quota. If enforcer returns 255 (a.k.a. -1), the job is rejected.
+Otherwise, enforcer gets called again when the job is done and logs the job in
+mysql, taking care to set the page count to zero if an error was encountered.
 
 Another function of enforcer is to send notifications to desktops to let users
 know when a job has been sent to the printer, been rejected due to the quota,
@@ -197,7 +197,7 @@ def main(argv):
 
         syslog(msg)
         send_problem_report(msg)
-        if job:
+        if job and args.command == 'prehook':
             try:
                 send_printer_mail(
                     ENFORCER_ERROR_MESSAGE,
