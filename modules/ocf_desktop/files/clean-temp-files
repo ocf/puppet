@@ -35,10 +35,10 @@ def get_last_logins():
     """
     curr_users = get_current_users()
 
-    login_data = get_command_by_lines(('last', '-wF'))
+    login_data = get_command_by_lines(('last', '-wFR'))
 
     if os.path.isfile('/var/log/wtmp.1'):
-        login_data += get_command_by_lines(('last', '-wF', '-f', '/var/log/wtmp.1'))
+        login_data += get_command_by_lines(('last', '-wFR', '-f', '/var/log/wtmp.1'))
 
     users = {}
     ignored_names = {'reboot', 'root', 'apt-dater', 'wtmp', 'wtmp.1'}
@@ -52,10 +52,7 @@ def get_last_logins():
             if username in curr_users:
                 users[username] = datetime.now()
             elif username not in ignored_names:
-                if session[1].startswith('tty'):
-                    session_start = ' '.join(session[2:7])
-                else:
-                    session_start = ' '.join(session[3:8])
+                session_start = ' '.join(session[2:7])
 
                 users[username] = parser.parse(session_start)
 
