@@ -101,14 +101,17 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
 
       'set PermitRootLogin yes',
 
-      # Lookup connected IPs and resolve to hostnames
-      # Mostly just for convenience, but also matters for access.conf rules
-      'set UseDNS yes',
-
       'set Match/Condition/Group sorry',
       'set Match/Settings/AllowTcpForwarding no',
       'set Match/Settings/X11Forwarding no',
       'set Match/Settings/AllowAgentForwarding no',
+
+      # Lookup connected IPs and resolve to hostnames
+      # Mostly just for convenience, but also matters for access.conf rules
+      # Match blocks are annoying in sshd_config and need extra work to use
+      # http://augeas.net/docs/references/lenses/files/sshd-aug.html#Sshd.CAVEATS
+      'ins UseDNS before Match',
+      'set UseDNS yes',
     ],
     require => Package['openssh-server'],
     notify  => Service['ssh']
