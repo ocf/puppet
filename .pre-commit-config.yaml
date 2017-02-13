@@ -18,6 +18,8 @@
     -   id: flake8
         language_version: python3
     -   id: check-added-large-files
+        args:
+        -   --maxkb=850
     -   id: check-docstring-first
         language_version: python3
     -   id: check-json
