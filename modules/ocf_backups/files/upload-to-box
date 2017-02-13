@@ -7,6 +7,7 @@ import sys
 import threading
 import time
 from collections import defaultdict
+from collections import deque
 from io import BytesIO
 from shutil import get_terminal_size
 
@@ -343,9 +344,7 @@ def main(args):
         multi.free.append(conn)
 
     # Make a queue of all files to be uploaded
-    queue = []
-    for f in files:
-        queue.append(f)
+    queue = deque(files)
 
     # Error dictionary for number of errored uploads per file
     num_errors = defaultdict(int)
@@ -358,7 +357,7 @@ def main(args):
     while stats['num_finished'] < len(files):
         # Add uploads if there are connections free to use
         while queue and multi.free:
-            filename = queue.pop(0)
+            filename = queue.popleft()
             conn = multi.free.pop()
             upload = BoxUpload(filename, auth)
             upload.start(conn)
@@ -399,7 +398,7 @@ def main(args):
                     num_errors[filename] += 1
                     if not args.quiet:
                         print('Retrying {}'.format(filename))
-                    queue.insert(0, filename)
+                    queue.appendleft(filename)
                 else:
                     print('Could not upload {}, errored too many times'.format(filename))
                     stats['num_finished'] += 1
