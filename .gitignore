@@ -1,6 +1,8 @@
 # r10k files
-.r10k/
-vendor/
+/.r10k/
+/vendor/
 
 # ignore vim swp files
 *.swp
+
+/venv
