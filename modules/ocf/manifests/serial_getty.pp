@@ -1,5 +1,5 @@
 class ocf::serial_getty {
-  if str2bool($::is_virtual) or member(hiera('classes'), 'ocf_kvm') {
+  if str2bool($::is_virtual) or tagged('ocf_kvm') {
     service { 'serial-getty@ttyS0':
       enable   => true,
       provider => systemd,
