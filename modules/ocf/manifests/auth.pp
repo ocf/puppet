@@ -92,7 +92,8 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
       content => template('ocf/access.conf.erb');
   }
 
-  augeas { 'sshd: enable gssapi, root login, dns, disable sorried forwarding':
+  # Enable GSSAPI and root login, disable sorried forwarding
+  augeas { 'sshd_config':
     context => '/files/etc/ssh/sshd_config',
     changes => [
       'set GSSAPIAuthentication yes',
@@ -105,7 +106,14 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
       'set Match/Settings/AllowTcpForwarding no',
       'set Match/Settings/X11Forwarding no',
       'set Match/Settings/AllowAgentForwarding no',
+    ],
+    require => Package['openssh-server'],
+    notify  => Service['ssh']
+  }
 
+  augeas { 'sshd_config UseDNS':
+    context => '/files/etc/ssh/sshd_config',
+    changes => [
       # Lookup connected IPs and resolve to hostnames
       # Mostly just for convenience, but also matters for access.conf rules
       # Match blocks are annoying in sshd_config and need extra work to use
@@ -113,7 +121,8 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
       'ins UseDNS before Match',
       'set UseDNS yes',
     ],
-    require => Package['openssh-server'],
+    onlyif  => 'match UseDNS size == 0',
+    require => Augeas['sshd_config'],
     notify  => Service['ssh']
   }
 
