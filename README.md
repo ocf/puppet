@@ -19,10 +19,13 @@ involved, [check us out][about-staff]!
 ## Making and testing changes
 ### Your puppet environment
 
-Puppet environments are stored on the puppetmaster in `/opt/puppet/env/`. Each
-user should have their own environment with the same name as their user name:
+Every staffer owns a _puppet environment_. A puppet environment is a copy of
+this repository which you can use for testing out changes to this puppet code.
 
-    ckuehl@lightning:~$ ls -l /opt/puppet/env
+Puppet environments are stored on the puppetmaster in `/opt/puppet/env/`. Each
+staffer's environment has the same name as their user name:
+
+    ckuehl@lightning:~$ ls -l /opt/puppet/env/
     drwxr-xr-x 6 ckuehl  ocf  4.0K Nov  5 11:04 ckuehl
     drwxr-xr-x 5 daradib ocf  4.0K Aug 11 22:53 daradib
     drwxr-xr-x 5 tzhu    ocf  4.0K Sep  2 17:46 tzhu
@@ -31,9 +34,8 @@ user should have their own environment with the same name as their user name:
 The puppetmaster has service CNAME `puppet`, so you can connect to it via `ssh
 puppet`.
 
-Each environment is just a copy of this git repository owned by the respective
-user. You should make your changes here and push them to GitHub to be deployed
-into production.
+You should make your changes in your puppet environment and test them before
+pushing them to GitHub to be deployed into production.
 
 If creating a new environment, you should either copy an existing environment,
 or clone the repo and remember to run `make vendor` to install all required
@@ -55,7 +57,7 @@ The easiest way to change the environment is to SSH to the server and run
 
 This changes the environment to `ckuehl` and triggers a run.
 
-Make sure to switch the environment back to production after pushing your
+Make sure to switch the environment back to `production` after pushing your
 changes.
 
 ### Linting and validating the puppet config
