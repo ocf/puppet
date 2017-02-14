@@ -8,7 +8,9 @@ class ocf_tv {
     [
       'arandr',
       'ffmpeg',
+      'feh',
       'i3',
+      'imagemagick',
       'nodm',
       'pavucontrol',
       'pulseaudio',
@@ -41,6 +43,12 @@ class ocf_tv {
       owner  => ocftv,
       group  => ocftv,
       source => 'puppet:///modules/ocf_tv/i3/config';
+
+    '/opt/share/background.svg':
+      mode   => '0644',
+      owner  => ocftv,
+      group  => ocftv,
+      source => 'puppet:///modules/ocf_tv/X11/images/background.svg';
   }
 
   ocf::systemd::service { 'x11vnc':

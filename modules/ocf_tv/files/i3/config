@@ -9,6 +9,8 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
+exec feh --bg-scale '/opt/share/background.png'
+
 set $mod Mod1
 
 # Font for window titles. Will also be used by the bar unless a different font
