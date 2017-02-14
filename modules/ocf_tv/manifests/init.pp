@@ -10,7 +10,6 @@ class ocf_tv {
       'ffmpeg',
       'feh',
       'i3',
-      'imagemagick',
       'nodm',
       'pavucontrol',
       'pulseaudio',
@@ -18,6 +17,12 @@ class ocf_tv {
       'x11vnc',
       'xinit',
     ]:;
+
+    # fonts
+    ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea', 'fonts-crosextra-carlito', 'fonts-inconsolata', 'fonts-linuxlibertine', 'fonts-unfonts-core', 'ttf-ancient-fonts']:;
+
+    # nonfree packages
+    ['ttf-mscorefonts-installer']:;
   }
 
   user { 'ocftv':
