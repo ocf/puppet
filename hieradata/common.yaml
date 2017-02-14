@@ -12,6 +12,7 @@ classes:
     - ocf::packages
     - ocf::puppet
     - ocf::rootpw
+    - ocf::serial_getty
     - ocf::staff_users
     - ocf::systemd
     - ocf::utils
