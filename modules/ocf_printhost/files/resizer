@@ -5,11 +5,28 @@ import subprocess
 import sys
 
 
+def mb(b):
+    return b / 1024 / 1024
+
+
 def do_filter(instream, outstream):
     """Force resize to US Letter, and mark as duplex (or not)."""
     is_duplex = os.environ.get('CLASS') != 'single'
-    subprocess.call(
-        [
+    original_ps = instream.read()
+
+    print('original: {:.2f} MB'.format(mb(len(original_ps))), file=sys.stderr)
+
+    # stage one: rasterize with imagemagick
+    rasterized = subprocess.check_output((
+        'convert', '-density', '300', '-compress', 'Group4', 'ps:-', 'ps:-',
+    ), input=original_ps)
+    print('rasterized: {:.2f} MB'.format(mb(len(rasterized))), file=sys.stderr)
+
+    open('rasterized.ps', 'wb').write(rasterized)
+
+    # stage two: fit to letter, apply duplex
+    final = subprocess.check_output(
+        (
             'gs',
             '-q',
             '-dBATCH',
@@ -19,21 +36,20 @@ def do_filter(instream, outstream):
             '-sPAPERSIZE=letter',
             '-dFIXEDMEDIA',
             '-dPSFitPage',
-        ] +
+        ) +
         (
-            [
+            (
                 '-c',
                 '<</PSDocOptions (<< /Duplex true >> setpagedevice)>> setdistillerparams',
-            ] if is_duplex else []
+            ) if is_duplex else ()
         ) +
-        [
-            '-f',
-            '/dev/stdin',
-        ],
-        stdin=instream,
-        stdout=outstream,
+        ('-f', '/dev/stdin'),
+        input=rasterized,
     )
+    print('final: {:.2f} MB'.format(mb(len(final))), file=sys.stderr)
+
+    outstream.write(final)
 
 
 if __name__ == '__main__':
-    do_filter(sys.stdin, sys.stdout)
+    do_filter(sys.stdin.buffer, sys.stdout.buffer)
