@@ -219,48 +219,48 @@ def make_box_folder(folder, auth):
         sys.exit(3)
 
 
-def print_progress(multi, stats, prev_total):
+def print_progress(multi, stats):
     """Show an updating progress bar for all ongoing uploads"""
-    width = get_terminal_size((80, 20)).columns  # Default size as a fallback
+    prev_total = 0
+    while True:
+        width = get_terminal_size((80, 20)).columns  # Default size as a fallback
 
-    # Move cursor to the top left using ANSI magic to overwrite previous lines
-    sys.stdout.write('\033[1;1H')
+        # Move cursor to the top left using ANSI magic to overwrite previous lines
+        sys.stdout.write('\033[1;1H')
 
-    bytes_partial = 0
-    for conn in multi.handles:
-        if conn.upload:
-            print(conn.upload.get_progress(width))
-            bytes_partial += conn.upload.bytes_uploaded
+        bytes_partial = 0
+        for conn in multi.handles:
+            if conn.upload:
+                print(conn.upload.get_progress(width))
+                bytes_partial += conn.upload.bytes_uploaded
 
-    bytes_total = stats['bytes_uploaded'] + bytes_partial
+        bytes_total = stats['bytes_uploaded'] + bytes_partial
 
-    # Print statistics on upload time and current speed
-    time_stats = 'Time so far: {}  Speed: {:.0f} Mb/s'.format(
-        friendly_time(time.time() - stats['start_time']),
-        (bytes_total - prev_total) * 0.000008
-    )
-    print(time_stats + (width - len(time_stats)) * ' ')
+        # Print statistics on upload time and current speed
+        time_stats = 'Time so far: {}  Speed: {:.0f} Mb/s'.format(
+            friendly_time(time.time() - stats['start_time']),
+            (bytes_total - prev_total) * 0.000008
+        )
+        print(time_stats + (width - len(time_stats)) * ' ')
 
-    # Print more stats, this time on amount uploaded
-    upload_stats = 'Uploaded {}/{} files and {}/{} ({:.2f}%) in total'.format(
-        stats['num_finished'],
-        stats['num_total'],
-        friendly_file_size(bytes_total),
-        friendly_file_size(stats['bytes_total']),
-        100 * bytes_total / stats['bytes_total']
-    )
-    print(upload_stats + (width - len(upload_stats)) * ' ')
+        # Print more stats, this time on amount uploaded
+        upload_stats = 'Uploaded {}/{} files and {}/{} ({:.2f}%) in total'.format(
+            stats['num_finished'],
+            stats['num_total'],
+            friendly_file_size(bytes_total),
+            friendly_file_size(stats['bytes_total']),
+            100 * bytes_total / stats['bytes_total']
+        )
+        print(upload_stats + (width - len(upload_stats)) * ' ')
 
-    # If there are less progress bars now, add blank rows to overwrite the
-    # bottom rows as necessary (to get rid of lines with outdated information)
-    blank_rows = len(multi.free)
-    for row in range(blank_rows):
-        print(' ' * width)
+        # If there are less progress bars now, add blank rows to overwrite the
+        # bottom rows as necessary (to get rid of lines with outdated information)
+        blank_rows = len(multi.free)
+        for row in range(blank_rows):
+            print(' ' * width)
 
-    # Print the next update in a second, allow interrupts
-    thread = threading.Timer(1, print_progress, [multi, stats, bytes_total])
-    thread.daemon = True
-    thread.start()
+        prev_total = bytes_total
+        time.sleep(1)
 
 
 def reset_connection(multi, conn):
@@ -352,7 +352,9 @@ def main(args):
     # Clear the screen and start printing the progress bar every second
     if not args.quiet:
         subprocess.call(('clear',))
-        print_progress(multi, stats, 0)
+        progress_thread = threading.Timer(1, print_progress, (multi, stats))
+        progress_thread.daemon = True
+        progress_thread.start()
 
     while stats['num_finished'] < len(files):
         # Add uploads if there are connections free to use
