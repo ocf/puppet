@@ -4,7 +4,6 @@ class ocf_ssh {
   include ocf::hostkeys
   include ocf::limits
   include ocf::packages::cups
-  include ocf::packages::mysql
   include ocf_ssl::default_bundle
 
   class { 'ocf::nfs':
