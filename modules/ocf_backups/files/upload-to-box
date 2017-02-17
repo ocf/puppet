@@ -391,7 +391,7 @@ def main(args):
                     ))
 
                 # Allow exits by SIGINT
-                if (errno == 42):  # Callback aborted exception code
+                if (errno == pycurl.E_ABORTED_BY_CALLBACK):
                     sys.exit(4)
 
                 # Retry this file if it hasn't errored too many times
