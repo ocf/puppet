@@ -40,7 +40,7 @@ class ocf_admin::create::redis {
     notify  => Service['redis-server'];
   }
 
-  package { 'stunnel4': } ->
+  ocf::repackage { 'stunnel4': backport_on => jessie } ->
   augeas { '/etc/default/stunnel4':
     lens    => 'Shellvars.lns',
     incl    => '/etc/default/stunnel4',
