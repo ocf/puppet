@@ -49,11 +49,11 @@ class ocf_tv {
       group  => ocftv,
       source => 'puppet:///modules/ocf_tv/i3/config';
 
-    '/opt/share/background.svg':
+    '/opt/share/background.png':
       mode   => '0644',
       owner  => ocftv,
       group  => ocftv,
-      source => 'puppet:///modules/ocf_tv/X11/images/background.svg';
+      source => 'puppet:///modules/ocf_tv/X11/images/background.png';
   }
 
   ocf::systemd::service { 'x11vnc':
