@@ -221,6 +221,7 @@ def make_box_folder(folder, auth):
 
 def print_progress(multi, stats):
     """Show an updating progress bar for all ongoing uploads"""
+    subprocess.call(['clear'])
     prev_total = 0
     while True:
         width = get_terminal_size((80, 20)).columns  # Default size as a fallback
@@ -351,9 +352,7 @@ def main(args):
 
     # Clear the screen and start printing the progress bar every second
     if not args.quiet:
-        subprocess.call(('clear',))
-        progress_thread = threading.Timer(1, print_progress, (multi, stats))
-        progress_thread.daemon = True
+        progress_thread = threading.Thread(target=print_progress, args=(multi, stats), daemon=True)
         progress_thread.start()
 
     while stats['num_finished'] < len(files):
