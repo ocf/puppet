@@ -9,20 +9,13 @@ class ocf_mysql {
     '/root/.my.cnf':
       mode   => '0600',
       source => 'puppet:///private/root-my.cnf';
-  }
-
-  package { 'mariadb-server':
-    responsefile => '/opt/share/puppet/mariadb-server-10.0.preseed',
-    require      => File['/opt/share/puppet/mariadb-server-10.0.preseed'],
-  }
-
-  service { 'mysql':
-    require => Package['mariadb-server'],
-  }
-
+  } ->
+  class { 'ocf::packages::mysql_server':
+    responsefile   => '/opt/share/puppet/mariadb-server-10.0.preseed',
+    manage_service => false,
+  } ->
   file { '/etc/mysql/conf.d/99ocf.cnf':
     source  => 'puppet:///modules/ocf_mysql/99ocf.cnf',
-    require => Package['mariadb-server'],
-    notify  => Service['mysql'],
-  }
+  } ~>
+  service { 'mysql': }
 }
