@@ -41,11 +41,11 @@ class ocf_mesos::master {
       masters => $mesos_masters;
 
     'ocf_mesos::master::webui':
-      mesos_fqdn             => "${mesos_hostname}.ocf.berkeley.edu",
-      mesos_http_password    => $mesos_http_password,
-      mesos_agent_http_password    => $mesos_agent_http_password,
-      marathon_fqdn          => "${marathon_hostname}.ocf.berkeley.edu",
-      marathon_http_password => $marathon_http_password;
+      mesos_fqdn                => "${mesos_hostname}.ocf.berkeley.edu",
+      mesos_http_password       => $mesos_http_password,
+      mesos_agent_http_password => $mesos_agent_http_password,
+      marathon_fqdn             => "${marathon_hostname}.ocf.berkeley.edu",
+      marathon_http_password    => $marathon_http_password;
 
     'ocf_mesos::master::dns':
       zookeeper_host      => $zookeeper_host,

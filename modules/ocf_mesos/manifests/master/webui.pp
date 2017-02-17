@@ -138,7 +138,7 @@ class ocf_mesos::master::webui(
 
       server_name      => [$::hostname, $::fqdn, 'mesos', 'mesos.ocf.berkeley.edu'],
       vhost_cfg_append => {
-        'return' => '301 https://mesos.ocf.berkeley.edu\$request_uri',
+        'return' => '301 https://mesos.ocf.berkeley.edu$request_uri',
       };
 
     # marathon
@@ -171,7 +171,7 @@ class ocf_mesos::master::webui(
 
       server_name      => ['marathon', 'marathon.ocf.berkeley.edu'],
       vhost_cfg_append => {
-        'return' => '301 https://marathon.ocf.berkeley.edu\$request_uri',
+        'return' => '301 https://marathon.ocf.berkeley.edu$request_uri',
       };
   }
 
