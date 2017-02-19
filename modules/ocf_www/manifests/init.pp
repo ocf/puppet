@@ -45,8 +45,9 @@ class ocf_www {
   include ocf_www::ssl
 
   # sites
-  include ocf_www::site::shorturl
-  include ocf_www::site::vhosts
   include ocf_www::site::ocfweb_redirects
+  include ocf_www::site::shorturl
+  include ocf_www::site::unavailable
+  include ocf_www::site::vhosts
   include ocf_www::site::www
 }

@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Website Unavailable</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                font-family: Helvetica, Arial, sans-serif;
+            }
+
+            body {
+                background-color: #f5f5f5;
+                height: 100%;
+            }
+
+            .container {
+                width: 500px;
+                margin: 0 auto;
+                padding: 40px;
+                padding-right: 280px;
+
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: white;
+            }
+
+            .penguin {
+                background-image: url(https://static.ocf.berkeley.edu/img/penguin-swing.svg);
+                background-repeat: no-repeat;
+                background-size: 366px 407px;
+                background-position: 0 -60px;
+
+                position: absolute;
+                right: 0;
+                top: 0px;
+
+                width: 266px;
+                height: 407px;
+            }
+
+            hr {
+                border: none;
+                border-bottom: solid 2px #eee;
+                margin: 30px 0;
+            }
+
+            h1 {
+                margin-top: 0;
+            }
+
+            .small p {
+                color: #777;
+                font-size: 14px;
+                margin-bottom: 0;
+            }
+
+            @media (max-width: 820px) {
+                .penguin {
+                    display: none;
+                }
+
+                .container {
+                    padding-right: 40px;
+                    margin: 0;
+                    width: auto;
+                }
+
+                body {
+                    padding: 0;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="penguin"></div>
+            <h1>This website is unavailable.</h1>
+            <p>
+                That could be due to maintenance, a technical glitch, or because it's been disabled.
+            </p>
+            <p>
+                If you're the owner of this website and aren't sure why you're
+                seeing this message,
+                <a href="https://www.ocf.berkeley.edu/docs/contact/">get in touch</a>
+                so we can help you out.
+            </p>
+            <hr />
+            <div class="small">
+                <p>
+                    This website is hosted by the
+                    <a href="https://www.ocf.berkeley.edu">Open Computing Facility</a>,
+                    an all-volunteer student organization dedicated to free computing.
+                </p>
+            </div>
+        </div>
+    </body>
+</html>
