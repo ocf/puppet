@@ -79,7 +79,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/stf-cost-breakdown$ https://docs.google.com/spreadsheets/d/1U3YfU5S1hyi4c9u1vME84lz5hQPz23LKWCaD8mq4JHI/edit [R]'},
       {rewrite_rule => '^/tw(/.*)?$ https://ocf.io/twitter$1 [R]'},
       {rewrite_rule => '^/twitter(/.*)?$ https://twitter.com/ucbocf$1 [R]'},
-      {rewrite_rule => '^/tvhours$ https://ocf.berkeley.edu/tv/hours [R]'},
+      {rewrite_rule => '^/tv(/.*)?$ https://www.ocf.berkeley.edu/tv$1 [R]'},
       {rewrite_rule => '^/vhost$ https://www.ocf.berkeley.edu/docs/services/vhost/ [R]'},
       {rewrite_rule => '^/vhost-mail$ https://www.ocf.berkeley.edu/docs/services/vhost/mail/ [R]'},
       {rewrite_rule => '^/wiki$ https://www.ocf.berkeley.edu/docs/ [R]'},
