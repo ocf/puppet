@@ -106,7 +106,12 @@ class ocf_www::site::www {
         'secure',
         'secure.ocf.berkeley.edu',
         'ocf.asuc.org',
+
+        # Domains we don't actually use, but want to redirect to our home page
+        # (rather than show the 503 unavailable error).
         'linux.berkeley.edu',
+        'ofc.berkeley.edu',
+
         $::hostname,
         $::fqdn,
       ],
