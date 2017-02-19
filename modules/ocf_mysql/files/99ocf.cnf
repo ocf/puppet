@@ -2,7 +2,7 @@
 bind-address = 0.0.0.0
 
 # https://mariadb.com/kb/en/mariadb/optimizing-key_buffer_size/
-key_buffer = 128M
+key_buffer_size = 128M
 
 max_connections = 750
 max_user_connections = 50
