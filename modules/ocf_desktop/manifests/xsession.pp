@@ -197,8 +197,13 @@ class ocf_desktop::xsession {
   }
 
   # xscreensaver settings: blank background, disable new login
-  file { '/etc/X11/Xresources/XScreenSaver':
-      content => "*newLoginCommand:\n*mode: blank\n",
+  file {
+    '/etc/X11/Xresources/XScreenSaver':
+      content => "*newLoginCommand:\n*mode: blank\n";
+    # xfce overrides our newLoginCommand with a stupid wrapper script
+    '/etc/xdg/autostart/xscreensaver.desktop':
+      source  => 'puppet:///modules/ocf_desktop/xsession/xscreensaver.desktop',
+      require => Package['xscreensaver'];
   }
 
   # Use GTK+ theme for Qt 4 apps
