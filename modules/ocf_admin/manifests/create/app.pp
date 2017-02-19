@@ -1,4 +1,6 @@
 class ocf_admin::create::app {
+  require ocf_ssl::default_bundle
+
   package { 'ocf-approve':; }
 
   # these get shoved into URIs, and we can't deal with escaping
@@ -31,22 +33,18 @@ class ocf_admin::create::app {
 
     # TODO: ideally this file wouldn't be directly readable by staff
     '/etc/ocf-create/ocf-create.conf':
-      owner  => create,
       group  => ocfstaff,
       mode   => '0440';
 
     '/etc/ocf-create/create.keytab':
-      owner  => create,
       mode   => '0400',
       source => 'puppet:///private/create.keytab';
 
     '/etc/ocf-create/create.key':
-      owner  => create,
       mode   => '0400',
       source => 'puppet:///private/create.key';
 
     '/etc/ocf-create/create.pub':
-      owner  => create,
       mode   => '0444',
       source => 'puppet:///private/create.pub';
   }
