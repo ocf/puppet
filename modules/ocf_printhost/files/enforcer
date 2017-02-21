@@ -155,9 +155,8 @@ def posthook(c, job, success):
     if success:
         quota.add_job(c, job)
     else:
-        pass
-#        quo = quota.get_quota(c, job.user)
-#        send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
+        quo = quota.get_quota(c, job.user)
+        send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
 
 
 def main(argv):
