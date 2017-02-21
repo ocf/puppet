@@ -21,6 +21,7 @@ class ocf::extrapackages {
   package {
     # misc. packages helpful for users
     [
+    'aactivator',
     'alpine',
     'apache2-dev',
     'apache2-utils',
