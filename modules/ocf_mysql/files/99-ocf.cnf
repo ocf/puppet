@@ -1,5 +1,5 @@
 [mysqld]
-bind-address = 0.0.0.0
+bind-address = ::
 
 # https://mariadb.com/kb/en/mariadb/optimizing-key_buffer_size/
 key_buffer_size = 128M
