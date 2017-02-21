@@ -1,21 +1,19 @@
 class ocf_ldap {
+  include ocf::packages::ldapvi
   include ocf_ssl::default_bundle
 
   package { 'slapd':; }
   service { 'slapd':
-    subscribe => File[
-      '/etc/ldap/slapd.conf',
-      '/etc/ldap/schema/ocf.schema',
-      '/etc/ldap/schema/puppet.schema',
-      '/etc/default/slapd',
-      '/etc/ldap/sasl2/slapd.conf'];
+    subscribe => [
+      File['/etc/ldap/schema/ocf.schema',
+        '/etc/ldap/schema/puppet.schema',
+        '/etc/ldap/sasl2/slapd.conf',
+        '/etc/ldap/krb5.keytab'],
+      Augeas['/etc/default/slapd'],
+    ],
   }
 
   file {
-    '/etc/ldap/slapd.conf':
-      content => template('ocf_ldap/slapd.conf.erb'),
-      require => Package['slapd'];
-
     '/etc/ldap/schema/ocf.schema':
       source  => 'puppet:///modules/ocf_ldap/ocf.schema',
       require => Package['slapd'];
@@ -23,10 +21,6 @@ class ocf_ldap {
     '/etc/ldap/schema/puppet.schema':
       source  => 'puppet:///modules/ocf_ldap/puppet.schema',
       require => Package['slapd'];
-
-    '/etc/default/slapd':
-      source  => 'puppet:///modules/ocf_ldap/slapd-defaults',
-      require => Package['slapd', 'openssl'];
 
     '/etc/ldap/sasl2/slapd.conf':
       source  => 'puppet:///modules/ocf_ldap/sasl2-slapd',
@@ -38,6 +32,16 @@ class ocf_ldap {
       group   => openldap,
       mode    => '0600',
       require => Package['slapd', 'heimdal-clients'];
+  }
+
+  augeas { '/etc/default/slapd':
+    context => '/files/etc/default/slapd',
+    changes => [
+      'set SLAPD_SERVICES \'"ldaps:///"\'',
+      'touch KRB5_KTNAME/export',
+      'set KRB5_KTNAME /etc/ldap/krb5.keytab',
+    ],
+    require => Package['slapd'],
   }
 
   # Daily local git backup
