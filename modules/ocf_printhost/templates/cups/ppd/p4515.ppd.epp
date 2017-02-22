@@ -21,7 +21,7 @@
 *ShortNickName: "HP LaserJet p4515x (ocf)"
 *NickName: "HP LaserJet p4515x (ocf)"
 
-*cupsFilter: "application/vnd.cups-pdf 0 ocfps"
+*cupsFilter: "application/pdf 0 ocfps"
 
 *% Duplexing options
 
