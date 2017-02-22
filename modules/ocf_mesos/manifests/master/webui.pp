@@ -26,16 +26,29 @@ class ocf_mesos::master::webui(
   }
 
   # We need the PAM authentication module, so install nginx-extras.
-  ocf::repackage { 'nginx-extras':
+  ocf::repackage { ['nginx-extras', 'libnginx-mod-http-auth-pam']:
     backport_on => jessie,
   }
 
-  class { 'nginx':
-    manage_repo  => false,
-    confd_purge  => true,
-    vhost_purge  => true,
+  class {'::nginx::config':
+    # When we get to v0.6.0, move this to the main nginx class definition below.
+    nginx_cfg_prepend => {
+      'load_module' => '"modules/ngx_http_auth_pam_module.so"',
+    },
+  }
 
-    require => Ocf::Repackage['nginx-extras'],
+  class { 'nginx':
+    manage_repo => false,
+    confd_purge => true,
+    vhost_purge => true,
+
+    # remove once we're on stretch:
+    # a random package we don't care about, so that the nginx module won't try
+    # to install nginx and screw with our backport
+    package_name   => 'emacs24',
+    package_ensure => absent,
+
+    require => Ocf::Repackage['nginx-extras', 'libnginx-mod-http-auth-pam'],
   }
 
   nginx::resource::upstream {
