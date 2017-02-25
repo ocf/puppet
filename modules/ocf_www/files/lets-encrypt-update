@@ -25,6 +25,7 @@ Fortunately, renewals have no rate limit, which is the only reason we can
 actually use Let's Encrypt.
 """
 import argparse
+import functools
 import os
 import re
 import shutil
@@ -180,7 +181,8 @@ def maybe_renew(domain, cert_path, dry_run=False):
         except:
             print('An error occured!', file=sys.stderr)
             print('stderr from acme-tiny:', file=sys.stderr)
-            print(stderr, file=sys.stderr)
+            for line in stderr.decode().split('\n'):
+                print('>', line, file=sys.stderr)
             raise
 
 
@@ -227,7 +229,8 @@ def maybe_acquire(domain, cert_path, dry_run=True):
         except:
             print('An error occured!', file=sys.stderr)
             print('stderr from acme-tiny:', file=sys.stderr)
-            print(stderr, file=sys.stderr)
+            for line in stderr.decode().split('\n'):
+                print('>', line, file=sys.stderr)
             raise
 
 
@@ -242,7 +245,7 @@ def main(argv=None):
 
     if args.verbose:
         global debug
-        debug = print
+        debug = functools.partial(print, flush=True)
 
     eligible = eligible_domains()
     have_cert = set()
