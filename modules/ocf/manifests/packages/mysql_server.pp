@@ -21,4 +21,15 @@ class ocf::packages::mysql_server(
       require  => Package['mariadb-server'],
     }
   }
+
+  # We make mysqladmin non-executable on servers which don't run a mysql
+  # server in order to avoid a logrotate bug (rt#5981).
+  $mysqladmin_mode = $manage_service ? {
+    true  => '0644',
+    false => '0755',
+  }
+
+  file { '/usr/bin/mysqladmin':
+    mode => $mysqladmin_mode,
+  }
 }
