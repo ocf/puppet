@@ -21,9 +21,9 @@ class ocf::packages::docker($admin_group = undef) {
   }
 
   exec { 'docker-socket-update':
-    command     => 'systemctl daemon-reload && systemctl restart docker.socket',
+    command     => 'systemctl restart docker.socket',
     refreshonly => true,
-    require     => Package['docker-engine'],
+    require     => Exec['systemd-reload'],
   }
 
   if $admin_group != undef {
