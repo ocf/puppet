@@ -115,6 +115,7 @@ class ocf::packages {
     'unzip',
     'vim',
     'vim-nox',
+    'whois',
     ]:;
   }
 
