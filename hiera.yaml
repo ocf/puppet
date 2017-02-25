@@ -8,6 +8,9 @@ defaults:
   data_hash: yaml_data
 
 hierarchy:
+  - name: "Private config (passwords, etc.)"
+    path: "private.yaml"
+
   - name: "Nodes"
     path: "nodes/%{::hostname}.yaml"
 
