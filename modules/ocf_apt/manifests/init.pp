@@ -63,7 +63,9 @@ class ocf_apt {
       require     => [
         Ocf::Repackage['reprepro'],
         File['/opt/apt/bin', '/opt/apt/etc', '/opt/apt/db', '/opt/apt/ftp'],
-        Exec['import-apt-gpg']];
+        Exec['import-apt-gpg'],
+        User['ocfapt'],
+      ];
   }
 
   apache::vhost { 'apt.ocf.berkeley.edu':

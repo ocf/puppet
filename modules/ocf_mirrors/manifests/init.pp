@@ -30,15 +30,15 @@ class ocf_mirrors {
 
     # Set to have no password, only allow key-based login
     password => '*',
-    require  => File['/opt/mirrors'],
   }
 
   file {
     ['/opt/mirrors', '/opt/mirrors/ftp', '/opt/mirrors/project']:
-      ensure => directory,
-      mode   => '0755',
-      owner  => mirrors,
-      group  => mirrors;
+      ensure  => directory,
+      mode    => '0755',
+      owner   => mirrors,
+      group   => mirrors,
+      require => User['mirrors'];
 
     '/opt/mirrors/ftp/README.html':
       source => 'puppet:///modules/ocf_mirrors/README.html',
