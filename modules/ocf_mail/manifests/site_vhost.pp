@@ -9,7 +9,7 @@ class ocf_mail::site_vhost {
     backport_on => jessie,
   }
 
-  $mysql_ro_password = file('/opt/puppet/shares/private/ocfmail/mysql-ro-password')
+  $mysql_ro_password = hiera('ocfmail::mysql::ro_password')
 
   file {
     '/etc/pam-mysql.conf':
