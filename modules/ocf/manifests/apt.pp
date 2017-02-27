@@ -60,6 +60,11 @@ class ocf::apt($stage = 'first') {
     }
   }
 
+  # Install dirmngr first on stretch so we can import apt keys in gpg
+  if $::lsbdistcodename != 'jessie' {
+    package { 'dirmngr':; } -> Apt::Key <| |>
+  }
+
   # repos available only for stable
   if $::lsbdistcodename in ['jessie'] {
     apt::source {

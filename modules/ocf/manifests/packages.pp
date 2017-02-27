@@ -16,10 +16,6 @@ class ocf::packages {
   include ocf::packages::shell
   include ocf::packages::ssh
 
-  class { 'ocf::packages::gnupg':
-    stage => first,
-  }
-
   # Packages to automatically update to be the latest version. This should be
   # kept short, since apt-dater should be used to update almost all packages.
   package {

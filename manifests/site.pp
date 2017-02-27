@@ -20,11 +20,7 @@ Mount { ensure => defined }
 # use init script restart and status commands
 Service { hasrestart => true, hasstatus => true }
 
-# puppet resources which depend on certain packages being installed
 Vcsrepo { require => Package['git'] }
-if $::lsbdistcodename != 'jessie' {
-  Apt::Key { require => Package['dirmngr'] }
-}
 
 Apache::Vhost { serveradmin => 'help@ocf.berkeley.edu' }
 
