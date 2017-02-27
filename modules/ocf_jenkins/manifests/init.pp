@@ -133,4 +133,15 @@ class ocf_jenkins {
     options => 'noatime,nodev,nosuid,uid=jenkins-slave,gid=jenkins-slave,mode=755',
     require => [File['/opt/jenkins/slave/workspace'], User['jenkins-slave']];
   }
+
+  # TODO: when Docker 17.04+ comes out:
+  #  - Nuke this hacky cronjob
+  #  - Make the one in ocf::packages::docker clean all images that are older
+  #    than some expiration time
+  #  - Make that expiration time configurable
+  cron { 'clean-old-docker-images-jenkins':
+    command => 'chronic docker image prune -af',
+    hour    => 1,
+    minute  => 15;
+  }
 }
