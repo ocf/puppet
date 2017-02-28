@@ -1,4 +1,0 @@
-classes:
-    - ocf_ssl::default_bundle
-
-owner: tianrui
