@@ -1,1 +1,4 @@
+classes:
+    - ocf::packages::docker
+
 owner: bzhen
