@@ -16,7 +16,7 @@ if __name__ == '__main__':
         print('graph_vlabel mails sent past hour')
         print('graph_scale no')
         print('mails_last_hour.label mails sent past hour')
-        exit(0)
+        sys.exit(0)
 
     count = 0
     now = datetime.now()

@@ -8,6 +8,7 @@ logged in to the desktop.
 import os
 import string
 import subprocess
+import sys
 from datetime import datetime
 from datetime import timedelta
 
@@ -71,4 +72,4 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    exit(main())
+    sys.exit(main())
