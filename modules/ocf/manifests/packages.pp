@@ -15,6 +15,7 @@ class ocf::packages {
   include ocf::packages::rsync
   include ocf::packages::shell
   include ocf::packages::ssh
+  include ocf::packages::vim
 
   # Packages to automatically update to be the latest version. This should be
   # kept short, since apt-dater should be used to update almost all packages.
@@ -113,8 +114,6 @@ class ocf::packages {
     'tofrodos',
     'tree',
     'unzip',
-    'vim',
-    'vim-nox',
     'whois',
     ]:;
   }
