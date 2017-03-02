@@ -24,13 +24,23 @@ class ocf_printhost::cups {
 
     '/etc/cups/ppd':
       ensure  => directory,
-      source  => 'puppet:///modules/ocf_printhost/cups/ppd',
-      group   => 'lp',
-      recurse => true;
+      group   => 'lp';
+
+    '/etc/cups/ppd/logjam-single.ppd':
+      content => epp('ocf_printhost/cups/ppd/p4515.ppd.epp', { 'double' => false });
+
+    '/etc/cups/ppd/logjam-double.ppd':
+      content => epp('ocf_printhost/cups/ppd/p4515.ppd.epp', { 'double' => true });
+
+    ['/etc/cups/ppd/papercut-single.ppd', '/etc/cups/ppd/pagefault-single.ppd']:
+      content => epp('ocf_printhost/cups/ppd/m806.ppd.epp', { 'double' => false });
+
+    ['/etc/cups/ppd/papercut-double.ppd', '/etc/cups/ppd/pagefault-double.ppd']:
+      content => epp('ocf_printhost/cups/ppd/m806.ppd.epp', { 'double' => true });
 
     '/etc/cups/printers.conf':
       replace => false,
-      group   => lp,
+      group   => 'lp',
       mode    => '0600',
       source  => 'puppet:///modules/ocf_printhost/cups/printers.conf';
 
@@ -39,6 +49,10 @@ class ocf_printhost::cups {
       group   => 'lp',
       mode    => '0600',
       source  => 'puppet:///modules/ocf_printhost/cups/classes.conf';
+
+    '/usr/lib/cups/filter/ocfps/':
+      source  => 'puppet:///modules/ocf_printhost/ocfps',
+      mode    => '0755';
   }
 
   mount { '/var/spool/cups':
