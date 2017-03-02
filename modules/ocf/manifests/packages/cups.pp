@@ -6,7 +6,7 @@ class ocf::packages::cups {
   file {
     # set print server destination
     '/etc/cups/client.conf':
-      content => "ServerName dev-printhost\nEncryption Always\n",
+      content => "ServerName printhost\nEncryption Always\n",
       require => Package[ 'cups', 'cups-bsd' ];
     # set default printer double
     '/etc/cups/lpoptions':
