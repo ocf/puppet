@@ -51,7 +51,7 @@ directory : /var/spool/cups/
 # The value defined in a print queue section takes precedence over the
 # value defined in the [global] section.
 # BEWARE : this may use huge amounts of disk space !
-<% if not @hostname.start_with?('dev-') %>
+<% if not @dev_config %>
 keepfiles : no
 <% else %>
 keepfiles : yes

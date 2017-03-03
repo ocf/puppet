@@ -8,7 +8,7 @@ Port 631
 SSLPort 443
 Listen /var/run/cups/cups.sock
 
-<% if not @hostname.start_with?('dev-') %>
+<% if not @dev_config %>
     ServerName printhost.ocf.berkeley.edu
     LogLevel emerg
     LogDebugHistory 0

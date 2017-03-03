@@ -1,4 +1,4 @@
-class ocf_printhost::cups {
+class ocf_printhost::cups($dev_config = false) {
   package { ['cups', 'cups-bsd']: }
 
   service { 'cups':
