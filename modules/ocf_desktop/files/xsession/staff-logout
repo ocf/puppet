@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+import datetime
+from subprocess import call
+from subprocess import check_output
+from time import sleep
+
+from ocflib.lab.hours import Day
+
+
+def main():
+    # delay before killing session in minutes
+    # counter only starts after computer is locked
+    wait = delay = 30
+    # extra delay if we will be closed delay minutes from now
+    bonus = 90
+    now = datetime.datetime.now()
+    tto = Day.from_date(now).time_to_open()
+    if tto >= datetime.timedelta(minutes=delay):
+        berkeley_time = 10
+        # this min makes it so wait should log out the sooner of 10 minutes before we open
+        # and delay+bonus minutes
+        wait = min(delay + bonus, int(tto.total_seconds() / 60) - berkeley_time)
+        # this statement ensures no one will be kicked out for at least delay minutes after lock
+        # in case say open after delay+1 minutes and then the berkeley time calculation will
+        # gives us an original value of wait that is less than delay
+        wait = max(wait, delay)
+
+    sleep(60 * wait)
+
+    output = check_output(('xscreensaver-command', '-display', ':0.0', '-time'))
+    output = output.decode('utf-8').strip().split()
+
+    # for some reason output sometimes has (hack #1) appended at the end, not sure why
+    if output[-2] == '(hack':
+        output = output[:-2]
+
+    if output[3] == 'locked':
+        # format is day, hour:minute:second year
+        time_of_lock = datetime.datetime.strptime(' '.join(output[-4:]), '%b %d %H:%M:%S %Y')
+        now = datetime.datetime.now()
+        diff = now - time_of_lock
+        # -1 prevents any slight misses
+        if diff >= datetime.timedelta(minutes=(wait - 1)):
+            call(('xfce4-session-logout', '--logout'))
+
+
+if __name__ == '__main__':
+    main()

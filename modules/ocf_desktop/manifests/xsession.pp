@@ -162,6 +162,7 @@ class ocf_desktop::xsession {
     owner   => root,
     group   => ocfstaff,
     mode    => '0754',
+    source  => 'puppet:///modules/ocf_desktop/xsession/xflock4',
     require => Package['xscreensaver'];
   }
 
@@ -192,8 +193,13 @@ class ocf_desktop::xsession {
   }
 
   file { '/usr/local/bin/auto-lock':
-      mode   => '0755',
-      source => 'puppet:///modules/ocf_desktop/xsession/auto-lock';
+    mode   => '0755',
+    source => 'puppet:///modules/ocf_desktop/xsession/auto-lock';
+  }
+
+  file { '/usr/local/bin/staff-logout':
+    mode   => '0755',
+    source => 'puppet:///modules/ocf_desktop/xsession/staff-logout';
   }
 
   # xscreensaver settings: blank background, disable new login
