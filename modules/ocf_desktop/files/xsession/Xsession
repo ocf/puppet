@@ -114,7 +114,10 @@ xset m 0 0
 sleep 8 && /usr/local/bin/fix-audio &
 
 # Auto logout inactive users
-/usr/bin/xautolock -locker /usr/local/bin/auto-lock -time 7 -noclose &
+# killer is called killtime minutes after locker is called
+# any user input including shaking the mouse then not clearing the lockscreen is considered user input
+# locker must still be running for killer to be called, so if auto-lock is killed then killer will not be called
+/usr/bin/xautolock -locker /usr/local/bin/auto-lock -time 7 -killtime 83 -killer 'pkill xfce4-session' -noclose &
 
 # Source custom rc shared across desktops
 [ -f ~/remote/.desktoprc ] && . ~/remote/.desktoprc
