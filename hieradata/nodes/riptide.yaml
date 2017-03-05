@@ -1,5 +1,6 @@
 classes:
     - ocf_kvm
+    - ocf_backups
 
     # TODO: Removed until mesos is available on stretch
     #- ocf_mesos::slave
