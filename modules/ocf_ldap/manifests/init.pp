@@ -48,7 +48,8 @@ class ocf_ldap {
   package { 'ldap-git-backup':; }
 
   cron { 'ldap-git-backup':
-    command => '/usr/sbin/ldap-git-backup',
+    # Back up all of LDAP, including configuration options
+    command => "/usr/sbin/ldap-git-backup --ldif-cmd 'slapcat -s cn=config; slapcat'",
     minute  => 0,
     hour    => 4,
     require => Package['ldap-git-backup'];
