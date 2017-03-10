@@ -5,23 +5,13 @@ class ocf_ldap {
   package { 'slapd':; }
   service { 'slapd':
     subscribe => [
-      File['/etc/ldap/schema/ocf.schema',
-        '/etc/ldap/schema/puppet.schema',
-        '/etc/ldap/sasl2/slapd.conf',
-        '/etc/ldap/krb5.keytab'],
+      File['/etc/ldap/krb5.keytab',
+        '/etc/ldap/sasl2/slapd.conf'],
       Augeas['/etc/default/slapd'],
     ],
   }
 
   file {
-    '/etc/ldap/schema/ocf.schema':
-      source  => 'puppet:///modules/ocf_ldap/ocf.schema',
-      require => Package['slapd'];
-
-    '/etc/ldap/schema/puppet.schema':
-      source  => 'puppet:///modules/ocf_ldap/puppet.schema',
-      require => Package['slapd'];
-
     '/etc/ldap/sasl2/slapd.conf':
       source  => 'puppet:///modules/ocf_ldap/sasl2-slapd',
       require => Package['slapd', 'libsasl2-modules-gssapi-mit'];
