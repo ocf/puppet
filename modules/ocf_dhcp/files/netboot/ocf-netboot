@@ -48,7 +48,7 @@ for dist in "${dists[@]}"; do
             # TODO: Currently the daily image is broken, so use one that works with the firmware
             # Once stretch becomes stable this should be removed and added to the section above,
             # and replaced with the new testing release.
-            netboot="http://mirrors/debian/dists/testing/main/installer-amd64/current/images/netboot/netboot.tar.gz"
+            netboot="https://d-i.debian.org/daily-images/amd64/daily/netboot/netboot.tar.gz"
             fw=""
         fi
 
