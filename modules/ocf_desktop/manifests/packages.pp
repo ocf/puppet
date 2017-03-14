@@ -23,7 +23,7 @@ class ocf_desktop::packages {
     # games
     ['armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music']:;
     # nonfree packages
-    ['firmware-linux', 'ttf-mscorefonts-installer']:;
+    ['firmware-linux', 'ttf-mscorefonts-installer', 'nvidia-smi']:;
     # notifications
     ['libnotify-bin', 'notification-daemon']:;
     # performance improvements
