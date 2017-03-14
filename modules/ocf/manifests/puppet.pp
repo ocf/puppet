@@ -93,9 +93,15 @@ class ocf::puppet($stage = 'first') {
       minute      => [fqdn_rand(30), fqdn_rand(30) + 30],
       environment => 'PATH=/opt/puppetlabs/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin'
     }
+
+    service { 'puppet':
+      ensure  => stopped,
+      enable  => false,
+      require => Package['puppet'],
+    }
   } else {
     service { 'puppet':
-      require   => Package['puppet'],
+      require => Package['puppet'],
     }
   }
 
