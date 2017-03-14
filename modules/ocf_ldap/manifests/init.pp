@@ -5,8 +5,10 @@ class ocf_ldap {
   package { 'slapd':; }
   service { 'slapd':
     subscribe => [
-      File['/etc/ldap/krb5.keytab',
-        '/etc/ldap/sasl2/slapd.conf'],
+      File[
+        '/etc/ldap/krb5.keytab',
+        '/etc/ldap/sasl2/slapd.conf',
+      ],
       Augeas['/etc/default/slapd'],
     ],
   }
@@ -39,6 +41,7 @@ class ocf_ldap {
 
   cron { 'ldap-git-backup':
     # Back up all of LDAP, including configuration options
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=721155
     command => "/usr/sbin/ldap-git-backup --ldif-cmd 'slapcat -s cn=config; slapcat'",
     minute  => 0,
     hour    => 4,
