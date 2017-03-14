@@ -1,8 +1,9 @@
 class ocf::puppet($stage = 'first') {
   if lookup('puppet_agent') {
-    package { 'puppet-agent':; }
-
     $cron = true
+    $puppet_pkg = 'puppet-agent'
+
+    package { $puppet_pkg:; }
 
     augeas { '/etc/puppetlabs/puppet/puppet.conf':
       context => '/files/etc/puppetlabs/puppet/puppet.conf',
@@ -29,10 +30,11 @@ class ocf::puppet($stage = 'first') {
         'rm master/ssl_client_header',
         'rm master/ssl_client_verify_header',
       ],
-      require => Package['puppet-agent'],
+      require => Package[$puppet_pkg],
     }
   } else {
-    package { ['facter', 'puppet', 'augeas-tools', 'ruby-augeas']: }
+    $puppet_pkg = 'puppet'
+    package { [$puppet_pkg, 'facter', 'augeas-tools', 'ruby-augeas']: }
 
     if $::lsbdistcodename == 'jessie' {
       # Puppet ships with a service, so use that instead of cron
@@ -55,7 +57,7 @@ class ocf::puppet($stage = 'first') {
           # templatedir is deprecated in 3.8+ and we don't use it
           'rm main/templatedir',
         ],
-        require => Package['augeas-tools', 'ruby-augeas', 'puppet'],
+        require => Package[$puppet_pkg, 'augeas-tools', 'ruby-augeas'],
         notify  => Service['puppet'],
       }
     } else {
@@ -78,7 +80,7 @@ class ocf::puppet($stage = 'first') {
           'rm master/ssl_client_header',
           'rm master/ssl_client_verify_header',
         ],
-        require => Package['augeas-tools', 'puppet'],
+        require => Package[$puppet_pkg, 'augeas-tools'],
       }
     }
   }
@@ -91,17 +93,18 @@ class ocf::puppet($stage = 'first') {
       command     => 'puppet agent --verbose --onetime --no-daemonize --logdest syslog > /dev/null 2>&1',
       user        => 'root',
       minute      => [fqdn_rand(30), fqdn_rand(30) + 30],
-      environment => 'PATH=/opt/puppetlabs/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin'
+      environment => 'PATH=/opt/puppetlabs/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin',
+      require     => Package[$puppet_pkg],
     }
 
     service { 'puppet':
       ensure  => stopped,
       enable  => false,
-      require => Package['puppet'],
+      require => Package[$puppet_pkg],
     }
   } else {
     service { 'puppet':
-      require => Package['puppet'],
+      require => Package[$puppet_pkg],
     }
   }
 
