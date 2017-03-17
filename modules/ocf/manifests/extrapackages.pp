@@ -147,7 +147,6 @@ class ocf::extrapackages {
     'r-cran-lubridate',
     'r-cran-magrittr',
     'r-cran-markdown',
-    'r-cran-readr',
     'r-cran-rmysql',
     'r-cran-stringr',
     'r-cran-tidyr',
