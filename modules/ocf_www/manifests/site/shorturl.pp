@@ -36,6 +36,7 @@ class ocf_www::site::shorturl {
       # Remember to add these to the list of RESERVED_USERNAMES in ocflib/constants.py
       {rewrite_rule => '^/?$ https://www.ocf.berkeley.edu/ [R=301]'},
       {rewrite_rule => '^/about$ https://www.ocf.berkeley.edu/docs/about/ [R]'},
+      {rewrite_rule => '^/absa$ https://drive.google.com/drive/folders/0B7n5VUVfGPUoV0xPREIwY0hzc0E?usp=sharing [R]'},
       {rewrite_rule => '^/account$ https://www.ocf.berkeley.edu/docs/services/account/ [R]'},
       {rewrite_rule => '^/apphost$ https://www.ocf.berkeley.edu/docs/services/webapps/ [R]'},
       {rewrite_rule => '^/bod(/.*)?$ https://www.ocf.berkeley.edu/~staff/bod$1 [R]'},
@@ -51,6 +52,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/gh(/.*)?$ https://ocf.io/github$1 [R]'},
       {rewrite_rule => '^/github(/.*)?$ https://github.com/ocf$1 [R]'},
       {rewrite_rule => '^/gmail$ https://mail.google.com/a/ocf.berkeley.edu [R]'},
+      {rewrite_rule => '^/gdrive$ https://drive.google.com/a/ocf.berkeley.edu [R]'},
       {rewrite_rule => '^/help(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
       {rewrite_rule => '^/hiring$ http://status.ocf.berkeley.edu/2016/09/taking-applications-for-new-work-study.html [R]'},
       {rewrite_rule => '^/hosting$ https://www.ocf.berkeley.edu/docs/services/web/ [R]'},
