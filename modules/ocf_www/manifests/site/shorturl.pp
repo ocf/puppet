@@ -33,7 +33,7 @@ class ocf_www::site::shorturl {
 
     rewrites      => [
       # Short URLs
-      # Remember to add these to the list of RESERVED_USERNAMES in ocflib/constants.py
+      # Remember to add these to the list of RESERVED_USERNAMES in ocflib/account/validators.py
       {rewrite_rule => '^/?$ https://www.ocf.berkeley.edu/ [R=301]'},
       {rewrite_rule => '^/about$ https://www.ocf.berkeley.edu/docs/about/ [R]'},
       {rewrite_rule => '^/account$ https://www.ocf.berkeley.edu/docs/services/account/ [R]'},
