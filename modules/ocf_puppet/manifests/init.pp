@@ -1,6 +1,4 @@
 class ocf_puppet {
-  include ocf::packages::ldapvi
-
   include ocf_puppet::environments
   include ocf_puppet::puppetmaster
 

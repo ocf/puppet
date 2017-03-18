@@ -10,6 +10,7 @@ class ocf::packages {
   # special snowflake packages that require some config
   include ocf::packages::git
   include ocf::packages::grub
+  include ocf::packages::ldapvi
   include ocf::packages::ntp
   include ocf::packages::postfix
   include ocf::packages::rsync
