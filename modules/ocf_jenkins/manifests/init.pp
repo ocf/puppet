@@ -116,6 +116,7 @@ class ocf_jenkins {
       home    => '/opt/jenkins/slave/',
       groups  => ['sys', 'docker'],
       shell   => '/bin/bash',
+      system  => true,
       require => Package['docker-engine'];
 
     'jenkins-deploy':
@@ -123,6 +124,7 @@ class ocf_jenkins {
       home    => '/opt/jenkins/deploy/',
       groups  => ['sys', 'docker'],
       shell   => '/bin/bash',
+      system  => true,
       require => Package['docker-engine'];
   }
 

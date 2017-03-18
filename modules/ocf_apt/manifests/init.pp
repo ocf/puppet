@@ -5,7 +5,8 @@ class ocf_apt {
     comment => 'OCF Apt',
     home    => '/opt/apt',
     groups  => ['sys'],
-    shell   => '/bin/false';
+    shell   => '/bin/false',
+    system  => true,
   }
 
   ocf::repackage { 'reprepro':

@@ -27,6 +27,7 @@ class ocf_mirrors {
     home     => '/opt/mirrors',
     groups   => ['sys'],
     shell    => '/bin/bash',
+    system   => true,
 
     # Set to have no password, only allow key-based login
     password => '*',
