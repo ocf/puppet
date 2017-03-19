@@ -1,12 +1,9 @@
 class ocf_syslog {
-  ocf::repackage { 'rsyslog':
-    # TCP logging is broken in jessie :\
-    backport_on => jessie,
-  }
+  package { 'rsyslog': }
 
   service { 'rsyslog':
     require => [
-      Ocf::Repackage['rsyslog'],
+      Package['rsyslog'],
       File['/etc/rsyslog.d/ocf.conf'],
     ],
   }
@@ -18,7 +15,7 @@ class ocf_syslog {
     '/etc/rsyslog.d/ocf.conf':
       source  => 'puppet:///modules/ocf_syslog/ocf.conf',
       notify  => Service['rsyslog'],
-      require => Ocf::Repackage['rsyslog'];
+      require => Package['rsyslog'];
 
     '/etc/logrotate.d/ocf-syslog':
       source  => 'puppet:///modules/ocf_syslog/logrotate';
