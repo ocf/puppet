@@ -86,7 +86,7 @@ class ocf_desktop::xsession {
   # overwrite greeter strings with OCF ones
   package {'gettext':;}
 
-  $po = $::staff_only ? {
+  $po = $staff_only ? {
     true    => 'lightdm-gtk-greeter-staff.po',
     default => 'lightdm-gtk-greeter.po',
   }
