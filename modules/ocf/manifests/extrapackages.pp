@@ -198,6 +198,7 @@ class ocf::extrapackages {
     package {
       [
         'jupyter-console',
+        'jupyter-core',
         'jupyter-notebook',
         'php-cli',
         'php-curl',
