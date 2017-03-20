@@ -52,7 +52,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/github(/.*)?$ https://github.com/ocf$1 [R]'},
       {rewrite_rule => '^/gmail$ https://mail.google.com/a/ocf.berkeley.edu [R]'},
       {rewrite_rule => '^/help(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
-      {rewrite_rule => '^/hiring$ https://ocf.berkeley.edu/announcements/2017-03-20/hiring [R]'},
+      {rewrite_rule => '^/hiring$ https://www.ocf.berkeley.edu/announcements/2017-03-20/hiring [R]'},
       {rewrite_rule => '^/hosting$ https://www.ocf.berkeley.edu/docs/services/web/ [R]'},
       {rewrite_rule => '^/hours$ https://ocf.io/lab#hours [R,NE]'},
       {rewrite_rule => '^/https$ http://status.ocf.berkeley.edu/2014/10/moving-wwwocfberkeleyedu-to-https-only.html [R]'},
