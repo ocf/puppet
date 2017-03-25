@@ -13,6 +13,7 @@ from collections import namedtuple
 from pathlib import Path
 
 import jinja2
+from ocflib.account.search import user_is_sorried
 from ocflib.account.utils import web_dir
 from ocflib.misc.mail import email_for_user
 from ocflib.vhost.web import get_vhosts
@@ -37,6 +38,7 @@ class VirtualHost(namedtuple('VirtualHost', (
         'ssl_key',
         'ssl_chain',
         'use_hsts',
+        'disabled',
 ))):
     """A single <VirtualHost>.
 
@@ -103,15 +105,17 @@ def build_config_file():
             ssl_options = {}
 
         # primary vhost
+        user = vhost['username']
         primary = VirtualHost(
             fqdn=domain,
-            user=vhost['username'],
+            user=user,
             relative_docroot=vhost['docroot'],
             redirect_dest=None,
             ssl_cert=ssl_options.get('ssl_cert'),
             ssl_key=ssl_options.get('ssl_key'),
             ssl_chain=ssl_options.get('ssl_chain'),
             use_hsts='hsts' in vhost['flags'],
+            disabled=user_is_sorried(user),
         )
         vhosts.add(primary)
 
@@ -129,6 +133,7 @@ def build_config_file():
                 ssl_key=None,
                 ssl_chain=None,
                 use_hsts=None,
+                disabled=False,
             ))
 
     return '\n\n'.join(
