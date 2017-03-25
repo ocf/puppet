@@ -22,6 +22,7 @@ class ocf::extrapackages {
     # misc. packages helpful for users
     [
     'aactivator',
+    'ack',
     'alpine',
     'apache2-dev',
     'apache2-utils',
@@ -40,6 +41,7 @@ class ocf::extrapackages {
     'elinks',
     'emacs',
     'flex',
+    'fortune',
     'gdb',
     'gem2deb',
     'ghc',
