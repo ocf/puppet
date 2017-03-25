@@ -22,7 +22,6 @@ class ocf::extrapackages {
     # misc. packages helpful for users
     [
     'aactivator',
-    'ack',
     'alpine',
     'apache2-dev',
     'apache2-utils',
@@ -168,6 +167,9 @@ class ocf::extrapackages {
   if $::lsbdistcodename == 'jessie' {
     package {
       [
+        # Renamed to "ack" in stretch
+        'ack-grep',
+
         # Replaced by jupyter-* packages in stretch with separate ipykernel
         # packages. We install python*-notebook in stretch which depend on
         # the ipykernel packages.
@@ -199,6 +201,7 @@ class ocf::extrapackages {
   } else {
     package {
       [
+        'ack',
         'jupyter-console',
         'jupyter-core',
         'jupyter-notebook',
