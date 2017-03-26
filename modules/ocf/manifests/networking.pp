@@ -17,10 +17,8 @@ class ocf::networking(
 
   # packages
   if $bridge {
+    include firewall
     package { 'bridge-utils': }
-
-    # For unknown reasons, this must be set on kernel 4.9, but not 4.7 or below (rt#5849)
-    sysctl { 'net.bridge.bridge-nf-call-iptables': value => '0' }
   }
 
   package { 'resolvconf':
@@ -80,5 +78,36 @@ class ocf::networking(
       '/etc/systemd/network/99-default.link',
     ]:
       ensure => absent;
+  }
+
+  # firewall configuration
+  if $bridge {
+    # Docker 1.13+ sets the iptables policy for the FORWARD chain to DROP.
+    # (See https://github.com/docker/docker/pull/28257). As a side effect,
+    # that prevents VMs from talking to anyone other than the host over
+    # IPv4.
+    # To fix this, add explicit rules allowing forwarding on the bridge
+    # interface used by VMs.
+
+    # One unpleasant thing about the puppetlabs-firewall module is that it
+    # calls iptables-save, which saves all iptables rules, including
+    # Docker's transient rules. It's not that big of a problem, since
+    # Docker is designed to check if the firewall rules are already present,
+    # but it does mean if the default Docker firewall rules change, we
+    # might not have the updates automatically applied to us.
+
+    firewall { '100 forward outgoing packets from VMs':
+      chain    => 'FORWARD',
+      outiface => $iface,
+      proto    => 'all',
+      action   => 'accept',
+    }
+
+    firewall { '101 forward incoming packets to VMs':
+      chain    => 'FORWARD',
+      iniface  => $iface,
+      proto    => 'all',
+      action   => 'accept',
+    }
   }
 }
