@@ -12,7 +12,12 @@
         SSLCertificateChainFile {{vhost.ssl_chain}}
     {% endif %}
 
-    {% if not vhost.is_redirect %}
+    {% if vhost.disabled %}
+        # Proxy to the local "unavailable" vhost, which serves up a friendly
+        # "your website is rekt" page.
+        RequestHeader set Host unavailable
+        ProxyPass / http://localhost/
+    {% elif not vhost.is_redirect %}
         <Directory {{vhost.docroot}}>
             Options ExecCGI IncludesNoExec Indexes MultiViews SymLinksIfOwnerMatch
             AllowOverride All
