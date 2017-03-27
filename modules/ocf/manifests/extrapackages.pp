@@ -34,6 +34,7 @@ class ocf::extrapackages {
     'cgdb',
     'chicken-bin',
     'chrpath',
+    'cowsay',
     'debhelper',
     'default-jdk',
     'dh-systemd',
