@@ -3,11 +3,11 @@ class ocf::networking(
 
     $ipaddress  = $::ipHostNumber,  # lint:ignore:variable_is_lowercase
     $netmask    = '255.255.255.0',
-    $gateway    = '169.229.226.1',
+    $gateway    = ip_address(ip_network("${ipaddress}/${netmask}", 1)),
 
     $ipaddress6 = regsubst($::ipHostNumber, '^(\d+)\.(\d+)\.(\d+)\.(\d+)$', '2607:f140:8801::1:\4'),  # lint:ignore:variable_is_lowercase
     $netmask6   = '64',
-    $gateway6   = '2607:f140:8801::1',
+    $gateway6   = ip_address(ip_network("${ipaddress6}/${netmask6}", 1)),
 
     $domain      = 'ocf.berkeley.edu',
     $nameservers = ['2607:f140:8801::1:22', '169.229.226.22', '128.32.206.12'],
@@ -96,18 +96,22 @@ class ocf::networking(
     # but it does mean if the default Docker firewall rules change, we
     # might not have the updates automatically applied to us.
 
+    $subnet = ip_network("${ipaddress}/${netmask}", 0)
+
     firewall { '100 forward outgoing packets from VMs':
       chain    => 'FORWARD',
       outiface => $iface,
+      source   => $subnet,
       proto    => 'all',
       action   => 'accept',
     }
 
     firewall { '101 forward incoming packets to VMs':
-      chain    => 'FORWARD',
-      iniface  => $iface,
-      proto    => 'all',
-      action   => 'accept',
+      chain       => 'FORWARD',
+      iniface     => $iface,
+      destination => $subnet,
+      proto       => 'all',
+      action      => 'accept',
     }
   }
 }
