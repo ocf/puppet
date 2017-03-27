@@ -3,7 +3,6 @@ moduledir 'vendor'
 
 
 # Third-party modules
-mod 'inkblot-ipcalc',      '2.2.0'
 mod 'puppet-nginx',        '0.5.0'
 mod 'puppetlabs-apache',   '1.11.0'
 mod 'puppetlabs-apt',      '2.3.0'
