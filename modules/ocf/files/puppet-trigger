@@ -3,7 +3,6 @@
 import argparse
 import os
 import re
-import signal
 import socket
 import subprocess
 import sys
@@ -11,36 +10,11 @@ from textwrap import dedent
 
 
 def log(*args, file=sys.stderr, **kwargs):
-    print(*args, file=file, **kwargs)
-    file.flush()
+    print(*args, file=file, flush=True, **kwargs)
 
 
-def trigger_run():
-    if subprocess.call(
-            ('/usr/sbin/service', 'puppet', 'status'),
-            stdout=subprocess.DEVNULL,
-    ) == 0:
-        with open('/var/run/puppet/agent.pid') as f:
-            pid = int(f.read().strip())
-
-        try:
-            os.kill(pid, signal.SIGUSR1)
-        except PermissionError:
-            log('Error triggering puppet run, are you root?')
-            sys.exit(1)
-    else:
-        log('Error: Puppet agent does not appear to be running')
-        sys.exit(1)
-
-
-def trigger_run_interactive(flags):
-    os.execvp('puppet', ('puppet', 'agent', '--test') + flags)
-
-
-def tail_syslog():
-    # call less in "secure" mode since this is triggered by passwordless sudo
-    os.environ['LESSSECURE'] = '1'
-    os.execvp('less', ('less', '+F', '/var/log/syslog'))
+def trigger_run(flags):
+    os.execvp('puppet', ['puppet', 'agent'] + flags)
 
 
 def switch_to_environment(env):
@@ -60,12 +34,12 @@ def switch_to_environment(env):
 
     # TODO: use subprocess.run on python3.5; we don't actually care about stdout here
     subprocess.check_output(
-        (
+        [
             'kinit',
             '-t', '/etc/krb5.keytab',
             'host/{}.ocf.berkeley.edu@OCF.BERKELEY.EDU'.format(hostname),
             'ldapmodify',
-        ),
+        ],
         input=ldif.encode('utf8'),
     )
 
@@ -85,32 +59,32 @@ def main(argv=None):
     )
     behavior_group = parser.add_mutually_exclusive_group()
     behavior_group.add_argument(
-        '-f', '--tail', action='store_true',
-        help='tail syslog after trigger',
-    )
-    behavior_group.add_argument(
         '-t', '--test', action='store_true',
-        help='run interactively in foreground',
+        help='run interactively',
     )
     parser.add_argument(
         '-d', '--debug', action='store_true',
-        help='show puppet debug output; can only be used with -t'
+        help='show puppet debug output'
     )
 
     args = parser.parse_args(argv)
-    if args.debug and not args.test:
-        parser.error('--debug can only be used with --test')
+
+    if os.geteuid() != 0:
+        log('You are not root.')
+        return 1
 
     if args.environment:
         switch_to_environment(args.environment)
 
     if args.test:
-        flags = ('--debug',) if args.debug else ()
-        trigger_run_interactive(flags)
+        flags = ['--test']
     else:
-        trigger_run()
-        if args.tail:
-            tail_syslog()
+        flags = ['--verbose', '--onetime', '--no-daemonize', '--logdest', 'syslog']
+
+    if args.debug:
+        flags.append('--debug')
+
+    trigger_run(flags)
 
 
 if __name__ == '__main__':

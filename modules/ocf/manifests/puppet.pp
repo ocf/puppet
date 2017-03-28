@@ -1,6 +1,5 @@
 class ocf::puppet($stage = 'first') {
   if lookup('puppet_agent') {
-    $cron = true
     $puppet_pkg = 'puppet-agent'
 
     package { $puppet_pkg:; }
@@ -37,9 +36,6 @@ class ocf::puppet($stage = 'first') {
     package { [$puppet_pkg, 'facter', 'augeas-tools', 'ruby-augeas']: }
 
     if $::lsbdistcodename == 'jessie' {
-      # Puppet ships with a service, so use that instead of cron
-      $cron = false
-
       # configure puppet agent
       # set environment to match server and disable cached catalog on failure
       augeas { '/etc/puppet/puppet.conf':
@@ -61,8 +57,6 @@ class ocf::puppet($stage = 'first') {
         notify  => Service['puppet'],
       }
     } else {
-      $cron = true
-
       augeas { '/etc/puppet/puppet.conf':
         context => '/files/etc/puppet/puppet.conf',
         changes => [
@@ -85,27 +79,20 @@ class ocf::puppet($stage = 'first') {
     }
   }
 
-  # Run puppet as a cron job or a service, depending on the version installed.
-  # Puppet 4+ doesn't ship with a service, so a cron job is used instead.
-  if $cron {
-    cron { 'puppet-agent':
-      ensure      => present,
-      command     => 'puppet agent --verbose --onetime --no-daemonize --logdest syslog > /dev/null 2>&1',
-      user        => 'root',
-      minute      => [fqdn_rand(30), fqdn_rand(30) + 30],
-      environment => 'PATH=/opt/puppetlabs/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin',
-      require     => Package[$puppet_pkg],
-    }
+  # Run puppet as a cron job rather than as a service
+  cron { 'puppet-agent':
+    ensure      => present,
+    command     => 'puppet-trigger > /dev/null 2>&1',
+    user        => 'root',
+    minute      => [fqdn_rand(30), fqdn_rand(30) + 30],
+    environment => 'PATH=/opt/puppetlabs/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin',
+    require     => Package[$puppet_pkg],
+  }
 
-    service { 'puppet':
-      ensure  => stopped,
-      enable  => false,
-      require => Package[$puppet_pkg],
-    }
-  } else {
-    service { 'puppet':
-      require => Package[$puppet_pkg],
-    }
+  service { 'puppet':
+    ensure  => stopped,
+    enable  => false,
+    require => Package[$puppet_pkg],
   }
 
   # Create share directories
