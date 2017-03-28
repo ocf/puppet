@@ -17,7 +17,7 @@ class ocf::networking(
 
   # packages
   if $bridge {
-    include firewall
+    include ocf::firewall
     package { 'bridge-utils': }
   }
 
@@ -88,13 +88,6 @@ class ocf::networking(
     # IPv4.
     # To fix this, add explicit rules allowing forwarding on the bridge
     # interface used by VMs.
-
-    # One unpleasant thing about the puppetlabs-firewall module is that it
-    # calls iptables-save, which saves all iptables rules, including
-    # Docker's transient rules. It's not that big of a problem, since
-    # Docker is designed to check if the firewall rules are already present,
-    # but it does mean if the default Docker firewall rules change, we
-    # might not have the updates automatically applied to us.
 
     # On hypervisors the ethernet interface and VM TAP interfaces are all
     # connected to $iface. Any packet traveling between VMs, or between a
