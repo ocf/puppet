@@ -41,7 +41,7 @@ class ocf::extrapackages {
     'elinks',
     'emacs',
     'flex',
-    'fortune',
+    'fortune-mod',
     'gdb',
     'gem2deb',
     'ghc',
