@@ -82,7 +82,7 @@ class ocf::puppet($stage = 'first') {
   # Run puppet as a cron job rather than as a service
   cron { 'puppet-agent':
     ensure      => present,
-    command     => 'puppet-trigger > /dev/null 2>&1',
+    command     => 'puppet-trigger',
     user        => 'root',
     minute      => [fqdn_rand(30), fqdn_rand(30) + 30],
     environment => 'PATH=/opt/puppetlabs/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin',

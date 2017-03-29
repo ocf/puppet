@@ -60,11 +60,15 @@ def main(argv=None):
     behavior_group = parser.add_mutually_exclusive_group()
     behavior_group.add_argument(
         '-t', '--test', action='store_true',
-        help='run interactively',
+        help='run interactively; implies --no-daemonize',
     )
     parser.add_argument(
         '-d', '--debug', action='store_true',
         help='show puppet debug output'
+    )
+    parser.add_argument(
+        '--no-daemonize', action='store_true',
+        help='run in foreground'
     )
 
     args = parser.parse_args(argv)
@@ -79,10 +83,12 @@ def main(argv=None):
     if args.test:
         flags = ['--test']
     else:
-        flags = ['--verbose', '--onetime', '--no-daemonize', '--logdest', 'syslog']
+        flags = ['--verbose', '--onetime', '--logdest', 'syslog']
 
     if args.debug:
         flags.append('--debug')
+    if args.no_daemonize:
+        flags.append('--no-daemonize')
 
     trigger_run(flags)
 
