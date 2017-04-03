@@ -18,7 +18,7 @@ class ocf_www::site::unavailable {
     # priority 10 so this is the default vhost
     priority   => 10,
 
-    servername => 'unavailable',
+    servername => 'unavailable.ocf.berkeley.edu',
     docroot    => '/srv/unavailable',
 
     rewrites   => [

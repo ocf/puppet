@@ -109,6 +109,7 @@ class ocf_www::site::www {
 
         # Domains we don't actually use, but want to redirect to our home page
         # (rather than show the 503 unavailable error).
+        'death.berkeley.edu',
         'linux.berkeley.edu',
         'ofc.berkeley.edu',
 
