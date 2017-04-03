@@ -15,7 +15,7 @@
     {% if vhost.disabled %}
         # Proxy to the local "unavailable" vhost, which serves up a friendly
         # "your website is rekt" page.
-        RequestHeader set Host unavailable
+        RequestHeader set Host unavailable.ocf.berkeley.edu
         ProxyPass / http://localhost/
     {% elif not vhost.is_redirect %}
         <Directory {{vhost.docroot}}>
