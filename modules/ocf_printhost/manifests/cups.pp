@@ -1,4 +1,4 @@
-class ocf_printhost::cups {
+class ocf_printhost::cups($dev_config = false) {
   package { ['cups', 'cups-bsd']: }
 
   service { 'cups':
@@ -25,12 +25,6 @@ class ocf_printhost::cups {
     '/etc/cups/ppd':
       ensure  => directory,
       group   => 'lp';
-
-    '/etc/cups/ppd/logjam-single.ppd':
-      content => epp('ocf_printhost/cups/ppd/p4515.ppd.epp', { 'double' => false });
-
-    '/etc/cups/ppd/logjam-double.ppd':
-      content => epp('ocf_printhost/cups/ppd/p4515.ppd.epp', { 'double' => true });
 
     ['/etc/cups/ppd/papercut-single.ppd', '/etc/cups/ppd/pagefault-single.ppd']:
       content => epp('ocf_printhost/cups/ppd/m806.ppd.epp', { 'double' => false });
