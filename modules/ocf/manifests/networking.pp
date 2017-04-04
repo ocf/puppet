@@ -17,10 +17,8 @@ class ocf::networking(
 
   # packages
   if $bridge {
+    include ocf::firewall
     package { 'bridge-utils': }
-
-    # For unknown reasons, this must be set on kernel 4.9, but not 4.7 or below (rt#5849)
-    sysctl { 'net.bridge.bridge-nf-call-iptables': value => '0' }
   }
 
   package { 'resolvconf':
@@ -80,5 +78,28 @@ class ocf::networking(
       '/etc/systemd/network/99-default.link',
     ]:
       ensure => absent;
+  }
+
+  # firewall configuration
+  if $bridge {
+    # Docker 1.13+ sets the iptables policy for the FORWARD chain to DROP.
+    # (See https://github.com/docker/docker/pull/28257). As a side effect,
+    # that prevents VMs from talking to anyone other than the host over
+    # IPv4.
+    # To fix this, add explicit rules allowing forwarding on the bridge
+    # interface used by VMs.
+
+    # On hypervisors the ethernet interface and VM TAP interfaces are all
+    # connected to $iface. Any packet traveling between VMs, or between a
+    # VM and the internet, will have an input interface and output interface
+    # of $iface. Any packet which doesn't have this property should not be
+    # forwarded (unless allowed for by a different iptables rule).
+    firewall { '100 allow traffic to/fro VMs':
+      chain    => 'FORWARD',
+      proto    => 'all',
+      iniface  => $iface,
+      outiface => $iface,
+      action   => 'accept',
+    }
   }
 }
