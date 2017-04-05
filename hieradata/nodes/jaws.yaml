@@ -8,6 +8,7 @@ ocf::networking::bridge: true
 
 ocf::packages::ntp::master: true
 ocf::packages::ntp::peers:
+    - corruption.ocf.berkeley.edu
     - hal.ocf.berkeley.edu
     - pandemic.ocf.berkeley.edu
     - riptide.ocf.berkeley.edu
