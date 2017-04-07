@@ -16,7 +16,7 @@ from sys import argv
 from sys import stdin
 from syslog import syslog
 
-from ocflib.constants import MAIL_ROOT
+from ocflib.misc.mail import MAIL_ROOT
 from ocflib.misc.mail import send_mail
 
 
