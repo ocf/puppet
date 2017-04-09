@@ -30,8 +30,8 @@ class ocf_desktop::packages {
     ['preload']:;
     # Xorg
     ['xserver-xorg', 'xclip', 'xscreensaver']:;
-    # R packages for rstudio
-    ['r-cran-data.table', 'r-cran-dplyr', 'r-cran-ggplot2', 'r-cran-jsonlite', 'r-cran-lubridate', 'r-cran-magrittr', 'r-cran-markdown', 'r-cran-rmysql', 'r-cran-stringr', 'r-cran-tidyr', 'r-cran-xml2', 'r-cran-zoo']:;
+    # graphics/plotting
+    ['r-cran-rgl', 'jupyter-qtconsole']:;
   }
 
   # Packages that only work on jessie
