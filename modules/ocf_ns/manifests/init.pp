@@ -20,6 +20,8 @@ class ocf_ns {
   vcsrepo { '/srv/dns':
     ensure   => latest,
     provider => git,
+    owner    => 'bind',
+    group    => 'bind',
     revision => 'master',
     source   => 'https://github.com/ocf/dns.git',
     require  => Package['bind9'],

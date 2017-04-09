@@ -30,18 +30,34 @@ options {
 
   // Enable and validate DNSSEC
   dnssec-enable yes;
+  dnssec-validation auto;
   dnssec-lookaside auto;
+  key-directory "/etc/bind/keys";
 
   // Allow queries from anywhere and zone transfers from OCF/UCB/gandi.net
-  allow-query {any;};
-  allow-transfer {"ocf"; "ucb";};
+  allow-query { any; };
+  allow-transfer { "ocf"; "ucb"; "localhost"; };
 
   // Only allow recursive queries from OCF
   recursion yes;
-  allow-recursion {"ocf"; "localhost";};
+  allow-recursion { "ocf"; "localhost"; };
 
   // TODO: remove this after bind9 >= 9.10 (becomes the default)
   listen-on-v6 { any; };
+};
+
+logging {
+  channel dnssec_log {
+    file "/var/log/dnssec" size 20m;
+    print-time yes;
+    print-category yes;
+    print-severity yes;
+    severity debug 3;
+  };
+
+  category dnssec {
+    dnssec_log;
+  };
 };
 
 // Query URIBL directly because campus nameservers are often blocked
