@@ -21,7 +21,7 @@ from ocflib.misc.mail import send_mail
 
 
 MAIL_FROM = 'Munin <munin@ocf.berkeley.edu>'
-MUNIN_HOSTS_URL = 'http://munin.ocf.berkeley.edu/ocf.berkeley.edu'
+MUNIN_HOSTS_URL = 'https://munin.ocf.berkeley.edu/ocf.berkeley.edu'
 
 
 # Filter out uninteresting or noisy warnings at the individual level
