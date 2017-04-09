@@ -142,6 +142,14 @@ class ocf::extrapackages {
     'r-base',
     'r10k',
     'rails',
+    'r-cran-data.table',
+    'r-cran-ggplot2',
+    'r-cran-jsonlite',
+    'r-cran-lubridate',
+    'r-cran-magrittr',
+    'r-cran-markdown',
+    'r-cran-xml2',
+    'r-cran-zoo',
     'ruby-dev',
     'ruby-fcgi',
     'ruby-ronn',
@@ -225,6 +233,11 @@ class ocf::extrapackages {
   ocf::repackage { 'dh-virtualenv':
     backport_on => 'jessie',
   }
+
+  ocf::repackage { 'r-cran-dplyr':
+      backport_on => 'jessie';
+  } ->
+  package { 'r-cran-tidyr': }
 
   if $::lsbdistcodename == 'jessie' {
     # We add python3.5 and tox2  on jessie so we can test our code against it
