@@ -8,7 +8,7 @@
 # Containers are helpful for testing things. For example:
 #   docker run -ti debian:jessie bash
 #
-class ocf::packages::docker($admin_group = undef) {
+class ocf::packages::docker($admin_group = undef, $autoclean = true) {
   class { 'ocf::packages::docker::apt':
     stage => first,
   }
@@ -57,30 +57,30 @@ class ocf::packages::docker($admin_group = undef) {
     } ~> Exec['systemd-reload'] ~> Service['docker']
   }
 
-  cron {
-    'clean-old-docker-containers':
-      # days is intentionally plural
-      command => "docker ps -a --filter status=exited | grep -E 'Exited \\([0-9]+\\) [0-9]+ (days|weeks?|months?|years?) ago' | awk '{print \$1}' | chronic xargs -r docker rm",
-      hour    => 1,
-      minute  => 3;
+  if $autoclean {
+    cron {
+      'clean-old-docker-containers':
+        # days is intentionally plural
+        command => "docker ps -a --filter status=exited | grep -E 'Exited \\([0-9]+\\) [0-9]+ (days|weeks?|months?|years?) ago' | awk '{print \$1}' | chronic xargs -r docker rm",
+        hour    => 1,
+        minute  => 3;
 
-    'clean-old-created-docker-containers':
-      # days is intentionally plural
-      command => "docker ps -a --filter status=created | grep -E '(days|weeks?|months?|years?) ago' | awk '{print \$1}' | chronic xargs -r docker rm",
-      hour    => 1,
-      minute  => 5;
+      'clean-old-created-docker-containers':
+        # days is intentionally plural
+        command => "docker ps -a --filter status=created | grep -E '(days|weeks?|months?|years?) ago' | awk '{print \$1}' | chronic xargs -r docker rm",
+        hour    => 1,
+        minute  => 5;
 
-    'clean-docker-images':
-      # TODO: use docker image prune -a --filter until=<timestamp> when on 17.04+
-      # Chronic doesn't work well here because docker rmi likes to raise errors
-      # about images still linked to containers
-      command => 'docker images -q --filter dangling=true | xargs -r docker rmi > /dev/null 2>&1',
-      hour    => 1,
-      minute  => 17;
+      'clean-docker-images':
+        # Clean images 4 weeks or older
+        command => 'chronic docker image prune -a --filter until=672h -f',
+        hour    => 1,
+        minute  => 17;
 
-    'clean-docker-volumes':
-      command => 'chronic docker volume prune -f',
-      hour    => 1,
-      minute  => 25;
+      'clean-docker-volumes':
+        command => 'chronic docker volume prune -f',
+        hour    => 1,
+        minute  => 25;
+    }
   }
 }
