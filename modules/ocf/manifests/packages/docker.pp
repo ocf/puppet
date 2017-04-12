@@ -23,7 +23,7 @@ class ocf::packages::docker($admin_group = undef) {
   exec { 'docker-socket-update':
     command     => 'systemctl restart docker.socket',
     refreshonly => true,
-    require     => Exec['systemd-reload'],
+    require     => Exec['systemd-reload'],  # which is triggered by ocf::systemd::override
   }
 
   if $admin_group != undef {
