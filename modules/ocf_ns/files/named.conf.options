@@ -28,11 +28,14 @@ options {
     128.32.136.12;
   };
 
-  // Enable and validate DNSSEC
   dnssec-enable yes;
-  dnssec-validation auto;
   dnssec-lookaside auto;
   key-directory "/etc/bind/keys";
+
+  // Don't validate DNSSEC yet, since mesos-dns doesn't support it
+  // dnssec-must-be-secure doesn't work either unfortunately :(
+  // Neither does using disable-algorithms on only the mesos zone
+  dnssec-validation no;
 
   // Allow queries from anywhere and zone transfers from OCF/UCB/gandi.net
   allow-query { any; };
