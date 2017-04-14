@@ -32,6 +32,8 @@ class ocf_desktop::packages {
     ['xserver-xorg', 'xclip', 'xscreensaver']:;
     # graphics/plotting
     ['r-cran-rgl', 'jupyter-qtconsole']:;
+    # temporary
+    ['imagej']:;
   }
 
   # Packages that only work on jessie
