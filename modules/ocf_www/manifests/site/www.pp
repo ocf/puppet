@@ -125,7 +125,14 @@ class ocf_www::site::www {
     # redirect weird HTTPS -> canonical HTTPS
     'www-https-redirect':
       servername           => 'ocf.berkeley.edu',
-      serveraliases        => ['dev-ocf.berkeley.edu', 'secure.ocf.berkeley.edu', $::fqdn],
+      serveraliases        => [
+        'dev-ocf.berkeley.edu',
+        'secure.ocf.berkeley.edu',
+        $::fqdn,
+
+        # We have links to the HTTPS version of this still that we don't want broken.
+        'ofc.berkeley.edu',
+      ],
       port                 => 443,
       docroot              => '/var/www/html',
       redirectmatch_status => 301,
