@@ -1,6 +1,0 @@
-ocf::packages::ntp::master: true
-ocf::packages::ntp::peers:
-    - hal.ocf.berkeley.edu
-    - jaws.ocf.berkeley.edu
-    - pandemic.ocf.berkeley.edu
-    - riptide.ocf.berkeley.edu
