@@ -1,9 +1,7 @@
 classes:
     - ocf_kvm
-
-    # TODO: Removed until mesos is available on stretch
-    #- ocf_mesos::slave
-    #- ocf_mesos::secrets
+    - ocf_mesos::slave
+    - ocf_mesos::secrets
 
 ocf::networking::bridge: true
 
