@@ -3,11 +3,7 @@ class ocf_desktop::drivers {
 
   # install proprietary nvidia drivers
   if $::gfx_brand == 'nvidia' {
-    # Install nvidia-driver from backports to support the GTX 1060s in the lab
-    # Only needed on jessie, since stretch has drivers that are recent (367+)
-    ocf::repackage { ['nvidia-driver', 'xserver-xorg-video-nvidia', 'libgl1-nvidia-glx:i386', 'nvidia-settings', 'nvidia-cuda-toolkit']:
-      backport_on => 'jessie',
-    }
+    package { ['nvidia-driver', 'xserver-xorg-video-nvidia', 'libgl1-nvidia-glx:i386', 'nvidia-settings', 'nvidia-cuda-toolkit', 'nvidia-cuda-mps']:; }
 
     file { '/etc/X11/xorg.conf':
       source => 'puppet:///modules/ocf_desktop/drivers/nvidia/xorg.conf';

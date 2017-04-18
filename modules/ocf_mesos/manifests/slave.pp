@@ -37,29 +37,42 @@ class ocf_mesos::slave($attributes = {}) {
       purge   => true;
 
     '/etc/mesos-slave/containerizers':
-      content => "docker\n";
+      content => "docker,mesos\n",
+      require => File['/etc/mesos-slave'];
 
     # increase executor timeout in case we need to pull a Docker image
     '/etc/mesos-slave/executor_registration_timeout':
-      content => "5mins\n";
+      content => "5mins\n",
+      require => File['/etc/mesos-slave'];
 
     # remove old dockers as soon as we're done with them
     '/etc/mesos-slave/docker_remove_delay':
-      content => "1secs\n";
+      content => "1secs\n",
+      require => File['/etc/mesos-slave'];
 
     '/etc/mesos-slave/hostname':
-      content => "${::hostname}\n";
+      content => "${::hostname}\n",
+      require => File['/etc/mesos-slave'];
 
     # Credentials needed to access the slave REST API.
     [
       '/etc/mesos-slave/authenticate_http_readonly',
       '/etc/mesos-slave/authenticate_http_readwrite',
     ]:
-      content => "true\n";
+      content => "true\n",
+      require => File['/etc/mesos-slave'];
+
+    '/etc/mesos-slave/isolation':
+      content => "docker/runtime,filesystem/linux,cgroups/devices,gpu/nvidia\n",
+      require => File['/etc/mesos-slave'];
+
+    '/etc/mesos-slave/image_providers':
+      content => "docker\n",
+      require => File['/etc/mesos-slave'];
 
     '/etc/mesos-slave/work_dir':
       content => "/var/lib/mesos-slave\n",
-      require => File['/var/lib/mesos-slave'];
+      require => File['/var/lib/mesos-slave', '/etc/mesos-slave'];
 
     '/var/lib/mesos-slave':
       ensure => directory;
@@ -76,7 +89,7 @@ class ocf_mesos::slave($attributes = {}) {
     # Credential to connect to the masters.
     '/etc/mesos-slave/credential':
       content => "/opt/share/mesos/slave/master_credential.json\n",
-      require => File['/opt/share/mesos/slave/master_credential.json'];
+      require => File['/opt/share/mesos/slave/master_credential.json', '/etc/mesos-slave'];
 
     '/opt/share/mesos/slave/master_credential.json':
       content   => template('ocf_mesos/slave/mesos/master_credential.json.erb'),
@@ -89,6 +102,7 @@ class ocf_mesos::slave($attributes = {}) {
     ensure_newline => true,
     force          => true, # TODO: Remove once upgraded to concat 2.x
     notify         => Exec['reset-agent'],
+    require        => File['/etc/mesos-slave'],
   }
 
   # Provide a custom start script which enables wiping the agent settings.
