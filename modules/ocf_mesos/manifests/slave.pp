@@ -62,10 +62,6 @@ class ocf_mesos::slave($attributes = {}) {
       content => "true\n",
       require => File['/etc/mesos-slave'];
 
-    '/etc/mesos-slave/isolation':
-      content => "docker/runtime,filesystem/linux,cgroups/devices,gpu/nvidia\n",
-      require => File['/etc/mesos-slave'];
-
     '/etc/mesos-slave/image_providers':
       content => "docker\n",
       require => File['/etc/mesos-slave'];
@@ -95,6 +91,21 @@ class ocf_mesos::slave($attributes = {}) {
       content   => template('ocf_mesos/slave/mesos/master_credential.json.erb'),
       mode      => '0400',
       show_diff => false;
+  }
+
+  # Enable Nvidia support on machines with Nvidia GPUs
+  if $::gfx_brand == 'nvidia' {
+    file {
+      '/etc/mesos-slave/isolation':
+        content => "docker/runtime,filesystem/linux,cgroups/devices,gpu/nvidia\n",
+        require => File['/etc/mesos-slave'];
+    }
+  } else {
+    file {
+      '/etc/mesos-slave/isolation':
+        content => "docker/runtime,filesystem/linux\n",
+        require => File['/etc/mesos-slave'];
+    }
   }
 
   concat { '/etc/mesos-slave/attributes':
