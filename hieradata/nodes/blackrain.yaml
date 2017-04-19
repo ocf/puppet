@@ -1,1 +1,4 @@
+classes:
+    - ocf_ocfweb::dev_config
+
 owner: tmochida
