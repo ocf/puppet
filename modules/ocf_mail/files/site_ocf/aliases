@@ -56,6 +56,10 @@ hostmaster: "|/usr/bin/rt-mailgate --queue 'hostmaster' --action correspond --ur
 hostmaster-comment: "|/usr/bin/rt-mailgate --queue 'hostmaster' --action comment --url https://rt.ocf.berkeley.edu"
 owner-hostmaster: wheel
 
+lending: "|/usr/bin/rt-mailgate --queue 'lending' --action correspond --url https://rt.ocf.berkeley.edu"
+lending-comment: "|/usr/bin/rt-mailgate --queue 'lending' --action comment --url https://rt.ocf.berkeley.edu"
+owner-lending: wheel
+
 operations: "|/usr/bin/rt-mailgate --queue 'operations' --action correspond --url https://rt.ocf.berkeley.edu"
 operations-comment: "|/usr/bin/rt-mailgate --queue 'operations' --action comment --url https://rt.ocf.berkeley.edu"
 owner-operations: wheel
