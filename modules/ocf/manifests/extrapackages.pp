@@ -156,6 +156,7 @@ class ocf::extrapackages {
     'ruby-sqlite3',
     'scala',
     'screenfetch',
+    'shellcheck',
     'sqlite3',
     'subversion',
     'texlive-extra-utils',
