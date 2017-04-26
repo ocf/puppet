@@ -22,6 +22,8 @@ class ocf_desktop::packages {
     ['fuse', 'exfat-fuse']:;
     # games
     ['armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music']:;
+    # input method editors
+    ['fcitx', 'fcitx-libpinyin', 'fcitx-rime', 'fcitx-hangul', 'fcitx-mozc']:;
     # nonfree packages
     ['firmware-linux', 'ttf-mscorefonts-installer', 'nvidia-smi']:;
     # notifications
@@ -65,6 +67,8 @@ class ocf_desktop::packages {
   # install packages without recommends
   ocf::repackage {
     'brasero':
+      recommends => false;
+    'fcitx-table-wubi':
       recommends => false;
     'gedit':
       recommends => false;
