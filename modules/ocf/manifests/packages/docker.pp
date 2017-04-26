@@ -16,8 +16,20 @@ class ocf::packages::docker($admin_group = undef) {
   package {
     'docker.io':
       ensure  => purged;
+  }
+
+  if $::lsbdistcodename != 'jessie' {
+    package {
+      ['aufs-dkms', 'aufs-tools']:
+        ensure => purged;
+    }
+  }
+
+  # Don't install AUFS stuff
+  ocf::repackage {
     'docker-engine':
-      require => Package['docker.io'];
+      recommends => false,
+      require    => Package['docker.io'];
   }
 
   exec { 'docker-socket-update':
@@ -35,13 +47,14 @@ class ocf::packages::docker($admin_group = undef) {
     }
   }
 
+  # temporary
   if $::lsbdistcodename != 'jessie' {
-    # Use overlay2 storage driver
-    ocf::systemd::override { 'cmd':
-      unit    => 'docker.service',
-      content => "[Service]\nExecStart=\nExecStart=/usr/bin/dockerd -H fd:// --storage-driver=overlay2\n",
-      require => Package['docker-engine'],
-    }
+    ensure_resource('service', 'docker', {'provider' => 'systemd'})
+    file {
+      '/etc/systemd/system/docker.service.d/cmd.conf':
+        ensure  => absent,
+        require => Package['aufs-dkms', 'aufs-tools'],
+    } ~> Exec['systemd-reload'] ~> Service['docker']
   }
 
   cron {
