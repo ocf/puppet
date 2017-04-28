@@ -7,4 +7,7 @@ ocf::auth::nopasswd: true
 
 
 # let any staff use docker on staff VMs without sudo
-ocf::packages::docker::admin_group: ocfstaff
+classes:
+    - ocf_staffvm::docker_group
+# TODO: temporary
+ocf::packages::docker::admin_group: docker
