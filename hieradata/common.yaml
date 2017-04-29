@@ -33,3 +33,4 @@ mesos_slaves:
     - jaws
     - hal
     - pandemic
+    - riptide
