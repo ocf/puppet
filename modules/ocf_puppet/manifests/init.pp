@@ -5,4 +5,7 @@ class ocf_puppet {
   file { '/etc/sudoers.d/ocfdeploy-puppet':
     content => "ocfdeploy ALL=NOPASSWD: /opt/puppetlabs/scripts/update-prod\n";
   }
+
+  # Staff need to use virtualenv to run tests.
+  package { 'virtualenv': }
 }
