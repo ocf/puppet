@@ -20,8 +20,8 @@ class ocf_mesos::slave($attributes = {}) {
   }
 
 
-  $ocf_mesos_master_password = file('/opt/puppet/shares/private/mesos/mesos-master-password')
-  $ocf_mesos_slave_password = file('/opt/puppet/shares/private/mesos/mesos-slave-password')
+  $ocf_mesos_master_password = hiera('mesos::master::password')
+  $ocf_mesos_slave_password = hiera('mesos::slave::password')
 
   file {
     default:

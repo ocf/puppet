@@ -14,7 +14,7 @@ class ocf_admin::create::redis {
     notify  => Service['redis-server'];
   }
 
-  $redis_password = file('/opt/puppet/shares/private/create/redis-password')
+  $redis_password = hiera('create::redis::password')
   validate_re($redis_password, '^[a-zA-Z0-9]*$', 'Bad Redis password')
 
   augeas { '/etc/redis/redis.conf':

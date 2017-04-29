@@ -3,9 +3,9 @@
 # staff VMs, etc.
 class ocf_ocfweb::dev_config($group = 'ocfstaff') {
   # TODO: stop copy-pasting this everywhere
-  $redis_password = file('/opt/puppet/shares/private/create/redis-password')
+  $redis_password = hiera('create::redis::password')
   validate_re($redis_password, '^[a-zA-Z0-9]*$', 'Bad Redis password')
-  $ocfmail_password = file('/opt/puppet/shares/private/ocfweb/ocfmail-dev-password')
+  $ocfmail_password = hiera('ocfmail::mysql::dev_password')
   validate_re($ocfmail_password, '^[a-zA-Z0-9]*$', 'Bad ocfmail password')
 
   $broker = "redis://:${redis_password}@admin.ocf.berkeley.edu:6378"
