@@ -2,7 +2,7 @@ class ocf_mesos::master::mesos(
     $mesos_hostname,
     $mesos_http_password,
     $masters,
-    $zookeeper_host,
+    $zookeeper_uri,
 ) {
   include ocf_mesos::package
 
@@ -49,12 +49,19 @@ class ocf_mesos::master::mesos(
       show_diff => false;
   }
 
+  file { '/opt/share/mesos/master/zk':
+    content   => "${zookeeper_uri}/mesos\n",
+    mode      => '0400',
+    show_diff => false,
+    require => Package['mesos'],
+    notify  => Service['mesos-slave'],
+  } ->
   augeas { '/etc/default/mesos-master':
     lens    => 'Shellvars.lns',
     incl    => '/etc/default/mesos-master',
     changes =>  [
       'set PORT 5050',
-      "set ZK 'zk://${zookeeper_host}/mesos'",
+      "set ZK 'file:///opt/share/mesos/master/zk'",
     ],
     notify  => Service['mesos-master'],
     require => Package['mesos'];

@@ -20,13 +20,14 @@ class ocf_mesos::master {
   # TODO: can we not duplicate this between slave/master?
   # looks like: mesos0:2181,mesos1:2181,mesos2:2181
   $zookeeper_host = join(keys($mesos_masters).map |$m| { "${m}:2181" }, ',')
+  $zookeeper_uri = "zk://ocf:${zookeeper_password}@${zookeeper_host}"
 
   class {
     'ocf_mesos::master::mesos':
       mesos_hostname      => $mesos_hostname,
       mesos_http_password => $mesos_http_password,
       masters             => $mesos_masters,
-      zookeeper_host      => $zookeeper_host;
+      zookeeper_uri       => $zookeeper_uri;
 
     'ocf_mesos::master::load_balancer':
       marathon_http_password => $marathon_http_password;
