@@ -1,0 +1,12 @@
+Server {
+    org.apache.zookeeper.server.auth.DigestLoginModule required
+    user_ocf="<%= @zookeeper_password %>";
+};
+
+/* The "Client" block is only used by zkCli.sh (for interactive staff use) */
+Client {
+    org.apache.zookeeper.server.auth.DigestLoginModule required
+    /* yes, the lack of semicolon below is intentional */
+    username="ocf"
+    password="<%= @zookeeper_password %>";
+};

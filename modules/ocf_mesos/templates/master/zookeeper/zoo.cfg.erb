@@ -49,3 +49,6 @@ server.<%= i + 1 %>=<%= host %>:2888:3888
 # read throughput the leader can be configured to not accept clients and focus
 # on coordination.
 #leaderServes=yes
+
+authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
+requireClientAuthScheme=sasl

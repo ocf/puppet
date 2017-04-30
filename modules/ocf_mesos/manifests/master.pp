@@ -15,6 +15,7 @@ class ocf_mesos::master {
   $mesos_http_password = hiera('mesos::master::password')
   $mesos_agent_http_password = hiera('mesos::slave::password')
   $marathon_http_password = hiera('mesos::marathon::http_password')
+  $zookeeper_password = hiera('mesos::zookeeper::password')
 
   # TODO: can we not duplicate this between slave/master?
   # looks like: mesos0:2181,mesos1:2181,mesos2:2181
@@ -38,7 +39,8 @@ class ocf_mesos::master {
 
     # Zookeeper needs IDs in the range [1, 255]
     'ocf_mesos::master::zookeeper':
-      masters => $mesos_masters;
+      masters            => $mesos_masters,
+      zookeeper_password => $zookeeper_password;
 
     'ocf_mesos::master::webui':
       mesos_fqdn                => "${mesos_hostname}.ocf.berkeley.edu",

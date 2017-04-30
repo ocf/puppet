@@ -17,4 +17,4 @@ JAVA=/usr/bin/java
 ZOOMAIN="org.apache.zookeeper.server.quorum.QuorumPeerMain"
 ZOO_LOG4J_PROP="INFO,ROLLINGFILE"
 JMXLOCALONLY=false
-JAVA_OPTS=""
+JAVA_OPTS="-Djava.security.auth.login.config=/etc/zookeeper/conf/jaas.conf"

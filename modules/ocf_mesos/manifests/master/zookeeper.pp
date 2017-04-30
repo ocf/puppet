@@ -1,4 +1,4 @@
-class ocf_mesos::master::zookeeper($masters) {
+class ocf_mesos::master::zookeeper($masters, $zookeeper_password) {
   include ocf_mesos::package
 
   package { 'zookeeper':; }
@@ -26,7 +26,11 @@ class ocf_mesos::master::zookeeper($masters) {
     '/etc/zookeeper/conf_ocf/myid':
       content => "${zookeeper_id}\n";
     '/etc/zookeeper/conf_ocf/zoo.cfg':
-      content => template('ocf_mesos/master/zookeeper/zoo.cfg.erb');
+      content   => template('ocf_mesos/master/zookeeper/zoo.cfg.erb');
+    '/etc/zookeeper/conf_ocf/jaas.conf':
+      content   => template('ocf_mesos/master/zookeeper/jaas.conf.erb'),
+      mode      => '0600',
+      show_diff => false;
     '/etc/zookeeper/conf_ocf/environment':
       source  => 'puppet:///modules/ocf_mesos/master/zookeeper/environment';
     '/etc/zookeeper/conf_ocf/configuration.xsl':
