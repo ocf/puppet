@@ -48,6 +48,7 @@ class ocf::extrapackages {
     'ghc',
     'git-buildpackage',
     'golang',
+    'icedtea-netx',
     'ikiwiki',
     'inotify-tools',
     'intltool',
