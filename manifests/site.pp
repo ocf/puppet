@@ -37,13 +37,13 @@ Nginx::Resource::Vhost {
 # Also set the PATH environment variable to be the same as in /etc/crontab.
 # The default PATH is only /usr/bin:/bin, which lacks a lot of commands.
 Cron {
-    special => 'absent',
-    minute => '*',
-    hour => '*',
-    weekday => '*',
-    month => '*',
-    monthday => '*',
-    environment => 'PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin'
+  special => 'absent',
+  minute => '*',
+  hour => '*',
+  weekday => '*',
+  month => '*',
+  monthday => '*',
+  environment => 'PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin'
 }
 
 $desktop_homepage = 'https://www.ocf.berkeley.edu/about/lab/open-source'
