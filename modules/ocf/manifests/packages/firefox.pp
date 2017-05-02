@@ -1,4 +1,6 @@
 class ocf::packages::firefox {
+  $browser_homepage = lookup('browser_homepage')
+
   class { 'ocf::packages::firefox::apt':
     stage => first,
   }
