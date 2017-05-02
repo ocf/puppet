@@ -10,5 +10,3 @@ ocf::packages::ntp::peers:
     - hal.ocf.berkeley.edu
     - pandemic.ocf.berkeley.edu
     - jaws.ocf.berkeley.edu
-
-ocf_mesos::slave::disabled: true
