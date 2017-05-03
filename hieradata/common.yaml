@@ -34,3 +34,5 @@ mesos_slaves:
     - hal
     - pandemic
     - riptide
+
+browser_homepage: https://www.ocf.berkeley.edu/about/lab/open-source
