@@ -21,6 +21,7 @@ HISTCONTROL=ignoreboth
 alias ls='ls -Fh'
 alias quota='/usr/bin/quota -Qs'
 alias rm='rm -I'
+alias weather='curl wttr.in'
 
 # Color terminal
 if [ "$TERM" != dumb ]; then
