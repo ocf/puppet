@@ -1,2 +1,4 @@
 classes:
     - ocf_tv
+
+pulse_sink: alsa_output.pci-0000_00_03.0.hdmi-stereo
