@@ -11,7 +11,7 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['arandr', 'atom', 'claws-mail', 'eog', 'evince-gtk', 'filezilla', 'freeplane', 'galculator', 'geany', 'gimp', 'gparted', 'hexchat', 'inkscape', 'lyx', 'mssh', 'mumble', 'numlockx', 'remmina', 'simple-scan', 'texmaker', 'texstudio', 'vlc', 'xarchiver', 'xterm', 'zenmap']:;
+    ['arandr', 'atom', 'claws-mail', 'eog', 'evince-gtk', 'filezilla', 'freeplane', 'galculator', 'geany', 'gimp', 'gparted', 'hexchat', 'inkscape', 'lyx', 'mssh', 'mumble', 'numlockx', 'remmina', 'simple-scan', 'texmaker', 'texstudio', 'vlc', 'xarchiver', 'xterm', 'zenmap', 'florence']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils', 'redshift', 'xfce4-whiskermenu-plugin']:;
     # display manager
@@ -34,7 +34,7 @@ class ocf_desktop::packages {
     ['xserver-xorg', 'xclip', 'xscreensaver']:;
     # graphics/plotting
     ['r-cran-rgl', 'jupyter-qtconsole']:;
-    # temporary
+    # user requested
     ['imagej']:;
   }
 
