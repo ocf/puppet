@@ -1,8 +1,11 @@
 class ocf_jenkins {
   include ocf::extrapackages
-  include ocf::packages::docker
   include ocf::tmpfs
   include ocf_ssl::default_bundle
+
+  class { 'ocf::packages::docker':
+    autoclean => false,
+  }
 
   class { 'ocf_ocfweb::dev_config':
     group   => 'jenkins-slave',
@@ -136,14 +139,17 @@ class ocf_jenkins {
     require => [File['/opt/jenkins/slave/workspace'], User['jenkins-slave']];
   }
 
-  # TODO: when Docker 17.04+ comes out:
-  #  - Nuke this hacky cronjob
-  #  - Make the one in ocf::packages::docker clean all images that are older
-  #    than some expiration time
-  #  - Make that expiration time configurable
-  cron { 'clean-old-docker-images-jenkins':
-    command => 'chronic docker image prune -af',
-    hour    => 1,
-    minute  => 15;
+  # Clean docker garbage on jenkins more frequently as it tends to fill up quickly.
+  # The time is chosen to be before jenkins builds new Debian images.
+  cron { 'clean-old-docker-garbage-jenkins':
+    command => 'chronic docker system prune -af',
+    hour    => 20,
+    minute  => 55,
+  }
+
+  # TODO: temporary, remove
+  cron {
+    ['clean-old-docker-containers', 'clean-old-created-docker-containers', 'clean-docker-images', 'clean-docker-volumes', 'clean-old-docker-images-jenkins']:
+      ensure => absent,
   }
 }
