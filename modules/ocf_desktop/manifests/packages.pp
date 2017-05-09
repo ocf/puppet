@@ -11,17 +11,25 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['arandr', 'atom', 'claws-mail', 'eog', 'evince-gtk', 'filezilla', 'freeplane', 'galculator', 'geany', 'gimp', 'gparted', 'hexchat', 'inkscape', 'lyx', 'mssh', 'mumble', 'numlockx', 'remmina', 'simple-scan', 'texmaker', 'texstudio', 'vlc', 'xarchiver', 'xterm', 'zenmap', 'florence']:;
+    ['arandr', 'atom', 'claws-mail', 'eog', 'evince-gtk', 'filezilla', 'florence',
+      'freeplane', 'galculator', 'geany', 'gimp', 'gparted', 'hexchat', 'inkscape',
+      'lyx', 'mssh', 'mumble', 'numlockx', 'remmina', 'simple-scan', 'texmaker',
+      'texstudio', 'vlc', 'xarchiver', 'xterm', 'zenmap']:;
     # desktop
-    ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils', 'redshift', 'xfce4-whiskermenu-plugin']:;
+    ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils', 'redshift',
+      'xfce4-whiskermenu-plugin']:;
     # display manager
     ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
     # fonts
-    ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea', 'fonts-crosextra-carlito', 'fonts-inconsolata', 'fonts-linuxlibertine', 'fonts-noto-unhinted', 'fonts-unfonts-core', 'ttf-ancient-fonts']:;
+    ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea', 'fonts-crosextra-carlito',
+      'fonts-inconsolata', 'fonts-linuxlibertine', 'fonts-noto-unhinted', 'fonts-unfonts-core',
+      'ttf-ancient-fonts']:;
     # FUSE
     ['fuse', 'exfat-fuse']:;
     # games
     ['armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music']:;
+    # graphics/plotting
+    ['r-cran-rgl', 'jupyter-qtconsole']:;
     # input method editors
     ['fcitx', 'fcitx-libpinyin', 'fcitx-rime', 'fcitx-hangul', 'fcitx-mozc']:;
     # nonfree packages
@@ -30,12 +38,10 @@ class ocf_desktop::packages {
     ['libnotify-bin', 'notification-daemon']:;
     # performance improvements
     ['preload']:;
-    # Xorg
-    ['xserver-xorg', 'xclip', 'xscreensaver']:;
-    # graphics/plotting
-    ['r-cran-rgl', 'jupyter-qtconsole']:;
     # user requested
     ['imagej']:;
+    # Xorg
+    ['xserver-xorg', 'xclip', 'xscreensaver']:;
   }
 
   # Packages that only work on jessie
