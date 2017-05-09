@@ -1,5 +1,5 @@
 classes:
-    - ocf::packages::docker
     - ocf_ocfweb::dev_config
+#   - ocf::packages::docker
 
 owner: abizer
