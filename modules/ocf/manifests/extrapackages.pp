@@ -158,6 +158,7 @@ class ocf::extrapackages {
     'scala',
     'screenfetch',
     'shellcheck',
+    'silversearcher-ag',
     'sqlite3',
     'subversion',
     'texlive-extra-utils',
