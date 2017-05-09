@@ -19,11 +19,12 @@ class ocf_desktop::pulse {
     require => Package['libasound2-plugins'],
   }
 
-  $pulse_sink = lookup({'name' => 'pulse_sink', 'default_value' => nil})
+  $pulse_sink = lookup('pulse_sink')
   if $pulse_sink {
-    exec { 'set-pulse-default-sink':
-      command => "sed -i 's/#set-default-sink output/set-default-sink ${pulse_sink}/' /etc/pulse/default.pa",
-      unless => 'grep ^set-default-sink /etc/pulse/default.pa > /dev/null',
+    augeas { 'set-pulse-default-sink':
+      incl => '/etc/pulse/default.pa',
+      lens => 'Spacevars.simple_lns',
+      changes => "set set-default-sink ${pulse_sink}",
     }
   }
 }
