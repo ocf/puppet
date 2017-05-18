@@ -52,6 +52,10 @@ class ocf::apt($stage = 'first') {
       };
   }
 
+  class { 'apt::backports':
+    location => 'http://mirrors/debian/';
+  }
+
   # workaround Debian #793444 by disabling pdiffs
   # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=793444
   if $::lsbdistcodename == 'jessie' {
@@ -83,10 +87,6 @@ class ocf::apt($stage = 'first') {
         include  => {
           src => true
         };
-    }
-
-    class { 'apt::backports':
-      location => 'http://mirrors/debian/';
     }
 
     # Add the puppetlabs apt repo key
