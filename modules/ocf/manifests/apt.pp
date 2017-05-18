@@ -103,7 +103,7 @@ class ocf::apt($stage = 'first') {
 
   file { '/etc/cron.daily/ocf-apt':
     mode    => '0755',
-    content => template('ocf/apt/ocf-apt.erb'),
+    source  => 'puppet:///modules/ocf/apt/ocf-apt',
     require => Package['aptitude'];
   }
 }
