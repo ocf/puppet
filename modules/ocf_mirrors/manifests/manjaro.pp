@@ -9,8 +9,8 @@ class ocf_mirrors::manjaro {
       recurse => true;
   }
 
-  # TODO: Change the rsync source to rsync://repo.manjaro.org/repos once we're
-  # an official mirror.
+  # TODO: Change the rsync source to rsync://repo.manjaro.org/repos since we're
+  # now an official mirror and should have access if we contact them about it.
   cron {
     'manjaro':
       command => '/opt/mirrors/project/manjaro/sync-archive > /dev/null',

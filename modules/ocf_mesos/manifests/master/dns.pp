@@ -7,7 +7,6 @@ class ocf_mesos::master::dns(
     $mesos_http_password,
     $zookeeper_host,
 ) {
-  # TODO: Include in stretch apt repo
   package { 'mesos-dns':; }
 
   file { '/opt/share/mesos/master/mesos-dns.json':

@@ -146,10 +146,4 @@ class ocf_jenkins {
     hour    => 20,
     minute  => 55,
   }
-
-  # TODO: temporary, remove
-  cron {
-    ['clean-old-docker-containers', 'clean-old-created-docker-containers', 'clean-docker-images', 'clean-docker-volumes', 'clean-old-docker-images-jenkins']:
-      ensure => absent,
-  }
 }
