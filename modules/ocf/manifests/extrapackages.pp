@@ -87,6 +87,7 @@ class ocf::extrapackages {
     'nasm',
     'nodejs',
     'npm',
+    'nvidia-settings',
     'octave',
     'pandoc',
     'pdfchain',
