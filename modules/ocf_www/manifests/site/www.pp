@@ -119,7 +119,7 @@ class ocf_www::site::www {
       port                 => 80,
       docroot              => '/var/www/html',
       redirectmatch_status => 301,
-      redirectmatch_regexp => '^(?!/server-status)(.*)',
+      redirectmatch_regexp => '^(.*)',
       redirectmatch_dest   => $canonical_url;
 
     # redirect weird HTTPS -> canonical HTTPS

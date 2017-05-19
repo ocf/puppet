@@ -23,7 +23,13 @@ class ocf_www::site::unavailable {
 
     rewrites   => [
       {
-        rewrite_cond => '%{ENV:REDIRECT_STATUS} !=503',
+        rewrite_cond => [
+          # Don't keep redirecting forever, only if it's not already a 503
+          '%{ENV:REDIRECT_STATUS} !=503',
+
+          # Don't redirect the server-status page (used by munin for stats)
+          '%{REQUEST_URI} !^/server-status',
+        ],
         rewrite_rule => '.* - [L,R=503]',
       },
     ],
