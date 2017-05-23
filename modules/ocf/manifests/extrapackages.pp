@@ -86,7 +86,6 @@ class ocf::extrapackages {
     'mutt',
     'nasm',
     'nodejs',
-    'npm',
     'octave',
     'pandoc',
     'pdfchain',

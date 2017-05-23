@@ -15,7 +15,12 @@ class ocf_apphost {
     recurse => true,
     purge   => true;
   }
-  $devs = split($::ocf_dev, ',')
+  if $::ocf_dev {
+    $devs = split($::ocf_dev, ',')
+  } else {
+    # ocf_dev is empty on the first run which causes a runtime error above
+    $devs = []
+  }
   $devs.each |$user| {
     file { "/var/lib/systemd/linger/${user}":
       ensure => file;
