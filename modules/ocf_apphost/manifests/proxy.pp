@@ -1,4 +1,4 @@
-class ocf_apphost::proxy {
+class ocf_apphost::proxy($dev_config = false) {
   package { 'nginx':; }
   service { 'nginx':
     require => Package['nginx'];
@@ -16,14 +16,28 @@ class ocf_apphost::proxy {
       require => Package['nginx'],
       notify  => Service['nginx'];
 
-    '/usr/local/sbin/rebuild-vhosts':
-      source  => 'puppet:///modules/ocf_apphost/rebuild-vhosts',
+    '/usr/local/sbin/build-vhosts':
+      source  => 'puppet:///modules/ocf_www/build-vhosts',
+      mode    => '0755';
+
+    '/opt/share/vhost-app.jinja':
+      source  => 'puppet:///modules/ocf_apphost/vhost-app.jinja';
+
+    # Generated SSL bundles go here
+    '/etc/ssl/apphost':
+      ensure  => directory,
       mode    => '0755';
   }
 
+  if $dev_config {
+    $build_vhosts_cmd = 'chronic /usr/local/sbin/build-vhosts --dev app'
+  } else {
+    $build_vhosts_cmd = 'chronic /usr/local/sbin/build-vhosts app'
+  }
+
   cron {
-    'rebuild-vhosts':
-      command => '/usr/local/sbin/rebuild-vhosts > /dev/null',
+    'build-vhosts':
+      command => $build_vhosts_cmd,
       minute  => '*/10',
       require => Package['nginx'];
   }

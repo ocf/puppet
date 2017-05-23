@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
-"""Build Apache virtual hosts.
-
-Reads the vhost.conf file and outputs a single Apache config file containing
-all virtual hosts.
-"""
 import argparse
+import grp
 import os.path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -16,70 +13,113 @@ import jinja2
 from ocflib.account.search import user_is_sorried
 from ocflib.account.utils import web_dir
 from ocflib.misc.mail import email_for_user
+from ocflib.vhost.application import get_app_vhosts
 from ocflib.vhost.web import get_vhosts
+
+
+APACHE_SITE_CONFIG = '/etc/apache2/ocf-vhost.conf'
+NGINX_SITE_CONFIG = '/etc/nginx/sites-enabled/virtual'
+
+LETS_ENCRYPT_SSL = Path('/services/http/ssl')
+SSL_BUNDLE = Path('/etc/ssl/apphost')
+
+APP_DIR = Path('/srv/apps')
+
 
 jinja_env = jinja2.Environment(
     loader=jinja2.FileSystemLoader((
         os.path.abspath(os.path.dirname(__file__)),
-        '/opt/share/',
+        '/opt/share',
     )),
 )
 
 
-LETS_ENCRYPT_SSL = Path('/services/http/ssl')
+class SSL(namedtuple('SSL', ('fqdn',))):
+    """Tells where to find SSL files for a given domain."""
+    key = '/etc/ssl/lets-encrypt/le-vhost.key'
+    chain = '/etc/ssl/certs/lets-encrypt.crt'
+
+    @property
+    def is_valid(self):
+        return os.path.exists(self.cert)
+
+    @property
+    def cert(self):
+        return str(LETS_ENCRYPT_SSL / (self.fqdn + '.crt'))
+
+    @property
+    def bundle(self):
+        return str(SSL_BUNDLE / (self.fqdn + '.bundle'))
 
 
 class VirtualHost(namedtuple('VirtualHost', (
         'fqdn',
         'user',
-        'relative_docroot',
-        'redirect_dest',
-        'ssl_cert',
-        'ssl_key',
-        'ssl_chain',
-        'use_hsts',
-        'disabled',
+        'comment',
+        'ssl',
+        'bind_type',
+        'bind_dest',
 ))):
-    """A single <VirtualHost>.
+    """A logical representation of a virtual host directive in one of
+    the webserver configs.
 
-    The VirtualHost has a one-to-one mapping to <VirtualHost> directives and is
-    rendered by one invocation of the template.
+    A VirtualHost corresponds to a unique combination of a port to
+    listen on and an FQDN naming it. This means that some vhost lines
+    might emit multiple VirtualHost instances (redirect domains, etc.).
 
-    This means that some vhost lines might emit multiple VirtualHost instances
-    (redirect domains, etc.).
+    VirtualHost instances contain no data specific to a specific host.
+    However, the methods defined here, used by the config templates, do
+    use information specific to the webhost and apphost setups.
+
+    bind_type can be any of 'socket', 'docroot', or 'redirect'.
+    bind_dest is then respectively the user socket name, the website
+    root directory relative to public_html, or URL to redirect to.
     """
-
-    def __str__(self):
-        return jinja_env.get_template('vhost.jinja').render(vhost=self)
-
     @property
     def contact_email(self):
         return email_for_user(self.user)
 
     @property
     def is_redirect(self):
-        return bool(self.redirect_dest)
+        return self.bind_type == 'redirect'
 
     @property
     def docroot(self):
+        assert self.bind_type == 'docroot'
         return os.path.join(
             web_dir(self.user),
-            self.relative_docroot.lstrip('/'),
+            self.bind_dest.strip('/'),
         )
 
     @property
-    def use_ssl(self):
-        return bool(self.ssl_key)
-
-    @property
     def port(self):
-        return (80, 443)[self.use_ssl]
+        return 443 if self.ssl else 80
 
     @property
     def canonical_url(self):
         return '{proto}://{fqdn}'.format(
-            proto=('http', 'https')[self.use_ssl],
+            proto='https' if self.ssl else 'http',
             fqdn=self.fqdn,
+        )
+
+    @property
+    def disabled(self):
+        return user_is_sorried(self.user)
+
+    @property
+    def socket(self):
+        assert self.bind_type == 'socket'
+        return str(APP_DIR / self.user / (self.bind_dest + '.sock'))
+
+    @property
+    def redirect_dest(self):
+        assert self.is_redirect
+        return self.bind_dest
+
+    def dev_alias(self, dev_config=False):
+        return '{}.{}.ocf.berkeley.edu'.format(
+            self.fqdn.replace('.', '-'),
+            'dev-apphost' if dev_config else 'apphost',
         )
 
 
@@ -89,115 +129,232 @@ def report(*args, **kwargs):
     kwargs['file'].flush()
 
 
-def build_config_file():
+def build_config(src_vhosts, template, dev_config=False):
     vhosts = set()
 
-    for domain, vhost in get_vhosts().items():
-        ssl_options = {
-            'ssl_key': '/etc/ssl/lets-encrypt/le-vhost.key',
-            'ssl_cert': str(LETS_ENCRYPT_SSL / (domain + '.crt')),
-            'ssl_chain': '/etc/ssl/certs/lets-encrypt.crt',
-        }
-        if (
-                'nossl' in vhost['flags'] or
-                not all(os.path.exists(p) for p in ssl_options.values())
-        ):
-            ssl_options = {}
+    for domain, vhost in src_vhosts.items():
+        user = vhost['username']
+        ssl = SSL(domain)
+        use_ssl = 'nossl' not in vhost['flags'] and ssl.is_valid
+
+        # Exactly one must be true
+        assert ('socket' in vhost) != ('docroot' in vhost)
+        if 'socket' in vhost:
+            bind_type = 'socket'
+        else:
+            bind_type = 'docroot'
+        bind_dest = vhost[bind_type]
 
         # primary vhost
-        user = vhost['username']
         primary = VirtualHost(
             fqdn=domain,
             user=user,
-            relative_docroot=vhost['docroot'],
-            redirect_dest=None,
-            ssl_cert=ssl_options.get('ssl_cert'),
-            ssl_key=ssl_options.get('ssl_key'),
-            ssl_chain=ssl_options.get('ssl_chain'),
-            use_hsts='hsts' in vhost['flags'],
-            disabled=user_is_sorried(user),
+            comment='{} (user {})'.format(domain, user),
+            ssl=ssl if use_ssl else None,
+            bind_type=bind_type,
+            bind_dest=bind_dest,
         )
         vhosts.add(primary)
 
-        # if it's an HTTPS domain, add an HTTP domain redirecting to it;
-        # if it has aliases defined, add HTTP domains redirecting there, too
-        for redirect_domain in (
-            ({domain} if ssl_options else set()) | set(vhost['aliases'])
-        ):
+        # for app vhosts, define a dev vhost as well (HTTP only)
+        if bind_type == 'socket':
+            dev_alias = primary.dev_alias(dev_config)
             vhosts.add(VirtualHost(
-                fqdn=redirect_domain,
-                user=vhost['username'],
-                relative_docroot='/',
-                redirect_dest=primary.canonical_url,
-                ssl_cert=None,
-                ssl_key=None,
-                ssl_chain=None,
-                use_hsts=None,
-                disabled=False,
+                fqdn=dev_alias,
+                user=user,
+                comment='{} (dev alias of {})'.format(dev_alias, domain),
+                ssl=None,
+                bind_type='socket',
+                bind_dest=vhost['socket'],
+            ))
+
+        redirects = set()
+        if use_ssl:
+            # Redirect from http://{domain} to https://{domain}
+            redirects.add((primary.fqdn, None))
+        for alias in vhost['aliases']:
+            # Redirect from http://{alias} to http(s)://{domain}
+            redirects.add((alias, None))
+            ssl = SSL(alias)
+            if ssl.is_valid:
+                # Redirect from https://{alias} to http(s)://{domain}
+                redirects.add((alias, ssl))
+
+        for fqdn, ssl in redirects:
+            vhosts.add(VirtualHost(
+                fqdn=fqdn,
+                user=user,
+                comment='{} (redirect to {})'.format(fqdn, primary.fqdn),
+                ssl=ssl,
+                bind_type='redirect',
+                bind_dest=primary.canonical_url,
             ))
 
     return '\n\n'.join(
-        str(vhost)
+        template.render(vhost=vhost)
         for vhost in sorted(
             vhosts,
-            key=lambda vhost: (vhost.user, vhost.fqdn, vhost.port),
+            key=lambda vhost: (vhost.user, vhost.fqdn, bool(vhost.ssl)),
         )
-    ) + '\n'
+    )
 
 
-def main(argv=None):
+def test_and_overwrite_config(config_path, new_config, target):
+    """Diffs and tests the new config and overwrites the old config if
+    the test passes.
+
+    Returns whether the old config was overwritten.
+    """
+    (_, new_path), (__, old_path) = (
+        tempfile.mkstemp(
+            # Prefix with '.' so temp files don't get included
+            prefix='.' + os.path.basename(config_path),
+            dir=os.path.dirname(config_path),
+        )
+        for i in range(2)
+    )
+    try:
+        os.chmod(new_path, 0o644)
+        with open(new_path, 'w') as f:
+            f.write(new_config)
+        report('Wrote to ' + new_path)
+
+        report('Diff between current and new file:')
+        ret = subprocess.call(('diff', '-u', config_path, new_path))
+        report('[end diff]')
+
+        if ret == 0:
+            report('Nothing changed, not doing anything.')
+            return False
+
+        # Save existing config
+        shutil.copyfile(config_path, old_path)
+        report('Copied existing config to ' + old_path)
+
+        # Overwrite with new config and test
+        os.rename(new_path, config_path)
+
+        report('Performing config test.')
+        if target == 'web':
+            ret = subprocess.call(('apachectl', 'configtest'))
+        else:
+            ret = subprocess.call(('nginx', '-t'))
+
+        if ret != 0:
+            report('Test failed! Replacing with old config.')
+            os.rename(old_path, config_path)
+
+        return ret == 0
+    finally:
+        for p in old_path, new_path:
+            try:
+                os.remove(p)
+            except FileNotFoundError:
+                pass
+
+
+def process_app_vhosts():
+    """Perform extra tasks specific to app vhosts.
+
+    This includes checking for membership in the ocfdev group, fixing
+    socket permissions, and generating SSL bundles."""
+    def groups_for_user(user):
+        return (g.gr_name for g in grp.getgrall() if user in g.gr_mem)
+
+    for domain, vhost in get_app_vhosts().items():
+        user = vhost['username']
+
+        # Warn about ocfdev group
+        if 'ocfdev' not in groups_for_user(user):
+            report(
+                "Warning: user '{}' not in group ocfdev but has app vhost '{}'"
+                .format(user, domain)
+            )
+
+        # Fix socket dir
+        socket_dir = str(APP_DIR / user)
+        os.makedirs(socket_dir, 0o755, exist_ok=True)
+        shutil.chown(socket_dir, user, 'ocf')
+        os.chmod(socket_dir, 0o755)
+
+        # Regenerate SSL bundle if older than cert
+        ssl = SSL(domain)
+        if 'nossl' not in vhost['flags'] and ssl.is_valid and (
+            not os.path.exists(ssl.bundle) or
+            os.path.getmtime(ssl.bundle) < os.path.getmtime(ssl.cert)
+        ):
+            report('Generating SSL bundle for ' + domain)
+            with open(ssl.bundle, 'w') as f, open(ssl.cert) as f1, open(ssl.chain) as f2:
+                shutil.copyfileobj(f1, f)
+                shutil.copyfileobj(f2, f)
+
+
+def main():
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawTextHelpFormatter,
     )
     parser.add_argument(
+        'target', metavar='TARGET', choices=('web', 'app'),
+        help="One of 'web' or 'app'. Determines which server to build for.",
+    )
+    parser.add_argument(
         '--dry-run', action='store_true',
-        help='Build vhost config file and print its contents without touching Apache.',
+        help=(
+            'Build the vhost config file and print its contents without '
+            'touching any files or services.'
+        ),
     )
     parser.add_argument(
         '--no-reload', action='store_true',
         help=(
-            "Build vhost config file, put it in place, but don't reload Apache. "
-            'Keep in mind that Apache may get reloaded at any time later on.',
+            "Build the vhost config file, put it in place, but don't reload "
+            'the web server. '
+            'Keep in mind that it may get reloaded at any time later on.'
         ),
     )
-    args = parser.parse_args(argv)
+    parser.add_argument(
+        '--dev', action='store_true',
+        help=(
+            'Use development server values, '
+            'i.e. use dev-www/dev-apphost instead of www/apphost.'
+        ),
+    )
+    args = parser.parse_args(sys.argv[1:])
 
-    config_file = build_config_file()
+    if args.target == 'app' and not args.dry_run:
+        process_app_vhosts()
+
+    if args.target == 'web':
+        site_cfg = APACHE_SITE_CONFIG
+        config = build_config(
+            get_vhosts(),
+            jinja_env.get_template('vhost-web.jinja'),
+            dev_config=args.dev,
+        )
+    else:
+        site_cfg = NGINX_SITE_CONFIG
+        config = build_config(
+            get_app_vhosts(),
+            jinja_env.get_template('vhost-app.jinja'),
+            dev_config=args.dev,
+        )
 
     if args.dry_run:
-        report(config_file)
+        report(config)
         return 0
 
-    fh, path = tempfile.mkstemp(dir='/etc/apache2', prefix='ocf-vhost.conf')
-    try:
-        os.chmod(path, 0o644)
-        os.write(fh, config_file.encode('utf8'))
-        os.close(fh)
-        report(path)
+    changed = test_and_overwrite_config(site_cfg, config, args.target)
 
-        report('Diff between current and new file:')
-        ret = subprocess.call(('diff', '-u', '/etc/apache2/ocf-vhost.conf', path))
-        report('[end diff]')
-
-        if ret != 0:
-            os.rename(path, '/etc/apache2/ocf-vhost.conf')
-
-            report('Performing config test.')
-            subprocess.check_call(('apachectl', 'configtest'))
-
-            if not args.no_reload:
-                report('Things changed, reloading Apache.')
+    if changed:
+        if not args.no_reload:
+            report('Things changed, reloading.')
+            if args.target == 'web':
                 subprocess.check_call(('systemctl', 'reload', 'apache2'))
             else:
-                report('Not reloading Apache, as you requested.')
+                subprocess.check_call(('systemctl', 'reload', 'nginx'))
         else:
-            report('Nothing changed, not doing anything.')
-    finally:
-        try:
-            os.remove(path)
-        except FileNotFoundError:
-            pass
+            report('Not reloading, as you requested.')
 
 
 if __name__ == '__main__':

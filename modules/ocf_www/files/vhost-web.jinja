@@ -1,23 +1,30 @@
-# {{vhost.fqdn}} (user {{vhost.user}})
+# {{vhost.comment}}
 <VirtualHost *:{{vhost.port}}>
     ServerName {{vhost.fqdn}}
     ServerAdmin {{vhost.contact_email}}
-    DocumentRoot {{vhost.docroot}}
 
-    {% if vhost.use_ssl %}
+    {% if vhost.ssl %}
         # SSL
         SSLEngine on
-        SSLCertificateFile {{vhost.ssl_cert}}
-        SSLCertificateKeyFile {{vhost.ssl_key}}
-        SSLCertificateChainFile {{vhost.ssl_chain}}
+        SSLCertificateFile {{vhost.ssl.cert}}
+        SSLCertificateKeyFile {{vhost.ssl.key}}
+        SSLCertificateChainFile {{vhost.ssl.chain}}
     {% endif %}
 
-    {% if vhost.disabled %}
+    {% if vhost.is_redirect %}
+        RewriteEngine on
+        RewriteCond %{REQUEST_URI} !^/\.well-known/
+        # 301 redirects are more correct, but get cached forever by dumb browsers.
+        # Doesn't matter too much for vhosts.
+        RewriteRule ^(.*)$ {{vhost.redirect_dest}}$1 [L,R=302]
+    {% elif vhost.disabled %}
         # Proxy to the local "unavailable" vhost, which serves up a friendly
         # "your website is rekt" page.
         RequestHeader set Host unavailable.ocf.berkeley.edu
         ProxyPass / http://localhost/
-    {% elif not vhost.is_redirect %}
+    {% else %}
+        DocumentRoot {{vhost.docroot}}
+
         <Directory {{vhost.docroot}}>
             Options ExecCGI IncludesNoExec Indexes MultiViews SymLinksIfOwnerMatch
             AllowOverride All
@@ -40,12 +47,6 @@
         Action php5-fcgi /php5-fcgi
         Alias /php5-fcgi /services/http/suexec/php5-fcgi-wrapper
         SuexecUserGroup {{vhost.user}} ocf
-    {% else %}
-        RewriteEngine on
-        RewriteCond %{REQUEST_URI} !^/\.well-known/
-        # 301 redirects are more correct, but get cached forever by dumb browers.
-        # Doesn't matter too much for vhosts.
-        RewriteRule ^(.*)$ {{vhost.redirect_dest}}$1 [L,R=302]
     {% endif %}
 
     Alias /.well-known /srv/well-known

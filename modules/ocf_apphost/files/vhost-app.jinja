@@ -1,0 +1,38 @@
+# {{vhost.comment}}
+server {
+    listen {{vhost.port}};
+    listen [::]:{{vhost.port}};
+    server_name "{{vhost.fqdn}}";
+
+    # Proxy /.well-known/ to www.o.b.e/.well-known/ so death can request
+    # Let's Encrypt certificates for app vhosts
+    location /.well-known/ {
+        proxy_pass https://www.ocf.berkeley.edu/.well-known/;
+    }
+
+    {% if vhost.is_redirect %}
+        return 301 {{vhost.redirect_dest}}$request_uri;
+    {% else %}
+        location / {
+            {% if vhost.disabled %}
+                # Proxy to the "unavailable" site, just as regular vhosts do.
+                proxy_pass http://unavailable.ocf.berkeley.edu/;
+                proxy_set_header Host unavailable.ocf.berkeley.edu;
+            {% else %}
+                proxy_pass http://unix:{{vhost.socket}};
+                proxy_set_header Host $host;
+            {% endif %}
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+    {% endif %}
+
+    access_log /var/log/nginx/vhost_access.log vhost;
+
+    {% if vhost.ssl %}
+        ssl on;
+        ssl_certificate {{vhost.ssl.bundle}};
+        ssl_certificate_key {{vhost.ssl.key}};
+        add_header Strict-Transport-Security "max-age=31536000";
+    {% endif %}
+}

@@ -1,2 +1,4 @@
 classes:
     - ocf_apphost
+
+ocf_apphost::proxy::dev_config: true
