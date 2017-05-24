@@ -4,15 +4,15 @@ class ocf_www::site::shorturl {
     '/etc/ssl/private/ocf.io.key':
       source => 'puppet:///private/ssl/ocf.io.key',
       mode   => '0600',
-      notify => Service['apache2'];
+      notify => Service['httpd'];
     '/etc/ssl/private/ocf.io.crt':
       source => 'puppet:///private/ssl/ocf.io.crt',
       mode   => '0644',
-      notify => Service['apache2'];
+      notify => Service['httpd'];
     '/etc/ssl/certs/positivessl-intermediate.crt':
       source => 'puppet:///private/ssl/positivessl-intermediate.crt',
       mode   => '0644',
-      notify => Service['apache2'];
+      notify => Service['httpd'];
   }
 
   $canonical_url = $::hostname ? {

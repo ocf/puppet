@@ -21,7 +21,7 @@ class ocf_www::site::vhosts {
 
     '/var/www/suexec':
       ensure  => directory,
-      require => Package['apache2'];
+      require => Package['httpd'];
   }
 
   cron { 'build-vhosts':

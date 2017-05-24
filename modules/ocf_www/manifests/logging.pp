@@ -16,7 +16,7 @@ class ocf_www::logging {
     # Users need to be able to read files in this directory.
     '/var/log/apache2':
       mode    => '0755',
-      require => Package['apache2'];
+      require => Package['httpd'];
   }
 
   # logrotate config
@@ -28,7 +28,7 @@ class ocf_www::logging {
       "set rule[file='/var/log/apache2/*.log']/create/mode 644",
       "set rule[file='/var/log/apache2/*.log']/ifempty ifempty",
     ],
-    require => Package['logrotate', 'apache2'],
+    require => Package['logrotate', 'httpd'],
     notify  => Exec['apache2-logrotate-once'],
   }
 
