@@ -5,12 +5,12 @@ class ocf_www::site::vhosts {
       mode    => '0755',
       require => [
         Package['python3-ocflib', 'python3-jinja2'],
-        File['/opt/share/vhost.jinja'],
+        File['/opt/share/vhost-web.jinja'],
       ],
       notify  => Exec['build-vhosts'];
 
-    '/opt/share/vhost.jinja':
-      source  => 'puppet:///modules/ocf_www/vhost.jinja';
+    '/opt/share/vhost-web.jinja':
+      source  => 'puppet:///modules/ocf_www/vhost-web.jinja';
 
     '/etc/ssl/private/vhosts':
       ensure  => directory,
@@ -25,13 +25,13 @@ class ocf_www::site::vhosts {
   }
 
   cron { 'build-vhosts':
-    command => 'chronic /usr/local/bin/build-vhosts',
+    command => 'chronic /usr/local/bin/build-vhosts web',
     special => hourly,
     require => File['/usr/local/bin/build-vhosts'],
   }
 
   exec { 'build-vhosts':
-    command => '/usr/local/bin/build-vhosts',
+    command => '/usr/local/bin/build-vhosts web',
     creates => '/etc/apache2/ocf-vhost.conf',
     require => File['/usr/local/bin/build-vhosts'],
   }

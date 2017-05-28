@@ -41,6 +41,7 @@ from pathlib import Path
 
 import dateutil.parser
 import dns.resolver
+from ocflib.vhost.application import get_app_vhosts
 from ocflib.vhost.web import get_vhosts
 
 
@@ -57,15 +58,16 @@ def debug(*args, **kwargs):
     pass
 
 
-def eligible_domains():
+def eligible_domains(target):
     """Return domains that should have certificates.
 
     This includes:
       * base virtual host domains
       * aliases which redirect to the base domain
 
-    We check that the domains appear to be served by us (in particular, we
-    check public DNS to see whether they seem to point to death).
+    We check that the domains appear to be served by us (in particular,
+    we check public DNS to see whether they seem to point to the right
+    host, i.e. death or the apphost).
     """
     resolver = dns.resolver.Resolver()
     resolver.nameservers = ['8.8.8.8', '8.8.4.4']
@@ -79,17 +81,21 @@ def eligible_domains():
             if answers:
                 return str(answers[0])
 
-    www_ip = resolve('death.ocf.berkeley.edu')
+    ip = resolve(
+        'death.ocf.berkeley.edu' if target == 'web' else
+        'werewolves.ocf.berkeley.edu'
+    )
 
-    vhosts = get_vhosts()
+    vhosts = get_vhosts() if target == 'web' else get_app_vhosts()
     all_domains = (
         set(vhosts.keys()) |
-        set(chain.from_iterable(vhost['aliases'] for vhost in vhosts.values()))
+        set(chain.from_iterable(vhost.get('aliases', [])
+                                for vhost in vhosts.values()))
     )
     eligible_domains = {
         domain
         for domain in all_domains
-        if resolve(domain) == www_ip
+        if resolve(domain) == ip
     }
 
     bad_domains = all_domains - eligible_domains
@@ -239,6 +245,7 @@ def main(argv=None):
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
+    parser.add_argument('target', choices=('web', 'app'))
     parser.add_argument('-n', '--dry-run', action='store_true')
     parser.add_argument('-v', '--verbose', action='store_true')
     args = parser.parse_args()
@@ -247,7 +254,7 @@ def main(argv=None):
         global debug
         debug = functools.partial(print, flush=True)
 
-    eligible = eligible_domains()
+    eligible = eligible_domains(args.target)
     have_cert = set()
     need_cert = set()
     for domain in eligible:
