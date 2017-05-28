@@ -58,7 +58,7 @@ def debug(*args, **kwargs):
     pass
 
 
-def eligible_domains():
+def eligible_domains(target):
     """Return domains that should have certificates.
 
     This includes:
@@ -81,35 +81,24 @@ def eligible_domains():
             if answers:
                 return str(answers[0])
 
-    www_ip = resolve('death.ocf.berkeley.edu')
-    app_ip = resolve('werewolves.ocf.berkeley.edu')
+    ip = resolve(
+        'death.ocf.berkeley.edu' if target == 'web' else
+        'werewolves.ocf.berkeley.edu'
+    )
 
-    vhosts = get_vhosts()
-    www_domains = (
+    vhosts = get_vhosts() if target == 'web' else get_app_vhosts()
+    all_domains = (
         set(vhosts.keys()) |
         set(chain.from_iterable(vhost.get('aliases', [])
                                 for vhost in vhosts.values()))
     )
+    eligible_domains = {
+        domain
+        for domain in all_domains
+        if resolve(domain) == ip
+    }
 
-    app_vhosts = get_app_vhosts()
-    app_domains = (
-        set(app_vhosts.keys()) |
-        set(chain.from_iterable(vhost.get('aliases', [])
-                                for vhost in app_vhosts.values()))
-    )
-
-    eligible_domains = set.union(
-        *({
-            domain
-            for domain in domains
-            if resolve(domain) == ip
-        } for domains, ip in (
-            (www_domains, www_ip),
-            (app_domains, app_ip),
-        ))
-    )
-
-    bad_domains = (www_domains | app_domains) - eligible_domains
+    bad_domains = all_domains - eligible_domains
     if bad_domains:
         debug('Excluded {} domains for bad DNS:\n    {}'.format(
             len(bad_domains),
@@ -256,6 +245,7 @@ def main(argv=None):
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
+    parser.add_argument('target', choices=('web', 'app'))
     parser.add_argument('-n', '--dry-run', action='store_true')
     parser.add_argument('-v', '--verbose', action='store_true')
     args = parser.parse_args()
@@ -264,7 +254,7 @@ def main(argv=None):
         global debug
         debug = functools.partial(print, flush=True)
 
-    eligible = eligible_domains()
+    eligible = eligible_domains(args.target)
     have_cert = set()
     need_cert = set()
     for domain in eligible:

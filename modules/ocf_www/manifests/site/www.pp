@@ -46,22 +46,9 @@ class ocf_www::site::www {
           '%{REQUEST_URI} !^/~',
           # ...and not if it's a special Apache thing (e.g. autoindex icons)
           '%{REQUEST_URI} !^/icons/',
-          # ...or the Let's Encrypt challenge directory
-          '%{REQUEST_URI} !^/.well-known/',
         ],
         rewrite_rule => '^/(.*)$ http://lb.ocf.berkeley.edu:10002/$1 [P]',
       }
-    ],
-
-    # vhosts on the apphost alias /.well-known to www.../.well-known so death
-    # can request Let's Encrypt certs for them.
-    # The alternative would be to put the acme-challenge directory in /services
-    # and have nginx serve it directly.
-    aliases         => [
-      {
-        alias => '/.well-known',
-        path  => '/srv/well-known',
-      },
     ],
 
     directories     => [

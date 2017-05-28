@@ -1,4 +1,4 @@
-class ocf_www::lets_encrypt {
+class ocf_apphost::lets_encrypt {
   include ocf::lets_encrypt
 
   file {
@@ -15,7 +15,7 @@ class ocf_www::lets_encrypt {
 
   if $::hostname !~ /^dev-/ {
     cron { 'lets-encrypt-update':
-      command     => 'chronic /usr/local/bin/lets-encrypt-update -v web',
+      command     => 'chronic /usr/local/bin/lets-encrypt-update -v app',
       user        => ocfletsencrypt,
       environment => 'MAILTO=root',
       special     => hourly,

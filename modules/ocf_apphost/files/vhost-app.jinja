@@ -4,10 +4,8 @@ server {
     listen [::]:{{vhost.port}};
     server_name "{{vhost.fqdn}}";
 
-    # Proxy /.well-known/ to www.o.b.e/.well-known/ so death can request
-    # Let's Encrypt certificates for app vhosts
     location /.well-known/ {
-        proxy_pass https://www.ocf.berkeley.edu/.well-known/;
+        alias /srv/well-known/;
     }
 
     {% if vhost.is_redirect %}
