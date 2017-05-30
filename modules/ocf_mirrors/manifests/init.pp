@@ -46,7 +46,7 @@ class ocf_mirrors {
       source => 'puppet:///modules/ocf_mirrors/README.html',
       owner  => mirrors,
       group  => mirrors;
-  }
+}
 
   class {
     '::apache':
@@ -166,4 +166,15 @@ class ocf_mirrors {
     command => '/opt/mirrors/bin/report-sizes',
     special => 'daily',
   }
+
+  file { '/usr/local/sbin/record-mirrors-stats':
+      source => 'puppet:///private/stats/record-mirrors-stats.py',
+      mode   => '0640',
+  } ->
+  cron { 'mirrors-stats':
+      command => '/usr/local/sbin/record-mirrors-stats',
+      minute  => 0,
+      hour    => 0,
+  }
+
 }
