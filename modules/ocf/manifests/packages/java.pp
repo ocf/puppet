@@ -3,6 +3,10 @@ class ocf::packages::java {
 
   if $::lsbdistcodename == 'jessie' {
     package { 'openjdk-7-jre-headless':; }
+
+    ocf::repackage { 'ca-certificates-java':
+      backport_on => jessie,
+    }
   }
 
   # Make Java 8 the default.
