@@ -42,5 +42,14 @@ class ocf_kvm($group = 'root') {
       ensure => link,
       links  => manage,
       target => '/opt/share/utils/staff/sys/makevm';
+
+    '/opt/share/kvm':
+      ensure => directory;
+
+    '/opt/share/kvm/makevm-ssh-key':
+      content   => file('/opt/puppet/shares/private/makevm-ssh-key'),
+      mode      => '0400',
+      owner     => 'root',
+      show_diff => false;
   }
 }
