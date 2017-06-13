@@ -35,7 +35,12 @@ def main():
         # Could not find a unique node to classify, exit
         sys.exit(1)
 
-    output = {'parameters': {}, 'environment': host['environment'][0]}
+    if 'environment' in host:
+        environment = host['environment'][0]
+    else:
+        environment = 'production'
+
+    output = {'parameters': {}, 'environment': environment}
 
     for key, values in host.items():
         # Remove the value from its list only if it is a singular value
