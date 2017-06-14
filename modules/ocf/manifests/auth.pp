@@ -126,6 +126,12 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     notify  => Service['ssh']
   }
 
+  # remove SSH key used by makevm for bootstrapping after root login enabled
+  file { '/root/.ssh/authorized_keys':
+    ensure  => absent,
+    require => Augeas['sshd_config'],
+  }
+
   # sudo user/group access controls
   package { 'sudo': }
   file {
