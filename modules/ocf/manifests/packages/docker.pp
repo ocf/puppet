@@ -47,16 +47,6 @@ class ocf::packages::docker($admin_group = undef, $autoclean = true) {
     }
   }
 
-  # temporary
-  if $::lsbdistcodename != 'jessie' {
-    ensure_resource('service', 'docker', {'provider' => 'systemd'})
-    file {
-      '/etc/systemd/system/docker.service.d/cmd.conf':
-        ensure  => absent,
-        require => Package['aufs-dkms', 'aufs-tools'],
-    } ~> Exec['systemd-reload'] ~> Service['docker']
-  }
-
   if $autoclean {
     cron {
       'clean-old-docker-containers':
