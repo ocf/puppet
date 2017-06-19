@@ -177,6 +177,7 @@ class ocf_mirrors {
       command => '/usr/local/sbin/record-mirrors-stats',
       minute  => 0,
       hour    => 0,
+      environment => ["OCFSTATS_PWD=${ocfstats_password}"];
   }
 
 }

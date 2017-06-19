@@ -1,10 +1,10 @@
 #!/usr/bin/python
-
 import os
-import pymysql
 from datetime import date
 
-OCFSTATS_PWD = "<%= @ocfstats_password %>"
+import pymysql
+
+OCFSTATS_PWD = os.environ['OCFSTATS_PWD']
 MIRRORS_PATH = '/opt/mirrors/ftp'
 LOG_PATH = '/var/log/apache2'
 LOG_NAME = 'mirrors.ocf.berkeley.edu_access.log'
@@ -12,20 +12,26 @@ LOG_NAME = 'mirrors.ocf.berkeley.edu_access.log'
 sources = [mirrored for mirrored in os.listdir(MIRRORS_PATH)
            if os.path.isdir(os.path.join(MIRRORS_PATH, mirrored)) and not mirrored.startswith('.')]
 
-sources.append('other') # catchall
+sources.append('other')  # catchall
+
 
 def build_dists():
-    return { mirrored: { 'up': 0, 'down': 0 } for mirrored in sources }
+    return {mirrored: {'up': 0, 'down': 0} for mirrored in sources}
+
 
 def process_file(fn):
     dists = build_dists()
     with open(fn, 'r') as f:
         for line in f:
             stats = line.split()
+
+            # extract dist name from request url
+            # '/debian/pool/main/h/hwdata/...' -> 'debian'
             dist = stats[6]
             dist = dist.split('/')[1] if '/' in dist else dist
 
-            if stats[8][0] in ('2', '3') and dist in dists: # http status code is 2xx/3xx
+            # record if we returned http 2xx/3xx
+            if stats[8][0] in ('2', '3') and dist in dists:
                 dists[dist]['up'] += int(stats[-2])
                 dists[dist]['down'] += int(stats[-1])
             else:
@@ -33,22 +39,25 @@ def process_file(fn):
                 dists['other']['down'] += int(stats[-1])
     return dists
 
+
 def to_mysql(dists):
     dt = date.today()
     conn = pymysql.connect(
-        host = 'mysql.ocf.berkeley.edu',
-        user = 'ocfstats',
-        password = OCFSTATS_PWD,
+        host='mysql.ocf.berkeley.edu',
+        user='ocfstats',
+        password=OCFSTATS_PWD,
         db='ocfstats',
-        autocommit = True,
+        autocommit=True,
         cursorclass=pymysql.cursors.DictCursor,
     )
 
-    c = conn.cursor()
+    with conn as cursor:
+        for dist in dists:
+            cursor.execute(
+                'INSERT INTO `mirrors` (`date`, `dist`, `up`, `down`) VALUES (%s, %s, %s, %s)',
+                (dt, dist, dists[dist]['up'], dists[dist]['down'])
+            )
 
-    for dist in dists:
-        c.execute('INSERT INTO `mirrors` (`date`, `dist`, `up`, `down`) VALUES (%s, %s, %s, %s)',
-                  (dt, dist, dists[dist]['up'], dists[dist]['down']))
 
 if __name__ == '__main__':
     to_mysql(process_file(os.path.join(LOG_PATH, LOG_NAME)))
