@@ -26,6 +26,7 @@ class ocf::extrapackages {
     'apache2-dev',
     'apache2-utils',
     'autoconf',
+    'autojump',
     'automake',
     'bison',
     'bogofilter',
