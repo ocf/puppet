@@ -8,7 +8,7 @@ class ocf_irc::nodejs::webirc {
   class { 'nginx':
     manage_repo => false,
     confd_purge => true,
-    vhost_purge => true,
+    server_purge => true,
   }
 
   $ssl_options = {
@@ -22,7 +22,7 @@ class ocf_irc::nodejs::webirc {
     },
   }
 
-  nginx::resource::vhost {
+  nginx::resource::server {
     $webirc_fqdn:
       server_name      => [$webirc_fqdn],
       proxy            => 'https://thelounge.ocf.berkeley.edu',
@@ -33,7 +33,7 @@ class ocf_irc::nodejs::webirc {
 
       * => $ssl_options,
 
-      rewrite_to_https => true;
+      ssl_redirect => true;
 
     "${webirc_fqdn}-redirect":
       # Needs a www_root even though we just redirect
@@ -46,7 +46,7 @@ class ocf_irc::nodejs::webirc {
 
       * => $ssl_options,
 
-      vhost_cfg_append => {
+      server_cfg_append => {
         'return' => "301 https://${webirc_fqdn}\$request_uri"
       };
   }

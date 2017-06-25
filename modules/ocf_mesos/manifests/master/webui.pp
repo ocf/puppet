@@ -30,17 +30,13 @@ class ocf_mesos::master::webui(
     backport_on => jessie,
   }
 
-  class {'::nginx::config':
-    # When we get to v0.6.0, move this to the main nginx class definition below.
-    nginx_cfg_prepend => {
-      'load_module' => '"modules/ngx_http_auth_pam_module.so"',
-    },
-  }
-
   class { 'nginx':
     manage_repo => false,
     confd_purge => true,
-    vhost_purge => true,
+    server_purge => true,
+    nginx_cfg_prepend => {
+      'load_module' => '"modules/ngx_http_auth_pam_module.so"',
+    },
 
     # remove once we're on stretch:
     # a random package we don't care about, so that the nginx module won't try
@@ -67,7 +63,7 @@ class ocf_mesos::master::webui(
       "':5051\",\"hostname\":\"${slave}\"' ':443\",\"hostname\":\"${slave}.agent.mesos.ocf.berkeley.edu\"'"
   }
 
-  nginx::resource::vhost {
+  nginx::resource::server {
     default:
       ssl_cert    => "/etc/ssl/private/${::fqdn}.bundle",
       ssl_key     => "/etc/ssl/private/${::fqdn}.key",
@@ -150,7 +146,7 @@ class ocf_mesos::master::webui(
       www_root => '/var/www',
 
       server_name      => [$::hostname, $::fqdn, 'mesos', 'mesos.ocf.berkeley.edu'],
-      vhost_cfg_append => {
+      server_cfg_append => {
         'return' => '301 https://mesos.ocf.berkeley.edu$request_uri',
       };
 
@@ -183,7 +179,7 @@ class ocf_mesos::master::webui(
       www_root => '/var/www',
 
       server_name      => ['marathon', 'marathon.ocf.berkeley.edu'],
-      vhost_cfg_append => {
+      server_cfg_append => {
         'return' => '301 https://marathon.ocf.berkeley.edu$request_uri',
       };
   }
@@ -196,7 +192,7 @@ class ocf_mesos::master::webui(
       members => ["${slave}:5051"],
     }
 
-    nginx::resource::vhost {
+    nginx::resource::server {
       "${slave}-agent":
         server_name => [$host],
         proxy       => "http://${slave}-agent",
@@ -231,7 +227,7 @@ class ocf_mesos::master::webui(
         www_root => '/var/www',
 
         server_name      => [$host],
-        vhost_cfg_append => {
+        server_cfg_append => {
           'return' => "301 https://${host}\$request_uri",
         };
     }

@@ -9,14 +9,14 @@ class ocf_ssh::webssh {
   class { 'nginx':
     manage_repo => false,
     confd_purge => true,
-    vhost_purge => true,
+    server_purge => true,
   }
 
   nginx::resource::upstream { 'webssh':
     members => ['localhost:4200'];
   }
 
-  nginx::resource::vhost {
+  nginx::resource::server {
     $webssh_fqdn:
       server_name => [
         $webssh_fqdn
@@ -32,6 +32,6 @@ class ocf_ssh::webssh {
         'Strict-Transport-Security' => 'max-age=31536000',
       },
 
-      rewrite_to_https => true;
+      ssl_redirect => true;
   }
 }

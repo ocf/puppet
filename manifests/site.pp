@@ -25,7 +25,7 @@ Vcsrepo { require => Package['git'] }
 Apache::Vhost { serveradmin => 'help@ocf.berkeley.edu' }
 
 # Listen on IPv6 addresses by default for nginx (along with IPv4)
-Nginx::Resource::Vhost {
+Nginx::Resource::Server {
   ipv6_enable         => true,
   ipv6_listen_options => '',
 }

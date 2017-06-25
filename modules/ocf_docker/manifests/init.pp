@@ -5,7 +5,7 @@ class ocf_docker {
   class { 'nginx':
     manage_repo => false,
     confd_purge => true,
-    vhost_purge => true,
+    server_purge => true,
   }
 
   nginx::resource::upstream { 'docker-registry':
@@ -23,7 +23,7 @@ class ocf_docker {
   #
   # Jenkins should push to docker-push.ocf and others should pull from
   # docker.ocf.
-  nginx::resource::vhost {
+  nginx::resource::server {
     default:
       listen_port => 443,
 
@@ -43,7 +43,7 @@ class ocf_docker {
         'Host $http_host'
       ],
 
-      vhost_cfg_append => {
+      server_cfg_append => {
         # Enable large uploads/downloads
         # https://docs.docker.com/registry/recipes/nginx/
         'chunked_transfer_encoding' => 'on',

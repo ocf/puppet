@@ -2,7 +2,7 @@ class ocf_jenkins::proxy {
   class { 'nginx':
     manage_repo   => false,
     confd_purge   => true,
-    vhost_purge   => true,
+    server_purge   => true,
     server_tokens => off,
   }
 
@@ -10,7 +10,7 @@ class ocf_jenkins::proxy {
     members => ['localhost:8080'];
   }
 
-  nginx::resource::vhost {
+  nginx::resource::server {
     'jenkins.ocf.berkeley.edu':
       server_name => ['jenkins.ocf.berkeley.edu'],
 
@@ -32,7 +32,7 @@ class ocf_jenkins::proxy {
       },
 
       listen_port      => 443,
-      rewrite_to_https => true;
+      ssl_redirect => true;
 
     'jenkins.ocf.berkeley.edu-redirect':
       # we have to specify www_root even though we always redirect
@@ -52,7 +52,7 @@ class ocf_jenkins::proxy {
         'Strict-Transport-Security' => 'max-age=31536000',
       },
 
-      vhost_cfg_append => {
+      server_cfg_append => {
         'return' => '301 https://jenkins.ocf.berkeley.edu$request_uri'
       };
   }

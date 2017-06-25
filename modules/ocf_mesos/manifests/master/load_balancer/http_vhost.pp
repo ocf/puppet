@@ -21,7 +21,7 @@ define ocf_mesos::master::load_balancer::http_vhost(
   }
 
   if $ssl {
-    nginx::resource::vhost {
+    nginx::resource::server {
       $title:
         server_name => [$server_name],
         proxy       => "http://marathon_service_${service_port}",
@@ -39,12 +39,12 @@ define ocf_mesos::master::load_balancer::http_vhost(
         # we have to specify www_root even though we always redirect/proxy
         www_root         => '/var/www',
 
-        vhost_cfg_append => {
+        server_cfg_append => {
           'return' => "301 https://${server_name}\$request_uri"
         };
     }
   } else {
-    nginx::resource::vhost { $title:
+    nginx::resource::server { $title:
       server_name => [$server_name],
       proxy       => "http://marathon_service_${service_port}",
     }
