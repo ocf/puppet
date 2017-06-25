@@ -49,7 +49,7 @@ compress_and_encrypt() {
             --recipient jvperrin@ocf.berkeley.edu \
             --recipient mattmcal@ocf.berkeley.edu \
             --recipient kpengboy@ocf.berkeley.edu \
-	    --recipient abizer@ocf.berkeley.edu
+            --recipient abizer@ocf.berkeley.edu
 }
 
 split_parts() {
