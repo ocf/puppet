@@ -170,11 +170,11 @@ class ocf_mirrors {
   }
 
   file { '/usr/local/sbin/record-mirrors-stats':
-      source => 'puppet:///private/stats/record-mirrors-stats.py',
+      source => 'puppet:///modules/ocf_mirrors/record-mirrors-stats',
       mode   => '0640',
   } ->
   cron { 'mirrors-stats':
-      command => '/usr/local/sbin/record-mirrors-stats',
+      command => '/usr/local/sbin/record-mirrors-stats --quiet',
       minute  => 0,
       hour    => 0,
       environment => ["OCFSTATS_PWD=${ocfstats_password}"];

@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import argparse
 import os
 from datetime import date
 
@@ -40,8 +41,8 @@ def process_file(fn):
     return dists
 
 
-def to_mysql(dists):
-    dt = date.today()
+def to_mysql(dists, dt=None, quiet=False):
+    dt = dt or date.today()
     conn = pymysql.connect(
         host='mysql.ocf.berkeley.edu',
         user='ocfstats',
@@ -58,6 +59,24 @@ def to_mysql(dists):
                 (dt, dist, dists[dist]['up'], dists[dist]['down'])
             )
 
+            if not quiet:
+                print('{:20} {:8} {:8}'.format(dist, dists[dist]['up'], dists[dist]['down']))
+
 
 if __name__ == '__main__':
-    to_mysql(process_file(os.path.join(LOG_PATH, LOG_NAME)))
+    parser = argparse.ArgumentParser(description='Process mirrors logs to calculate network usage '
+                                                 'and store in ocfstats')
+    parser.add_argument('-q', '--quiet', action='store_true',
+                        help='do not print stats after collecting them')
+    parser.add_argument('log_file', nargs='?', default=os.path.join(LOG_PATH, LOG_NAME),
+                        help='log file to parse')
+    parser.add_argument('date', nargs='?', default=date.today(),
+                        help='date this log file corresponds to')
+
+    args = parser.parse_args()
+
+    to_mysql(
+        process_file(args.log_file),
+        args.date,
+        args.quiet
+    )
