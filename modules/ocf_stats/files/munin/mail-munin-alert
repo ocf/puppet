@@ -9,19 +9,19 @@ The expected call format from Munin is
 
 The list of warnings/criticals allows filtering of unhelpful messages such as
 those only containing OKs or UNKNOWNs. The list of fields must be in the same
-order as the list of fields.
+order as the list of alerts.
 """
 import argparse
 from sys import argv
 from sys import stdin
 from syslog import syslog
 
+from ocflib.infra import hosts
 from ocflib.misc.mail import MAIL_ROOT
 from ocflib.misc.mail import send_mail
 
 
 MAIL_FROM = 'Munin <munin@ocf.berkeley.edu>'
-MUNIN_HOSTS_URL = 'https://munin.ocf.berkeley.edu/ocf.berkeley.edu'
 
 
 # Filter out uninteresting or noisy warnings at the individual level
@@ -33,14 +33,34 @@ IGNORED_WARNINGS = {
 
 # Enumerate uninteresting discrete values (e.g. exit codes)
 IGNORED_VALUES = {
+    # smartctl exits nonzero even if there are no current errors
     'smartctl_exit_status': {32, 64, 96, 128, 160, 192, 224},
 }
 
 
 def send_alert(host, plugin, mail_to=MAIL_ROOT):
-    subject = 'Munin alert for {}'.format(host)
-    body = ''.join(stdin)
-    body += '\nSee graph at {}/{}/{}.html'.format(MUNIN_HOSTS_URL, host, plugin)
+    ldap_entry, = hosts.hosts_by_filter('(cn={})'.format(host))
+    dns_names = ', '.join(sorted(
+        ldap_entry.get('dnsCname', []) + ldap_entry.get('dnsA', []),
+    )) or '(none)'
+
+    subject = 'Munin alert for {} ({[type]})'.format(host, ldap_entry)
+    body = (
+        '{status}\n'
+        'See graph at https://munin.ocf.berkeley.edu/ocf.berkeley.edu/{host}/{plugin}.html\n'
+        '\n'
+        'Host details:\n'
+        '  - Type: {ldap_entry[type]}\n'
+        '  - Environment: {ldap_entry[environment][0]}\n'
+        # TODO: once puppetdb is a thing, it'd be great to read classes and owners from it
+        '  - DNS names: {dns_names}\n'
+    ).format(
+        status=''.join(stdin),
+        host=host,
+        plugin=plugin,
+        ldap_entry=ldap_entry,
+        dns_names=dns_names,
+    )
     send_mail(mail_to, subject, body, MAIL_FROM)
 
 
@@ -65,7 +85,7 @@ def main(argv):
             send_alert(host, plugin, mail_to)
     except Exception as ex:
         syslog("caught exception '{}' with args {}".format(ex, argv))
-        raise ex
+        raise
 
 
 if __name__ == '__main__':
