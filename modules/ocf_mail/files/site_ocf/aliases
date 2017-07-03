@@ -88,3 +88,6 @@ ocfapt: /dev/null
 # misc
 archive: /var/mail/archives/archive
 ocflog: "| /usr/local/bin/log-mail"
+
+# remove me
+photobears: spie
