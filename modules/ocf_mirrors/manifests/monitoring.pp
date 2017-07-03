@@ -3,8 +3,8 @@ define ocf_mirrors::monitoring(
     $project_path = "/opt/mirrors/project/${title}",
     $upstream_host = undef,
     $dist_to_check = undef,
-    $local_path = $title,
-    $upstream_path = $title,
+    $local_path = "/${title}",
+    $upstream_path = "/${title}",
     $upstream_protocol = 'http',
     $ensure = 'present',
   ) {
