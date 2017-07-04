@@ -39,7 +39,7 @@ IGNORED_VALUES = {
 
 
 def send_alert(host, plugin, mail_to=MAIL_ROOT):
-    ldap_entry, = hosts.hosts_by_filter('(cn={})'.format(host))
+    ldap_entry, = hosts.hosts_by_filter('(cn={})'.format(host.split('.')[0]))
     dns_names = ', '.join(sorted(
         ldap_entry.get('dnsCname', []) + ldap_entry.get('dnsA', []),
     )) or '(none)'
