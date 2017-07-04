@@ -10,6 +10,7 @@
         -   --no-documentation-check
         -   --no-puppet_url_without_modules-check
         -   --no-arrow_alignment-check
+        -   --no-arrow_on_right_operand_line-check
 -   repo: https://github.com/pre-commit/pre-commit-hooks.git
     sha: v0.9.1
     hooks:
