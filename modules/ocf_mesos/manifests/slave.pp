@@ -120,7 +120,6 @@ class ocf_mesos::slave($attributes = {}) {
   concat { '/etc/mesos-slave/attributes':
     ensure         => present,
     ensure_newline => true,
-    force          => true, # TODO: Remove once upgraded to concat 2.x
     notify         => Exec['reset-agent'],
     require        => File['/etc/mesos-slave'],
   }
