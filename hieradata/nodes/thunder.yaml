@@ -1,2 +1,4 @@
 classes:
     - ocf_puppetdb
+
+puppet_agent: true
