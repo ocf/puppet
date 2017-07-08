@@ -1,4 +1,4 @@
-#/bin/dash
+#!/bin/dash
 # source: https://wiki.ubuntu.com/Mirrors/Scripts (2014-08-11)
 # modified by OCF to use rsync-no-vanished
 

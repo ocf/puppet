@@ -1,2 +1,2 @@
-#/bin/sh -eu
+#!/bin/sh -eu
 /usr/local/bin/rsync-no-vanished -aqzH --delete rsync://us-msync.centos.org/CentOS /opt/mirrors/ftp/centos

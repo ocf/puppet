@@ -21,6 +21,7 @@
     -   id: check-added-large-files
     -   id: check-docstring-first
         language_version: python3
+    -   id: check-executables-have-shebangs
     -   id: check-json
     -   id: check-merge-conflict
     -   id: check-xml
