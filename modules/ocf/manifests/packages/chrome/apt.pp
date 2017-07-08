@@ -5,6 +5,12 @@ class ocf::packages::chrome::apt {
     source => 'https://dl-ssl.google.com/linux/linux_signing_key.pub';
   }
 
+  # Remove old key causing duplicate installations
+  apt::key { 'google-old':
+    ensure => absent,
+    id     => '4CCA1EAF950CEE4AB83976DCA040830F7FAC5991',
+  }
+
   # Chrome creates /etc/apt/sources.list.d/google-chrome.list upon
   # installation, so we use the name 'google-chrome' to avoid duplicates
   #
