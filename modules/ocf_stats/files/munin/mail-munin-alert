@@ -10,6 +10,9 @@ The expected call format from Munin is
 The list of warnings/criticals allows filtering of unhelpful messages such as
 those only containing OKs or UNKNOWNs. The list of fields must be in the same
 order as the list of alerts.
+
+To test changes to this script, try a command like:
+    echo hi | mail-munin-alert --mail-to <user>@ocf.berkeley.edu tsunami.ocf.berkeley.edu some-plugin some-metric 1
 """
 import argparse
 from sys import argv
@@ -40,6 +43,13 @@ IGNORED_VALUES = {
 
 def send_alert(host, plugin, mail_to=MAIL_ROOT):
     ldap_entry, = hosts.hosts_by_filter('(cn={})'.format(host.split('.')[0]))
+
+    if ldap_entry['type'] == 'staffvm':
+        # We don't alert on staff VMs because staff are hozers and it's just spam.
+        # TODO: when puppetdb is ready, consider sending to the staffvm owner.
+        syslog('not sending alert for host {} because it is a staff vm'.format(host))
+        return
+
     dns_names = ', '.join(sorted(
         ldap_entry.get('dnsCname', []) + ldap_entry.get('dnsA', []),
     )) or '(none)'
