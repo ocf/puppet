@@ -8,7 +8,9 @@
 # Containers are helpful for testing things. For example:
 #   docker run -ti debian:jessie bash
 #
-class ocf::packages::docker($admin_group = undef, $autoclean = true) {
+class ocf::packages::docker($admin_group = undef,
+                            $autoclean = true,
+                            $image_max_age = '24h') {
   class { 'ocf::packages::docker::apt':
     stage => first,
   }
@@ -63,7 +65,7 @@ class ocf::packages::docker($admin_group = undef, $autoclean = true) {
 
       'clean-docker-images':
         # Clean images 4 weeks or older
-        command => 'chronic docker image prune -a --filter until=672h -f',
+        command => "chronic docker image prune -a --filter until=${image_max_age} -f",
         hour    => 1,
         minute  => 17;
 

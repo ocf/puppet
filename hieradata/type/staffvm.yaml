@@ -4,6 +4,8 @@ ocf::auth::usudo: ["%{hiera('owner')}"]
 # ocfroot gets nopasswd as well, since we don't want root staffers typing their
 # passwords into staff VMs
 ocf::auth::nopasswd: true
+# keep docker images around for 1 month
+ocf::packages::docker::image_max_age: '672h'
 
 
 # let any staff use docker on staff VMs without sudo
