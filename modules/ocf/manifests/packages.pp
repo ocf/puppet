@@ -65,6 +65,7 @@ class ocf::packages {
   # common packages for all ocf machines
   package {
     [
+    'aactivator',
     'apt-dater-host',
     'beep',
     'bsdmainutils',
