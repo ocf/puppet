@@ -1,0 +1,16 @@
+#!/bin/bash
+# Generate a "sizes" file in /opt/mirrors/ftp for convenience of us and any
+# curious internet people.
+set -euo pipefail
+
+{
+    cd /opt/mirrors/ftp
+    find -mindepth 1 -maxdepth 1 -type d |
+        sort |
+	cut -d/ -f2 |
+	grep -vE '^\.' |
+	xargs nice ionice du -hs
+
+    echo -n 'Last updated: '
+    date
+} | sponge /opt/mirrors/ftp/sizes

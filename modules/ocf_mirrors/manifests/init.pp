@@ -35,7 +35,7 @@ class ocf_mirrors {
   }
 
   file {
-    ['/opt/mirrors', '/opt/mirrors/ftp', '/opt/mirrors/project']:
+    ['/opt/mirrors', '/opt/mirrors/ftp', '/opt/mirrors/project', '/opt/mirrors/bin']:
       ensure  => directory,
       mode    => '0755',
       owner   => mirrors,
@@ -156,5 +156,14 @@ class ocf_mirrors {
     ssl_key   => "/etc/ssl/private/${::fqdn}.key",
     ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
     ssl_chain => '/etc/ssl/certs/incommon-intermediate.crt',
+  }
+
+  file { '/opt/mirrors/bin/report-sizes':
+    source => 'puppet:///modules/ocf_mirrors/report-sizes',
+    mode   => '0755',
+  } ->
+  cron { 'report-sizes':
+    command => '/opt/mirrors/bin/report-sizes',
+    special => 'daily',
   }
 }
