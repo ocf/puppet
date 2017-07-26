@@ -75,7 +75,7 @@ def eligible_domains(target):
     def resolve(fqdn):
         try:
             answers = list(resolver.query(fqdn, 'A'))
-        except dns.resolver.NXDOMAIN:
+        except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer):
             return
         else:
             if answers:
