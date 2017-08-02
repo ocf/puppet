@@ -40,9 +40,6 @@ def process_log(dists, fn, log_date):
                 dists['other']['up'] += int(stats[-2])
                 dists['other']['down'] += int(stats[-1])
 
-            if n % 10000 is 0:
-                print(n, "lines processed from", fn)
-
     return dists
 
 
