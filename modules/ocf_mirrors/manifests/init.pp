@@ -169,12 +169,12 @@ class ocf_mirrors {
     special => 'daily',
   }
 
-  file { '/usr/local/sbin/record-mirrors-stats':
-    source => 'puppet:///modules/ocf_mirrors/record-mirrors-stats',
+  file { '/usr/local/sbin/process-mirrors-logs':
+    source => 'puppet:///modules/ocf_mirrors/process-mirrors-logs',
     mode   => '0640',
   } ->
   cron { 'mirrors-stats':
-    command => '/usr/local/sbin/record-mirrors-stats --quiet',
+    command => '/usr/local/sbin/process-mirrors-logs --quiet',
     minute  => 0,
     hour    => 0,
     environment => ["OCFSTATS_PWD=${ocfstats_password}"];
