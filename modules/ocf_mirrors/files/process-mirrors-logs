@@ -1,0 +1,110 @@
+#!/usr/bin/python3
+import argparse
+import os
+from datetime import date
+from datetime import timedelta
+from datetime import datetime
+
+import pymysql
+
+OCFSTATS_PWD = os.environ['OCFSTATS_PWD']
+MIRRORS_PATH = '/opt/mirrors/ftp'
+LOG_PATH = '/var/log/apache2'
+LOG_NAME = 'mirrors.ocf.berkeley.edu_access.log'
+
+def process_log(dists, fn, log_date):
+    with open(fn, 'r') as f:
+        n = 0
+        for line in f:
+            n += 1
+            stats = line.split()
+
+            # apache log date format looks like [11/Jul/2017:00:05:16 -0700]
+            # line.split()[3][1:12] = 11/Jul/2017
+            # we need to dump dates that don't match because
+            # logrotate rotates the logs at 6am
+            line_date = datetime.strptime(stats[3][1:12], '%d/%b/%Y')
+            if line_date.date() != log_date:
+                continue
+
+            # extract dist name from request url
+            # '/debian/pool/main/h/hwdata/...' -> 'debian'
+            dist = stats[6]
+            dist = dist.split('/')[1] if '/' in dist else dist
+
+            # record if we returned http 2xx/3xx
+            if stats[8][0] in ('2', '3') and dist in dists:
+                dists[dist]['up'] += int(stats[-2])
+                dists[dist]['down'] += int(stats[-1])
+            else:
+                dists['other']['up'] += int(stats[-2])
+                dists['other']['down'] += int(stats[-1])
+
+    return dists
+
+
+def to_mysql(dists, dt=None, quiet=False):
+    dt = dt or date.today()
+    conn = pymysql.connect(
+        host='mysql.ocf.berkeley.edu',
+        user='ocfstats',
+        password=OCFSTATS_PWD,
+        db='ocfstats',
+        autocommit=True,
+        cursorclass=pymysql.cursors.DictCursor,
+    )
+
+    with conn as cursor:
+        for dist in dists:
+            cursor.execute(
+                'INSERT INTO `mirrors` (`date`, `dist`, `up`, `down`) VALUES (%s, %s, %s, %s)',
+                (dt, dist, dists[dist]['up'], dists[dist]['down'])
+            )
+
+            if not quiet:
+                print('{:20} {:8} {:8}'.format(dist,
+                                               _humanize(dists[dist]['up']),
+                                               _humanize(dists[dist]['down'])))
+
+def _humanize(n):
+    for unit in ['', 'KB', 'MB', 'GB', 'TB', 'PB']:
+        if n < 1024.0:
+            return '{:3.2f} {}'.format(n, unit)
+        n /= 1024.0
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Process mirrors logs to calculate network usage '
+                                                 'and store in ocfstats')
+    parser.add_argument('-q', '--quiet', action='store_true',
+                        help='do not print stats after collecting them')
+    parser.add_argument('log_files', nargs='*',
+                        help='log file(s) to process')
+    parser.add_argument('date', nargs='?', default=date.today() - timedelta(1),
+                        help='date for use in filtering log entries')
+
+    args = parser.parse_args()
+
+    if not args.log_files:
+        log = os.path.join(LOG_PATH, LOG_NAME)
+        # logrotate rotates the log at 6am, but this script
+        # runs at midnight. So to capture 24h of data, we need
+        # to parse the rotated log as well.
+        log_files = [log, log + '.1']
+    else:
+        log_files = args.log_files
+
+    sources = [mirrored for mirrored in os.listdir(MIRRORS_PATH)
+           if os.path.isdir(os.path.join(MIRRORS_PATH, mirrored)) and not mirrored.startswith('.')]
+
+    sources.append('other')  # catchall
+
+    dists = {mirrored: {'up': 0, 'down': 0} for mirrored in sources}
+
+    for fn in log_files:
+        dists = process_log(dists, fn, args.date)
+
+    to_mysql(
+        dists = dists,
+        dt = args.date,
+        quiet = args.quiet
+    )

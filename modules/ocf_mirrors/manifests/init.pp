@@ -34,6 +34,8 @@ class ocf_mirrors {
     password => '*',
   }
 
+  $ocfstats_password = hiera('ocfstats::mysql::password')
+
   file {
     ['/opt/mirrors', '/opt/mirrors/ftp', '/opt/mirrors/project', '/opt/mirrors/bin']:
       ensure  => directory,
@@ -165,5 +167,16 @@ class ocf_mirrors {
   cron { 'report-sizes':
     command => '/opt/mirrors/bin/report-sizes',
     special => 'daily',
+  }
+
+  file { '/usr/local/sbin/record-mirrors-stats':
+    source => 'puppet:///modules/ocf_mirrors/record-mirrors-stats',
+    mode   => '0640',
+  } ->
+  cron { 'mirrors-stats':
+    command => '/usr/local/sbin/record-mirrors-stats --quiet',
+    minute  => 0,
+    hour    => 0,
+    environment => ["OCFSTATS_PWD=${ocfstats_password}"];
   }
 }
