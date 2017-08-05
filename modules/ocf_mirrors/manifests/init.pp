@@ -171,7 +171,7 @@ class ocf_mirrors {
 
   file { '/usr/local/sbin/process-mirrors-logs':
     source => 'puppet:///modules/ocf_mirrors/process-mirrors-logs',
-    mode   => '0640',
+    mode   => '0755',
   } ->
   cron { 'mirrors-stats':
     command => '/usr/local/sbin/process-mirrors-logs --quiet',
