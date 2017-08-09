@@ -22,6 +22,7 @@ nomail: /var/mail/nomail/nomail
 officers: officers@g.ocf.berkeley.edu
 alums: alums@g.ocf.berkeley.edu
 decal: decal@g.ocf.berkeley.edu
+opstaff: opstaff@g.ocf.berkeley.edu
 
 gm: officers
 general-manager: gm
