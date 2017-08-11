@@ -40,6 +40,8 @@ class ocf_rancid {
 
   cron { 'rancid-run':
     command => 'rancid-run',
-    special => 'hourly';
+    user    => 'rancid',
+    special => 'hourly',
+    require => Package['rancid'],
   }
 }
