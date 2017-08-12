@@ -16,6 +16,7 @@ class ocf_rancid {
     # idempotent command to update rancid cvs groups
     'rancid-cvs-update':
       command     => '/var/lib/rancid/bin/rancid-cvs',
+      user        => 'rancid',
       refreshonly => true,
       require     => Package['rancid'],
       subscribe   => [
@@ -27,13 +28,17 @@ class ocf_rancid {
   file {
     '/var/lib/rancid/ocf/router.db':
       content => "blackhole:cisco:up\n",
+      owner   => 'rancid',
+      group   => 'rancid',
       require => [
         Package['rancid'],
         Exec['rancid-cvs-update'],
       ];
 
-    '/root/.cloginrc':
+    '/var/lib/rancid/.cloginrc':
       source  => 'puppet:///private/cloginrc',
+      owner   => 'rancid',
+      group   => 'rancid',
       mode    => '0600',
       require => Package['rancid'];
   }
