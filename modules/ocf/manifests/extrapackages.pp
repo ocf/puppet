@@ -84,6 +84,7 @@ class ocf::extrapackages {
     'lynx',
     'maven',
     'mercurial',
+    'mosh',
     'mutt',
     'nasm',
     'nodejs',
