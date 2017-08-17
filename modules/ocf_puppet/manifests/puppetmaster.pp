@@ -3,9 +3,9 @@ class ocf_puppet::puppetmaster {
     ['puppetserver', 'puppet-lint', 'augeas-tools']:;
   }
 
-  service { 'puppetserver':
-    enable  => true,
-    require => Package['puppetserver'],
+  # This defines Service['puppetserver'], so we can't do it ourselves.
+  class { 'puppetdb::master::config':
+    puppetdb_server => 'thunder.ocf.berkeley.edu',
   }
 
   # Set correct memory limits on puppetserver so that it doesn't run out

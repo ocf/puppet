@@ -26,4 +26,8 @@ node_terminus = exec
 external_nodes = /opt/share/puppet/ldap-enc
 
 # log and mail reports from failed clients
-reports = log, tagmail
+reports = log, tagmail, puppetdb
+
+# Send information to puppetdb
+storeconfigs = true
+storeconfigs_backend = puppetdb
