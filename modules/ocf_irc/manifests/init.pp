@@ -2,7 +2,6 @@ class ocf_irc {
   include ocf_ssl::default_bundle
   include ocf_irc::ircd
   include ocf_irc::services
-  include ocf_irc::nodejs::slack
   include ocf_irc::nodejs::webirc
 
   class { 'ocf_irc::nodejs::apt':
