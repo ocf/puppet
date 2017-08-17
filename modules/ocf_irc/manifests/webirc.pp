@@ -1,4 +1,4 @@
-class ocf_irc::nodejs::webirc {
+class ocf_irc::webirc {
   $webirc_fqdn = $::hostname ? {
     /^dev-/ => 'dev-irc.ocf.berkeley.edu',
     default => 'irc.ocf.berkeley.edu',
