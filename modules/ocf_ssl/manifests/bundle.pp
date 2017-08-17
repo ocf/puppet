@@ -25,23 +25,47 @@ define ocf_ssl::bundle(
   # ssl bundle (cert + intermediates)
   $bundle = "/etc/ssl/private/${title}.bundle"
 
-  concat { $bundle:
-    owner => root,
-    group => ssl-cert,
-    mode  => '0644',
+  # pem certificate (private key + cert + intermediates)
+  $pem = "/etc/ssl/private/${title}.pem"
 
-    ensure_newline => true,
+  concat {
+    default:
+      owner => root,
+      group => ssl-cert,
+
+      ensure_newline => true;
+    $bundle:
+      mode  => '0644';
+    $pem:
+      mode  => '0640';
   }
 
   concat::fragment {
-    "${title}-cert":
+    # bundle
+    "${title}-bundle-cert":
       target => $bundle,
       source => $cert_source,
       order  => '0';
 
-    "${title}-intermediate":
+    "${title}-bundle-intermediate":
       target => $bundle,
       source => $intermediate_source,
       order  => '1';
+
+    # pem
+    "${title}-pem-key":
+      target => $pem,
+      source => $key_source,
+      order  => '0';
+
+    "${title}-pem-cert":
+      target => $pem,
+      source => $cert_source,
+      order  => '1';
+
+    "${title}-pem-intermediate":
+      target => $pem,
+      source => $intermediate_source,
+      order  => '2';
   }
 }
