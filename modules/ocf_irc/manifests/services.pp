@@ -1,9 +1,9 @@
 class ocf_irc::services {
   package { 'anope':; }
 
-  service { 'anope':
-    enable  => true,
-    require => [Package['anope'], Service['inspircd']],
+  ocf::systemd::service { 'anope':
+    source  => 'puppet:///modules/ocf_irc/anope.service',
+    require => Package['anope'],
   }
 
   $passwords = parsejson(file("/opt/puppet/shares/private/${::hostname}/services-passwords"))

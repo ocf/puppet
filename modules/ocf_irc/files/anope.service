@@ -1,0 +1,17 @@
+[Unit]
+Description=A set of IRC Services
+After=network-online.target inspircd.service
+
+[Service]
+User=irc
+Group=irc
+Restart=always
+# Run ExecStartPre with root permissions to be able to create pid directory
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /var/run/anope/
+ExecStartPre=/bin/chown -R irc:irc /var/run/anope/
+# Run anope with regular permissions (irc:irc)
+ExecStart=/usr/sbin/anope --debug --nofork --confdir=/etc/anope --dbdir=/var/lib/anope/db --logdir=/var/log/anope --modulesdir=/usr/lib/anope --localedir=/usr/share/anope/locale
+
+[Install]
+WantedBy=multi-user.target
