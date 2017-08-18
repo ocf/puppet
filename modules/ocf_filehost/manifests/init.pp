@@ -1,4 +1,6 @@
 class ocf_filehost {
+  package { 'quotatool':; }
+
   package {
     'nfs-kernel-server':
   } ->
