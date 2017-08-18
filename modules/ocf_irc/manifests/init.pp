@@ -3,6 +3,7 @@ class ocf_irc {
   include ocf_irc::ircd
   include ocf_irc::services
   include ocf_irc::nodejs::webirc
+  include ocf_irc::znc
 
   class { 'ocf_irc::nodejs::apt':
     stage => first,

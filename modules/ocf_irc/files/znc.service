@@ -1,0 +1,9 @@
+[Service]
+ExecStart=/usr/bin/znc --foreground --datadir /var/lib/znc
+User=ocfznc
+Group=ocfznc
+Restart=always
+SyslogIdentifier=znc
+
+[Install]
+WantedBy=multi-user.target
