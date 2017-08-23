@@ -15,11 +15,6 @@ class ocf::packages::docker($admin_group = undef,
     stage => first,
   }
 
-  package {
-    'docker.io':
-      ensure  => purged;
-  }
-
   if $::lsbdistcodename != 'jessie' {
     package {
       ['aufs-dkms', 'aufs-tools']:
@@ -29,9 +24,8 @@ class ocf::packages::docker($admin_group = undef,
 
   # Don't install AUFS stuff
   ocf::repackage {
-    'docker-engine':
+    'docker-ce':
       recommends => false,
-      require    => Package['docker.io'];
   }
 
   exec { 'docker-socket-update':
@@ -44,7 +38,7 @@ class ocf::packages::docker($admin_group = undef,
     ocf::systemd::override { 'set-docker-socket-group':
       unit    => 'docker.socket',
       content => "[Socket]\nSocketGroup=${admin_group}\n",
-      require => Package['docker-engine'],
+      require => Package['docker-ce'],
       notify  => Exec['docker-socket-update'];
     }
   }
