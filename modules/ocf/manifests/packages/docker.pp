@@ -10,7 +10,9 @@
 #
 class ocf::packages::docker($admin_group = undef,
                             $autoclean = true,
-                            $image_max_age = '24h') {
+                            $image_max_age = '24h',
+                            $container_max_age = '24h',
+                            $prune_volumes = true) {
   class { 'ocf::packages::docker::apt':
     stage => first,
   }
@@ -46,27 +48,28 @@ class ocf::packages::docker($admin_group = undef,
   if $autoclean {
     cron {
       'clean-old-docker-containers':
-        # days is intentionally plural
-        command => "docker ps -a --filter status=exited | grep -E 'Exited \\([0-9]+\\) [0-9]+ (days|weeks?|months?|years?) ago' | awk '{print \$1}' | chronic xargs -r docker rm",
+        command => "chronic docker container prune --filter until=${container_max_age} -f",
         hour    => 1,
         minute  => 3;
 
-      'clean-old-created-docker-containers':
-        # days is intentionally plural
-        command => "docker ps -a --filter status=created | grep -E '(days|weeks?|months?|years?) ago' | awk '{print \$1}' | chronic xargs -r docker rm",
-        hour    => 1,
-        minute  => 5;
-
       'clean-docker-images':
-        # Clean images 4 weeks or older
         command => "chronic docker image prune -a --filter until=${image_max_age} -f",
         hour    => 1,
         minute  => 17;
 
-      'clean-docker-volumes':
-        command => 'chronic docker volume prune -f',
+      'clean-docker-networks':
+        command => 'chronic docker network prune -f',
         hour    => 1,
         minute  => 25;
+    }
+
+    if $prune_volumes {
+      cron {
+        'clean-docker-volumes':
+          command => 'chronic docker volume prune -f',
+          hour    => 1,
+          minute  => 30;
+      }
     }
   }
 }
