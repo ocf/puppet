@@ -18,7 +18,8 @@ pointer = None
 keyboard = None
 time_left = WAIT_TIME
 notification = None
-is_staffer = is_staff(current_user())
+user = current_user()
+is_staffer = is_staff(user) or is_staff(user, group='opstaff')
 
 
 def set_event_handler():
