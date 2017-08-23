@@ -35,6 +35,9 @@ class ocf::packages {
       'needrestart',
       'popularity-contest',
 
+      # Pops up with an annoying search thing on desktop login
+      'gnome-do',
+
       # nonfree shareware with "40-day trial"
       'rar',
       'unrar',
