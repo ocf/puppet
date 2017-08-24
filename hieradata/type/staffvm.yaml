@@ -6,6 +6,8 @@ ocf::auth::usudo: ["%{hiera('owner')}"]
 ocf::auth::nopasswd: true
 # keep docker images around for 1 month
 ocf::packages::docker::image_max_age: '672h'
+# don't want to accidentally delete someone's data
+ocf::packages::docker::prune_volumes: false
 
 
 # let any staff use docker on staff VMs without sudo
