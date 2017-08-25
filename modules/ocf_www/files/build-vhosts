@@ -205,6 +205,8 @@ def test_and_overwrite_config(config_path, new_config, target):
 
     Returns whether the old config was overwritten.
     """
+    config_path_exists = os.path.isfile(config_path)
+
     (_, new_path), (__, old_path) = (
         tempfile.mkstemp(
             # Prefix with '.' so temp files don't get included
@@ -213,23 +215,25 @@ def test_and_overwrite_config(config_path, new_config, target):
         )
         for i in range(2)
     )
+
     try:
         os.chmod(new_path, 0o644)
         with open(new_path, 'w') as f:
             f.write(new_config)
         report('Wrote to ' + new_path)
 
-        report('Diff between current and new file:')
-        ret = subprocess.call(('diff', '-u', config_path, new_path))
-        report('[end diff]')
+        if config_path_exists:
+            report('Diff between current and new file:')
+            ret = subprocess.call(('diff', '-u', config_path, new_path))
+            report('[end diff]')
 
-        if ret == 0:
-            report('Nothing changed, not doing anything.')
-            return False
+            if ret == 0:
+                report('Nothing changed, not doing anything.')
+                return False
 
-        # Save existing config
-        shutil.copyfile(config_path, old_path)
-        report('Copied existing config to ' + old_path)
+            # Save existing config
+            shutil.copyfile(config_path, old_path)
+            report('Copied existing config to ' + old_path)
 
         # Overwrite with new config and test
         os.rename(new_path, config_path)
@@ -241,8 +245,10 @@ def test_and_overwrite_config(config_path, new_config, target):
             ret = subprocess.call(('nginx', '-t'))
 
         if ret != 0:
-            report('Test failed! Replacing with old config.')
-            os.rename(old_path, config_path)
+            report('Test failed!')
+            if config_path_exists:
+                report('Replacing with old config.')
+                os.rename(old_path, config_path)
 
         return ret == 0
     finally:
