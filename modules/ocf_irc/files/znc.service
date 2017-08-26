@@ -1,5 +1,11 @@
+[Description]
+Description=ZNC - IRC Bouncer
+After=network-online.target
+
 [Service]
 ExecStart=/usr/bin/znc --foreground --datadir /var/lib/znc
+ExecReload=/bin/kill -HUP $MAINPID
+SuccessExitStatus=15
 User=ocfznc
 Group=ocfznc
 Restart=always
