@@ -14,7 +14,7 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     ensure  => running,
     source  => 'puppet:///modules/ocf_mesos/master/load_balancer/ocf-lb.service',
     enable  => true,
-    require => Package['docker-engine'],
+    require => Package['docker-ce'],
   }
 
   # keepalived config
