@@ -20,7 +20,7 @@ def main():
     staff = {
         pwd.getpwnam(session.user).pw_gecos
         for session in staff_in_lab()
-        if session.user != 'pubstaff' and not is_staff(session.user, 'opstaff')
+        if not is_staff(session.user, 'opstaff')
     }
 
     # List staff in lab
