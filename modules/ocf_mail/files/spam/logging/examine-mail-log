@@ -101,6 +101,20 @@ def examine_mail(mail):
             """
 
 
+def sending_too_much_mail(entry):
+    """Returns whether the given user has sent out too many emails.
+
+    Args:
+        entry: a (uid, count) tuple
+    """
+    uid, count = entry
+    try:
+        user = get_user_from_uid(uid)
+        return int(uid) >= 1000 and count > MAIL_PER_DAY and user not in SYSTEM_USERS
+    except TypeError:
+        return False  # no uid, so can't flag them
+
+
 if __name__ == '__main__':
     problems = defaultdict(lambda: defaultdict(list))
     mail_count = defaultdict(int)
@@ -132,14 +146,6 @@ if __name__ == '__main__':
                     print()
 
             print()
-
-    def sending_too_much_mail(entry):
-        uid, count = entry
-        try:
-            user = get_user_from_uid(uid)
-            return int(uid) >= 1000 and count > MAIL_PER_DAY and user not in SYSTEM_USERS
-        except TypeError:
-            return False  # no uid, so can't flag them
 
     too_much_mail = list(filter(sending_too_much_mail, mail_count.items()))
 
