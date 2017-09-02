@@ -53,6 +53,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/github(/.*)?$ https://github.com/ocf$1 [R]'},
       {rewrite_rule => '^/gmail$ https://mail.google.com/a/ocf.berkeley.edu [R]'},
       {rewrite_rule => '^/gdrive$ https://drive.google.com/a/ocf.berkeley.edu [R]'},
+      {rewrite_rule => '^/guest$ https://goo.gl/forms/ImNfnZkrRrakZcIr1 [R]'},
       {rewrite_rule => '^/help(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
       {rewrite_rule => '^/hiring$ https://www.ocf.berkeley.edu/announcements/2017-03-20/hiring [R]'},
       {rewrite_rule => '^/hosting$ https://www.ocf.berkeley.edu/docs/services/web/ [R]'},
