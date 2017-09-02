@@ -44,6 +44,19 @@ class ocf_desktop::packages {
     ['xserver-xorg', 'xclip', 'xscreensaver']:;
   }
 
+  # TODO: temporary code for removing unstable packages, remove
+  ['fontconfig-config', 'libfontconfig1', 'libfontconfig1-dev', 'libnss3'].each |$pkg| {
+    exec {
+      "/usr/bin/apt-get -y --allow-downgrades -o Dpkg::Options::=--force-confold install ${pkg}/stretch":
+        unless  => "/usr/bin/apt-cache policy ${pkg} | grep -A1 \\* | grep -w stretch",
+    }
+  }
+  package {
+    ['firefox', 'gcc-5-base', 'libevent-2.1-6', 'libhunspell-1.6-0', 'libmysqlclient20',
+      'libreadline6', 'libvirglrenderer0']:
+      ensure => purged,
+  }
+
   # Packages that only work on jessie
   if $::lsbdistcodename == 'jessie' {
     package {
