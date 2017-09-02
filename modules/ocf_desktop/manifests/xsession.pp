@@ -175,12 +175,12 @@ class ocf_desktop::xsession {
     '/etc/fonts/conf.d/10-sub-pixel-rgb.conf':
       ensure => symlink,
       links  => manage,
-      target => '../conf.avail/10-sub-pixel-rgb.conf';
+      target => '/usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf';
     # enable LCD filter
     '/etc/fonts/conf.d/11-lcdfilter-default.conf':
       ensure => symlink,
       links  => manage,
-      target => '../conf.avail/11-lcdfilter-default.conf';
+      target => '/usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf';
     # enable hinting and anti-aliasing
     '/etc/fonts/local.conf':
       source => 'puppet:///modules/ocf_desktop/xsession/fonts.conf';
