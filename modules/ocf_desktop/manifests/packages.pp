@@ -56,6 +56,10 @@ class ocf_desktop::packages {
         unless  => "/usr/bin/apt-cache policy ${pkg} | grep -A1 \\* | grep -w stretch",
     }
   }
+  file {
+    '/etc/fonts/conf.d/10-hinting-slight.conf':
+      ensure => absent,
+  }
 
   # Packages that only work on jessie
   if $::lsbdistcodename == 'jessie' {
