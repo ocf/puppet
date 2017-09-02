@@ -78,7 +78,7 @@ class ocf_desktop::packages {
       recommends => false;
     'gedit':
       recommends => false;
-    ['libreoffice-calc', 'libreoffice-draw', 'libreoffice-gnome', 'libreoffice-impress', 'libreoffice-writer', 'ure']:
+    ['libreoffice-calc', 'libreoffice-draw', 'libreoffice-gnome', 'libreoffice-impress', 'libreoffice-pdfimport', 'libreoffice-writer', 'ure']:
       recommends => false;
     'thunar':
       recommends => false;
