@@ -13,7 +13,7 @@ class ocf_desktop::packages {
     # applications
     ['arandr', 'atom', 'claws-mail', 'eog', 'evince-gtk', 'filezilla', 'florence',
       'freeplane', 'galculator', 'geany', 'gimp', 'gparted', 'hexchat', 'inkscape',
-      'lyx', 'mssh', 'mumble', 'numlockx', 'remmina', 'simple-scan', 'texmaker',
+      'lyx', 'mssh', 'mumble', 'numlockx', 'simple-scan', 'texmaker',
       'texstudio', 'vlc', 'xarchiver', 'xterm', 'zenmap']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils', 'redshift',
@@ -59,6 +59,8 @@ class ocf_desktop::packages {
   # from our apt repo (ported from jessie) and are dependencies of rstudio until
   # rstudio updates to libgstreamer1.0-0 and libgstreamer-plugins-base1.0-0.
   package { 'rstudio':; }
+
+  # TODO: install remmina from backports when that becomes available
 
   # remove some packages
   package {
