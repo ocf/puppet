@@ -61,6 +61,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/https$ http://status.ocf.berkeley.edu/2014/10/moving-wwwocfberkeleyedu-to-https-only.html [R]'},
       {rewrite_rule => '^/job$ https://docs.google.com/document/d/1oS3ma415LbtuyeEuuoucWKYLcWOJaWmzhv2nIs5f718/edit [R]'},
       {rewrite_rule => '^/join$ https://www.ocf.berkeley.edu/account/register/ [R]'},
+      {rewrite_rule => '^/joinfamily$ https://goo.gl/forms/POOjVhW7pUw21myP2 [R]'},
       {rewrite_rule => '^/register$ https://www.ocf.berkeley.edu/account/register/ [R]'},
       {rewrite_rule => '^/lab$ https://www.ocf.berkeley.edu/docs/services/lab/ [R]'},
       {rewrite_rule => '^/mail$ https://www.ocf.berkeley.edu/docs/services/vhost/mail/ [R]'},
