@@ -44,19 +44,6 @@ class ocf::puppet($stage = 'first') {
       changes => [
         "set agent/environment ${::environment}",
         'set agent/usecacheonfailure false',
-
-        # Remove a bunch of old settings that are no longer needed
-        # TODO: Remove this once all hosts have run puppet once to delete the
-        # unnecessary settings
-        'rm main/templatedir',
-        'rm main/factpath',
-        'rm main/pluginsync',
-        'rm main/stringify_facts',
-        'rm main/prerun_command',
-        'rm main/postrun_command',
-        'rm agent/certname',
-        'rm master/ssl_client_header',
-        'rm master/ssl_client_verify_header',
       ],
       require => Package[$puppet_pkg, 'augeas-tools'],
     }

@@ -64,10 +64,6 @@ class ocf::packages::docker($admin_group = undef,
         command => "chronic docker image prune -a --filter until=${image_max_age} -f",
         hour    => 1,
         minute  => 17;
-
-      # TODO: temporary, remove
-      'clean-docker-networks':
-        ensure => absent;
     }
 
     # We don't currently use Docker volumes in OCF workflows. However,
