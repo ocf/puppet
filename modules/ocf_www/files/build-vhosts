@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 from collections import namedtuple
+from itertools import chain
 from pathlib import Path
 
 import jinja2
@@ -284,15 +285,17 @@ def process_app_vhosts():
         os.chmod(socket_dir, 0o755)
 
         # Regenerate SSL bundle if older than cert
-        ssl = SSL(domain)
-        if 'nossl' not in vhost['flags'] and ssl.is_valid and (
-            not os.path.exists(ssl.bundle) or
-            os.path.getmtime(ssl.bundle) < os.path.getmtime(ssl.cert)
-        ):
-            report('Generating SSL bundle for ' + domain)
-            with open(ssl.bundle, 'w') as f, open(ssl.cert) as f1, open(ssl.chain) as f2:
-                shutil.copyfileobj(f1, f)
-                shutil.copyfileobj(f2, f)
+        for ssl in chain((SSL(domain),), map(SSL, vhost['aliases'])):
+            if 'nossl' not in vhost['flags'] and ssl.is_valid and (
+                not os.path.exists(ssl.bundle) or
+                os.path.getmtime(ssl.bundle) < os.path.getmtime(ssl.cert)
+            ):
+                report('Generating SSL bundle for ' + ssl.fqdn)
+                with open(ssl.bundle, 'w') as f, \
+                        open(ssl.cert) as f1, \
+                        open(ssl.chain) as f2:
+                    shutil.copyfileobj(f1, f)
+                    shutil.copyfileobj(f2, f)
 
 
 def main():
