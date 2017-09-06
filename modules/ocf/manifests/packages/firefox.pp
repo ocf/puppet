@@ -1,27 +1,13 @@
 class ocf::packages::firefox {
   $browser_homepage = lookup('browser_homepage')
 
-  class { 'ocf::packages::firefox::apt':
-    stage => first,
-  }
-
-  # TODO: switch to mozilla.debian.net once they support stretch.
-  ocf::repackage { 'firefox':
-    backport_on => ['stretch', 'sid'],
-    dist        => 'unstable',
-  }
-
-  # TODO: remove after upgrade to stretch.
-  package {
-    'iceweasel':
-      ensure => absent;
-  }
+  package { 'firefox-esr':; }
 
   file {
     # disable caching, history, blacklisting, and set homepage
     '/etc/firefox/prefs.js':
       content => template('ocf/firefox/prefs.js.erb'),
-      require => Package['firefox'];
+      require => Package['firefox-esr'];
     # TODO: start maximized by default
   }
 }

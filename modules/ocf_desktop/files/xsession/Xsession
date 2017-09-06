@@ -42,7 +42,7 @@ echo "[Desktop Entry]
 Name=Firefox
 Exec=firefox
 Type=Application
-Icon=firefox" > $HOME/Desktop/firefox.desktop
+Icon=firefox-esr" > $HOME/Desktop/firefox.desktop
 
 # Chrome
 echo "[Desktop Entry]
