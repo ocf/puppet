@@ -16,6 +16,7 @@ umask 022
 
 # No duplicate lines in shell history
 HISTCONTROL=ignoreboth
+HISTTIMEFORMAT="%F %T "
 
 # Aliases
 alias ls='ls -Fh'
