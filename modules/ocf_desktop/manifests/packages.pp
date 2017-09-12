@@ -11,19 +11,20 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['arandr', 'atom', 'claws-mail', 'eog', 'evince-gtk', 'filezilla', 'florence',
-      'freeplane', 'galculator', 'geany', 'gimp', 'gparted', 'hexchat', 'inkscape',
-      'lyx', 'mssh', 'mumble', 'numlockx', 'simple-scan', 'texmaker',
-      'texstudio', 'vlc', 'xarchiver', 'xterm', 'zenmap']:;
+    ['arandr', 'atom', 'claws-mail', 'eog', 'evince-gtk', 'filezilla',
+      'florence', 'freeplane', 'galculator', 'geany', 'gimp', 'gparted',
+      'hexchat', 'imagej', 'inkscape', 'lyx', 'mssh', 'mumble', 'numlockx',
+      'simple-scan', 'ssh-askpass-gnome', 'texmaker', 'texstudio', 'vlc',
+      'xarchiver', 'xterm', 'zenmap']:;
     # desktop
-    ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils', 'redshift',
-      'xfce4-whiskermenu-plugin']:;
+    ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils',
+      'redshift', 'xfce4-whiskermenu-plugin']:;
     # display manager
     ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
     # fonts
-    ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea', 'fonts-crosextra-carlito',
-      'fonts-inconsolata', 'fonts-linuxlibertine', 'fonts-noto-unhinted', 'fonts-unfonts-core',
-      'ttf-ancient-fonts']:;
+    ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea',
+      'fonts-crosextra-carlito', 'fonts-inconsolata', 'fonts-linuxlibertine',
+      'fonts-noto-unhinted', 'fonts-unfonts-core', 'ttf-ancient-fonts']:;
     # FUSE
     ['fuse', 'exfat-fuse']:;
     # games
@@ -38,8 +39,6 @@ class ocf_desktop::packages {
     ['libnotify-bin', 'notification-daemon']:;
     # performance improvements
     ['preload']:;
-    # user requested
-    ['imagej']:;
     # Xorg
     ['xserver-xorg', 'xclip', 'xscreensaver']:;
   }
