@@ -70,6 +70,7 @@ class ocf::packages {
     [
     'aactivator',
     'apt-dater-host',
+    'apt-show-versions',
     'beep',
     'bsdmainutils',
     'cpufrequtils',
