@@ -49,20 +49,6 @@ options {
   listen-on-v6 { any; };
 };
 
-logging {
-  channel dnssec_log {
-    file "/var/log/dnssec" size 20m;
-    print-time yes;
-    print-category yes;
-    print-severity yes;
-    severity debug 3;
-  };
-
-  category dnssec {
-    dnssec_log;
-  };
-};
-
 // Query URIBL directly because campus nameservers are often blocked
 zone "multi.uribl.com" {
   type forward;
