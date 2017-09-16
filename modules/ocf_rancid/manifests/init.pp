@@ -13,27 +13,18 @@ class ocf_rancid {
       unless  => 'grep -q ^FILTER_PWDS /etc/rancid/rancid.conf',
       require => Package['rancid'];
 
-    # idempotent command to update rancid cvs groups
-    'rancid-cvs-update':
-      command     => '/var/lib/rancid/bin/rancid-cvs',
-      user        => 'rancid',
-      refreshonly => true,
-      require     => Package['rancid'],
-      subscribe   => [
-        Package['rancid'],
-        Exec['rancid-add-ocf-group'],
-      ];
+    'rancid-set-vcs-git':
+      command => 'sed -i s/RCSSYS=cvs/RCSSYS=git/ /etc/rancid/rancid.conf',
+      unless  => 'grep -q ^RCSSYS=git /etc/rancid/rancid.conf',
+      require => Package['rancid'];
   }
 
   file {
     '/var/lib/rancid/ocf/router.db':
-      content => "blackhole:cisco:up\n",
+      content => "blackhole;cisco;up\n",
       owner   => 'rancid',
       group   => 'rancid',
-      require => [
-        Package['rancid'],
-        Exec['rancid-cvs-update'],
-      ];
+      require => Package['rancid'];
 
     '/var/lib/rancid/.cloginrc':
       source  => 'puppet:///private/cloginrc',
@@ -48,5 +39,36 @@ class ocf_rancid {
     user    => 'rancid',
     special => 'hourly',
     require => Package['rancid'],
+  }
+
+  # Delete all logs older than 14 days.
+  # This would be better with logrotate, but the log files contain the date in
+  # their name, which logrotate doesn't handle very well. The files aren't large
+  # at all, so they don't need to be compressed, there's just a lot of them
+  # since they are created once for every hour.
+  cron { 'clean-rancid-logs':
+    command => 'find /var/log/rancid/* -mtime +14 > /dev/null',
+    user    => 'rancid',
+    special => 'hourly',
+    require => Package['rancid'],
+  }
+
+  # Don't push to GitHub for dev-* hosts to prevent duplicate backups with
+  # different commit hashes
+  if $::hostname !~ /^dev-/ {
+    # GitHub deploy hook and key
+    file {
+      '/var/lib/rancid/.ssh':
+        ensure => directory,
+        owner  => 'rancid',
+        group  => 'rancid',
+        mode   => '0700';
+
+      '/var/lib/rancid/.ssh/id_rsa':
+        source => 'puppet:///private/id_rsa',
+        owner  => 'rancid',
+        group  => 'rancid',
+        mode   => '0600';
+    }
   }
 }
