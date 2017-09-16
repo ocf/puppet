@@ -8,10 +8,10 @@ server {
         alias /srv/well-known/;
     }
 
-    {% if vhost.is_redirect %}
-        return 301 {{vhost.redirect_dest}}$request_uri;
-    {% else %}
-        location / {
+    location / {
+        {% if vhost.is_redirect %}
+            return 301 {{vhost.redirect_dest}}$request_uri;
+        {% else %}
             {% if vhost.disabled %}
                 # Proxy to the "unavailable" site, just as regular vhosts do.
                 proxy_pass http://unavailable.ocf.berkeley.edu/;
@@ -22,8 +22,8 @@ server {
             {% endif %}
             proxy_set_header X-Forwarded-For $remote_addr;
             proxy_set_header X-Real-IP $remote_addr;
-        }
-    {% endif %}
+        {% endif %}
+    }
 
     access_log /var/log/nginx/vhost_access.log vhost;
 
