@@ -111,7 +111,6 @@ class ocf_www::site::www {
         # (rather than show the 503 unavailable error).
         'death.berkeley.edu',
         'linux.berkeley.edu',
-        'ofc.berkeley.edu',
 
         $::hostname,
         $::fqdn,
@@ -129,9 +128,6 @@ class ocf_www::site::www {
         'dev-ocf.berkeley.edu',
         'secure.ocf.berkeley.edu',
         $::fqdn,
-
-        # We have links to the HTTPS version of this still that we don't want broken.
-        'ofc.berkeley.edu',
       ],
       port                 => 443,
       docroot              => '/var/www/html',
