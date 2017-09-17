@@ -37,4 +37,11 @@ class ocf_apphost {
       ensure => directory,
       mode   => '0755';
   }
+
+  # Install redis for web apps; don't run it
+  package { 'redis-server': }
+
+  service { 'redis-server':
+    ensure => stopped,
+  }
 }
