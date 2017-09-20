@@ -21,6 +21,7 @@ class ocf_www::site::www {
   include ocf_www::mod::fastcgi
   include ocf_www::mod::ocfdir
   include ocf_www::mod::php
+  include ocf_www::mod::security
   include ocf_www::mod::suexec
 
   # TODO: dev-death should add a robots.txt disallowing everything
