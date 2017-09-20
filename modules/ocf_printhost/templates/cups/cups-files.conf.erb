@@ -2,8 +2,7 @@
 SystemGroup ocfstaff
 
 # SSL
-ServerCertificate /etc/ssl/private/<%= @fqdn -%>.crt
-ServerKey /etc/ssl/private/<%= @fqdn -%>.key
+ServerKeychain /etc/ssl/private
 
 # World-readable config and log files
 ConfigFilePerm 0644
