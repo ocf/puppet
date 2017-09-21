@@ -14,7 +14,7 @@ class ocf_printhost::cups($dev_config = false) {
       content => template('ocf_printhost/cups/cupsd.conf.erb');
 
     '/etc/cups/cups-files.conf':
-      content => template('ocf_printhost/cups/cups-files.conf.erb');
+      source => 'puppet:///modules/ocf_printhost/cups-files.conf';
 
     '/etc/cups/lpoptions':
       content => "Default double\n";
