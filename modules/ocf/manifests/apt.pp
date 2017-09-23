@@ -27,6 +27,14 @@ class ocf::apt($stage = 'first') {
         src => true
       };
 
+    'debian-updates':
+      location  => 'http://mirrors/debian/',
+      release   => "${::lsbdistcodename}-updates",
+      repos     => $repos,
+      include   => {
+        src => true
+      };
+
     'debian-security':
       location  => 'http://mirrors/debian-security/',
       release   => "${dist}/updates",
@@ -72,14 +80,6 @@ class ocf::apt($stage = 'first') {
   # repos available only for stable
   if $::lsbdistcodename in ['jessie'] {
     apt::source {
-      'debian-updates':
-        location  => 'http://mirrors/debian/',
-        release   => "${::lsbdistcodename}-updates",
-        repos     => $repos,
-        include   => {
-          src => true
-        };
-
       'puppetlabs':
         location => 'http://mirrors/puppetlabs/apt/',
         release  => $::lsbdistcodename,
