@@ -1,4 +1,5 @@
 classes:
     - ocf::packages::docker
+    - ocf_ssl::default_bundle
 
 owner: kpengboy
