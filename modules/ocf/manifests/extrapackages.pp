@@ -217,6 +217,7 @@ class ocf::extrapackages {
     package {
       [
         'ack',
+        'elpa-markdown-mode',
         'jupyter-console',
         'jupyter-core',
         'jupyter-notebook',
