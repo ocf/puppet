@@ -57,7 +57,7 @@ def parse_received_for_auth(header):
         # TODO: uids should be ints...
         return {
             'uid': str(pwd.getpwnam(user).pw_uid),
-            'sender': match.group(1).lower(),
+            'smtp_user': match.group(1).lower(),
         }
 
 
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     info = {
         'relay': parsed.get('relay'),
         'uid': parsed.get('uid'),
-        'sender': parsed.get('sender'),
+        'smtp_user': parsed.get('smtp_user'),
         'from': clean_addr(message['From']),
         'to': clean_addr(message['To']),
         'subject': message['Subject'],

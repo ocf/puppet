@@ -55,7 +55,7 @@ def examine_mail(mail):
 
     from_name, from_addr = mail['from']
     from_domain = extract_domain(from_addr)
-    sender = mail.get('sender')
+    smtp_user = mail.get('smtp_user')
     try:
         uid = int(mail.get('uid'))
     except TypeError:
@@ -75,9 +75,9 @@ def examine_mail(mail):
                                'from {}, should be {} (uid {})'.format(from_user, user, uid))
             else:
                 yield "From @ocf but user doesn't make sense", 'from ' + from_addr
-        elif sender and sender != from_addr:
-            yield ("From address doesn't match sender address",
-                   'from {}, should be {}'.format(from_addr, sender))
+        elif smtp_user and smtp_user != from_addr:
+            yield ("From address doesn't match authenticated sender address",
+                   'from {}, should be {}'.format(from_addr, smtp_user))
         else:
             """We could use this to detect if someone is sending mail from our
             servers with a bad From address, but unfortunately it's extremely
@@ -121,11 +121,11 @@ if __name__ == '__main__':
         from_name, from_addr = mail['from']
         from_domain = extract_domain(from_addr)
 
-        sender = mail.get('sender')
+        smtp_user = mail.get('smtp_user')
         uid = mail.get('uid')
 
-        if sender:
-            vhost_mail_count[sender] += 1
+        if smtp_user:
+            vhost_mail_count[smtp_user] += 1
         elif uid:
             mail_count[uid] += 1
 
