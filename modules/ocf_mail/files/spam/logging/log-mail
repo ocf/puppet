@@ -43,19 +43,22 @@ def parse_received_for_auth(header):
     them in our logs.
     """
     match = re.search(
-        r'\n\t\(Authenticated sender: [^@]+@([^\)]+)\)\n',
+        r'^\t\(Authenticated sender: ([^@]+@([^\)]+))\)$',
         header,
         re.MULTILINE,
     )
     if match:
-        domain = match.group(1).lower()
+        domain = match.group(2).lower()
         user, = [
             vhost.user
             for vhost in get_mail_vhosts()
             if vhost.domain == domain
         ]
         # TODO: uids should be ints...
-        return {'uid': str(pwd.getpwnam(user).pw_uid)}
+        return {
+            'uid': str(pwd.getpwnam(user).pw_uid),
+            'smtp_user': match.group(1).lower(),
+        }
 
 
 def clean_addr(addr):
@@ -92,6 +95,7 @@ if __name__ == '__main__':
     info = {
         'relay': parsed.get('relay'),
         'uid': parsed.get('uid'),
+        'smtp_user': parsed.get('smtp_user'),
         'from': clean_addr(message['From']),
         'to': clean_addr(message['To']),
         'subject': message['Subject'],

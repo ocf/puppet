@@ -3,9 +3,9 @@ import json
 import pwd
 import re
 import sys
+from collections import Counter
 from collections import defaultdict
 
-import dns.resolver
 from ocflib.account.utils import is_staff
 
 
@@ -50,28 +50,12 @@ def extract_user(addr):
         return match.group(1)
 
 
-def is_vhost_host(host):
-    """Returns whether host (either IP or FQDN with trailing dot) hosts
-    vhosts."""
-
-    return host.lower() in ('death.ocf.berkeley.edu.', '169.229.226.23')
-
-
-def is_vhost_domain(domain):
-    """Returns whether domain is one of our vhosts."""
-
-    try:
-        answer = dns.resolver.query(domain, 'A')
-        return any(is_vhost_host(str(record)) for record in answer)
-    except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN):
-        return False
-
-
 def examine_mail(mail):
     """Examine a JSON dict of mail, yielding problem tuples."""
 
     from_name, from_addr = mail['from']
     from_domain = extract_domain(from_addr)
+    smtp_user = mail.get('smtp_user')
     try:
         uid = int(mail.get('uid'))
     except TypeError:
@@ -87,10 +71,13 @@ def examine_mail(mail):
             if from_user:
                 if from_user != user and from_user not in USER_EXCEPTIONS:
                     if not is_staff(user) or from_user != 'help':
-                        yield "From @ocf but user doesn't match", \
-                            'from {}, should be {} (uid {})'.format(from_user, user, uid)
+                        yield ("From @ocf but user doesn't match",
+                               'from {}, should be {} (uid {})'.format(from_user, user, uid))
             else:
                 yield "From @ocf but user doesn't make sense", 'from ' + from_addr
+        elif smtp_user and smtp_user != from_addr:
+            yield ("From address doesn't match authenticated sender address",
+                   'from {}, should be {}'.format(from_addr, smtp_user))
         else:
             """We could use this to detect if someone is sending mail from our
             servers with a bad From address, but unfortunately it's extremely
@@ -115,14 +102,31 @@ def sending_too_much_mail(entry):
         return False  # no uid, so can't flag them
 
 
+def vhost_sending_too_much_mail(entry):
+    """Returns whether the given vhost address has sent out too many emails.
+
+    Args:
+        entry: a (address, count) tuple
+    """
+    addr, count = entry
+    return count > MAIL_PER_DAY
+
+
 if __name__ == '__main__':
     problems = defaultdict(lambda: defaultdict(list))
-    mail_count = defaultdict(int)
+    mail_count = Counter()
+    vhost_mail_count = Counter()
 
     for mail in map(json.loads, sys.stdin):
+        from_name, from_addr = mail['from']
+        from_domain = extract_domain(from_addr)
+
+        smtp_user = mail.get('smtp_user')
         uid = mail.get('uid')
 
-        if uid:
+        if smtp_user:
+            vhost_mail_count[smtp_user] += 1
+        elif uid:
             mail_count[uid] += 1
 
         for problem, details in examine_mail(mail):
@@ -148,6 +152,7 @@ if __name__ == '__main__':
             print()
 
     too_much_mail = list(filter(sending_too_much_mail, mail_count.items()))
+    vhost_too_much_mail = list(filter(vhost_sending_too_much_mail, vhost_mail_count.items()))
 
     if too_much_mail:
         print('Users sending too much mail:')
@@ -155,3 +160,9 @@ if __name__ == '__main__':
         for uid, count in sorted(too_much_mail, key=lambda x: x[1], reverse=True):
             user = get_user_from_uid(uid)
             print('- {} (uid {}): {}'.format(user, uid, count))
+
+    if vhost_too_much_mail:
+        print('Vhost addresses sending too much mail:')
+
+        for addr, count in sorted(vhost_too_much_mail, key=lambda x: x[1], reverse=True):
+            print('- {}: {}'.format(addr, count))
