@@ -62,16 +62,6 @@
 <%- } -%>
 *CloseUI: *Duplex
 
-*% Print quality
-
-*OpenUI *HPEconoMode/EconoMode: Boolean
-*OrderDependency: 18 AnySetup *HPEconoMode
-*DefaultHPEconoMode: True
-*HPEconoMode True/On: "<</EconoMode true>> setpagedevice"
-*HPEconoMode False/Off: "<</EconoMode false>> setpagedevice"
-*CloseUI: *HPEconoMode
-
-
 *%%% The rest is straight from the stock driver
 
 *ColorDevice: False
