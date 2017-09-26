@@ -43,16 +43,16 @@ class ocf::nfs($cron = false, $web = false) {
 
   if $web {
     exec {
-    'mkdir /opt/httpd':
-      creates => '/opt/httpd';
+      'mkdir /opt/httpd':
+        creates => '/opt/httpd';
     }
 
     mount {
-    '/opt/httpd':
-      device  => 'www:/',
-      fstype  => 'nfs4',
-      options => 'ro,bg,noatime,nodev,noexec,nosuid',
-      require => Exec['mkdir /opt/httpd'];
+      '/opt/httpd':
+        device  => 'www:/',
+        fstype  => 'nfs4',
+        options => 'ro,bg,noatime,nodev,noexec,nosuid',
+        require => Exec['mkdir /opt/httpd'];
     }
   }
 }
