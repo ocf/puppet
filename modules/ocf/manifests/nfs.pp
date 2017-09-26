@@ -32,6 +32,13 @@ class ocf::nfs($cron = false, $web = false) {
         target => "/services/crontabs/${::hostname}",
         force  => true;
     }
+
+    # Wait for /services to be mounted before we try to load crontabs
+    ocf::systemd::override {
+      'wait-for-nfs':
+        unit    => 'cron.service',
+        content => "[Unit]\nRequires=services.mount\nAfter=services.mount\n";
+    }
   }
 
   if $web {
