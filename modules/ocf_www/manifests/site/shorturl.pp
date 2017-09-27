@@ -66,6 +66,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/lab$ https://www.ocf.berkeley.edu/docs/services/lab/ [R]'},
       {rewrite_rule => '^/mail$ https://www.ocf.berkeley.edu/docs/services/vhost/mail/ [R]'},
       {rewrite_rule => '^/mailrequest$ https://www.ocf.berkeley.edu/account/vhost/mail/ [R]'},
+      {rewrite_rule => '^/minutes$ https://www.ocf.berkeley.edu/~staff/bod/ [R]'},
       {rewrite_rule => '^/mlk$ https://www.ocf.berkeley.edu/mlk [R]'},
       {rewrite_rule => '^/mon$ https://munin.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/mysql$ https://www.ocf.berkeley.edu/docs/services/mysql/ [R]'},
