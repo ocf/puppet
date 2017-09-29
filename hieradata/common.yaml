@@ -2,6 +2,7 @@ classes:
     - ocf::apt
     - ocf::auth
     - ocf::autologout
+    - ocf::firewall
     - ocf::groups
     - ocf::kerberos
     - ocf::ldap
