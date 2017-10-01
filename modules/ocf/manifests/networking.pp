@@ -10,10 +10,14 @@ class ocf::networking(
     $gateway6   = '2607:f140:8801::1',
 
     $domain      = 'ocf.berkeley.edu',
-    $nameservers = ['2607:f140:8801::1:22', '169.229.226.22', '169.229.2.171'],
+    $nameservers = ['2607:f140:8801::1:22', '169.229.226.22', '8.8.8.8'],
 ) {
   $fqdn = $::clientcert
   $hostname = regsubst($::clientcert, '^([\w-]+)\..*$', '\1')
+
+  if size($nameservers) > 3 {
+    fail("Can't have more than 3 nameservers")
+  }
 
   # packages
   if $bridge {
