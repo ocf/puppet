@@ -15,6 +15,10 @@ class ocf::networking(
   $fqdn = $::clientcert
   $hostname = regsubst($::clientcert, '^([\w-]+)\..*$', '\1')
 
+  if size($nameservers) > 3 {
+    fail("Can't have more than 3 nameservers")
+  }
+
   # packages
   if $bridge {
     include ocf::firewall
