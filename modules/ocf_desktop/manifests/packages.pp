@@ -23,8 +23,9 @@ class ocf_desktop::packages {
     ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
     # fonts
     ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea',
-      'fonts-crosextra-carlito', 'fonts-inconsolata', 'fonts-linuxlibertine',
-      'fonts-noto-unhinted', 'fonts-unfonts-core', 'ttf-ancient-fonts']:;
+      'fonts-crosextra-carlito', 'fonts-hack-otf', 'fonts-inconsolata',
+      'fonts-linuxlibertine', 'fonts-noto-unhinted', 'fonts-unfonts-core',
+      'ttf-ancient-fonts', ]:;
     # FUSE
     ['fuse', 'exfat-fuse']:;
     # games
