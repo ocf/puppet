@@ -63,4 +63,11 @@ class ocf_tv {
       User['ocftv'],
     ],
   }
+
+  $pulse_sink = lookup('pulse_sink')
+
+  exec { "pactl set-default-sink ${pulse_sink}":
+    environment => ['PULSE_SERVER=localhost'],
+  }
+
 }

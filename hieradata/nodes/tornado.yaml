@@ -1,2 +1,5 @@
 classes:
     - ocf_tv
+
+# get this value by running `PULSE_SERVER=localhost pactl list sinks`
+pulse_sink: alsa_output.pci-0000_00_03.0.hdmi-stereo
