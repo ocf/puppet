@@ -52,6 +52,8 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/gh/w(/.*)?$ https://github.com/ocf/ocfweb$1 [R]'},
       {rewrite_rule => '^/gh(/.*)?$ https://ocf.io/github$1 [R]'},
       {rewrite_rule => '^/github(/.*)?$ https://github.com/ocf$1 [R]'},
+      {rewrite_rule => '^/gadmin$ https://admin.google.com/a/ocf.berkeley.edu [R]'},
+      {rewrite_rule => '^/gcal$ https://calendar.google.com/a/ocf.berkeley.edu [R]'},
       {rewrite_rule => '^/gmail$ https://mail.google.com/a/ocf.berkeley.edu [R]'},
       {rewrite_rule => '^/gdrive$ https://drive.google.com/a/ocf.berkeley.edu [R]'},
       {rewrite_rule => '^/guest$ https://goo.gl/forms/ImNfnZkrRrakZcIr1 [R]'},
