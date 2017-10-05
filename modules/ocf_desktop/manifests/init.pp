@@ -3,6 +3,7 @@ class ocf_desktop {
   include ocf::packages::chrome
   include ocf::packages::cups
   include ocf::packages::firefox
+  include ocf::packages::pulse
 
   include ocf_mesos::slave
 
@@ -12,7 +13,6 @@ class ocf_desktop {
   include ocf_desktop::grub
   include ocf_desktop::modprobe
   include ocf_desktop::packages
-  include ocf_desktop::pulse
   include ocf_desktop::sshfs
   include ocf_desktop::stats
   include ocf_desktop::steam

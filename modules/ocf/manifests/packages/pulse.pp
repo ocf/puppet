@@ -1,5 +1,4 @@
-class ocf_desktop::pulse {
-
+class ocf::packages::pulse {
   ocf::repackage {
     # PulseAudio without recommends
     'pulseaudio':
@@ -10,7 +9,7 @@ class ocf_desktop::pulse {
       require    => Ocf::Repackage['pulseaudio'];
   }
 
-  # ALSA ultilities and PulseAudio plugin
+  # ALSA utilities and PulseAudio plugin
   package { [ 'alsa-utils', 'libasound2-plugins' ]: }
 
   # route ALSA sound through PulseAudio
@@ -18,5 +17,4 @@ class ocf_desktop::pulse {
     source  => 'puppet:///modules/ocf_desktop/asound.conf',
     require => Package['libasound2-plugins'],
   }
-
 }

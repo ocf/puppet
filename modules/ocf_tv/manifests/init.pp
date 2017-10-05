@@ -1,4 +1,6 @@
 class ocf_tv {
+  include ocf_tv::pulse
+
   include ocf::packages::chrome
   include ocf::packages::firefox
   include ocf_desktop::drivers
@@ -11,8 +13,6 @@ class ocf_tv {
       'feh',
       'i3',
       'nodm',
-      'pavucontrol',
-      'pulseaudio',
       'vlc',
       'x11vnc',
       'xinit',
