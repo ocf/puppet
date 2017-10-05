@@ -1,23 +1,22 @@
 #!/bin/bash -e
-[ "$#" -ne 1 ] && { echo 'Bad arguments, trying evince...'; exec evince "$@"; }
-[ -f "$1" ] || { echo 'File does not exist, trying evince...'; exec evince "$@"; }
+[ "$#" -ne 1 ] && { echo 'Bad arguments, trying evince...'; exec evince "$1"; }
+[ -f "$1" ] || { echo 'File does not exist, trying evince...'; exec evince "$1"; }
 
-size=$(du "$1") || { echo 'Cannot get size, trying evince...'; exec evince "$@"; }
+size=$(du "$1") || { echo 'Cannot get size, trying evince...'; exec evince "$1"; }
 size=$(cut -f1 <<< "$size")
-[ "$size" -lt 5120 ] || { echo 'Too large, trying evince...'; exec evince "$@"; }
+[ "$size" -lt 5120 ] || { echo 'Too large, trying evince...'; exec evince "$1"; }
 
 echo 'Rasterizing PDF...'
-tmp=$(mktemp --suffix='.pdf')
+filename=$(basename $1)
+tmp="/tmp/ocf_$filename"
 
-if ! convert -density 250 "$1" "$tmp"; then
+if ! convert -density 250 "$1" "$tmp" | zenity --progress --pulsate --auto-close; then
     rm "$tmp"
     echo 'Convert failed, trying evince...'
-    exec evince "$@"
+    exec evince "$1"
 fi
 
-echo 'Done rasterizing, now overwriting unrasterized version...'
-exiftool -tagsfromfile "$@" -title "$tmp"
-mv "$tmp" "$@"
-
-echo 'Opening with evince...'
-exec evince "$@"
+echo 'Done rasterizing, now opening with evince...'
+exiftool -tagsfromfile "$1" -title "$tmp"
+echo "(output file: $tmp)"
+exec evince "$tmp"

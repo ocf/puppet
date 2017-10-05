@@ -2,7 +2,7 @@
 Name=Document Viewer
 Comment=Evince wrapper so that pdfs are properly rendered for printing
 Keywords=pdf;ps;postscript;dvi;xps;djvu;tiff;document;presentation;
-Exec=/opt/share/puppet/pdf-open %U
+Exec=/usr/local/bin/pdf-open %u
 Terminal=false
 Type=Application
 Icon=evince
