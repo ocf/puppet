@@ -1,22 +1,35 @@
-#!/bin/bash -e
-[ "$#" -ne 1 ] && { echo 'Bad arguments, trying evince...'; exec evince "$1"; }
+#!/bin/bash
+set -euo pipefail
+
+[ "$#" -ne 1 ] && { echo 'Bad arguments, trying evince...'; exec evince "$@"; }
 [ -f "$1" ] || { echo 'File does not exist, trying evince...'; exec evince "$1"; }
 
 size=$(du "$1") || { echo 'Cannot get size, trying evince...'; exec evince "$1"; }
 size=$(cut -f1 <<< "$size")
 [ "$size" -lt 5120 ] || { echo 'Too large, trying evince...'; exec evince "$1"; }
 
-echo 'Rasterizing PDF...'
-filename=$(basename $1)
-tmp="/tmp/ocf_$filename"
+len=$(pdftk "$1" dump_data | awk '/NumberOfPages/{print $2}')
+[ -z "$len" ] || [ "$len" -gt 75 ] && { echo 'Too long, trying evince...'; exec evince "$1"; }
 
-if ! convert -density 250 "$1" "$tmp" | zenity --progress --pulsate --auto-close; then
-    rm "$tmp"
+filename=$(basename "$1")
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/$filename"
+
+convert -density 250 "$1" "$tmp" |
+zenity --progress \
+	--pulsate \
+	--auto-close \
+	--auto-kill \
+	--text="Rasterizing File..."
+
+if [ $? -ne 0 ]; then
+    rm -rf "$tmpdir"
     echo 'Convert failed, trying evince...'
     exec evince "$1"
 fi
 
 echo 'Done rasterizing, now opening with evince...'
-exiftool -tagsfromfile "$1" -title "$tmp"
+exiftool -tagsfromfile "$1" -title "$tmp" || true
 echo "(output file: $tmp)"
-exec evince "$tmp"
+evince "$tmp"
+rm -rf "$tmpdir"
