@@ -1,5 +1,5 @@
 .PHONY: all
-all: vendor
+all: vendor install-hooks
 
 .PHONY: venv
 venv: bin/venv-update Makefile
