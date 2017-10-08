@@ -17,7 +17,7 @@ you're a member of the UC Berkeley community and interested in getting
 involved, [check us out][about-staff]!
 
 ## Making and testing changes
-### Your puppet environment
+### Puppet environments
 
 Every staffer owns a _puppet environment_. A puppet environment is a copy of
 this repository which you can use for testing out changes to this puppet code.
@@ -37,9 +37,16 @@ puppet`.
 You should make your changes in your puppet environment and test them before
 pushing them to GitHub to be deployed into production.
 
-If creating a new environment, you should either copy an existing environment,
-or clone the repo and remember to run `make vendor` to install all required
-third-party modules.
+### Setting up your puppet environment
+
+If you're using your puppet environment for the first time, there's a little
+setup you'll have to do. `cd` into your puppet environment and run:
+
+    you@lightning:/opt/puppet/env/you$ git pull
+    you@lightning:/opt/puppet/env/you$ make
+
+This will update your puppet environment to the latest version on master and
+install the appropriate third-party modules and the pre-commit hooks.
 
 ### Testing using your puppet environment
 
