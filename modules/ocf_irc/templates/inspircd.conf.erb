@@ -1,5 +1,8 @@
 # Comments removed for easier editing
 # See the examples in /usr/share/doc/inspircd/examples/ for more information
+# The example config included with inspircd at
+# https://github.com/inspircd/inspircd/blob/master/docs/conf/inspircd.conf.example
+# is also quite good.
 
 # Extra modules
 <module name="m_cloaking.so">
@@ -59,12 +62,12 @@
 # their host cloaked (+x mode)
 <connect allow="169.229.226.0/24"
          timeout="60" flood="20" localmax="1000" globalmax="1000"
-         limit="1000" modes="+x" commandrate="10" fakelag="off"
+         limit="1000" modes="+x" commandrate="5000"
          threshold="100" maxchans="200">
 
 <connect allow="2607:f140:8801::/64"
          timeout="60" flood="20" localmax="1000" globalmax="1000"
-         limit="1000" modes="+x" commandrate="10" fakelag="off"
+         limit="1000" modes="+x" commandrate="5000"
          threshold="100" maxchans="200">
 
 <connect allow="*"
