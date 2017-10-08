@@ -59,14 +59,16 @@
 # their host cloaked (+x mode)
 <connect allow="169.229.226.0/24"
          timeout="60" flood="20" localmax="1000" globalmax="1000"
-         limit="1000" modes="+x">
+         limit="1000" modes="+x" commandrate="10" fakelag="off"
+         threshold="100" maxchans="200">
 
 <connect allow="2607:f140:8801::/64"
          timeout="60" flood="20" localmax="1000" globalmax="1000"
-         limit="1000" modes="+x">
+         limit="1000" modes="+x" commandrate="10" fakelag="off"
+         threshold="100" maxchans="200">
 
 <connect allow="*"
-         timeout="60" flood="20" threshold="20" fakelag="on"
+         timeout="60" flood="20" threshold="20"
          pingfreq="120" sendq="262144" recvq="8192"
          useident="no" localmax="5" globalmax="5">
 
@@ -109,6 +111,9 @@
 <files motd="/etc/inspircd/inspircd.motd"
        rules="/etc/inspircd/inspircd.rules">
 
+# Allow both regular users and opers to join up to 200 channels
+<channels users="200" opers="200">
+
 <pid file="/var/run/inspircd.pid">
 
 <options prefixquit="Quit: "
@@ -129,19 +134,17 @@
         maxgecos="128"
         maxaway="200">
 
+# Logging levels include default, debug, sparse, and verbose. Debug is a little
+# too verbose, but verbose is a good level of messages without having too many.
 <log method="file"
-     type="* -USERINPUT -USEROUTPUT -m_spanningtree"
-     level="default"
+     type="*"
+     level="verbose"
      target="/var/log/inspircd.log">
 
+<whowas goupsize="10" maxgroups="100000" maxkeep="2w">
 
 <badnick nick="Global" reason="Reserved For Services">
 <badnick nick="*Serv" reason="Reserved For Services">
-
-# Allow slack bots to connect with no limits
-<exception host="*@flood.ocf.berkeley.edu" reason="IRC server hostname">
-<exception host="*@dev-flood.ocf.berkeley.edu" reason="Dev IRC server hostname">
-
 
 # Anope aliases
 <alias text="NICKSERV" replace="PRIVMSG NickServ :$2-" requires="NickServ" uline="yes">
