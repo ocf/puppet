@@ -1,11 +1,6 @@
 class ocf::firewall {
   include firewall
-
-  Firewall{
-    before  => Class['ocf::firewall::post'],
-  }
-
-  class { ['ocf::firewall::post']:; }
+  include ocf::firewall::post
 
   # One unpleasant thing about the puppetlabs-firewall module is that it
   # calls iptables-save, which saves all iptables rules when it runs,

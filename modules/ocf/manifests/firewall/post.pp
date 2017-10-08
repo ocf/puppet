@@ -3,7 +3,7 @@ class ocf::firewall::post {
   $devices = ['corruption-mgmt','hal-mgmt', 'jaws-mgmt', 'pagefault', 'pandemic-mgmt',
               'papercut', 'radiation', 'riptide-mgmt']
 
-  $devicesIPv6 = ['radiation']
+  $devices_ipv6 = ['radiation']
 
   $devices.each |String $d| {
     firewall { "998 allow ICMP to ${d} (IPv4)":
@@ -15,7 +15,7 @@ class ocf::firewall::post {
     }
   }
 
-  $devicesIPv6.each |String $d| {
+  $devices_ipv6.each |String $d| {
     firewall { "998 allow ICMP to ${d} (IPv6)":
       chain       => 'OUTPUT',
       proto       => 'ipv6-icmp',
@@ -35,7 +35,7 @@ class ocf::firewall::post {
     }
   }
 
-  $devicesIPv6.each |String $d| {
+  $devices_ipv6.each |String $d| {
     firewall { "999 drop other output to ${d} (IPv6)":
       chain       => 'OUTPUT',
       action      => 'drop',
