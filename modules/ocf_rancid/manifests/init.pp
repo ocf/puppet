@@ -47,7 +47,7 @@ class ocf_rancid {
   # at all, so they don't need to be compressed, there's just a lot of them
   # since they are created once for every hour.
   cron { 'clean-rancid-logs':
-    command => 'find /var/log/rancid/* -mtime +14 > /dev/null',
+    command => 'find /var/log/rancid/* -mtime +14 -delete > /dev/null',
     user    => 'rancid',
     special => 'hourly',
     require => Package['rancid'],
