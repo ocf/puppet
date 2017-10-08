@@ -34,4 +34,14 @@ class ocf_irc::services {
       recurse => true,
       source  => 'puppet:///modules/ocf_irc/anope';
   }
+
+  # Delete all logs older than 14 days.
+  # This would be better with logrotate, but the log files contain the date in
+  # their name, which logrotate doesn't handle very well.
+  cron { 'clean-anope-logs':
+    command => 'find /var/log/anope/ -mtime +14 -delete > /dev/null',
+    user    => 'irc',
+    special => 'daily',
+    require => Package['anope'],
+  }
 }
