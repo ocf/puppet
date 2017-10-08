@@ -5,25 +5,19 @@ class ocf::firewall::post {
 
   $devices_ipv6 = ['radiation']
 
-  $devices.each |String $d| {
-    firewall { "998 allow ICMP to ${d} (IPv4)":
-      chain       => 'OUTPUT',
-      proto       => 'icmp',
-      action      => 'accept',
-      destination => $d,
-      before      => undef,
-    }
+  firewall { '998 allow all outgoing ICMP':
+    chain  => 'OUTPUT',
+    proto  => 'icmp',
+    action => 'accept',
+    before => undef,
   }
 
-  $devices_ipv6.each |String $d| {
-    firewall { "998 allow ICMP to ${d} (IPv6)":
-      chain       => 'OUTPUT',
-      proto       => 'ipv6-icmp',
-      action      => 'accept',
-      destination => $d,
-      provider    => 'ip6tables',
-      before      => undef,
-    }
+  firewall { '998 allow all outgoing ICMPv6':
+    provider => 'ip6tables',
+    chain    => 'OUTPUT',
+    proto    => 'ipv6-icmp',
+    action   => 'accept',
+    before   => undef,
   }
 
   $devices.each |String $d| {
