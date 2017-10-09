@@ -72,11 +72,6 @@ class ocf::apt($stage = 'first') {
     }
   }
 
-  # Install dirmngr first on stretch so we can import apt keys in gpg
-  if $::lsbdistcodename != 'jessie' {
-    package { 'dirmngr':; } -> Apt::Key <| |>
-  }
-
   $puppetlabs_repo = $::lsbdistcodename ? {
     'jessie'        => 'PC1',
     /(sid|stretch)/ => 'puppet',

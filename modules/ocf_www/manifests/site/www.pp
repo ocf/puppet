@@ -25,18 +25,19 @@ class ocf_www::site::www {
 
   # TODO: dev-death should add a robots.txt disallowing everything
   apache::vhost { 'www':
-    servername      => 'www.ocf.berkeley.edu',
-    serveraliases   => ['dev-www.ocf.berkeley.edu'],
-    port            => 443,
-    docroot         => '/services/http/users',
+    servername          => 'www.ocf.berkeley.edu',
+    serveraliases       => ['dev-www.ocf.berkeley.edu'],
+    port                => 443,
+    docroot             => '/services/http/users',
 
-    ssl             => true,
-    ssl_key         => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert        => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain       => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl                 => true,
+    ssl_key             => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert            => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain           => '/etc/ssl/certs/incommon-intermediate.crt',
 
-    headers         => ['always set Strict-Transport-Security max-age=31536000'],
-    request_headers => ['set X-Forwarded-Proto https'],
+    headers             => ['always set Strict-Transport-Security max-age=31536000'],
+    request_headers     => ['set X-Forwarded-Proto https'],
+    proxy_preserve_host => true,
 
     rewrites        => [
       {
@@ -71,19 +72,18 @@ class ocf_www::site::www {
         provider    => 'filesmatch',
         ssl_options => '+StdEnvVars',
       },
+      {
+        # XXX: Strip OCFWEB_* cookies before we hit userdirs so that they
+        # cannot steal other peoples sessions.
+        path            => '/',
+        provider        => 'directories',
+        request_headers => 'edit* Cookie (;?\s*OCFWEB_.+?)=.+?(;|$) $1=REMOVED$2',
+      }
     ],
 
     custom_fragment => '
       UserDir /services/http/users/
       UserDir disabled root
-      ProxyPreserveHost on
-
-      # TODO: puppet does not allow setting request_headers in directories, send a PR?
-      <Directory />
-        # XXX: Strip OCFWEB_* cookies before we hit userdirs so that they
-        # cannot steal other peoples sessions.
-        RequestHeader edit* Cookie (;?\s*OCFWEB_.+?)=.+?(;|$) $1=REMOVED$2
-      </Directory>
     ',
   }
 
@@ -93,8 +93,7 @@ class ocf_www::site::www {
     default => 'https://www.ocf.berkeley.edu$1',
   }
 
-  apache::vhost
-  {
+  apache::vhost {
     # redirect HTTP -> canonical HTTPS
     'www-http-redirect':
       servername      => 'www.ocf.berkeley.edu',

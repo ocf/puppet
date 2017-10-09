@@ -99,10 +99,12 @@ class ocf_mirrors {
   # Tails asked us to turn off ETags.
   $tails_project_directory_options = {
     path          => '/opt/mirrors/ftp/tails',
-    custom_fragment => "
-      Header unset ETag
-      FileETag none
-    ",
+    headers       => 'unset ETag',
+
+    # TODO: Submit a PR for puppetlabs-apache to support changing etags in
+    # directories. They can be canged in the vhost config currently, but not
+    # per directory.
+    custom_fragment => 'FileETag none',
   }
 
   apache::vhost { 'mirrors.ocf.berkeley.edu':
@@ -122,7 +124,10 @@ class ocf_mirrors {
     ],
 
     access_log_format => 'io_count',
-    custom_fragment   => "HeaderName README.html\nReadmeName FOOTER.html",
+    custom_fragment   => "
+      HeaderName README.html
+      ReadmeName FOOTER.html
+    ",
   }
 
   apache::vhost { 'mirrors.berkeley.edu':
@@ -152,7 +157,10 @@ class ocf_mirrors {
     ],
 
     access_log_format => 'io_count',
-    custom_fragment   => "HeaderName README.html\nReadmeName FOOTER.html",
+    custom_fragment   => "
+      HeaderName README.html
+      ReadmeName FOOTER.html
+    ",
 
     ssl       => true,
     ssl_key   => "/etc/ssl/private/${::fqdn}.key",
