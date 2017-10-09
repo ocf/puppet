@@ -77,23 +77,25 @@ class ocf::apt($stage = 'first') {
     package { 'dirmngr':; } -> Apt::Key <| |>
   }
 
-  # repos available only for stable
-  if $::lsbdistcodename in ['jessie'] {
-    apt::source {
-      'puppetlabs':
-        location => 'http://mirrors/puppetlabs/apt/',
-        release  => $::lsbdistcodename,
-        repos    => 'PC1',
-        include  => {
-          src => true
-        };
-    }
+  $puppetlabs_repo = $::lsbdistcodename ? {
+    'jessie'        => 'PC1',
+    /(sid|stretch)/ => 'puppet',
+  }
 
-    # Add the puppetlabs apt repo key
-    apt::key { 'puppet gpg key':
-      id     => '6F6B15509CF8E59E6E469F327F438280EF8D349F',
-      server => 'pgp.mit.edu',
-    }
+  apt::source {
+    'puppetlabs':
+      location => 'http://mirrors/puppetlabs/apt/',
+      release  => $::lsbdistcodename,
+      repos    => $puppetlabs_repo,
+      include  => {
+        src => true
+      };
+  }
+
+  # Add the puppetlabs apt repo key
+  apt::key { 'puppet gpg key':
+    id     => '6F6B15509CF8E59E6E469F327F438280EF8D349F',
+    server => 'pgp.mit.edu',
   }
 
   apt::key { 'ocf':
