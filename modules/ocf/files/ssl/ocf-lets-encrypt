@@ -63,6 +63,7 @@ import socket
 import subprocess
 import sys
 import tempfile
+from collections import namedtuple
 from contextlib import contextmanager
 from datetime import datetime
 from datetime import timedelta
@@ -77,6 +78,9 @@ RENEW_WHEN_TIME_REMAINING = timedelta(days=45)
 DEFAULT_CERT_STORAGE_DIR = '/etc/ssl/private/'
 LE_ACCOUNT_KEY = Path('/etc/ssl/lets-encrypt/le-account.key')
 ACME_BASE_DIR = Path('/var/lib/lets-encrypt/')
+
+
+Request = namedtuple('Request', ('domain', 'cert_path', 'has_cert'))
 
 
 def debug(*args, **kwargs):
@@ -142,30 +146,17 @@ def write_cert(cert, cert_path):
             pass
 
 
-def maybe_acquire(domain, cert_path, key, dry_run=False):
-    """Acquires/renews a cert for the given domain if necessary and
-    returns True if it did."""
-    renewing = False
-    if cert_path.exists():
-        renewing = True
-
-        expires = expiration_date(cert_path)
-        time_remaining = expires - datetime.now(timezone.utc)
-        if time_remaining > RENEW_WHEN_TIME_REMAINING:
-            debug('not renewing {} (remaining: {})'.format(domain, time_remaining))
-            return False
-        else:
-            debug('renewing {} (remaining: {})'.format(domain, time_remaining))
-
+def acquire(request, key, dry_run=False):
+    """Makes a Let's Encrypt certificate request."""
     if not dry_run:
         try:
-            cert, stderr, returncode = acme_tiny(domain, key)
+            cert, stderr, returncode = acme_tiny(request.domain, key)
             assert returncode == 0, returncode
-            write_cert(cert, cert_path)
-            if renewing:
-                print('cert renewed for: ' + domain)
+            write_cert(cert, request.cert_path)
+            if request.has_cert:
+                print('cert renewed for: ' + request.domain)
             else:
-                print('cert acquired for: ' + domain)
+                print('cert acquired for: ' + request.domain)
             return True
         except:
             print('An error occured!', file=sys.stderr)
@@ -226,27 +217,36 @@ def main(argv=None):
         global debug
         debug = functools.partial(print, flush=True)
 
-    changed = False
-    need_cert = set()
-    with maybe_start_webserver(dry_run=args.dry_run):
-        for domain in args.domains:
-            assert re.match('^[a-z\-_\.0-9]+$', domain)
-            cert_path = Path(args.cert_dir) / '{}.crt'.format(domain)
+    requests = set()
+    for domain in args.domains:
+        assert re.match('^[a-z\-_\.0-9]+$', domain)
+        cert_path = Path(args.cert_dir) / '{}.crt'.format(domain)
 
-            if not cert_path.exists():
-                need_cert.add(domain)
+        if cert_path.exists():
+            expires = expiration_date(cert_path)
+            time_remaining = expires - datetime.now(timezone.utc)
+            if time_remaining > RENEW_WHEN_TIME_REMAINING:
+                debug('not renewing {} (remaining: {})'.format(domain, time_remaining))
+            else:
+                debug('renewing {} (remaining: {})'.format(domain, time_remaining))
+                requests.add(Request(domain, cert_path, has_cert=True))
+        else:
+            requests.add(Request(domain, cert_path, has_cert=False))
 
-            changed |= maybe_acquire(
-                domain,
-                cert_path,
-                key=args.private_key,
-                dry_run=args.dry_run
-            )
+    if requests:
+        with maybe_start_webserver(dry_run=args.dry_run):
+            for request in requests:
+                acquire(
+                    request,
+                    key=args.private_key,
+                    dry_run=args.dry_run,
+                )
 
+    need_cert = {request for request in requests if not request.has_cert}
     debug('Want cert: {}'.format(len(need_cert)))
     debug('Already have cert: {}'.format(len(args.domains) - len(need_cert)))
 
-    return 255 if changed else 0
+    return 255 if requests else 0
 
 
 if __name__ == '__main__':
