@@ -5,7 +5,7 @@ server {
     server_name "{{vhost.fqdn}}";
 
     location /.well-known/ {
-        alias /srv/well-known/;
+        alias /var/lib/lets-encrypt/.well-known/;
     }
 
     location / {

@@ -200,7 +200,7 @@ def build_config(src_vhosts, template, dev_config=False):
     )
 
 
-def test_and_overwrite_config(config_path, new_config, target):
+def test_and_overwrite_config(config_path, new_config, config_test_cmd):
     """Diffs and tests the new config and overwrites the old config if
     the test passes.
 
@@ -229,7 +229,6 @@ def test_and_overwrite_config(config_path, new_config, target):
             report('[end diff]')
 
             if ret == 0:
-                report('Nothing changed, not doing anything.')
                 return False
 
             # Save existing config
@@ -240,10 +239,7 @@ def test_and_overwrite_config(config_path, new_config, target):
         os.rename(new_path, config_path)
 
         report('Performing config test.')
-        if target == 'web':
-            ret = subprocess.call(('apachectl', 'configtest'))
-        else:
-            ret = subprocess.call(('nginx', '-t'))
+        ret = subprocess.call(config_test_cmd)
 
         if ret != 0:
             report('Test failed!')
@@ -353,8 +349,12 @@ def main():
         report(config)
         return 0
 
-    changed = test_and_overwrite_config(site_cfg, config, args.target)
+    if args.target == 'web':
+        config_test_cmd = ('apachect', 'configtest')
+    else:
+        config_test_cmd = ('nginx', '-t')
 
+    changed = test_and_overwrite_config(site_cfg, config, config_test_cmd)
     if changed:
         if not args.no_reload:
             report('Things changed, reloading.')
@@ -364,6 +364,8 @@ def main():
                 subprocess.check_call(('systemctl', 'reload', 'nginx'))
         else:
             report('Not reloading, as you requested.')
+    else:
+        report('Nothing changed, not doing anything.')
 
 
 if __name__ == '__main__':

@@ -1,0 +1,253 @@
+#!/usr/bin/env python3
+"""Update or acquire Let's Encrypt certificates for a host.
+
+This script is triggered every time Puppet runs with the certs needed by
+the host in the arguments. It is also triggered by other scripts, e.g.
+the Let's Encrypt scripts for vhosts on www and apphost.
+
+The script takes the following basic steps to acquire a certificate:
+
+    1. Checks whether we have already acquired a certificate in the past
+       for this domain.
+
+    2. If we already have a cert, further checks the expiration date to
+       see if it is expired or going to expire within a few weeks.
+
+    3. If the answer to (1) or (2) is "no", we invoke acme-tiny to
+       acquire/renew a cert for the domain.
+
+Sounds simple enough? Well, there's more to it. acme-tiny proves that we
+actually own the domain by writing a challenge file and expecting it to
+be served under http://<fqdn>/.well-known/acme-challenge/. This presents
+two problems: 1) on hosts that don't run a web server (e.g. mail), we
+need something to serve that file, and 2) on hosts that do run a web
+server, we may need to acquire the cert before the web server can even
+start.
+
+Our solution is to enforce the following assumption: if there is a
+running web server, it MUST serve up the challenge directory at
+http://<fqdn>/.well-known/acme-challenge. This simplifies our logic to
+the following:
+
+    1. If there's something already listening on port 80, just make any
+       needed certificate requests and expect them to succeed; the
+       running web server will handle it.
+
+    2. If not, then we're either bootstrapping or the host doesn't run a
+       web server. In this case, we start a temporary server (Python's
+       http.server) to serve the challenge files while making requests
+       and shut it down when we're finished.
+
+It is also possible for us to hit our rate limit for Let's Encrypt
+requests, but our limit as of writing is 1000 new certs per week with
+unlimited renewals, so this is only possible in case of catastrophic
+failure (i.e. we lose all of our web vhost certs).
+
+Once the needed certs are acquired, the corresponding .pem and .bundle
+files still have to be generated. This is left to the caller, i.e.
+puppet or a host-specific script.
+
+The return code indicates whether the script did anything, so the caller
+can reload services as necessary:
+
+    0       nothing changed
+    255     certs added/changed
+    else    error
+"""
+import argparse
+import functools
+import os
+import re
+import shutil
+import socket
+import subprocess
+import sys
+import tempfile
+from contextlib import contextmanager
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
+from pathlib import Path
+
+import dateutil.parser
+
+
+RENEW_WHEN_TIME_REMAINING = timedelta(days=45)
+
+DEFAULT_CERT_STORAGE_DIR = '/etc/ssl/private/'
+LE_ACCOUNT_KEY = Path('/etc/ssl/lets-encrypt/le-account.key')
+ACME_BASE_DIR = Path('/var/lib/lets-encrypt/')
+
+
+def debug(*args, **kwargs):
+    pass
+
+
+def expiration_date(cert_path):
+    output = subprocess.check_output((
+        'openssl', 'x509', '-enddate', '-noout',
+        '-in', str(cert_path),
+    ))
+    m = re.match(b'notAfter=(.+)$', output)
+    assert m, output
+    return dateutil.parser.parse(m.group(1).decode('ascii'))
+
+
+@contextmanager
+def make_csr(domain, key):
+    _, csr_path = tempfile.mkstemp()
+    try:
+        subprocess.check_call((
+            'openssl', 'req', '-new', '-sha256',
+            '-key', key,
+            '-subj', '/CN={}'.format(domain),
+            '-out', csr_path,
+        ))
+        yield csr_path
+    finally:
+        os.remove(csr_path)
+
+
+def acme_tiny(domain, key):
+    with make_csr(domain, key) as csr_path:
+        # TODO: use subprocess.run when we get python3.5
+        proc = subprocess.Popen(
+            (
+                'acme-tiny',
+                '--account-key', str(LE_ACCOUNT_KEY),
+                '--csr', csr_path,
+                '--acme-dir', str(ACME_BASE_DIR / '.well-known' / 'acme-challenge'),
+                # '--ca', 'https://acme-staging.api.letsencrypt.org',
+            ),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        stdout, stderr = proc.communicate()
+    return stdout, stderr, proc.returncode
+
+
+def write_cert(cert, cert_path):
+    """Write certificate file for a domain."""
+    _, temp_cert_path = tempfile.mkstemp(dir=str(cert_path.parent), prefix='.tmp')
+    try:
+        with open(temp_cert_path, 'wb') as f:
+            f.write(cert)
+        # atomic overwrite in case of errors
+        os.chmod(temp_cert_path, 0o644)
+        shutil.move(temp_cert_path, str(cert_path))
+    finally:
+        try:
+            os.remove(temp_cert_path)
+        except FileNotFoundError:
+            pass
+
+
+def maybe_acquire(domain, cert_path, key, dry_run=False):
+    """Acquires/renews a cert for the given domain if necessary and
+    returns True if it did."""
+    renewing = False
+    if cert_path.exists():
+        renewing = True
+
+        expires = expiration_date(cert_path)
+        time_remaining = expires - datetime.now(timezone.utc)
+        if time_remaining > RENEW_WHEN_TIME_REMAINING:
+            debug('not renewing {} (remaining: {})'.format(domain, time_remaining))
+            return False
+        else:
+            debug('renewing {} (remaining: {})'.format(domain, time_remaining))
+
+    if not dry_run:
+        try:
+            cert, stderr, returncode = acme_tiny(domain, key)
+            assert returncode == 0, returncode
+            write_cert(cert, cert_path)
+            if renewing:
+                print('cert renewed for: ' + domain)
+            else:
+                print('cert acquired for: ' + domain)
+            return True
+        except:
+            print('An error occured!', file=sys.stderr)
+            print('stderr from acme-tiny:', file=sys.stderr)
+            for line in stderr.decode().split('\n'):
+                print('>', line, file=sys.stderr)
+            raise
+    else:
+        return False
+
+
+@contextmanager
+def maybe_start_webserver(dry_run):
+    if not dry_run and socket.socket().connect_ex(('127.0.0.1', 80)) != 0:
+        proc = subprocess.Popen(
+            ('python3', '-m', 'http.server', '80'),
+            cwd=str(ACME_BASE_DIR),
+        )
+
+        # Wait for server to start up before proceeding
+        while socket.socket().connect_ex(('127.0.0.1', 80)) != 0:
+            pass
+
+        yield proc
+
+        proc.kill()
+        print('Stopped ephemeral web server on port 80')
+    else:
+        yield None
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument('-n', '--dry-run', action='store_true')
+    parser.add_argument('-v', '--verbose', action='store_true')
+    parser.add_argument(
+        '--private-key',
+        required=True,
+        help='Path to the private SSL key to use in certificate requests',
+    )
+    parser.add_argument(
+        '--cert-dir',
+        default=DEFAULT_CERT_STORAGE_DIR,
+        help='Where to find and store acquired cert files. '
+             'Defaults to ' + DEFAULT_CERT_STORAGE_DIR,
+    )
+    parser.add_argument(
+        'domains',
+        nargs='+',
+        help='List of domains to acquire/renew certs for',
+    )
+    args = parser.parse_args()
+
+    if args.verbose:
+        global debug
+        debug = functools.partial(print, flush=True)
+
+    changed = False
+    need_cert = set()
+    with maybe_start_webserver(dry_run=args.dry_run):
+        for domain in args.domains:
+            assert re.match('^[a-z\-_\.0-9]+$', domain)
+            cert_path = Path(args.cert_dir) / '{}.crt'.format(domain)
+
+            if not cert_path.exists():
+                need_cert.add(domain)
+
+            changed |= maybe_acquire(
+                domain,
+                cert_path,
+                key=args.private_key,
+                dry_run=args.dry_run
+            )
+
+    debug('Want cert: {}'.format(len(need_cert)))
+    debug('Already have cert: {}'.format(len(args.domains) - len(need_cert)))
+
+    return 255 if changed else 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
