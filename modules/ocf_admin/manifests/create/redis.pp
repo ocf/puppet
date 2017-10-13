@@ -32,7 +32,7 @@ class ocf_admin::create::redis {
       #
       # http://redis.io/topics/persistence
       'set appendonly yes',
-      'set appendfsync always',
+      'set appendfsync everysec',
       'rm save',
     ],
     show_diff => false,
