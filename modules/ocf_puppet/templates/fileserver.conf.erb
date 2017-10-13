@@ -5,8 +5,4 @@
 
 [private-docker]
   path /opt/puppet/shares/private/docker
-  # TODO: this is deprecated
-  # https://docs.puppet.com/puppet/latest/reference/config_file_fileserver.html#deprecated-security-directives
-  <% @docker_private_hosts.each do |host| %>
-      allow <%= host %>.ocf.berkeley.edu
-  <% end %>
+  allow *

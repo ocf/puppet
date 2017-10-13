@@ -1,6 +1,6 @@
 class ocf_puppet::puppetmaster {
   package {
-    ['puppetserver', 'puppet-lint']:;
+    ['puppetserver', 'puppet-lint', 'augeas-tools']:;
   }
 
   service { 'puppetserver':
@@ -12,13 +12,25 @@ class ocf_puppet::puppetmaster {
   augeas { '/etc/default/puppetserver':
     context => '/files/etc/default/puppetserver',
     changes => [
-      "set JAVA_ARGS '\"-Xms1g -Xmx1g -XX:MaxPermSize=512m\"'",
+      "set JAVA_ARGS '\"-Xms1536m -Xmx1536m\"'",
     ],
     require => Package['puppetserver'],
     notify  => Service['puppetserver'],
   }
 
   $docker_private_hosts = union(keys(lookup('mesos_masters')), lookup('mesos_slaves'))
+
+  # Allow Mesos agents and masters to access docker secrets
+  puppet_authorization::rule { 'private-docker':
+    match_request_path   => '^/puppet/v3/file_(content|metadata)s?/private-docker$',
+    match_request_type   => 'regex',
+    match_request_method => ['get', 'post'],
+    allow                => suffix($docker_private_hosts, '.ocf.berkeley.edu'),
+    sort_order           => 500,
+    path                 => '/etc/puppetlabs/puppetserver/conf.d/auth.conf',
+    require              => Package['puppetserver'],
+    notify               => Service['puppetserver'],
+  }
 
   file {
     '/etc/puppetlabs/puppet/fileserver.conf':
