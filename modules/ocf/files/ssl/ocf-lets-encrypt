@@ -178,17 +178,17 @@ def maybe_start_webserver(dry_run):
 
         # Wait for server to start up before proceeding
         while socket.socket().connect_ex(('127.0.0.1', 80)) != 0:
-            pass
+            assert proc.poll() is None, proc.returncode
 
         yield proc
 
-        proc.kill()
+        proc.terminate()
         print('Stopped ephemeral web server on port 80')
     else:
         yield None
 
 
-def main(argv=None):
+def main():
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,

@@ -1,5 +1,5 @@
 class ocf::lets_encrypt {
-  package { 'acme-tiny':; }
+  package { ['acme-tiny', 'python3-openssl']:; }
 
   file {
     '/etc/ssl/lets-encrypt':
@@ -21,7 +21,8 @@ class ocf::lets_encrypt {
       group  => sys;
 
     '/usr/local/bin/ocf-lets-encrypt':
-      source => 'puppet:///modules/ocf/ssl/ocf-lets-encrypt',
-      mode   => '0755';
+      source  => 'puppet:///modules/ocf/ssl/ocf-lets-encrypt',
+      mode    => '0755',
+      require => Package['acme-tiny', 'python3-openssl'];
   }
 }

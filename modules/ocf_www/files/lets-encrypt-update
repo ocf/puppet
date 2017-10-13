@@ -81,7 +81,7 @@ def eligible_domains(domains, target_domain):
     return eligible_domains
 
 
-def main(argv=None):
+def main():
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
