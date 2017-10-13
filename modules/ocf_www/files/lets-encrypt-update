@@ -102,20 +102,28 @@ def main():
 
     domains = all_domains(vhosts)
     eligible = eligible_domains(domains, target_domain)
+    acquired = set()
+    renewed = set()
+    for domain in eligible:
+        ret = subprocess.call(chain(
+            ('ocf-lets-encrypt', domain),
+            ('--verbose',) if args.verbose else (),
+            ('--dry-run',) if args.dry_run else (),
+            ('--extended-return-codes',),
+            ('--private-key', '/etc/ssl/lets-encrypt/le-vhost.key'),
+            ('--cert', '/services/http/ssl/{}.crt'.format(domain)),
+        ))
+        if ret == 255:
+            acquired.add(domain)
+        elif ret == 254:
+            renewed.add(domain)
+        else:
+            assert ret == 0, 'ocf-lets-encrypt returned {}'.format(ret)
 
-    ret = subprocess.call(chain(
-        ('ocf-lets-encrypt',),
-        ('--verbose',) if args.verbose else (),
-        ('--dry-run',) if args.dry_run else (),
-        ('--private-key', '/etc/ssl/lets-encrypt/le-vhost.key'),
-        ('--cert-dir', '/services/http/ssl/'),
-        eligible,
-    ))
-
-    debug('Total eligible domains: {}'.format(len(eligible)))
     debug('Total domains: {}'.format(len(domains)))
-
-    return ret
+    debug('Total eligible domains: {}'.format(len(eligible)))
+    debug('Certs acquired: {}'.format(len(acquired)))
+    debug('Certs renewed: {}'.format(len(renewed)))
 
 
 if __name__ == '__main__':
