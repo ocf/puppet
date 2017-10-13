@@ -7,7 +7,7 @@ class ocf::packages::docker::apt {
   }
 
   apt::source { 'docker':
-    location    => 'https://download.docker.com/linux/debian',
+    location    => '[arch=amd64] https://download.docker.com/linux/debian',
     release     => $::lsbdistcodename,
     repos       => 'stable',
     include   => {
