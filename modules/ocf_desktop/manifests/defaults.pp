@@ -21,5 +21,4 @@ class ocf_desktop::defaults {
       unless => '/usr/bin/test $(readlink /etc/alternatives/x-terminal-emulator) == "/usr/bin/xfce4-terminal.wrapper"';
     }
   }
-
 }

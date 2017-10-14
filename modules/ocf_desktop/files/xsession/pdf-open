@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -uo pipefail
 
 [ "$#" -ne 1 ] && { echo 'Bad arguments, trying evince...'; exec evince "$@"; }
 [ -f "$1" ] || { echo 'File does not exist, trying evince...'; exec evince "$1"; }
@@ -8,28 +8,47 @@ size=$(du "$1") || { echo 'Cannot get size, trying evince...'; exec evince "$1";
 size=$(cut -f1 <<< "$size")
 [ "$size" -lt 5120 ] || { echo 'Too large, trying evince...'; exec evince "$1"; }
 
-len=$(pdftk "$1" dump_data | awk '/NumberOfPages/{print $2}')
-[ -z "$len" ] || [ "$len" -gt 75 ] && { echo 'Too long, trying evince...'; exec evince "$1"; }
+ft=$(file -b "$1")
+ft=$(cut -d ' ' -f1 <<< "$ft")
+ft="${ft,,}"
+
+if [ "$ft" == "pdf" ]; then
+    len=$(pdftk "$1" dump_data | awk '/NumberOfPages/{print $2}')
+    [ -z "$len" -o "$len" -gt 75 ] && { echo 'Too long, trying evince...'; exec evince "$1"; }
+fi
 
 filename=$(basename "$1")
 tmpdir=$(mktemp -d)
 tmp="$tmpdir/$filename"
 
-convert -density 250 "$1" "$tmp" |
-zenity --progress \
-	--pulsate \
-	--auto-close \
-	--auto-kill \
-	--text="Rasterizing File..."
+trap 'rm -rf "$tmpdir"' EXIT
 
-if [ $? -ne 0 ]; then
-    rm -rf "$tmpdir"
+(
+    # Because Zenity ...
+    function clean_up {
+        [ -n "$(jobs -pr)" ] && kill $(jobs -pr)
+    }
+
+    trap clean_up EXIT
+
+    convert -density 250 "$1" "$tmp" |
+    zenity --progress \
+    	--pulsate \
+    	--auto-close \
+    	--auto-kill \
+    	--text="Rasterizing File..."
+)
+
+if [ $? -eq 129 ]; then
+    echo 'Rasterization cancelled... Quitting.'
+    exit
+elif [ $? -ne 0 ]; then
     echo 'Convert failed, trying evince...'
-    exec evince "$1"
+    evince "$1"
+    exit
 fi
 
 echo 'Done rasterizing, now opening with evince...'
-exiftool -tagsfromfile "$1" -title "$tmp" || true
+exiftool -tagsfromfile "$1" -title "$tmp"
 echo "(output file: $tmp)"
 evince "$tmp"
-rm -rf "$tmpdir"
