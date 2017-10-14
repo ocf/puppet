@@ -15,12 +15,12 @@ def get_num_players(server):
     sock.connect(SERVER)
 
     # https://developer.valvesoftware.com/wiki/Server_queries#A2S_INFO
-    req = bytes([0xff, 0xff, 0xff, 0xff] + list(map(ord, 'TSource Engine Query')) + [0x00])
+    req = b'\xff\xff\xff\xffTSource Engine Query\x00'
     sock.send(req)
 
     response = sock.recv(4096)
     response = response[4:]  # cut off header
-    response = response.split(bytes([0x00]), 4)[4]  # cut off 4 strings
+    response = response.split(b'\0', 4)[4]  # cut off 4 strings
 
     players, max_players, bots = map(int, response[2:5])
     return players - bots
