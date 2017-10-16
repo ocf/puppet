@@ -19,6 +19,8 @@ class ocf_desktop::packages {
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils',
       'redshift', 'xfce4-whiskermenu-plugin']:;
+    # desktop helpers
+    ['libimage-exiftool-perl']:;
     # display manager
     ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
     # fonts
