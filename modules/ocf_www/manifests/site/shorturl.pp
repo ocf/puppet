@@ -40,6 +40,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/account$ https://www.ocf.berkeley.edu/docs/services/account/ [R]'},
       {rewrite_rule => '^/apphost$ https://www.ocf.berkeley.edu/docs/services/webapps/ [R]'},
       {rewrite_rule => '^/bod(/.*)?$ https://www.ocf.berkeley.edu/~staff/bod$1 [R]'},
+      {rewrite_rule => '^/buy$ https://docs.google.com/spreadsheets/d/1-VwZ-kch-XYwRO53wl9uCxQCioAvm1wNalxyw3TKNOo/edit#gid=0 [R]'},
       {rewrite_rule => '^/callinkapi$ https://studentservices.berkeley.edu/WebServices/StudentGroupServiceV2/Service.asmx/CalLinkOrganizations [R]'},
       {rewrite_rule => '^/contact$ https://www.ocf.berkeley.edu/docs/contact/ [R]'},
       {rewrite_rule => '^/decal(/.*)?$ https://decal.ocf.berkeley.edu$1 [R]'},
