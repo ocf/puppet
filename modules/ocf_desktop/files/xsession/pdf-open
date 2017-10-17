@@ -39,10 +39,11 @@ trap 'rm -rf "$tmpdir"' EXIT
     	--text="Rasterizing File..."
 )
 
-if [ $? -eq 129 ]; then
+exitstatus=$?
+if [ "$exitstatus" -eq 129 ]; then
     echo 'Rasterization cancelled... Quitting.'
     exit
-elif [ $? -ne 0 ]; then
+elif [ "$exitstatus" -ne 0 ]; then
     echo 'Convert failed, trying evince...'
     evince "$1"
     exit
