@@ -97,4 +97,13 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     ssl_cert       => '/opt/share/docker/secrets/pma/pma.ocf.berkeley.edu.crt',
     ssl_key        => '/opt/share/docker/secrets/pma/pma.ocf.berkeley.edu.key',
   }
+
+  ocf_mesos::master::load_balancer::http_vhost { 'metabase':
+    server_name    => 'metabase.ocf.berkeley.edu',
+    server_aliases => ['mb', 'metabase', 'mb.ocf.berkeley.edu'],
+    service_port   => 10010,
+    ssl            => true,
+    ssl_cert       => '/opt/share/docker/secrets/metabase/metabase.ocf.berkeley.edu.crt',
+    ssl_key        => '/opt/share/docker/secrets/metabase/metabase.ocf.berkeley.edu.key',
+  }
 }
