@@ -1,29 +1,38 @@
 class ocf_filehost {
-  package { 'quotatool':; }
+  package { ['quotatool', 'nfs-kernel-server']:; }
 
-  package {
-    'nfs-kernel-server':
-  } ->
+  file { '/etc/exports':
+    source  => 'puppet:///modules/ocf_filehost/exports',
+    require => Package['nfs-kernel-server'],
+  }
+
+  ocf::systemd::override { 'nfs-kernel-server-grace-period':
+    # TODO: temporary, remove
+    ensure => absent,
+    unit   => 'nfs-server.service',
+  } ~>
   augeas { '/etc/default/nfs-kernel-server':
     lens    => 'Shellvars.lns',
     incl    => '/etc/default/nfs-kernel-server',
-    # Increase number of NFS threads.
-    changes =>  ['set RPCNFSDCOUNT 32'],
+    changes => [
+      # Increase number of NFS threads.
+      'set RPCNFSDCOUNT 32',
+
+      # Decrease the grace period (time from server start until clients are
+      # allowed to start reading/writing files) from 90 seconds to 10 seconds.
+      #
+      # It's unlikely for us to have a 10+ second netsplit, so this is reasonably
+      # safe. This greatly reduces downtime during NFS restarts.
+      "set RPCNFSDOPTS '\"-G 10\"'",
+    ],
+    require => Package['nfs-kernel-server'],
   } ~>
-  file { '/etc/exports':
-    source => 'puppet:///modules/ocf_filehost/exports',
+  service {
+    # Make systemd re"compile" the NFS server config
+    'nfs-config':;
   } ~>
-  ocf::systemd::override { 'nfs-kernel-server-grace-period':
-    unit    => 'nfs-server.service',
-    # Decrease the grace period (time from server start until clients are
-    # allowed to start reading/writing files) from 90 seconds to 10 seconds.
-    #
-    # It's unlikely for us to have a 10+ second netsplit, so this is reasonably
-    # safe. This greatly reduces downtime during NFS restarts.
-    #
-    # The environment file lets us override the number of threads, but not the
-    # grace period :\
-    content => "[Service]\nExecStart=\nExecStart=/usr/sbin/rpc.nfsd -G 10 -- \$RPCNFSDARGS\n",
-  } ~>
-  service { 'nfs-server':; }
+  service {
+    'nfs-server':
+      subscribe => File['/etc/exports'],
+  }
 }
