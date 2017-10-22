@@ -132,6 +132,14 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     require => Augeas['sshd_config'],
   }
 
+  # Export SSH keys from every host, and use them to populate the global list
+  # in /etc/ssh/ssh_known_hosts
+  @@sshkey { $::hostname:
+    type => ecdsa-sha2-nistp256,
+    key  => $::sshecdsakey,
+  }
+  Sshkey <<| |>>
+
   # sudo user/group access controls
   package { 'sudo': }
   file {
