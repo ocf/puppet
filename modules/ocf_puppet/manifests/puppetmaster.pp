@@ -8,7 +8,7 @@ class ocf_puppet::puppetmaster {
     puppetdb_server => 'thunder.ocf.berkeley.edu',
 
     # Prevent hard Puppet failures if PuppetDB is not available
-    puppetdb_sort_write_failure => true,
+    puppetdb_soft_write_failure => true,
   }
 
   # Set correct memory limits on puppetserver so that it doesn't run out

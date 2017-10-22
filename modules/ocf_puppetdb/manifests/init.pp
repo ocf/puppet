@@ -20,7 +20,12 @@ class ocf_puppetdb {
   }
 
   class { 'puppetdb::server':
-    database_host => 'localhost',
+    database_host      => 'localhost',
+    java_args          => {
+      '-Xmx' => '1g',
+      '-Xms' => '256m',
+    },
+    manage_firewall    => true,
     ssl_set_cert_paths => true,
   }
 }
