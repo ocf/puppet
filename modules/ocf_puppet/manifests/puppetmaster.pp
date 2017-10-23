@@ -5,7 +5,7 @@ class ocf_puppet::puppetmaster {
 
   # This defines Service['puppetserver'], so we can't do it ourselves.
   class { 'puppetdb::master::config':
-    puppetdb_server => 'thunder.ocf.berkeley.edu',
+    puppetdb_server => 'puppetdb',
 
     # Prevent hard Puppet failures if PuppetDB is not available
     puppetdb_soft_write_failure => true,
