@@ -1,16 +1,9 @@
 class ocf_www::site::shorturl {
-  # special ssl (non-incommon)
+  # TODO: Remove this cert and replace with Let's Encrypt
+  # Make sure this gets renewed before Jan 21 2018
   file {
-    '/etc/ssl/private/ocf.io.key':
-      source => 'puppet:///private/ssl/ocf.io.key',
-      mode   => '0600',
-      notify => Service['httpd'];
     '/etc/ssl/private/ocf.io.crt':
       source => 'puppet:///private/ssl/ocf.io.crt',
-      mode   => '0644',
-      notify => Service['httpd'];
-    '/etc/ssl/certs/positivessl-intermediate.crt':
-      source => 'puppet:///private/ssl/positivessl-intermediate.crt',
       mode   => '0644',
       notify => Service['httpd'];
   }
@@ -27,9 +20,9 @@ class ocf_www::site::shorturl {
     docroot       => '/var/www/html',
 
     ssl           => true,
-    ssl_key       => '/etc/ssl/private/ocf.io.key',
+    ssl_key       => '/etc/ssl/lets-encrypt/le-vhost.key',
     ssl_cert      => '/etc/ssl/private/ocf.io.crt',
-    ssl_chain     => '/etc/ssl/certs/positivessl-intermediate.crt',
+    ssl_chain     => '/etc/ssl/certs/lets-encrypt.crt',
 
     rewrites      => [
       # Short URLs
@@ -112,7 +105,7 @@ class ocf_www::site::shorturl {
   # canonical redirects
   apache::vhost { 'shorturl-http-redirect':
     servername      => 'ocf.io',
-    serveraliases   => ['dev-ocf-io.ocf.berkeley.edu'],
+    serveraliases   => ['dev-ocf-io.ocf.berkeley.edu', 'www.ocf.io'],
     port            => 80,
     docroot         => '/var/www/html',
 
