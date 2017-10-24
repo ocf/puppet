@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import pwd
 import subprocess
-import time
 from datetime import datetime
 
 from gi.repository import Notify
@@ -32,15 +31,10 @@ def main():
         ).show()
 
     # Show user's print quota when changed
-    old_quota = None
-    while True:
-        quota = subprocess.check_output(PAPER_PATH)
-        if quota != old_quota:
-            title, msg = quota.decode(encoding='UTF-8').split('\n', 1)
-            msg += '(as of {})'.format(datetime.now().strftime('%-I:%M%P'))
-            Notify.Notification.new(title, msg, NOTIFICATION_ICON).show()
-            old_quota = quota
-        time.sleep(60)
+    quota = subprocess.check_output(PAPER_PATH)
+    title, msg = quota.decode(encoding='UTF-8').split('\n', 1)
+    msg += '(as of {})'.format(datetime.now().strftime('%-I:%M%P'))
+    Notify.Notification.new(title, msg, NOTIFICATION_ICON).show()
 
 
 if __name__ == '__main__':
