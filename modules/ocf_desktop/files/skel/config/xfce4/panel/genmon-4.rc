@@ -1,0 +1,5 @@
+Command=/usr/local/bin/paper-genmon
+UseLabel=0
+Text=(genmon)
+UpdatePeriod=60000
+Font=(default)
