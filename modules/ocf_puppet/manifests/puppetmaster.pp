@@ -3,9 +3,12 @@ class ocf_puppet::puppetmaster {
     ['puppetserver', 'puppet-lint', 'augeas-tools']:;
   }
 
-  service { 'puppetserver':
-    enable  => true,
-    require => Package['puppetserver'],
+  # This defines Service['puppetserver'], so we can't do it ourselves.
+  class { 'puppetdb::master::config':
+    puppetdb_server => 'puppetdb',
+
+    # Prevent hard Puppet failures if PuppetDB is not available
+    puppetdb_soft_write_failure => true,
   }
 
   # Set correct memory limits on puppetserver so that it doesn't run out
