@@ -6,11 +6,6 @@ class ocf_filehost {
     require => Package['nfs-kernel-server'],
   }
 
-  ocf::systemd::override { 'nfs-kernel-server-grace-period':
-    # TODO: temporary, remove
-    ensure => absent,
-    unit   => 'nfs-server.service',
-  } ~>
   augeas { '/etc/default/nfs-kernel-server':
     lens    => 'Shellvars.lns',
     incl    => '/etc/default/nfs-kernel-server',
