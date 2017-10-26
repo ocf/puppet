@@ -30,12 +30,6 @@ def main():
             NOTIFICATION_ICON,
         ).show()
 
-    # Show user's print quota when changed
-    quota = subprocess.check_output(PAPER_PATH)
-    title, msg = quota.decode(encoding='UTF-8').split('\n', 1)
-    msg += '(as of {})'.format(datetime.now().strftime('%-I:%M%P'))
-    Notify.Notification.new(title, msg, NOTIFICATION_ICON).show()
-
 
 if __name__ == '__main__':
     main()
