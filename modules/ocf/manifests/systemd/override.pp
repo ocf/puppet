@@ -8,6 +8,7 @@
 #     ExecStart=/path/to/my/thing
 define ocf::systemd::override(
     $unit,
+    $ensure = present,
     $source = undef,
     $content = undef,
 ) {
@@ -16,6 +17,7 @@ define ocf::systemd::override(
   })
 
   file { "/etc/systemd/system/${unit}.d/${title}.conf":
+    ensure  => $ensure,
     source  => $source,
     content => $content,
     notify  => Exec['systemd-reload'],
