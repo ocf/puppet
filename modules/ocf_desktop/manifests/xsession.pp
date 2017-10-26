@@ -26,6 +26,11 @@ class ocf_desktop::xsession {
     '/usr/local/bin/fix-audio':
       mode    => '0755',
       source  => 'puppet:///modules/ocf_desktop/xsession/fix-audio';
+    # script for paper stats on panel
+    '/usr/local/bin/paper-genmon':
+      mode    => '0755',
+      source  => 'puppet:///modules/ocf_desktop/xsession/paper-genmon',
+      require => File['/opt/share/xsession/icons'];
     # list of possible xsessions
     '/usr/share/xsessions':
       ensure  => directory,

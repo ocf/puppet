@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+import sys
+
+from ocflib.account.search import user_exists
+from ocflib.account.search import user_is_group
+from ocflib.misc.whoami import current_user
+from ocflib.printing.quota import get_connection
+from ocflib.printing.quota import get_quota
+
+
+IMAGE_PATH = '/opt/share/xsession/icons/paper-stack.png'
+
+
+def main(argv=None):
+    user = None
+    daily_quota = 'N/A'
+    semester_quota = 'N/A'
+    user = current_user()
+
+    if user_exists(user) and not user_is_group(user):
+        with get_connection() as c:
+            quota = get_quota(c, user)
+            daily_quota = quota.daily
+            semester_quota = quota.semesterly
+
+    print('<img>{}</img>'.format(IMAGE_PATH))
+    print('<txt> {} {} left</txt>'.format(daily_quota,
+                                          'page' if daily_quota == 1 else 'pages'))
+    print('<tool>{} remaining this semester</tool>'.format(semester_quota))
+
+
+if __name__ == '__main__':
+    sys.exit(main())
