@@ -48,7 +48,7 @@ class ocf::firewall::post {
     before   => undef,
   }
 
-  $devices.each |String $d| {
+  $devices.each |$d| {
     firewall { "999 drop other output to ${d} (IPv4)":
       chain       => 'OUTPUT',
       action      => 'drop',
@@ -57,7 +57,7 @@ class ocf::firewall::post {
     }
   }
 
-  $devices_ipv6.each |String $d| {
+  $devices_ipv6.each |$d| {
     firewall { "999 drop other output to ${d} (IPv6)":
       chain       => 'OUTPUT',
       action      => 'drop',
