@@ -51,6 +51,7 @@ class ocf::firewall::post {
   $devices.each |$d| {
     firewall { "999 drop other output to ${d} (IPv4)":
       chain       => 'OUTPUT',
+      proto       => 'all',
       action      => 'drop',
       destination => $d,
       before      => undef,
@@ -60,6 +61,7 @@ class ocf::firewall::post {
   $devices_ipv6.each |$d| {
     firewall { "999 drop other output to ${d} (IPv6)":
       chain       => 'OUTPUT',
+      proto       => 'all',
       action      => 'drop',
       destination => $d,
       provider    => 'ip6tables',
