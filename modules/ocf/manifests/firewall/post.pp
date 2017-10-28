@@ -1,15 +1,33 @@
-class ocf::firewall::post{
+class ocf::firewall::post {
 
+  $devices = ['corruption-mgmt','hal-mgmt', 'jaws-mgmt', 'pagefault', 'pandemic-mgmt',
+              'papercut', 'radiation', 'riptide-mgmt']
 
-  $devices = ['corruption-mgmt','hal-mgmt', 'jaws-mgmt', 'ocf-2.eac.berkeley.edu',
-              'pagefault', 'pandemic-mgmt', 'papercut', 'radiation', 'riptide-mgmt']
+  $devicesIPv6 = ['radiation']
 
-  $devicesIPv6 = ['ocf-2.eac.berkeley.edu', 'radiation']
+  $devices.each |String $d| {
+    firewall { "998 allow ICMP to ${d} (IPv4)":
+      chain       => 'OUTPUT',
+      proto       => 'icmp',
+      action      => 'accept',
+      destination => $d,
+      before      => undef,
+    }
+  }
 
-  #loop constructs rules to drop output to special devices
+  $devicesIPv6.each |String $d| {
+    firewall { "998 allow ICMP to ${d} (IPv6)":
+      chain       => 'OUTPUT',
+      proto       => 'ipv6-icmp',
+      action      => 'accept',
+      destination => $d,
+      provider    => 'ip6tables',
+      before      => undef,
+    }
+  }
 
-  $devices.each | String $d|{
-    firewall { "998 drop output to ${d}":
+  $devices.each |String $d| {
+    firewall { "999 drop other output to ${d} (IPv4)":
       chain       => 'OUTPUT',
       action      => 'drop',
       destination => $d,
@@ -17,8 +35,8 @@ class ocf::firewall::post{
     }
   }
 
-  $devicesIPv6.each |String $d|{
-    firewall { "998 drop output to ${d} (IPv6)":
+  $devicesIPv6.each |String $d| {
+    firewall { "999 drop other output to ${d} (IPv6)":
       chain       => 'OUTPUT',
       action      => 'drop',
       destination => $d,
@@ -26,5 +44,4 @@ class ocf::firewall::post{
       before      => undef,
     }
   }
-
 }
