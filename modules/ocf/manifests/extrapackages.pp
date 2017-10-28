@@ -56,6 +56,7 @@ class ocf::extrapackages {
     'ipython',
     'ipython3',
     'irssi',
+    'keychain',
     'libcrack2-dev',
     'libdbi-perl',
     'libexpect-perl',
