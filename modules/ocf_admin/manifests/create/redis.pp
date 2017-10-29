@@ -1,5 +1,5 @@
 class ocf_admin::create::redis {
-  package { ['redis-server']: }
+  package { ['redis-server', 'hitch']: }
 
   service { 'redis-server':
     require => Package['redis-server'],
@@ -21,10 +21,8 @@ class ocf_admin::create::redis {
     lens    => 'Spacevars.simple_lns',
     incl    => '/etc/redis/redis.conf',
     changes =>  [
-      'set port 0',
+      'set port 6379',
       "set requirepass ${redis_password}",
-      'set unixsocket /var/run/redis/redis.sock',
-      'set unixsocketperm 666',
 
       # Redis offers two data stores: RDB and AOF.
       # Supposedly AOF is more durable than RDB, so that's what we'll use.
@@ -40,14 +38,19 @@ class ocf_admin::create::redis {
     notify  => Service['redis-server'];
   }
 
-  ocf::repackage { 'stunnel4': backport_on => jessie } ->
-  augeas { '/etc/default/stunnel4':
-    lens    => 'Shellvars.lns',
-    incl    => '/etc/default/stunnel4',
-    changes =>  ['set ENABLED 1'],
-  } ~>
-  file { '/etc/stunnel/redis.conf':
-    content => template('ocf_admin/stunnel/redis.conf.erb'),
-  } ~>
-  service { 'stunnel4': }
+  # We already have an OCF member with the username "hitch", so dpkg
+  # chooses "_hitch" as a fallback username.
+  user { '_hitch':
+    groups  => 'ssl-cert',
+    notify  => Service['hitch'],
+    require => Package['hitch'],
+  }
+
+  file { '/etc/hitch/hitch.conf':
+    content => template('ocf_admin/hitch.conf.erb'),
+    notify  => Service['hitch'],
+    require => Package['hitch'],
+  }
+
+  service { 'hitch': }
 }
