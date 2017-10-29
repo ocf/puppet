@@ -63,6 +63,17 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     ssl_key        => '/opt/share/docker/secrets/rt/rt.key',
   }
 
+  # Port 10002 is used by ocfweb-web
+
+  ocf_mesos::master::load_balancer::http_vhost { 'pma':
+    server_name    => 'pma.ocf.berkeley.edu',
+    server_aliases => ['pma', 'phpmyadmin', 'phpmyadmin.ocf.berkeley.edu'],
+    service_port   => 10003,
+    ssl            => true,
+    ssl_cert       => '/opt/share/docker/secrets/pma/pma.ocf.berkeley.edu.crt',
+    ssl_key        => '/opt/share/docker/secrets/pma/pma.ocf.berkeley.edu.key',
+  }
+
   ocf_mesos::master::load_balancer::http_vhost { 'ocfweb-static':
     server_name    => 'static.ocf.berkeley.edu',
     service_port   => 10004,
@@ -87,15 +98,6 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     ssl            => true,
     ssl_cert       => '/opt/share/docker/secrets/thelounge/thelounge.ocf.berkeley.edu.crt',
     ssl_key        => '/opt/share/docker/secrets/thelounge/thelounge.ocf.berkeley.edu.key',
-  }
-
-  ocf_mesos::master::load_balancer::http_vhost { 'pma':
-    server_name    => 'pma.ocf.berkeley.edu',
-    server_aliases => ['pma', 'phpmyadmin', 'phpmyadmin.ocf.berkeley.edu'],
-    service_port   => 10003,
-    ssl            => true,
-    ssl_cert       => '/opt/share/docker/secrets/pma/pma.ocf.berkeley.edu.crt',
-    ssl_key        => '/opt/share/docker/secrets/pma/pma.ocf.berkeley.edu.key',
   }
 
   ocf_mesos::master::load_balancer::http_vhost { 'metabase':
