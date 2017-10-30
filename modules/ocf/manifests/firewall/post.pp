@@ -5,7 +5,7 @@ class ocf::firewall::post {
     ocf::firewall::firewall46 {
       "996 allow ${username} to send on SMTP port":
         opts => {
-          chain  => 'OUTPUT',
+          chain  => 'PUPPET-OUTPUT',
           proto  => 'tcp',
           dport  => 'smtp',
           uid    => $username,
@@ -18,7 +18,7 @@ class ocf::firewall::post {
   ocf::firewall::firewall46 {
     '997 forbid other users from sending on SMTP port':
       opts => {
-        chain  => 'OUTPUT',
+        chain  => 'PUPPET-OUTPUT',
         proto  => 'tcp',
         dport  => 'smtp',
         action => 'drop',
@@ -34,7 +34,7 @@ class ocf::firewall::post {
   $devices_ipv6 = ['radiation']
 
   firewall { '998 allow all outgoing ICMP':
-    chain  => 'OUTPUT',
+    chain  => 'PUPPET-OUTPUT',
     proto  => 'icmp',
     action => 'accept',
     before => undef,
@@ -42,7 +42,7 @@ class ocf::firewall::post {
 
   firewall { '998 allow all outgoing ICMPv6':
     provider => 'ip6tables',
-    chain    => 'OUTPUT',
+    chain    => 'PUPPET-OUTPUT',
     proto    => 'ipv6-icmp',
     action   => 'accept',
     before   => undef,
@@ -50,7 +50,7 @@ class ocf::firewall::post {
 
   $devices.each |$d| {
     firewall { "999 drop other output to ${d} (IPv4)":
-      chain       => 'OUTPUT',
+      chain       => 'PUPPET-OUTPUT',
       proto       => 'all',
       action      => 'drop',
       destination => $d,
@@ -60,7 +60,7 @@ class ocf::firewall::post {
 
   $devices_ipv6.each |$d| {
     firewall { "999 drop other output to ${d} (IPv6)":
-      chain       => 'OUTPUT',
+      chain       => 'PUPPET-OUTPUT',
       proto       => 'all',
       action      => 'drop',
       destination => $d,
