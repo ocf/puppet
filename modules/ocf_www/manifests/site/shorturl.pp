@@ -40,6 +40,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/decal(/.*)?$ https://decal.ocf.berkeley.edu$1 [R]'},
       {rewrite_rule => '^/docs(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
       {rewrite_rule => '^/email-update$ http://status.ocf.berkeley.edu/2014/06/email-discontinuation-update-forward.html [R]'},
+      {rewrite_rule => '^/facebook$ https://goo.gl/forms/dEzJmyRMwAPWCDAY2 [R]'},
       {rewrite_rule => '^/faq$ https://www.ocf.berkeley.edu/docs/faq/ [R]'},
       {rewrite_rule => '^/gh/l(/.*)?$ https://github.com/ocf/ocflib$1 [R]'},
       {rewrite_rule => '^/gh/p(/.*)?$ https://github.com/ocf/puppet$1 [R]'},
