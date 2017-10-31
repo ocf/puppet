@@ -12,9 +12,11 @@ class ocf_ocfweb::dev_config($group = 'ocfstaff') {
   $backend = $broker
 
 
-  # installed in extrapackages but this is an dependency
-  # of the crypto libraries used in ocfweb as well
-  package { 'libcrack2-dev':; }
+  # libcrack2-dev is a dependency of the crypto libraries that
+  # ocfweb depends on, but we can't just declare the package
+  # because it conflicts with extrapackages, which is declared in
+  # ocf_admin along with this manifest (for supernova)
+  ensure_packages(['libcrack2-dev'])
 
   file {
     '/etc/ocfweb':
