@@ -1,4 +1,5 @@
 classes:
     - ocf::packages::docker
+    - ocf_ocfweb::dev_config
 
 owner: dkessler
