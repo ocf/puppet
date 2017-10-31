@@ -1,2 +1,5 @@
 classes:
     - ocf_hpc
+    - ocf_kvm
+
+ocf::networking::bridge: true
