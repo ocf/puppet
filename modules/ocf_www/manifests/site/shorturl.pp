@@ -40,6 +40,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/decal(/.*)?$ https://decal.ocf.berkeley.edu$1 [R]'},
       {rewrite_rule => '^/docs(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
       {rewrite_rule => '^/email-update$ http://status.ocf.berkeley.edu/2014/06/email-discontinuation-update-forward.html [R]'},
+      {rewrite_rule => '^/facebook$ https://goo.gl/forms/dEzJmyRMwAPWCDAY2 [R]'},
       {rewrite_rule => '^/faq$ https://www.ocf.berkeley.edu/docs/faq/ [R]'},
       {rewrite_rule => '^/gh/l(/.*)?$ https://github.com/ocf/ocflib$1 [R]'},
       {rewrite_rule => '^/gh/p(/.*)?$ https://github.com/ocf/puppet$1 [R]'},
@@ -94,7 +95,6 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/web$ https://www.ocf.berkeley.edu/docs/services/web/ [R]'},
       {rewrite_rule => '^/xkcd$ https://xkcd.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/youtube$ https://www.youtube.com/channel/UCx6SI8vROy9UGje0IiLkk8w [R]'},
-      {rewrite_rule => '^/facebook$ https://goo.gl/forms/dEzJmyRMwAPWCDAY2 [R]'},
 
       # Otherwise, send a temporary redirect to the appropriate userdir
       {rewrite_rule => '^/~?([a-z]{3,16}(?:/.*)?)$ https://www.ocf.berkeley.edu/~$1 [R]'},
