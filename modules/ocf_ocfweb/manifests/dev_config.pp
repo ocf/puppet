@@ -11,6 +11,11 @@ class ocf_ocfweb::dev_config($group = 'ocfstaff') {
   $broker = "redis://:${redis_password}@admin.ocf.berkeley.edu:6378"
   $backend = $broker
 
+
+  # installed in extrapackages but this is an dependency
+  # of the crypto libraries used in ocfweb as well
+  package { 'libcrack2-dev':; }
+
   file {
     '/etc/ocfweb':
       ensure    => directory;
