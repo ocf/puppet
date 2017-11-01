@@ -1,5 +1,5 @@
 #allow desktops to send packets to papercut, pagefault, radiation
-class ocf::firewall::desktop_output {
+class ocf_desktop::firewall_output {
 
   $devices = ['pagefault', 'papercut', 'radiation']
 
@@ -10,7 +10,6 @@ class ocf::firewall::desktop_output {
       chain       => 'PUPPET-OUTPUT',
       action      => 'accept',
       destination => $d,
-      before      => 'post.pp',
     }
   }
 
@@ -20,7 +19,6 @@ class ocf::firewall::desktop_output {
       action      => 'accept',
       destination => $d,
       provider    => 'ip6tables',
-      before      => 'post.pp',
     }
   }
 }
