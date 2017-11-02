@@ -1,4 +1,5 @@
 class ocf_kvm($group = 'root') {
+  include ocf::firewall::output_all
   include ocf::ipmi
   include ocf::tmpfs
 

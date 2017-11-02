@@ -1,5 +1,6 @@
 class ocf_admin {
   include ocf::extrapackages
+  include ocf::firewall::output_all
   include ocf::hostkeys
   include ocf::packages::cups
   include ocf::tmpfs
@@ -9,8 +10,8 @@ class ocf_admin {
   include ocf_admin::create
 
   class { 'ocf::nfs':
-    cron   => true,
-    web    => true;
+    cron  => true,
+    web   => true;
   }
 
   class { 'ocf::packages::docker':
