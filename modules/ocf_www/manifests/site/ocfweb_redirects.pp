@@ -2,9 +2,9 @@
 # redirect those sites to the appropriate pages on ocfweb.
 class ocf_www::site::ocfweb_redirects {
   # accounts
-  $accounts_canonical_url = $::hostname ? {
-    /^dev-/ => 'https://dev-accounts.ocf.berkeley.edu/',
-    default => 'https://accounts.ocf.berkeley.edu/',
+  $accounts_canonical_url = $::dev_config ? {
+    true  => 'https://dev-accounts.ocf.berkeley.edu/'
+    false => 'https://accounts.ocf.berkeley.edu/'
   }
 
   apache::vhost { 'accounts':
@@ -43,9 +43,9 @@ class ocf_www::site::ocfweb_redirects {
   }
 
   # wiki
-  $wiki_canonical_url = $::hostname ? {
-    /^dev-/ => 'https://dev-wiki.ocf.berkeley.edu/',
-    default => 'https://wiki.ocf.berkeley.edu/',
+  $wiki_canonical_url = $::dev_config ? {
+    true  => 'https://dev-wiki.ocf.berkeley.edu/'
+    false => 'https://wiki.ocf.berkeley.edu/'
   }
 
   apache::vhost { 'wiki':
@@ -80,9 +80,9 @@ class ocf_www::site::ocfweb_redirects {
   }
 
   # hello
-  $hello_canonical_url = $::hostname ? {
-    /^dev-/ => 'https://dev-hello.ocf.berkeley.edu/',
-    default => 'https://hello.ocf.berkeley.edu/',
+  $hello_canonical_url = $::dev_config ? {
+    true  => 'https://dev-hello.ocf.berkeley.edu/'
+    false => 'https://hello.ocf.berkeley.edu/'
   }
 
   apache::vhost { 'hello':

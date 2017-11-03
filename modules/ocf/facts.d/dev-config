@@ -1,0 +1,6 @@
+#!/bin/bash -eu
+if hostname | grep -qE '^dev-'; then
+    echo 'dev_config=true'
+else
+    echo 'dev_config=false'
+fi

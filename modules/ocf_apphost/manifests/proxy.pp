@@ -1,4 +1,4 @@
-class ocf_apphost::proxy($dev_config = false) {
+class ocf_apphost::proxy {
   package { 'nginx':; }
   service { 'nginx':
     require => Package['nginx'];
@@ -29,10 +29,9 @@ class ocf_apphost::proxy($dev_config = false) {
       mode    => '0755';
   }
 
-  if $dev_config {
-    $build_args = '--dev'
-  } else {
-    $build_args = ''
+  $build_args = $::dev_config ? {
+    true  => '--dev'
+    false => ''
   }
 
   cron {

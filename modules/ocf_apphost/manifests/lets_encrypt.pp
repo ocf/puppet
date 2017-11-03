@@ -14,7 +14,7 @@ class ocf_apphost::lets_encrypt {
       mode      => '0400';
   }
 
-  if $::hostname !~ /^dev-/ {
+  if !$::dev_config {
     cron { 'lets-encrypt-update':
       command     => 'chronic /usr/local/bin/lets-encrypt-update -v app',
       user        => ocfletsencrypt,
