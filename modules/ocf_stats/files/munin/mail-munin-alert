@@ -50,6 +50,13 @@ def send_alert(host, plugin, mail_to=MAIL_ROOT):
         syslog('not sending alert for host {} because it is a staff vm'.format(host))
         return
 
+    if ldap_entry['type'] == 'desktop' and plugin == 'memory':
+        # We don't want to send out memory alerts on desktops, because some
+        # people really like using large amounts of memory on the desktops, and
+        # we shouldn't get unactionable alerts when they do
+        syslog('not sending alert for host {} because it is a memory alert for a desktop'.format(host))
+        return
+
     dns_names = ', '.join(sorted(
         ldap_entry.get('dnsCname', []) + ldap_entry.get('dnsA', []),
     )) or '(none)'
