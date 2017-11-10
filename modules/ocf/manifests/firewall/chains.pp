@@ -18,4 +18,21 @@ class ocf::firewall::chains {
         jump  => 'PUPPET-OUTPUT',
       };
   }
+
+  firewallchain {
+    ['PUPPET-INPUT:filter:IPv4', 'PUPPET-INPUT:filter:IPv6']:
+      ensure => present,
+      purge  => true;
+  } ->
+  ocf::firewall::firewall46 {
+    default:
+      require => undef;
+
+    '100 run rules in PUPPET-INPUT chain':
+      opts => {
+        chain => 'INPUT',
+        proto => 'all',
+        jump  => 'PUPPET-INPUT',
+      };
+  }
 }

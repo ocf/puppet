@@ -36,14 +36,14 @@ class ocf::firewall::post {
   ]
   $devices = ['radiation']
 
-  firewall { '998 allow all outgoing ICMP':
+  firewall_multi { '998 allow all outgoing ICMP':
     chain  => 'PUPPET-OUTPUT',
     proto  => 'icmp',
     action => 'accept',
     before => undef,
   }
 
-  firewall { '998 allow all outgoing ICMPv6':
+  firewall_multi { '998 allow all outgoing ICMPv6':
     provider => 'ip6tables',
     chain    => 'PUPPET-OUTPUT',
     proto    => 'ipv6-icmp',
