@@ -35,7 +35,7 @@ def main():
         quota = get_quota(c, user)
 
     msg = '   → {} {}\n'.format(quota.semesterly, 'remaining this semester')
-    msg += '   → {} {}\n'.format(quota.daily, 'remaining this semester')
+    msg += '   → {} {}\n'.format(quota.daily, 'remaining today')
     msg += '(as of {})'.format(datetime.now().strftime('%-I:%M%P'))
     Notify.Notification.new(
         '{} printing quota:'.format(user), msg, NOTIFICATION_ICON).show()
