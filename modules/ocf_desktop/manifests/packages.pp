@@ -1,13 +1,13 @@
 class ocf_desktop::packages {
   include ocf::extrapackages
 
-  # install packages specific to desktops
+  # Install packages specific to desktops
   #
-  # in general, prefer to install packages to ocf::packages so that they are
+  # In general, prefer to install packages to ocf::packages so that they are
   # also available on the login and web servers; this is helpful to users, and
   # avoids surprises
   #
-  # this list should be used only for packages that don't make sense on a
+  # This list should be used only for packages that don't make sense on a
   # server (such as gimp)
   package {
     # applications
@@ -33,7 +33,7 @@ class ocf_desktop::packages {
     # games
     ['armagetronad', 'gl-117', 'gnome-games', 'wesnoth', 'wesnoth-music']:;
     # graphics/plotting
-    ['r-cran-rgl', 'jupyter-qtconsole']:;
+    ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
     # input method editors
     ['fcitx', 'fcitx-libpinyin', 'fcitx-rime', 'fcitx-hangul', 'fcitx-mozc']:;
     # nonfree packages
@@ -46,25 +46,9 @@ class ocf_desktop::packages {
     ['xserver-xorg', 'xclip', 'xscreensaver']:;
   }
 
-  # Packages that only work on jessie
-  if $::lsbdistcodename == 'jessie' {
-    package {
-      [
-        'readahead-fedora',
-      ]:;
-    }
-  }
-
-  # Install rstudio, custom built to work with libssl1.0.2 and run on stretch.
-  # TODO: Remove libgstreamer0.10-0 and libgstreamer-plugins-base0.10-0 once
-  # rstudio is packaged officially for stretch. These two packages are installed
-  # from our apt repo (ported from jessie) and are dependencies of rstudio until
-  # rstudio updates to libgstreamer1.0-0 and libgstreamer-plugins-base1.0-0.
-  package { 'rstudio':; }
-
   # TODO: install remmina from backports when that becomes available
 
-  # remove some packages
+  # Remove some packages
   package {
     # causes gid conflicts
     'sane-utils':

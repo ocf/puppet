@@ -152,13 +152,11 @@ class ocf_desktop::xsession {
       recurse => true;
   }
 
-  if $::lsbdistcodename != 'jessie' {
-    file {
-      # Overwrite datetime file to add larger font on stretch
-      '/etc/skel/.config/xfce4/panel/datetime-7.rc':
-        source  => 'puppet:///modules/ocf_desktop/datetime-7-stretch.rc',
-        require => File['/etc/skel/.config'];
-    }
+  # Overwrite datetime file to add larger font on stretch
+  file {
+    '/etc/skel/.config/xfce4/panel/datetime-7.rc':
+      source  => 'puppet:///modules/ocf_desktop/datetime-7-stretch.rc',
+      require => File['/etc/skel/.config'];
   }
 
   # disable user switching and screen locking (prevent non-staff users from
