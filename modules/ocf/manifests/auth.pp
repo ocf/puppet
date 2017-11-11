@@ -132,11 +132,23 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     require => Augeas['sshd_config'],
   }
 
+  # Get all DNS names, FQDNs, and IPs for a host to include in SSH keys
+  $ssh_aliases = delete(concat(
+    suffix(delete(any2array($::dnsA), ''), ".${::domain}"),
+    $::dnsA,
+    suffix(delete(any2array($::dnsCname), ''), ".${::domain}"),
+    $::dnsCname,
+    $::fqdn,
+    $::ipHostNumber,
+    $::ipaddress6,
+  ), '')
+
   # Export SSH keys from every host, and use them to populate the global list
   # in /etc/ssh/ssh_known_hosts
   @@sshkey { $::hostname:
-    type => ecdsa-sha2-nistp256,
-    key  => $::sshecdsakey,
+    host_aliases => $ssh_aliases,
+    key          => $::sshecdsakey,
+    type         => ecdsa-sha2-nistp256,
   }
   Sshkey <<| |>>
 
