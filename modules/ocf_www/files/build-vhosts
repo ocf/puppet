@@ -229,7 +229,6 @@ def test_and_overwrite_config(config_path, new_config, target):
             report('[end diff]')
 
             if ret == 0:
-                report('Nothing changed, not doing anything.')
                 return False
 
             # Save existing config
@@ -263,11 +262,12 @@ def test_and_overwrite_config(config_path, new_config, target):
 def process_app_vhosts():
     """Perform extra tasks specific to app vhosts.
 
-    This includes checking for membership in the ocfdev group, fixing
-    socket permissions, and generating SSL bundles."""
+    This includes checking for membership in the ocfdev group and fixing
+    socket permissions. Returns true if nginx should reload."""
     def groups_for_user(user):
         return (g.gr_name for g in grp.getgrall() if user in g.gr_mem)
 
+    changed = False
     for domain, vhost in get_app_vhosts().items():
         user = vhost['username']
 
@@ -291,11 +291,14 @@ def process_app_vhosts():
                 os.path.getmtime(ssl.bundle) < os.path.getmtime(ssl.cert)
             ):
                 report('Generating SSL bundle for ' + ssl.fqdn)
+                changed = True
                 with open(ssl.bundle, 'w') as f, \
                         open(ssl.cert) as f1, \
                         open(ssl.chain) as f2:
                     shutil.copyfileobj(f1, f)
                     shutil.copyfileobj(f2, f)
+
+    return changed
 
 
 def main():
@@ -331,8 +334,10 @@ def main():
     )
     args = parser.parse_args(sys.argv[1:])
 
+    changed = False
+
     if args.target == 'app' and not args.dry_run:
-        process_app_vhosts()
+        changed |= process_app_vhosts()
 
     if args.target == 'web':
         site_cfg = APACHE_SITE_CONFIG
@@ -353,8 +358,7 @@ def main():
         report(config)
         return 0
 
-    changed = test_and_overwrite_config(site_cfg, config, args.target)
-
+    changed |= test_and_overwrite_config(site_cfg, config, args.target)
     if changed:
         if not args.no_reload:
             report('Things changed, reloading.')
@@ -364,6 +368,8 @@ def main():
                 subprocess.check_call(('systemctl', 'reload', 'nginx'))
         else:
             report('Not reloading, as you requested.')
+    else:
+        report('Nothing changed, not doing anything.')
 
 
 if __name__ == '__main__':

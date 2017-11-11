@@ -1,5 +1,5 @@
 classes:
-    - ocf_ssl::default_bundle
+    - ocf::lets_encrypt
     - ocf::packages::docker
 
 owner: mattmcal
