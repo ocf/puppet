@@ -1,4 +1,4 @@
-#allow desktops to send packets to papercut, pagefault, radiation
+# allow desktops to send packets to papercut, pagefault, radiation
 class ocf_desktop::firewall_output {
 
   $devices = ['pagefault', 'papercut', 'radiation']
