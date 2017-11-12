@@ -1,5 +1,7 @@
 class ocf::firewall {
+  # Install prerequisite packages (that is, netfilter-persistent)
   include firewall
+
   include ocf::firewall::chains
 
   class {
