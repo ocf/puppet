@@ -8,7 +8,7 @@ from ocflib.account.utils import is_staff
 from ocflib.lab.stats import staff_in_lab
 
 
-NOTIFICATION_ICON = '/opt/share/xsession/images/ocf-color.png'
+NOTIFICATION_ICON = '/opt/share/xsession/images/ocf-notification.svg'
 
 PAPER_PATH = '/opt/share/utils/bin/paper'
 
