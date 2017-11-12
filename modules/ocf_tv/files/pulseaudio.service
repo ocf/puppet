@@ -1,0 +1,12 @@
+[Unit]
+Description=PulseAudio user service
+Requires=network-online.target
+After=nodm.service
+
+[Service]
+User=ocftv
+ExecStart=/usr/bin/pulseaudio --log-target=syslog
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
