@@ -1,5 +1,5 @@
 [Unit]
-Description=PulseAudio user service
+Description=PulseAudio service
 Requires=network-online.target
 After=nodm.service
 
