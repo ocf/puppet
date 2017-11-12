@@ -12,7 +12,8 @@ mod 'puppet-nginx',                    '0.6.0'
 mod 'puppetlabs-apache',               '2.2.0'
 mod 'puppetlabs-apt',                  '4.2.0'
 mod 'puppetlabs-concat',               '4.0.1'
-mod 'puppetlabs-firewall',             '1.9.0'
+#revert to puppetlabs-firewall when 1.9.1 released
+mod 'kpengboy-firewall',               '1.9.0-79-gcb1bc3d-1'
 mod 'puppetlabs-hocon',                '1.0.0'
 mod 'puppetlabs-inifile',              '1.6.0' # Dependency of puppetlabs-puppetdb
 mod 'puppetlabs-postgresql',           '5.0.0' # Dependency of puppetlabs-puppetdb

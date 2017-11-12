@@ -46,3 +46,7 @@ Cron {
   monthday => '*',
   environment => 'PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin'
 }
+
+Firewall {
+  before => Class['ocf::firewall::post'],
+}
