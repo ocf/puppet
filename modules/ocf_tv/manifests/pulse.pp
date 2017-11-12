@@ -28,4 +28,13 @@ class ocf_tv::pulse {
     unless  => "grep -q 'tsched=0' /etc/pulse/default.pa",
     require => Package['pulseaudio'],
   }
+
+  # configure the default server manually so we don't have to run
+  # pax11publish -e -S 127.0.0.1 every time Xorg restarts
+  $default_server = 'default-server = 127.0.0.1'
+  exec { 'set-default-server':
+    command => "echo '${default_server}' >> /etc/pulse/client.conf",
+    unless  => "grep -q '^${default_server}$' /etc/pulse/client.conf",
+    require => Package['pulseaudio'],
+  }
 }
