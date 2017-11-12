@@ -82,6 +82,14 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     ssl_key        => '/opt/share/docker/secrets/ocfweb/static.ocf.berkeley.edu.key',
   }
 
+  ocf_mesos::master::load_balancer::http_vhost { 'dev-rt':
+    server_name  => 'dev-rt.ocf.berkeley.edu',
+    service_port => 10005,
+    ssl          => true,
+    ssl_cert     => '/opt/share/docker/secrets/rt/dev-rt.ocf.berkeley.edu.crt',
+    ssl_key      => '/opt/share/docker/secrets/rt/dev-rt.ocf.berkeley.edu.key',
+  }
+
   ocf_mesos::master::load_balancer::http_vhost { 'templates':
     server_name    => 'templates.ocf.berkeley.edu',
     server_aliases => ['templates'],
