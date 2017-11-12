@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 import pwd
-import subprocess
 from datetime import datetime
 
 from gi.repository import Notify
 from ocflib.account.utils import is_staff
 from ocflib.lab.stats import staff_in_lab
-
+from ocflib.misc.whoami import current_user
+from ocflib.printing.quota import get_connection
+from ocflib.printing.quota import get_quota
 
 NOTIFICATION_ICON = '/opt/share/xsession/images/ocf-notification.svg'
-
-PAPER_PATH = '/opt/share/utils/bin/paper'
 
 
 def main():
@@ -31,10 +30,15 @@ def main():
         ).show()
 
     # Show user's print quota when changed
-    quota = subprocess.check_output(PAPER_PATH)
-    title, msg = quota.decode(encoding='UTF-8').split('\n', 1)
+    user = current_user()
+    with get_connection() as c:
+        quota = get_quota(c, user)
+
+    msg = '   → {} {}\n'.format(quota.semesterly, 'remaining this semester')
+    msg += '   → {} {}\n'.format(quota.daily, 'remaining today')
     msg += '(as of {})'.format(datetime.now().strftime('%-I:%M%P'))
-    Notify.Notification.new(title, msg, NOTIFICATION_ICON).show()
+    Notify.Notification.new(
+        '{} printing quota:'.format(user), msg, NOTIFICATION_ICON).show()
 
 
 if __name__ == '__main__':
