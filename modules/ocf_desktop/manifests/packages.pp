@@ -12,7 +12,7 @@ class ocf_desktop::packages {
   package {
     # applications
     ['arandr', 'atom', 'claws-mail', 'eog', 'evince-gtk', 'filezilla',
-      'florence', 'freeplane', 'galculator', 'geany', 'gimp', 'gparted',
+      'florence', 'freeplane', 'geany', 'gimp', 'gnome-calculator', 'gparted',
       'hexchat', 'imagej', 'inkscape', 'lyx', 'mssh', 'mumble', 'numlockx',
       'simple-scan', 'ssh-askpass-gnome', 'texmaker', 'texstudio', 'vlc',
       'xarchiver', 'xterm', 'zenmap']:;
