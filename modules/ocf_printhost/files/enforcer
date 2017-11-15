@@ -112,8 +112,10 @@ def read_config():
     return mysql_user, mysql_passwd
 
 
-def page_count(path):
-    return int(subprocess.check_output(('/usr/local/bin/enforcer-pc', path), timeout=30))
+def page_count(env):
+    path = env['TEADATAFILE']
+    num_copy = 1 if env['CLASS'] == 'single' else int(env['TEACOPIES'])
+    return num_copy * int(subprocess.check_output(('/usr/local/bin/enforcer-pc', path), timeout=30))
 
 
 def create_job(env):
@@ -122,7 +124,7 @@ def create_job(env):
     return quota.Job(
         user=env['TEAUSERNAME'],
         time=datetime.now(),
-        pages=page_count(env['TEADATAFILE']),
+        pages=page_count(env),
         queue=queue,
         printer=printer,
         doc_name=env['TEATITLE'],
@@ -178,7 +180,7 @@ def main(argv):
                 posthook(c, job, success)
     except SystemExit as e:
         sys.exit(e.code)
-    except:
+    except Exception:
         msg = dedent("""\
             enforcer encountered the following error while processing a job:
 
@@ -204,7 +206,7 @@ def main(argv):
                     quo or quota.UserQuota(user=job.user, daily='Unknown',
                                            semesterly='Unknown')
                 )
-            except:
+            except Exception:
                 pass
         # Don't retry; it's not going to print the second time.
         sys.exit(255)
