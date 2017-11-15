@@ -51,4 +51,23 @@ class ocf_kvm($group = 'root') {
       owner     => 'root',
       show_diff => false;
   }
+
+  # firewall input rules, allow all ssh, allow ntp
+  ocf::firewall::firewall46 {
+    '101 accept all ssh':
+      opts => {
+        'chain'  => 'PUPPET-INPUT',
+        'proto'  => 'tcp',
+        'dport'  => 'ssh',          # change to port number 22?
+        'action' => 'accept',
+      };
+
+    '102 accept all ntp':
+      opts => {
+        'chain'  => 'PUPPET-INPUT',
+        'proto'  => ['tcp', 'udp'],
+        'dport'  => 'ntp',          # change to port number 123?
+        'action' => 'accept',
+      };
+  }
 }
