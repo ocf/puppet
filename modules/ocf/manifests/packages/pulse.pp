@@ -4,7 +4,7 @@ class ocf::packages::pulse {
     'pulseaudio':
       recommends => false;
     # PulseAudio graphical interfaces
-    [ 'paprefs', 'pavucontrol' ]:
+    [ 'pavucontrol' ]:
       recommends => false,
       require    => Ocf::Repackage['pulseaudio'];
   }
