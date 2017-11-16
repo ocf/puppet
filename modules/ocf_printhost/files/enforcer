@@ -114,6 +114,7 @@ def read_config():
 
 def page_count(env):
     path = env['TEADATAFILE']
+    # When printing with single, page number is already multiplied by copy count
     num_copy = 1 if env['CLASS'] == 'single' else int(env['TEACOPIES'])
     return num_copy * int(subprocess.check_output(('/usr/local/bin/enforcer-pc', path), timeout=30))
 
