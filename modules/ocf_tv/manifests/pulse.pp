@@ -18,6 +18,7 @@ class ocf_tv::pulse {
     command => "echo '${tcp_module}' >> /etc/pulse/default.pa",
     unless  => "grep -q '^${tcp_module}$' /etc/pulse/default.pa",
     require => Package['pulseaudio'],
+    notify  => Service['pulseaudio'],
   }
 
   # the timer-based scheduler performs worse for some reason for remote audio
@@ -27,6 +28,7 @@ class ocf_tv::pulse {
     command => "sed -i 's/module-udev-detect$/module-udev-detect tsched=0/' /etc/pulse/default.pa",
     unless  => "grep -q 'tsched=0' /etc/pulse/default.pa",
     require => Package['pulseaudio'],
+    notify  => Service['pulseaudio'],
   }
 
   # configure the default server manually so we don't have to run
@@ -36,5 +38,6 @@ class ocf_tv::pulse {
     command => "echo '${default_server}' >> /etc/pulse/client.conf",
     unless  => "grep -q '^${default_server}$' /etc/pulse/client.conf",
     require => Package['pulseaudio'],
+    notify  => Service['pulseaudio'],
   }
 }
