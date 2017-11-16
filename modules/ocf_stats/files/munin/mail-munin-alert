@@ -20,11 +20,11 @@ from sys import stdin
 from syslog import syslog
 
 from ocflib.infra import hosts
-from ocflib.misc.mail import MAIL_ROOT
 from ocflib.misc.mail import send_mail
 
 
 MAIL_FROM = 'Munin <munin@ocf.berkeley.edu>'
+MAIL_TO = 'Monitoring <mon@ocf.berkeley.edu>'
 
 
 # Filter out uninteresting or noisy warnings at the individual level
@@ -41,7 +41,7 @@ IGNORED_VALUES = {
 }
 
 
-def send_alert(host, plugin, mail_to=MAIL_ROOT):
+def send_alert(host, plugin, mail_to=MAIL_TO):
     ldap_entry, = hosts.hosts_by_filter('(cn={})'.format(host.split('.')[0]))
 
     if ldap_entry['type'] == 'staffvm':
@@ -83,7 +83,7 @@ def send_alert(host, plugin, mail_to=MAIL_ROOT):
 
 def main(argv):
     parser = argparse.ArgumentParser(description='Mail out a munin alert.')
-    parser.add_argument('--mail-to', default=MAIL_ROOT)
+    parser.add_argument('--mail-to', default=MAIL_TO)
     parser.add_argument('host')
     parser.add_argument('plugin')
     parser.add_argument('fields', nargs='*')
