@@ -70,4 +70,5 @@ class ocf_kvm($group = 'root') {
         'action' => 'accept',
       };
   }
+
 }

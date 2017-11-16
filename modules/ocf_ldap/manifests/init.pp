@@ -108,4 +108,15 @@ class ocf_ldap {
     source => 'puppet:///modules/ocf_ldap/munin/slapd-open-files',
     user   => root,
   }
+
+  # firewall input rule, allow ldaps, port number 636
+  ocf::firewall::firewall46 {
+    '101 allow ldaps':
+      opts => {
+        'chain'  => 'PUPPET-INPUT',
+        'proto'  => [ 'tcp', 'udp' ],
+        'dport'  => 'ldaps',
+        'action' => 'accept',
+      };
+  }
 }
