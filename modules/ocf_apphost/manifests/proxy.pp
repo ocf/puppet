@@ -29,9 +29,9 @@ class ocf_apphost::proxy {
       mode    => '0755';
   }
 
-  $build_args = $::dev_config ? {
-    true  => '--dev'
-    false => ''
+  $build_args = $::host_env ? {
+    'dev'  => '--dev',
+    'prod' => '',
   }
 
   cron {

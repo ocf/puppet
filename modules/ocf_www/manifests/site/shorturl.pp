@@ -8,9 +8,9 @@ class ocf_www::site::shorturl {
       notify => Service['httpd'];
   }
 
-  $canonical_url = $::dev_config ? {
-    true  => 'https://dev-ocf-io.ocf.berkeley.edu/'
-    false => 'https://ocf.io/'
+  $canonical_url = $::host_env ? {
+    'dev'  => 'https://dev-ocf-io.ocf.berkeley.edu/',
+    'prod' => 'https://ocf.io/',
   }
 
   apache::vhost { 'shorturl':

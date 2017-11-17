@@ -1,0 +1,6 @@
+#!/bin/bash -euo pipefail
+if hostname | grep -qE '^dev-'; then
+    echo 'host_env=dev'
+else
+    echo 'host_env=prod'
+fi

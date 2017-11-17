@@ -55,7 +55,7 @@ class ocf_rancid {
 
   # Don't push to GitHub for dev-* hosts to prevent duplicate backups with
   # different commit hashes
-  if !$::dev_config {
+  if $::host_env == 'prod' {
     # GitHub deploy hook and key
     file {
       '/var/lib/rancid/.ssh':

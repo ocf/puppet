@@ -55,7 +55,7 @@ class ocf_ldap {
   }
 
   # Pushing to GitHub is disabled for dev-* hosts to prevent duplicate backups
-  if !$::dev_config {
+  if $::host_env == 'prod' {
     # GitHub deploy hook and key
     file {
       '/var/backups/ldap/.git/hooks/post-commit':
