@@ -149,7 +149,7 @@ future staffers what options you actually changed.
 
 Instead of overwriting an entire config file just to change one value, try to
 [use augeas][augeas] ([example][augeas-example]) or [sed][sed]
-([example][sed-example]) to change just the necessary values.
+to change just the necessary values.
 
 ## Future improvements
 
@@ -165,7 +165,6 @@ Instead of overwriting an entire config file just to change one value, try to
 [jenkins]: https://jenkins.ocf.berkeley.edu/view/puppet-deploy/
 [r10k]: https://github.com/puppetlabs/r10k
 [puppet-forge]: https://forge.puppet.com/
-[augeas]: http://projects.puppetlabs.com/projects/1/wiki/puppet_augeas
+[augeas]: https://puppet.com/docs/puppet/4.8/types/augeas.html
 [augeas-example]: https://github.com/ocf/puppet/blob/57c9bec/modules/ocf/manifests/auth.pp#L95
-[sed]: http://projects.puppetlabs.com/projects/puppet/wiki/Simple_Text_Patterns/5
-[sed-example]: https://github.com/ocf/puppet/blob/e7de500/modules/ocf_desktop/manifests/grub.pp#L13
+[sed]: https://github.com/ocf/puppet/blob/e7de500/modules/ocf_desktop/manifests/grub.pp#L13
