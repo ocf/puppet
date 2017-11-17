@@ -8,6 +8,17 @@ class ocf::packages::ntp($master = false, $peers = []) {
       content => template('ocf/ntp.conf.erb'),
       require => Package['ntp'],
     }
+
+    #firewall input rule, allow ntp (123 udp/tcp)
+    ocf::firewall::firewall46 {
+      '101 accept all ntp':
+        opts => {
+          chain  => 'PUPPET-INPUT',
+          proto  => ['tcp', 'udp'],
+          dport  => 'ntp',
+          action => 'accept',
+        };
+    }
   } else {
     file { '/etc/ntp.conf':
       source  => 'puppet:///modules/ocf/ntp.conf',

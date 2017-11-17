@@ -58,17 +58,8 @@ class ocf_kvm($group = 'root') {
       opts => {
         'chain'  => 'PUPPET-INPUT',
         'proto'  => 'tcp',
-        'dport'  => 'ssh',          # change to port number 22?
-        'action' => 'accept',
-      };
-
-    '102 accept all ntp':
-      opts => {
-        'chain'  => 'PUPPET-INPUT',
-        'proto'  => ['tcp', 'udp'],
-        'dport'  => 'ntp',          # change to port number 123?
+        'dport'  => 'ssh',
         'action' => 'accept',
       };
   }
-
 }

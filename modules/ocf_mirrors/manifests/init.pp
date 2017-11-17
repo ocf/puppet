@@ -13,6 +13,7 @@ class ocf_mirrors {
   include ocf_mirrors::centos_debuginfo
   include ocf_mirrors::debian
   include ocf_mirrors::finnix
+  include ocf_mirrors::firewall_input
   include ocf_mirrors::gnu
   include ocf_mirrors::kali
   include ocf_mirrors::kde
