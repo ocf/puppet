@@ -1,4 +1,2 @@
 classes:
     - ocf_printhost
-
-ocf_printhost::dev_config: true

@@ -14,7 +14,7 @@ class ocf_www::lets_encrypt {
       mode      => '0400';
   }
 
-  if $::hostname !~ /^dev-/ {
+  if $::host_env == 'prod' {
     cron { 'lets-encrypt-update':
       command     => 'chronic /usr/local/bin/lets-encrypt-update -v web',
       user        => ocfletsencrypt,

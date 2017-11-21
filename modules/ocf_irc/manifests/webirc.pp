@@ -1,7 +1,8 @@
 class ocf_irc::webirc {
-  $webirc_fqdn = $::hostname ? {
-    /^dev-/ => 'dev-irc.ocf.berkeley.edu',
-    default => 'irc.ocf.berkeley.edu',
+
+  $webirc_fqdn = $::host_env ? {
+    'dev'  => 'dev-irc.ocf.berkeley.edu',
+    'prod' => 'irc.ocf.berkeley.edu',
   }
 
   # Nginx is used to proxy to Marathon and to supply a HTTP -> HTTPS redirect

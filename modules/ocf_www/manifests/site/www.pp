@@ -88,9 +88,9 @@ class ocf_www::site::www {
   }
 
   # canonical redirects
-  $canonical_url = $::hostname ? {
-    /^dev-/ => 'https://dev-www.ocf.berkeley.edu$1',
-    default => 'https://www.ocf.berkeley.edu$1',
+  $canonical_url = $::host_env ? {
+    'dev'  => 'https://dev-www.ocf.berkeley.edu$1',
+    'prod' => 'https://www.ocf.berkeley.edu$1',
   }
 
   apache::vhost {
