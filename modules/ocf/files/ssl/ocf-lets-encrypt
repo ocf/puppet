@@ -168,7 +168,7 @@ def make_request(domains, cert_path, key, dry_run=False):
             cert, stderr, returncode = acme_tiny(domains, key)
             assert returncode == 0, returncode
             write_cert(cert, cert_path)
-        except:
+        except Exception:
             print('An error occured!', file=sys.stderr)
             print('stderr from acme-tiny:', file=sys.stderr)
             for line in stderr.decode().split('\n'):
@@ -192,13 +192,12 @@ def maybe_start_webserver(dry_run):
 
         proc.terminate()
         try:
-            proc.communicate(timeout=10)
+            proc.wait(timeout=10)
             print('Stopped ephemeral web server on port 80')
-        except:
-            # Might not be possible, but kill and quit noisily just in case
+        except subprocess.TimeoutExpired:
+            # Might not be possible, but kill
             proc.kill()
             print('Force-stopped ephemeral web server on port 80')
-            raise
     else:
         yield None
 

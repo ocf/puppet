@@ -25,11 +25,8 @@ if __name__ == '__main__':
             break
         else:
             line = line.split(':')
-            try:
-                data[line[0]] = line[1][1:]
-            except:
-                print('Could not parse input: ' + str(line), file=sys.stderr)
-                sys.exit(1)
+            assert len(line) == 2, 'Could not parse input: ' + str(line)
+            data[line[0]] = line[1][1:]
     try:
         username = utils.extract_username_from_principal(data['principal'])
         password = data['new-password']
