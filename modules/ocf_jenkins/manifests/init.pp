@@ -139,12 +139,15 @@ class ocf_jenkins {
     require => [File['/opt/jenkins/slave/workspace'], User['jenkins-slave']];
   }
 
-  # Clean docker garbage on jenkins more frequently as it tends to fill up quickly.
-  # The time is chosen to be before jenkins builds new Debian images.
+  # Autoclean /var/lib/docker when it's too full. This filesystem on the Jenkins
+  # server tends to fill up much faster than our regular cronjobs can clean it.
+  file { '/opt/jenkins/autoclean-docker.sh':
+    source => 'puppet:///modules/ocf_jenkins/autoclean-docker.sh',
+    mode   => '0755',
+  } ->
   cron { 'clean-old-docker-garbage-jenkins':
-    command => 'chronic docker system prune -af',
-    hour    => 20,
-    minute  => 55,
+    command => 'chronic /opt/jenkins/autoclean-docker.sh',
+    minute  => '*/5',
   }
 
   ocf::firewall::firewall46 { '899 allow jenkins to send mail':
