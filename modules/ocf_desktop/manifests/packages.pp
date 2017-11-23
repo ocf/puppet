@@ -14,8 +14,8 @@ class ocf_desktop::packages {
     ['arandr', 'atom', 'claws-mail', 'eog', 'evince-gtk', 'filezilla',
       'florence', 'freeplane', 'geany', 'gimp', 'gnome-calculator', 'gparted',
       'hexchat', 'imagej', 'inkscape', 'lyx', 'mssh', 'mumble', 'numlockx',
-      'simple-scan', 'ssh-askpass-gnome', 'texmaker', 'texstudio', 'vlc',
-      'xarchiver', 'xterm', 'zenmap']:;
+      'remmina', 'simple-scan', 'ssh-askpass-gnome', 'texmaker', 'texstudio',
+      'vlc', 'xarchiver', 'xterm', 'zenmap']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils',
       'redshift', 'xfce4-whiskermenu-plugin']:;
@@ -45,8 +45,6 @@ class ocf_desktop::packages {
     # Xorg
     ['xserver-xorg', 'xclip', 'xscreensaver']:;
   }
-
-  # TODO: install remmina from backports when that becomes available
 
   # Remove some packages
   package {
