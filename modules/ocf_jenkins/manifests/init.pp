@@ -141,12 +141,12 @@ class ocf_jenkins {
 
   # Autoclean /var/lib/docker when it's too full. This filesystem on the Jenkins
   # server tends to fill up much faster than our regular cronjobs can clean it.
-  file { '/opt/jenkins/autoclean-docker.sh':
-    source => 'puppet:///modules/ocf_jenkins/autoclean-docker.sh',
+  file { '/opt/jenkins/autoclean-docker':
+    source => 'puppet:///modules/ocf_jenkins/autoclean-docker',
     mode   => '0755',
   } ->
   cron { 'clean-old-docker-garbage-jenkins':
-    command => 'chronic /opt/jenkins/autoclean-docker.sh',
+    command => 'chronic /opt/jenkins/autoclean-docker',
     minute  => '*/5',
   }
 
