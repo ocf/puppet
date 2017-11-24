@@ -53,4 +53,21 @@ class ocf_dhcp {
       minute  => '*/15',
       require => File['/usr/local/bin/lab-wakeup'];
   }
+
+  # Allow BOOTP (IPv4 only)
+  firewall_multi { '101 allow bootps':
+    chain  => 'PUPPET-INPUT',
+    proto  => 'udp',
+    dport  => 67,
+    action => 'accept',
+  }
+
+  # Allow DHCP Server (IPv6 only)
+  firewall_multi { '101 allow dhcpv6-server':
+    provider => 'ip6tables',
+    chain    => 'PUPPET-INPUT',
+    proto    => 'udp',
+    dport    => 547,
+    action   => 'accept',
+  }
 }

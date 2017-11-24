@@ -10,4 +10,29 @@ class ocf_irc {
     groups  => 'ssl-cert',
     require => [Package['inspircd'], Package['ssl-cert']],
   }
+
+  # Allow HTTP and HTTPS
+  include ocf::firewall::allow_http
+
+  # Allow IRC server (SSL only)
+  ocf::firewall::firewall46 {
+    '101 allow irc':
+    opts => {
+      chain  => 'PUPPET-INPUT',
+      proto  => 'tcp',
+      dport  => '6697',
+      action => 'accept',
+    };
+  }
+
+  # Allow ZNC server
+  ocf::firewall::firewall46 {
+    '101 allow znc':
+    opts => {
+      chain  => 'PUPPET-INPUT',
+      proto  => 'tcp',
+      dport  => 4095,
+      action => 'accept',
+    };
+  }
 }

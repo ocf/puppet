@@ -36,26 +36,26 @@ class ocf_ns {
   ocf::firewall::firewall46 {
     '101 allow domain':
       opts => {
-        'chain'  => 'PUPPET-INPUT',
-        'proto'  => [ 'tcp', 'udp' ],
-        'dport'  => 'domain',
-        'action' => 'accept',
+        chain  => 'PUPPET-INPUT',
+        proto  => ['tcp', 'udp'],
+        dport  => 'domain',
+        action => 'accept',
       };
 
     '102 allow bootps':
       opts => {
-        'chain'  => 'PUPPET-INPUT',
-        'proto'  => [ 'tcp', 'udp' ],
-        'dport'  => 'bootps',
-        'action' => 'accept',
+        chain  => 'PUPPET-INPUT',
+        proto  => ['tcp', 'udp'],
+        dport  => 'bootps',
+        action => 'accept',
       };
 
     '103 allow tftp':
       opts => {
-        'chain'  => 'PUPPET-INPUT',
-        'proto'  => 'udp',
-        'dport'  => 'tftp',
-        'action' => 'accept',
+        chain  => 'PUPPET-INPUT',
+        proto  => 'udp',
+        dport  => 'tftp',
+        action => 'accept',
       };
   }
 }

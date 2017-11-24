@@ -33,10 +33,10 @@ class ocf_puppetdb {
   ocf::firewall::firewall46 {
     '101 allow access to port 8081':
       opts => {
-        'chain'  => 'PUPPET-INPUT',
-        'proto'  => 'all',
-        'action' => 'accept',
-        'dport'  => 8081,
+        chain  => 'PUPPET-INPUT',
+        proto  => 'all',
+        dport  => 8081,
+        action => 'accept',
       };
   }
 }

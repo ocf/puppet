@@ -7,18 +7,18 @@ class ocf_mirrors::firewall_input {
   ocf::firewall::firewall46 {
     '104 allow ftp':
       opts => {
-        'chain'  => 'PUPPET-INPUT',
-        'proto'  => 'tcp',
-        'dport'  => 'ftp',
-        'action' => 'accept',
+        chain  => 'PUPPET-INPUT',
+        proto  => 'tcp',
+        dport  => 'ftp',
+        action => 'accept',
       };
 
     '105 allow rsync':
       opts => {
-        'chain'  => 'PUPPET-INPUT',
-        'proto'  => 'tcp',
-        'dport'  => 'rsync',
-        'action' => 'accept',
+        chain  => 'PUPPET-INPUT',
+        proto  => 'tcp',
+        dport  => 'rsync',
+        action => 'accept',
       };
   }
 }

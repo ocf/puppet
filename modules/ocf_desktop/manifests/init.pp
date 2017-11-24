@@ -24,4 +24,27 @@ class ocf_desktop {
   include ocf_desktop::udev
   include ocf_desktop::wireshark
   include ocf_desktop::xsession
+
+  # Allow HTTP and HTTPS
+  include ocf::firewall::allow_http
+
+  # Allow Steam login and Steam content
+  ocf::firewall::firewall46 {
+    '101 allow steam (tcp)':
+      opts => {
+        chain  => 'PUPPET-INPUT',
+        proto  => 'tcp',
+        dport  => ['27015-27030', 27036, 27037],
+        action => 'accept',
+      };
+  }
+  ocf::firewall::firewall46 {
+    '101 allow steam (udp)':
+      opts => {
+        chain  => 'PUPPET-INPUT',
+        proto  => 'udp',
+        dport  => [4380, '27000-27031', 27036],
+        action => 'accept',
+      };
+  }
 }

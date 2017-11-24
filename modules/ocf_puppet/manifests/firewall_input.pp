@@ -4,10 +4,10 @@ class ocf_puppet::firewall_input {
   ocf::firewall::firewall46 {
     '101 allow puppet':
       opts => {
-        'chain'  => 'PUPPET-INPUT',
-        'proto'  => 'tcp',
-        'dport'  => 'puppet',
-        'action' => 'accept',
+        chain  => 'PUPPET-INPUT',
+        proto  => 'tcp',
+        dport  => 'puppet',
+        action => 'accept',
       };
   }
 }

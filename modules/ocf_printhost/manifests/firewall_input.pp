@@ -6,10 +6,10 @@ class ocf_printhost::firewall_input {
   ocf::firewall::firewall46 {
     '103 allow ipp':
       opts => {
-        'chain'  => 'PUPPET-INPUT',
-        'proto'  => [ 'tcp', 'udp' ],
-        'dport'  => 'ipp',
-        'action' => 'accept',
+        chain  => 'PUPPET-INPUT',
+        proto  => ['tcp', 'udp'],
+        dport  => 'ipp',
+        action => 'accept',
       };
   }
 }

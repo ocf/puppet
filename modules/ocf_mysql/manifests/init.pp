@@ -30,10 +30,10 @@ class ocf_mysql {
   ocf::firewall::firewall46 {
     '101 allow mysql':
       opts => {
-        'chain'  => 'PUPPET-INPUT',
-        'proto'  => [ 'tcp', 'udp' ],
-        'dport'  => 'mysql',
-        'action' => 'accept',
+        chain  => 'PUPPET-INPUT',
+        proto  => ['tcp', 'udp'],
+        dport  => 'mysql',
+        action => 'accept',
       };
   }
 }

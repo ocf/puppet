@@ -1,6 +1,9 @@
 class ocf_apphost {
   include ocf::extrapackages
   include ocf::hostkeys
+  include ocf::firewall::allow_http
+  include ocf::firewall::allow_mosh
+  include ocf::firewall::allow_ssh
   include ocf_apphost::proxy
   include ocf_apphost::lets_encrypt
 

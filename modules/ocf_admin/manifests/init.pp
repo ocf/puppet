@@ -44,4 +44,25 @@ class ocf_admin {
       mode      => '0640',
       show_diff => false;
   }
+
+  # Allow Redis
+  ocf::firewall::firewall46 {
+    '101 allow redis':
+      opts => {
+        chain  => 'PUPPET-INPUT',
+        proto  => 'tcp',
+        dport  => 6378,
+        action => 'accept',
+      };
+  }
+  # Allow 8000-8999 for dev work
+  ocf::firewall::firewall46 {
+    '101 allow dev':
+      opts => {
+        chain  => 'PUPPET-INPUT',
+        proto  => 'tcp',
+        dport  => '8000-8999',
+        action => 'accept',
+      };
+  }
 }

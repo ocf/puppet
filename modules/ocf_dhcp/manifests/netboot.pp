@@ -16,6 +16,17 @@ class ocf_dhcp::netboot {
     require   => Package['tftpd-hpa'],
   }
 
+  # Allow TFTP
+  ocf::firewall::firewall46 {
+    '101 allow tftp':
+      opts => {
+        chain  => 'PUPPET-INPUT',
+        proto  => 'udp',
+        dport  => 69,
+        action => 'accept',
+      };
+  }
+
   # Set up netboot image
   package { ['pax', 'p7zip-full']: }
 

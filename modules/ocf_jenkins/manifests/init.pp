@@ -1,5 +1,6 @@
 class ocf_jenkins {
   include ocf::extrapackages
+  include ocf::firewall::allow_http
   include ocf::tmpfs
   include ocf_ssl::default_bundle
 
