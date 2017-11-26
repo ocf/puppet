@@ -18,7 +18,7 @@ class ocf_desktop::packages {
       'vlc', 'xarchiver', 'xterm', 'zenmap']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils',
-      'redshift', 'xfce4-whiskermenu-plugin']:;
+      'gnome-icon-theme', 'redshift', 'xfce4-whiskermenu-plugin']:;
     # desktop helpers
     ['libimage-exiftool-perl']:;
     # display manager
