@@ -3,7 +3,7 @@
 set -euo pipefail
 
 fs_usage() {
-    df --output=pcent /var/lib/docker | sed -r 's/^ *([0-9]+)%$/\1/; t; d'
+    df --output=pcent /var/lib/docker | tail -n 1 | sed -r 's/^ *([0-9]+)%$/\1/'
 }
 
 
