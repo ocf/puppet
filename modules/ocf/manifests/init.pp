@@ -1,7 +1,8 @@
-class ocf::base {
+class ocf {
   include ocf::apt
   include ocf::auth
   include ocf::autologout
+  include ocf::firewall
   include ocf::groups
   include ocf::kerberos
   include ocf::ldap
