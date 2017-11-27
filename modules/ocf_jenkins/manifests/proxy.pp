@@ -14,10 +14,5 @@ class ocf_jenkins::proxy {
     ssl              => true,
     proxy            => 'http://localhost:8080',
     proxy_redirect   => 'http://localhost:8080 https://jenkins.ocf.berkeley.edu',
-    proxy_set_header => [
-      'X-Forwarded-Proto $scheme',
-      'X-Forwarded-For $proxy_add_x_forwarded_for',
-      'Host $http_host'
-    ],
   }
 }
