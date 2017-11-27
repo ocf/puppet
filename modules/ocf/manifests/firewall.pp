@@ -1,11 +1,15 @@
-class ocf::firewall {
+class ocf::firewall(
+  # Temporary variable for enabling mandatory input packet filtering on a
+  # host-by-host basis.
+  $drop_other_input = false,
+  ) {
   # Install prerequisite packages (that is, netfilter-persistent)
   include firewall
 
   include ocf::firewall::chains
 
   class {
-    ['ocf::firewall::post']:
+    ['ocf::firewall::pre', 'ocf::firewall::post']:
       require => Class['ocf::firewall::chains'],
   }
 

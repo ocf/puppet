@@ -1,4 +1,6 @@
 class ocf::firewall::post {
+  require ocf::networking
+
   # Only allow root and postfix to connect to anthrax port 25; everyone else
   # must use the sendmail interface.
   # firewall-multi doesn't multiplex this so we have to do it manually :(
@@ -67,5 +69,21 @@ class ocf::firewall::post {
       destination => $devices,
     },
     before => undef,
+  }
+
+
+  # Drop packets on the primary network inteface that are not whitelisted
+  # TODO: eliminate this if statement once testing is complete
+  if $ocf::firewall::drop_other_input {
+    ocf::firewall::firewall46 {
+      '999 drop unrecognized input packets on primary interface':
+        opts => {
+          chain   => 'PUPPET-INPUT',
+          proto   => 'all',
+          iniface => $ocf::networking::iface,
+          action  => 'drop',
+        },
+        before => undef,
+    }
   }
 }
