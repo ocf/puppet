@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+"""Closes old sessions that haven't updated in a while"""
+
+import sys
+
+from ocflib.lab.stats import get_connection
+
+# Timeout in minutes after which a host should be considered dead
+# (if we don't receive an update within X minutes, end any open sessions)
+HOST_TIMEOUT = 3
+
+
+def close_old_sessions(ocfstats_pass):
+    """Close any old sessions for hosts that have not given a session update in
+    HOST_TIMEOUT minutes."""
+
+    query = """
+        UPDATE `session` SET `end` = NOW(), `last_update` = NOW()
+            WHERE `end` IS NULL AND
+                `last_update` < ADDDATE(NOW(), INTERVAL -{} MINUTE)
+    """.format(HOST_TIMEOUT)
+
+    with get_connection(user='ocfstats', password=ocfstats_pass) as c:
+        c.execute(query)
+
+
+def main():
+    with open('/opt/stats/ocfstats-password') as f:
+        ocfstats_password = f.read().rstrip()
+
+    close_old_sessions(ocfstats_password)
+
+
+if __name__ == '__main__':
+    sys.exit(main())

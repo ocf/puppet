@@ -1,8 +1,4 @@
 class ocf_stats::labstats {
-  include ocf::packages::matplotlib
-
-  package { ['python3-mysql.connector', 'imagemagick', 'inkscape']:; }
-
   user {
     'ocfstats':
       comment => 'OCF Lab Stats',
@@ -11,15 +7,9 @@ class ocf_stats::labstats {
       groups  => 'sys';
   }
 
-  file {
-    ['/opt/stats', '/opt/stats/var', '/opt/stats/var/printing',
-    '/opt/stats/var/printing/history', '/opt/stats/var/printing/oracle']:
-        ensure => directory,
-        owner  => ocfstats,
-        group  => ocfstats,
-        mode   => '0755';
-  }
-
+  # TODO: Remove these two, the labstats repo only needs to have the desktop
+  # update endpoint and maybe the web interface moved to ocfweb (if we want a
+  # graph of toner levels, that is)
   vcsrepo { '/opt/stats/labstats':
     ensure   => latest,
     provider => git,
@@ -35,6 +25,8 @@ class ocf_stats::labstats {
     require => Vcsrepo['/opt/stats/labstats'];
   }
 
+  # TODO: Remove this by moving the endpoint for desktop session updates to
+  # ocfweb API (rt#6624)
   apache::vhost { 'labstats.ocf.berkeley.edu':
     servername => 'labstats.ocf.berkeley.edu',
     port       => 444,
@@ -57,23 +49,54 @@ class ocf_stats::labstats {
     }];
   }
 
+  $file_defaults = {
+    owner => ocfstats,
+    group => ocfstats,
+  }
+  file {
+    '/opt/stats':
+      ensure => directory,
+      *      => $file_defaults;
+
+    '/opt/stats/ocfstats-password':
+      content => hiera('ocfstats::mysql::password'),
+      mode    => '0600',
+      require => File['/opt/stats'],
+      *       => $file_defaults;
+
+    '/opt/stats/bin':
+      ensure  => directory,
+      source  => 'puppet:///modules/ocf_stats/stats/bin',
+      mode    => '0755',
+      recurse => true,
+      require => File['/opt/stats/ocfstats-password'],
+      *       => $file_defaults;
+  }
+
+  $cron_defaults = {
+    user        => 'ocfstats',
+    environment => 'MAILTO=root',
+    require     => File['/opt/stats/bin'],
+  }
   cron {
-    'labstats':
-      command     => '/opt/stats/labstats/cron/lab-cron > /dev/null',
-      environment => 'MAILTO=root',
-      user        => 'ocfstats',
-      minute      => '*';
+    'close-old-sessions':
+      command => '/opt/stats/bin/close-old-sessions',
+      minute  => '*',
+      *       => $cron_defaults;
 
-    'printstats':
-      command     => '/opt/stats/labstats/cron/print-cron > /dev/null',
-      environment => 'MAILTO=root',
-      user        => 'ocfstats',
-      minute      => '*/5';
+    'update-groups':
+      command => '/opt/stats/bin/update-groups',
+      minute  => '*/15',
+      *       => $cron_defaults;
 
-    'toner-check':
-      command     => '/opt/stats/labstats/cron/toner',
-      environment => 'MAILTO=root',
-      user        => 'ocfstats',
-      minute      => '*/5';
+    'update-printer-stats':
+      command => '/opt/stats/bin/update-printer-stats',
+      minute  => '*/5',
+      *       => $cron_defaults;
+
+    'low-toner-alert':
+      command => '/opt/stats/bin/low-toner-alert',
+      minute  => '*/15',
+      *       => $cron_defaults;
   }
 }
