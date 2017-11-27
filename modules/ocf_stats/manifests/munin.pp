@@ -28,7 +28,7 @@ class ocf_stats::munin {
   # with periodic Munin checks every 5 minutes (rt#4712)
   cron { 'gen-munin-nodes':
     command => '/usr/local/bin/gen-munin-nodes > /etc/munin/munin-conf.d/nodes',
-    user => 'root',
+    user    => 'root',
     minute  => '03',
     notify  => Service['munin'],
     require => File['/usr/local/bin/gen-munin-nodes'];
@@ -51,18 +51,10 @@ class ocf_stats::munin {
       headers       => ['always set Strict-Transport-Security max-age=31536000'],
 
       rewrites => [
-        {
-          rewrite_rule => '^/favicon.ico /var/cache/munin/www/static/favicon.ico [L]'
-        },
-        {
-          rewrite_rule => '^/static/(.*) /var/cache/munin/www/static/$1 [L]'
-        },
-        {
-          rewrite_rule => '^(/.*\.html)?$ /munin-cgi/munin-cgi-html/$1 [PT]'
-        },
-        {
-          rewrite_rule => '^/munin-cgi/munin-cgi-graph/(.*) /$1'
-        },
+        {rewrite_rule => '^/favicon.ico /var/cache/munin/www/static/favicon.ico [L]'},
+        {rewrite_rule => '^/static/(.*) /var/cache/munin/www/static/$1 [L]'},
+        {rewrite_rule => '^(/.*\.html)?$ /munin-cgi/munin-cgi-html/$1 [PT]'},
+        {rewrite_rule => '^/munin-cgi/munin-cgi-graph/(.*) /$1'},
         {
           rewrite_cond => '%{REQUEST_URI} !^/static',
           rewrite_rule => '^/(.*.png)$  /munin-cgi/munin-cgi-graph/$1 [L,PT]'
