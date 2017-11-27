@@ -1,5 +1,7 @@
 class ocf_puppet {
+  include ocf_ssl::default_bundle
   include ocf_puppet::environments
+  include ocf_puppet::puppetboard
   include ocf_puppet::puppetmaster
 
   file { '/etc/sudoers.d/ocfdeploy-puppet':
