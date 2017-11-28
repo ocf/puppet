@@ -173,7 +173,8 @@ def main(argv):
                             choices={'prehook', 'posthook'})
         args = parser.parse_args(argv[1:])
         job = create_job(os.environ)
-        with quota.get_connection(*read_config()) as c:
+        mysql_user, mysql_pass = *read_config()
+        with quota.get_connection(user=mysql_user, password=mysql_pass) as c:
             if args.command == 'prehook':
                 prehook(c, job)
             else:
