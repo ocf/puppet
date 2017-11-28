@@ -1,4 +1,6 @@
 class ocf_ssh::webssh {
+  include ocf::firewall::allow_http
+
   package { ['shellinabox']:; }
 
   case $::hostname {
