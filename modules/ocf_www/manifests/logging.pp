@@ -43,4 +43,6 @@ class ocf_www::logging {
   apache::custom_config { 'error_log':
     content => "ErrorLogFormat \"%v: [%t] [%l] [pid %P] %F: %E: [client %a] %M\"\n",
   }
+
+  include ocf::firewall::nfs
 }

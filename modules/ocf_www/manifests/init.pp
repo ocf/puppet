@@ -13,6 +13,7 @@
 class ocf_www {
   include ocf::acct
   include ocf::extrapackages
+  include ocf::firewall::allow_http
   include ocf::limits
   include ocf::tmpfs
   include ocf_ssl::default_bundle
