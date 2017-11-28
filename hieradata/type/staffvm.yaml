@@ -10,6 +10,5 @@ ocf::packages::docker::image_max_age: '672h'
 ocf::packages::docker::prune_volumes: false
 
 
-# let any staff use docker on staff VMs without sudo
 classes:
-    - ocf_staffvm::docker_group
+    - ocf_staffvm
