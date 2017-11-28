@@ -50,7 +50,13 @@ def eligible_domains(domains, target_domain):
     host, i.e. death or the apphost).
     """
     resolver = dns.resolver.Resolver()
-    resolver.nameservers = ['8.8.8.8', '8.8.4.4']
+
+    # Use Google's public DNS servers, OpenDNS servers, and Quad9 to test some
+    # public DNS services to see what the domains point to. If one fails, then
+    # some of the others should hopefully be working fine
+    resolver.nameservers = [
+        '8.8.8.8', '8.8.4.4', '208.67.222.222', '208.67.220.220', '9.9.9.9',
+    ]
 
     def resolve(fqdn):
         try:
