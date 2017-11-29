@@ -7,9 +7,6 @@ CUR_USER=$(who | awk '$NF == "(:0)" { print $1 }')
 DATA="state=inactive"
 
 if [ -n "$CUR_USER" ]; then
-	DATA="state=active&user=$CUR_USER"
+    curl -H "Content-Type: application/json" -X POST -d "{\"user\": \"$CUR_USER\"}" \
+         https://ocf.berkeley.edu/api/session/log 2>/dev/null
 fi
-
-curl --data "$DATA" \
-    https://labstats.ocf.berkeley.edu:444/update.cgi \
-	2>/dev/null
