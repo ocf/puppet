@@ -15,7 +15,7 @@ for ((max_age=24; max_age>=0; max_age--)); do
     if [ "$(fs_usage)" -le 75 ]; then
         break
     fi
-    logger -t "$0" --id=$$ "Cleaning Docker stuff older than ${max_age}h"
+    logger -t "$(basename "$0")" --id=$$ "Cleaning Docker stuff older than ${max_age}h"
     docker system prune -af --filter "until=${max_age}h"
     echo
 done
