@@ -29,6 +29,8 @@ umask 022
 alias ls "ls -F"
 alias quota "quota -Qs"
 alias rm "rm -I"
+alias leetfish "set -gx FISH swim"
+alias noobfish "set -gx FISH noob"
 
 # Logout
 function on_exit --on-process %self
@@ -39,10 +41,16 @@ end
 
 # Prompt colors
 function fish_prompt --description 'Write out the prompt'
-    set_color red; echo -n (whoami)
-    set_color normal; echo -n '@'
-    set_color purple; echo -n (hostname | cut -d . -f1) ''
-    set_color cyan; echo -n (prompt_pwd)
-    set_color $fish_color_cwd; echo -n "> "
-    set_color normal
+    if test "$FISH" = "swim"
+        set_color $fish_color_cwd; echo -n "><>  "
+        set_color cyan; echo -n (prompt_pwd) ''
+        set_color normal
+    else
+        set_color red; echo -n (whoami)
+        set_color normal; echo -n '@'
+        set_color purple; echo -n (hostname | cut -d . -f1) ''
+        set_color cyan; echo -n (prompt_pwd)
+        set_color $fish_color_cwd; echo -n "> "
+        set_color normal
+    end
 end
