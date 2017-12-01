@@ -1,8 +1,6 @@
 class ocf_mesos::package {
-  if $::lsbdistcodename == 'jessie' {
-    class { 'ocf_mesos::package::first_stage':
-      stage => first,
-    }
+  class { 'ocf_mesos::package::first_stage':
+    stage => first,
   }
 
   # We need Java 8 to be the default java.
