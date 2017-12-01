@@ -36,3 +36,13 @@ function on_exit --on-process %self
         kdestroy
     end
 end
+
+# Prompt colors
+function fish_prompt --description 'Write out the prompt'
+    set_color red; echo -n (whoami)
+    set_color normal; echo -n '@'
+    set_color purple; echo -n (hostname | cut -d . -f1) ''
+    set_color cyan; echo -n (prompt_pwd)
+    set_color $fish_color_cwd; echo -n "> "
+    set_color normal
+end
