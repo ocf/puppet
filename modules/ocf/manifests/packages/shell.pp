@@ -1,5 +1,5 @@
 class ocf::packages::shell {
-  package { ['bash', 'tcsh', 'zsh']: }
+  package { ['bash', 'tcsh', 'zsh', 'fish']: }
 
   file {
     # Bash system-wide config
@@ -28,5 +28,10 @@ class ocf::packages::shell {
     '/etc/zsh/zlogout':
       source  => 'puppet:///modules/ocf/shell/zlogout',
       require => Package['zsh'];
+
+    # Fish shell system-wide config
+    '/etc/fish/config.fish':
+      source => 'puppet:///modules/ocf/shell/config.fish',
+      require => Package['fish'];
   }
 }
