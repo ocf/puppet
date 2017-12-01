@@ -1,17 +1,15 @@
 class ocf::firewall(
   # Temporary variable for enabling mandatory input packet filtering on a
   # host-by-host basis.
-  $drop_other_input = false,
+  $allow_other_traffic = true,
   ) {
   # Install prerequisite packages (that is, netfilter-persistent)
   include firewall
+  include ocf::firewall::pre
+  include ocf::firewall::post
 
-  include ocf::firewall::chains
+  require ocf::firewall::chains
 
-  class {
-    ['ocf::firewall::pre', 'ocf::firewall::post']:
-      require => Class['ocf::firewall::chains'],
-  }
 
   # One unpleasant thing about the puppetlabs-firewall module is that it
   # calls iptables-save, which saves all iptables rules when it runs,

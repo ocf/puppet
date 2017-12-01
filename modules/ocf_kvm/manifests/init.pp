@@ -1,4 +1,5 @@
 class ocf_kvm($group = 'root') {
+  include ocf::firewall::allow_ssh
   include ocf::firewall::output_all
   include ocf::ipmi
   include ocf::tmpfs
@@ -50,16 +51,5 @@ class ocf_kvm($group = 'root') {
       mode      => '0400',
       owner     => 'root',
       show_diff => false;
-  }
-
-  # firewall input rules, allow all ssh, allow ntp
-  ocf::firewall::firewall46 {
-    '101 accept all ssh':
-      opts => {
-        chain  => 'PUPPET-INPUT',
-        proto  => 'tcp',
-        dport  => 'ssh',
-        action => 'accept',
-      };
   }
 }

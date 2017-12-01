@@ -1,4 +1,4 @@
 classes:
     - ocf_ssh
 
-ocf::firewall::drop_other_input: true
+ocf::firewall::allow_other_traffic: false
