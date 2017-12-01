@@ -59,10 +59,17 @@ define ocf::nginx_proxy(
     }
   } else {
     nginx::resource::server { $title:
-      server_name => concat([$server_name], $server_aliases),
-      proxy       => $proxy,
-      add_header  => $headers,
-      *           => $nginx_options,
+      server_name      => concat([$server_name], $server_aliases),
+      proxy            => $proxy,
+      proxy_redirect   => $proxy_redirect,
+      proxy_set_header => concat([
+        'Host $host',
+        'X-Forwarded-For $proxy_add_x_forwarded_for',
+        'X-Forwarded-Protocol $scheme',
+        'X-Real-IP $remote_addr',
+      ], $proxy_set_header),
+      add_header       => $headers,
+      *                => $nginx_options,
     }
   }
 }
