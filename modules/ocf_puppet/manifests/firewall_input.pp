@@ -6,7 +6,7 @@ class ocf_puppet::firewall_input {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
-        dport  => 'puppet',
+        dport  => 8140,
         action => 'accept',
       };
   }

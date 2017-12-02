@@ -32,7 +32,7 @@ class ocf_mysql {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => ['tcp', 'udp'],
-        dport  => 'mysql',
+        dport  => 3306,
         action => 'accept',
       };
   }

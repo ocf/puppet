@@ -8,7 +8,7 @@ class ocf_printhost::firewall_input {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => ['tcp', 'udp'],
-        dport  => 'ipp',
+        dport  => 631,
         action => 'accept',
       };
   }

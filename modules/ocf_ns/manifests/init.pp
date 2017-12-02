@@ -38,7 +38,7 @@ class ocf_ns {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => ['tcp', 'udp'],
-        dport  => 'domain',
+        dport  => 53,
         action => 'accept',
       };
 
@@ -46,7 +46,7 @@ class ocf_ns {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => ['tcp', 'udp'],
-        dport  => 'bootps',
+        dport  => 67,
         action => 'accept',
       };
 
@@ -54,7 +54,7 @@ class ocf_ns {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'udp',
-        dport  => 'tftp',
+        dport  => 69,
         action => 'accept',
       };
   }

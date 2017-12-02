@@ -6,7 +6,7 @@ class ocf_syslog {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
-        dport  => '514',
+        dport  => 514,
         action => 'accept',
       };
 
@@ -14,7 +14,7 @@ class ocf_syslog {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'udp',
-        dport  => '514',
+        dport  => 514,
         action => 'accept',
       };
   }

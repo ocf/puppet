@@ -5,7 +5,7 @@ class ocf::firewall::allow_ssh {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
-        dport  => 'ssh',
+        dport  => 22,
         action => 'accept',
       };
   }

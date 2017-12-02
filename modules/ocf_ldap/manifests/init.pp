@@ -115,7 +115,7 @@ class ocf_ldap {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => ['tcp', 'udp'],
-        dport  => 'ldaps',
+        dport  => 636,
         action => 'accept',
       };
   }

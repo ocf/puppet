@@ -9,7 +9,7 @@ class ocf_mirrors::firewall_input {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
-        dport  => 'ftp',
+        dport  => 21,
         action => 'accept',
       };
 
@@ -17,7 +17,7 @@ class ocf_mirrors::firewall_input {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
-        dport  => 'rsync',
+        dport  => 873,
         action => 'accept',
       };
   }

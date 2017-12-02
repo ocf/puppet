@@ -5,7 +5,7 @@ class ocf_mail::firewall_input {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
-        dport  => 'submission',
+        dport  => 587,
         action => 'accept',
       };
 
@@ -13,7 +13,7 @@ class ocf_mail::firewall_input {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
-        dport  => 'smtp',
+        dport  => 25,
         action => 'accept',
       };
   }
