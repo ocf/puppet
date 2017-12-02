@@ -53,59 +53,52 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     notify  => Service['keepalived'],
   }
 
-  # Service virtual host definitions
+  ####################################
+  # Service virtual host definitions #
+  ####################################
+
+  # Port 10000 is unused, it used to be used for fluffy, and then was used for
+  # a trivial testing service, but is now unused again
+
   ocf_mesos::master::load_balancer::http_vhost { 'rt':
     server_name    => 'rt.ocf.berkeley.edu',
     server_aliases => ['rt'],
     service_port   => 10001,
     ssl            => true,
-    ssl_cert       => '/opt/share/docker/secrets/rt/rt.crt',
-    ssl_key        => '/opt/share/docker/secrets/rt/rt.key',
   }
 
-  # Port 10002 is used by ocfweb-web
+  # Port 10002 is used by ocfweb-web and proxied to by ocf_www
 
   ocf_mesos::master::load_balancer::http_vhost { 'pma':
     server_name    => 'pma.ocf.berkeley.edu',
     server_aliases => ['pma', 'phpmyadmin', 'phpmyadmin.ocf.berkeley.edu'],
     service_port   => 10003,
     ssl            => true,
-    ssl_cert       => '/opt/share/docker/secrets/pma/pma.ocf.berkeley.edu.crt',
-    ssl_key        => '/opt/share/docker/secrets/pma/pma.ocf.berkeley.edu.key',
   }
 
   ocf_mesos::master::load_balancer::http_vhost { 'ocfweb-static':
     server_name    => 'static.ocf.berkeley.edu',
     service_port   => 10004,
     ssl            => true,
-    ssl_cert       => '/opt/share/docker/secrets/ocfweb/static.ocf.berkeley.edu.crt',
-    ssl_key        => '/opt/share/docker/secrets/ocfweb/static.ocf.berkeley.edu.key',
+    ssl_dir        => 'ocfweb',
   }
+
+  # Ports 10005 and 10006 are unused
 
   ocf_mesos::master::load_balancer::http_vhost { 'templates':
     server_name    => 'templates.ocf.berkeley.edu',
     server_aliases => ['templates'],
     service_port   => 10007,
     ssl            => true,
-    ssl_cert       => '/opt/share/docker/secrets/templates/templates.ocf.berkeley.edu.crt',
-    ssl_key        => '/opt/share/docker/secrets/templates/templates.ocf.berkeley.edu.key',
   }
 
-  ocf_mesos::master::load_balancer::http_vhost { 'thelounge':
-    server_name    => 'thelounge.ocf.berkeley.edu',
-    server_aliases => ['thelounge'],
-    service_port   => 10008,
-    ssl            => true,
-    ssl_cert       => '/opt/share/docker/secrets/thelounge/thelounge.ocf.berkeley.edu.crt',
-    ssl_key        => '/opt/share/docker/secrets/thelounge/thelounge.ocf.berkeley.edu.key',
-  }
+  # Port 10008 is used by thelounge, it is proxied to by ocf_irc
+  # Port 10009 is used by puppetboard, it is proxied to by ocf_puppet
 
   ocf_mesos::master::load_balancer::http_vhost { 'metabase':
     server_name    => 'metabase.ocf.berkeley.edu',
     server_aliases => ['mb', 'metabase', 'mb.ocf.berkeley.edu'],
     service_port   => 10010,
     ssl            => true,
-    ssl_cert       => '/opt/share/docker/secrets/metabase/metabase.ocf.berkeley.edu.crt',
-    ssl_key        => '/opt/share/docker/secrets/metabase/metabase.ocf.berkeley.edu.key',
   }
 }

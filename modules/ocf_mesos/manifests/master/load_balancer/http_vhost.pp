@@ -9,44 +9,19 @@
 define ocf_mesos::master::load_balancer::http_vhost(
   $server_name,
   $service_port,
-
   $server_aliases = [],
-  $ssl = false,
-  $ssl_cert = undef,
-  $ssl_key = undef,
-  $ssl_dhparam = '/etc/ssl/dhparam.pem',
+  $ssl            = false,
+  $ssl_dir        = $title,
+  $ssl_dhparam    = '/etc/ssl/dhparam.pem',
 ) {
-  nginx::resource::upstream { "marathon_service_${service_port}":
-    members => ["localhost:${service_port}"],
-  }
+  ocf::nginx_proxy { $title:
+    server_name    => $server_name,
+    server_aliases => $server_aliases,
+    proxy          => "http://localhost:${service_port}",
 
-  if $ssl {
-    nginx::resource::server {
-      $title:
-        server_name => [$server_name],
-        proxy       => "http://marathon_service_${service_port}",
-
-        # TODO: probably HSTS header here
-        listen_port => 443,
-        ssl         => true,
-        ssl_cert    => $ssl_cert,
-        ssl_key     => $ssl_key,
-        ssl_dhparam => $ssl_dhparam;
-
-      "${title}-redirect":
-        server_name      => concat([$server_name], $server_aliases),
-
-        # we have to specify www_root even though we always redirect/proxy
-        www_root         => '/var/www',
-
-        server_cfg_append => {
-          'return' => "301 https://${server_name}\$request_uri"
-        };
-    }
-  } else {
-    nginx::resource::server { $title:
-      server_name => [$server_name],
-      proxy       => "http://marathon_service_${service_port}",
-    }
+    ssl            => $ssl,
+    ssl_cert       => "/opt/share/docker/secrets/${ssl_dir}/${server_name}.crt",
+    ssl_key        => "/opt/share/docker/secrets/${ssl_dir}/${server_name}.key",
+    ssl_dhparam    => $ssl_dhparam,
   }
 }
