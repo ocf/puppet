@@ -70,7 +70,6 @@ class ocf::packages {
     [
     'aactivator',
     'apt-dater-host',
-    'apt-show-versions',
     'beep',
     'bsdmainutils',
     'cpufrequtils',
@@ -121,6 +120,11 @@ class ocf::packages {
     'unzip',
     'whois',
     ]:;
+  }
+  # TODO: temporary, remove
+  package {
+    'apt-show-versions':
+      ensure => purged,
   }
 
   ocf::repackage {
