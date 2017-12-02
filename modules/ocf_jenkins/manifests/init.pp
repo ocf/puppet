@@ -146,4 +146,16 @@ class ocf_jenkins {
     hour    => 20,
     minute  => 55,
   }
+
+  ocf::firewall::firewall46 { '899 allow jenkins to send mail':
+    opts => {
+      chain  => 'PUPPET-OUTPUT',
+      uid    => 'jenkins',
+      proto  => 'tcp',
+      dport  => 'smtp',
+      action => 'accept',
+    },
+    # Require the jenkins user to have been created already
+    require => Package['jenkins'],
+  }
 }
