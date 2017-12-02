@@ -6,6 +6,11 @@ fs_usage() {
     df --output=pcent /var/lib/docker | tail -n 1 | sed -r 's/^ *([0-9]+)%$/\1/'
 }
 
+log() {
+    echo "$@"
+    logger -t "$(basename "$0")" --id=$$ "$@"
+}
+
 
 # Try progressively cleaning things from oldest to youngest until disk usage is
 # below acceptable threshold. Start at 24 hours and work our way down by 1 hour
@@ -15,7 +20,7 @@ for ((max_age=24; max_age>=0; max_age--)); do
     if [ "$(fs_usage)" -le 75 ]; then
         break
     fi
-    logger -t "$(basename "$0")" --id=$$ "Cleaning Docker stuff older than ${max_age}h"
+    log "Cleaning Docker stuff older than ${max_age}h"
     docker system prune -af --filter "until=${max_age}h"
     echo
 done
