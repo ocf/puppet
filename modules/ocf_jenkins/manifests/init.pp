@@ -152,7 +152,7 @@ class ocf_jenkins {
       chain  => 'PUPPET-OUTPUT',
       uid    => 'jenkins',
       proto  => 'tcp',
-      dport  => 'smtp',
+      dport  => 25,
       action => 'accept',
     },
     # Require the jenkins user to have been created already

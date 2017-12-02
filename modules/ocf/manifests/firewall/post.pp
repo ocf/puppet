@@ -7,7 +7,7 @@ class ocf::firewall::post {
         opts => {
           chain  => 'PUPPET-OUTPUT',
           proto  => 'tcp',
-          dport  => 'smtp',
+          dport  => 25,
           uid    => $username,
           action => 'accept',
         },
@@ -20,7 +20,7 @@ class ocf::firewall::post {
       opts => {
         chain  => 'PUPPET-OUTPUT',
         proto  => 'tcp',
-        dport  => 'smtp',
+        dport  => 25,
         action => 'drop',
       },
       before => undef,
