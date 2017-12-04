@@ -12,3 +12,6 @@ ssl_ciphers '<%= @ssl_ciphersuite %>';
 log_format vhost '$host $remote_addr - $remote_user [$time_local] '
                     '"$request" $status $body_bytes_sent '
                                         '"$http_referer" "$http_user_agent"';
+
+# increase client max request body size (default is 1MiB)
+client_max_body_size 20M;
