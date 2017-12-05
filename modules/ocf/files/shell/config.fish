@@ -26,7 +26,7 @@ set -x LC_ALL en_US.UTF-8
 umask 022
 
 # Aliases
-alias ls "ls -F"
+alias ls "ls -F --color=auto"
 alias quota "quota -Qs"
 alias rm "rm -I"
 alias leetfish "set -gx FISH swim"
