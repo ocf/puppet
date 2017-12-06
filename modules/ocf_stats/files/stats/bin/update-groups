@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+
+import sys
+
+from ocflib.account.utils import list_staff
+from ocflib.lab.stats import get_connection
+
+
+def update_group(ocfstats_pass, table, users):
+    """Update any tables of usernames used in ocfstats to generate views."""
+
+    with get_connection(user='ocfstats', password=ocfstats_pass) as c:
+        # This is not great, but this seems like the only way to insert lists
+        # into a SQL query without the possibility of SQL injection. That being
+        # said, if a staff member has a username that actually causes SQL
+        # injection, we have larger problems.
+        placeholders = ', '.join(['%s'] * len(users))
+        c.execute(
+            'DELETE FROM `{}` WHERE `user` NOT IN ({})'.format(table, placeholders),
+            users,
+        )
+
+        # Insert without generating errors on duplicate primary key values
+        c.executemany(
+            'REPLACE INTO `{}` (`user`) VALUES (%s)'.format(table),
+            users,
+        )
+
+
+def main():
+    with open('/opt/stats/ocfstats-password') as f:
+        ocfstats_password = f.read().rstrip()
+
+    update_group(ocfstats_password, 'staff', list_staff() + ['pubstaff'])
+    update_group(ocfstats_password, 'opstaff', list_staff('opstaff'))
+
+if __name__ == '__main__':
+    sys.exit(main())

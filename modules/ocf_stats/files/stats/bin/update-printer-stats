@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+
+import sys
+
+from ocflib.lab.stats import get_connection
+from ocflib.printing.printers import get_lifetime_pages
+from ocflib.printing.printers import get_toner
+from ocflib.printing.printers import PRINTERS
+
+
+def update_printer_stats(ocfstats_pass, printer):
+    try:
+        current_toner, max_toner = get_toner(printer)
+        lifetime_pages = get_lifetime_pages(printer)
+    except OSError as ex:
+        print(
+            '{}\nError reading data from {}, check that it is on'.format(
+                ex, printer,
+            ),
+            file=sys.stderr
+        )
+        return
+
+    with get_connection(user='ocfstats', password=ocfstats_pass) as c:
+        c.execute(
+            (
+                'INSERT INTO `printer_toner` (`date`, `printer`, `value`, `max`)'
+                '    VALUES (CURRENT_TIMESTAMP(), %s, %s, %s)'
+            ),
+            (printer, current_toner, max_toner),
+        )
+
+        c.execute(
+            (
+                'INSERT INTO `printer_pages` (`date`, `printer`, `value`)'
+                '    VALUES (CURRENT_TIMESTAMP(), %s, %s)'
+            ),
+            (printer, lifetime_pages),
+        )
+
+
+def main():
+    with open('/opt/stats/ocfstats-password') as f:
+        ocfstats_password = f.read().rstrip()
+
+    for printer in PRINTERS:
+        update_printer_stats(ocfstats_password, printer)
+
+
+if __name__ == '__main__':
+    sys.exit(main())
