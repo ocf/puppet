@@ -9,11 +9,10 @@ class ocf_mirrors::kde {
       recurse => true;
   }
 
-  cron {
+  ocf_mirrors::timer {
     'kde':
-      command => '/opt/mirrors/project/kde/sync-archive > /dev/null',
-      user    => 'mirrors',
-      hour    => '*/2',
-      minute  => '0',
+      exec_start => '/opt/mirrors/project/kde/sync-archive > /dev/null',
+      hour       => '0/2',
+      minute     => '0',
   }
 }

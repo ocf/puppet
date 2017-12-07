@@ -1,7 +1,8 @@
 class ocf_mirrors::tanglu {
   ocf_mirrors::ftpsync { 'tanglu':
     rsync_host  => 'archive.tanglu.org',
-    cron_minute => '40';
+    cron_minute => '40',
+    use_systemd => true,
   }
 
   ocf_mirrors::monitoring { 'tanglu':
@@ -17,10 +18,9 @@ class ocf_mirrors::tanglu {
     group  => mirrors;
   }
 
-  cron { 'tanglu-releases':
-    command => '/opt/mirrors/project/tanglu/sync-releases > /dev/null',
-    user    => 'mirrors',
-    hour    => '*/2',
-    minute  => '53';
+  ocf_mirrors::timer { 'tanglu-releases':
+    exec_start => '/opt/mirrors/project/tanglu/sync-releases',
+    hour       => '0/2',
+    minute     => '53',
   }
 }

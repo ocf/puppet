@@ -18,11 +18,10 @@ class ocf_mirrors::manjaro {
 
   # TODO: Change the rsync source to rsync://repo.manjaro.org/repos since we're
   # now an official mirror and should have access if we contact them about it.
-  cron {
+  ocf_mirrors::timer {
     'manjaro':
-      command => '/opt/mirrors/project/manjaro/sync-archive > /dev/null',
-      user    => 'mirrors',
-      hour    => '*/2',
-      minute  => '35';
+      exec_start => '/opt/mirrors/project/manjaro/sync-archive',
+      hour       => '0/2',
+      minute     => '35';
   }
 }

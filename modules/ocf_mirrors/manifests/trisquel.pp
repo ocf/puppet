@@ -3,13 +3,15 @@ class ocf_mirrors::trisquel {
     'trisquel':
       rsync_host  => 'rsync.trisquel.info',
       rsync_path  => 'trisquel.packages',
-      cron_minute => '45';
+      cron_minute => '45',
+      use_systemd => true;
 
     'trisquel-images':
       rsync_host  => 'rsync.trisquel.info',
       rsync_path  => 'trisquel.iso',
       rsync_extra => '--block-size=8192',
-      cron_minute => '55';
+      cron_minute => '55',
+      use_systemd => true;
   }
 
   ocf_mirrors::monitoring { 'trisquel':

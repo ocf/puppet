@@ -15,11 +15,9 @@ class ocf_mirrors::gnu {
     ts_path       => 'mirror-updated-timestamp.txt',
   }
 
-  cron {
-    'gnu':
-      command => '/opt/mirrors/project/gnu/sync-archive > /dev/null',
-      user    => 'mirrors',
-      hour    => '*/4',
-      minute  => '38';
+  ocf_mirrors::timer { 'gnu':
+    exec_start => '/opt/mirrors/project/gnu/sync-archive',
+    hour       => '0/4',
+    minute     => '38',
   }
 }
