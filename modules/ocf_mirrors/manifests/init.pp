@@ -13,6 +13,7 @@ class ocf_mirrors {
   include ocf_mirrors::finnix
   include ocf_mirrors::gnu
   include ocf_mirrors::kali
+  include ocf_mirrors::kde
   include ocf_mirrors::manjaro
   include ocf_mirrors::parrot
   include ocf_mirrors::puppetlabs
