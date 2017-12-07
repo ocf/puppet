@@ -14,5 +14,6 @@ class ocf_mirrors::kde {
       command => '/opt/mirrors/project/kde/sync-archive > /dev/null',
       user    => 'mirrors',
       hour    => '*/2',
+      minute  => '0',
   }
 }
