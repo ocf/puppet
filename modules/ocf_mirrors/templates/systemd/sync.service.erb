@@ -1,0 +1,9 @@
+[Unit]
+Description=Sync service for <%= @title %>
+
+[Service]
+User=<%= @exec_user %>
+Type=simple
+Environment=<%= @environments.map{ | env, val | "\""+env+"="+val+"\"" }.join(' ') %>
+ExecStart=<%= @exec_start %>
+StandardOutput=<%= @stdout %>
