@@ -3,4 +3,3 @@
 	rsync.kde.org::kdeftp /opt/mirrors/ftp/kde
 /usr/local/bin/rsync-no-vanished -az --delete --safe-links \
 	rsync.kde.org::applicationdata /opt/mirrors/ftp/kde-applicationdata
-
