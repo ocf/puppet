@@ -89,7 +89,7 @@ class ocf_docker {
   }
 
   ocf::systemd::service { 'docker-registry':
-    content => template('ocf_docker/docker-registry.service.erb'),
+    source  => 'puppet:///modules/ocf_docker/docker-registry.service',
     require => [
       Package['docker-ce'],
       File['/var/lib/registry'],
