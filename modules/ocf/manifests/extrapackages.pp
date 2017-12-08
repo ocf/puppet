@@ -218,6 +218,7 @@ class ocf::extrapackages {
     package {
       [
         'ack',
+        'default-libmysqlclient-dev',
         'elpa-markdown-mode',
         'jupyter-console',
         'jupyter-core',
@@ -231,7 +232,7 @@ class ocf::extrapackages {
         'python-notebook',
         'python3-notebook',
         'ruby-mysql2',
-        'default-libmysqlclient-dev',
+        'rustc',
       ]:;
     }
   }
