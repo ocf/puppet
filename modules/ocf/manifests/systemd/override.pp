@@ -1,4 +1,4 @@
-# Override something set in a service file.
+# Override something set in a systemd unit file.
 # This is a nicer way to override distro defaults than replacing the entire file.
 # An example override file looks like:
 #
