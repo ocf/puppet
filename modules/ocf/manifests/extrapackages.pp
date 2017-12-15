@@ -88,6 +88,7 @@ class ocf::extrapackages {
     'mosh',
     'mutt',
     'nasm',
+    'nodeenv',
     'nodejs',
     'octave',
     'pandoc',
