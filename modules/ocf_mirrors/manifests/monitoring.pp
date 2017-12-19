@@ -8,15 +8,15 @@ define ocf_mirrors::monitoring(
     $upstream_protocol = 'http',
     $ensure = 'present',
   ) {
-
+  $local_url = "http://mirrors.ocf.berkeley.edu${local_path}/dists/${dist_to_check}/Release"
+  $upstream_url = "${upstream_protocol}://${upstream_host}${upstream_path}/dists/${dist_to_check}/Release"
   if $ensure == 'present' {
     file { "${project_path}/health":
-      content => template("ocf_mirrors/monitoring/${type}-health.erb"),
-      mode    => '0755';
-    }
-
+      ensure => link,
+      target => '/opt/mirrors/bin/health',
+    }->
     cron { "${title}-health":
-      command => "${project_path}/health",
+      command => "${project_path}/health ${local_url} ${upstream_url}",
       user    => 'mirrors',
       hour    => '*/6',
       minute  => '0';

@@ -178,6 +178,13 @@ class ocf_mirrors {
     special => 'daily',
   }
 
+  file { '/opt/mirrors/bin/health':
+    source  => 'puppet:///modules/ocf_mirrors/health',
+    owner   => 'mirrors',
+    group   => 'mirrors',
+    mode    => '0755',
+  }
+
   file { '/usr/local/sbin/process-mirrors-logs':
     source => 'puppet:///modules/ocf_mirrors/process-mirrors-logs',
     mode   => '0755',
