@@ -178,8 +178,8 @@ class ocf_mirrors {
     special => 'daily',
   }
 
-  file { '/opt/mirrors/bin/health':
-    source  => 'puppet:///modules/ocf_mirrors/health',
+  file { '/opt/mirrors/bin/debian-healthcheck':
+    source  => 'puppet:///modules/ocf_mirrors/debian-healthcheck',
     owner   => 'mirrors',
     group   => 'mirrors',
     mode    => '0755',

@@ -17,12 +17,12 @@ class ocf_mirrors::debian {
 
   ocf_mirrors::monitoring {
     'debian':
-      type          => 'ftpsync',
+      type          => 'debian',
       dist_to_check => 'stable',
       upstream_host => 'ftp.us.debian.org';
 
     'debian-security':
-      type          => 'ftpsync',
+      type          => 'debian',
       dist_to_check => 'stable/updates',
       upstream_host => 'security.debian.org',
       upstream_path => '';

@@ -1,5 +1,5 @@
 define ocf_mirrors::monitoring(
-    $type = 'ftpsync',
+    $type = 'debian',
     $project_path = "/opt/mirrors/project/${title}",
     $upstream_host = undef,
     $dist_to_check = undef,
@@ -13,11 +13,13 @@ define ocf_mirrors::monitoring(
   if $ensure == 'present' {
     file { "${project_path}/health":
       ensure => link,
-      target => '/opt/mirrors/bin/health',
+      target => "/opt/mirrors/bin/${type}-healthcheck",
+      owner  => mirrors,
+      group  => mirrors,
     }->
     cron { "${title}-health":
       command => "${project_path}/health ${local_url} ${upstream_url}",
-      user    => 'mirrors',
+      user    => mirrors,
       hour    => '*/6',
       minute  => '0';
     }

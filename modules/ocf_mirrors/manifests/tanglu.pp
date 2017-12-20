@@ -5,7 +5,7 @@ class ocf_mirrors::tanglu {
   }
 
   ocf_mirrors::monitoring { 'tanglu':
-    type          => 'ftpsync',
+    type          => 'debian',
     dist_to_check => 'staging',
     upstream_host => 'archive.tanglu.org';
   }

@@ -5,7 +5,7 @@ class ocf_mirrors::ubuntu {
   }
 
   ocf_mirrors::monitoring { 'ubuntu':
-    type          => 'ftpsync',
+    type          => 'debian',
     dist_to_check => 'devel',
     upstream_host => 'archive.ubuntu.com';
   }
