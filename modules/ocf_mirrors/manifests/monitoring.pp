@@ -16,7 +16,7 @@ define ocf_mirrors::monitoring(
       target => "/opt/mirrors/bin/${type}-healthcheck",
       owner  => mirrors,
       group  => mirrors,
-    }->
+    } ->
     cron { "${title}-health":
       command => "${project_path}/health ${local_url} ${upstream_url}",
       user    => mirrors,
@@ -29,7 +29,8 @@ define ocf_mirrors::monitoring(
     }
 
     cron { "${title}-health":
-      ensure => absent;
+      ensure => absent,
+      user   => mirrors;
     }
   }
 }
