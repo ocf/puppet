@@ -4,7 +4,7 @@
 This detects most problems caused by both failed syncs to our direct upstream
 as well as cases where the upstream is out-of-date.
 
-Ideally, "UPSTREAM_MIRROR" should refer to the *actual* upstream (e.g. Debian's
+Ideally, "args.upstream_url" should refer to the *actual* upstream (e.g. Debian's
 authoritative archive) and not just our upstream mirror (e.g.
 mirrors.kernel.org).
 """
@@ -19,12 +19,11 @@ import requests
 def get_updated(mirror_url):
     """Find the time the host was last updated.
 
-    >>> get_updated(LOCAL_MIRROR, 'jessie')
+    >>> get_updated(args.local_url, 'jessie')
     datetime.datetime(2015, 12, 26, 9, 9, 42, tzinfo=tzutc())
     """
     req = requests.get(mirror_url)
-    if req.status_code != 200:
-        return -1
+    req.raise_for_status()
     updated_line, = [line for line in req.text.splitlines() if line.startswith('Date: ')]
     return dateutil.parser.parse(updated_line.split(': ', 1)[1])
 
@@ -33,37 +32,23 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     # order doesn't actually matter but we'll impose one for clarity's sake
-    parser.add_argument('local_url',
-                        type=str,
-                        help='URL of local mirror'
-                        )
-    parser.add_argument('upstream_url',
-                        type=str,
-                        help='URL of upstream mirror'
-                        )
+    parser.add_argument('local_url', type=str, help='URL of local mirror')
+    parser.add_argument('upstream_url', type=str, help='URL of upstream mirror')
 
     args = parser.parse_args()
-    LOCAL_MIRROR = args.local_url
-    UPSTREAM_MIRROR = args.upstream_url
 
     # instead of comparing against current time, compare against the master server;
     # this helps avoid flaky monitoring if the upstream archive isn't updated
-    local_mirror = get_updated(LOCAL_MIRROR)
-    if local_mirror == -1:
-        print('Invalid mirror: {}'.format(LOCAL_MIRROR))
-        sys.exit(1)
-    upstream_mirror = get_updated(UPSTREAM_MIRROR)
-    if upstream_mirror == -1:
-        print('Invalid mirror: {}'.format(UPSTREAM_MIRROR))
-        sys.exit(1)
+    local_mirror = get_updated(args.local_url)
+    upstream_mirror = get_updated(args.upstream_url)
 
     delta = upstream_mirror - local_mirror
     if delta > timedelta(hours=24):
         print('Warning: <%= @title %> has not been updated in {}'.format(delta))
         print('    Local mirror: {}'.format(local_mirror))
-        print('        {}'.format(LOCAL_MIRROR))
+        print('        {}'.format(args.local_url))
         print('    Upstream mirror: {}'.format(upstream_mirror))
-        print('        {}'.format(UPSTREAM_MIRROR))
+        print('        {}'.format(args.upstream_url))
         sys.exit(1)
 
 # vim: ft=python
