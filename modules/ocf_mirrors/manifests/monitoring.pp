@@ -18,7 +18,7 @@ define ocf_mirrors::monitoring(
       group  => mirrors,
     } ->
     cron { "${title}-health":
-      command => "${project_path}/health ${local_url} ${upstream_url}",
+      command => "${project_path}/health ${title} ${local_url} ${upstream_url}",
       user    => mirrors,
       hour    => '*/6',
       minute  => '0';

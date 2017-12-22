@@ -4,7 +4,7 @@
 This detects most problems caused by both failed syncs to our direct upstream
 as well as cases where the upstream is out-of-date.
 
-Ideally, "args.upstream_url" should refer to the *actual* upstream (e.g. Debian's
+Ideally, the upstream url argument should refer to the *actual* upstream (e.g. Debian's
 authoritative archive) and not just our upstream mirror (e.g.
 mirrors.kernel.org).
 """
@@ -31,24 +31,31 @@ def get_updated(mirror_url):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    # order doesn't actually matter but we'll impose one for clarity's sake
-    parser.add_argument('local_url', type=str, help='URL of local mirror')
-    parser.add_argument('upstream_url', type=str, help='URL of upstream mirror')
+    # urls of local and upstream mirrors
+    parser.add_argument('project', type=str, help='Project title')
+    parser.add_argument('url_first', type=str, help='URL of local or upstream mirror')
+    parser.add_argument('url_second', type=str, help='URL of local or upstream mirror')
 
+    # ensure we aren't comparing a mirror against itself
     args = parser.parse_args()
+    if args.url_first == args.url_second:
+        print('Local and upstream urls cannot be equal... Exiting!')
+        sys.exit(1)
 
     # instead of comparing against current time, compare against the master server;
     # this helps avoid flaky monitoring if the upstream archive isn't updated
-    local_mirror = get_updated(args.local_url)
-    upstream_mirror = get_updated(args.upstream_url)
+    mirror_first = get_updated(args.url_first), args.url_first
+    mirror_second = get_updated(args.url_second), args.url_second
+    local_mirror = min(mirror_first, mirror_second, key=lambda z: z[0])
+    upstream_mirror = max(mirror_first, mirror_second, key=lambda z: z[0])
 
-    delta = upstream_mirror - local_mirror
+    delta = upstream_mirror[0] - local_mirror[0]
     if delta > timedelta(hours=24):
-        print('Warning: <%= @title %> has not been updated in {}'.format(delta))
-        print('    Local mirror: {}'.format(local_mirror))
-        print('        {}'.format(args.local_url))
-        print('    Upstream mirror: {}'.format(upstream_mirror))
-        print('        {}'.format(args.upstream_url))
+        print('Warning: {} has not been updated in {}'.format(args.project, delta))
+        print('    Local mirror: {}'.format(local_mirror[0]))
+        print('        {}'.format(local_mirror[1]))
+        print('    Upstream mirror: {}'.format(upstream_mirror[0]))
+        print('        {}'.format(upstream_mirror[1]))
         sys.exit(1)
 
 # vim: ft=python
