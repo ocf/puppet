@@ -13,6 +13,7 @@ from shutil import get_terminal_size
 
 import pycurl
 import pymysql
+from ocflib.lab.stats import humanize_bytes
 
 ARCHIVE = '/opt/backups/scratch/archive'
 BOX_DAV = 'https://dav.box.com/dav/'
@@ -252,8 +253,8 @@ def print_progress(multi, stats):
         upload_stats = 'Uploaded {}/{} files and {}/{} ({:.2f}%) in total'.format(
             stats['num_finished'],
             stats['num_total'],
-            friendly_file_size(bytes_total),
-            friendly_file_size(stats['bytes_total']),
+            humanize_bytes(bytes_total),
+            humanize_bytes(stats['bytes_total']),
             100 * bytes_total / stats['bytes_total']
         )
         print(upload_stats + (width - len(upload_stats)) * ' ')
@@ -276,17 +277,6 @@ def reset_connection(multi, conn):
     conn.fp = None
     conn.file_bytes = 0
     multi.free.append(conn)
-
-
-def friendly_file_size(num_bytes):
-    """To convert bytes to human-readable units
-
-    Adapted from http://stackoverflow.com/a/1094933/1979001
-    """
-    for unit in ['', 'KB', 'MB', 'GB', 'TB', 'PB']:
-        if num_bytes < 1024.0:
-            return '{:3.2f} {}'.format(num_bytes, unit)
-        num_bytes /= 1024.0
 
 
 def friendly_time(seconds):
@@ -323,7 +313,7 @@ def main(args):
     # Start timer for upload speed and get total upload size
     file_bytes = sum(os.path.getsize(ARCHIVE + '/' + f) for f in files)
     if not args.quiet:
-        print('Uploading {}...'.format(friendly_file_size(file_bytes)))
+        print('Uploading {}...'.format(humanize_bytes(file_bytes)))
         time.sleep(3)
 
     start_time = time.time()
@@ -443,7 +433,7 @@ def main(args):
     print('Took {} to transfer {} files with combined size {}'.format(
         friendly_time(total_time),
         stats['num_total'],
-        friendly_file_size(file_bytes)
+        humanize_bytes(file_bytes)
     ))
     print('Average rate of {:.2f} Mb/s ({:.2f} MB/s)'.format(
         transfer_rate * 8,
