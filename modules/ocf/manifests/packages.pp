@@ -114,17 +114,13 @@ class ocf::packages {
     'screen',
     'systemd-sysv',
     'tcpdump',
+    'time',
     'tmux',
     'tofrodos',
     'tree',
     'unzip',
     'whois',
     ]:;
-  }
-  # TODO: temporary, remove
-  package {
-    'apt-show-versions':
-      ensure => purged,
   }
 
   ocf::repackage {
