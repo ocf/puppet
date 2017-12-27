@@ -12,7 +12,7 @@ class ocf_mirrors::kali {
   }
 
   ocf_mirrors::monitoring { 'kali':
-    type          => 'ftpsync',
+    type          => 'debian',
     dist_to_check => 'kali-rolling',
     upstream_host => 'archive.kali.org';
   }

@@ -1,5 +1,5 @@
 define ocf_mirrors::monitoring(
-    $type = 'ftpsync',
+    $type = 'debian',
     $project_path = "/opt/mirrors/project/${title}",
     $upstream_host = undef,
     $dist_to_check = undef,
@@ -8,16 +8,18 @@ define ocf_mirrors::monitoring(
     $upstream_protocol = 'http',
     $ensure = 'present',
   ) {
-
+  $local_url = "http://mirrors.ocf.berkeley.edu${local_path}/dists/${dist_to_check}/Release"
+  $upstream_url = "${upstream_protocol}://${upstream_host}${upstream_path}/dists/${dist_to_check}/Release"
   if $ensure == 'present' {
     file { "${project_path}/health":
-      content => template("ocf_mirrors/monitoring/${type}-health.erb"),
-      mode    => '0755';
-    }
-
+      ensure => link,
+      target => "/opt/mirrors/bin/${type}-healthcheck",
+      owner  => mirrors,
+      group  => mirrors,
+    } ->
     cron { "${title}-health":
-      command => "${project_path}/health",
-      user    => 'mirrors',
+      command => "${project_path}/health ${title} ${local_url} ${upstream_url}",
+      user    => mirrors,
       hour    => '*/6',
       minute  => '0';
     }
@@ -27,7 +29,8 @@ define ocf_mirrors::monitoring(
     }
 
     cron { "${title}-health":
-      ensure => absent;
+      ensure => absent,
+      user   => mirrors;
     }
   }
 }

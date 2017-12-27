@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+"""Test if the Debian-style mirror hasn't been updated recently.
+
+This detects most problems caused by both failed syncs to our direct upstream
+as well as cases where the upstream is out-of-date.
+
+Ideally, the upstream url argument should refer to the *actual* upstream (e.g. Debian's
+authoritative archive) and not just our upstream mirror (e.g.
+mirrors.kernel.org).
+"""
+import argparse
+import sys
+from collections import namedtuple
+from datetime import timedelta
+
+import dateutil.parser
+import requests
+
+Mirror = namedtuple('Mirror', ['url', 'updated_at'])
+
+
+def get_updated(mirror_url):
+    """Find the time the host was last updated.
+
+    >>> get_updated(args.local_url)
+    datetime.datetime(2015, 12, 26, 9, 9, 42, tzinfo=tzutc())
+    """
+    req = requests.get(mirror_url)
+    req.raise_for_status()
+    updated_line, = [line for line in req.text.splitlines() if line.startswith('Date: ')]
+    return dateutil.parser.parse(updated_line.split(': ', 1)[1])
+
+
+def get_mirrors(url_first, url_second):
+    """Given two mirror urls, returns two Mirror
+    namedtuples ordered (asc) by update date."""
+
+    mirror_first = Mirror(url_first, get_updated(url_first))
+    mirror_second = Mirror(url_second, get_updated(url_second))
+    return (min(mirror_first, mirror_second, key=lambda z: z.updated_at),
+            max(mirror_first, mirror_second, key=lambda z: z.updated_at))
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+
+    # urls of local and upstream mirrors
+    parser.add_argument('project', type=str, help='Project title')
+    parser.add_argument('url_first', type=str, help='URL of local or upstream mirror')
+    parser.add_argument('url_second', type=str, help='URL of local or upstream mirror')
+
+    # ensure we aren't comparing a mirror against itself
+    args = parser.parse_args()
+    if args.url_first == args.url_second:
+        print('Local and upstream urls cannot be equal... Exiting!')
+        sys.exit(1)
+
+    local_mirror, upstream_mirror = get_mirrors(args.url_first, args.url_second)
+
+    # instead of comparing against current time, compare against the master server;
+    # this helps avoid flaky monitoring if the upstream archive isn't updated
+    delta = upstream_mirror.updated_at - local_mirror.updated_at
+    if delta > timedelta(hours=24):
+        print('Warning: {} has not been updated in {}'.format(args.project, delta))
+        print('    Local mirror: {}'.format(local_mirror.updated_at))
+        print('        {}'.format(local_mirror.url))
+        print('    Upstream mirror: {}'.format(upstream_mirror.updated_at))
+        print('        {}'.format(upstream_mirror.url))
+        sys.exit(1)
+
+# vim: ft=python

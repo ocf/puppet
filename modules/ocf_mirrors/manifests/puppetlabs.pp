@@ -6,7 +6,7 @@ class ocf_mirrors::puppetlabs {
   }
 
   ocf_mirrors::monitoring { 'puppetlabs':
-    type          => 'ftpsync',
+    type          => 'debian',
     dist_to_check => 'jessie',
     local_path    => '/puppetlabs/apt',
     upstream_host => 'apt.puppetlabs.com',
