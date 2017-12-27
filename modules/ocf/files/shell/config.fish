@@ -32,6 +32,15 @@ alias rm "rm -I"
 alias leetfish "set -gx FISH swim"
 alias noobfish "set -gx FISH noob"
 
+# for sudo !!
+function sudo
+    if test "$argv" = !!
+        eval command sudo $history[1]
+    else
+        command sudo $argv
+    end
+end
+
 # Logout
 function on_exit --on-process %self
     if klist > /dev/null 2>&1
