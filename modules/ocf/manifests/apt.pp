@@ -90,7 +90,7 @@ class ocf::apt($stage = 'first') {
   # Add the puppetlabs apt repo key
   apt::key { 'puppet gpg key':
     id     => '6F6B15509CF8E59E6E469F327F438280EF8D349F',
-    server => 'pgp.mit.edu',
+    source => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/pubkey.gpg';
   }
 
   apt::key { 'ocf':
