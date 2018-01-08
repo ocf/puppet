@@ -11,14 +11,9 @@ class ocf::packages::mysql_server(
 
   if $manage_service {
     service { 'mysql':
-      ensure   => stopped,
-
-      # Can't disable services on stretch and default provider.
-      # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=854680 rt#5940
-      provider => systemd,
-
-      enable   => false,
-      require  => Package['mariadb-server'],
+      ensure  => stopped,
+      enable  => false,
+      require => Package['mariadb-server'],
     }
   }
 
