@@ -9,6 +9,12 @@ class ocf_mirrors::gnu {
       recurse => true;
   }
 
+  ocf_mirrors::monitoring { 'gnu':
+    type          => 'ts',
+    upstream_host => 'ftp.gnu.org',
+    ts_path       => 'mirror-updated-timestamp.txt',
+  }
+
   cron {
     'gnu':
       command => '/opt/mirrors/project/gnu/sync-archive > /dev/null',

@@ -9,6 +9,12 @@ class ocf_mirrors::tails {
       recurse => true;
   }
 
+  ocf_mirrors::monitoring { 'tails':
+    type          => 'ts',
+    upstream_host => 'mirrors.kernel.org',
+    ts_path       => 'project/trace',
+  }
+
   cron {
     'tails':
       command => '/opt/mirrors/project/tails/sync > /dev/null',

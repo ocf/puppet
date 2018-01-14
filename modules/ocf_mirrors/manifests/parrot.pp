@@ -9,6 +9,12 @@ class ocf_mirrors::parrot {
       recurse => true;
   }
 
+  ocf_mirrors::monitoring { 'parrot':
+    type          => 'ts',
+    upstream_host => 'archive2.parrotsec.org',
+    ts_path       => 'last-sync.txt',
+  }
+
   cron {
     'parrot':
       command => '/opt/mirrors/project/parrot/sync > /dev/null',

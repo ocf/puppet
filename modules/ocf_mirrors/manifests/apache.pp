@@ -9,6 +9,13 @@ class ocf_mirrors::apache {
       recurse => true;
   }
 
+  ocf_mirrors::monitoring { 'apache':
+    type          => 'ts',
+    upstream_host => 'archive.apache.org',
+    upstream_path => '/dist',
+    ts_path       => 'zzz/time.txt',
+  }
+
   cron {
     'apache':
       command => '/opt/mirrors/project/apache/sync-archive > /dev/null',
