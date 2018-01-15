@@ -9,14 +9,15 @@ define ocf_mirrors::monitoring(
     $ts_path = undef,
     $ensure = 'present',
   ) {
+  $local_base = "http://mirrors.ocf.berkeley.edu${local_path}"
+  $upstream_base = "${upstream_protocol}://${upstream_host}${upstream_path}"
 
   if $type == 'debian' {
-    $local_url = "http://mirrors.ocf.berkeley.edu${local_path}/dists/${dist_to_check}/Release"
-    $upstream_url = "${upstream_protocol}://${upstream_host}${upstream_path}/dists/${dist_to_check}/Release"
-  }
-  elsif $type == 'ts' {
-    $local_url ="http://mirrors.ocf.berkeley.edu${local_path}/${ts_path}"
-    $upstream_url = "${upstream_protocol}://${upstream_host}${upstream_path}/${ts_path}"
+    $local_url = "${local_base}/dists/${dist_to_check}/Release"
+    $upstream_url = "${upstream_base}/dists/${dist_to_check}/Release"
+  } elsif $type == 'ts' or $type == 'datetime' {
+    $local_url ="${local_base}/${ts_path}"
+    $upstream_url = "${upstream_base}/${ts_path}"
   }
   if $ensure == 'present' {
     file { "${project_path}/health":

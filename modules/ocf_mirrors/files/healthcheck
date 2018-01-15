@@ -25,20 +25,24 @@ def update_func(healthcheck):
         return get_updated_debian
     elif healthcheck == 'ts':
         return get_updated_ts
+    elif healthcheck == 'datetime':
+        return get_updated_datetime
     else:
-        return get_updated_debian
+        raise ValueError('Unsupported type: {}'.format(healthcheck))
+
+
+def get_updated_datetime(mirror_url):
+    """Find the time the host was last synced"""
+    req = requests.get(mirror_url)
+    req.raise_for_status()
+    return dateutil.parser.parse(req.text.splitlines()[0])
 
 
 def get_updated_ts(mirror_url):
     """Find the time the host was last synced"""
-
     req = requests.get(mirror_url)
     req.raise_for_status()
-    try:
-        return datetime.utcfromtimestamp(int(req.text.split()[0]))
-    except (TypeError, ValueError):
-        # UTC Timestamp ... parrot
-        return dateutil.parser.parse(req.text.splitlines()[0])
+    return datetime.utcfromtimestamp(int(req.text.split()[0]))
 
 
 def get_updated_debian(mirror_url):
@@ -55,7 +59,6 @@ def get_updated_debian(mirror_url):
 def get_mirrors(url_first, url_second, get_updated):
     """Given two mirror urls, return two Mirror
     namedtuples ordered (asc) by sync date."""
-
     mirror_first = Mirror(url_first, get_updated(url_first))
     mirror_second = Mirror(url_second, get_updated(url_second))
     return (min(mirror_first, mirror_second, key=lambda z: z.updated_at),
