@@ -10,7 +10,7 @@ class ocf_mirrors::tails {
   }
 
   ocf_mirrors::monitoring { 'tails':
-    type          => 'ts',
+    type          => 'unix_timestamp',
     upstream_host => 'archive.torproject.org',
     upstream_path => '/amnesia.boum.org/tails',
     ts_path       => 'project/trace',

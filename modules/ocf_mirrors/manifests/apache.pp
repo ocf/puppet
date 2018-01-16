@@ -10,7 +10,7 @@ class ocf_mirrors::apache {
   }
 
   ocf_mirrors::monitoring { 'apache':
-    type          => 'ts',
+    type          => 'unix_timestamp',
     upstream_host => 'archive.apache.org',
     upstream_path => '/dist',
     ts_path       => 'zzz/time.txt',

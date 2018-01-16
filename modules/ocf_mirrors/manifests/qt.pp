@@ -10,7 +10,7 @@ class ocf_mirrors::qt {
   }
 
   ocf_mirrors::monitoring { 'qt':
-    type          => 'ts',
+    type          => 'unix_timestamp',
     upstream_host => 'download.qt.io',
     upstream_path => '',
     ts_path       => 'timestamp.txt',

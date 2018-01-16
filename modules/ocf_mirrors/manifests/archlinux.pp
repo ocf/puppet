@@ -10,7 +10,7 @@ class ocf_mirrors::archlinux {
   }
 
   ocf_mirrors::monitoring { 'archlinux':
-    type          => 'ts',
+    type          => 'unix_timestamp',
     upstream_host => 'mirrors.kernel.org',
     ts_path       => 'lastsync',
   }

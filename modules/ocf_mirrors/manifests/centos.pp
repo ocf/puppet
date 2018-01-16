@@ -9,7 +9,7 @@ class ocf_mirrors::centos {
   }
 
   ocf_mirrors::monitoring { 'centos':
-      type          => 'ts',
+      type          => 'unix_timestamp',
       upstream_host => 'mirror.centos.org',
       ts_path       => 'TIME',
   }

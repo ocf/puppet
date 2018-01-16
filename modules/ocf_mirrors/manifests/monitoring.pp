@@ -15,7 +15,7 @@ define ocf_mirrors::monitoring(
   if $type == 'debian' {
     $local_url = "${local_base}/dists/${dist_to_check}/Release"
     $upstream_url = "${upstream_base}/dists/${dist_to_check}/Release"
-  } elsif $type == 'ts' or $type == 'datetime' {
+  } elsif $type == 'unix_timestamp' or $type == 'datetime' {
     $local_url ="${local_base}/${ts_path}"
     $upstream_url = "${upstream_base}/${ts_path}"
   }

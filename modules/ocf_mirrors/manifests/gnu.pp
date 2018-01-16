@@ -10,7 +10,7 @@ class ocf_mirrors::gnu {
   }
 
   ocf_mirrors::monitoring { 'gnu':
-    type          => 'ts',
+    type          => 'unix_timestamp',
     upstream_host => 'ftp.gnu.org',
     ts_path       => 'mirror-updated-timestamp.txt',
   }

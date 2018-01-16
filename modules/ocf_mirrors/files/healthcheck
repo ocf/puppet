@@ -23,7 +23,7 @@ Mirror = namedtuple('Mirror', ['url', 'updated_at'])
 def update_func(healthcheck):
     if healthcheck == 'debian':
         return get_updated_debian
-    elif healthcheck == 'ts':
+    elif healthcheck == 'unix_timestamp':
         return get_updated_ts
     elif healthcheck == 'datetime':
         return get_updated_datetime
