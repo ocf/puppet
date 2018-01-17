@@ -83,7 +83,14 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     ssl_dir        => 'ocfweb',
   }
 
-  # Ports 10005 and 10006 are unused
+  ocf_mesos::master::load_balancer::http_vhost { 'ircbot':
+    server_name    => 'ircbot.ocf.berkeley.edu',
+    service_port   => 10005,
+    ssl            => true,
+    ssl_dir        => 'ircbot',
+  }
+
+  # Port 10006 is unused
 
   ocf_mesos::master::load_balancer::http_vhost { 'templates':
     server_name    => 'templates.ocf.berkeley.edu',
