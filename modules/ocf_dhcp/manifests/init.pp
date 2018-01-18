@@ -1,4 +1,5 @@
 class ocf_dhcp {
+  require ocf::networking
   include ocf_dhcp::netboot
 
   # setup dhcp server
@@ -14,6 +15,17 @@ class ocf_dhcp {
       mode   => '0755';
   }
 
+  augeas {
+    '/etc/default/isc-dhcp-server':
+      context => '/files/etc/default/isc-dhcp-server',
+      changes => [
+        'rm INTERFACESv4',
+        'rm INTERFACESv6',
+        "set INTERFACES '\"${ocf::networking::iface}\"'",
+      ],
+      require => Package['isc-dhcp-server'];
+  }
+
   exec { 'gen-desktop-leases':
     command    => '/usr/local/sbin/gen-desktop-leases > /etc/dhcp/desktop-leases.conf',
     creates    => '/etc/dhcp/desktop-leases.conf',
@@ -22,7 +34,7 @@ class ocf_dhcp {
   }
 
   service { 'isc-dhcp-server':
-    subscribe => File['/etc/dhcp/dhcpd.conf']
+    subscribe => [File['/etc/dhcp/dhcpd.conf'], Augeas['/etc/default/isc-dhcp-server']],
   }
 
   # send magic packet to wakeup desktops at lab opening time
