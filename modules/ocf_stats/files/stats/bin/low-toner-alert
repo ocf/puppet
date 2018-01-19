@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
                 # Create en empty file to prevent email spam
                 open(threshold_file, 'w').close()
-            elif file_exists:
+            elif percent_remaining > ALERT_THRESHOLD and file_exists:
                 os.remove(threshold_file)
 
     except OSError as ex:
