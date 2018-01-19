@@ -47,11 +47,18 @@ class ocf_ldap {
     require => Package['ldap-git-backup'];
   }
 
-  # Use the puppet cron task instead of the packaged cron script for more
-  # configurability and similarity with the kerberos-git-backup cron setup
   file {
+    # Use the puppet cron task instead of the packaged cron script for more
+    # configurability and similarity with the kerberos-git-backup cron setup
     '/etc/cron.d/ldap-git-backup':
       ensure => absent;
+
+    # ldap-git-backup complains if the directory it backs up to is
+    # world-readable, so set it and the kerberos backups for consistency to be
+    # usable only by root.
+    ['/var/backups/ldap', '/var/backups/kerberos']:
+      ensure => directory,
+      mode   => '0700';
   }
 
   # Pushing to GitHub is disabled for dev-* hosts to prevent duplicate backups
