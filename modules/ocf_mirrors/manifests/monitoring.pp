@@ -19,6 +19,7 @@ define ocf_mirrors::monitoring(
     $local_url ="${local_base}/${ts_path}"
     $upstream_url = "${upstream_base}/${ts_path}"
   }
+
   if $ensure == 'present' {
     file { "${project_path}/health":
       ensure => link,

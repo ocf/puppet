@@ -24,7 +24,7 @@ def update_func(healthcheck):
     if healthcheck == 'debian':
         return get_updated_debian
     elif healthcheck == 'unix_timestamp':
-        return get_updated_ts
+        return get_updated_unix_timestamp
     elif healthcheck == 'datetime':
         return get_updated_datetime
     else:
@@ -32,23 +32,32 @@ def update_func(healthcheck):
 
 
 def get_updated_datetime(mirror_url):
-    """Find the time the host was last synced"""
+    """Find the time the host was last synced.
+    The first line on the page should be a datetime, e.g. Fri Jan 19 20:15:01 UTC 2018.
+    >>> get_updated_datetime(mirror_url)
+    datetime.datetime(2018, 1, 19, 20, 15, 1, tzinfo=tzutc())
+    """
     req = requests.get(mirror_url)
     req.raise_for_status()
     return dateutil.parser.parse(req.text.splitlines()[0])
 
 
-def get_updated_ts(mirror_url):
-    """Find the time the host was last synced"""
+def get_updated_unix_timestamp(mirror_url):
+    """Find the time the host was last synced.
+    The first line on the page should be a unix timestamp, e.g. 1516392227.
+    >>> get_updated_unix_timestamp(mirror_url)
+    datetime.datetime(2018, 1, 19, 20, 3, 47)
+    """
     req = requests.get(mirror_url)
     req.raise_for_status()
     return datetime.utcfromtimestamp(int(req.text.split()[0]))
 
 
 def get_updated_debian(mirror_url):
-    """Find the time the host was last updated.
-    >>> get_updated(args.local_url)
-    datetime.datetime(2015, 12, 26, 9, 9, 42, tzinfo=tzutc())
+    """Find the time the host was last synced.
+    The page of should have a line of the form "Date: Fri, 19 Jan 2018 19:26:41 UTC"
+    >>> get_updated_debian(mirror_url)
+    datetime.datetime(2018, 1, 19, 19, 26, 41, tzinfo=tzutc())
     """
     req = requests.get(mirror_url)
     req.raise_for_status()
