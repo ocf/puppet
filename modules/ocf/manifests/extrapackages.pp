@@ -142,6 +142,7 @@ class ocf::extrapackages {
     'python3-stdeb',
     'python3-sympy',
     'python3-tk',
+    'qrencode',
     'quilt',
     'r-base',
     'r10k',
