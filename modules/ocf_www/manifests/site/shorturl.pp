@@ -1,6 +1,6 @@
 class ocf_www::site::shorturl {
-  # TODO: Remove this cert and replace with Let's Encrypt
-  # Make sure this gets renewed before Jan 21 2018
+  # TODO: automate Let's Encrypt renewal of this cert
+  # Make sure this gets renewed before April 21 2018
   file {
     '/etc/ssl/private/ocf.io.crt':
       source => 'puppet:///private/ssl/ocf.io.crt',
