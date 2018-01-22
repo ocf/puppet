@@ -9,6 +9,13 @@ class ocf_mirrors::qt {
       recurse => true;
   }
 
+  ocf_mirrors::monitoring { 'qt':
+    type          => 'unix_timestamp',
+    upstream_host => 'download.qt.io',
+    upstream_path => '',
+    ts_path       => 'timestamp.txt',
+  }
+
   cron {
     'qt':
       command => '/opt/mirrors/project/qt/sync-archive > /dev/null',

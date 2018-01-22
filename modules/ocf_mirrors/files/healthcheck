@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Test if the Debian-style mirror hasn't been updated recently.
+"""Test if the Debian-style or timestamp mirror hasn't been updated recently.
 
 This detects most problems caused by both failed syncs to our direct upstream
 as well as cases where the upstream is out-of-date.
@@ -11,6 +11,7 @@ mirrors.kernel.org).
 import argparse
 import sys
 from collections import namedtuple
+from datetime import datetime
 from datetime import timedelta
 
 import dateutil.parser
@@ -19,11 +20,44 @@ import requests
 Mirror = namedtuple('Mirror', ['url', 'updated_at'])
 
 
-def get_updated(mirror_url):
-    """Find the time the host was last updated.
+def update_func(healthcheck):
+    if healthcheck == 'debian':
+        return get_updated_debian
+    elif healthcheck == 'unix_timestamp':
+        return get_updated_unix_timestamp
+    elif healthcheck == 'datetime':
+        return get_updated_datetime
+    else:
+        raise ValueError('Unsupported type: {}'.format(healthcheck))
 
-    >>> get_updated(args.local_url)
-    datetime.datetime(2015, 12, 26, 9, 9, 42, tzinfo=tzutc())
+
+def get_updated_datetime(mirror_url):
+    """Find the time the host was last synced.
+    The first line on the page should be a datetime, e.g. Fri Jan 19 20:15:01 UTC 2018.
+    >>> get_updated_datetime(mirror_url)
+    datetime.datetime(2018, 1, 19, 20, 15, 1, tzinfo=tzutc())
+    """
+    req = requests.get(mirror_url)
+    req.raise_for_status()
+    return dateutil.parser.parse(req.text.splitlines()[0])
+
+
+def get_updated_unix_timestamp(mirror_url):
+    """Find the time the host was last synced.
+    The first line on the page should be a unix timestamp, e.g. 1516392227.
+    >>> get_updated_unix_timestamp(mirror_url)
+    datetime.datetime(2018, 1, 19, 20, 3, 47)
+    """
+    req = requests.get(mirror_url)
+    req.raise_for_status()
+    return datetime.utcfromtimestamp(int(req.text.split()[0]))
+
+
+def get_updated_debian(mirror_url):
+    """Find the time the host was last synced.
+    The page of should have a line of the form "Date: Fri, 19 Jan 2018 19:26:41 UTC"
+    >>> get_updated_debian(mirror_url)
+    datetime.datetime(2018, 1, 19, 19, 26, 41, tzinfo=tzutc())
     """
     req = requests.get(mirror_url)
     req.raise_for_status()
@@ -31,10 +65,9 @@ def get_updated(mirror_url):
     return dateutil.parser.parse(updated_line.split(': ', 1)[1])
 
 
-def get_mirrors(url_first, url_second):
-    """Given two mirror urls, returns two Mirror
-    namedtuples ordered (asc) by update date."""
-
+def get_mirrors(url_first, url_second, get_updated):
+    """Given two mirror urls, return two Mirror
+    namedtuples ordered (asc) by sync date."""
     mirror_first = Mirror(url_first, get_updated(url_first))
     mirror_second = Mirror(url_second, get_updated(url_second))
     return (min(mirror_first, mirror_second, key=lambda z: z.updated_at),
@@ -44,10 +77,10 @@ def get_mirrors(url_first, url_second):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    # urls of local and upstream mirrors
     parser.add_argument('project', type=str, help='Project title')
     parser.add_argument('url_first', type=str, help='URL of local or upstream mirror')
     parser.add_argument('url_second', type=str, help='URL of local or upstream mirror')
+    parser.add_argument('-t', '--type', type=str, default='debian')
 
     # ensure we aren't comparing a mirror against itself
     args = parser.parse_args()
@@ -55,7 +88,8 @@ if __name__ == '__main__':
         print('Local and upstream urls cannot be equal... Exiting!')
         sys.exit(1)
 
-    local_mirror, upstream_mirror = get_mirrors(args.url_first, args.url_second)
+    # Assume our mirror is out of date
+    local_mirror, upstream_mirror = get_mirrors(args.url_first, args.url_second, update_func(args.type))
 
     # instead of comparing against current time, compare against the master server;
     # this helps avoid flaky monitoring if the upstream archive isn't updated

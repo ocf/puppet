@@ -9,6 +9,12 @@ class ocf_mirrors::archlinux {
       recurse => true;
   }
 
+  ocf_mirrors::monitoring { 'archlinux':
+    type          => 'unix_timestamp',
+    upstream_host => 'mirrors.kernel.org',
+    ts_path       => 'lastsync',
+  }
+
   cron {
     'archlinux':
       command => '/opt/mirrors/project/archlinux/sync-archive > /dev/null',

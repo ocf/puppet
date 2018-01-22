@@ -8,6 +8,12 @@ class ocf_mirrors::centos {
     recurse => true,
   }
 
+  ocf_mirrors::monitoring { 'centos':
+      type          => 'unix_timestamp',
+      upstream_host => 'mirror.centos.org',
+      ts_path       => 'TIME',
+  }
+
   cron {
     'centos':
       command => '/opt/mirrors/project/centos/sync-archive > /dev/null',

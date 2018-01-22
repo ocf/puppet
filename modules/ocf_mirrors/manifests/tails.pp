@@ -9,6 +9,13 @@ class ocf_mirrors::tails {
       recurse => true;
   }
 
+  ocf_mirrors::monitoring { 'tails':
+    type          => 'unix_timestamp',
+    upstream_host => 'archive.torproject.org',
+    upstream_path => '/amnesia.boum.org/tails',
+    ts_path       => 'project/trace',
+  }
+
   cron {
     'tails':
       command => '/opt/mirrors/project/tails/sync > /dev/null',
