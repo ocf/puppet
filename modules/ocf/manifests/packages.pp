@@ -79,6 +79,7 @@ class ocf::packages {
     'dnsutils',
     'dtach',
     'finger',
+    'fluffy',
     'gist',
     'hexedit',
     'htop',
