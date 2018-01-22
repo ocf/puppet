@@ -1,0 +1,9 @@
+#!/bin/bash
+set -euo pipefail
+
+curl http://puppetdb:8081/pdb/query/v4/nodes
+if [[ "$?" -eq 0 ]]; then
+    echo 'puppetdb_running=true'
+else
+    echo 'puppetdb_running=false'
+fi
