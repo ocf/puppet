@@ -78,7 +78,7 @@ def send_alert(host, plugin, mail_to=MAIL_TO):
         ldap_entry=ldap_entry,
         dns_names=dns_names,
     )
-    send_mail(mail_to, subject, body, MAIL_FROM)
+    send_mail(to=mail_to, subject=subject, body=body, cc=None, sender=MAIL_FROM)
 
 
 def main(argv):
