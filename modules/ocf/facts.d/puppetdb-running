@@ -1,8 +1,13 @@
 #!/bin/bash
-set -euo pipefail
+set -uo pipefail
+fqdn=$(hostname -f)
 
-curl http://puppetdb:8081/pdb/query/v4/nodes
-if [[ "$?" -eq 0 ]]; then
+# Due to differences between the puppet and puppet-agent packages, the SSL directory may be in /etc/puppetlabs/puppet or /var/lib/puppet
+puppet_ssl_path=$(puppet config print ssldir)
+
+curl 'https://puppetdb:8081/pdb/query/v4/nodes' -s --tlsv1 --cacert $puppet_ssl_path/certs/ca.pem --cert $puppet_ssl_path/certs/$fqdn.pem --key $puppet_ssl_path/private_keys/$fqdn.pem > /dev/null
+
+if [[ $? -eq 0 ]]; then
     echo 'puppetdb_running=true'
 else
     echo 'puppetdb_running=false'
