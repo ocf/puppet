@@ -1,0 +1,4 @@
+classes:
+    - ocf_kvm
+
+ocf::networking::bridge: true
