@@ -152,6 +152,10 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   }
   Sshkey <<| |>>
 
+  file { '/etc/ssh/ssh_known_hosts':
+    mode => '0644',
+  }
+
   # sudo user/group access controls
   package { 'sudo': }
   file {
