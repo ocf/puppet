@@ -143,8 +143,8 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     $::ipaddress6,
   ), '')
 
-  # Export SSH keys from every host if PuppetDB is running, and use them to populate the global list
-  # in /etc/ssh/ssh_known_hosts.
+  # Export SSH keys from every host if PuppetDB is running, and use them
+  # to populate the global list in /etc/ssh/ssh_known_hosts.
   if str2bool($::puppetdb_running) {
     @@sshkey { $::hostname:
       host_aliases => $ssh_aliases,
@@ -152,10 +152,10 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
       type         => ecdsa-sha2-nistp256,
     }
     Sshkey <<| |>>
-  }
 
-  file { '/etc/ssh/ssh_known_hosts':
-    mode => '0644',
+    file { '/etc/ssh/ssh_known_hosts':
+      mode => '0644',
+    }
   }
 
   # sudo user/group access controls
