@@ -118,3 +118,7 @@ sleep 8 && /usr/local/bin/fix-audio &
 
 # Source custom rc shared across desktops
 [ -f ~/remote/.desktoprc ] && . ~/remote/.desktoprc
+
+# Enable compositor
+xfconf-query -c xfwm4 -p /general/use_compositing -s false
+/usr/bin/compton --config $HOME/.config/compton/compton.conf --daemon
