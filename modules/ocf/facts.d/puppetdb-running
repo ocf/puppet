@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euo pipefail
+
+fqdn=$(hostname -f)
+# Due to differences between the puppet and puppet-agent packages,
+# the SSL directory may be in /etc/puppetlabs/puppet or /var/lib/puppet.
+puppet_ssl_path=$(puppet config print ssldir)
+
+if curl 'https://puppetdb:8081/pdb/meta/v1/version' -s --tlsv1 \
+        --cacert "$puppet_ssl_path/certs/ca.pem" \
+        --cert "$puppet_ssl_path/certs/$fqdn.pem" \
+        --key "$puppet_ssl_path/private_keys/$fqdn.pem" \
+        > /dev/null; then
+    echo 'puppetdb_running=true'
+else
+    echo 'puppetdb_running=false'
+fi
