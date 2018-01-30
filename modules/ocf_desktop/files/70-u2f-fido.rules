@@ -1,3 +1,7 @@
+# --- OCF ---
+# this file is updated by wget'ing the latest copy from the yubikey repo:
+# https://github.com/Yubico/libu2f-host/blob/master/70-u2f.rules
+
 # Copyright (C) 2013-2015 Yubico AB
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -45,5 +49,8 @@ KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2abe", ATTRS{idProduct
 
 # Thetis Key
 KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1ea8", ATTRS{idProduct}=="f025", TAG+="uaccess"
+
+# Nitrokey FIDO U2F
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="20a0", ATTRS{idProduct}=="4287", TAG+="uaccess"
 
 LABEL="u2f_end"
