@@ -8,10 +8,19 @@ class ocf_mirrors::centos {
     recurse => true,
   }
 
-  ocf_mirrors::monitoring { 'centos':
+  ocf_mirrors::monitoring {
+    default:
       type          => 'unix_timestamp',
       upstream_host => 'mirror.centos.org',
-      ts_path       => 'TIME',
+      ts_path       => 'TIME';
+
+    'centos':
+    ;
+
+    'centos-altarch':
+      filename      => 'health-altarch',
+      upstream_path => '/altarch',
+      project_path  => '/opt/mirrors/project/centos';
   }
 
   cron {

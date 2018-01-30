@@ -11,4 +11,11 @@ class ocf_mirrors::trisquel {
       rsync_extra => '--block-size=8192',
       cron_minute => '55';
   }
+
+  ocf_mirrors::monitoring { 'trisquel':
+    type          => 'debian',
+    dist_to_check => 'flidas-security',
+    upstream_host => 'devel.trisquel.info',
+    upstream_path => '/archive/trisquel',
+  }
 }
