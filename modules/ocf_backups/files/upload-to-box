@@ -22,6 +22,7 @@ BOX_EMAILS = [
     'kpeng3.4@berkeley.edu',
     'abizer@berkeley.edu',
     'benjamin.zhang@berkeley.edu',
+    'dkessler@berkeley.edu',
 ]
 FOLDER = 'ocf-backup-' + time.strftime('%Y-%m-%d')
 MAX_CONCURR_UPLOADS = 10
