@@ -50,7 +50,8 @@ compress_and_encrypt() {
             --recipient mattmcal@ocf.berkeley.edu \
             --recipient kpengboy@ocf.berkeley.edu \
             --recipient abizer@ocf.berkeley.edu \
-            --recipient benzhang4@gmail.com
+            --recipient benzhang4@gmail.com \
+            --recipient daniel@dkess.me
 }
 
 split_parts() {
