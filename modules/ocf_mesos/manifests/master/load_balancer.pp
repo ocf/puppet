@@ -85,6 +85,7 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
 
   ocf_mesos::master::load_balancer::http_vhost { 'ircbot':
     server_name    => 'ircbot.ocf.berkeley.edu',
+    server_aliases => ['ircbot'],
     service_port   => 10005,
     ssl            => true,
     ssl_dir        => 'ircbot',
