@@ -30,7 +30,6 @@ class ocf::firewall::post {
       before => undef,
   }
 
-
   # Special devices we want to protect from most hosts
   $devices_ipv4_only = [
     'corruption-mgmt','hal-mgmt', 'jaws-mgmt', 'logjam', 'pagefault',
@@ -71,19 +70,61 @@ class ocf::firewall::post {
     before => undef,
   }
 
+  # drop from internal zone exceptions: tsunami, werewolves, death, and dev- versions
+  # hard code the addresses in case of DNS malfunction
 
-  # Drop packets on the primary network inteface that are not whitelisted
+  $drop_all = ['tsunami', 'werewolves', 'death', 'dev-tsunami', 'dev-werewolves', 'dev-death']
+
+  $drop_all.each |String $s| {
+    ocf::firewall::firewall46 { "997 drop internal zone exception, (${s})":
+      opts   => {
+        chain  => 'PUPPET-INPUT',
+        proto  => ['tcp', 'udp'],
+        action => 'drop',
+        source => $s,
+      },
+      before => undef,
+    }
+  }
+
+  firewall_multi {
+    '998 allow from internal zone (IPv4)':
+      chain     => 'PUPPET-INPUT',
+      src_range => '169.229.226.5-169.229.226.90',
+      proto     => ['tcp', 'udp'],
+      action    => 'accept',
+      before    => undef;
+
+    '998 allow ssh from desktops (IPv6)':
+      provider  => 'ip6tables',
+      chain     => 'PUPPET-INPUT',
+      src_range => '2607:f140:8801::1:100-2607:f140:8801::1:139',
+      proto     => ['tcp', 'udp'],
+      action    => 'accept',
+      before    => undef;
+  }
+
+  # These rules intentionally apply only to addresses within our network as a reminder that
+  # it is the external firewall's job to filter external packets.
+
   # TODO: eliminate this if statement once testing is complete
   if !$ocf::firewall::allow_other_traffic {
-    ocf::firewall::firewall46 {
-      '999 drop unrecognized input packets on primary interface':
-        opts => {
-          chain   => 'PUPPET-INPUT',
-          proto   => 'all',
-          iniface => $ocf::networking::iface,
-          action  => 'drop',
-        },
-        before => undef,
+
+    firewall_multi {
+      '999 drop unrecognized packets from within OCF network (IPv4)':
+        chain     => 'PUPPET-INPUT',
+        src_range => '169.229.226.0/24',
+        proto     => ['tcp', 'udp'],
+        action    => 'drop',
+        before    => undef;
+
+      '999 drop unrecognized packets from within OCF network (IPv6)':
+        provider  => 'ip6tables',
+        chain     => 'PUPPET-INPUT',
+        src_range => '2607:f140:8801::/64',
+        proto     => ['tcp', 'udp'],
+        action    => 'drop',
+        before    => undef;
     }
   }
 }
