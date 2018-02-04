@@ -1,3 +1,7 @@
-GSSAPIAuthentication yes
-GSSAPIKeyExchange yes
-GSSAPIDelegateCredentials no
+CanonicalizeHostname yes
+CanonicalDomains ocf.berkeley.edu
+
+Host *.ocf.berkeley.edu 169.229.226.* 2607:f140:8801::*
+     GSSAPIAuthentication yes
+     GSSAPIKeyExchange yes
+     GSSAPIDelegateCredentials no
