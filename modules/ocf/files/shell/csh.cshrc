@@ -9,6 +9,9 @@ setenv MAIL /var/mail/$USER
 # Non-restrictive umask
 umask 022
 
+# ignore messages from others
+mesg n
+
 alias ls ls -F
 alias quota quota -Qs
 alias rm rm -I

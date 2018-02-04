@@ -11,6 +11,9 @@ export LC_ALL=en_US.UTF-8
 # Non-restrictive umask
 umask 022
 
+# ignore messages from others
+mesg n
+
 # Set up bash-completion
 [ -r /etc/bash_completion ] && source /etc/bash_completion
 
