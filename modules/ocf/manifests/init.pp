@@ -17,4 +17,5 @@ class ocf {
   include ocf::staff_users
   include ocf::systemd
   include ocf::utils
+  include ocf::walldeny
 }

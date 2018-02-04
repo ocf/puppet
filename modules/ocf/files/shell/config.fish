@@ -25,6 +25,9 @@ set -x LC_ALL en_US.UTF-8
 # Non-restrictive umask
 umask 022
 
+# ignore messages from others
+mesg n
+
 # Aliases
 alias ls "ls -F --color=auto"
 alias quota "quota -Qs"
