@@ -34,5 +34,9 @@ class ocf_admin {
       source => 'puppet:///private/ocfprinting.json',
       group  => ocfstaff,
       mode   => '0640';
+    '/etc/ocfstats-ro.passwd':
+      source => 'puppet:///private/ocfstats-ro.passwd',
+      group  => ocfstaff,
+      mode   => '0640';
   }
 }
