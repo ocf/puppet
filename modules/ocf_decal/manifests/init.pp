@@ -1,6 +1,6 @@
 class ocf_decal {
 
-  include ocf_decal::decal_website
+  include ocf_decal::website
 
   class { 'apache':
     default_vhost => false;
