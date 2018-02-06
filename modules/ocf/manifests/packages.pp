@@ -90,6 +90,7 @@ class ocf::packages {
     'lsof',
     'moreutils',
     'mtr',
+    'net-tools',
     'netcat-openbsd',
     'pigz',
     'powertop',
