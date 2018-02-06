@@ -1,12 +1,5 @@
 class ocf_syslog {
-  package { 'rsyslog': }
-
-  service { 'rsyslog':
-    require => [
-      Package['rsyslog'],
-      File['/etc/rsyslog.d/ocf.conf'],
-    ],
-  }
+  # rsyslog package and service are already defined in ocf::logging
 
   file {
     '/var/log/remote':

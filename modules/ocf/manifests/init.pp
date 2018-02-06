@@ -7,6 +7,7 @@ class ocf {
   include ocf::kerberos
   include ocf::ldap
   include ocf::locale
+  include ocf::logging
   include ocf::motd
   include ocf::munin::node
   include ocf::networking
