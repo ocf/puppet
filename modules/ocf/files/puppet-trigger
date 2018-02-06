@@ -14,6 +14,11 @@ def log(*args, file=sys.stderr, **kwargs):
 
 
 def trigger_run(flags):
+    # Change directory to the root directory before running puppet to avoid
+    # errors when run from a directory that root does not have read access to.
+    # (rt#7040)
+    os.chdir('/')
+
     os.execvp('puppet', ['puppet', 'agent'] + flags)
 
 
