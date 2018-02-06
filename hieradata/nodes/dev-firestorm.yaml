@@ -1,3 +1,5 @@
 classes:
     - ocf_kerberos
     - ocf_ldap
+
+puppet_agent: true
