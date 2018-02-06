@@ -10,6 +10,7 @@ class ocf_decal {
     comment => 'DeCal management account',
     home    => '/opt/ocfdecal',
     shell   => '/bin/bash',
+    system  => true,
   }
 
   file { '/opt/ocfdecal':
