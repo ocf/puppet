@@ -60,6 +60,8 @@ class ocf::apt($stage = 'first') {
       };
   }
 
+  # TODO: Submit patch to puppetlabs-apt to enable having includes for
+  # apt::backports (so that we can include the source too)
   class { 'apt::backports':
     location => 'http://mirrors/debian/';
   }
