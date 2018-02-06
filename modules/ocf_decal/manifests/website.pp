@@ -15,11 +15,9 @@ class ocf_decal::website {
     '/srv/ssl/decal/decal.key':
       source  => 'puppet:///private/decal.key',
       mode    => '0440';
-
     '/srv/ssl/decal/decal.crt':
       source  => 'puppet:///private/decal.crt',
       mode    => '0440';
-
     '/etc/ssl/certs/lets-encrypt.crt':
       source  => 'puppet:///private/lets-encrypt.crt',
       mode    => '0640';
@@ -28,6 +26,7 @@ class ocf_decal::website {
   apache::vhost { 'decal-redirect':
     servername => 'decal.ocf.berkeley.edu',
     serveraliases => [
+      'decal',
       'decal.ocf.io',
       'decal.xcf.sh',
       'decal.xcf.berkeley.edu'
@@ -41,6 +40,7 @@ class ocf_decal::website {
   apache::vhost { 'decal-ssl':
     servername => 'decal.ocf.berkeley.edu',
     serveraliases => [
+      'decal',
       'decal.ocf.io',
       'decal.xcf.sh',
       'decal.xcf.berkeley.edu',
