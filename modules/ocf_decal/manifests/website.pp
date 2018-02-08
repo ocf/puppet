@@ -16,10 +16,12 @@ class ocf_decal::website {
       require => User['ocfdecal'];
     '/srv/ssl/decal/decal.key':
       source  => 'puppet:///private/decal.key',
-      mode    => '0440';
+      mode    => '0440',
+      require => File['/srv/ssl/decal'];
     '/srv/ssl/decal/decal.crt':
       source  => 'puppet:///private/decal.crt',
-      mode    => '0440';
+      mode    => '0440',
+      require => File['/srv/ssl/decal'];
     '/etc/ssl/certs/lets-encrypt.crt':
       source  => 'puppet:///private/lets-encrypt.crt',
       mode    => '0640';
