@@ -10,13 +10,14 @@ class ocf_decal {
     comment => 'DeCal management account',
     home    => '/opt/ocfdecal',
     shell   => '/bin/bash',
+    groups  => 'www-data',
     system  => true,
   }
 
   file { '/opt/ocfdecal':
-    ensure => directory,
-    owner => ocfdecal,
-    group => ocfdecal,
+    ensure  => directory,
+    owner   => ocfdecal,
+    group   => ocfdecal,
     require => User['ocfdecal'];
   }
 }

@@ -1,10 +1,12 @@
 class ocf_decal::website {
+  include apache::mod::rewrite
 
   file {
     ['/srv/www', '/srv/www/decal']:
       ensure  => directory,
       owner   => ocfdecal,
       group   => www-data,
+      mode    => '0755',
       require => User['ocfdecal'];
     ['/srv/ssl', '/srv/ssl/decal']:
       ensure  => directory,
@@ -31,10 +33,10 @@ class ocf_decal::website {
       'decal.xcf.sh',
       'decal.xcf.berkeley.edu'
     ],
-    port => 80,
-    docroot => '/srv/www/decal',
+    port            => 80,
+    docroot         => '/srv/www/decal',
     redirect_status => 'permanent',
-    redirect_dest   => 'https://decal.ocf.berkeley.edu',
+    redirect_dest   => 'https://decal.ocf.berkeley.edu/',
   }
 
   apache::vhost { 'decal-ssl':
@@ -50,6 +52,7 @@ class ocf_decal::website {
     docroot       => '/srv/www/decal',
     docroot_owner => 'ocfdecal',
     docroot_group => 'www-data',
+    override      => ['All'],
 
     ssl       => true,
     ssl_key   => '/srv/ssl/decal/decal.key',
