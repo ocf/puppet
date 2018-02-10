@@ -47,4 +47,22 @@ class ocf_mail {
     notify  => Service['postfix'],
     require => Package['postfix'],
   }
+
+  ocf::firewall::firewall46 {
+    '101 allow submission':
+      opts => {
+        chain  => 'PUPPET-INPUT',
+        proto  => 'tcp',
+        dport  => 587,
+        action => 'accept',
+      };
+
+    '102 allow smtp':
+      opts => {
+        chain  => 'PUPPET-INPUT',
+        proto  => 'tcp',
+        dport  => 25,
+        action => 'accept',
+      };
+  }
 }
