@@ -34,7 +34,7 @@ class ocf_desktop {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
-        dport  => ['27015-27030', 27036, 27037],
+        dport  => ['27015-27030', '27036', '27037'],
         action => 'accept',
       };
   }
@@ -43,7 +43,7 @@ class ocf_desktop {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'udp',
-        dport  => [4380, '27000-27031', 27036],
+        dport  => ['4380', '27000-27031', '27036'],
         action => 'accept',
       };
   }
