@@ -70,16 +70,14 @@ class ocf::firewall::post {
     before => undef,
   }
 
-  # drop from internal zone exceptions: tsunami, werewolves, death, and dev- versions
-  # hard code the addresses in case of DNS malfunction
-
+  # drop from hosts in internal zone range but not actually internal
   $drop_all = ['tsunami', 'werewolves', 'death', 'dev-tsunami', 'dev-werewolves', 'dev-death']
 
   $drop_all.each |String $s| {
-    ocf::firewall::firewall46 { "997 drop internal zone exception, (${s})":
+    ocf::firewall::firewall46 { "997 drop all other traffic from ${s}":
       opts   => {
         chain  => 'PUPPET-INPUT',
-        proto  => ['tcp', 'udp'],
+        proto  => 'all',
         action => 'drop',
         source => $s,
       },
@@ -87,14 +85,14 @@ class ocf::firewall::post {
     }
   }
 
+  # blanket-allow stuff from the internal zone
   $internal_zone_range_4 = lookup('internal_zone_range_4')
   $internal_zone_range_6 = lookup('internal_zone_range_6')
-
   firewall_multi {
     '998 allow from internal zone (IPv4)':
       chain     => 'PUPPET-INPUT',
       src_range => $internal_zone_range_4,
-      proto     => ['tcp', 'udp'],
+      proto     => 'all',
       action    => 'accept',
       before    => undef;
 
@@ -102,7 +100,7 @@ class ocf::firewall::post {
       provider  => 'ip6tables',
       chain     => 'PUPPET-INPUT',
       src_range => $internal_zone_range_6,
-      proto     => ['tcp', 'udp'],
+      proto     => 'all',
       action    => 'accept',
       before    => undef;
   }
@@ -112,12 +110,11 @@ class ocf::firewall::post {
 
   # TODO: eliminate this if statement once testing is complete
   if !$ocf::firewall::allow_other_traffic {
-
     firewall_multi {
       '999 drop unrecognized packets from within OCF network (IPv4)':
         chain     => 'PUPPET-INPUT',
         src_range => '169.229.226.0/24',
-        proto     => ['tcp', 'udp'],
+        proto     => 'all',
         action    => 'drop',
         before    => undef;
 
@@ -125,7 +122,7 @@ class ocf::firewall::post {
         provider  => 'ip6tables',
         chain     => 'PUPPET-INPUT',
         src_range => '2607:f140:8801::/64',
-        proto     => ['tcp', 'udp'],
+        proto     => 'all',
         action    => 'drop',
         before    => undef;
     }
