@@ -64,8 +64,8 @@ class ocf_kerberos {
     require => File['/usr/local/sbin/kerberos-git-backup'];
   }
 
-  # Allow Kerberos
   ocf::firewall::firewall46 {
+    # Allow Kerberos
     '101 allow kerberos':
       opts => {
         chain  => 'PUPPET-INPUT',
@@ -73,9 +73,8 @@ class ocf_kerberos {
         dport  => 88,
         action => 'accept',
       };
-  }
-  # Allow Kerberos Password
-  ocf::firewall::firewall46 {
+
+    # Allow Kerberos Password
     '101 allow kpasswd':
       opts => {
         chain  => 'PUPPET-INPUT',
@@ -84,14 +83,21 @@ class ocf_kerberos {
         action => 'accept',
       };
   }
-  # Allow Kerberos Admin
-  ocf::firewall::firewall46 {
-    '101 allow kerberos-adm':
-      opts => {
-        chain  => 'PUPPET-INPUT',
-        proto  => 'tcp',
-        dport  => 749,
-        action => 'accept',
-      };
+  # Allow Kerberos Admin from desktops (as well as internal zone)
+  firewall_multi {
+    '101 allow kerberos-adm from desktops (IPv4)':
+      chain     => 'PUPPET-INPUT',
+      src_range => lookup('desktop_src_range_4'),
+      proto     => 'tcp',
+      dport     => 749,
+      action    => 'accept';
+
+    '101 allow kerberos-adm from desktops (IPv6)':
+      provider  => 'ip6tables',
+      chain     => 'PUPPET-INPUT',
+      src_range => lookup('desktop_src_range_6'),
+      proto     => 'tcp',
+      dport     => 749,
+      action    => 'accept';
   }
 }
