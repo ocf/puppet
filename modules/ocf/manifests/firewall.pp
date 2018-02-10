@@ -5,10 +5,11 @@ class ocf::firewall(
   ) {
   # Install prerequisite packages (that is, netfilter-persistent)
   include firewall
-  include ocf::firewall::pre
-  include ocf::firewall::post
-
   require ocf::firewall::chains
+
+  # Use an explicit class statement so the require on ocf::firewall::chains
+  # applies to these
+  class { ['ocf::firewall::pre', 'ocf::firewall::post']:; }
 
 
   # One unpleasant thing about the puppetlabs-firewall module is that it
