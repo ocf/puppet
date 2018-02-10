@@ -87,18 +87,21 @@ class ocf::firewall::post {
     }
   }
 
+  $internal_zone_range_4 = lookup('internal_zone_range_4')
+  $internal_zone_range_6 = lookup('internal_zone_range_6')
+
   firewall_multi {
     '998 allow from internal zone (IPv4)':
       chain     => 'PUPPET-INPUT',
-      src_range => '169.229.226.5-169.229.226.90',
+      src_range => $internal_zone_range_4,
       proto     => ['tcp', 'udp'],
       action    => 'accept',
       before    => undef;
 
-    '998 allow ssh from desktops (IPv6)':
+    '998 allow from internal zone (IPv6)':
       provider  => 'ip6tables',
       chain     => 'PUPPET-INPUT',
-      src_range => '2607:f140:8801::1:100-2607:f140:8801::1:139',
+      src_range => $internal_zone_range_6,
       proto     => ['tcp', 'udp'],
       action    => 'accept',
       before    => undef;

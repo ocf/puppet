@@ -6,6 +6,7 @@ class ocf::firewall::pre {
   firewall_multi {
     default:
       * => $firewall_defaults;
+
     '000 accept all icmp':
       chain  => 'PUPPET-INPUT',
       proto  => 'icmp',
@@ -31,13 +32,16 @@ class ocf::firewall::pre {
       };
   }
 
+  $desktop_src_range_4 = lookup('desktop_src_range_4')
+  $desktop_src_range_6 = lookup('desktop_src_range_6')
+
   firewall_multi {
     default:
       * => $firewall_defaults;
 
     '002 allow ssh from desktops (IPv4)':
       chain     => 'PUPPET-INPUT',
-      src_range => '169.229.226.100-169.229.226.139',
+      src_range => $desktop_src_range_4,
       proto     => 'tcp',
       dport     => 22,
       action    => 'accept';
@@ -45,11 +49,14 @@ class ocf::firewall::pre {
     '002 allow ssh from desktops (IPv6)':
       provider  => 'ip6tables',
       chain     => 'PUPPET-INPUT',
-      src_range => '2607:f140:8801::1:100-2607:f140:8801::1:139',
+      src_range => $desktop_src_range_6,
       proto     => 'tcp',
       dport     => 22,
       action    => 'accept';
   }
+
+  $staffvm_src_range_4 = lookup('staffvm_src_range_4')
+  $staffvm_src_range_6 = lookup('staffvm_src_range_6')
 
   firewall_multi {
     default:
@@ -57,7 +64,7 @@ class ocf::firewall::pre {
 
     '003 allow ssh from staff VMs (IPv4)':
       chain     => 'PUPPET-INPUT',
-      src_range => '169.229.226.200-169.229.226.252',
+      src_range => $staffvm_src_range_4,
       proto     => 'tcp',
       dport     => 22,
       action    => 'accept';
@@ -65,7 +72,7 @@ class ocf::firewall::pre {
     '003 allow ssh from staff VMs (IPv6)':
       provider  => 'ip6tables',
       chain     => 'PUPPET-INPUT',
-      src_range => '2607:f140:8801::1:200-2607:f140:8801::1:252',
+      src_range => $staffvm_src_range_6,
       proto     => 'tcp',
       dport     => 22,
       action    => 'accept';
