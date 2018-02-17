@@ -1,4 +1,2 @@
 classes:
     - ocf_mesos::master
-
-puppet_agent: true

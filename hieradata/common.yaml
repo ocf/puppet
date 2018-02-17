@@ -2,7 +2,7 @@ classes:
     - ocf
 
 staff_only: true
-puppet_agent: false
+puppet_agent: true
 
 # Mesos/Marathon configuration
 #

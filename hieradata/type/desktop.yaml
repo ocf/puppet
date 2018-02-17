@@ -8,4 +8,3 @@ ocf::auth::gsudo: [ocfstaff]
 ocf::staff_users::noop: true
 
 staff_only: false
-puppet_agent: true

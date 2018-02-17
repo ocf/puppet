@@ -2,4 +2,3 @@ classes:
     - ocf_ssl::default_bundle
 
 owner: asai
-puppet_agent: true
