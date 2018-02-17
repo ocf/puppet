@@ -136,6 +136,7 @@ class ocf::extrapackages {
     'python3-mock',
     'python3-mysqldb',
     'python3-nose',
+    'python3-pandas',
     'python3-progressbar',
     'python3-pytest',
     'python3-pytest-cov',
