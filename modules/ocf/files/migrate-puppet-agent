@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if [[ $EUID -ne 0 ]]; then
+  echo "This script must be run as root"
+  exit 1
+fi
+
+if [ "$(puppet --version)" == "4.8.2" ]; then
+  apt remove -y puppet
+  apt install -y puppet-agent
+  mv /var/lib/puppet/ssl /etc/puppetlabs/puppet/
+  chown root:root -R /etc/puppetlabs/puppet/ssl
+
+  echo "Running puppet agent..."
+  /opt/puppetlabs/bin/puppet agent -t
+
+  echo "Removing old puppet directories to avoid future confusion"
+  rm -r /var/lib/puppet /etc/puppet
+else
+  echo "Puppet > 4.8.2 is already installed"
+  exit 1
+fi
