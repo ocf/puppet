@@ -17,9 +17,17 @@ class ocf::packages::mysql_server(
     }
   }
 
+  # We make mysqladmin non-executable on servers which don't run a mysql
+  # server in order to avoid a logrotate bug (rt#5981).
+  $mysqladmin_mode = $manage_service ? {
+    true  => '0644',
+    false => '0755',
+  }
+
   # TODO: Remove once mysqladmin is made executable on all hosts again
-  # (rt#5981, fixed in mariadb-server 10.1.22-1).
+  # (rt#5981, fixed in mariadb-server 10.1.22-1, but some hosts are still on
+  # jessie so they haven't been updated yet).
   file { '/usr/bin/mysqladmin':
-    mode => '0755',
+    mode => $mysqladmin_mode,
   }
 }
