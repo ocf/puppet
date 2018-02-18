@@ -49,6 +49,7 @@ class ocf::extrapackages {
     'git-buildpackage',
     'golang',
     'graphviz',
+    'haveged',
     'icedtea-netx',
     'ikiwiki',
     'inotify-tools',
