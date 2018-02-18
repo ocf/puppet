@@ -13,23 +13,6 @@ class ocf::puppet($stage = 'first') {
         # the changes made here are also made in that module.
         "set agent/environment ${::environment}",
         'set agent/usecacheonfailure false',
-
-        # Remove a bunch of old settings that are no longer needed
-        # TODO: Remove ones from here that have already been removed in the
-        # section below for non-puppet-agent hosts
-        'rm main/logdir',
-        'rm main/vardir',
-        'rm main/ssldir',
-        'rm main/rundir',
-        'rm main/templatedir',
-        'rm main/factpath',
-        'rm main/pluginsync',
-        'rm main/stringify_facts',
-        'rm main/prerun_command',
-        'rm main/postrun_command',
-        'rm agent/certname',
-        'rm master/ssl_client_header',
-        'rm master/ssl_client_verify_header',
       ],
       require => Package[$puppet_pkg],
     }
@@ -85,9 +68,8 @@ class ocf::puppet($stage = 'first') {
       mode    => '0755',
       source  => 'puppet:///modules/ocf/puppet-trigger';
 
-    # TODO: Remove this after all hosts are on puppet-agent
+    # TODO: Remove this entirely once all hosts have this file removed
     '/usr/local/sbin/migrate-puppet-agent':
-      mode    => '0755',
-      source  => 'puppet:///modules/ocf/migrate-puppet-agent';
+      ensure => absent,
   }
 }
