@@ -56,9 +56,11 @@ class ocf_kerberos {
   }
 
   cron { 'kerberos-git-backup':
+    # Make sure this occurs before the rsync backup for rsnapshot, since this
+    # ensures we have a more recent daily backup stored on our backup server
     command => '/usr/local/sbin/kerberos-git-backup',
     minute  => 0,
-    hour    => 4,
+    hour    => 1,
     require => File['/usr/local/sbin/kerberos-git-backup'];
   }
 }

@@ -48,9 +48,12 @@ class ocf_ldap {
   cron { 'ldap-git-backup':
     # Back up all of LDAP, including configuration options
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=721155
+    #
+    # Make sure this occurs before the rsync backup for rsnapshot, since this
+    # ensures we have a more recent daily backup stored on our backup server
     command => "/usr/sbin/ldap-git-backup --ldif-cmd 'slapcat -s cn=config; slapcat'",
     minute  => 0,
-    hour    => 4,
+    hour    => 1,
     require => Package['ldap-git-backup'];
   }
 
