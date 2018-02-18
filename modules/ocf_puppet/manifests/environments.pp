@@ -9,7 +9,7 @@ class ocf_puppet::environments {
   #
   # Instead, we just call `git clone`.
   if $::ocf_staff {
-  $staff = split($::ocf_staff, ',')
+    $staff = split($::ocf_staff, ',')
     $staff.each |$user| {
       $repo_path = "${::puppet_environmentpath}/${user}"
 
@@ -22,7 +22,7 @@ class ocf_puppet::environments {
         group  => ocf,
       }
 
-      exec { "git clone https://github.com/ocf/puppet ${repo_path} && cd ${repo_path} && make vendor":
+      exec { "git clone https://github.com/ocf/puppet ${repo_path}":
         user    => $user,
         unless  => "test -d ${repo_path}/.git",
         require => [File[$repo_path], Package['git'], Package['r10k']];
