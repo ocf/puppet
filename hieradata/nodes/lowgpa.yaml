@@ -1,5 +1,2 @@
 classes:
     - ocf_decal
-
-ocf::auth::glogin: [[ocfdecal, ALL]]
-staff_only: false
