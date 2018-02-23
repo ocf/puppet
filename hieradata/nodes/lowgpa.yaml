@@ -1,2 +1,5 @@
 classes:
     - ocf_decal
+
+# Allow deployment with the ocfdecal user
+ocf::auth::ulogin: [['ocfdecal', 'reaper.ocf.berkeley.edu']]
