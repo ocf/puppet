@@ -14,8 +14,7 @@ class ocf_admin::create::redis {
     notify  => Service['redis-server'];
   }
 
-  $redis_password = hiera('create::redis::password')
-  validate_re($redis_password, '^[a-zA-Z0-9]*$', 'Bad Redis password')
+  $redis_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], hiera('create::redis::password'))
 
   augeas { '/etc/redis/redis.conf':
     lens    => 'Spacevars.simple_lns',

@@ -3,11 +3,9 @@
 # staff VMs, etc.
 class ocf_ocfweb::dev_config($group = 'ocfstaff') {
   include ocf::firewall::output_printers
-  # TODO: stop copy-pasting this everywhere
-  $redis_password = hiera('create::redis::password')
-  validate_re($redis_password, '^[a-zA-Z0-9]*$', 'Bad Redis password')
-  $ocfmail_password = hiera('ocfmail::mysql::dev_password')
-  validate_re($ocfmail_password, '^[a-zA-Z0-9]*$', 'Bad ocfmail password')
+  # TODO: stop copy-pasting this password validation everywhere
+  $redis_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], hiera('create::redis::password'))
+  $ocfmail_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], hiera('ocfmail::mysql::dev_password'))
 
   $broker = "redis://:${redis_password}@admin.ocf.berkeley.edu:6378"
   $backend = $broker
