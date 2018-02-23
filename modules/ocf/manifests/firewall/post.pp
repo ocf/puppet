@@ -73,15 +73,17 @@ class ocf::firewall::post {
   # drop from hosts in internal zone range but not actually internal
   $drop_all = ['tsunami', 'werewolves', 'death', 'dev-tsunami', 'dev-werewolves', 'dev-death']
 
-  $drop_all.each |String $s| {
-    ocf::firewall::firewall46 { "997 drop all other traffic from ${s}":
-      opts   => {
-        chain  => 'PUPPET-INPUT',
-        proto  => 'all',
-        action => 'drop',
-        source => $s,
-      },
-      before => undef,
+  if !$ocf::firewall::allow_other_traffic {
+    $drop_all.each |String $s| {
+      ocf::firewall::firewall46 { "997 drop all other traffic from ${s}":
+        opts   => {
+          chain  => 'PUPPET-INPUT',
+          proto  => 'all',
+          action => 'drop',
+          source => $s,
+        },
+        before => undef,
+      }
     }
   }
 
