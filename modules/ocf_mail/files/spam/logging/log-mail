@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-#
 # Appends JSON dictionary of NSA-style metadata about a message read from stdin
 # to /var/log/ocfmail.log for the purposes of monitoring spam. Should be run as
 # the postfix user.
 #
 # Note that `date` returned is the current date (and not one parsed from
 # message headers), since we don't really trust headers more than necessary.
-import base64
 import email
 import email.utils
 import io
 import json
 import pwd
-import quopri
 import re
 import sys
 from datetime import datetime
+from email.header import decode_header
+from email.header import make_header
 
 from ocflib.vhost.mail import get_mail_vhosts
 
@@ -29,26 +27,11 @@ def mime_decode(string):
 
     These are mostly found in From and Subject headers of emails and look
     something like "=?UTF-8?Q?" + encoded_data + "?=" where the encoded data
-    just has some characters encoded (for example ™ turns into something like
-    =E2=84=A2 when encoded). It can also take the form of "=?UTF-8?B?" +
+    just has some characters encoded (for example =E2=84=A2 turn into something
+    like ™ when decoded). It can also take the form of "=?UTF-8?B?" +
     encoded_data + "?=" where all the data is base64 encoded.
     """
-    encoding_regex = r'=\?(.+?)\?([bBqQ])\?(.+?)\?='
-    match = re.search(encoding_regex, string)
-    while match:
-        charset, encoding, encoded_text = match.groups()
-        if encoding.lower() == 'b':
-            byte_string = base64.b64decode(encoded_text)
-        elif encoding.lower() == 'q':
-            byte_string = quopri.decodestring(encoded_text)
-
-        string = string.replace(
-            '=?{}?{}?{}?='.format(charset, encoding, encoded_text),
-            byte_string.decode(charset),
-        )
-        match = re.search(encoding_regex, string)
-
-    return string
+    return str(make_header(decode_header(string)))
 
 
 def parse_received_for_uid(header):
@@ -117,7 +100,7 @@ def clean_addr(realname, addr):
 
     We keep the realname in case it says something useful (e.g. 'Cron Daemon').
 
-    >>> clean_addr(('Chris Kuehl', '<cKuEhL@OCF.Berkeley.EDU>'))
+    >>> clean_addr('Chris Kuehl', '<cKuEhL@OCF.Berkeley.EDU>')
     ('Chris Kuehl', 'ckuehl@ocf.berkeley.edu')
     """
     return mime_decode(realname.strip()) or None, addr.strip().lower() or None
@@ -126,7 +109,7 @@ def clean_addr(realname, addr):
 if __name__ == '__main__':
     safe_stdin = io.TextIOWrapper(
         sys.stdin.buffer,
-        encoding='ascii',
+        encoding='utf-8',
         errors='ignore',
     )
     message = email.message_from_file(safe_stdin)
@@ -160,5 +143,5 @@ if __name__ == '__main__':
         'date': datetime.now().isoformat(),
     }
 
-    with open(LOG_FILE, 'a') as f:
+    with open(LOG_FILE, 'a', encoding='utf-8') as f:
         print(json.dumps(info, sort_keys=True, ensure_ascii=False), file=f)
