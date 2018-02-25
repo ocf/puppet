@@ -98,7 +98,7 @@ class ocf::networking(
     # VM and the internet, will have an input interface and output interface
     # of $iface. Any packet which doesn't have this property should not be
     # forwarded (unless allowed for by a different iptables rule).
-    firewall { '100 allow traffic to/from VMs':
+    firewall_multi { '100 allow traffic to/from VMs':
       chain    => 'FORWARD',
       proto    => 'all',
       iniface  => $iface,
