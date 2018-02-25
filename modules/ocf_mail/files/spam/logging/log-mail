@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+#
 # Appends JSON dictionary of NSA-style metadata about a message read from stdin
 # to /var/log/ocfmail.log for the purposes of monitoring spam. Should be run as
 # the postfix user.
 #
 # Note that `date` returned is the current date (and not one parsed from
 # message headers), since we don't really trust headers more than necessary.
+import base64
 import email
 import email.utils
 import io
 import json
 import pwd
+import quopri
 import re
 import sys
 from datetime import datetime
@@ -18,6 +22,33 @@ from ocflib.vhost.mail import get_mail_vhosts
 
 
 LOG_FILE = '/var/log/ocfmail.log'
+
+
+def mime_decode(string):
+    """Decode any UTF-8 encoded strings as specified by RFC 2047.
+
+    These are mostly found in From and Subject headers of emails and look
+    something like "=?UTF-8?Q?" + encoded_data + "?=" where the encoded data
+    just has some characters encoded (for example ™ turns into something like
+    =E2=84=A2 when encoded). It can also take the form of "=?UTF-8?B?" +
+    encoded_data + "?=" where all the data is base64 encoded.
+    """
+    encoding_regex = r'=\?(.+?)\?([bBqQ])\?(.+?)\?='
+    match = re.search(encoding_regex, string)
+    while match:
+        charset, encoding, encoded_text = match.groups()
+        if encoding.lower() == 'b':
+            byte_string = base64.b64decode(encoded_text)
+        elif encoding.lower() == 'q':
+            byte_string = quopri.decodestring(encoded_text)
+
+        string = string.replace(
+            '=?{}?{}?{}?='.format(charset, encoding, encoded_text),
+            byte_string.decode(charset),
+        )
+        match = re.search(encoding_regex, string)
+
+    return string
 
 
 def parse_received_for_uid(header):
@@ -61,16 +92,35 @@ def parse_received_for_auth(header):
         }
 
 
-def clean_addr(addr):
+def parse_received_for_recipient(header):
+    """Attempt to parse the receipient address from the Received header.
+
+    The To header is required, but can sometimes be something like "To:
+    undisclosed-recipients:;", which is not helpful at all and otherwise
+    produces an empty output in the log ([null, null]). We'd prefer to have an
+    actual address shown, so we search through the Received headers for an
+    address to log.
+    """
+    match = re.search(
+        r'^\tfor <(.+?)>;(.*)$',
+        header,
+        re.MULTILINE,
+    )
+    if match:
+        # The recipient's name will be empty since only the email is parsed out
+        # of the Received header
+        return ('', match.group(1))
+
+
+def clean_addr(realname, addr):
     """Cleans up email address, attempting to normalize as much as possible.
 
     We keep the realname in case it says something useful (e.g. 'Cron Daemon').
 
-    >>> clean_addr('Chris Kuehl <cKuEhL@OCF.Berkeley.EDU>')
+    >>> clean_addr(('Chris Kuehl', '<cKuEhL@OCF.Berkeley.EDU>'))
     ('Chris Kuehl', 'ckuehl@ocf.berkeley.edu')
     """
-    realname, mail_addr = email.utils.parseaddr(addr)
-    return realname.strip() or None, mail_addr.strip().lower() or None
+    return mime_decode(realname.strip()) or None, addr.strip().lower() or None
 
 
 if __name__ == '__main__':
@@ -83,6 +133,7 @@ if __name__ == '__main__':
 
     parsed = {}
     received = message.get_all('Received')
+    to = clean_addr(*email.utils.parseaddr(message['To']))
     if received:
         parsed = (
             # received header with uid comes from the first relay
@@ -92,15 +143,22 @@ if __name__ == '__main__':
             {}
         )
 
+        if to == (None, None):
+            # If the To header does not contain an address, then attempt to
+            # find the recipient address in the received headers
+            to = clean_addr(*parse_received_for_recipient(received[0]))
+
+    cc_addrs = message.get_all('Cc') or []
     info = {
         'relay': parsed.get('relay'),
         'uid': parsed.get('uid'),
         'smtp_user': parsed.get('smtp_user'),
-        'from': clean_addr(message['From']),
-        'to': clean_addr(message['To']),
-        'subject': message['Subject'],
+        'from': clean_addr(*email.utils.parseaddr(message['From'])),
+        'to': to,
+        'cc': [clean_addr(*addr) for addr in email.utils.getaddresses(cc_addrs)],
+        'subject': mime_decode(message['Subject']),
         'date': datetime.now().isoformat(),
     }
 
     with open(LOG_FILE, 'a') as f:
-        print(json.dumps(info, sort_keys=True), file=f)
+        print(json.dumps(info, sort_keys=True, ensure_ascii=False), file=f)
