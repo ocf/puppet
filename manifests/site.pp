@@ -50,3 +50,7 @@ Cron {
 Firewall {
   before => Class['ocf::firewall::post'],
 }
+
+Ocf::Firewall::Firewall46 {
+  before => Class['ocf::firewall::post'],
+}
