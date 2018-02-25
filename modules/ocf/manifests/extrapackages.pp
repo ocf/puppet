@@ -48,6 +48,7 @@ class ocf::extrapackages {
     'ghc',
     'git-buildpackage',
     'golang',
+    'graphicsmagick',
     'graphviz',
     'haveged',
     'icedtea-netx',
