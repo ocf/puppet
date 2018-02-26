@@ -42,6 +42,8 @@ class ocf_desktop::packages {
     ['libnotify-bin', 'notification-daemon']:;
     # performance improvements
     ['preload']:;
+    # security tools
+    ['scdaemon']:;
     # Xorg
     ['xserver-xorg', 'xclip', 'xscreensaver']:;
   }
