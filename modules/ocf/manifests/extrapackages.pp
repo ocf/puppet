@@ -220,6 +220,10 @@ class ocf::extrapackages {
       ]:;
     }
   } else {
+    # TODO: temporary, remove
+    package { 'rustc':
+      ensure => purged,
+    }
     package {
       [
         'ack',
