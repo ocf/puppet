@@ -27,4 +27,11 @@ class ocf_decal {
       mode    => '0660',
       require => User['ocfdecal'];
   }
+
+  vcsrepo { '/opt/share/decal-utils':
+    ensure    => latest,
+    provider  => git,
+    revision  => 'master',
+    source    => 'https://github.com/0xcf/decal-util.git'
+  }
 }
