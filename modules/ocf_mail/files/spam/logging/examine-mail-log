@@ -10,7 +10,7 @@ from ocflib.account.utils import is_staff
 
 
 # number of messages a single account can send per day without being flagged
-MAIL_PER_DAY = 30
+MAIL_PER_DAY = 45
 
 REGEX_EXTRACT_DOMAIN = re.compile('^.*@(.*)$')
 REGEX_EXTRACT_USER = re.compile('^(.*)@.*$')
