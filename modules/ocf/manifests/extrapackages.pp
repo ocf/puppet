@@ -237,7 +237,6 @@ class ocf::extrapackages {
         'python-notebook',
         'python3-notebook',
         'ruby-mysql2',
-        'rustc',
       ]:;
     }
   }
