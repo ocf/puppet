@@ -220,6 +220,10 @@ class ocf::extrapackages {
       ]:;
     }
   } else {
+    # TODO: temporary, remove
+    package { 'rustc':
+      ensure => purged,
+    }
     package {
       [
         'ack',
@@ -237,7 +241,6 @@ class ocf::extrapackages {
         'python-notebook',
         'python3-notebook',
         'ruby-mysql2',
-        'rustc',
       ]:;
     }
   }
