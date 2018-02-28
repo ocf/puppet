@@ -15,15 +15,18 @@ class ocf::firewall::post {
     }
   }
 
-  ocf::firewall::firewall46 {
-    '997 forbid other users from sending on SMTP port':
-      opts   => {
-        chain  => 'PUPPET-OUTPUT',
-        proto  => 'tcp',
-        dport  => 25,
-        action => 'drop',
-      },
-      before => undef,
+  ['anthrax', 'dev-anthrax'].each |$dest| {
+    ocf::firewall::firewall46 {
+      "997 forbid other users from sending on SMTP port to ${dest}":
+        opts   => {
+          chain       => 'PUPPET-OUTPUT',
+          proto       => 'tcp',
+          destination => $dest,
+          dport       => 25,
+          action      => 'drop',
+        },
+        before => undef,
+    }
   }
 
 
