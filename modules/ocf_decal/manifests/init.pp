@@ -14,10 +14,24 @@ class ocf_decal {
     system  => true,
   }
 
-  file { '/opt/ocfdecal':
-    ensure  => directory,
-    owner   => ocfdecal,
-    group   => ocfdecal,
-    require => User['ocfdecal'];
+  file {
+    '/opt/ocfdecal':
+      ensure  => directory,
+      owner   => ocfdecal,
+      group   => ocfdecal,
+      require => User['ocfdecal'];
+    '/etc/decal_mysql.conf':
+      source  => 'puppet:///private/mysql.conf',
+      owner   => ocfdecal,
+      group   => ocfstaff,
+      mode    => '0440',
+      require => User['ocfdecal'];
+  }
+
+  vcsrepo { '/opt/share/decal-utils':
+    ensure    => latest,
+    provider  => git,
+    revision  => 'master',
+    source    => 'https://github.com/0xcf/decal-util.git'
   }
 }
