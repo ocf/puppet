@@ -40,7 +40,7 @@ repos:
 -   repo: local
     hooks:
     -   id: no-resource-defaults
-        language: pcre
+        language: pygrep
         name: No resource defaults are used (see https://github.com/ocf/puppet/pull/58)
         entry: ^\s*[A-Z][A-Za-z0-9:]+\s*{
         types: [puppet]
