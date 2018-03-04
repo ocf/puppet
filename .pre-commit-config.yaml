@@ -3,6 +3,13 @@ repos:
     sha: v2.0.1
     hooks:
     -   id: puppet-validate
+        # TODO: Remove this version pinning. The problem here seems to be that
+        # the Debian-packaged versions of the semantic_puppet gem
+        # (ruby-semantic-puppet package) cause some kind of error with locale
+        # loading for puppet validation. A bug probably needs to be opened with
+        # the Debian package maintainers or with semantic_puppet depending on
+        # who is actually causing the error.
+        additional_dependencies: ['puppet:<5']
     -   id: erb-validate
     -   id: puppet-lint
         args:
