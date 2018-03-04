@@ -24,7 +24,7 @@ class ocf_decal {
       source  => 'puppet:///private/mysql.conf',
       owner   => ocfdecal,
       group   => ocfstaff,
-      mode    => '0660',
+      mode    => '0440',
       require => User['ocfdecal'];
   }
 
