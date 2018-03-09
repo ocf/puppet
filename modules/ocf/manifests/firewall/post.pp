@@ -1,6 +1,7 @@
 class ocf::firewall::post {
   # Only allow root and postfix to connect to anthrax port 25; everyone else
-  # must use the sendmail interface
+  # must use the sendmail interface.
+  # firewall-multi doesn't multiplex this so we have to do it manually :(
   ['root', 'postfix'].each |$username| {
     ocf::firewall::firewall46 {
       "996 allow ${username} to send on SMTP port":
@@ -15,18 +16,16 @@ class ocf::firewall::post {
     }
   }
 
-  ['anthrax', 'dev-anthrax'].each |$dest| {
-    ocf::firewall::firewall46 {
-      "997 forbid other users from sending on SMTP port to ${dest}":
-        opts   => {
-          chain       => 'PUPPET-OUTPUT',
-          proto       => 'tcp',
-          destination => $dest,
-          dport       => 25,
-          action      => 'drop',
-        },
-        before => undef,
-    }
+  ocf::firewall::firewall46 {
+    '997 forbid other users from sending on SMTP port':
+      opts   => {
+        chain       => 'PUPPET-OUTPUT',
+        proto       => 'tcp',
+        destination => ['anthrax', 'dev-anthrax'],
+        dport       => 25,
+        action      => 'drop',
+      },
+      before => undef,
   }
 
 
@@ -50,25 +49,21 @@ class ocf::firewall::post {
     before   => undef,
   }
 
-  $devices_ipv4_only.each |$d| {
-    firewall { "999 drop other output to ${d}":
+  firewall_multi { '999 drop output (special devices)':
+    chain       => 'PUPPET-OUTPUT',
+    proto       => 'all',
+    action      => 'drop',
+    destination => $devices_ipv4_only,
+    before      => undef,
+  }
+
+  ocf::firewall::firewall46 { '999 drop output (special devices)':
+    opts   => {
       chain       => 'PUPPET-OUTPUT',
       proto       => 'all',
       action      => 'drop',
-      destination => $d,
-      before      => undef,
-    }
-  }
-
-  $devices.each |$d| {
-    ocf::firewall::firewall46 { "999 drop other output to ${d}":
-      opts   => {
-        chain       => 'PUPPET-OUTPUT',
-        proto       => 'all',
-        action      => 'drop',
-        destination => $d,
-      },
-      before => undef,
-    }
+      destination => $devices,
+    },
+    before => undef,
   }
 }

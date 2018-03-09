@@ -6,6 +6,7 @@ moduledir 'vendor'
 # too, since r10k does not manage dependencies and you will be confused as to
 # why they are not working properly.
 
+mod 'alexharvey/firewall_multi',       '1.10.0'
 mod 'puppet-nginx',                    '0.10.0'
 mod 'puppetlabs-apache',               '2.3.1'
 mod 'puppetlabs-apt',                  '4.5.1'

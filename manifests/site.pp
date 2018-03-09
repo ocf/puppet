@@ -47,7 +47,7 @@ Cron {
   environment => 'PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin'
 }
 
-Firewall {
+Firewall_multi {
   before => Class['ocf::firewall::post'],
 }
 
