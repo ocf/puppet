@@ -7,4 +7,7 @@ ocf::auth::gsudo: [ocfstaff]
 # Don't manage staff home directories on desktops.
 ocf::staff_users::noop: true
 
+# Allow ocfroot to use docker without sudo
+ocf::packages::docker::admin_group: ocfroot
+
 staff_only: false
