@@ -1,5 +1,6 @@
 class ocf_desktop::packages {
   include ocf::extrapackages
+  include ocf::packages::docker
 
   # Install packages specific to desktops
   #
