@@ -2,3 +2,5 @@ classes:
     - ocf_dhcp
     - ocf_ns
     - ocf_rancid
+
+ocf::firewall::allow_other_traffic: false
