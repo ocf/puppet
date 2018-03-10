@@ -73,18 +73,13 @@ class ocf::firewall::post {
   # drop from hosts in internal zone range but not actually internal
   $drop_all = ['tsunami', 'werewolves', 'death', 'dev-tsunami', 'dev-werewolves', 'dev-death']
 
-  if !$ocf::firewall::allow_other_traffic {
-    $drop_all.each |String $s| {
-      ocf::firewall::firewall46 { "997 drop all other traffic from ${s}":
-        opts   => {
-          chain  => 'PUPPET-INPUT',
-          proto  => 'all',
-          action => 'drop',
-          source => $s,
-        },
-        before => undef,
-      }
-    }
+  firewall_multi { '997 drop output (exceptions to internal zone)':
+    chain    => 'PUPPET-INPUT',
+    proto    => 'all',
+    action   => 'drop',
+    source   => $drop_all,
+    provider => ['iptables','ip6tables'],
+    before   => undef,
   }
 
   # blanket-allow stuff from the internal zone
@@ -114,19 +109,19 @@ class ocf::firewall::post {
   if !$ocf::firewall::allow_other_traffic {
     firewall_multi {
       '999 drop unrecognized packets from within OCF network (IPv4)':
-        chain     => 'PUPPET-INPUT',
-        src_range => '169.229.226.0/24',
-        proto     => 'all',
-        action    => 'drop',
-        before    => undef;
+        chain  => 'PUPPET-INPUT',
+        source => '169.229.226.0/24',
+        proto  => 'all',
+        action => 'drop',
+        before => undef;
 
       '999 drop unrecognized packets from within OCF network (IPv6)':
-        provider  => 'ip6tables',
-        chain     => 'PUPPET-INPUT',
-        src_range => '2607:f140:8801::/64',
-        proto     => 'all',
-        action    => 'drop',
-        before    => undef;
+        provider => 'ip6tables',
+        chain    => 'PUPPET-INPUT',
+        source   => '2607:f140:8801::/64',
+        proto    => 'all',
+        action   => 'drop',
+        before   => undef;
     }
   }
 }
