@@ -18,11 +18,12 @@ from ocflib.lab.stats import humanize_bytes
 ARCHIVE = '/opt/backups/scratch/archive'
 BOX_DAV = 'https://dav.box.com/dav/'
 BOX_EMAILS = [
-    'ckuehl@berkeley.edu',
-    'kpeng3.4@berkeley.edu',
     'abizer@berkeley.edu',
     'benjamin.zhang@berkeley.edu',
+    'ckuehl@berkeley.edu',
     'dkessler@berkeley.edu',
+    'jvperrin@ocf.berkeley.edu',
+    'kpeng3.4@berkeley.edu',
 ]
 FOLDER = 'ocf-backup-' + time.strftime('%Y-%m-%d')
 MAX_CONCURR_UPLOADS = 10
