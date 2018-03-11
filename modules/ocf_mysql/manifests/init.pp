@@ -7,8 +7,9 @@ class ocf_mysql {
       show_diff => false;
 
     '/root/.my.cnf':
-      mode   => '0600',
-      source => 'puppet:///private/root-my.cnf';
+      mode      => '0600',
+      source    => 'puppet:///private/root-my.cnf',
+      show_diff => false;
   }
 
   class { 'ocf::packages::mysql_server':

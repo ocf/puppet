@@ -25,11 +25,12 @@ class ocf_ldap {
       require => Package['slapd', 'libsasl2-modules-gssapi-mit'];
 
     '/etc/ldap/krb5.keytab':
-      source  => 'puppet:///private/krb5-ldap.keytab',
-      owner   => openldap,
-      group   => openldap,
-      mode    => '0600',
-      require => Package['slapd', 'heimdal-clients'];
+      source    => 'puppet:///private/krb5-ldap.keytab',
+      owner     => openldap,
+      group     => openldap,
+      mode      => '0600',
+      show_diff => false,
+      require   => Package['slapd', 'heimdal-clients'];
   }
 
   augeas { '/etc/default/slapd':
@@ -85,8 +86,9 @@ class ocf_ldap {
         mode   => '0700';
 
       '/root/.ssh/id_rsa':
-        source => 'puppet:///private/id_rsa',
-        mode   => '0600';
+        source    => 'puppet:///private/id_rsa',
+        mode      => '0600',
+        show_diff => false;
 
       # This is to stop backups from sending emails every time a new IP is used
       # See rt#4724 for more information

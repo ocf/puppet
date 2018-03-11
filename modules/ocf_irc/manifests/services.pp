@@ -23,8 +23,9 @@ class ocf_irc::services {
       group   => root;
 
     '/etc/anope/services.conf':
-      content => template('ocf_irc/services.conf.erb'),
-      mode    => '0640';
+      content   => template('ocf_irc/services.conf.erb'),
+      mode      => '0640',
+      show_diff => false;
 
     '/etc/anope/services.motd':
       content => "Welcome to OCF IRC Services!\n";

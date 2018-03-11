@@ -18,8 +18,9 @@ class ocf_backups::offsite {
 
     # Box.com credentials and API id/secret
     '/opt/share/backups/box-creds.json':
-      source => 'puppet:///private/box-creds.json',
-      mode   => '0600';
+      source    => 'puppet:///private/box-creds.json',
+      mode      => '0600',
+      show_diff => false;
   }
 
   # Runs Saturday at noon, makes a backup and then uploads it to Box.com

@@ -15,8 +15,9 @@ class ocf_mirrors::finnix {
     # we are registered with the Finnix project and have a password for the
     # master upstream mirror
     '/opt/mirrors/project/finnix/password':
-      source  => 'puppet:///private/mirrors/finnix',
-      mode    => '0600';
+      source    => 'puppet:///private/mirrors/finnix',
+      mode      => '0600',
+      show_diff => false;
   }
 
   cron { 'finnix':

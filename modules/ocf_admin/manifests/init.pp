@@ -27,16 +27,21 @@ class ocf_admin {
 
   file {
     '/opt/passwords':
-      source => 'puppet:///private/passwords',
-      group  => ocfroot,
-      mode   => '0640';
+      source    => 'puppet:///private/passwords',
+      group     => ocfroot,
+      mode      => '0640',
+      show_diff => false;
+
     '/etc/ocfprinting.json':
-      source => 'puppet:///private/ocfprinting.json',
-      group  => ocfstaff,
-      mode   => '0640';
+      source    => 'puppet:///private/ocfprinting.json',
+      group     => ocfstaff,
+      mode      => '0640',
+      show_diff => false;
+
     '/etc/ocfstats-ro.passwd':
-      source => 'puppet:///private/ocfstats-ro.passwd',
-      group  => ocfstaff,
-      mode   => '0640';
+      source    => 'puppet:///private/ocfstats-ro.passwd',
+      group     => ocfstaff,
+      mode      => '0640',
+      show_diff => false;
   }
 }

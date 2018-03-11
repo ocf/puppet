@@ -78,22 +78,25 @@ class ocf_jenkins {
       group  => jenkins-deploy;
 
     '/opt/jenkins/deploy/ocfdeploy.keytab':
-      source => 'puppet:///private/ocfdeploy.keytab',
-      owner  => root,
-      group  => jenkins-deploy,
-      mode   => '0640';
+      source    => 'puppet:///private/ocfdeploy.keytab',
+      owner     => root,
+      group     => jenkins-deploy,
+      mode      => '0640',
+      show_diff => false;
 
     '/opt/jenkins/deploy/.pypirc':
-      source => 'puppet:///private/pypirc',
-      owner  => root,
-      group  => jenkins-deploy,
-      mode   => '0640';
+      source    => 'puppet:///private/pypirc',
+      owner     => root,
+      group     => jenkins-deploy,
+      mode      => '0640',
+      show_diff => false;
 
     '/opt/jenkins/deploy/.ocf-marathon':
-      source => 'puppet:///private/ocf-marathon',
-      owner  => root,
-      group  => jenkins-deploy,
-      mode   => '0640';
+      source    => 'puppet:///private/ocf-marathon',
+      owner     => root,
+      group     => jenkins-deploy,
+      mode      => '0640',
+      show_diff => false;
 
     '/opt/jenkins/deploy/.docker':
       ensure => directory,
@@ -102,10 +105,11 @@ class ocf_jenkins {
       mode   => '0750';
 
     '/opt/jenkins/deploy/.docker/config.json':
-      source => 'puppet:///private/docker-config.json',
-      owner  => root,
-      group  => jenkins-deploy,
-      mode   => '0640';
+      source    => 'puppet:///private/docker-config.json',
+      owner     => root,
+      group     => jenkins-deploy,
+      mode      => '0640',
+      show_diff => false;
 
     '/etc/sudoers.d/jenkins-deploy':
       content => "jenkins ALL=(jenkins-deploy) NOPASSWD: ALL\n",

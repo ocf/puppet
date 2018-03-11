@@ -27,11 +27,12 @@ class ocf_rancid {
       require => Package['rancid'];
 
     '/var/lib/rancid/.cloginrc':
-      source  => 'puppet:///private/cloginrc',
-      owner   => 'rancid',
-      group   => 'rancid',
-      mode    => '0600',
-      require => Package['rancid'];
+      source    => 'puppet:///private/cloginrc',
+      owner     => 'rancid',
+      group     => 'rancid',
+      mode      => '0600',
+      show_diff => false,
+      require   => Package['rancid'];
   }
 
   cron { 'rancid-run':
@@ -65,10 +66,11 @@ class ocf_rancid {
         mode   => '0700';
 
       '/var/lib/rancid/.ssh/id_rsa':
-        source => 'puppet:///private/id_rsa',
-        owner  => 'rancid',
-        group  => 'rancid',
-        mode   => '0600';
+        source    => 'puppet:///private/id_rsa',
+        owner     => 'rancid',
+        group     => 'rancid',
+        mode      => '0600',
+        show_diff => false;
     }
   }
 }
