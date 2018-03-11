@@ -53,7 +53,7 @@ class ocf_decal::website {
     port            => 443,
     docroot         => '/srv/www/decal',
     redirect_status => 'permanent',
-    redirect_dest   => 'https://decal.ocf.berkeley.edu',
+    redirect_dest   => 'https://decal.ocf.berkeley.edu/',
 
     ssl             => true,
     ssl_key         => '/srv/ssl/decal/decal.key',
