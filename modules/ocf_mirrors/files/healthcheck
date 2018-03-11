@@ -60,11 +60,13 @@ def get_updated_unix_timestamp(mirror_url):
 def get_updated_recursive_ls(mirror_url):
     """Find the time the host was last synced.
     Should contain the output of ls -lR
-    >>> get_updated_unix_timestamp(mirror_url)
+    >>> get_updated_recursive_ls(mirror_url)
     datetime.datetime(2018, 1, 24, 10, 3)
     """
     req = requests.get(mirror_url)
     req.raise_for_status()
+    # Ex: drwxr-xr-x  3 ftpadmin packager   3 2009-09-21 14:51 3.5.6
+    # Splits on date and time, giving us "2009-09-21 14:51"
     dates = [' '.join(line.split()[5:7]) for line in req.text.splitlines()
              if len(line.split()) == 8]
     return dateutil.parser.parse(max(dates))
@@ -84,13 +86,13 @@ def get_updated_debian(mirror_url):
 
 def get_updated_manjaro(mirror_url):
     """Find the time the host was last synced.
-    The last line on the page should be of the form "date=2018-01-25T21:52:18Z"
+    Line in question should be of the form "date=2018-01-25T21:52:18Z"
     >>> get_updated_manjaro(mirror_url)
     datetime.datetime(2018, 1, 25, 21, 52, 18, tzinfo=tzutc())
     """
     req = requests.get(mirror_url)
     req.raise_for_status()
-    updated_line = req.text.splitlines()[-1]
+    updated_line, = [line for line in req.text.splitlines() if line.startswith('date=')]
     return dateutil.parser.parse(updated_line.split('=', 1)[1])
 
 
