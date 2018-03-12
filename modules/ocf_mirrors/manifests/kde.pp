@@ -15,14 +15,6 @@ class ocf_mirrors::kde {
       upstream_host => 'download.kde.org',
       upstream_path => '',
       ts_path       => 'ls-lR';
-
-    'kde-applicationdata':
-      type          => 'unix_timestamp',
-      upstream_host => 'files.kde.org',
-      upstream_path => '',
-      ts_path       => 'last-updated',
-      filename     => 'health-appdata',
-      project_path => '/opt/mirrors/project/kde';
   }
 
   cron {
