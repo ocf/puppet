@@ -9,18 +9,10 @@ class ocf_mirrors::centos {
   }
 
   ocf_mirrors::monitoring {
-    default:
+    'centos':
       type          => 'unix_timestamp',
       upstream_host => 'mirror.centos.org',
       ts_path       => 'TIME';
-
-    'centos':
-    ;
-
-    'centos-altarch':
-      filename      => 'health-altarch',
-      upstream_path => '/altarch',
-      project_path  => '/opt/mirrors/project/centos';
   }
 
   cron {
@@ -29,11 +21,5 @@ class ocf_mirrors::centos {
       user    => 'mirrors',
       hour    => '*/3',
       minute  => '22';
-
-    'centos-altarch':
-      command => '/opt/mirrors/project/centos/sync-altarch > /dev/null',
-      user    => 'mirrors',
-      hour    => '*/3',
-      minute  => '44';
   }
 }
