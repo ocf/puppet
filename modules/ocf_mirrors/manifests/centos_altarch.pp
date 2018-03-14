@@ -18,7 +18,7 @@ class ocf_mirrors::centos_altarch {
 
   cron {
     'centos-altarch':
-      command => '/opt/mirrors/project/centos-altarch/sync-altarch > /dev/null',
+      command => '/opt/mirrors/project/centos-altarch/sync-archive > /dev/null',
       user    => 'mirrors',
       hour    => '*/3',
       minute  => '44';

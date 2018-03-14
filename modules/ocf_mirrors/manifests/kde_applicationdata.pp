@@ -1,8 +1,8 @@
-class ocf_mirrors::kde_appdata {
+class ocf_mirrors::kde_applicationdata {
   file {
-    '/opt/mirrors/project/kde-appdata':
+    '/opt/mirrors/project/kde-applicationdata':
       ensure  => directory,
-      source  => 'puppet:///modules/ocf_mirrors/project/kde-appdata/',
+      source  => 'puppet:///modules/ocf_mirrors/project/kde-applicationdata/',
       owner   => mirrors,
       group   => mirrors,
       mode    => '0755',
@@ -10,7 +10,7 @@ class ocf_mirrors::kde_appdata {
   }
 
   ocf_mirrors::monitoring {
-    'kde-appdata':
+    'kde-applicationdata':
       type          => 'unix_timestamp',
       upstream_host => 'files.kde.org',
       upstream_path => '',
@@ -18,8 +18,8 @@ class ocf_mirrors::kde_appdata {
   }
 
   cron {
-    'kde-appdata':
-      command => '/opt/mirrors/project/kde-appdata/sync-archive > /dev/null',
+    'kde-applicationdata':
+      command => '/opt/mirrors/project/kde-applicationdata/sync-archive > /dev/null',
       user    => 'mirrors',
       hour    => '*/2',
       minute  => '0',

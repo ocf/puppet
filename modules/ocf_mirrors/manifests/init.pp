@@ -9,11 +9,13 @@ class ocf_mirrors {
   include ocf_mirrors::apache
   include ocf_mirrors::archlinux
   include ocf_mirrors::centos
+  include ocf_mirrors::centos_altarch
   include ocf_mirrors::debian
   include ocf_mirrors::finnix
   include ocf_mirrors::gnu
   include ocf_mirrors::kali
   include ocf_mirrors::kde
+  include ocf_mirrors::kde_applicationdata
   include ocf_mirrors::manjaro
   include ocf_mirrors::parrot
   include ocf_mirrors::puppetlabs

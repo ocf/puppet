@@ -7,7 +7,6 @@ define ocf_mirrors::monitoring(
     $upstream_path = "/${title}",
     $upstream_protocol = 'http',
     $ts_path = undef,
-    $filename = 'health',
     $ensure = 'present',
   ) {
   $local_base = "http://mirrors.ocf.berkeley.edu${local_path}"
@@ -22,20 +21,20 @@ define ocf_mirrors::monitoring(
   }
 
   if $ensure == 'present' {
-    file { "${project_path}/${filename}":
+    file { "${project_path}/health":
       ensure => link,
       target => '/opt/mirrors/bin/healthcheck',
       owner  => mirrors,
       group  => mirrors,
     } ->
     cron { "${title}-health":
-      command => "${project_path}/${filename} ${title} ${local_url} ${upstream_url} --type=${type}",
+      command => "${project_path}/health ${title} ${local_url} ${upstream_url} --type=${type}",
       user    => mirrors,
       hour    => '*/6',
       minute  => '0';
     }
   } else {
-    file { "${project_path}/${filename}":
+    file { "${project_path}/health":
       ensure => absent;
     }
 
