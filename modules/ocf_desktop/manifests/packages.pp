@@ -46,7 +46,7 @@ class ocf_desktop::packages {
     # security tools
     ['scdaemon']:;
     # Xorg
-    ['xserver-xorg', 'xclip', 'xscreensaver']:;
+    ['xclip', 'xsel', 'xserver-xorg', 'xscreensaver']:;
   }
 
   # Remove some packages
