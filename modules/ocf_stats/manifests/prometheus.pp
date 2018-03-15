@@ -2,6 +2,7 @@
 class ocf_stats::prometheus {
   class { '::prometheus':
     version        => '2.0.0',
+    extra_options  => '--web.listen-address="127.0.0.1:9090" --web.route-prefix=/prometheus'
     alerts         => {},
     scrape_configs => [
       { 'job_name' => 'prometheus',
