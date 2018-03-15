@@ -11,6 +11,5 @@ class ocf_stats {
   include ocf::firewall::output_printers
   include ocf_stats::labstats
   include ocf_stats::munin
-  include ocf_stats::prometheus
   include ocf_stats::www
 }

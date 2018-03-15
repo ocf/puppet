@@ -22,7 +22,6 @@ class ocf_stats::prometheus {
             # We should probably figure out a better way of enumerating all the
             # hosts.
             'leprosy:9100',
-            'dementors:9100',
           ]
           }
         ]
