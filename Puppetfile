@@ -7,7 +7,10 @@ moduledir 'vendor'
 # why they are not working properly.
 
 mod 'alexharvey/firewall_multi',       '1.10.0'
+mod 'camptocamp-systemd',              '1.1.1' # Dependency of puppet-prometheus
 mod 'puppet-nginx',                    '0.10.0'
+mod 'puppet-archive',                  '2.3.0' # Dependency of puppet-prometheus
+mod 'puppet-prometheus',               '5.0.0'
 mod 'puppetlabs-apache',               '2.3.1'
 mod 'puppetlabs-apt',                  '4.5.1'
 mod 'puppetlabs-concat',               '4.1.1'
