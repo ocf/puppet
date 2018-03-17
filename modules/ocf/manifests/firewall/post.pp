@@ -73,13 +73,14 @@ class ocf::firewall::post {
   # drop from hosts in internal zone range but not actually internal
   $drop_all = ['tsunami', 'werewolves', 'death', 'dev-tsunami', 'dev-werewolves', 'dev-death']
 
-  firewall_multi { '997 drop output (exceptions to internal zone)':
-    chain    => 'PUPPET-INPUT',
-    proto    => 'all',
-    action   => 'drop',
-    source   => $drop_all,
-    provider => ['iptables','ip6tables'],
-    before   => undef,
+  ocf::firewall::firewall46 { '997 drop output (exceptions to internal zone)':
+    opts   => {
+      chain  => 'PUPPET-INPUT',
+      proto  => 'all',
+      action => 'drop',
+      source => $drop_all,
+    },
+    before => undef,
   }
 
   # blanket-allow stuff from the internal zone
