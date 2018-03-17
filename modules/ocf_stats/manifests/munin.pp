@@ -1,5 +1,6 @@
 # munin master config
 class ocf_stats::munin {
+  include ocf::firewall::allow_http
   include ocf_ssl::default_bundle
 
   package {
