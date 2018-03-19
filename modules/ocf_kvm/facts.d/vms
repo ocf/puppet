@@ -4,19 +4,20 @@ import subprocess
 
 
 def run_command(command_args):
-    output = subprocess.check_output(command_args).decode('utf-8').split('\n')
+    output = subprocess.check_output(command_args).decode('utf-8').splitlines()
 
     # Return the command output split by line with any empty lines removed
     return list(filter(None, output))
 
 
-vms_all = run_command(('/usr/bin/virsh', 'list', '--name', '--all'))
-vms_inactive = run_command(('/usr/bin/virsh', 'list', '--name', '--inactive'))
+if __name__ == '__main__':
+    vms_all = run_command(('/usr/bin/virsh', 'list', '--name', '--all'))
+    vms_inactive = run_command(('/usr/bin/virsh', 'list', '--name', '--inactive'))
 
-print(json.dumps(
-    {
-        'vms': vms_all,
-        'vms_off': vms_inactive,
-        'vms_on': list(set(vms_all) - set(vms_inactive)),
-    },
-))
+    print(json.dumps(
+        {
+            'vms': vms_all,
+            'vms_off': vms_inactive,
+            'vms_on': list(set(vms_all) - set(vms_inactive)),
+        },
+    ))
