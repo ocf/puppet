@@ -56,7 +56,7 @@ class ocf_desktop::xsession {
     true  => 'background-staff.svg',
     false => 'background.svg',
   }
-  
+
   file { '/opt/share/wallpaper':
     ensure  => link,
     target  => "/opt/share/xsession/images/${wallpaper}",
