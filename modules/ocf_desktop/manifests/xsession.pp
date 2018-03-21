@@ -52,16 +52,9 @@ class ocf_desktop::xsession {
   }
 
   # wallpaper symlink
-  if $::lsbdistcodename == 'jessie' {
-    $wallpaper = $staff_only ? {
-      true  => 'background-staff.png',
-      false => 'background.png',
-    }
-  } else {
-    $wallpaper = $staff_only ? {
-      true  => 'background-staff.svg',
-      false => 'background.svg',
-    }
+  $wallpaper = $staff_only ? {
+    true  => 'background-staff.svg',
+    false => 'background.svg',
   }
 
   file { '/opt/share/wallpaper':
