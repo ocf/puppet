@@ -118,3 +118,12 @@ sleep 8 && /usr/local/bin/fix-audio &
 
 # Source custom rc shared across desktops
 [ -f ~/remote/.desktoprc ] && . ~/remote/.desktoprc
+
+# Enable compositor
+xfconf-query -c xfwm4 -p /general/use_compositing -s false
+compton --daemon --config /dev/null --backend glx  \
+  --vsync opengl-swc --glx-no-stencil --paint-on-overlay \
+  --glx-swap-method 0 --glx-no-rebind-pixmap  \
+  --xrender-sync  --xrender-sync-fence  --unredir-if-possible \
+  --detect-client-opacity
+[ "$?" -ne 0 ] && notify-send -u critical "Compositor not working!"
