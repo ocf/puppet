@@ -67,8 +67,9 @@ class ocf_desktop::packages {
       recommends => false;
     'gedit':
       recommends => false;
-    ['libreoffice-calc', 'libreoffice-draw', 'libreoffice-gnome', 'libreoffice-impress', 'libreoffice-pdfimport', 'libreoffice-writer', 'ure']:
-      recommends => false;
+    ['libreoffice-calc', 'libreoffice-draw', 'libreoffice-gnome', 'libreoffice-gtk3', 'libreoffice-impress', 'libreoffice-pdfimport', 'libreoffice-writer', 'ure']:
+      recommends => false,
+      backport_on => stretch;
     'thunar':
       recommends => false;
     ['virt-manager', 'virt-viewer']:
