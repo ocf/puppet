@@ -9,7 +9,6 @@ class ocf_hpc::controller {
     mode    => '0600',
     owner   => 'slurm',
     group   => 'slurm',
-    require => Package['slurmdbd']
   } ~> augeas { 'slurmdbd.conf':
     incl    => '/etc/slurm-llnl/slurmdbd.conf',
     lens    => 'Simplevars.lns',
