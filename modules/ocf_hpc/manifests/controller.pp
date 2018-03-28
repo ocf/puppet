@@ -5,7 +5,7 @@ class ocf_hpc::controller {
 
   package { 'slurmdbd':
   } -> file { '/etc/slurm-llnl/slurmdbd.conf':
-    source  => 'puppet:///modules/ocf_hpc/files/slurmdbd.conf',
+    source  => 'puppet:///modules/ocf_hpc/slurmdbd.conf',
     mode    => '0600',
     owner   => 'slurm',
     group   => 'slurm',
