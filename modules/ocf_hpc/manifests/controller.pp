@@ -13,7 +13,7 @@ class ocf_hpc::controller {
     incl    => '/etc/slurm-llnl/slurmdbd.conf',
     lens    => 'Simplevars.lns',
     changes => [
-      'set StoragePass $slurmdbd_mysql_password',
+      "set StoragePass ${slurmdbd_mysql_password}",
     ],
   } ~> service { 'slurmdbd':
     ensure     => 'running',
