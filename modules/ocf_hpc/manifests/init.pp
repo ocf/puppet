@@ -8,12 +8,12 @@ class ocf_hpc {
   package { 'slurm-wlm': }
 
   if $::puppetdb_running {
-    $slurm_nodes_facts_query = 'inventory[facts] { resources { type = "Class" and title = "Ocf_hpc::compute" } }'
-    $slurm_nodes_facts = puppetdb_query($::slurm_nodes_query).map |$value| { $value['facts'] }
-    file { '/etc/slurm-llbl/slurm.conf':
+    $slurm_nodes_facts_query = 'inventory[facts] { resources { type = "Class" and title = "Ocf_hpc::Compute" } }'
+    $slurm_nodes_facts = puppetdb_query($slurm_nodes_facts_query).map |$value| { $value['facts'] }
+    file { '/etc/slurm-llnl/slurm.conf':
       content => template(
         'ocf_hpc/slurm.conf.erb',
-        'ocf_hpc/nodes.erb'
+        'ocf_hpc/nodes-partitions.erb'
       ),
       mode    => '0644',
       owner   => 'slurm',
