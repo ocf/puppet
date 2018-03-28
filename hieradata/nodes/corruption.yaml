@@ -1,2 +1,2 @@
 classes:
-    - ocf_hpc
+    - ocf_hpc::compute
