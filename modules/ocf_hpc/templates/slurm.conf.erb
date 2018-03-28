@@ -2,7 +2,7 @@
 # Put this file on all nodes of your cluster.
 # See the slurm.conf man page for more information.
 #
-ControlMachine=hpcctl
+ControlMachine=<%= @slurm_controller_hostname %>
 #BackupController=
 #BackupAddr=
 #
@@ -118,7 +118,7 @@ PriorityType=priority/multifactor
 #
 # LOGGING AND ACCOUNTING
 AccountingStorageEnforce=qos,safe
-AccountingStorageHost=hpcdb
+AccountingStorageHost=<%= @slurm_controller_hostname %>
 #AccountingStorageLoc=
 #AccountingStoragePass=
 #AccountingStoragePort=3306
