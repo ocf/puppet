@@ -14,6 +14,7 @@ class ocf_hpc::controller {
     lens    => 'Simplevars.lns',
     changes => [
       "set StoragePass ${slurmdbd_mysql_password}",
+      "set DbdHost ${::hostname}",
     ],
   } ~> service { 'slurmdbd':
     ensure     => 'running',
