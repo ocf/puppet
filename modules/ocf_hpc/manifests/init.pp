@@ -26,34 +26,12 @@ class ocf_hpc {
       group   => 'slurm',
       require => Package['slurm-wlm'],
     }
-    # Currently all nodes contain the gres.conf and cgroup.conf files
-    file { '/etc/slurm-llnl/gres.conf':
-      content => template(
-        'ocf_hpc/gres.conf.erb'
-      ),
-      mode    => '0644',
-      owner   => 'slurm',
-      group   => 'slurm',
-    }
-    file { '/etc/slurm-llnl/cgroup.conf':
-      content => template(
-        'ocf_hpc/cgroup.conf.erb'
-      ),
-      mode    => '0644',
-      owner   => 'slurm',
-      group   => 'slurm',
-    }
-    # Kernel option to enable memory as a consumable gres resource
-    augeas { 'grub':
-      context => '/etc/default/grub',
-      changes => [
-        'set GRUB_CMDLINE_LINUX "cgroup_enable=memory swapaccount=1"',
-      ],
-    }
-    # Update grub.cfg to apply changes made above
-    exec { 'update-grub':
-      user      => 'slurm',
-      subscribe => 'grub',
-    }
+  }
+  # Currently all nodes contain the cgroup.conf files
+  file { '/etc/slurm-llnl/cgroup.conf':
+    content => template('ocf_hpc/cgroup.conf.erb'),
+    mode    => '0644',
+    owner   => 'slurm',
+    group   => 'slurm',
   }
 }

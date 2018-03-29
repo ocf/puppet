@@ -9,7 +9,7 @@ class ocf_hpc::controller {
     mode    => '0600',
     owner   => 'slurm',
     group   => 'slurm',
-  } ~> augeas { 'slurmdbd.conf':
+  } -> augeas { 'slurmdbd.conf':
     incl    => '/etc/slurm-llnl/slurmdbd.conf',
     lens    => 'Simplevars.lns',
     changes => [
@@ -26,6 +26,9 @@ class ocf_hpc::controller {
     ensure     => 'running',
     enable     => true,
     hasrestart => true,
-    subscribe  => File['/etc/slurm-llnl/slurm.conf'],
+    subscribe  => [
+      File['/etc/slurm-llnl/slurm.conf'],
+      File['/etc/slurm-llnl/cgroup.conf']
+    ],
   }
 }
