@@ -1,4 +1,6 @@
+# Currently there is a 'Gres=...' entry that should be changed to dynamically handle 
+# gres resources on selected nodes 
 <% @slurm_nodes_facts.each do |facts| -%>
-NodeName=<%= facts["hostname"] %> NodeAddr=<%= facts["ipaddress"] %> CPUs=<%= facts["processorcount"] %> Sockets=<%= facts["physicalprocessorcount"] %> CoresPerSocket=<%= facts["cores_per_socket"] %> ThreadsPerCore=<%= facts["threads_per_core"] %> RealMemory=<%= facts["memorysize_mb"].floor %> State=UNKNOWN
+NodeName=<%= facts["hostname"] %> NodeAddr=<%= facts["ipaddress"] %> CPUs=<%= facts["processorcount"] %> Sockets=<%= facts["physicalprocessorcount"] %> CoresPerSocket=<%= facts["cores_per_socket"] %> ThreadsPerCore=<%= facts["threads_per_core"] %> RealMemory=<%= facts["memorysize_mb"].floor %> Gres=gpu:no_consume:2 State=UNKNOWN
 <% end -%>
 PartitionName=ocf-hpc Nodes=ALL Default=YES MaxTime=48:00:00 State=UP
