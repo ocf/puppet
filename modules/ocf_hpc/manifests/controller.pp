@@ -10,12 +10,13 @@ class ocf_hpc::controller {
     owner   => 'slurm',
     group   => 'slurm',
   } -> augeas { 'slurmdbd.conf':
-    incl    => '/etc/slurm-llnl/slurmdbd.conf',
-    lens    => 'Simplevars.lns',
-    changes => [
+    incl      => '/etc/slurm-llnl/slurmdbd.conf',
+    lens      => 'Simplevars.lns',
+    changes   => [
       "set StoragePass ${slurmdbd_mysql_password}",
       "set DbdHost ${::hostname}",
     ],
+    show_diff => false,
   } ~> service { 'slurmdbd':
     ensure     => 'running',
     enable     => true,
