@@ -13,12 +13,12 @@ class ocf_hpc::compute {
   # Kernel option to enable memory as a consumable gres resource
   augeas { 'grub':
     incl    => '/etc/default/grub',
-    lens    => 'Grub.lns',
+    lens    => 'ShellVars.lns',
     changes => [
-      'set GRUB_CMDLINE_LINUX "cgroup_enable=memory swapaccount=1"',
+      "set GRUB_CMDLINE_LINUX '\"cgroup_enable=memory swapaccount=1\"'",
     ],
   } -> exec { 'update-grub':
-    user => 'slurm',
+    user => 'root',
   }
 
   service { 'slurmd':
