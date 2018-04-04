@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Brave
+Comment=Brave laptop and desktop browser
+GenericName=Web Browser
+Exec=sh -c "brave --user-data-dir-name=brave -- %U"
+Icon=brave
+Type=Application
+StartupNotify=true
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml_xml;image/webp;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;
+X-XFCE-Source=file:///usr/share/applications/brave.desktop

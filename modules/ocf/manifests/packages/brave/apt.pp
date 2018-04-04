@@ -6,7 +6,7 @@ class ocf::packages::brave::apt {
   }
 
   apt::source { 'brave':
-    architecture =>  'amd64',
+    architecture => 'amd64',
     location     => 'https://s3-us-west-2.amazonaws.com/brave-apt',
     release      => $::lsbdistcodename,
     repos        => 'main',
