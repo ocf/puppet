@@ -39,7 +39,7 @@ Icon=libreoffice-startcenter" > $HOME/Desktop/office.desktop
 
 echo "[Desktop Entry]
 Name=Brave
-Exec=sh -c "brave --user-data-dir-name=brave -- %U"
+Exec=brave --user-data-dir-name=brave -- %U
 Type=Application
 Icon=brave" > $HOME/Desktop/brave.desktop
 

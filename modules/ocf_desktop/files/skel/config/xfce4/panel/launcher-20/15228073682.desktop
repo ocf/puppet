@@ -2,7 +2,7 @@
 Name=Brave
 Comment=Brave laptop and desktop browser
 GenericName=Web Browser
-Exec=sh -c "brave --user-data-dir-name=brave -- %U"
+Exec=brave --user-data-dir-name=brave -- %U
 Icon=brave
 Type=Application
 StartupNotify=true
