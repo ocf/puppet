@@ -45,6 +45,8 @@ class ocf_desktop::packages {
     ['preload']:;
     # security tools
     ['scdaemon']:;
+    # utilities
+    ['wakeonlan']:;
     # Xorg
     ['xclip', 'xsel', 'xserver-xorg', 'xscreensaver']:;
   }
