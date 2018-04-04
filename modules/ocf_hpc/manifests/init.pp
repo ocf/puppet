@@ -1,9 +1,6 @@
 class ocf_hpc {
   include ocf::ipmi
-
-  package { 'singularity-container':
-    install_options => ['-t stretch-backports'],
-  }
+  include ocf_hpc::singularity
 
   package { 'slurm-wlm': }
 
