@@ -33,5 +33,15 @@ class ocf::packages::shell {
     '/etc/fish/config.fish':
       source => 'puppet:///modules/ocf/shell/config.fish',
       require => Package['fish'];
+
+    # termite terminfo
+    '/usr/share/terminfo/x/xterm-termite':
+      source => 'puppet:///modules/ocf/shell/termite.terminfo',
+      notify => Exec['compile-terminfo'];
+  }
+
+  exec { 'compile-terminfo':
+    command => 'tic -x /usr/share/terminfo/x/xterm-termite',
+    refreshonly => true;
   }
 }
