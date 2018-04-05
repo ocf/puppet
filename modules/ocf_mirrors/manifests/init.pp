@@ -177,7 +177,7 @@ class ocf_mirrors {
     mode   => '0755',
   } ->
   cron { 'mirrors-stats':
-    command => '/usr/local/sbin/process-mirrors-logs',
+    command => '/usr/local/sbin/process-mirrors-logs --quiet',
     minute  => 0,
     hour    => 0,
     environment => ["OCFSTATS_PWD=${ocfstats_password}"];
