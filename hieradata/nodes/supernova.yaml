@@ -3,3 +3,5 @@ ocf::packages::docker::image_max_age: '672h'
 
 classes:
     - ocf_admin
+
+ocf::firewall::allow_other_traffic: false
