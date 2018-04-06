@@ -42,6 +42,9 @@ default_privs = ocfmail
 virtual_alias_expansion_limit = 300
 virtual_alias_recursion_limit = 5
 
+# set max message size to 25MiB
+message_size_limit = 26214400
+
 # environment variables for LDAP GSSAPI bind
 import_environment = MAIL_CONFIG MAIL_DEBUG MAIL_LOGTAG TZ XAUTHORITY DISPLAY
     LANG=C KRB5CCNAME=FILE:/var/spool/postfix/krb5-cred
