@@ -10,7 +10,7 @@ import pymysql
 OCFSTATS_PWD = os.environ['OCFSTATS_PWD']
 MIRRORS_PATH = '/opt/mirrors/ftp'
 LOG_PATH = '/var/log/apache2'
-LOG_NAME = 'mirrors.ocf.berkeley.edu_access.log'
+LOG_NAMES = ['mirrors.ocf.berkeley.edu_access.log', 'mirrors.ocf.berkeley.edu-ssl_access_ssl.log']
 
 def process_log(dists, fn, log_date):
     with open(fn, 'r') as f:
@@ -85,11 +85,14 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if not args.log_files:
-        log = os.path.join(LOG_PATH, LOG_NAME)
-        # logrotate rotates the log at 6am, but this script
-        # runs at midnight. So to capture 24h of data, we need
-        # to parse the rotated log as well.
-        log_files = [log, log + '.1']
+        log_files = []
+        for log_name in LOG_NAMES:
+            log = os.path.join(LOG_PATH, log_name)
+            # logrotate rotates the log at 6am, but this script
+            # runs at midnight. So to capture 24h of data, we need
+            # to parse the rotated log as well. (the .1 file)
+            log_files.append(log)
+            log_files.append(log + ".1")
     else:
         log_files = args.log_files
 
