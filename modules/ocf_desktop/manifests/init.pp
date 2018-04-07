@@ -1,5 +1,6 @@
 class ocf_desktop {
   include ocf::acct
+  include ocf::packages::brave
   include ocf::packages::chrome
   include ocf::packages::cups
   include ocf::packages::firefox
