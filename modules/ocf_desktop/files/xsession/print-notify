@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+from gi.repository import Notify
+
+from ocflib.misc.pubsub import subscribe
+from ocflib.misc.whoami import current_user
+
+NOTIFICATION_ICON = '/opt/share/xsession/images/ocf-color.png'
+
+BROKER_AUTH = 'password' #TODO
+
+def main():
+    Notify.init('OCF')
+
+    s = subscribe('broker', BROKER_AUTH, 'printing')
+    while True:
+    	message = s.get_message()
+	if message:
+	    user, status_message = (message.decode(encoding='UTF-8')).split("\n")
+		if user == current_user():
+		    Notify.Notification.new('Printing Status', status_message, NOTIFICATION_ICON).show()
+
+if __name__ == '__main__':
+    main()
