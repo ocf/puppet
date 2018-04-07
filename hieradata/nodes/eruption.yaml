@@ -5,3 +5,4 @@ ocf::auth::glogin: [['ocfstaff', 'ALL']]
 ocf::auth::gsudo: ['ocfstaff']
 
 staff_only: true
+ocf::firewall::allow_other_traffic: false
