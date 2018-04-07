@@ -25,7 +25,7 @@ class ocf::firewall::post {
         proto       => 'tcp',
         destination => ['anthrax', 'dev-anthrax'],
         dport       => 25,
-        action      => 'drop',
+        action      => 'reject',
       },
       before => undef,
   }
@@ -52,33 +52,33 @@ class ocf::firewall::post {
     before   => undef,
   }
 
-  firewall_multi { '999 drop output (special devices)':
+  firewall_multi { '999 reject output (special devices)':
     chain       => 'PUPPET-OUTPUT',
     proto       => 'all',
-    action      => 'drop',
+    action      => 'reject',
     destination => $devices_ipv4_only,
     before      => undef,
   }
 
-  ocf::firewall::firewall46 { '999 drop output (special devices)':
+  ocf::firewall::firewall46 { '999 reject output (special devices)':
     opts   => {
       chain       => 'PUPPET-OUTPUT',
       proto       => 'all',
-      action      => 'drop',
+      action      => 'reject',
       destination => $devices,
     },
     before => undef,
   }
 
-  # drop from hosts in internal zone range but not actually internal
-  $drop_all = ['tsunami', 'werewolves', 'death', 'dev-tsunami', 'dev-werewolves', 'dev-death']
+  # reject from hosts in internal zone range but not actually internal
+  $reject_all = ['tsunami', 'werewolves', 'death', 'dev-tsunami', 'dev-werewolves', 'dev-death']
 
-  ocf::firewall::firewall46 { '997 drop output (exceptions to internal zone)':
+  ocf::firewall::firewall46 { '997 reject output (exceptions to internal zone)':
     opts   => {
       chain  => 'PUPPET-INPUT',
       proto  => 'all',
-      action => 'drop',
-      source => $drop_all,
+      action => 'reject',
+      source => $reject_all,
     },
     before => undef,
   }
@@ -109,19 +109,19 @@ class ocf::firewall::post {
   # TODO: eliminate this if statement once testing is complete
   if !$ocf::firewall::allow_other_traffic {
     firewall_multi {
-      '999 drop unrecognized packets from within OCF network (IPv4)':
+      '999 reject unrecognized packets from within OCF network (IPv4)':
         chain  => 'PUPPET-INPUT',
         source => '169.229.226.0/24',
         proto  => 'all',
-        action => 'drop',
+        action => 'reject',
         before => undef;
 
-      '999 drop unrecognized packets from within OCF network (IPv6)':
+      '999 reject unrecognized packets from within OCF network (IPv6)':
         provider => 'ip6tables',
         chain    => 'PUPPET-INPUT',
         source   => '2607:f140:8801::/64',
         proto    => 'all',
-        action   => 'drop',
+        action   => 'reject',
         before   => undef;
     }
   }
