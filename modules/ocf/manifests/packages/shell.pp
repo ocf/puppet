@@ -38,6 +38,11 @@ class ocf::packages::shell {
     '/usr/share/terminfo/x/xterm-termite':
       source => 'puppet:///modules/ocf/shell/termite.terminfo',
       notify => Exec['compile-terminfo'];
+
+    # bash `how` completion
+    '/etc/bash_completion.d/how':
+      source  => 'puppet:///modules/ocf/shell/how_completion.bash',
+      require => Package['bash'];
   }
 
   exec { 'compile-terminfo':
