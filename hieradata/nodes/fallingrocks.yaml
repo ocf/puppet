@@ -1,3 +1,5 @@
 classes:
     - ocf_apt
     - ocf_mirrors
+
+ocf::firewall::allow_other_traffic: false
