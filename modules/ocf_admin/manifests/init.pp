@@ -1,5 +1,7 @@
 class ocf_admin {
   include ocf::extrapackages
+  include ocf::firewall::allow_mosh
+  include ocf::firewall::allow_ssh
   include ocf::firewall::output_all
   include ocf::hostkeys
   include ocf::packages::cups
@@ -55,9 +57,9 @@ class ocf_admin {
         action => 'accept',
       };
   }
-  # Allow 8000-8999 for dev work
+  # Allow 8000-8999 for ocfweb etc. dev work
   ocf::firewall::firewall46 {
-    '101 allow dev':
+    '101 allow dev ports':
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
