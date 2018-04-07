@@ -73,7 +73,7 @@ class ocf::firewall::post {
   # reject from hosts in internal zone range but not actually internal
   $reject_all = ['tsunami', 'werewolves', 'death', 'dev-tsunami', 'dev-werewolves', 'dev-death']
 
-  ocf::firewall::firewall46 { '997 reject output (exceptions to internal zone)':
+  ocf::firewall::firewall46 { '997 reject internal-zone-exception input':
     opts   => {
       chain  => 'PUPPET-INPUT',
       proto  => 'all',
