@@ -17,7 +17,6 @@ repos:
         -   --no-140chars-check
         -   --no-documentation-check
         -   --no-puppet_url_without_modules-check
-        -   --no-arrow_alignment-check
         -   --no-arrow_on_right_operand_line-check
         -   --no-variable_is_lowercase-check
 -   repo: https://github.com/pre-commit/pre-commit-hooks.git
