@@ -11,10 +11,10 @@ class ocf_mirrors::tanglu {
   }
 
   file { '/opt/mirrors/project/tanglu/sync-releases':
-    source  => 'puppet:///modules/ocf_mirrors/project/tanglu/sync-releases',
-    mode    => '0755',
-    owner   => mirrors,
-    group   => mirrors;
+    source => 'puppet:///modules/ocf_mirrors/project/tanglu/sync-releases',
+    mode   => '0755',
+    owner  => mirrors,
+    group  => mirrors;
   }
 
   cron { 'tanglu-releases':

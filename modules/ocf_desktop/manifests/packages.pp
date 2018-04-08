@@ -70,7 +70,7 @@ class ocf_desktop::packages {
     'gedit':
       recommends => false;
     ['libreoffice-calc', 'libreoffice-draw', 'libreoffice-gnome', 'libreoffice-gtk3', 'libreoffice-impress', 'libreoffice-pdfimport', 'libreoffice-writer', 'ure']:
-      recommends => false,
+      recommends  => false,
       backport_on => stretch;
     'thunar':
       recommends => false;

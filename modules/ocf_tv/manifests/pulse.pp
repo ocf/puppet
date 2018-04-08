@@ -5,7 +5,7 @@ class ocf_tv::pulse {
   # problems with the daemon not starting properly
   # or starting with the wrong environment
   ocf::systemd::service { 'pulseaudio':
-    source => 'puppet:///modules/ocf_tv/pulseaudio.service',
+    source  => 'puppet:///modules/ocf_tv/pulseaudio.service',
     require => [
       Package['pulseaudio'],
       User['ocftv'],

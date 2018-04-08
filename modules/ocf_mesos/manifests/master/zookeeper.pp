@@ -38,7 +38,7 @@ class ocf_mesos::master::zookeeper($masters, $zookeeper_password) {
     '/etc/zookeeper/conf_ocf/log4j.properties':
       source  => 'puppet:///modules/ocf_mesos/master/zookeeper/log4j.properties';
     '/etc/zookeeper/conf':
-      ensure  => link,
-      target  => '/etc/zookeeper/conf_ocf';
+      ensure => link,
+      target => '/etc/zookeeper/conf_ocf';
   }
 }

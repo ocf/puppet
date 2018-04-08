@@ -19,16 +19,16 @@ define ocf_mirrors::ftpsync(
       group => mirrors;
 
     [$project_path, "${project_path}/log", "${project_path}/etc"]:
-      ensure  => directory,
-      mode    => '0755';
+      ensure => directory,
+      mode   => '0755';
 
     "${project_path}/bin":
-      ensure  => link,
-      target  => "${project_path}/distrib/bin";
+      ensure => link,
+      target => "${project_path}/distrib/bin";
 
     "${project_path}/etc/common":
-      ensure  => link,
-      target  => "${project_path}/distrib/etc/common";
+      ensure => link,
+      target => "${project_path}/distrib/etc/common";
 
     "${project_path}/etc/ftpsync.conf":
       content => template('ocf_mirrors/ftpsync.conf.erb'),

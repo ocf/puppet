@@ -7,8 +7,8 @@ class ocf_irc::webirc {
 
   # Nginx is used to proxy to Marathon and to supply a HTTP -> HTTPS redirect
   class { 'nginx':
-    manage_repo => false,
-    confd_purge => true,
+    manage_repo  => false,
+    confd_purge  => true,
     server_purge => true,
   }
 
@@ -17,7 +17,7 @@ class ocf_irc::webirc {
       $::hostname,
       $::fqdn,
     ],
-    proxy => 'http://lb.ocf.berkeley.edu:10008',
-    ssl   => true,
+    proxy          => 'http://lb.ocf.berkeley.edu:10008',
+    ssl            => true,
   }
 }

@@ -11,10 +11,10 @@ class ocf_mirrors::ubuntu {
   }
 
   file { '/opt/mirrors/project/ubuntu/sync-releases':
-    source  => 'puppet:///modules/ocf_mirrors/project/ubuntu/sync-releases',
-    mode    => '0755',
-    owner   => mirrors,
-    group   => mirrors;
+    source => 'puppet:///modules/ocf_mirrors/project/ubuntu/sync-releases',
+    mode   => '0755',
+    owner  => mirrors,
+    group  => mirrors;
   }
 
   cron { 'ubuntu-releases':

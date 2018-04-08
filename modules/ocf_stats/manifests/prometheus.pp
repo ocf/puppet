@@ -5,27 +5,31 @@ class ocf_stats::prometheus {
     extra_options  => '--web.listen-address="127.0.0.1:9090" --web.external-url=http://127.0.0.1/prom',
     alerts         => {},
     scrape_configs => [
-      { 'job_name' => 'prometheus',
+      {
+        'job_name'        => 'prometheus',
         'scrape_interval' => '10s',
         'scrape_timeout'  => '10s',
         'static_configs'  => [
-          { 'targets' => [ 'localhost:9090' ],
-            'labels'  => { 'alias' => 'Prometheus' }
-          }
-        ]
+          {
+            'targets' => [ 'localhost:9090' ],
+            'labels'  => { 'alias' => 'Prometheus' },
+          },
+        ],
       },
-      { 'job_name' => 'node',
+      {
+        'job_name'        => 'node',
         'scrape_interval' => '5s',
         'scrape_timeout'  => '5s',
         'static_configs'  => [
-          { 'targets' => [
-            # A list of all hosts to scrape.
-            # We should probably figure out a better way of enumerating all the
-            # hosts.
-            'leprosy:9100',
-          ]
-          }
-        ]
+          {
+            'targets' => [
+              # A list of all hosts to scrape.
+              # We should probably figure out a better way of enumerating all the
+              # hosts.
+              'leprosy:9100',
+            ],
+          },
+        ],
       }
     ]
   }

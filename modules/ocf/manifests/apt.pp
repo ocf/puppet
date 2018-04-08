@@ -20,42 +20,42 @@ class ocf::apt($stage = 'first') {
 
   apt::source {
     'debian':
-      location  => 'http://mirrors/debian/',
-      release   => $dist,
-      repos     => $repos,
-      include   => {
+      location => 'http://mirrors/debian/',
+      release  => $dist,
+      repos    => $repos,
+      include  => {
         src => true
       };
 
     'debian-updates':
-      location  => 'http://mirrors/debian/',
-      release   => "${::lsbdistcodename}-updates",
-      repos     => $repos,
-      include   => {
+      location => 'http://mirrors/debian/',
+      release  => "${::lsbdistcodename}-updates",
+      repos    => $repos,
+      include  => {
         src => true
       };
 
     'debian-security':
-      location  => 'http://mirrors/debian-security/',
-      release   => "${dist}/updates",
-      repos     => $repos,
-      include   => {
+      location => 'http://mirrors/debian-security/',
+      release  => "${dist}/updates",
+      repos    => $repos,
+      include  => {
         src => true
       };
 
     'ocf':
-      location  => 'http://apt/',
-      release   => $dist,
-      repos     => 'main',
-      include   => {
+      location => 'http://apt/',
+      release  => $dist,
+      repos    => 'main',
+      include  => {
         src => true
       };
 
     'ocf-backports':
-      location  => 'http://apt/',
-      release   => "${::lsbdistcodename}-backports",
-      repos     => 'main',
-      include   => {
+      location => 'http://apt/',
+      release  => "${::lsbdistcodename}-backports",
+      repos    => 'main',
+      include  => {
         src => true
       };
   }

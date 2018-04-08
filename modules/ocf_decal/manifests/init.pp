@@ -30,9 +30,9 @@ class ocf_decal {
   }
 
   vcsrepo { '/opt/share/decal-utils':
-    ensure    => latest,
-    provider  => git,
-    revision  => 'master',
-    source    => 'https://github.com/0xcf/decal-util.git'
+    ensure   => latest,
+    provider => git,
+    revision => 'master',
+    source   => 'https://github.com/0xcf/decal-util.git'
   }
 }

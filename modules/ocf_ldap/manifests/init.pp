@@ -98,10 +98,10 @@ class ocf_ldap {
   }
 
   cron { 'ldap-lint':
-    command  => '/opt/share/utils/sbin/ldap-lint',
-    user     => root,
-    special  => 'daily',
-    require  => Vcsrepo['/opt/share/utils'];
+    command => '/opt/share/utils/sbin/ldap-lint',
+    user    => root,
+    special => 'daily',
+    require => Vcsrepo['/opt/share/utils'];
   }
 
   ocf::munin::plugin { 'slapd-open-files':

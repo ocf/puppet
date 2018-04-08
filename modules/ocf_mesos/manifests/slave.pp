@@ -15,8 +15,8 @@ class ocf_mesos::slave($attributes = {}) {
     content   => "${zookeeper_uri}/mesos\n",
     mode      => '0400',
     show_diff => false,
-    require => Package['mesos'],
-    notify  => Service['mesos-slave'],
+    require   => Package['mesos'],
+    notify    => Service['mesos-slave'],
   } ->
   augeas { '/etc/default/mesos-slave':
     lens    => 'Shellvars.lns',

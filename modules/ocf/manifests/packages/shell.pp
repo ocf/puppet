@@ -4,18 +4,18 @@ class ocf::packages::shell {
   file {
     # Bash system-wide config
     '/etc/bash.bashrc':
-      source => 'puppet:///modules/ocf/shell/bash.bashrc',
+      source  => 'puppet:///modules/ocf/shell/bash.bashrc',
       require => Package['bash'];
     '/etc/bash.bash_logout':
-      source => 'puppet:///modules/ocf/shell/bash.bash_logout',
+      source  => 'puppet:///modules/ocf/shell/bash.bash_logout',
       require => Package['bash'];
 
     # C shell system-wide config
     '/etc/csh.cshrc':
-      source => 'puppet:///modules/ocf/shell/csh.cshrc',
+      source  => 'puppet:///modules/ocf/shell/csh.cshrc',
       require => Package['tcsh'];
     '/etc/csh.logout':
-      source => 'puppet:///modules/ocf/shell/csh.logout',
+      source  => 'puppet:///modules/ocf/shell/csh.logout',
       require => Package['tcsh'];
 
     # Z shell system-wide config
@@ -31,7 +31,7 @@ class ocf::packages::shell {
 
     # Fish shell system-wide config
     '/etc/fish/config.fish':
-      source => 'puppet:///modules/ocf/shell/config.fish',
+      source  => 'puppet:///modules/ocf/shell/config.fish',
       require => Package['fish'];
 
     # termite terminfo
@@ -41,7 +41,7 @@ class ocf::packages::shell {
   }
 
   exec { 'compile-terminfo':
-    command => 'tic -x /usr/share/terminfo/x/xterm-termite',
+    command     => 'tic -x /usr/share/terminfo/x/xterm-termite',
     refreshonly => true;
   }
 }

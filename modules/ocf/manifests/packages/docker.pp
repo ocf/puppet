@@ -75,7 +75,7 @@ class ocf::packages::docker($admin_group = undef,
     }
     cron {
       'clean-docker-volumes':
-        ensure => $prune_volumes_ensure,
+        ensure  => $prune_volumes_ensure,
         command => 'chronic docker volume prune -f',
         hour    => 1,
         minute  => 30;

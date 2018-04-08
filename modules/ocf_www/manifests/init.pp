@@ -18,8 +18,8 @@ class ocf_www {
   include ocf_ssl::default_bundle
 
   class { 'ocf::nfs':
-    cron   => false,
-    web    => false,
+    cron => false,
+    web  => false,
   }
 
   class {

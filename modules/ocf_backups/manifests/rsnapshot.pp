@@ -43,18 +43,18 @@ class ocf_backups::rsnapshot {
 
     # 12am Saturday mornings
     'rsnapshot-weekly':
-      command  => "${rsnapshot} weekly",
-      hour     => '0',
-      weekday  => '6';
+      command => "${rsnapshot} weekly",
+      hour    => '0',
+      weekday => '6';
 
     # 2am daily
     'rsnapshot-daily':
-      command  => "${rsnapshot} sync && ${rsnapshot} daily",
-      hour     => '2';
+      command => "${rsnapshot} sync && ${rsnapshot} daily",
+      hour    => '2';
 
     # check rsnapshot backups to ensure they're actually happening
     'check-rsnapshot-backups':
-      command  => '/opt/share/backups/check-rsnapshot-backups',
-      hour     => '10';
+      command => '/opt/share/backups/check-rsnapshot-backups',
+      hour    => '10';
   }
 }

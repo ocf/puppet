@@ -7,8 +7,8 @@ class ocf_ssh {
   include ocf_ssl::default_bundle
 
   class { 'ocf::nfs':
-    cron   => true,
-    web    => true;
+    cron => true,
+    web  => true;
   }
 
   include ocf_ssh::makeservices

@@ -71,9 +71,9 @@ class ocf_mail::spam {
       notify  => Service['spamassassin'],
       require => Package['spamassassin'];
     '/var/spool/postfix/clamav':
-      ensure  => directory,
-      owner   => clamav,
-      group   => root;
+      ensure => directory,
+      owner  => clamav,
+      group  => root;
     '/etc/clamav/clamav-milter.conf':
       source  => 'puppet:///modules/ocf_mail/spam/clamav/clamav-milter.conf',
       notify  => Service['clamav-milter'],

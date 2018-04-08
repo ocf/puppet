@@ -5,10 +5,10 @@ define ocf::systemd::service(
   $enable = true,
 ) {
   file { "/etc/systemd/system/${title}.service":
-    source   => $source,
-    content  => $content,
-    notify   => Exec['systemd-reload'],
-    require  => Package['systemd-sysv'],
+    source  => $source,
+    content => $content,
+    notify  => Exec['systemd-reload'],
+    require => Package['systemd-sysv'],
   }
 
   service { $title:

@@ -10,8 +10,8 @@ class ocf_csgo {
 
   file {
     default:
-      owner  => ocfcsgo,
-      group  => ocfcsgo;
+      owner => ocfcsgo,
+      group => ocfcsgo;
 
     ['/opt/csgo', '/opt/csgo/bin', '/opt/csgo/etc']:
       ensure => directory,

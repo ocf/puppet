@@ -271,8 +271,8 @@ class ocf::extrapackages {
   # install wp-cli
   # TODO: can we debian-package this?
   file { '/usr/local/sbin/download-wp-cli':
-    source  => 'puppet:///modules/ocf/packages/download-wp-cli',
-    mode    => '0755';
+    source => 'puppet:///modules/ocf/packages/download-wp-cli',
+    mode   => '0755';
   }
   cron { 'download-wp-cli':
     command => '/usr/local/sbin/download-wp-cli',
