@@ -14,6 +14,7 @@ repos:
     -   id: puppet-lint
         args:
         -   --fail-on-warnings
+        -   --fix
         -   --no-140chars-check
         -   --no-documentation-check
         -   --no-puppet_url_without_modules-check
