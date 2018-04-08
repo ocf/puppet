@@ -1,7 +1,7 @@
 class ocf_hpc::singularity {
 
-  package { 'singularity-container':
-    install_options => ['-t stretch-backports'],
+  ocf::repackage { 'singularity-container':
+    backport_on => ['stretch'],
   }
 
   file { '/etc/singularity/singularity.conf':
@@ -14,7 +14,7 @@ class ocf_hpc::singularity {
   # Each running singularity container consumes a loop device,
   # and the default max loop devices is 8.
   # Requires reboot after change.
-  augeas { 'modules':
+  augeas { 'Set max loop devices for Singularity':
     incl    => '/etc/modules',
     lens    => 'Modules.lns',
     changes => ['set loop max_loop=256'],
