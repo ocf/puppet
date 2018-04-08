@@ -7,7 +7,7 @@ class ocf::ldap {
       require => Package['ldap-utils'];
 
     '/etc/ldap/ldap.conf':
-      ensure  => symlink,
-      target  => '/etc/ldap.conf';
+      ensure => symlink,
+      target => '/etc/ldap.conf';
   }
 }

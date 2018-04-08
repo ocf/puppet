@@ -3,8 +3,8 @@ class ocf_docker {
   require ocf_ssl::default_bundle
 
   class { 'nginx':
-    manage_repo => false,
-    confd_purge => true,
+    manage_repo  => false,
+    confd_purge  => true,
     server_purge => true,
   }
 
@@ -25,19 +25,19 @@ class ocf_docker {
   # docker.ocf.
   nginx::resource::server {
     default:
-      listen_port => 443,
+      listen_port       => 443,
 
-      ssl         => true,
-      ssl_cert    => "/etc/ssl/private/${::fqdn}.bundle",
-      ssl_key     => "/etc/ssl/private/${::fqdn}.key",
-      ssl_dhparam => '/etc/ssl/dhparam.pem',
+      ssl               => true,
+      ssl_cert          => "/etc/ssl/private/${::fqdn}.bundle",
+      ssl_key           => "/etc/ssl/private/${::fqdn}.key",
+      ssl_dhparam       => '/etc/ssl/dhparam.pem',
 
-      add_header  => {
+      add_header        => {
         'Strict-Transport-Security' => 'max-age=31536000',
       },
 
-      proxy            => 'http://docker-registry',
-      proxy_set_header => [
+      proxy             => 'http://docker-registry',
+      proxy_set_header  => [
         'X-Forwarded-Proto $scheme',
         'X-Forwarded-For $proxy_add_x_forwarded_for',
         'Host $http_host'
@@ -51,7 +51,7 @@ class ocf_docker {
       };
 
     'docker-ro':
-      server_name    => ['docker.ocf.berkeley.edu', 'docker', $::hostname, $::fqdn],
+      server_name         => ['docker.ocf.berkeley.edu', 'docker', $::hostname, $::fqdn],
 
       location_cfg_append => {
         # The `auth_required` is not needed, it's a hack so that the Puppet
@@ -60,20 +60,20 @@ class ocf_docker {
       };
 
     'docker-push':
-      server_name    => ['docker-push.ocf.berkeley.edu'],
+      server_name         => ['docker-push.ocf.berkeley.edu'],
 
       location_cfg_append => {
-        'auth_basic' => 'Restricted',
+        'auth_basic'           => 'Restricted',
         'auth_basic_user_file' => '/opt/share/docker.htpasswd',
       },
 
-      raw_append => [
+      raw_append          => [
         'location /_ping { auth_basic off; }',
         'location /v1/_ping { auth_basic off; }',
       ],
 
-      require   => File['/opt/share/docker.htpasswd'],
-      subscribe => File['/opt/share/docker.htpasswd'];
+      require             => File['/opt/share/docker.htpasswd'],
+      subscribe           => File['/opt/share/docker.htpasswd'];
   }
 
   file {

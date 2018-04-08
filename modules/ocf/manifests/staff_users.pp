@@ -14,10 +14,10 @@ class ocf::staff_users($noop = false) {
       ensure_resource('file', [$parent1, $parent2], {'ensure' => 'directory'})
 
       file { $homedir:
-        ensure  => directory,
-        owner   => $user,
-        mode    => '0700',
-        group   => ocfstaff;
+        ensure => directory,
+        owner  => $user,
+        mode   => '0700',
+        group  => ocfstaff;
       }
     }
   }

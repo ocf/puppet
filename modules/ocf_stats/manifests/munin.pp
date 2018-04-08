@@ -17,11 +17,11 @@ class ocf_stats::munin {
       notify  => Service['munin'],
       require => Package['munin'];
     '/usr/local/bin/gen-munin-nodes':
-      source  => 'puppet:///modules/ocf_stats/munin/gen-munin-nodes',
-      mode    => '0755';
+      source => 'puppet:///modules/ocf_stats/munin/gen-munin-nodes',
+      mode   => '0755';
     '/usr/local/bin/mail-munin-alert':
-      source  => 'puppet:///modules/ocf_stats/munin/mail-munin-alert',
-      mode    => '0755';
+      source => 'puppet:///modules/ocf_stats/munin/mail-munin-alert',
+      mode   => '0755';
   }
 
   # Generate munin nodes on the 3rd minute of every hour to avoid conflicting
@@ -50,7 +50,7 @@ class ocf_stats::munin {
 
       headers       => ['always set Strict-Transport-Security max-age=31536000'],
 
-      rewrites => [
+      rewrites      => [
         {rewrite_rule => '^/favicon.ico /var/cache/munin/www/static/favicon.ico [L]'},
         {rewrite_rule => '^/static/(.*) /var/cache/munin/www/static/$1 [L]'},
         {rewrite_rule => '^(/.*\.html)?$ /munin-cgi/munin-cgi-html/$1 [PT]'},
@@ -72,7 +72,7 @@ class ocf_stats::munin {
         }
       ],
 
-      directories => [
+      directories   => [
         {
           path         => '/var/cache/munin/www/static/',
           auth_require => 'all granted',

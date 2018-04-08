@@ -5,7 +5,7 @@ class ocf_puppet::puppetmaster {
 
   # This defines Service['puppetserver'], so we can't do it ourselves.
   class { 'puppetdb::master::config':
-    puppetdb_server => 'puppetdb',
+    puppetdb_server             => 'puppetdb',
 
     # Prevent hard Puppet failures if PuppetDB is not available
     puppetdb_soft_write_failure => true,
@@ -72,8 +72,8 @@ class ocf_puppet::puppetmaster {
       require => File['/opt/puppetlabs/shares'];
 
     '/opt/puppetlabs/scripts/update-prod':
-      source  => 'puppet:///modules/ocf_puppet/update-prod',
-      mode    => '0755';
+      source => 'puppet:///modules/ocf_puppet/update-prod',
+      mode   => '0755';
 
     # These are just links to the new locations, but keep them for staff to use
     # since they are much more convenient to type.

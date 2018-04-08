@@ -75,17 +75,17 @@ class ocf_mail::site_ocf {
 
     # aliases and hashes
     '/etc/aliases':
-      mode    => '0644',
-      source  => 'puppet:///modules/ocf_mail/site_ocf/aliases',
-      notify  => Exec['newaliases'];
+      mode   => '0644',
+      source => 'puppet:///modules/ocf_mail/site_ocf/aliases',
+      notify => Exec['newaliases'];
     '/usr/local/sbin/update-aliases':
-      mode    => '0755',
-      source  => 'puppet:///modules/ocf_mail/site_ocf/update-aliases';
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_mail/site_ocf/update-aliases';
     '/usr/local/sbin/update-nomail-hashes':
-      mode    => '0755',
-      source  => 'puppet:///modules/ocf_mail/site_ocf/update-nomail-hashes';
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_mail/site_ocf/update-nomail-hashes';
     '/usr/local/sbin/update-cred-cache':
-      mode    => '0755',
-      source  => 'puppet:///modules/ocf_mail/site_ocf/update-cred-cache';
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_mail/site_ocf/update-cred-cache';
   }
 }

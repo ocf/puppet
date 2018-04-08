@@ -22,9 +22,9 @@ class ocf_mail {
   }
 
   group { 'ocfmail':
-    ensure  => present,
-    name    => ocfmail,
-    system  => true,
+    ensure => present,
+    name   => ocfmail,
+    system => true,
   }
 
   file { '/etc/postfix/main.cf':

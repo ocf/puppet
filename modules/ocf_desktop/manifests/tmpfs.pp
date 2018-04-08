@@ -26,8 +26,8 @@ class ocf_desktop::tmpfs {
       mode   => '0755';
 
     '/usr/local/sbin/clean-temp-files':
-      source  => 'puppet:///modules/ocf_desktop/clean-temp-files',
-      mode    => '0755';
+      source => 'puppet:///modules/ocf_desktop/clean-temp-files',
+      mode   => '0755';
   }
 
   cron { 'clean-temp-files':

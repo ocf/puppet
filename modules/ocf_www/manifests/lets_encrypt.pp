@@ -3,9 +3,9 @@ class ocf_www::lets_encrypt {
 
   file {
     '/usr/local/bin/lets-encrypt-update':
-      source    => 'puppet:///modules/ocf_www/lets-encrypt-update',
-      mode      => '0755',
-      require   => File['/usr/local/bin/ocf-lets-encrypt'];
+      source  => 'puppet:///modules/ocf_www/lets-encrypt-update',
+      mode    => '0755',
+      require => File['/usr/local/bin/ocf-lets-encrypt'];
 
     '/etc/ssl/lets-encrypt/le-vhost.key':
       source    => 'puppet:///private/lets-encrypt-vhost.key',

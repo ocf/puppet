@@ -8,8 +8,8 @@ class ocf_www::mod::suexec {
   }
 
   file { '/etc/alternatives/suexec':
-    ensure => link,
-    target => '/usr/lib/apache2/suexec-ocf',
+    ensure  => link,
+    target  => '/usr/lib/apache2/suexec-ocf',
     require => Package['apache2-suexec-ocf'],
   }
 }

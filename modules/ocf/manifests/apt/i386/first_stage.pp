@@ -9,6 +9,6 @@ class ocf::apt::i386::first_stage {
   exec { 'add-i386':
     command => 'dpkg --add-architecture i386',
     unless  => 'dpkg --print-foreign-architectures | grep i386',
-    notify => Exec['apt_update'],
+    notify  => Exec['apt_update'],
   }
 }

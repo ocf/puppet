@@ -98,12 +98,12 @@ class ocf_mirrors {
   }
 
   apache::vhost { 'mirrors.ocf.berkeley.edu':
-    serveraliases   => ['mirrors', 'dl.amnesia.boum.org', '*.dl.amnesia.boum.org'],
-    port            => 80,
-    default_vhost   => true,
-    docroot         => '/opt/mirrors/ftp',
+    serveraliases     => ['mirrors', 'dl.amnesia.boum.org', '*.dl.amnesia.boum.org'],
+    port              => 80,
+    default_vhost     => true,
+    docroot           => '/opt/mirrors/ftp',
 
-    directories     => [
+    directories       => [
       {
         path          => '/opt/mirrors/ftp',
         options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
@@ -131,11 +131,11 @@ class ocf_mirrors {
   }
 
   apache::vhost { 'mirrors.ocf.berkeley.edu-ssl':
-    servername      => 'mirrors.ocf.berkeley.edu',
-    port            => 443,
-    docroot         => '/opt/mirrors/ftp',
+    servername        => 'mirrors.ocf.berkeley.edu',
+    port              => 443,
+    docroot           => '/opt/mirrors/ftp',
 
-    directories     => [
+    directories       => [
       {
         path          => '/opt/mirrors/ftp',
         options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
@@ -150,10 +150,10 @@ class ocf_mirrors {
       ReadmeName FOOTER.html
     ",
 
-    ssl       => true,
-    ssl_key   => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl               => true,
+    ssl_key           => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert          => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain         => '/etc/ssl/certs/incommon-intermediate.crt',
   }
 
   file { '/opt/mirrors/bin/report-sizes':
@@ -166,10 +166,10 @@ class ocf_mirrors {
   }
 
   file { '/opt/mirrors/bin/healthcheck':
-    source  => 'puppet:///modules/ocf_mirrors/healthcheck',
-    owner   => 'mirrors',
-    group   => 'mirrors',
-    mode    => '0755',
+    source => 'puppet:///modules/ocf_mirrors/healthcheck',
+    owner  => 'mirrors',
+    group  => 'mirrors',
+    mode   => '0755',
   }
 
   file { '/usr/local/sbin/process-mirrors-logs':
@@ -177,9 +177,9 @@ class ocf_mirrors {
     mode   => '0755',
   } ->
   cron { 'mirrors-stats':
-    command => '/usr/local/sbin/process-mirrors-logs --quiet',
-    minute  => 0,
-    hour    => 0,
+    command     => '/usr/local/sbin/process-mirrors-logs --quiet',
+    minute      => 0,
+    hour        => 0,
     environment => ["OCFSTATS_PWD=${ocfstats_password}"];
   }
 }

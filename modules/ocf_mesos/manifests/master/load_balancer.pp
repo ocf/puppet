@@ -77,10 +77,10 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
   }
 
   ocf_mesos::master::load_balancer::http_vhost { 'ocfweb-static':
-    server_name    => 'static.ocf.berkeley.edu',
-    service_port   => 10004,
-    ssl            => true,
-    ssl_dir        => 'ocfweb',
+    server_name  => 'static.ocf.berkeley.edu',
+    service_port => 10004,
+    ssl          => true,
+    ssl_dir      => 'ocfweb',
   }
 
   ocf_mesos::master::load_balancer::http_vhost { 'ircbot':

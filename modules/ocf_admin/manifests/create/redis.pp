@@ -17,9 +17,9 @@ class ocf_admin::create::redis {
   $redis_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], hiera('create::redis::password'))
 
   augeas { '/etc/redis/redis.conf':
-    lens    => 'Spacevars.simple_lns',
-    incl    => '/etc/redis/redis.conf',
-    changes =>  [
+    lens      => 'Spacevars.simple_lns',
+    incl      => '/etc/redis/redis.conf',
+    changes   =>  [
       'set port 6379',
       "set requirepass ${redis_password}",
 
@@ -33,8 +33,8 @@ class ocf_admin::create::redis {
       'rm save',
     ],
     show_diff => false,
-    require => File['/etc/redis/redis.conf'],
-    notify  => Service['redis-server'];
+    require   => File['/etc/redis/redis.conf'],
+    notify    => Service['redis-server'];
   }
 
   # We already have an OCF member with the username "hitch", so dpkg

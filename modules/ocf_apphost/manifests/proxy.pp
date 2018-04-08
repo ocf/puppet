@@ -17,16 +17,16 @@ class ocf_apphost::proxy {
       notify  => Service['nginx'];
 
     '/usr/local/bin/build-vhosts':
-      source  => 'puppet:///modules/ocf_www/build-vhosts',
-      mode    => '0755';
+      source => 'puppet:///modules/ocf_www/build-vhosts',
+      mode   => '0755';
 
     '/opt/share/vhost-app.jinja':
-      source  => 'puppet:///modules/ocf_apphost/vhost-app.jinja';
+      source => 'puppet:///modules/ocf_apphost/vhost-app.jinja';
 
     # Generated SSL bundles go here
     '/etc/ssl/apphost':
-      ensure  => directory,
-      mode    => '0755';
+      ensure => directory,
+      mode   => '0755';
   }
 
   $build_args = $::host_env ? {

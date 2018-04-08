@@ -65,8 +65,8 @@ class ocf::puppet($stage = 'first') {
   file {
     # Trigger a puppet run by the agent
     '/usr/local/sbin/puppet-trigger':
-      mode    => '0755',
-      source  => 'puppet:///modules/ocf/puppet-trigger';
+      mode   => '0755',
+      source => 'puppet:///modules/ocf/puppet-trigger';
 
     # TODO: Remove this entirely once all hosts have this file removed
     '/usr/local/sbin/migrate-puppet-agent':
