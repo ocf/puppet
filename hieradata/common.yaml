@@ -21,6 +21,28 @@ mesos_slaves:
 
 browser_homepage: https://www.ocf.berkeley.edu/about/lab/open-source
 
+#special devices
+devices_ipv4_only:
+    - corruption-mgmt
+    - hal-mgmt
+    - jaws-mgmt
+    - logjam
+    - pagefault
+    - pandemic-mgmt
+    - papercut
+    - riptide-mgmt
+
+devices_ipv46:
+    - radiation
+
+internal_zone_exceptions:
+    - tsunami
+    - werewolves
+    - death
+    - dev-tsunami
+    - dev-werewolves
+    - dev-death
+
 # IPv4 and IPv6 src ranges for types of servers
 internal_zone_range_4: 169.229.226.5-169.229.226.90
 desktop_src_range_4: 169.229.226.100-169.229.226.139

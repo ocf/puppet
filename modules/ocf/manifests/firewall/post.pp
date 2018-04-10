@@ -31,11 +31,8 @@ class ocf::firewall::post {
   }
 
   # Special devices we want to protect from most hosts
-  $devices_ipv4_only = [
-    'corruption-mgmt','hal-mgmt', 'jaws-mgmt', 'logjam', 'pagefault',
-    'pandemic-mgmt', 'papercut', 'riptide-mgmt',
-  ]
-  $devices = ['radiation']
+  $devices_ipv4_only = lookup('devices_ipv4_only')
+  $devices = lookup('devices_ipv46')
 
   firewall_multi { '998 allow all outgoing ICMP':
     chain  => 'PUPPET-OUTPUT',
@@ -71,8 +68,7 @@ class ocf::firewall::post {
   }
 
   # reject from hosts in internal zone range but not actually internal
-  $reject_all = ['tsunami', 'werewolves', 'death', 'dev-tsunami', 'dev-werewolves', 'dev-death']
-
+  $reject_all = lookup('internal_zone_exceptions')
   ocf::firewall::firewall46 { '997 reject internal-zone-exception input':
     opts   => {
       chain  => 'PUPPET-INPUT',
