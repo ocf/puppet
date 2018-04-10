@@ -23,11 +23,7 @@ _how () {
             -exec grep -Il . {} + 2> /dev/null | \
         xargs basename -a)
 
-    local IFS=$'\n'
-    local exec
-    for exec in $executables; do
-        COMPREPLY+=( "$exec" )
-    done
+    mapfile -t COMPREPLY <<< "$executables"
 }
 
 complete -F _how how
