@@ -17,9 +17,9 @@ class ocf_hpc::compute {
     changes     => [
       "set GRUB_CMDLINE_LINUX '\"cgroup_enable=memory swapaccount=1\"'",
     ],
-    refreshonly => true
   } ~> exec { 'update-grub':
-    user => 'root',
+    user        => 'root',
+    refreshonly => true,
   }
 
   service { 'slurmd':
