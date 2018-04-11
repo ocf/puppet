@@ -6,6 +6,7 @@ ArchiveSuspend=no
 #ArchiveScript=/usr/sbin/slurm.dbd.archive
 #AuthInfo=/var/run/munge/munge.socket.2
 AuthType=auth/munge
+DbdHost=<%= @hostname %>
 #DbdBackupHost=
 DebugLevel=4
 PurgeEventAfter=1month
@@ -18,5 +19,6 @@ LogFile=/var/log/slurm-llnl/slurmdbd.log
 SlurmUser=slurm
 StorageType=accounting_storage/mysql
 StorageUser=ocfhpc
+StoragePass=<%= @slurmdbd_mysql_password %>
 StorageHost=mysql.ocf.berkeley.edu
 StorageLoc=ocfhpc

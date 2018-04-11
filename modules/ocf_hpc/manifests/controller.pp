@@ -5,18 +5,10 @@ class ocf_hpc::controller {
 
   package { 'slurmdbd':
   } -> file { '/etc/slurm-llnl/slurmdbd.conf':
-    source  => 'puppet:///modules/ocf_hpc/slurmdbd.conf',
+    content => template('ocf_hpc/slurmdbd.conf.erb'),
     mode    => '0600',
     owner   => 'slurm',
     group   => 'slurm',
-  } -> augeas { 'slurmdbd.conf':
-    incl      => '/etc/slurm-llnl/slurmdbd.conf',
-    lens      => 'Simplevars.lns',
-    changes   => [
-      "set StoragePass ${slurmdbd_mysql_password}",
-      "set DbdHost ${::hostname}",
-    ],
-    show_diff => false,
   } ~> service { 'slurmdbd':
     ensure     => 'running',
     enable     => true,
