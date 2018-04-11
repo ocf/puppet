@@ -5,10 +5,11 @@ class ocf_hpc::controller {
 
   package { 'slurmdbd':
   } -> file { '/etc/slurm-llnl/slurmdbd.conf':
-    content => template('ocf_hpc/slurmdbd.conf.erb'),
-    mode    => '0600',
-    owner   => 'slurm',
-    group   => 'slurm',
+    content   => template('ocf_hpc/slurmdbd.conf.erb'),
+    mode      => '0600',
+    owner     => 'slurm',
+    group     => 'slurm',
+    show_diff => false,
   } ~> service { 'slurmdbd':
     ensure     => 'running',
     enable     => true,
