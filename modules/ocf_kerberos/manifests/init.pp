@@ -65,16 +65,14 @@ class ocf_kerberos {
   }
 
   ocf::firewall::firewall46 {
-    # Allow Kerberos
     '101 allow kerberos':
       opts => {
         chain  => 'PUPPET-INPUT',
-        proto  => 'tcp',
+        proto  => ['tcp', 'udp'],
         dport  => 88,
         action => 'accept',
       };
 
-    # Allow Kerberos Password
     '101 allow kpasswd':
       opts => {
         chain  => 'PUPPET-INPUT',
