@@ -34,7 +34,7 @@ class ocf_puppetdb {
     '101 allow puppet DB port':
       opts => {
         chain  => 'PUPPET-INPUT',
-        proto  => 'all',
+        proto  => 'tcp',
         dport  => 8081,
         action => 'accept',
       };
