@@ -68,15 +68,18 @@ class ocf::firewall::post {
   }
 
   # reject from hosts in internal zone range but not actually internal
-  $reject_all = lookup('internal_zone_exceptions')
-  ocf::firewall::firewall46 { '997 reject internal-zone-exception input':
-    opts   => {
-      chain  => 'PUPPET-INPUT',
-      proto  => 'all',
-      action => 'reject',
-      source => $reject_all,
-    },
-    before => undef,
+  # TODO: eliminate this if statement once testing is complete
+  if !$ocf::firewall::allow_other_traffic {
+    $reject_all = lookup('internal_zone_exceptions')
+    ocf::firewall::firewall46 { '997 reject internal-zone-exception input':
+      opts   => {
+        chain  => 'PUPPET-INPUT',
+        proto  => 'all',
+        action => 'reject',
+        source => $reject_all,
+      },
+      before => undef,
+    }
   }
 
   # blanket-allow stuff from the internal zone
