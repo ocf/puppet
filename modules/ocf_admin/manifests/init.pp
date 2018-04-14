@@ -47,16 +47,6 @@ class ocf_admin {
       show_diff => false;
   }
 
-  # Allow Redis
-  ocf::firewall::firewall46 {
-    '101 allow redis':
-      opts => {
-        chain  => 'PUPPET-INPUT',
-        proto  => 'tcp',
-        dport  => 6378,
-        action => 'accept',
-      };
-  }
   # Allow 8000-8999 for ocfweb etc. dev work
   ocf::firewall::firewall46 {
     '101 allow dev ports':
