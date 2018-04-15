@@ -53,6 +53,15 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     notify  => Service['keepalived'],
   }
 
+  ocf::firewall::firewall46 { '101 accept on marathon-lb service ports':
+    opts => {
+      chain  => 'PUPPET-INPUT',
+      proto  => 'tcp',
+      dport  => '10000-10099',
+      action => 'accept',
+    },
+  }
+
   ####################################
   # Service virtual host definitions #
   ####################################
