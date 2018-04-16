@@ -27,9 +27,9 @@ class ocf_desktop::stats {
   }
 
   cron { 'labstats':
-    ensure   => present,
-    command  => '/opt/stats/update.sh > /dev/null',
-    user     => 'ocfstats',
-    minute   => '*';
+    ensure  => present,
+    command => '/opt/stats/update.sh > /dev/null',
+    user    => 'ocfstats',
+    minute  => '*';
   }
 }

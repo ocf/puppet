@@ -18,9 +18,9 @@ define ocf::munin::plugin($source, $user = undef) {
 
   file {
     "/etc/munin/plugins/${title}":
-      source  => $source,
-      mode    => '0755',
-      *       => $file_defaults;
+      source => $source,
+      mode   => '0755',
+      *      => $file_defaults;
   }
 
   if $user != undef {

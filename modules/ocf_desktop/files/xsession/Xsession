@@ -37,6 +37,12 @@ Exec=libreoffice
 Type=Application
 Icon=libreoffice-startcenter" > $HOME/Desktop/office.desktop
 
+echo "[Desktop Entry]
+Name=Brave
+Exec=brave --user-data-dir-name=brave -- %U
+Type=Application
+Icon=brave" > $HOME/Desktop/brave.desktop
+
 # Firefox
 echo "[Desktop Entry]
 Name=Firefox

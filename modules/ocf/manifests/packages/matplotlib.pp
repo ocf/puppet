@@ -18,7 +18,7 @@ class ocf::packages::matplotlib {
   }
 
   exec { "sed -i 's/^backend\s*:.*$/backend : ${backend}/' /etc/matplotlibrc":
-    unless => "grep -qE '^backend\s*:\s*${backend}' /etc/matplotlibrc",
+    unless  => "grep -qE '^backend\s*:\s*${backend}' /etc/matplotlibrc",
     require => Package[$packages];
   }
 }

@@ -27,8 +27,8 @@ class ocf_stats::prometheus {
         'static_configs'  => [
           {
             'targets' => $nodes.map |$hostname| {
-	    	"${hostname}:9100"
-	    },
+              "${hostname}:9100"
+	          },
           },
         ],
       }

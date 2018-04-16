@@ -16,12 +16,12 @@ class ocf_mesos::package {
   $is_slave = tagged('ocf_mesos::slave') and !hiera('ocf_mesos::slave::disabled', false)
   service {
     'mesos-master':
-      ensure => $is_master,
-      enable => $is_master,
+      ensure  => $is_master,
+      enable  => $is_master,
       require => Ocf::Repackage['mesos'];
     'mesos-slave':
-      ensure => $is_slave,
-      enable => $is_slave,
+      ensure  => $is_slave,
+      enable  => $is_slave,
       require => Ocf::Repackage['mesos'];
   }
 }

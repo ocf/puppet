@@ -7,12 +7,12 @@ class ocf::packages::docker::apt {
   }
 
   apt::source { 'docker':
-    location    => '[arch=amd64] https://download.docker.com/linux/debian',
-    release     => $::lsbdistcodename,
-    repos       => 'stable',
-    include   => {
+    location => '[arch=amd64] https://download.docker.com/linux/debian',
+    release  => $::lsbdistcodename,
+    repos    => 'stable',
+    include  => {
       src => false
     },
-    require     => [Apt::Key['docker'], Package['apt-transport-https']],
+    require  => [Apt::Key['docker'], Package['apt-transport-https']],
   }
 }

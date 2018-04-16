@@ -11,8 +11,8 @@ class ocf_jenkins::proxy {
       $::hostname,
       $::fqdn
     ],
-    ssl              => true,
-    proxy            => 'http://localhost:8080',
-    proxy_redirect   => 'http://localhost:8080 https://jenkins.ocf.berkeley.edu',
+    ssl            => true,
+    proxy          => 'http://localhost:8080',
+    proxy_redirect => 'http://localhost:8080 https://jenkins.ocf.berkeley.edu',
   }
 }

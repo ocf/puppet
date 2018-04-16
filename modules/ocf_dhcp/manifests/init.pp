@@ -6,9 +6,9 @@ class ocf_dhcp {
   package { 'isc-dhcp-server': }
   file {
     '/etc/dhcp/dhcpd.conf':
-      source   => 'puppet:///modules/ocf_dhcp/dhcpd.conf',
-      require  => [Package['isc-dhcp-server'], Exec['gen-desktop-leases']],
-      notify   => Service['isc-dhcp-server'];
+      source  => 'puppet:///modules/ocf_dhcp/dhcpd.conf',
+      require => [Package['isc-dhcp-server'], Exec['gen-desktop-leases']],
+      notify  => Service['isc-dhcp-server'];
 
     '/usr/local/sbin/gen-desktop-leases':
       source => 'puppet:///modules/ocf_dhcp/gen-desktop-leases',
@@ -27,10 +27,10 @@ class ocf_dhcp {
   }
 
   exec { 'gen-desktop-leases':
-    command    => '/usr/local/sbin/gen-desktop-leases > /etc/dhcp/desktop-leases.conf',
-    creates    => '/etc/dhcp/desktop-leases.conf',
-    require    => [File['/usr/local/sbin/gen-desktop-leases'], Package['python3-ocflib']],
-    notify     => Service['isc-dhcp-server'];
+    command => '/usr/local/sbin/gen-desktop-leases > /etc/dhcp/desktop-leases.conf',
+    creates => '/etc/dhcp/desktop-leases.conf',
+    require => [File['/usr/local/sbin/gen-desktop-leases'], Package['python3-ocflib']],
+    notify  => Service['isc-dhcp-server'];
   }
 
   service { 'isc-dhcp-server':

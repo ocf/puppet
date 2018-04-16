@@ -23,8 +23,8 @@ class ocf_decal::website {
       mode    => '0440',
       require => File['/srv/ssl/decal'];
     '/etc/ssl/certs/lets-encrypt.crt':
-      source  => 'puppet:///private/lets-encrypt.crt',
-      mode    => '0640';
+      source => 'puppet:///private/lets-encrypt.crt',
+      mode   => '0640';
   }
 
   apache::vhost { 'decal-http-redirect':
@@ -62,17 +62,17 @@ class ocf_decal::website {
 }
 
   apache::vhost { 'decal-ssl':
-    servername      => 'decal.ocf.berkeley.edu',
+    servername    => 'decal.ocf.berkeley.edu',
 
-    port            => 443,
-    docroot         => '/srv/www/decal',
-    docroot_owner   => 'ocfdecal',
-    docroot_group   => 'www-data',
-    override        => ['All'],
+    port          => 443,
+    docroot       => '/srv/www/decal',
+    docroot_owner => 'ocfdecal',
+    docroot_group => 'www-data',
+    override      => ['All'],
 
-    ssl             => true,
-    ssl_key         => '/srv/ssl/decal/decal.key',
-    ssl_cert        => '/srv/ssl/decal/decal.crt',
-    ssl_chain       => '/etc/ssl/certs/lets-encrypt.crt',
+    ssl           => true,
+    ssl_key       => '/srv/ssl/decal/decal.key',
+    ssl_cert      => '/srv/ssl/decal/decal.crt',
+    ssl_chain     => '/etc/ssl/certs/lets-encrypt.crt',
   }
 }

@@ -10,8 +10,8 @@ class ocf_admin {
   include ocf_admin::create
 
   class { 'ocf::nfs':
-    cron  => true,
-    web   => true;
+    cron => true,
+    web  => true;
   }
 
   class { 'ocf::packages::docker':

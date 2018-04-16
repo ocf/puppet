@@ -155,7 +155,7 @@ class ocf_jenkins {
   }
 
   ocf::firewall::firewall46 { '899 allow jenkins to send mail':
-    opts => {
+    opts    => {
       chain  => 'PUPPET-OUTPUT',
       uid    => 'jenkins',
       proto  => 'tcp',

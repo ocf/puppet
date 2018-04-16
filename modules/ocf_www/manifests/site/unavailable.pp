@@ -40,8 +40,8 @@ class ocf_www::site::unavailable {
   }
 
   apache::vhost { 'unavailable':
-    *         => $options,
-    port      => 80,
+    *    => $options,
+    port => 80,
   }
 
   apache::vhost { 'https-unavailable':

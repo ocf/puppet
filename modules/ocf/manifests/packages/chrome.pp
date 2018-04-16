@@ -1,4 +1,6 @@
 class ocf::packages::chrome {
+  include ocf::userns
+
   $browser_homepage = lookup('browser_homepage')
 
   class { 'ocf::packages::chrome::apt':

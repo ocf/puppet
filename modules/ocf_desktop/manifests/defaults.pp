@@ -11,7 +11,7 @@ class ocf_desktop::defaults {
   }
 
   file { '/usr/share/applications/pdfopen.desktop':
-    source => 'puppet:///modules/ocf_desktop/xsession/pdfopen.desktop',
+    source  => 'puppet:///modules/ocf_desktop/xsession/pdfopen.desktop',
     require => File['/usr/local/bin/pdf-open'];
   }
 }

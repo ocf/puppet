@@ -39,7 +39,7 @@ class ocf_www::site::www {
     request_headers     => ['set X-Forwarded-Proto https'],
     proxy_preserve_host => true,
 
-    rewrites        => [
+    rewrites            => [
       {
         comment      => 'proxy to ocfweb',
         rewrite_cond => [
@@ -52,7 +52,7 @@ class ocf_www::site::www {
       }
     ],
 
-    directories     => [
+    directories         => [
       {
         path           => '/services/http/users',
         provider       => 'directories',
@@ -81,7 +81,7 @@ class ocf_www::site::www {
       }
     ],
 
-    custom_fragment => '
+    custom_fragment     => '
       UserDir /services/http/users/
       UserDir disabled root
     ',
@@ -96,8 +96,8 @@ class ocf_www::site::www {
   apache::vhost {
     # redirect HTTP -> canonical HTTPS
     'www-http-redirect':
-      servername      => 'www.ocf.berkeley.edu',
-      serveraliases   => [
+      servername           => 'www.ocf.berkeley.edu',
+      serveraliases        => [
         'www',
         'dev-www',
         'ocf.berkeley.edu',
@@ -134,9 +134,9 @@ class ocf_www::site::www {
       redirectmatch_regexp => '^(.*)',
       redirectmatch_dest   => $canonical_url,
 
-      ssl             => true,
-      ssl_key         => "/etc/ssl/private/${::fqdn}.key",
-      ssl_cert        => "/etc/ssl/private/${::fqdn}.crt",
-      ssl_chain       => '/etc/ssl/certs/incommon-intermediate.crt';
+      ssl                  => true,
+      ssl_key              => "/etc/ssl/private/${::fqdn}.key",
+      ssl_cert             => "/etc/ssl/private/${::fqdn}.crt",
+      ssl_chain            => '/etc/ssl/certs/incommon-intermediate.crt';
   }
 }

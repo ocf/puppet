@@ -28,17 +28,17 @@ class ocf_stats::labstats {
   # TODO: Remove this by moving the endpoint for desktop session updates to
   # ocfweb API (rt#6624)
   apache::vhost { 'labstats.ocf.berkeley.edu':
-    servername => 'labstats.ocf.berkeley.edu',
-    port       => 444,
-    docroot    => '/opt/stats/labstats/cgi/',
-    options    => ['-Indexes'],
+    servername  => 'labstats.ocf.berkeley.edu',
+    port        => 444,
+    docroot     => '/opt/stats/labstats/cgi/',
+    options     => ['-Indexes'],
 
-    ssl        => true,
-    ssl_key    => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert   => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain  => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl         => true,
+    ssl_key     => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert    => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain   => '/etc/ssl/certs/incommon-intermediate.crt',
 
-    directories   => [{
+    directories => [{
       path        => '/opt/stats/labstats/cgi/',
       options     => ['+ExecCGI'],
 

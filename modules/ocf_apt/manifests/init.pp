@@ -16,8 +16,8 @@ class ocf_apt {
 
   file {
     default:
-      owner  => ocfapt,
-      group  => ocfapt;
+      owner => ocfapt,
+      group => ocfapt;
 
     ['/opt/apt', '/opt/apt/ftp', '/opt/apt/etc', '/opt/apt/db']:
       ensure => directory,
@@ -53,15 +53,15 @@ class ocf_apt {
       subscribe   => File['/opt/apt/etc/private.key'];
 
     'export-gpg-pubkey':
-      command     => 'gpg --output /opt/apt/ftp/pubkey.gpg --export D72A0AF4',
-      creates     => '/opt/apt/ftp/pubkey.gpg',
-      require     => Exec['import-apt-gpg'];
+      command => 'gpg --output /opt/apt/ftp/pubkey.gpg --export D72A0AF4',
+      creates => '/opt/apt/ftp/pubkey.gpg',
+      require => Exec['import-apt-gpg'];
 
     'initial-reprepro-export':
-      command     => '/opt/apt/bin/reprepro export',
-      user        => ocfapt,
-      creates     => '/opt/apt/ftp/dists',
-      require     => [
+      command => '/opt/apt/bin/reprepro export',
+      user    => ocfapt,
+      creates => '/opt/apt/ftp/dists',
+      require => [
         Ocf::Repackage['reprepro'],
         File['/opt/apt/bin', '/opt/apt/etc', '/opt/apt/db', '/opt/apt/ftp'],
         Exec['import-apt-gpg'],
@@ -70,11 +70,11 @@ class ocf_apt {
   }
 
   apache::vhost { 'apt.ocf.berkeley.edu':
-    serveraliases   => ['apt'],
-    port            => 80,
-    docroot         => '/opt/apt/ftp',
+    serveraliases     => ['apt'],
+    port              => 80,
+    docroot           => '/opt/apt/ftp',
 
-    directories     => [{
+    directories       => [{
       path          => '/opt/apt/ftp',
       options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
       index_options => ['NameWidth=*', '+SuppressDescription']
@@ -85,11 +85,11 @@ class ocf_apt {
   }
 
   apache::vhost { 'apt.ocf.berkeley.edu-ssl':
-    servername      => 'apt.ocf.berkeley.edu',
-    port            => 443,
-    docroot         => '/opt/apt/ftp',
+    servername        => 'apt.ocf.berkeley.edu',
+    port              => 443,
+    docroot           => '/opt/apt/ftp',
 
-    directories     => [{
+    directories       => [{
       path          => '/opt/apt/ftp',
       options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
       index_options => ['NameWidth=*', '+SuppressDescription']
@@ -98,9 +98,9 @@ class ocf_apt {
     access_log_format => 'io_count',
     custom_fragment   => "HeaderName README.html\nReadmeName FOOTER.html",
 
-    ssl       => true,
-    ssl_key   => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl               => true,
+    ssl_key           => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert          => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain         => '/etc/ssl/certs/incommon-intermediate.crt',
   }
 }

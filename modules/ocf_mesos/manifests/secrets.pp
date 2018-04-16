@@ -21,8 +21,8 @@ class ocf_mesos::secrets {
   # won't run jobs that require secrets. All masters have the class.
   file {
     '/opt/share/docker':
-      ensure  => directory,
-      mode    => '0700';
+      ensure => directory,
+      mode   => '0700';
 
     '/opt/share/docker/secrets':
       mode    => '0644',

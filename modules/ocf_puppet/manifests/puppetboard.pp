@@ -6,8 +6,8 @@ class ocf_puppet::puppetboard {
 
   # Nginx is used to proxy to Marathon and to supply a HTTP -> HTTPS redirect
   class { 'nginx':
-    manage_repo => false,
-    confd_purge => true,
+    manage_repo  => false,
+    confd_purge  => true,
     server_purge => true,
   }
 
@@ -19,7 +19,7 @@ class ocf_puppet::puppetboard {
       $::hostname,
       $::fqdn,
     ],
-    proxy => 'http://lb.ocf.berkeley.edu:10009',
-    ssl   => true,
+    proxy          => 'http://lb.ocf.berkeley.edu:10009',
+    ssl            => true,
   }
 }

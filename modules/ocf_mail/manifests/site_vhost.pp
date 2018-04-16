@@ -19,8 +19,8 @@ class ocf_mail::site_vhost {
       require   => Ocf::Repackage['libpam-mysql'];
 
     '/etc/pam.d/smtp':
-      source    => 'puppet:///modules/ocf_mail/site_vhost/pam',
-      require   => Ocf::Repackage['libpam-mysql'];
+      source  => 'puppet:///modules/ocf_mail/site_vhost/pam',
+      require => Ocf::Repackage['libpam-mysql'];
   }
 
   # Configure the saslauthd instance used by Postfix.

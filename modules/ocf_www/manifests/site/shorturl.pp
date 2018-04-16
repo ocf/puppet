@@ -32,6 +32,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/absa$ https://drive.google.com/drive/folders/0B7n5VUVfGPUoV0xPREIwY0hzc0E?usp=sharing [R]'},
       {rewrite_rule => '^/account$ https://www.ocf.berkeley.edu/docs/services/account/ [R]'},
       {rewrite_rule => '^/apphost$ https://www.ocf.berkeley.edu/docs/services/webapps/ [R]'},
+      {rewrite_rule => '^/bjb$ https://leprosy.ocf.berkeley.edu/bjb [R]'},
       {rewrite_rule => '^/bod(/.*)?$ https://www.ocf.berkeley.edu/~staff/bod$1 [R]'},
       {rewrite_rule => '^/buy$ https://goo.gl/forms/S4DbENwDV2utnYPG3 [R]'},
       {rewrite_rule => '^/buysheet$ https://docs.google.com/a/ocf.berkeley.edu/spreadsheets/d/1ylEgN2RP0CifGBMNnG3I0P1F5H9GbHetBMb4I2Osa6k/edit?usp=sharing [R]'},

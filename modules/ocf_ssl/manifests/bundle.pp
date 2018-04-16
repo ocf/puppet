@@ -10,16 +10,16 @@ define ocf_ssl::bundle(
       group   => ssl-cert;
 
     "/etc/ssl/private/${title}.key":
-      source  => $key_source,
-      mode    => '0640';
+      source => $key_source,
+      mode   => '0640';
 
     "/etc/ssl/private/${title}.crt":
-      source  => $cert_source,
-      mode    => '0644';
+      source => $cert_source,
+      mode   => '0644';
 
     "/etc/ssl/private/${title}.intermediate":
-      source  => $intermediate_source,
-      mode    => '0644';
+      source => $intermediate_source,
+      mode   => '0644';
   }
 
   # ssl bundle (cert + intermediates)
@@ -30,8 +30,8 @@ define ocf_ssl::bundle(
 
   concat {
     default:
-      owner => root,
-      group => ssl-cert,
+      owner          => root,
+      group          => ssl-cert,
 
       ensure_newline => true;
     $bundle:

@@ -23,8 +23,8 @@ class ocf_printhost::cups {
       content => "# deny printing raw jobs\n";
 
     '/etc/cups/ppd':
-      ensure  => directory,
-      group   => 'lp';
+      ensure => directory,
+      group  => 'lp';
 
     ['/etc/cups/ppd/papercut-single.ppd', '/etc/cups/ppd/pagefault-single.ppd']:
       content => epp('ocf_printhost/cups/ppd/m806.ppd.epp', { 'double' => false });
@@ -45,8 +45,8 @@ class ocf_printhost::cups {
       source  => 'puppet:///modules/ocf_printhost/cups/classes.conf';
 
     '/usr/lib/cups/filter/ocfps/':
-      source  => 'puppet:///modules/ocf_printhost/ocfps',
-      mode    => '0755';
+      source => 'puppet:///modules/ocf_printhost/ocfps',
+      mode   => '0755';
   }
 
   mount { '/var/spool/cups':

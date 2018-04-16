@@ -16,7 +16,7 @@ class ocf_desktop::packages {
       'florence', 'freeplane', 'geany', 'gimp', 'gnome-calculator', 'gparted',
       'hexchat', 'imagej', 'inkscape', 'lyx', 'mssh', 'mumble', 'numlockx',
       'remmina', 'simple-scan', 'ssh-askpass-gnome', 'texmaker', 'texstudio',
-      'vlc', 'xarchiver', 'xterm', 'zenmap']:;
+      'vlc', 'xarchiver', 'xcape', 'xterm', 'zenmap']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils',
       'gnome-icon-theme', 'redshift', 'xfce4-whiskermenu-plugin']:;
@@ -45,6 +45,8 @@ class ocf_desktop::packages {
     ['preload']:;
     # security tools
     ['scdaemon']:;
+    # utilities
+    ['wakeonlan']:;
     # Xorg
     ['xclip', 'xsel', 'xserver-xorg', 'xscreensaver']:;
   }
@@ -67,8 +69,9 @@ class ocf_desktop::packages {
       recommends => false;
     'gedit':
       recommends => false;
-    ['libreoffice-calc', 'libreoffice-draw', 'libreoffice-gnome', 'libreoffice-impress', 'libreoffice-pdfimport', 'libreoffice-writer', 'ure']:
-      recommends => false;
+    ['libreoffice-calc', 'libreoffice-draw', 'libreoffice-gnome', 'libreoffice-gtk3', 'libreoffice-impress', 'libreoffice-pdfimport', 'libreoffice-writer', 'ure']:
+      recommends  => false,
+      backport_on => stretch;
     'thunar':
       recommends => false;
     ['virt-manager', 'virt-viewer']:

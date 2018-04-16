@@ -22,6 +22,7 @@ keur/admin@OCF.BERKELEY.EDU             all,get-keys
 bzh/admin@OCF.BERKELEY.EDU              all,get-keys
 asai/admin@OCF.BERKELEY.EDU             all,get-keys
 wporr/admin@OCF.BERKELEY.EDU            all,get-keys
+mdcha/admin@OCF.BERKELEY.EDU            all,get-keys
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
@@ -47,6 +48,7 @@ keur/root@OCF.BERKELEY.EDU              change-password                         
 bzh/root@OCF.BERKELEY.EDU               change-password                         *@OCF.BERKELEY.EDU
 asai/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
 wporr/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
+mdcha/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
 
 # create
 create/admin@OCF.BERKELEY.EDU           add,get,change-password                 *@OCF.BERKELEY.EDU

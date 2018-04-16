@@ -15,10 +15,10 @@ class ocf_mesos::master::dns(
   }
 
   ocf::systemd::service { 'mesos-dns':
-    ensure  => running,
-    source  => 'puppet:///modules/ocf_mesos/master/dns/mesos-dns.service',
-    enable  => true,
-    require => [
+    ensure    => running,
+    source    => 'puppet:///modules/ocf_mesos/master/dns/mesos-dns.service',
+    enable    => true,
+    require   => [
       Package['mesos-dns'],
       File['/opt/share/mesos/master/mesos-dns.json'],
     ],

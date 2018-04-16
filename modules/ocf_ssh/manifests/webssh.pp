@@ -7,8 +7,8 @@ class ocf_ssh::webssh {
   }
 
   class { 'nginx':
-    manage_repo => false,
-    confd_purge => true,
+    manage_repo  => false,
+    confd_purge  => true,
     server_purge => true,
   }
 
@@ -18,17 +18,17 @@ class ocf_ssh::webssh {
 
   nginx::resource::server {
     $webssh_fqdn:
-      server_name => [
+      server_name  => [
         $webssh_fqdn
       ],
 
-      proxy => 'http://webssh',
+      proxy        => 'http://webssh',
 
-      ssl        => true,
-      ssl_cert   => "/etc/ssl/private/${::fqdn}.bundle",
-      ssl_key    => "/etc/ssl/private/${::fqdn}.key",
+      ssl          => true,
+      ssl_cert     => "/etc/ssl/private/${::fqdn}.bundle",
+      ssl_key      => "/etc/ssl/private/${::fqdn}.key",
 
-      add_header => {
+      add_header   => {
         'Strict-Transport-Security' => 'max-age=31536000',
       },
 

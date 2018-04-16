@@ -12,20 +12,20 @@ class ocf_desktop::xsession {
       require => File['/opt/share/xsession'];
     # printing and other notification script daemon
     '/opt/share/puppet/notify':
-      mode    => '0755',
-      source  => 'puppet:///modules/ocf_desktop/xsession/notify';
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_desktop/xsession/notify';
     # script for warning users when the lab is about to close
     '/opt/share/puppet/lab-close-notify':
-      mode    => '0755',
-      source  => 'puppet:///modules/ocf_desktop/xsession/lab-close-notify';
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_desktop/xsession/lab-close-notify';
     # script to tile multiple displays
     '/usr/local/bin/fix-displays':
-      mode    => '0755',
-      source  => 'puppet:///modules/ocf_desktop/xsession/fix-displays';
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_desktop/xsession/fix-displays';
     # script to fix audio on login
     '/usr/local/bin/fix-audio':
-      mode    => '0755',
-      source  => 'puppet:///modules/ocf_desktop/xsession/fix-audio';
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_desktop/xsession/fix-audio';
     # script for paper stats on panel
     '/usr/local/bin/paper-genmon':
       mode    => '0755',
@@ -52,16 +52,9 @@ class ocf_desktop::xsession {
   }
 
   # wallpaper symlink
-  if $::lsbdistcodename == 'jessie' {
-    $wallpaper = $staff_only ? {
-      true  => 'background-staff.png',
-      false => 'background.png',
-    }
-  } else {
-    $wallpaper = $staff_only ? {
-      true  => 'background-staff.svg',
-      false => 'background.svg',
-    }
+  $wallpaper = $staff_only ? {
+    true  => 'background-staff.svg',
+    false => 'background.svg',
   }
 
   file { '/opt/share/wallpaper':
@@ -80,12 +73,12 @@ class ocf_desktop::xsession {
     '/etc/X11/default-display-manager':
       content => "/usr/sbin/lightdm\n";
     '/etc/lightdm/session-setup':
-      mode    => '0755',
-      source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/session-setup';
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_desktop/xsession/lightdm/session-setup';
     # kill child processes on logout
     '/etc/lightdm/session-cleanup':
-      mode    => '0755',
-      source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/session-cleanup';
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_desktop/xsession/lightdm/session-cleanup';
   }
 
   # overwrite greeter strings with OCF ones
@@ -147,8 +140,8 @@ class ocf_desktop::xsession {
   file {
     # copy skel files
     '/etc/skel/.config':
-      ensure => directory,
-      source => 'puppet:///modules/ocf_desktop/skel/config',
+      ensure  => directory,
+      source  => 'puppet:///modules/ocf_desktop/skel/config',
       recurse => true;
   }
 

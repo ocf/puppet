@@ -18,7 +18,7 @@ define ocf::repackage(
     # dependencies would need to be pinned, which is excessive and prone to
     # breaking if a package's dependencies change.
     exec { "apt install ${package}":
-      command => "/usr/bin/apt-get -y -o Dpkg::Options::=--force-confold ${install_options[0]} -t ${dist} install ${package}",
+      command     => "/usr/bin/apt-get -y -o Dpkg::Options::=--force-confold ${install_options[0]} -t ${dist} install ${package}",
       logoutput   => on_failure,
       environment => [
         'DEBIAN_FRONTEND=noninteractive',
