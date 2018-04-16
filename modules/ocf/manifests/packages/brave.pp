@@ -12,8 +12,12 @@ class ocf::packages::brave {
   # TODO: Change this to a global config
   # if/when Brave adds support for it.
   file {
+    '/etc/skel/.config/brave':
+      ensure  => directory,
+      require => [File['/etc/skel/.config'], Package['brave']];
+
     '/etc/skel/.config/brave/session-store-1':
       content => template('ocf/brave/session-store-1.erb'),
-      require => Package['brave'];
+      require => [File['/etc/skel/.config/brave'], Package['brave']];
   }
 }
