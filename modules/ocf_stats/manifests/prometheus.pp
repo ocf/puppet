@@ -28,7 +28,7 @@ class ocf_stats::prometheus {
           {
             'targets' => $nodes.map |$hostname| {
               "${hostname}:9100"
-	          },
+            },
           },
         ],
       }
