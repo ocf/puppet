@@ -2,7 +2,7 @@
 class ocf_stats::prometheus {
   # The list of nodes to monitor-- for now, monitor all hosts.
   $nodes_query = '["from", "nodes", ["=", "expired", null]]'
-  $nodes = puppetdb_query($nodes_query).map |$value| { $value["certname"] }
+  $nodes = sort(puppetdb_query($nodes_query).map |$value| { $value["certname"] })
 
   class { '::prometheus':
     version        => '2.0.0',
