@@ -15,7 +15,7 @@ class ocf_stats::prometheus {
 
   class { '::prometheus':
     version        => '2.0.0',
-    extra_options  => '--web.listen-address="127.0.0.1:9090" --web.external-url=http://127.0.0.1/prometheus',
+    extra_options  => '--web.listen-address="127.0.0.1:9090" --web.external-url=http://127.0.0.1/prometheus --storage.tsdb.retention=2y',
     alerts         => {},
     scrape_configs => [
       {
