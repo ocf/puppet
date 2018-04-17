@@ -7,7 +7,7 @@ class ocf_stats::prometheus {
   }
 
   cron { 'gen-prometheus-nodes':
-    command => '/usr/local/bin/gen-prometheus-nodes > /etc/prometheus/nodes.json',
+    command => '/usr/local/bin/gen-prometheus-nodes > /var/local/prometheus-nodes.json',
     user    => 'root',
     minute  => '03',
     require => File['/usr/local/bin/gen-prometheus-nodes'];
@@ -36,7 +36,7 @@ class ocf_stats::prometheus {
 
         'file_sd_configs' => [
           {
-            'files'            => [ '/etc/prometheus/nodes.json' ],
+            'files'            => [ '/var/local/prometheus-nodes.json' ],
             'refresh_interval' => '1h',
           },
         ],
