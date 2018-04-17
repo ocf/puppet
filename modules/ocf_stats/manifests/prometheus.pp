@@ -1,8 +1,17 @@
 # prometheus daemon config
 class ocf_stats::prometheus {
-  # The list of nodes to monitor-- for now, monitor all hosts.
-  $nodes_query = '["from", "nodes", ["=", "expired", null]]'
-  $nodes = sort(puppetdb_query($nodes_query).map |$value| { $value["certname"] })
+  file {
+    '/usr/local/bin/gen-prometheus-nodes':
+      source => 'puppet:///modules/ocf_stats/prometheus/gen-prometheus-nodes',
+      mode   => '0755';
+  }
+
+  cron { 'gen-prometheus-nodes':
+    command => '/usr/local/bin/gen-prometheus-nodes > /etc/prometheus/nodes.json',
+    user    => 'root',
+    minute  => '03',
+    require => File['/usr/local/bin/gen-prometheus-nodes'];
+  }
 
   class { '::prometheus':
     version        => '2.0.0',
@@ -24,11 +33,11 @@ class ocf_stats::prometheus {
         'job_name'        => 'node',
         'scrape_interval' => '5s',
         'scrape_timeout'  => '5s',
-        'static_configs'  => [
+
+        'file_sd_configs' => [
           {
-            'targets' => $nodes.map |$hostname| {
-              "${hostname}:9100"
-            },
+            'files'            => [ '/etc/prometheus/nodes.json' ],
+            'refresh_interval' => '1h',
           },
         ],
       }

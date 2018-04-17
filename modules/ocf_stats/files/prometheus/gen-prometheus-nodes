@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+"""Generate a list of hosts to give to prometheus for stats generation"""
+import json
+
+from ocflib.infra.hosts import hosts_by_filter
+
+d = [{'targets': [vals['ipHostNumber'][0] + ':9100'],
+      'labels': {'host_type': vals['type'], 'host_cn': vals['cn'][0]}}
+     for vals in hosts_by_filter('(|(type=server)(type=desktop)(type=staffvm))')
+     if not vals['cn'][0].startswith('hozer-')]
+
+print(json.dumps(d, indent=4))
