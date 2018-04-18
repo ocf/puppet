@@ -1,14 +1,12 @@
 vrrp_instance VI_1 {
-    # TODO: This is the default interface on stretch VMs, but try to come up
-    # with a better way to figure this out than hardcoding it
-    interface ens3
+    interface <%= @networking['primary'] %>
     state MASTER
     virtual_router_id 51
     priority 100
 
     authentication {
         auth_type PASS
-        auth_pass $ <%= @keepalived_secret  %>
+        auth_pass $ <%= @keepalived_secret %>
     }
 
     virtual_ipaddress {

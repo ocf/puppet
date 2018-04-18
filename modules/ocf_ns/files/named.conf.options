@@ -46,9 +46,6 @@ options {
   // Only allow recursive queries from OCF
   recursion yes;
   allow-recursion { "ocf"; "localhost"; };
-
-  // TODO: remove this after bind9 >= 9.10 (becomes the default)
-  listen-on-v6 { any; };
 };
 
 // Query URIBL directly because campus nameservers are often blocked
