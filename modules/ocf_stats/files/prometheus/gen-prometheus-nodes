@@ -1,12 +1,37 @@
 #!/usr/bin/env python3
 """Generate a list of hosts to give to prometheus for stats generation"""
 import json
+import os
+import tempfile
+from sys import argv
 
 from ocflib.infra.hosts import hosts_by_filter
 
-d = [{'targets': [vals['ipHostNumber'][0] + ':9100'],
-      'labels': {'host_type': vals['type'], 'host_cn': vals['cn'][0]}}
-     for vals in hosts_by_filter('(|(type=server)(type=desktop)(type=staffvm))')
-     if not vals['cn'][0].startswith('hozer-')]
+hosts = []
+for vals in hosts_by_filter('(|(type=server)(type=desktop)(type=staffvm))'):
+    cn, ip, host_type = vals['cn'][0], vals['ipHostNumber'][0], vals['type'][0]
 
-print(json.dumps(d, indent=4))
+    # Don't include hozer machines
+    if cn.startswith('hozer-'):
+        continue
+
+    hosts.append({
+        'targets': [ip + ':9100'],
+        'labels': {'host_type': host_type, 'host_cn': cn},
+    })
+
+if len(argv) < 2 or argv[1] == '-':
+    print(json.dumps(hosts, indent=4))
+else:
+    # atomic overwrite in case of errors
+    file_name = argv[1]
+    with tempfile.NamedTemporaryFile(mode='w', delete=False) as temp_file:
+        try:
+            json.dump(hosts, temp_file, indent=4)
+            os.chmod(temp_file.name, 0o644)
+            os.rename(temp_file.name, file_name)
+        finally:
+            try:
+                os.remove(temp_file.name)
+            except FileNotFoundError:
+                pass
