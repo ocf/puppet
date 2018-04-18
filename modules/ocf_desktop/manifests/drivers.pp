@@ -8,6 +8,15 @@ class ocf_desktop::drivers {
     file { '/etc/X11/xorg.conf':
       source => 'puppet:///modules/ocf_desktop/drivers/nvidia/xorg.conf';
     }
+
+    augeas { 'grub_nomodeset':
+      context => '/files/etc/default/grub',
+      changes => [
+        # Add nomodeset to grub command-line options (quiet is the default)
+        'set GRUB_CMDLINE_LINUX_DEFAULT \'"quiet nomodeset"\'',
+      ],
+      notify  => Exec['update-grub'],
+    }
   } elsif $::gfx_brand == 'intel' {
     package { ['libgl1-mesa-glx:i386']:; }
   }
