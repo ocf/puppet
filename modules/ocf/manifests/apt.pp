@@ -18,52 +18,73 @@ class ocf::apt($stage = 'first') {
     /(sid|stretch)/ => 'stretch',
   }
 
-  apt::source {
-    'debian':
-      location => 'http://mirrors/debian/',
-      release  => $dist,
-      repos    => $repos,
-      include  => {
-        src => true
-      };
+  if $::lsbdistid == 'Debian' {
+    apt::source {
+      'debian':
+        location => 'http://mirrors/debian/',
+        release  => $dist,
+        repos    => $repos,
+        include  => {
+          src => true
+        };
 
-    'debian-updates':
-      location => 'http://mirrors/debian/',
-      release  => "${::lsbdistcodename}-updates",
-      repos    => $repos,
-      include  => {
-        src => true
-      };
+      'debian-updates':
+        location => 'http://mirrors/debian/',
+        release  => "${::lsbdistcodename}-updates",
+        repos    => $repos,
+        include  => {
+          src => true
+        };
 
-    'debian-security':
-      location => 'http://mirrors/debian-security/',
-      release  => "${dist}/updates",
-      repos    => $repos,
-      include  => {
-        src => true
-      };
+      'debian-security':
+        location => 'http://mirrors/debian-security/',
+        release  => "${dist}/updates",
+        repos    => $repos,
+        include  => {
+          src => true
+        };
 
-    'ocf':
-      location => 'http://apt/',
-      release  => $dist,
-      repos    => 'main',
-      include  => {
-        src => true
-      };
+      'ocf':
+        location => 'http://apt/',
+        release  => $dist,
+        repos    => 'main',
+        include  => {
+          src => true
+        };
 
-    'ocf-backports':
-      location => 'http://apt/',
-      release  => "${::lsbdistcodename}-backports",
-      repos    => 'main',
-      include  => {
-        src => true
-      };
-  }
+      'ocf-backports':
+        location => 'http://apt/',
+        release  => "${::lsbdistcodename}-backports",
+        repos    => 'main',
+        include  => {
+          src => true
+        };
+    }
 
-  # TODO: Submit patch to puppetlabs-apt to enable having includes for
-  # apt::backports (so that we can include the source too)
-  class { 'apt::backports':
-    location => 'http://mirrors/debian/';
+    # TODO: Submit patch to puppetlabs-apt to enable having includes for
+    # apt::backports (so that we can include the source too)
+    class { 'apt::backports':
+      location => 'http://mirrors/debian/';
+    }
+
+  } elsif $::lsbdistid == 'Raspbian' {
+    apt::source {
+      'raspbian':
+        location => 'http://mirrors/raspbian/raspbian/',
+        release  => $dist,
+        repos    => 'main contrib non-free rpi',
+        include  => {
+          src => true
+        };
+
+      'archive-rpi':
+        location => 'http://mirrors/archive-raspberrypi/debian/',
+        release  => $dist,
+        repos    => 'main ui',
+        include  => {
+          src => true
+        };
+    }
   }
 
   # workaround Debian #793444 by disabling pdiffs
