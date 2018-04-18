@@ -17,7 +17,7 @@ for vals in hosts_by_filter('(|(type=server)(type=desktop)(type=staffvm))'):
 
     hosts.append({
         'targets': [ip + ':9100'],
-        'labels': {'host_type': host_type, 'host_cn': cn},
+        'labels': {'host_type': host_type, 'instance': cn},
     })
 
 if len(argv) < 2 or argv[1] == '-':
