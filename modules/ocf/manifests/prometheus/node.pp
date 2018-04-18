@@ -1,3 +1,3 @@
-class ocf::prometheus_node {
+class ocf::prometheus::node {
   include prometheus::node_exporter
 }

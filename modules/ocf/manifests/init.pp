@@ -12,7 +12,7 @@ class ocf {
   include ocf::munin::node
   include ocf::networking
   include ocf::packages
-  include ocf::prometheus_node
+  include ocf::prometheus::node
   include ocf::puppet
   include ocf::rootpw
   include ocf::serial_getty
