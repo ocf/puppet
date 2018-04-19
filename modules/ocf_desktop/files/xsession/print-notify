@@ -5,19 +5,19 @@ import functools
 from gi.repository import Notify
 
 
-get_redis_connection = functools.partial(redis.StrictRedis,
-                                        host='hozer-65',
-                                        port=6379,
-                                        db=0,
-                                        password=None
-                                        )
+redis_connection = functools.partial(redis.StrictRedis,
+                                     host='broker',
+                                     port=6378,
+                                     ssl=True,
+                                     db=0,
+                                     password=None)
 
 def publish(host, password, channel, message):
-    rc = get_redis_connection(host=host, password=password)
+    rc = redis_connection(host=host, password=password)
     rc.publish(channel, message)
 
 def subscribe(host, password, *channels):
-    rc = get_redis_connection(host=host, password=password)
+    rc = redis_connection(host=host, password=password)
     sub = rc.pubsub()
     sub.subscribe(channel for channel in channels)
     return sub
@@ -30,14 +30,13 @@ BROKER_AUTH = 'password' #TODO
 
 def main():
     Notify.init('OCF')
-    s = subscribe('hozer-65', BROKER_AUTH, 'printing')
+    s = subscribe('broker', BROKER_AUTH, current_user())
     while True:
         message = s.get_message()
         if message and message['type'] == 'message':
             print(message)
-            user, status_message = (message['data'].decode(encoding='UTF-8')).split("\n")
-            if user == current_user():
-                Notify.Notification.new('Printing Status', status_message, NOTIFICATION_ICON).show()
+            _, status_message = (message['data'].decode(encoding='UTF-8')).split("\n")
+            Notify.Notification.new('Printing Status', status_message, NOTIFICATION_ICON).show()
 
 if __name__ == '__main__':
     main()
