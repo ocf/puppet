@@ -20,10 +20,11 @@ _how () {
         xargs -d : -I %% -- find -L %% \
             -maxdepth 1 -mindepth 1 \
             -name "${pattern}*" -type f -executable \
-            -exec grep -Il . {} + 2> /dev/null | \
-        xargs basename -a)
-
-    mapfile -t COMPREPLY <<< "$executables"
+            -exec grep -Il . {} + 2> /dev/null)
+    if [ -n "$executables" ]; then
+        executables=$(xargs -d '\n' basename -a <<< "$executables")
+        mapfile -t COMPREPLY <<< "$executables"
+    fi
 }
 
 complete -F _how how
