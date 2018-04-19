@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+import functools
+
+import redis
+from gi.repository import Notify
+from ocflib.misc.whoami import current_user
+
+
+redis_connection = functools.partial(redis.StrictRedis,
+                                     host='broker',
+                                     port=6378,
+                                     ssl=True,
+                                     db=0,
+                                     password=None)
+
+
+def publish(host, password, channel, message):
+    rc = redis_connection(host=host, password=password)
+    rc.publish(channel, message)
+
+
+def subscribe(host, password, *channels):
+    rc = redis_connection(host=host, password=password)
+    sub = rc.pubsub()
+    sub.subscribe(channel for channel in channels)
+    return sub
+
+
+NOTIFICATION_ICON = '/opt/share/xsession/images/ocf-color.png'
+
+BROKER_AUTH = 'password'  # TODO
+
+
+def main():
+    Notify.init('OCF')
+    s = subscribe('broker', BROKER_AUTH, current_user())
+    while True:
+        message = s.get_message()
+        if message and message['type'] == 'message':
+            print(message)
+            _, status_message = (message['data'].decode(encoding='UTF-8')).split('\n')
+            Notify.Notification.new('Printing Status', status_message, NOTIFICATION_ICON).show()
+
+
+if __name__ == '__main__':
+    main()
