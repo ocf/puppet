@@ -155,22 +155,22 @@ def prehook(c, job):
         send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
         msg = job.user + '\nYour print job failed due to insufficient pages.  Your job was ' \
             + job.pages + 'pages and you have ' + quo.daily + ' pages remaining today.'
-        r = redis.StrictRedis(host='broker', password=BROKER_AUTH)
-        r.publish('printing', msg)
+        r = redis.StrictRedis(host='broker', port=6378, password=BROKER_AUTH, ssl=True)
+        r.publish(job.user, msg)
         sys.exit(255)
 
 
 def posthook(c, job, success):
-    r = redis.StrictRedis(host='broker', password=BROKER_AUTH)
+    r = redis.StrictRedis(host='broker', port=6378, password=BROKER_AUTH, ssl=True)
     if success:
         quota.add_job(c, job)
         msg = job.user + "\nYour print job '" + job.doc_name + "' was accepted and sent to " + job.printer + '.'
-        r.publish('printing', msg)
+        r.publish(job.user, msg)
     else:
         quo = quota.get_quota(c, job.user)
         msg = job.user + '\nYour last print job failed due to a printer error.\
                 Please contact a staff member for assistance.'
-        r.publish('printing', msg)
+        r.publish(job.user, msg)
         send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
 
 
