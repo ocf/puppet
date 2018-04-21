@@ -37,9 +37,14 @@ class ocf_stats::munin {
   include apache::mod::fcgid
   include apache::mod::rewrite
 
+  $cname = $::host_env ? {
+    'dev'  => 'dev-munin',
+    'prod' => 'munin',
+  }
+
   apache::vhost {
     'munin':
-      servername    => 'munin.ocf.berkeley.edu',
+      servername    => "${cname}.ocf.berkeley.edu",
       port          => 443,
       docroot       => '/var/cache/munin/www/static/',
 
@@ -94,14 +99,14 @@ class ocf_stats::munin {
       ];
 
     'munin-redirect':
-      servername      => 'munin.ocf.berkeley.edu',
+      servername      => "${cname}.ocf.berkeley.edu",
       serveraliases   => [
-        'munin',
+        $cname,
       ],
       port            => 80,
       docroot         => '/var/www/html',
 
       redirect_status => 301,
-      redirect_dest   => 'https://munin.ocf.berkeley.edu/';
+      redirect_dest   => "https://${cname}.ocf.berkeley.edu/";
   }
 }
