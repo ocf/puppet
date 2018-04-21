@@ -54,16 +54,14 @@ class ocf_csgo {
     '101 allow srcds_linux from desktops (IPv4)':
       chain     => 'PUPPET-INPUT',
       src_range => '169.229.226.100-169.229.226.139',
-      proto     => ['tcp', 'udp'],
-      dport     => [26901, 27005, 27015, 27020],
+      proto     => 'all',
       action    => 'accept';
 
     '101 allow srcds_linux from desktops (IPv6)':
       provider  => 'ip6tables',
       chain     => 'PUPPET-INPUT',
       src_range => '2607:f140:8801::100-2607:f140:8801::139',
-      proto     => ['tcp', 'udp'],
-      dport     => [26901, 27005, 27015, 27020],
+      proto     => 'all',
       action    => 'accept';
   }
 }
