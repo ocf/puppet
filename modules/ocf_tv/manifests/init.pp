@@ -6,6 +6,11 @@ class ocf_tv {
   include ocf_desktop::drivers
   include ocf_desktop::steam
 
+  # Allow anyone on the ocf network to ssh into the TV.
+  # External firewall already blocks outsiders.
+  # Mostly so laptops can connect.
+  include ocf::firewall::allow_ssh
+
   package {
     [
       'arandr',
@@ -63,4 +68,5 @@ class ocf_tv {
       User['ocftv'],
     ],
   }
+
 }
