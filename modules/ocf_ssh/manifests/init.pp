@@ -4,7 +4,6 @@ class ocf_ssh {
   include ocf::hostkeys
   include ocf::limits
   include ocf::firewall::allow_mosh
-  include ocf::firewall::allow_ssh
   include ocf::packages::cups
   include ocf_ssl::default_bundle
 

@@ -1,7 +1,6 @@
 class ocf_admin {
   include ocf::extrapackages
   include ocf::firewall::allow_mosh
-  include ocf::firewall::allow_ssh
   include ocf::firewall::output_all
   include ocf::hostkeys
   include ocf::packages::cups
