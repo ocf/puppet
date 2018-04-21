@@ -1,5 +1,6 @@
 class ocf_csgo {
   include ocf::apt::i386
+  include ocf::firewall::allow_desktops
 
   user { 'ocfcsgo':
     comment => 'Counter-Strike Server',
@@ -46,22 +47,5 @@ class ocf_csgo {
 
   ocf::munin::plugin { 'csgo':
     source => 'puppet:///modules/ocf_csgo/munin';
-  }
-
-  # Firewall rules for dedicated server hosting
-  include ocf::firewall::allow_http
-  firewall_multi {
-    '101 allow srcds_linux from desktops (IPv4)':
-      chain     => 'PUPPET-INPUT',
-      src_range => '169.229.226.100-169.229.226.139',
-      proto     => 'all',
-      action    => 'accept';
-
-    '101 allow srcds_linux from desktops (IPv6)':
-      provider  => 'ip6tables',
-      chain     => 'PUPPET-INPUT',
-      src_range => '2607:f140:8801::100-2607:f140:8801::139',
-      proto     => 'all',
-      action    => 'accept';
   }
 }
