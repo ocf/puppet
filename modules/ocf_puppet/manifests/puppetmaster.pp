@@ -37,7 +37,7 @@ class ocf_puppet::puppetmaster {
 
   file {
     '/etc/puppetlabs/puppet/fileserver.conf':
-      content => 'puppet:///modules/ocf_puppet/fileserver.conf',
+      source  => 'puppet:///modules/ocf_puppet/fileserver.conf',
       require => Package['puppetserver'],
       notify  => Service['puppetserver'];
 
