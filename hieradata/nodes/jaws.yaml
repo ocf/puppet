@@ -15,3 +15,5 @@ ocf::packages::ntp::peers:
 ocf_mesos::slave::attributes:
     nfs:
         value: 'true'
+
+ocf::firewall::allow_other_traffic: false
