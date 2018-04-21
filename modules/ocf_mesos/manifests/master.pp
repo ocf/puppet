@@ -2,6 +2,9 @@ class ocf_mesos::master {
   include ocf_mesos
   include ocf_mesos::secrets
 
+  # Desktops are mesos agents, and there are too many ports to keep track of easily.
+  include ocf::firewall::allow_desktops
+
   file { '/opt/share/mesos/master':
     ensure => directory,
   }

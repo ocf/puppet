@@ -1,4 +1,4 @@
 classes:
     - ocf_mesos::master
 
-ocf::firewall::allow_other_traffic: true
+ocf::firewall::allow_other_traffic: false
