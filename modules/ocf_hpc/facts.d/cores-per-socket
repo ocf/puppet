@@ -1,0 +1,4 @@
+#!/bin/bash
+set -euo pipefail
+
+echo "cores_per_socket=$(lscpu | sed -n 's/^Core(s) per socket: *//p')"

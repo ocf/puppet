@@ -1,0 +1,4 @@
+#!/bin/bash
+set -euo pipefail
+
+echo "threads_per_core=$(lscpu | sed -n 's/^Thread(s) per core: *//p')"

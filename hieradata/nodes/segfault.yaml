@@ -1,0 +1,6 @@
+classes:
+    - ocf_hpc::controller
+
+ocf::auth::glogin: [[ocfhpc, ALL]]
+
+staff_only: false
