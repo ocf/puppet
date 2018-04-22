@@ -5,14 +5,20 @@ class ocf_hpc {
   package { 'slurm-wlm': }
 
   if $::puppetdb_running {
-    $slurm_nodes_facts_query = 'inventory[facts] { resources { type = "Class" and title = "Ocf_hpc::Compute" } }'
-    $slurm_nodes_facts = puppetdb_query($slurm_nodes_facts_query).map |$value| { $value['facts'] }
-
+    $slurm_nodes_facts_query = puppetdb_query('inventory[facts] { resources { type = "Class" and title = "Ocf_hpc::Compute" } }')
+    # To avoid a circular dependency, fallback to empty values if no nodes match the query.
+    $slurm_nodes_facts = $slurm_nodes_facts_query == undef ? {
+      false => $slurm_nodes_facts_query.map |$value| { $value['facts'] },
+      true  => [],
+    }
     # Hostname of the controller to pass into the template.
     # This is hacky, as it will select the first entry in the query, and assumes there is only one controller.
     # It also assumes the slurmdbd host is the same machine as the controller.
-    $slurm_controller_query = 'inventory[facts] { resources { type = "Class" and title = "Ocf_hpc::Controller" } }'
-    $slurm_controller_hostname = puppetdb_query($slurm_controller_query)[0]['facts']['hostname']
+    $slurm_controller_query = puppetdb_query('inventory[facts] { resources { type = "Class" and title = "Ocf_hpc::Controller" } }')
+    $slurm_controller_hostname = $slurm_controller_query == undef ? {
+      false => $slurm_controller_query[0]['facts']['hostname'],
+      true  => '',
+    }
     file { '/etc/slurm-llnl/slurm.conf':
       content => template(
         'ocf_hpc/slurm.conf.erb',
