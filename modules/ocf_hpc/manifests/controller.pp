@@ -3,8 +3,7 @@ class ocf_hpc::controller {
 
   $slurmdbd_mysql_password = hiera('hpc::controller::slurmdbd_mysql_password')
 
-  package { 'slurmdbd':
-  } -> file { '/etc/slurm-llnl/slurmdbd.conf':
+  package { 'slurmdbd': } -> file { '/etc/slurm-llnl/slurmdbd.conf':
     content   => template('ocf_hpc/slurmdbd.conf.erb'),
     mode      => '0600',
     owner     => 'slurm',

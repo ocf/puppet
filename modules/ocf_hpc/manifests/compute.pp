@@ -10,6 +10,7 @@ class ocf_hpc::compute {
     owner   => 'slurm',
     group   => 'slurm',
   }
+
   # Kernel option to enable memory as a consumable gres resource
   augeas { 'grub':
     incl    => '/etc/default/grub',

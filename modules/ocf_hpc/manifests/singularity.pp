@@ -6,9 +6,6 @@ class ocf_hpc::singularity {
 
   file { '/etc/singularity/singularity.conf':
     source => 'puppet:///modules/ocf_hpc/singularity.conf',
-    mode   => '0644',
-    owner  => 'root',
-    group  => 'root',
   }
 
   # Each running singularity container consumes a loop device,
