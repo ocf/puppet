@@ -1,5 +1,3 @@
-#includedir /etc/sudoers.d
-
 # We're using the /root principal in PAM so change the prompt accordingly
 Defaults passprompt="%u/root's password: "
 
@@ -23,6 +21,10 @@ ocfdeploy ALL=NOPASSWD: /usr/local/sbin/puppet-trigger
 <% @usudo.each do |user| -%>
 <%= user %> ALL=(ALL) <%= @nopasswd ? 'NOPASSWD:' : '' %> ALL
 <% end -%>
+
+# This needs to be positioned lower in this file to not be overridden by
+# previous sections (rt#6210)
+#includedir /etc/sudoers.d
 
 # Allow ocfstaff to run a few commands without password for easier scripting.
 %ocfstaff ALL=(ALL) NOPASSWD: /usr/bin/virsh list, /usr/bin/virsh list --all
