@@ -87,9 +87,15 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
       source  => 'puppet:///modules/ocf/auth/pam/access',
       require => File['/etc/security/access.conf'],
       notify  => Exec['pam-auth-update'];
+
     # provide access control table
     '/etc/security/access.conf':
       content => template('ocf/access.conf.erb');
+
+    # Create pam_mkhomedir profile
+    '/usr/share/pam-configs/mkhomedir':
+      source => 'puppet:///modules/ocf/auth/pam/mkhomedir',
+      notify => Exec['pam-auth-update'];
   }
 
   # Enable GSSAPI and root login, disable sorried forwarding
