@@ -1,4 +1,6 @@
 class ocf_stats::labstats {
+  include ocf::firewall::output_printers
+
   user {
     'ocfstats':
       comment => 'OCF Lab Stats',
