@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import functools
+import os
+from configparser import ConfigParser
 
 import redis
-from gi.repository import Notify
-from ocflib.misc.whoami import current_user
 
 
 redis_connection = functools.partial(redis.StrictRedis,
@@ -14,32 +14,39 @@ redis_connection = functools.partial(redis.StrictRedis,
                                      password=None)
 
 
-def publish(host, password, channel, message):
-    rc = redis_connection(host=host, password=password)
-    rc.publish(channel, message)
-
-
 def subscribe(host, password, *channels):
     rc = redis_connection(host=host, password=password)
-    sub = rc.pubsub()
+    sub = rc.pubsub(ignore_subscribe_messages=True)
     sub.subscribe(channel for channel in channels)
     return sub
 
 
 NOTIFICATION_ICON = '/opt/share/xsession/images/ocf-color.png'
 
-BROKER_AUTH = 'password'  # TODO
+BROKER_AUTH = '/opt/share/broker/broker.conf'
+
+
+def read_config():
+    config = ConfigParser()
+    config.read(BROKER_AUTH)
+    host = config.get('broker', 'host')
+    password = config.get('broker', 'password')
+    return host, password
 
 
 def main():
-    Notify.init('OCF')
-    s = subscribe('broker', BROKER_AUTH, current_user())
-    while True:
-        message = s.get_message()
-        if message and message['type'] == 'message':
-            print(message)
-            _, status_message = (message['data'].decode(encoding='UTF-8')).split('\n')
-            Notify.Notification.new('Printing Status', status_message, NOTIFICATION_ICON).show()
+    username = os.environ.get('SUDO_USER')
+
+    if not username:
+        raise RuntimeError('Unable to read SUDO_USER.')
+
+    # read config file
+    host, password = read_config()
+
+    s = subscribe(host, password, username)
+    for message in s.listen():
+        _, status_message = (message['data'].decode(encoding='UTF-8')).split('\n')
+        print(status_message, flush=True)
 
 
 if __name__ == '__main__':

@@ -1,2 +1,27 @@
 #!/bin/bash -eu
-sudo -u ocf_broker /opt/share/puppet/print-notify-real
+function clean_up {
+    jobs -pr | xargs pgrep -P | xargs sudo -u ocfbroker kill
+    exit 0
+}
+
+trap clean_up INT TERM EXIT
+
+pipe=$HOME/tmp/print-notify
+icon=/opt/share/xsession/images/ocf-color-256.png
+
+if [[ ! -p $pipe ]]; then
+    mkfifo $pipe
+fi
+
+sudo -u ocfbroker /opt/share/puppet/print-notify-real > $pipe &
+
+# listener
+while true
+do
+    if read msg < $pipe; then
+        if [[ ! -p $pipe ]] && [[ "$msg" == 'quit' ]]; then
+            break
+        fi
+	notify-send -i $icon "Print Job Status" "$msg"
+    fi
+done
