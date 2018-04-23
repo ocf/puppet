@@ -25,8 +25,8 @@ class ocf_printhost::enforcer {
       show_diff => false;
 
     '/opt/share/broker':
-      ensure  => directory,
-      mode    => '0500';
+      ensure => directory,
+      mode   => '0500';
 
     '/opt/share/broker/broker.conf':
       content => template('ocf/broker/broker.conf.erb'),

@@ -8,11 +8,11 @@ class ocf_broker {
     }
 
     file { '/etc/redis/redis.conf':
-      owner    => redis,
-      group    => root,
-      mode     => '0600',
-      require  => Package['redis-server'],
-      notify   => Service['redis-server'];
+      owner   => redis,
+      group   => root,
+      mode    => '0600',
+      require => Package['redis-server'],
+      notify  => Service['redis-server'];
     }
 
     $redis_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], hiera('broker::redis::password'))
