@@ -114,7 +114,7 @@ xset m 0 0
 /opt/share/puppet/lab-close-notify &
 
 # Start script that notifies print job status
-/opt/share/puppet/print-notify &
+/opt/share/puppet/print-notify-listener &
 
 # Fix multiple monitors
 /usr/local/bin/fix-displays &

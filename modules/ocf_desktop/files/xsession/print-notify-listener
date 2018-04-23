@@ -13,15 +13,15 @@ if [[ ! -p $pipe ]]; then
     mkfifo $pipe
 fi
 
-sudo -u ocfbroker /opt/share/puppet/print-notify-real > $pipe &
+sudo -u ocfbroker /opt/share/puppet/print-notify-handler > $pipe &
 
 # listener
 while true
 do
+    if [[ ! -p $pipe ]]; then
+        break
+    fi
     if read msg < $pipe; then
-        if [[ ! -p $pipe ]] && [[ "$msg" == 'quit' ]]; then
-            break
-        fi
-	notify-send -i $icon "Print Job Status" "$msg"
+	    notify-send -i $icon "Print Job Status" "$msg"
     fi
 done

@@ -21,8 +21,6 @@ def subscribe(host, password, *channels):
     return sub
 
 
-NOTIFICATION_ICON = '/opt/share/xsession/images/ocf-color.png'
-
 BROKER_AUTH = '/opt/share/broker/broker.conf'
 
 
