@@ -1,13 +1,14 @@
 class ocf_desktop::printnotify {
-  user { 'ocf_broker':
+  user { 'ocfbroker':
     ensure => present,
     shell  => '/bin/false',
   }
 
-  # enable regular users to run notification script as ocf_broker
+  # enable regular users to run notification script as ocfbroker
   file { '/etc/sudoers.d/broker':
-    content => "ALL ALL=(ocf_broker) NOPASSWD: /opt/share/puppet/print-notify-real\n",
-    require =>  User['ocf_broker'],
+    content => "ALL ALL=(ocfbroker) NOPASSWD: /opt/share/puppet/print-notify-real\n\
+ALL ALL=(ocfbroker) NOPASSWD: /bin/kill\n",
+    require =>  User['ocfbroker'],
   }
 
   $redis_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], hiera('broker::redis::password'))
@@ -16,11 +17,11 @@ class ocf_desktop::printnotify {
     '/opt/share/broker':
       ensure => directory,
       mode   => '0500',
-      owner  => 'ocf_broker';
+      owner  => 'ocfbroker';
 
     '/opt/share/broker/broker.conf':
-      content => template('ocf/broker.conf.erb'),
+      content => template('ocf/broker/broker.conf.erb'),
       mode    => '0400',
-      owner   => 'ocf_broker';
+      owner   => 'ocfbroker';
     }
 }
