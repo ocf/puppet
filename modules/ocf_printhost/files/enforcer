@@ -33,8 +33,6 @@ from ocflib.misc.mail import send_problem_report
 
 CONF_FILE = '/opt/share/enforcer/enforcer.conf'
 
-BROKER_AUTH = 'password'  # TODO
-
 Message = namedtuple('Message', ['subject', 'body'])
 
 
@@ -109,9 +107,11 @@ ENFORCER_ERROR_MESSAGE = Message(
 def read_config():
     conf = ConfigParser()
     conf.read(CONF_FILE)
-    mysql_user = conf.get('enforcer', 'user')
-    mysql_passwd = conf.get('enforcer', 'passwd')
-    return mysql_user, mysql_passwd
+    mysql_user = conf.get('mysql', 'user')
+    mysql_passwd = conf.get('mysql', 'passwd')
+    redis_host = conf.get('redis', 'host')
+    redis_passwd = conf.get('redis', 'passwd')
+    return mysql_user, mysql_passwd, redis_host, redis_passwd
 
 
 def page_count(env):
@@ -149,19 +149,17 @@ def send_printer_mail(message, job, quo):
     send_mail_user(job.user, message.subject, body)
 
 
-def prehook(c, job):
+def prehook(c, r, job):
     quo = quota.get_quota(c, job.user)
     if job.pages > quo.daily:
         send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
         msg = job.user + '\nYour print job failed due to insufficient pages.  Your job was ' \
             + job.pages + 'pages and you have ' + quo.daily + ' pages remaining today.'
-        r = redis.StrictRedis(host='broker', port=6378, password=BROKER_AUTH, ssl=True)
         r.publish(job.user, msg)
         sys.exit(255)
 
 
-def posthook(c, job, success):
-    r = redis.StrictRedis(host='broker', port=6378, password=BROKER_AUTH, ssl=True)
+def posthook(c, r, job, success):
     if success:
         quota.add_job(c, job)
         msg = job.user + "\nYour print job '" + job.doc_name + "' was accepted and sent to " + job.printer + '.'
@@ -185,13 +183,14 @@ def main(argv):
                             choices={'prehook', 'posthook'})
         args = parser.parse_args(argv[1:])
         job = create_job(os.environ)
-        mysql_user, mysql_pass = read_config()
+        mysql_user, mysql_pass, redis_host, redis_pass = read_config()
+        r = redis.StrictRedis(host=redis_host, port=6378, password=redis_pass, ssl=True)
         with quota.get_connection(user=mysql_user, password=mysql_pass) as c:
             if args.command == 'prehook':
-                prehook(c, job)
+                prehook(c, r, job)
             else:
                 success = os.environ['TEASTATUS'] == '0'
-                posthook(c, job, success)
+                posthook(c, r, job, success)
     except SystemExit as e:
         sys.exit(e.code)
     except Exception:

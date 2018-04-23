@@ -1,6 +1,8 @@
 class ocf_printhost::enforcer {
   package { ['cups-tea4cups', 'mariadb-client']: }
 
+  $redis_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], hiera('broker::redis::password'))
+
   file {
     '/etc/cups/tea4cups.conf':
       content => template('ocf_printhost/cups/tea4cups.conf.erb'),
@@ -27,7 +29,7 @@ class ocf_printhost::enforcer {
       mode    => '0500';
 
     '/opt/share/broker/broker.conf':
-      content => template('ocf/broker.conf.erb'),
+      content => template('ocf/broker/broker.conf.erb'),
       mode    => '0400';
   }
 
