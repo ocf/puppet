@@ -23,14 +23,6 @@ class ocf_printhost::enforcer {
     '/opt/share/enforcer/enforcer.conf':
       source    => 'puppet:///private/enforcer/enforcer.conf',
       show_diff => false;
-
-    '/opt/share/broker':
-      ensure => directory,
-      mode   => '0500';
-
-    '/opt/share/broker/broker.conf':
-      content => template('ocf/broker/broker.conf.erb'),
-      mode    => '0400';
   }
 
   # We remove old document titles from the enforcer database for privacy reasons.
