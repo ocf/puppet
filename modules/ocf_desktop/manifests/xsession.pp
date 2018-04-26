@@ -184,8 +184,10 @@ class ocf_desktop::xsession {
 
   # auto logout users
   package {
-    ['xautolock',
-    'gir1.2-notify-0.7']:;
+    [
+      'xautolock',
+      'gir1.2-notify-0.7'
+    ]:;
   }
 
   file { '/usr/local/bin/auto-lock':
