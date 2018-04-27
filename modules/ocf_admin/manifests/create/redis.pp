@@ -40,6 +40,7 @@ class ocf_admin::create::redis {
   # We already have an OCF member with the username "hitch", so dpkg
   # chooses "_hitch" as a fallback username.
   user { '_hitch':
+    home    => '/etc/hitch',
     groups  => 'ssl-cert',
     notify  => Service['hitch'],
     require => Package['hitch'],
