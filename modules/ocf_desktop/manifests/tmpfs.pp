@@ -13,12 +13,6 @@ class ocf_desktop::tmpfs {
       options => 'noatime,nodev,nosuid'
   }
 
-  # create pam_mkhomedir profile
-  file { '/usr/share/pam-configs/mkhomedir':
-    source => 'puppet:///modules/ocf_desktop/pam/mkhomedir',
-    notify => Exec['pam-auth-update']
-  }
-
   # on-disk temporary directories mounted at ~/tmp
   file {
     '/var/local/tmp':
