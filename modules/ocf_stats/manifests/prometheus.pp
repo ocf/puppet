@@ -12,9 +12,9 @@ class ocf_stats::prometheus {
     require => File['/usr/local/bin/gen-prometheus-nodes'];
   }
 
-  exec {
-    command => 'usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json'
-    onlyif => 'test ! -f /var/local/prometheus-nodes.json'
+  exec { 'gen-promethues-nodes-initial':
+    command => 'usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json',
+    onlyif  => 'test ! -f /var/local/prometheus-nodes.json',
   }
 
   class { '::prometheus':
