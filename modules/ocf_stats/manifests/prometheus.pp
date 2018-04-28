@@ -12,6 +12,11 @@ class ocf_stats::prometheus {
     require => File['/usr/local/bin/gen-prometheus-nodes'];
   }
 
+  exec {
+    command => 'usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json'
+    onlyif => 'test ! -f /var/local/prometheus-nodes.json'
+  }
+
   class { '::prometheus':
     version        => '2.0.0',
     extra_options  => '--web.listen-address="127.0.0.1:9090" --web.external-url=http://127.0.0.1/prometheus --storage.tsdb.retention=2y',
