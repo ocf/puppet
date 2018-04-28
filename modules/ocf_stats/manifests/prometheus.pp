@@ -8,7 +8,6 @@ class ocf_stats::prometheus {
 
   cron { 'gen-prometheus-nodes':
     command => '/usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json',
-    user    => 'root',
     minute  => '03',
     require => File['/usr/local/bin/gen-prometheus-nodes'];
   }
