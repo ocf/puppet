@@ -8,13 +8,13 @@ class ocf_stats::prometheus {
 
   cron { 'gen-prometheus-nodes':
     command => '/usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json',
-    minute  => '03',
+    minute  => '0',
     require => File['/usr/local/bin/gen-prometheus-nodes'];
   }
 
   exec { 'gen-promethues-nodes-initial':
-    command => 'usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json',
-    onlyif  => 'test ! -f /var/local/prometheus-nodes.json',
+    command => '/usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json',
+    creates => '/var/local/prometheus-nodes.json',
   }
 
   class { '::prometheus':
