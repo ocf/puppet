@@ -11,10 +11,6 @@ hosts = []
 for vals in hosts_by_filter('(|(type=server)(type=desktop)(type=staffvm))'):
     cn, ip, host_type = vals['cn'][0], vals['ipHostNumber'][0], vals['type'][0]
 
-    # Don't include hozer machines
-    if cn.startswith('hozer-'):
-        continue
-
     hosts.append({
         'targets': [ip + ':9100'],
         'labels': {'host_type': host_type, 'instance': cn},
