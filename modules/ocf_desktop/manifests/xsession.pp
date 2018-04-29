@@ -186,7 +186,7 @@ class ocf_desktop::xsession {
   package {
     [
       'xautolock',
-      'gir1.2-notify-0.7'
+      'gir1.2-notify-0.7',
     ]:;
   }
 
