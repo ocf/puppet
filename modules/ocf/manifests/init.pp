@@ -12,7 +12,6 @@ class ocf {
   include ocf::munin::node
   include ocf::networking
   include ocf::packages
-  include ocf::prometheus::node
   include ocf::puppet
   include ocf::rootpw
   include ocf::serial_getty
@@ -20,4 +19,6 @@ class ocf {
   include ocf::systemd
   include ocf::utils
   include ocf::walldeny
+
+  include prometheus::node_exporter
 }
