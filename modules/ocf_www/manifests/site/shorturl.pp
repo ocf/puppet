@@ -43,6 +43,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/decalform(/.*)?$ https://goo.gl/forms/70uze4r9OhWGRuh42 [R]'},
       {rewrite_rule => '^/docs(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
       {rewrite_rule => '^/email-update$ https://status.ocf.berkeley.edu/2014/06/email-discontinuation-update-forward.html [R]'},
+      {rewrite_rule => '^/eligibility$ https://www.ocf.berkeley.edu/docs/membership/eligibility/ [R]'},
       {rewrite_rule => '^/facebook$ https://goo.gl/forms/dEzJmyRMwAPWCDAY2 [R]'},
       {rewrite_rule => '^/faq$ https://www.ocf.berkeley.edu/docs/faq/ [R]'},
       {rewrite_rule => '^/gh/([^/]*)(/(?!blob/)(?!tree/)(?!info/)(?!issue)(?!pull).+)$ https://ocf.io/gh/$1/blob/master$2 [R]'},
