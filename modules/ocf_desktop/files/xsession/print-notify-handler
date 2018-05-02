@@ -6,12 +6,16 @@ from configparser import ConfigParser
 import redis
 
 
-redis_connection = functools.partial(redis.StrictRedis,
-                                     host='broker',
-                                     port=6378,
-                                     ssl=True,
-                                     db=0,
-                                     password=None)
+BROKER_AUTH = '/opt/share/broker/broker.conf'
+
+redis_connection = functools.partial(
+    redis.StrictRedis,
+    host='broker',
+    port=6378,
+    ssl=True,
+    db=0,
+    password=None
+)
 
 
 def subscribe(host, password, *channels):
@@ -19,9 +23,6 @@ def subscribe(host, password, *channels):
     sub = rc.pubsub(ignore_subscribe_messages=True)
     sub.subscribe(channel for channel in channels)
     return sub
-
-
-BROKER_AUTH = '/opt/share/broker/broker.conf'
 
 
 def read_config():
