@@ -1,0 +1,2 @@
+ALL ALL=(ocfbroker) NOPASSWD: /opt/share/puppet/print-notify-handler
+ALL ALL=(ocfbroker) NOPASSWD: /bin/kill

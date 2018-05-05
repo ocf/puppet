@@ -6,9 +6,8 @@ class ocf_desktop::printnotify {
 
   # enable regular users to run notification script as ocfbroker
   file { '/etc/sudoers.d/broker':
-    content => "ALL ALL=(ocfbroker) NOPASSWD: /opt/share/puppet/print-notify-handler\n\
-ALL ALL=(ocfbroker) NOPASSWD: /bin/kill\n",
-    require =>  User['ocfbroker'],
+    content => template('ocf_desktop/sudoers.d/broker'),
+    require => User['ocfbroker'],
   }
 
   $redis_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], hiera('broker::redis::password'))
