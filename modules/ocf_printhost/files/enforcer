@@ -104,16 +104,13 @@ ENFORCER_ERROR_MESSAGE = Message(
 )
 
 NOTIFY_QUOTA_MESSAGE = dedent("""\
-        {user}
         Your print job failed due to insufficient pages. Your job was
         {pages} pages, and you have {quota} pages remaining today.""")
 
 NOTIFY_JOB_ACCEPTED = dedent("""\
-        {user}
         Your print job {document} was accepted and sent to {printer}.""")
 
 NOTIFY_JOB_ERROR = dedent("""\
-        {user}
         Your last print job failed due to a printer error.
         Please contact a staff member for assistance.""")
 
@@ -168,7 +165,6 @@ def prehook(c, r, job):
     if job.pages > quo.daily:
         send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
         msg = NOTIFY_QUOTA_MESSAGE.format(
-            user=job.user,
             pages=job.pages,
             quota=quo.daily)
         r.publish(job.user, msg)
@@ -176,15 +172,15 @@ def prehook(c, r, job):
 
 
 def posthook(c, r, job, success):
+    msg = ''
     if success:
         quota.add_job(c, job)
         msg = NOTIFY_JOB_ACCEPTED.format(
-            user=job.user,
             document=job.doc_name,
             printer=job.printer)
     else:
         quo = quota.get_quota(c, job.user)
-        msg = NOTIFY_JOB_ERROR.format(user=job.user)
+        msg = NOTIFY_JOB_ERROR
         send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
     r.publish(job.user, msg)
 

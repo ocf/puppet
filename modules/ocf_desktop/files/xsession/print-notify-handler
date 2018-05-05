@@ -44,8 +44,9 @@ def main():
 
     s = subscribe(host, password, username)
     for message in s.listen():
-        _, status_message = (message['data'].decode(encoding='UTF-8')).split('\n')
-        print(status_message, flush=True)
+        if 'data' in message:
+            status_message = message['data'].decode(encoding='UTF-8').replace('\n', ' ')
+            print(status_message, flush=True)
 
 
 if __name__ == '__main__':
