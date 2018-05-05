@@ -36,16 +36,16 @@
             Options +ExecCGI
             AllowOverride None
             Require all granted
-            SetHandler fastcgi-script
+            SetHandler fcgid-script
         </Directory>
 
-        <FilesMatch "\.ph(p3?|tml)$">
+        <FilesMatch "\.ph(p\d?|tml)$">
             Require all granted
-            SetHandler php5-fcgi
+            SetHandler php-fcgi
         </FilesMatch>
 
-        Action php5-fcgi /php5-fcgi
-        Alias /php5-fcgi /services/http/suexec/php5-fcgi-wrapper
+        Action php-fcgi /php-fcgi
+        Alias /php-fcgi /services/http/suexec/php-fcgi-wrapper
         SuexecUserGroup {{vhost.user}} ocf
     {% endif %}
 
@@ -57,5 +57,4 @@
     CustomLog /var/log/apache2/vhost-access.log combined
 
     UserDir disabled
-    suPHP_Engine off
 </VirtualHost>

@@ -18,7 +18,7 @@ class ocf_www::site::www {
   include apache::mod::rewrite
   include apache::mod::status
   include ocf_www::mod::cgi
-  include ocf_www::mod::fastcgi
+  include ocf_www::mod::fcgid
   include ocf_www::mod::ocfdir
   include ocf_www::mod::php
   include ocf_www::mod::suexec
