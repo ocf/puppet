@@ -10,6 +10,8 @@
 
 CUR_USER=$(who | awk '$NF == "(:0)" { print $1 }')
 
+# if a user is logged in, the state is active, else, take it from argv[1]
+# (used when calling update-delay.sh from the lightdm session-cleanup script)
 [[ -n "$CUR_USER" ]] && STATE="active" || STATE="$1"
 
 # when a user is logged or once during cleanup, otherwise, stay silent

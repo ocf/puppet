@@ -27,10 +27,9 @@ class ocf_desktop::stats {
   }
 
   cron { 'labstats':
-    ensure      => present,
-    environment => 'PATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin',
-    command     => '/opt/stats/update.sh > /dev/null',
-    user        => 'ocfstats',
-    minute      => '*';
+    ensure  => present,
+    command => '/opt/stats/update.sh > /dev/null',
+    user    => 'ocfstats',
+    minute  => '*';
   }
 }

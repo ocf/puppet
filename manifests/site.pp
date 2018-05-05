@@ -44,7 +44,7 @@ Cron {
   weekday => '*',
   month => '*',
   monthday => '*',
-  environment => 'PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin'
+  environment => 'PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin'
 }
 
 Firewall_multi {
