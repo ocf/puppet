@@ -23,7 +23,10 @@ class ocf_printhost::enforcer {
       mode   => '0500';
 
     '/opt/share/enforcer/enforcer.conf':
-      content   => template('ocf_printhost/enforcer/enforcer.conf.erb'),
+      content   => template(
+        'ocf_printhost/enforcer/enforcer.conf.erb',
+        'ocf/broker/broker.conf.erb',
+      ),
       show_diff => false;
   }
 

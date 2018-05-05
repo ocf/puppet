@@ -122,9 +122,9 @@ def read_config():
     conf = ConfigParser()
     conf.read(CONF_FILE)
     mysql_user = conf.get('mysql', 'user')
-    mysql_passwd = conf.get('mysql', 'passwd')
-    redis_host = conf.get('redis', 'host')
-    redis_passwd = conf.get('redis', 'passwd')
+    mysql_passwd = conf.get('mysql', 'password')
+    redis_host = conf.get('broker', 'host')
+    redis_passwd = conf.get('broker', 'password')
     return mysql_user, mysql_passwd, redis_host, redis_passwd
 
 
@@ -182,7 +182,6 @@ def posthook(c, r, job, success):
             user=job.user,
             document=job.doc_name,
             printer=job.printer)
-        r.publish(job.user, msg)
     else:
         quo = quota.get_quota(c, job.user)
         msg = NOTIFY_JOB_ERROR.format(user=job.user)
