@@ -105,14 +105,17 @@ ENFORCER_ERROR_MESSAGE = Message(
 
 NOTIFY_QUOTA_MESSAGE = dedent("""\
         Your print job failed due to insufficient pages. Your job was
-        {pages} pages, and you have {quota} pages remaining today.""")
+        {pages} pages, and you have {quota} pages remaining today.\
+""")
 
 NOTIFY_JOB_ACCEPTED = dedent("""\
-        Your print job {document} was accepted and sent to {printer}.""")
+        Your print job '{document}' was accepted and sent to {printer}.\
+""")
 
 NOTIFY_JOB_ERROR = dedent("""\
-        Your last print job failed due to a printer error.
-        Please contact a staff member for assistance.""")
+        Your print job '{document}' failed due to a printer error.
+        Please contact a staff member for assistance.\
+""")
 
 
 def read_config():
@@ -166,7 +169,8 @@ def prehook(c, r, job):
         send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
         msg = NOTIFY_QUOTA_MESSAGE.format(
             pages=job.pages,
-            quota=quo.daily)
+            quota=quo.daily,
+        )
         r.publish(job.user, msg)
         sys.exit(255)
 
@@ -177,10 +181,11 @@ def posthook(c, r, job, success):
         quota.add_job(c, job)
         msg = NOTIFY_JOB_ACCEPTED.format(
             document=job.doc_name,
-            printer=job.printer)
+            printer=job.printer,
+        )
     else:
         quo = quota.get_quota(c, job.user)
-        msg = NOTIFY_JOB_ERROR
+        msg = NOTIFY_JOB_ERROR.format(document=job.doc_name)
         send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
     r.publish(job.user, msg)
 
