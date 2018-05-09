@@ -2,7 +2,6 @@ class ocf_printhost::enforcer {
   package { ['cups-tea4cups', 'mariadb-client']: }
 
   $mysql_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], hiera('ocfprinting::mysql::password'))
-
   $redis_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], hiera('broker::redis::password'))
 
   file {

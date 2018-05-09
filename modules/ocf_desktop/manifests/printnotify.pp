@@ -6,7 +6,7 @@ class ocf_desktop::printnotify {
 
   # enable regular users to run notification script as ocfbroker
   file { '/etc/sudoers.d/broker':
-    content => template('ocf_desktop/sudoers.d/broker'),
+    content => "ALL ALL=(ocfbroker) NOPASSWD: /opt/share/puppet/print-notify-handler\n",
     require => User['ocfbroker'],
   }
 
