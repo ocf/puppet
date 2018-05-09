@@ -1,28 +1,23 @@
 #!/bin/bash
 set -euo pipefail
 
-function clean_up {
-    jobs -pr | xargs pgrep -P | xargs sudo -u ocfbroker kill
-    exit 0
-}
+trap 'rm -f "$pipe" && exit' TERM
 
-trap clean_up INT TERM EXIT
-
-pipe="$HOME/tmp/print-notify"
+pipe="/run/user/$UID/print-notify"
 icon=/opt/share/xsession/images/ocf-color-256.png
 
-[[ -p "$pipe" ]] && rm "$pipe"
-mkfifo $pipe
+[[ -p "$pipe" ]] && rm -f "$pipe"
+mkfifo "$pipe"
 
 sudo -u ocfbroker /opt/share/puppet/print-notify-handler > "$pipe" &
 
 # listener
-while true
-do
+exec 3< "$pipe"
+while true; do
     if [[ ! -p "$pipe" ]]; then
         break
     fi
-    if read msg < "$pipe"; then
+    if read -u 3 msg < "$pipe"; then
 	    notify-send -i "$icon" "Print Job Status" "$msg"
     fi
 done

@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 import functools
 import os
+import sys
 from configparser import ConfigParser
+from select import poll
+from select import POLLERR
+from select import POLLHUP
 
 import redis
 
@@ -21,7 +25,7 @@ redis_connection = functools.partial(
 def subscribe(host, password, *channels):
     rc = redis_connection(host=host, password=password)
     sub = rc.pubsub(ignore_subscribe_messages=True)
-    sub.subscribe(channel for channel in channels)
+    sub.subscribe(channels)
     return sub
 
 
@@ -42,11 +46,18 @@ def main():
     # read config file
     host, password = read_config()
 
+    # set up stdout monitoring
+    p = poll()
+    p.register(sys.stdout.fileno(), POLLERR | POLLHUP)
+
     s = subscribe(host, password, username)
-    for message in s.listen():
-        if 'data' in message:
+    while True:
+        message = s.get_message()
+        if message and 'data' in message:
             status_message = message['data'].decode(encoding='UTF-8').replace('\n', ' ')
             print(status_message, flush=True)
+        if p.poll(0.1):
+            break
 
 
 if __name__ == '__main__':
