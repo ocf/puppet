@@ -4,4 +4,4 @@ Priority: 0
 Session-Interactive-Only: yes
 Session-Type: Additional
 Session-Final:
-	required	pam_mkhomedir.so silent skel=/etc/skel/ umask=0077
+	optional	pam_mkhomedir.so silent skel=/etc/skel/ umask=0077
