@@ -58,7 +58,7 @@
 *Duplex DuplexNoTumble/Long-Edge Binding: "<</Duplex true /Tumble false>> setpagedevice"
 <%- } else { -%>
 *DefaultDuplex: None
-%Duplex None/Off: "<</Duplex false /Tumble false>> setpagedevice"
+*%Duplex None/Off: "<</Duplex false /Tumble false>> setpagedevice"
 <%- } -%>
 *CloseUI: *Duplex
 

@@ -26,12 +26,6 @@ class ocf_printhost::cups {
       ensure => directory,
       group  => 'lp';
 
-    ['/etc/cups/ppd/papercut-single.ppd', '/etc/cups/ppd/pagefault-single.ppd']:
-      content => epp('ocf_printhost/cups/ppd/m806.ppd.epp', { 'double' => false });
-
-    ['/etc/cups/ppd/papercut-double.ppd', '/etc/cups/ppd/pagefault-double.ppd']:
-      content => epp('ocf_printhost/cups/ppd/m806.ppd.epp', { 'double' => true });
-
     '/etc/cups/printers.conf':
       replace => false,
       group   => 'lp',
@@ -47,6 +41,21 @@ class ocf_printhost::cups {
     '/usr/lib/cups/filter/ocfps/':
       source => 'puppet:///modules/ocf_printhost/ocfps',
       mode   => '0755';
+  }
+
+  ['logjam', 'papercut', 'pagefault'].each |String $printer| {
+    file {
+      default:
+        group   => 'lp',
+        require => Package['cups', 'cups-bsd'],
+        notify  => Service['cups'];
+
+      "/etc/cups/ppd/${printer}-single.ppd":
+        content => epp('ocf_printhost/cups/ppd/m806.ppd.epp', { 'double' => false });
+
+      "/etc/cups/ppd/${printer}-double.ppd":
+        content => epp('ocf_printhost/cups/ppd/m806.ppd.epp', { 'double' => true });
+    }
   }
 
   mount { '/var/spool/cups':

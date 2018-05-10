@@ -30,8 +30,10 @@ class ocf::firewall::post {
 
 
   # Special devices we want to protect from most hosts
-  $devices_ipv4_only = ['corruption-mgmt','hal-mgmt', 'jaws-mgmt', 'pagefault',
-                        'pandemic-mgmt', 'papercut', 'riptide-mgmt']
+  $devices_ipv4_only = [
+    'corruption-mgmt','hal-mgmt', 'jaws-mgmt', 'logjam', 'pagefault',
+    'pandemic-mgmt', 'papercut', 'riptide-mgmt',
+  ]
   $devices = ['radiation']
 
   firewall { '998 allow all outgoing ICMP':
