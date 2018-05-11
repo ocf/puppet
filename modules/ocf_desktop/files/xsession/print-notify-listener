@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euo pipefail
+
+trap 'rm -f "$pipe" && exit' TERM
+
+pipe="/run/user/$UID/print-notify"
+icon=/opt/share/xsession/images/ocf-color-256.png
+
+[[ -p "$pipe" ]] && rm -f "$pipe"
+mkfifo "$pipe"
+
+sudo -u ocfbroker /opt/share/puppet/print-notify-handler > "$pipe" &
+
+# listener
+exec 3< "$pipe"
+while true; do
+    if [[ ! -p "$pipe" ]]; then
+        break
+    fi
+    if read -u 3 msg < "$pipe"; then
+	    notify-send -i "$icon" "Print Job Status" "$msg"
+    fi
+done

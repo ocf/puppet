@@ -15,6 +15,7 @@ class ocf_desktop {
   include ocf_desktop::grub
   include ocf_desktop::modprobe
   include ocf_desktop::packages
+  include ocf_desktop::printnotify
   include ocf_desktop::sshfs
   include ocf_desktop::stats
   include ocf_desktop::steam

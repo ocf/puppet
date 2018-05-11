@@ -25,13 +25,13 @@ from textwrap import dedent
 from traceback import format_exc
 
 import ocflib.printing.quota as quota
+import redis
 from ocflib.misc.mail import MAIL_SIGNATURE
 from ocflib.misc.mail import send_mail_user
 from ocflib.misc.mail import send_problem_report
 
 
 CONF_FILE = '/opt/share/enforcer/enforcer.conf'
-
 
 Message = namedtuple('Message', ['subject', 'body'])
 
@@ -103,13 +103,29 @@ ENFORCER_ERROR_MESSAGE = Message(
         """) + MAIL_SIGNATURE
 )
 
+NOTIFY_QUOTA_MESSAGE = dedent("""\
+        Your print job failed due to insufficient pages. Your job was
+        {pages} pages, and you have {quota} pages remaining today.\
+""")
+
+NOTIFY_JOB_ACCEPTED = dedent("""\
+        Your print job '{document}' was accepted and sent to {printer}.\
+""")
+
+NOTIFY_JOB_ERROR = dedent("""\
+        Your print job '{document}' failed due to a printer error.
+        Please contact a staff member for assistance.\
+""")
+
 
 def read_config():
     conf = ConfigParser()
     conf.read(CONF_FILE)
-    mysql_user = conf.get('enforcer', 'user')
-    mysql_passwd = conf.get('enforcer', 'passwd')
-    return mysql_user, mysql_passwd
+    mysql_user = conf.get('mysql', 'user')
+    mysql_passwd = conf.get('mysql', 'password')
+    redis_host = conf.get('broker', 'host')
+    redis_passwd = conf.get('broker', 'password')
+    return mysql_user, mysql_passwd, redis_host, redis_passwd
 
 
 def page_count(env):
@@ -147,19 +163,31 @@ def send_printer_mail(message, job, quo):
     send_mail_user(job.user, message.subject, body)
 
 
-def prehook(c, job):
+def prehook(c, r, job):
     quo = quota.get_quota(c, job.user)
     if job.pages > quo.daily:
         send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
+        msg = NOTIFY_QUOTA_MESSAGE.format(
+            pages=job.pages,
+            quota=quo.daily,
+        )
+        r.publish(job.user, msg)
         sys.exit(255)
 
 
-def posthook(c, job, success):
+def posthook(c, r, job, success):
+    msg = ''
     if success:
         quota.add_job(c, job)
+        msg = NOTIFY_JOB_ACCEPTED.format(
+            document=job.doc_name,
+            printer=job.printer,
+        )
     else:
         quo = quota.get_quota(c, job.user)
+        msg = NOTIFY_JOB_ERROR.format(document=job.doc_name)
         send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
+    r.publish(job.user, msg)
 
 
 def main(argv):
@@ -173,13 +201,14 @@ def main(argv):
                             choices={'prehook', 'posthook'})
         args = parser.parse_args(argv[1:])
         job = create_job(os.environ)
-        mysql_user, mysql_pass = read_config()
+        mysql_user, mysql_pass, redis_host, redis_pass = read_config()
+        r = redis.StrictRedis(host=redis_host, port=6378, password=redis_pass, ssl=True)
         with quota.get_connection(user=mysql_user, password=mysql_pass) as c:
             if args.command == 'prehook':
-                prehook(c, job)
+                prehook(c, r, job)
             else:
                 success = os.environ['TEASTATUS'] == '0'
-                posthook(c, job, success)
+                posthook(c, r, job, success)
     except SystemExit as e:
         sys.exit(e.code)
     except Exception:
