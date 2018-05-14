@@ -1,7 +1,7 @@
 # Firewall input rules for ocf_mirrors
 class ocf_mirrors::firewall_input {
   include ocf::firewall::allow_ssh
-  include ocf::firewall::allow_http
+  include ocf::firewall::allow_web
 
   ocf::firewall::firewall46 {
     '104 allow ftp':

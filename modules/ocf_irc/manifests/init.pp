@@ -12,7 +12,7 @@ class ocf_irc {
   }
 
   # Allow HTTP and HTTPS
-  include ocf::firewall::allow_http
+  include ocf::firewall::allow_web
 
   # Allow IRC server (SSL only)
   ocf::firewall::firewall46 {

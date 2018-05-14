@@ -1,5 +1,5 @@
 class ocf_ssh::webssh {
-  include ocf::firewall::allow_http
+  include ocf::firewall::allow_web
 
   package { ['shellinabox']:; }
 

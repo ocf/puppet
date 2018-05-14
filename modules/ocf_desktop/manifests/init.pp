@@ -26,7 +26,7 @@ class ocf_desktop {
   include ocf_desktop::xsession
 
   # Allow HTTP and HTTPS
-  include ocf::firewall::allow_http
+  include ocf::firewall::allow_web
 
   # Allow Steam login and Steam content
   ocf::firewall::firewall46 {
