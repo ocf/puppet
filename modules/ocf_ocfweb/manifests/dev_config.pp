@@ -11,6 +11,7 @@ class ocf_ocfweb::dev_config($group = 'ocfstaff') {
 
   $broker = "redis://:${redis_password}@admin.ocf.berkeley.edu:6378"
   $backend = $broker
+  $redis_uri = "rediss://:${redis_password}@admin.ocf.berkeley.edu:6378/1"
 
 
   # libcrack2-dev is a dependency of the crypto libraries that
