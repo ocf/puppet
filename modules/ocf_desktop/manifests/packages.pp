@@ -53,12 +53,15 @@ class ocf_desktop::packages {
 
   # Remove some packages
   package {
+    # causes the fcitx menu to vanish
+    'ayatana-indicator-application':
+      ensure => purged;
     # causes gid conflicts
     'sane-utils':
-      ensure  => purged;
+      ensure => purged;
     # xpdf takes over as default sometimes
     'xpdf':
-      ensure  => purged;
+      ensure => purged;
   }
 
   # install packages without recommends
