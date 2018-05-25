@@ -19,6 +19,7 @@ class ocf_www::site::www {
   include apache::mod::status
   include ocf_www::mod::cgi
   include ocf_www::mod::fastcgi
+  include ocf_www::mod::fpm
   include ocf_www::mod::ocfdir
   include ocf_www::mod::php
   include ocf_www::mod::suexec
@@ -71,6 +72,11 @@ class ocf_www::site::www {
         path        => '\.(cgi|shtml|phtml|php)$',
         provider    => 'filesmatch',
         ssl_options => '+StdEnvVars',
+      },
+      {
+        path       => '\.ph(p\d?|tml)$',
+        provider   => 'filesmatch',
+        sethandler => 'proxy:unix:/run/php/%{SCRIPT_USER}-fpm.sock|fcgi://localhost/',
       },
       {
         # XXX: Strip OCFWEB_* cookies before we hit userdirs so that they

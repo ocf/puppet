@@ -1,0 +1,12 @@
+[{{user}}]
+user = "{{user}}"
+group = "ocf"
+listen = /run/php/{{user}}-fpm.sock
+listen.owner = "{{user}}"
+listen.group = "www-data"
+pm = ondemand
+pm.max_children = 3
+pm.process_idle_timeout = 30s;
+pm.max_requests = 500
+; access.log = /var/log/apache2/php-fpm/{{user}}.access.log
+security.limit_extensions = .php .php3 .php4 .php5 .php7

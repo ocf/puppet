@@ -39,9 +39,9 @@
             SetHandler fastcgi-script
         </Directory>
 
-        <FilesMatch "\.ph(p3?|tml)$">
+        <FilesMatch "\.ph(p\d?|tml)$">
             Require all granted
-            SetHandler php5-fcgi
+            SetHandler "proxy:unix:/run/php/%{SCRIPT_USER}-fpm.sock|fcgi://localhost/"
         </FilesMatch>
 
         Action php5-fcgi /php5-fcgi
