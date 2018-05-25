@@ -39,13 +39,11 @@
             SetHandler fcgid-script
         </Directory>
 
-        <FilesMatch "\.ph(p\d?|tml)$">
+        <FilesMatch "\.ph(p[3457]?|tml)$">
             Require all granted
-            SetHandler php-fcgi
+            SetHandler fcgid-script
         </FilesMatch>
 
-        Action php-fcgi /php-fcgi
-        Alias /php-fcgi /services/http/suexec/php-fcgi-wrapper
         SuexecUserGroup {{vhost.user}} ocf
     {% endif %}
 

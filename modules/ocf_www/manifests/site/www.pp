@@ -73,6 +73,11 @@ class ocf_www::site::www {
         ssl_options => '+StdEnvVars',
       },
       {
+        path       => '\.ph(p[3457]?|tml)$',
+        provider   => 'filesmatch',
+        sethandler => 'fcgid-script',
+      },
+      {
         # XXX: Strip OCFWEB_* cookies before we hit userdirs so that they
         # cannot steal other peoples sessions.
         path            => '/',
