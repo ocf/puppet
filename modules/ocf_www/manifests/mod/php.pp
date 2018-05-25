@@ -1,6 +1,4 @@
 class ocf_www::mod::php {
-  include apache::mod::proxy_fcgi
-
   package { ['php-cgi', 'php-apcu']:; }
 
   file {
