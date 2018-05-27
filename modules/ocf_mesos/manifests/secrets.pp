@@ -25,11 +25,12 @@ class ocf_mesos::secrets {
       mode   => '0700';
 
     '/opt/share/docker/secrets':
-      mode    => '0644',
-      source  => 'puppet:///private-docker/',
-      recurse => true,
-      purge   => true,
-      force   => true;
+      mode      => '0644',
+      source    => 'puppet:///private-docker/',
+      recurse   => true,
+      purge     => true,
+      force     => true,
+      show_diff => false;
   }
 
   ocf_mesos::slave::attribute { 'secrets':
