@@ -4,8 +4,8 @@ webserver: {
   ssl-host          : 0.0.0.0
   ssl-port          : 8140
 
-  ssl-cert       : /etc/puppetlabs/puppet/ssl/certs/puppet.pem
-  ssl-key        : /etc/puppetlabs/puppet/ssl/private_keys/puppet.pem
+  ssl-cert       : /etc/puppetlabs/puppet/ssl/certs/<%= @fqdn %>.pem
+  ssl-key        : /etc/puppetlabs/puppet/ssl/private_keys/<%= @fqdn %>.pem
   ssl-ca-cert    : /etc/puppetlabs/puppet/ssl/certs/ca.pem
   ssl-cert-chain : /etc/puppetlabs/puppet/ssl/certs/ca.pem
   ssl-crl-path   : /etc/puppetlabs/puppet/ssl/ca/ca_crl.pem

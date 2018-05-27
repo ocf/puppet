@@ -47,7 +47,7 @@ class ocf_puppet::puppetmaster {
       notify  => Service['puppetserver'];
 
     '/etc/puppetlabs/puppetserver/conf.d/webserver.conf':
-      source  => 'puppet:///modules/ocf_puppet/webserver.conf',
+      content => template('ocf_puppet/webserver.conf.erb'),
       require => Package['puppetserver'],
       notify  => Service['puppetserver'];
 
