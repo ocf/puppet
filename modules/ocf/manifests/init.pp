@@ -18,4 +18,6 @@ class ocf {
   include ocf::systemd
   include ocf::utils
   include ocf::walldeny
+
+  include prometheus::node_exporter
 }

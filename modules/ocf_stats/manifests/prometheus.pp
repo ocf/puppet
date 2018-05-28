@@ -1,8 +1,25 @@
 # prometheus daemon config
 class ocf_stats::prometheus {
+  file {
+    '/usr/local/bin/gen-prometheus-nodes':
+      source => 'puppet:///modules/ocf_stats/prometheus/gen-prometheus-nodes',
+      mode   => '0755';
+  }
+
+  cron { 'gen-prometheus-nodes':
+    command => '/usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json',
+    minute  => '0',
+    require => File['/usr/local/bin/gen-prometheus-nodes'];
+  }
+
+  exec { 'gen-promethues-nodes-initial':
+    command => '/usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json',
+    creates => '/var/local/prometheus-nodes.json',
+  }
+
   class { '::prometheus':
     version        => '2.0.0',
-    extra_options  => '--web.listen-address="127.0.0.1:9090" --web.external-url=http://127.0.0.1/prom',
+    extra_options  => '--web.listen-address="127.0.0.1:9090" --web.external-url=http://127.0.0.1/prometheus --storage.tsdb.retention=2y',
     alerts         => {},
     scrape_configs => [
       {
@@ -20,20 +37,14 @@ class ocf_stats::prometheus {
         'job_name'        => 'node',
         'scrape_interval' => '5s',
         'scrape_timeout'  => '5s',
-        'static_configs'  => [
+
+        'file_sd_configs' => [
           {
-            'targets' => [
-              # A list of all hosts to scrape.
-              # We should probably figure out a better way of enumerating all the
-              # hosts.
-              'leprosy:9100',
-            ],
+            'files'            => [ '/var/local/prometheus-nodes.json' ],
+            'refresh_interval' => '1h',
           },
         ],
       }
     ]
   }
-
-  # TODO: eventually roll out node exporting to all hosts, instead of just here
-  include prometheus::node_exporter
 }
