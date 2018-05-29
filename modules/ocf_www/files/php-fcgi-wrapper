@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+export PHP_FCGI_MAX_REQUESTS=10000
+exec /usr/bin/php-cgi
