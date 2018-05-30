@@ -1,3 +1,3 @@
 #!/bin/sh -eu
 /usr/local/bin/rsync-no-vanished -az --delete --safe-links \
-	rsync://rsync.us.apache.org/apache-dist/ /opt/mirrors/ftp/apache
+	rsync://rsync.apache.org/apache-dist/ /opt/mirrors/ftp/apache
