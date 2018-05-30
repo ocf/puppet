@@ -15,10 +15,19 @@ class ocf_www::mod::fcgid {
       require => File['/usr/local/bin/suexec'];
   }
 
-  apache::custom_config { 'fastcgi_options':
+  apache::custom_config { 'fcgid_options':
     content => "
       FcgidCmdOptions /usr/lib/apache2/suexec ConnectTimeout 15 MaxProcesses 1000 MinProcesses 0
-      FcgidWrapper /usr/local/bin/suexec/php-fcgi-wrapper
+      FcgidIdleTimeout 3600
+      FcgidProcessLifeTime 3600
+      FcgidMaxRequestsPerProcess 200
+      FcgidMinProcessesPerClass 0
+      FcgidWrapper /usr/local/bin/suexec/php-fcgi-wrapper .php
+      FcgidWrapper /usr/local/bin/suexec/php-fcgi-wrapper .php3
+      FcgidWrapper /usr/local/bin/suexec/php-fcgi-wrapper .php4
+      FcgidWrapper /usr/local/bin/suexec/php-fcgi-wrapper .php5
+      FcgidWrapper /usr/local/bin/suexec/php-fcgi-wrapper .php7
+      FcgidWrapper /usr/local/bin/suexec/php-fcgi-wrapper .phtml
     ",
   }
 }

@@ -73,7 +73,7 @@ class ocf_www::site::www {
         ssl_options => '+StdEnvVars',
       },
       {
-        path       => '\.ph(p[3457]?|tml)$',
+        path       => '\.(php[3457]?|phtml|fcgi)$',
         provider   => 'filesmatch',
         sethandler => 'fcgid-script',
       },
