@@ -1,0 +1,12 @@
+[Unit]
+Description=FCGI file watcher and process restarter
+Requires=network-online.target
+After=apache2.service
+
+[Service]
+User=root
+ExecStart=/usr/local/bin/fcgi-restarter
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
