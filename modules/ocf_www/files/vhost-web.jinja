@@ -32,20 +32,11 @@
             DirectoryIndex index.html index.cgi index.pl index.php index.xhtml index.htm index.shtm index.shtml
         </Directory>
 
-        <Directory /services/http/suexec>
-            Options +ExecCGI
-            AllowOverride None
+        <FilesMatch "\.(php[3457]?|phtml|fcgi)$">
             Require all granted
-            SetHandler fastcgi-script
-        </Directory>
-
-        <FilesMatch "\.ph(p3?|tml)$">
-            Require all granted
-            SetHandler php5-fcgi
+            SetHandler fcgid-script
         </FilesMatch>
 
-        Action php5-fcgi /php5-fcgi
-        Alias /php5-fcgi /services/http/suexec/php5-fcgi-wrapper
         SuexecUserGroup {{vhost.user}} ocf
     {% endif %}
 
@@ -57,5 +48,4 @@
     CustomLog /var/log/apache2/vhost-access.log combined
 
     UserDir disabled
-    suPHP_Engine off
 </VirtualHost>
