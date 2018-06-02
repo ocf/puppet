@@ -18,24 +18,38 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     # nss_updatedb for offline LDAP caching
     'nss-updatedb':;
   }
+
   package { [ 'libnss-ldapd', 'libnss-sss', 'libpam-ldap', 'libpam-sss', 'nslcd', 'nscd', 'sssd' ]:
     ensure => purged
   }
+
   file {
-    # store local copy of LDAP daily with nss_updatedb
+    # TODO: Remove this once all hosts have switched over to using cron instead
     '/etc/cron.daily/nss-updatedb':
-      mode    => '0755',
-      content => "#!/bin/sh\nnss_updatedb ldap > /dev/null",
-      require => Package['nss-updatedb'];
+      ensure => absent;
+
     # NSCD caching configuration
     '/etc/nscd.conf':
       source  => 'puppet:///modules/ocf/auth/nss/nscd.conf',
-      require => Package['unscd']; # LDAP nameservice configuration
+      require => Package['unscd'];
+
+    # LDAP nameservice configuration
     '/etc/libnss-ldap.conf':
       ensure  => symlink,
       links   => manage,
       target  => '/etc/ldap.conf',
       require => Ocf::Repackage['libnss-ldap'];
+  }
+
+  # Store local copy of LDAP daily with nss_updatedb
+  # This used to be done in /etc/cron.daily, but all the servers storing a
+  # local copy at the same time was causing the LDAP server to get rekt
+  cron {
+    'nss-updatedb':
+      command => 'nss_updatedb ldap > /dev/null',
+      hour    => '6',
+      minute  => fqdn_rand(60),
+      require => Package['nss-updatedb'],
   }
 
   # nameservice configuration
@@ -56,6 +70,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
       require => [Ocf::Repackage['libnss-ldap'], File['/etc/libnss-ldap.conf']];
     }
   }
+
   # restart NSCD
   service { 'unscd':
     subscribe => File['/etc/nscd.conf', '/etc/nsswitch.conf'],
@@ -75,6 +90,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     backup => false,
     notify => Exec['pam-auth-update']
   }
+
   exec { 'pam-auth-update':
     command     => 'pam-auth-update --package',
     refreshonly => true
