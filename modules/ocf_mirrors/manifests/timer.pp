@@ -7,7 +7,6 @@ define ocf_mirrors::timer(
   $exec_user = 'mirrors',
   $exec_start = '',
   $environments = {},
-  $stdout = '',
 ) {
   # Any meaningful second precision requires AccuracySec to be set
   $on_calendar = "${year}-${month}-${day} ${hour}:${minute}:00"

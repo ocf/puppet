@@ -18,10 +18,10 @@ define ocf::systemd::service(
     require => Package['systemd-sysv'],
   } ~>
   service { $title:
-    ensure    => $ensure,
-    enable    => $enable,
-    provider  => systemd,
-    require   => [
+    ensure   => $ensure,
+    enable   => $enable,
+    provider => systemd,
+    require  => [
       Package['systemd-sysv'],
       File["/etc/systemd/system/${title}.service"],
       Exec['systemd-reload'],

@@ -3,7 +3,7 @@ class ocf_mirrors::kali {
     'kali':
       rsync_host  => 'archive.kali.org',
       cron_minute => '15',
-      cron_hour   => '*/3';
+      cron_hour   => '0/3';
 
     'kali-images':
       rsync_host  => 'archive.kali.org',
