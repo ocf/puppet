@@ -15,8 +15,8 @@ class ocf_desktop::packages {
     ['arandr', 'atom', 'claws-mail', 'eog', 'evince-gtk', 'filezilla',
       'florence', 'freeplane', 'geany', 'gimp', 'gnome-calculator', 'gparted',
       'hexchat', 'imagej', 'inkscape', 'lyx', 'mssh', 'mumble', 'numlockx',
-      'remmina', 'simple-scan', 'ssh-askpass-gnome', 'texmaker', 'texstudio',
-      'vlc', 'xarchiver', 'xcape', 'xterm', 'zenmap']:;
+      'quassel-client', 'remmina', 'simple-scan', 'ssh-askpass-gnome', 'texmaker', 
+      'texstudio', 'vlc', 'xarchiver', 'xcape', 'xterm', 'zenmap']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils',
       'gnome-icon-theme', 'redshift', 'xfce4-whiskermenu-plugin']:;
