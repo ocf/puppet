@@ -42,6 +42,11 @@ class ocf_www::mod::fcgid {
       # forever when started, but with many users this does not work
       FcgidMinProcessesPerClass 0
 
+      # Set the default max request size to 1 GiB, so that uploads are not
+      # blocked. Otherwise, the default here is something ridiculously low,
+      # like 128 KiB
+      FcgidMaxRequestLen 1073741824
+
       # These are specified individually because .fcgi files do not use this
       # wrapper and there is no regex option for it
       FcgidWrapper /usr/local/bin/suexec/php-fcgi-wrapper .php
