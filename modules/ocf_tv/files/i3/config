@@ -12,6 +12,8 @@
 
 set $mod        Mod4
 set $term       i3-sensible-terminal
+set $browser    google-chrome-stable
+set $browseralt firefox
 
 # Run on startup
 exec_always feh --no-startup-id --bg-scale '/opt/share/background.png'
@@ -150,6 +152,10 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
+
+# Web Browser
+bindsym $mod+w exec --no-startup-id google-chrome-stable
+bindsym $mod+Shift+w exec --no-startup-id $browseralt
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
