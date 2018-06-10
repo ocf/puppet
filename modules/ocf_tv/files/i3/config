@@ -172,6 +172,9 @@ mode "volume" {
 bindsym $mod+Shift+v mode "volume"
 bindsym $mod+v exec --no-startup-id pavucontrol
 
+# htop
+bindsym $mod+i exec --no-startup-id $term -e htop
+
 # Web Browser
 bindsym $mod+w exec --no-startup-id google-chrome-stable
 bindsym $mod+Shift+w exec --no-startup-id $browseralt
