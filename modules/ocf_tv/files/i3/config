@@ -74,7 +74,7 @@ bindsym $mod+Shift+Right move right
 bindsym $mod+semicolon split h
 
 # split in vertical orientation
-bindsym $mod+v split v
+bindsym $mod+slash split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen
@@ -152,6 +152,25 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
+
+# Volume Control
+mode "volume" {
+    # Volume up
+    bindsym i exec --no-startup-id amixer -D pulse sset Master 5%+
+    bindsym Shift+i exec --no-startup-id amixer -D pulse sset Master 15%+
+    # Volume down
+    bindsym d exec --no-startup-id amixer -D pulse sset Master 5%-
+    bindsym Shift+d exec --no-startup-id amixer -D pulse sset Master 15%-
+    # Mute / Max
+    bindsym m exec --no-startup-id amixer -D pulse sset Master 0%
+    bindsym Shift+m exec --no-startup-id amixer -D pulse sset Master 100%
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+Shift+v mode "volume"
+bindsym $mod+v exec --no-startup-id pavucontrol
 
 # Web Browser
 bindsym $mod+w exec --no-startup-id google-chrome-stable
