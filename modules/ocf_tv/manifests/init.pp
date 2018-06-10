@@ -13,6 +13,7 @@ class ocf_tv {
       'feh',
       'i3',
       'nodm',
+      'rofi',
       'vlc',
       'x11vnc',
       'xinit',
