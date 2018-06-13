@@ -4,3 +4,5 @@ classes:
 ocf::auth::glogin: [[ocf, ALL], [sorry, ALL]]
 
 staff_only: false
+
+ocf::firewall::allow_other_traffic: false
