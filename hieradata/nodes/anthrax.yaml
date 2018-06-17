@@ -2,3 +2,5 @@ classes:
     - ocf_mail
 
 ocf::packages::postfix::manage: false
+
+ocf::firewall::allow_other_traffic: false
