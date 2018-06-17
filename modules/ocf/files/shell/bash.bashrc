@@ -21,6 +21,10 @@ mesg n
 HISTCONTROL=ignoreboth
 HISTTIMEFORMAT="%F %T "
 
+# Check the window size after each command, and update LINES and COLUMNS if
+# needed
+shopt -s checkwinsize
+
 # Aliases
 alias ls='ls -Fh'
 alias quota='/usr/bin/quota -Qs'
