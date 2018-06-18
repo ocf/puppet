@@ -21,6 +21,9 @@ mesg n
 HISTCONTROL=ignoreboth
 HISTTIMEFORMAT="%F %T "
 
+# Append to history file instead of overwriting it
+shopt -s histappend
+
 # Check the window size after each command, and update LINES and COLUMNS if
 # needed
 shopt -s checkwinsize
