@@ -45,6 +45,12 @@ class ocf::packages::shell {
       require => Package['bash'];
   }
 
+  # Settings in these files are handled by our custom bash.bashrc and bash.bash_logout
+  file {
+    ['/etc/skel/.bashrc', '/etc/skel/.profile', '/etc/skel/.bash_logout']:
+      ensure => absent;
+  }
+
   exec { 'compile-terminfo':
     command     => 'tic -x /usr/share/terminfo/x/xterm-termite',
     refreshonly => true;
