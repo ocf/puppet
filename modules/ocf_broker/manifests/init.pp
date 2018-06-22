@@ -48,4 +48,22 @@ class ocf_broker {
     service { 'hitch':
       require => [ Package['hitch'], Service['redis-server']];
     }
+
+    # firewall input rule, allow hitch (redis tls proxy)
+    firewall_multi {
+      '101 allow hitch (IPv4)':
+        chain     => 'PUPPET-INPUT',
+        src_range => lookup('desktop_src_range_4'),
+        proto     => 'tcp',
+        dport     => 6378,
+        action    => 'accept';
+
+      '101 allow hitch (IPv6)':
+        chain     => 'PUPPET-INPUT',
+        src_range => lookup('desktop_src_range_6'),
+        proto     => 'tcp',
+        action    => 'accept',
+        dport     => 6378,
+        provider  => 'ip6tables';
+    }
 }
