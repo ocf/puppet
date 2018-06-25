@@ -15,11 +15,10 @@ class ocf_mirrors::centos {
       ts_path       => 'TIME';
   }
 
-  cron {
+  ocf_mirrors::timer {
     'centos':
-      command => '/opt/mirrors/project/centos/sync-archive > /dev/null',
-      user    => 'mirrors',
-      hour    => '*/3',
-      minute  => '22';
+      exec_start => '/opt/mirrors/project/centos/sync-archive',
+      hour       => '0/3',
+      minute     => '22';
   }
 }

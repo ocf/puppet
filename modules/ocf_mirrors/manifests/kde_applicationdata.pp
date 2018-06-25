@@ -17,11 +17,10 @@ class ocf_mirrors::kde_applicationdata {
       ts_path       => 'last-updated';
   }
 
-  cron {
+  ocf_mirrors::timer {
     'kde-applicationdata':
-      command => '/opt/mirrors/project/kde-applicationdata/sync-archive > /dev/null',
-      user    => 'mirrors',
-      hour    => '*/2',
-      minute  => '0',
+      exec_start => '/opt/mirrors/project/kde-applicationdata/sync-archive',
+      hour       => '0/2',
+      minute     => '0',
   }
 }

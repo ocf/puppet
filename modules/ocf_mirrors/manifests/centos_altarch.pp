@@ -16,11 +16,10 @@ class ocf_mirrors::centos_altarch {
       ts_path       => 'TIME';
   }
 
-  cron {
+  ocf_mirrors::timer {
     'centos-altarch':
-      command => '/opt/mirrors/project/centos-altarch/sync-archive > /dev/null',
-      user    => 'mirrors',
-      hour    => '*/3',
-      minute  => '44';
+      exec_start => '/opt/mirrors/project/centos-altarch/sync-archive',
+      hour       => '0/3',
+      minute     => '44',
   }
 }

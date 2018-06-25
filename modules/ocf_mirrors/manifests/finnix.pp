@@ -20,9 +20,8 @@ class ocf_mirrors::finnix {
       show_diff => false;
   }
 
-  cron { 'finnix':
-    command => '/opt/mirrors/project/finnix/sync-releases > /dev/null',
-    user    => 'mirrors',
-    minute  => '41';
+  ocf_mirrors::timer { 'finnix':
+    exec_start => '/opt/mirrors/project/finnix/sync-releases',
+    minute     => '41',
   }
 }

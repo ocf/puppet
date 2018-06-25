@@ -16,11 +16,10 @@ class ocf_mirrors::centos_debuginfo {
       ts_path       => 'TIME';
   }
 
-  cron {
+  ocf_mirrors::timer {
     'centos-debuginfo':
-      command => '/opt/mirrors/project/centos-debuginfo/sync-archive > /dev/null',
-      user    => 'mirrors',
-      hour    => '*/3',
-      minute  => '56';
+      exec_start => '/opt/mirrors/project/centos-debuginfo/sync-archive',
+      hour       => '0/3',
+      minute     => '56';
   }
 }

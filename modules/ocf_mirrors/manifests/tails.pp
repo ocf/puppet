@@ -16,10 +16,9 @@ class ocf_mirrors::tails {
     ts_path       => 'project/trace',
   }
 
-  cron {
+  ocf_mirrors::timer {
     'tails':
-      command => '/opt/mirrors/project/tails/sync > /dev/null',
-      user    => 'mirrors',
-      minute  => '15';
+      exec_start => '/opt/mirrors/project/tails/sync > /dev/null',
+      minute     => '15';
   }
 }

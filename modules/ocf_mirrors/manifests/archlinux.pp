@@ -15,11 +15,10 @@ class ocf_mirrors::archlinux {
     ts_path       => 'lastsync',
   }
 
-  cron {
+  ocf_mirrors::timer {
     'archlinux':
-      command => '/opt/mirrors/project/archlinux/sync-archive > /dev/null',
-      user    => 'mirrors',
-      hour    => '*/3',
-      minute  => '22';
+      exec_start => '/opt/mirrors/project/archlinux/sync-archive',
+      hour       => '0/3',
+      minute     => '22';
   }
 }

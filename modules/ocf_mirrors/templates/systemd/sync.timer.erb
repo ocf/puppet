@@ -1,0 +1,10 @@
+[Unit]
+Description=Sync timer for <%= @title %>
+After=network.target
+Wants=network.target
+
+[Timer]
+OnCalendar=<%= @on_calendar %>
+
+[Install]
+WantedBy=timers.target

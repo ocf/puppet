@@ -17,10 +17,9 @@ class ocf_mirrors::ubuntu {
     group  => mirrors;
   }
 
-  cron { 'ubuntu-releases':
-    command => '/opt/mirrors/project/ubuntu/sync-releases > /dev/null',
-    user    => 'mirrors',
-    hour    => '*/7',
-    minute  => '18';
+  ocf_mirrors::timer { 'ubuntu-releases':
+    exec_start => '/opt/mirrors/project/ubuntu/sync-releases > /dev/null',
+    hour       => '0/7',
+    minute     => '18';
   }
 }

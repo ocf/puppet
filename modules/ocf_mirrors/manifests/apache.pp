@@ -16,11 +16,10 @@ class ocf_mirrors::apache {
     ts_path       => 'zzz/time.txt',
   }
 
-  cron {
+  ocf_mirrors::timer {
     'apache':
-      command => '/opt/mirrors/project/apache/sync-archive > /dev/null',
-      user    => 'mirrors',
-      hour    => '*/8',
-      minute  => '37';
+      exec_start => '/opt/mirrors/project/apache/sync-archive',
+      hour       => '0/8',
+      minute     => '37';
   }
 }

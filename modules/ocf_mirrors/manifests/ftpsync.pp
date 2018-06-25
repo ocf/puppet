@@ -11,6 +11,7 @@ define ocf_mirrors::ftpsync(
     $mirror_name = 'mirrors.ocf.berkeley.edu',
     $mirror_path = "/opt/mirrors/ftp/${title}",
     $project_path = "/opt/mirrors/project/${title}",
+    $use_systemd = true,
   ) {
 
   file {
@@ -42,11 +43,21 @@ define ocf_mirrors::ftpsync(
     require => File[$project_path];
   }
 
-  cron { "ftpsync-${title}":
-    command => "BASEDIR=${project_path} ${project_path}/bin/ftpsync > /dev/null 2>&1",
-    user    => 'mirrors',
-    minute  => $cron_minute,
-    hour    => $cron_hour,
-    require => File["${project_path}/bin", "${project_path}/etc/ftpsync.conf"];
+  if $use_systemd {
+    ocf_mirrors::timer { "ftpsync-${title}":
+      exec_start   => "${project_path}/bin/ftpsync",
+      environments => { 'BASEDIR' => $project_path },
+      hour         => $cron_hour,
+      minute       => $cron_minute,
+      require      => File["${project_path}/bin", "${project_path}/etc/ftpsync.conf"],
+    }
+  } else {
+    cron { "ftpsync-${title}":
+      command => "BASEDIR=${project_path} ${project_path}/bin/ftpsync > /dev/null 2>&1",
+      user    => 'mirrors',
+      minute  => $cron_minute,
+      hour    => $cron_hour,
+      require => File["${project_path}/bin", "${project_path}/etc/ftpsync.conf"];
+    }
   }
 }

@@ -15,11 +15,10 @@ class ocf_mirrors::parrot {
     ts_path       => 'last-sync.txt',
   }
 
-  cron {
+  ocf_mirrors::timer {
     'parrot':
-      command => '/opt/mirrors/project/parrot/sync > /dev/null',
-      user    => 'mirrors',
-      minute  => '15',
-      hour    => '*/3',
+      exec_start => '/opt/mirrors/project/parrot/sync',
+      minute     => '15',
+      hour       => '0/3',
   }
 }

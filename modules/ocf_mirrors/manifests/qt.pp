@@ -16,11 +16,10 @@ class ocf_mirrors::qt {
     ts_path       => 'timestamp.txt',
   }
 
-  cron {
+  ocf_mirrors::timer {
     'qt':
-      command => '/opt/mirrors/project/qt/sync-archive > /dev/null',
-      user    => 'mirrors',
-      hour    => '*/4',
-      minute  => '5';
+      exec_start => '/opt/mirrors/project/qt/sync-archive',
+      hour       => '0/4',
+      minute     => '5',
   }
 }
