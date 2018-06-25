@@ -11,7 +11,7 @@ define ocf_mirrors::ftpsync(
     $mirror_name = 'mirrors.ocf.berkeley.edu',
     $mirror_path = "/opt/mirrors/ftp/${title}",
     $project_path = "/opt/mirrors/project/${title}",
-    $use_systemd = false,
+    $use_systemd = true,
   ) {
 
   file {

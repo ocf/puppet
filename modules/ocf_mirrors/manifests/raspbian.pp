@@ -3,7 +3,6 @@ class ocf_mirrors::raspbian {
     rsync_host  => 'archive.raspbian.org',
     rsync_path  => 'archive',
     cron_minute => '45',
-    use_systemd => true,
   }
 
   ocf_mirrors::monitoring { 'raspbian':

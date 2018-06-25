@@ -20,6 +20,6 @@ class ocf_mirrors::centos_altarch {
     'centos-altarch':
       exec_start => '/opt/mirrors/project/centos-altarch/sync-archive',
       hour       => '0/3',
-      minute     => '44';
+      minute     => '44',
   }
 }

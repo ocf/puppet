@@ -3,7 +3,6 @@ class ocf_mirrors::puppetlabs {
     rsync_host  => 'rsync.puppet.com',
     rsync_path  => 'packages/apt',
     cron_minute => '55',
-    use_systemd => true;
   }
 
   ocf_mirrors::monitoring { 'puppetlabs':
