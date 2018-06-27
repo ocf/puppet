@@ -1,2 +1,4 @@
 classes:
     - ocf_mysql
+
+ocf::firewall::allow_other_traffic: false

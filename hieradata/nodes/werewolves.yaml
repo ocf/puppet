@@ -4,3 +4,4 @@ classes:
 ocf::auth::glogin: [[ocfdev, ALL]]
 
 staff_only: false
+ocf::firewall::allow_other_traffic: false
