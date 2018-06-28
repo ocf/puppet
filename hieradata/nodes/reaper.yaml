@@ -1,2 +1,4 @@
 classes:
     - ocf_jenkins
+
+ocf::firewall::allow_other_traffic: false
