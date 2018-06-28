@@ -29,7 +29,7 @@ LimitRequestBody 256m
 Browsing Off
 BrowseOrder allow,deny
 BrowseAllow from 169.229.226.0/24
-BrowseAllow from 2607:f140:8801::/64
+BrowseAllow from 2607:f140:8801::/48
 BrowseAllow from 127.0.0.0/8
 BrowseAllow from ::1
 BrowseRemoteProtocols CUPS
@@ -43,7 +43,7 @@ DefaultAuthType Basic
   # Allow shared printing and remote administration...
   Order allow,deny
   Allow from 169.229.226.0/24
-  Allow from [2607:f140:8801::]/64
+  Allow from [2607:f140:8801::]/48
   Allow from 127.0.0.0/8
   Allow from [::1]
 </Location>
@@ -52,7 +52,7 @@ DefaultAuthType Basic
   # Allow remote administration...
   Order allow,deny
   Allow from 169.229.226.0/24
-  Allow from [2607:f140:8801::]/64
+  Allow from [2607:f140:8801::]/48
   Allow from 127.0.0.0/8
   Allow from [::1]
 </Location>
@@ -62,7 +62,7 @@ DefaultAuthType Basic
   # Allow remote access to the configuration files...
   Order allow,deny
   Allow from 169.229.226.0/24
-  Allow from [2607:f140:8801::]/64
+  Allow from [2607:f140:8801::]/48
   Allow from 127.0.0.0/8
   Allow from [::1]
 </Location>

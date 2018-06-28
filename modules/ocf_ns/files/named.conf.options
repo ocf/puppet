@@ -1,7 +1,7 @@
 // ACLs
 acl "ocf" {
   169.229.226.0/24;
-  2607:f140:8801::/64;
+  2607:f140:8801::/48;
 };
 
 acl "ucb" {
@@ -39,7 +39,7 @@ options {
   // Neither does using disable-algorithms on only the mesos zone
   dnssec-validation no;
 
-  // Allow queries from anywhere and zone transfers from OCF/UCB/gandi.net
+  // Allow queries from anywhere and zone transfers from OCF/UCB
   allow-query { any; };
   allow-transfer { "ocf"; "ucb"; "localhost"; };
 
