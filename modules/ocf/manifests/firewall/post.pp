@@ -118,7 +118,7 @@ class ocf::firewall::post {
       '999 reject unrecognized packets from within OCF network (IPv6)':
         provider => 'ip6tables',
         chain    => 'PUPPET-INPUT',
-        source   => '2607:f140:8801::/64',
+        source   => '2607:f140:8801::/48',
         proto    => 'all',
         action   => 'reject',
         before   => undef;
