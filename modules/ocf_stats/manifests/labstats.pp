@@ -9,48 +9,6 @@ class ocf_stats::labstats {
       groups  => 'sys';
   }
 
-  # TODO: Remove these two, the labstats repo only needs to have the desktop
-  # update endpoint and maybe the web interface moved to ocfweb (if we want a
-  # graph of toner levels, that is)
-  vcsrepo { '/opt/stats/labstats':
-    ensure   => latest,
-    provider => git,
-    revision => 'master',
-    source   => 'https://github.com/ocf/labstats.git';
-  }
-
-  file { '/opt/stats/labstats/labstats/settings.py':
-    source  => 'puppet:///private/stats/settings.py',
-    owner   => ocfstats,
-    group   => www-data,
-    mode    => '0640',
-    require => Vcsrepo['/opt/stats/labstats'];
-  }
-
-  # TODO: Remove this by moving the endpoint for desktop session updates to
-  # ocfweb API (rt#6624)
-  apache::vhost { 'labstats.ocf.berkeley.edu':
-    servername  => 'labstats.ocf.berkeley.edu',
-    port        => 444,
-    docroot     => '/opt/stats/labstats/cgi/',
-    options     => ['-Indexes'],
-
-    ssl         => true,
-    ssl_key     => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert    => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain   => '/etc/ssl/certs/incommon-intermediate.crt',
-
-    directories => [{
-      path        => '/opt/stats/labstats/cgi/',
-      options     => ['+ExecCGI'],
-
-      addhandlers => [{
-        handler    => 'cgi-script',
-        extensions => ['.cgi']
-      }]
-    }];
-  }
-
   $file_defaults = {
     owner => ocfstats,
     group => ocfstats,

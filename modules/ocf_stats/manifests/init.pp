@@ -10,5 +10,4 @@ class ocf_stats {
   include apache
   include ocf_stats::labstats
   include ocf_stats::munin
-  include ocf_stats::www
 }
