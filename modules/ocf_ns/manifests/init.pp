@@ -4,9 +4,11 @@ class ocf_ns {
     require => Package['bind9'];
   }
 
+  $letsencrypt_ddns_key = assert_type(Stdlib::Base64, hiera('letsencrypt::ddns::key'))
+
   file {
     '/etc/bind/named.conf.options':
-      source  => 'puppet:///modules/ocf_ns/named.conf.options',
+      content => template('ocf_ns/named.conf.options.erb'),
       require => Package['bind9'],
       notify  => Service['bind9'];
 

@@ -53,3 +53,13 @@ zone "multi.uribl.com" {
   type forward;
   forwarders {};
 };
+
+key "letsencrypt.ocf.io" {
+  // Unfortunately bind9 does not appear to support algorithms stronger than
+  // hmac-md5 for user keys (used for dynamic DNS), but we can make the key
+  // size fairly large at least. HMAC with md5 does not suffer from the
+  // collision problems that md5 has, but ideally this would still be changed
+  // to something stronger in the future.
+  algorithm HMAC-MD5;
+  secret "<%= @letsencrypt_ddns_key -%>";
+};
