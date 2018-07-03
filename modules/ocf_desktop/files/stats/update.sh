@@ -1,15 +1,21 @@
 #!/bin/bash
-# imvirt spews dmesg errors on stderr
-# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=842226
-[ "$(imvirt 2>/dev/null)" == "Physical" ] || exit 0 # only count hours on desktops
+
+# don't trigger on desktop-like VMs
+[ "$(facter virtual)" == "physical" ] || exit 0
+
+# state can be "active" "cleanup"
+# "active" implies a current logged-in session
+# "cleanup" triggers closing of the session
+# other files to look at: session-cleanup and session-setup in /etc/lightdm
 
 CUR_USER=$(who | awk '$NF == "(:0)" { print $1 }')
-DATA="state=inactive"
 
-if [ -n "$CUR_USER" ]; then
-	DATA="state=active&user=$CUR_USER"
+# if a user is logged in, the state is active, else, take it from argv[1]
+# (used when calling update-delay.sh from the lightdm session-cleanup script)
+[[ -n "$CUR_USER" ]] && STATE="active" || STATE="$1"
+
+# when a user is logged or once during cleanup, otherwise, stay silent
+if [[ -n "$STATE" ]]; then
+    curl -H "Content-Type: application/json" -X POST -d "{\"user\": \"$CUR_USER\", \"state\":\"$STATE\"}" \
+         https://www.ocf.berkeley.edu/api/session/log 2>/dev/null
 fi
-
-curl --data "$DATA" \
-    https://labstats.ocf.berkeley.edu:444/update.cgi \
-	2>/dev/null

@@ -7,4 +7,4 @@ if [ -n "$USER" ]; then
   pkill -9 -u $USER
 fi
 
-sudo -u ocfstats "/opt/stats/update-delay.sh" &
+sudo -u ocfstats /opt/stats/update-delay.sh cleanup &
