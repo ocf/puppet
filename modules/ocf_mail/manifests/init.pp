@@ -33,4 +33,18 @@ class ocf_mail {
     notify  => Service['postfix'],
     require => Package['postfix'],
   }
+
+  # Require authentication for SMTP submission, even if within the OCF.
+  # Otherwise, users can spoof each other on port 587
+  augeas { '/etc/postfix/master.cf':
+    context => '/files/etc/postfix/master.cf',
+    changes => [
+      'set submission/command "smtpd
+          -o syslog_name=postfix/submission
+          -o smtpd_sasl_auth_enable=yes
+          -o smtpd_recipient_restrictions=permit_sasl_authenticated,reject"',
+    ],
+    notify  => Service['postfix'],
+    require => Package['postfix'],
+  }
 }
