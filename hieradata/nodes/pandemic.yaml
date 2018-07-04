@@ -10,3 +10,5 @@ ocf::packages::ntp::peers:
     - hal.ocf.berkeley.edu
     - jaws.ocf.berkeley.edu
     - riptide.ocf.berkeley.edu
+
+ocf::firewall::allow_other_traffic: false
