@@ -1,5 +1,3 @@
 classes:
     - ocf_kerberos
     - ocf_ldap
-
-ocf::firewall::allow_other_traffic: false

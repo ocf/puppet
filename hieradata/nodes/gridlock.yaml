@@ -1,4 +1,2 @@
 classes:
     - ocf_broker
-
-ocf::firewall::allow_other_traffic: false

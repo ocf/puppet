@@ -3,5 +3,3 @@ classes:
     - ocf_ssl::default_bundle
 
 owner: kpengboy
-
-ocf::firewall::allow_other_traffic: false

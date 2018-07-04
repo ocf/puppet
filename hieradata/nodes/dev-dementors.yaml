@@ -1,4 +1,2 @@
 classes:
     - ocf_stats
-
-ocf::firewall::allow_other_traffic: false

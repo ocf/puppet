@@ -4,3 +4,5 @@ classes:
 ocf::auth::glogin: [[ocfhpc, ALL]]
 
 staff_only: false
+# TODO: temporary, remove
+ocf::firewall::reject_unrecognized_input: false

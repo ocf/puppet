@@ -1,7 +1,5 @@
 class ocf::firewall(
-  # Temporary variable for enabling mandatory input packet filtering on a
-  # host-by-host basis.
-  $allow_other_traffic = true,
+  $reject_unrecognized_input = true,
   ) {
   # Install prerequisite packages (that is, netfilter-persistent)
   include firewall

@@ -1,4 +1,2 @@
 classes:
     - ocf_irc
-
-ocf::firewall::allow_other_traffic: false

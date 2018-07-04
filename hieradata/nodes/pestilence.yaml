@@ -2,3 +2,6 @@ classes:
     - ocf_dhcp
     - ocf_ns
     - ocf_rancid
+
+# TODO: temporary, remove
+ocf::firewall::reject_unrecognized_input: false

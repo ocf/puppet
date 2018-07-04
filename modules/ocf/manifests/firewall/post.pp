@@ -68,8 +68,7 @@ class ocf::firewall::post {
   }
 
   # reject from hosts in internal zone range but not actually internal
-  # TODO: eliminate this if statement once testing is complete
-  if !$ocf::firewall::allow_other_traffic {
+  if $ocf::firewall::reject_unrecognized_input {
     $reject_all = lookup('internal_zone_exceptions')
     ocf::firewall::firewall46 { '997 reject internal-zone-exception input':
       opts   => {
@@ -105,8 +104,7 @@ class ocf::firewall::post {
   # These rules intentionally apply only to addresses within our network as a reminder that
   # it is the external firewall's job to filter external packets.
 
-  # TODO: eliminate this if statement once testing is complete
-  if !$ocf::firewall::allow_other_traffic {
+  if $ocf::firewall::reject_unrecognized_input {
     firewall_multi {
       '999 reject unrecognized packets from within OCF network (IPv4)':
         chain  => 'PUPPET-INPUT',
