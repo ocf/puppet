@@ -30,4 +30,6 @@ class ocf_filehost {
     'nfs-server':
       subscribe => File['/etc/exports'],
   }
+
+  include ocf::firewall::nfs
 }

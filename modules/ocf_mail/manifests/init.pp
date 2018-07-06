@@ -1,6 +1,5 @@
 class ocf_mail {
   include ocf_ssl::default_bundle
-
   include ocf_mail::spam
   include ocf_mail::site_ocf
   include ocf_mail::site_vhost
@@ -46,5 +45,23 @@ class ocf_mail {
     ],
     notify  => Service['postfix'],
     require => Package['postfix'],
+  }
+
+  ocf::firewall::firewall46 {
+    '101 allow submission':
+      opts => {
+        chain  => 'PUPPET-INPUT',
+        proto  => 'tcp',
+        dport  => 587,
+        action => 'accept',
+      };
+
+    '102 allow smtp':
+      opts => {
+        chain  => 'PUPPET-INPUT',
+        proto  => 'tcp',
+        dport  => 25,
+        action => 'accept',
+      };
   }
 }

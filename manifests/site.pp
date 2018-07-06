@@ -48,9 +48,11 @@ Cron {
 }
 
 Firewall_multi {
-  before => Class['ocf::firewall::post'],
+  require => Class['ocf::firewall::pre'],
+  before  => Class['ocf::firewall::post'],
 }
 
 Ocf::Firewall::Firewall46 {
-  before => Class['ocf::firewall::post'],
+  require => Class['ocf::firewall::pre'],
+  before  => Class['ocf::firewall::post'],
 }

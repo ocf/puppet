@@ -21,7 +21,6 @@ class ocf::networking(
 
   # packages
   if $bridge {
-    include ocf::firewall
     package { 'bridge-utils': }
   }
 

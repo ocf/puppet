@@ -1,4 +1,5 @@
 class ocf_docker {
+  include ocf::firewall::allow_web
   include ocf::packages::docker
   require ocf_ssl::default_bundle
 

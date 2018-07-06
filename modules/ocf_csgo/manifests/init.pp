@@ -1,5 +1,6 @@
 class ocf_csgo {
   include ocf::apt::i386
+  include ocf::firewall::allow_desktops
 
   user { 'ocfcsgo':
     comment => 'Counter-Strike Server',

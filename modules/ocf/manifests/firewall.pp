@@ -1,13 +1,14 @@
-class ocf::firewall {
+class ocf::firewall(
+  $reject_unrecognized_input = true,
+  ) {
   # Install prerequisite packages (that is, netfilter-persistent)
   include firewall
+  require ocf::firewall::chains
 
-  include ocf::firewall::chains
+  # Use an explicit class statement so the require on ocf::firewall::chains
+  # applies to these
+  class { ['ocf::firewall::pre', 'ocf::firewall::post']:; }
 
-  class {
-    ['ocf::firewall::post']:
-      require => Class['ocf::firewall::chains'],
-  }
 
   # One unpleasant thing about the puppetlabs-firewall module is that it
   # calls iptables-save, which saves all iptables rules when it runs,

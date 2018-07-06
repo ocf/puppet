@@ -28,4 +28,15 @@ class ocf_puppetdb {
     manage_firewall    => true,
     ssl_set_cert_paths => true,
   }
+
+  # firewall input, allow access to ports 8081, the puppet DB port
+  ocf::firewall::firewall46 {
+    '101 allow puppet DB port':
+      opts => {
+        chain  => 'PUPPET-INPUT',
+        proto  => 'tcp',
+        dport  => 8081,
+        action => 'accept',
+      };
+  }
 }

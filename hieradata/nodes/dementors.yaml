@@ -1,2 +1,5 @@
 classes:
     - ocf_stats
+
+# TODO: temporary, remove
+ocf::firewall::reject_unrecognized_input: false

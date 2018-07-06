@@ -20,3 +20,33 @@ mesos_slaves:
     - riptide
 
 browser_homepage: https://www.ocf.berkeley.edu/about/lab/open-source
+
+#special devices
+devices_ipv4_only:
+    - corruption-mgmt
+    - hal-mgmt
+    - jaws-mgmt
+    - logjam
+    - pagefault
+    - pandemic-mgmt
+    - papercut
+    - riptide-mgmt
+
+devices_ipv46:
+    - radiation
+
+internal_zone_exceptions:
+    - tsunami
+    - werewolves
+    - death
+    - dev-tsunami
+    - dev-werewolves
+    - dev-death
+
+# IPv4 and IPv6 src ranges for types of servers
+internal_zone_range_4: 169.229.226.5-169.229.226.90
+desktop_src_range_4: 169.229.226.100-169.229.226.139
+staffvm_src_range_4: 169.229.226.200-169.229.226.252
+internal_zone_range_6: 2607:f140:8801::1:5-2607:f140:8801::1:90
+desktop_src_range_6: 2607:f140:8801::1:100-2607:f140:8801::1:139
+staffvm_src_range_6: 2607:f140:8801::1:200-2607:f140:8801::1:252

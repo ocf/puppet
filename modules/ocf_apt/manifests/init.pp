@@ -1,4 +1,5 @@
 class ocf_apt {
+  include ocf::firewall::allow_web
   include ocf_ssl::default_bundle
 
   user { 'ocfapt':

@@ -1,4 +1,6 @@
 class ocf_puppet::puppetboard {
+  include ocf::firewall::allow_web
+
   $puppet_fqdn = $::host_env ? {
     'dev'  => 'dev-puppet.ocf.berkeley.edu',
     'prod' => 'puppet.ocf.berkeley.edu',
