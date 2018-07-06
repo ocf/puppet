@@ -5,9 +5,11 @@ class ocf_mesos::master::webui(
     $marathon_fqdn,
     $marathon_http_password,
 ) {
-  require ocf_ssl::default_bundle
+  require ocf::ssl::default_incommon
 
-  ocf_ssl::bundle { 'wildcard.agent.mesos.ocf.berkeley.edu':; }
+  ocf::ssl::bundle { 'wildcard.agent.mesos.ocf.berkeley.edu':
+    intermediate_source => 'puppet:///modules/ocf/ssl/incommon-intermediate.crt',
+  }
 
   # We limit access to ocfroot only via PAM.
   file {
@@ -219,7 +221,7 @@ class ocf_mesos::master::webui(
 
         require          => [
           File['/etc/pam.d/mesos_master_webui'],
-          Ocf_ssl::Bundle['wildcard.agent.mesos.ocf.berkeley.edu'],
+          Ocf::Ssl::Bundle['wildcard.agent.mesos.ocf.berkeley.edu'],
         ];
 
       "${slave}-agent-http-redirect":

@@ -1,5 +1,5 @@
 class ocf_broker {
-    include ocf_ssl::default_bundle
+    include ocf::ssl::default_incommon
 
     package { ['redis-server', 'hitch']: }
 

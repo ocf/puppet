@@ -1,13 +1,15 @@
-define ocf_ssl::bundle(
-  $intermediate_source = 'puppet:///modules/ocf_ssl/incommon-intermediate.crt',
+define ocf::ssl::bundle(
+  $intermediate_source = 'puppet:///modules/ocf/ssl/lets-encrypt.crt',
   $cert_source = "puppet:///private/ssl/${title}.crt",
   $key_source = "puppet:///private/ssl/${title}.key",
+  $owner = 'root',
+  $group = 'ssl-cert',
 ) {
-  require ocf_ssl
+  require ocf::ssl::setup
 
   file {
     default:
-      group   => ssl-cert;
+      group   => $group;
 
     "/etc/ssl/private/${title}.key":
       source => $key_source,
@@ -30,12 +32,14 @@ define ocf_ssl::bundle(
 
   concat {
     default:
-      owner          => root,
-      group          => ssl-cert,
+      owner          => $owner,
+      group          => $group,
 
       ensure_newline => true;
+
     $bundle:
       mode  => '0644';
+
     $pem:
       mode  => '0640';
   }

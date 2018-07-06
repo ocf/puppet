@@ -1,5 +1,5 @@
 class ocf_mirrors {
-  include ocf_ssl::default_bundle
+  include ocf::ssl::default_incommon
   require ocf::packages::rsync
 
   include ocf_mirrors::ftp

@@ -1,5 +1,5 @@
 class ocf_puppetdb {
-  include ocf_ssl::default_bundle
+  include ocf::ssl::default_incommon
 
   class { 'puppetdb::database::postgresql':
     # Only listen locally since puppetdb is the only database client and it is

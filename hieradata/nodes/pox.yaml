@@ -1,4 +1,4 @@
 classes:
-    - ocf_ssl::default_bundle
+    - ocf::ssl::default_incommon
 
 owner: mcint

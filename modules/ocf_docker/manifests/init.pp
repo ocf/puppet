@@ -1,7 +1,7 @@
 class ocf_docker {
   include ocf::firewall::allow_web
   include ocf::packages::docker
-  require ocf_ssl::default_bundle
+  require ocf::ssl::default_incommon
 
   class { 'nginx':
     manage_repo  => false,

@@ -1,5 +1,5 @@
 class ocf_admin::create::app {
-  require ocf_ssl::default_bundle
+  require ocf::ssl::default_incommon
 
   package { 'ocf-approve':; }
 

@@ -16,7 +16,7 @@ class ocf_www {
   include ocf::firewall::allow_web
   include ocf::limits
   include ocf::tmpfs
-  include ocf_ssl::default_bundle
+  include ocf::ssl::default_incommon
 
   class { 'ocf::nfs':
     cron => false,

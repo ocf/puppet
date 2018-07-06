@@ -5,7 +5,7 @@ class ocf_ssh {
   include ocf::limits
   include ocf::firewall::allow_mosh
   include ocf::packages::cups
-  include ocf_ssl::default_bundle
+  include ocf::ssl::default_incommon
 
   class { 'ocf::nfs':
     cron => true,
