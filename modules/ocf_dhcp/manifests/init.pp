@@ -7,7 +7,7 @@ class ocf_dhcp {
   file {
     '/etc/dhcp/dhcpd.conf':
       source  => 'puppet:///modules/ocf_dhcp/dhcpd.conf',
-      require => [Package['isc-dhcp-server'], Exec['gen-desktop-leases']],
+      require => Package['isc-dhcp-server'],
       notify  => Service['isc-dhcp-server'];
 
     '/usr/local/sbin/gen-desktop-leases':
@@ -24,13 +24,6 @@ class ocf_dhcp {
         "set INTERFACES '\"${ocf::networking::iface}\"'",
       ],
       require => Package['isc-dhcp-server'];
-  }
-
-  exec { 'gen-desktop-leases':
-    command => '/usr/local/sbin/gen-desktop-leases > /etc/dhcp/desktop-leases.conf',
-    creates => '/etc/dhcp/desktop-leases.conf',
-    require => [File['/usr/local/sbin/gen-desktop-leases'], Package['python3-ocflib']],
-    notify  => Service['isc-dhcp-server'];
   }
 
   service { 'isc-dhcp-server':
@@ -52,6 +45,11 @@ class ocf_dhcp {
       command => '/usr/local/bin/lab-wakeup -q',
       minute  => '*/15',
       require => File['/usr/local/bin/lab-wakeup'];
+
+    'gen-desktop-leases':
+      command => '/usr/local/sbin/gen-desktop-leases',
+      minute  => '*/15',
+      require => [File['/usr/local/sbin/gen-desktop-leases'], Package['python3-ocflib']];
   }
 
   # Allow BOOTP (IPv4 only)
