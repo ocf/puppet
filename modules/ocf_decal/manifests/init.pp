@@ -33,6 +33,6 @@ class ocf_decal {
     ensure   => latest,
     provider => git,
     revision => 'master',
-    source   => 'https://github.com/0xcf/decal-util.git'
+    source   => 'https://github.com/0xcf/decal-utils.git'
   }
 }
