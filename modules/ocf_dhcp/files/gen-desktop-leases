@@ -1,11 +1,24 @@
 #!/usr/bin/env python3
+import subprocess
+
 from ocflib.infra.hosts import hosts_by_filter
+
+DESKTOP_LEASES_FILE = '/etc/dhcp/desktop-leases.conf'
 
 desktops = hosts_by_filter('(type=desktop)')
 
-for desktop in desktops:
-    print('host {} {{ hardware ethernet {}; fixed-address {}; }}'.format(
+with open(DESKTOP_LEASES_FILE, 'r') as f:
+    old_contents = sorted([line.strip() for line in f])
+
+new_contents = []
+for desktop in sorted(desktops, key=lambda d: d['cn'][0]):
+    new_contents.append('host {} {{ hardware ethernet {}; fixed-address {}; }}'.format(
         desktop['cn'][0],
         desktop['macAddress'][0],
         desktop['ipHostNumber'][0],
     ))
+
+if new_contents and new_contents != old_contents:
+    with open(DESKTOP_LEASES_FILE, 'w') as f:
+        f.write('\n'.join(new_contents) + '\n')
+    subprocess.check_call(('systemctl', 'restart', 'isc-dhcp-server'))
