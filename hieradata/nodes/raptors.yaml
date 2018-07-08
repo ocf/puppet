@@ -1,6 +1,6 @@
 classes:
     - ocf::packages::docker
     - ocf_ocfweb::dev_config
-    - ocf::ssl::default_incommon
+    - ocf::ssl::default
 
 owner: ckuehl

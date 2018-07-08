@@ -1,4 +1,4 @@
 classes:
-    - ocf::ssl::default_incommon
+    - ocf::ssl::default
 
 owner: asai

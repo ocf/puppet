@@ -1,5 +1,5 @@
 classes:
     - ocf::packages::docker
-    - ocf::ssl::default_incommon
+    - ocf::ssl::default
 
 owner: kpengboy
