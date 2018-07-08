@@ -1,0 +1,15 @@
+BASEDIR="/var/lib/lets-encrypt"
+
+HOOK="/usr/share/dehydrated-hook-ddns-tsig/dehydrated-hook-ddns-tsig.py"
+CHALLENGETYPE="dns-01"
+
+DEHYDRATED_USER="ocfletsencrypt"
+
+# Ideally we'd be able to use IPv4 and IPv6 for this, but if we do, then we get
+# issues like this:
+# https://github.com/lukas2511/dehydrated/issues/547
+#IP_VERSION=4
+
+# Using the staging CA seems to need a different account key, so make sure to
+# use a different key from the one for the production CA
+#CA="https://acme-staging-v02.api.letsencrypt.org/directory"

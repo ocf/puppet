@@ -1,0 +1,8 @@
+[DEFAULT]
+name_server_ip = 169.229.226.22
+verbosity = 1
+# XXX: Do not put the key name in quotes, or it will not work
+key_name = letsencrypt.ocf.io
+key_secret = "<%= @letsencrypt_ddns_key -%>"
+key_algorithm = hmac-md5
+dns_rewrite = s/^_acme-challenge\.(.*)\.(ocf\.berkeley\.edu|ocf\.io)$/\1.letsencrypt.ocf.io/
