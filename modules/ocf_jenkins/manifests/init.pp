@@ -2,7 +2,7 @@ class ocf_jenkins {
   include ocf::extrapackages
   include ocf::firewall::allow_web
   include ocf::tmpfs
-  include ocf::ssl::default_incommon
+  include ocf::ssl::default
 
   class { 'ocf::packages::docker':
     autoclean => false,
