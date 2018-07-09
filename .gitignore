@@ -2,6 +2,10 @@
 /.r10k/
 /vendor/
 
+# ignore emacs temp files
+\#*\#
+*~
+
 # ignore vim swp files
 *.swp
 
