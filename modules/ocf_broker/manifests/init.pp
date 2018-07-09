@@ -1,5 +1,5 @@
 class ocf_broker {
-    include ocf::ssl::default_incommon
+    include ocf::ssl::default
 
     package { ['redis-server', 'hitch']: }
 
@@ -46,7 +46,8 @@ class ocf_broker {
     }
 
     service { 'hitch':
-      require => [ Package['hitch'], Service['redis-server']];
+      require   => [Package['hitch'], Service['redis-server']],
+      subscribe => Class['ocf::ssl::default'],
     }
 
     # firewall input rule, allow hitch (redis tls proxy)

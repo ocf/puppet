@@ -1,25 +1,9 @@
+# TODO: Separate out this file into the http and dns versions, since they can't
+# overlap anyways due to resource duplicate declaration problems
 define ocf::ssl::lets_encrypt(
   Array[String] $domains = [$::fqdn],
   Enum['http', 'dns'] $challenge_type = 'dns',
 ) {
-  file {
-    '/etc/ssl/lets-encrypt':
-      ensure => directory,
-      owner  => ocfletsencrypt;
-
-    '/etc/ssl/lets-encrypt/le-account.key':
-      content   => file('/opt/puppet/shares/private/lets-encrypt-account.key'),
-      owner     => ocfletsencrypt,
-      show_diff => false,
-      mode      => '0400';
-
-    '/var/lib/lets-encrypt':
-      ensure  => directory,
-      owner   => ocfletsencrypt,
-      group   => ssl-cert,
-      require => Package['ssl-cert'];
-  }
-
   if $challenge_type == 'http' {
     package { ['acme-tiny', 'python3-openssl']:; }
 

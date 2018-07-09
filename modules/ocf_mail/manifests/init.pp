@@ -1,5 +1,5 @@
 class ocf_mail {
-  include ocf::ssl::default_incommon
+  include ocf::ssl::default
 
   include ocf_mail::spam
   include ocf_mail::site_ocf
@@ -8,8 +8,10 @@ class ocf_mail {
   package { ['postfix']:; }
 
   service { 'postfix':
-    require => Package['postfix'],
+    require   => Package['postfix'],
+    subscribe => Class['ocf::ssl::default'],
   }
+
   user { 'ocfmail':
     ensure  => present,
     name    => ocfmail,

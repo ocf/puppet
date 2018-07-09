@@ -1,5 +1,5 @@
 class ocf_stats {
-  include ocf::ssl::default_incommon
+  include ocf::ssl::default
 
   class { '::apache':
     default_vhost => false,

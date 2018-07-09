@@ -41,6 +41,8 @@ define ocf::ssl::bundle(
         mode   => '0644';
     }
   } else {
+    # TODO: Remove this branch once we are confident enough that using Let's
+    # Encrypt certs is working well and is sustainable
     $intermediate_source = 'puppet:///modules/ocf/ssl/incommon-intermediate.crt'
     $cert_source = "puppet:///private/ssl/${title}.crt"
     $key_source = "puppet:///private/ssl/${title}.key"

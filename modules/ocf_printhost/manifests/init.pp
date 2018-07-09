@@ -1,6 +1,6 @@
 class ocf_printhost {
   include ocf::tmpfs
-  include ocf::ssl::default_incommon
+  include ocf::ssl::default
 
   include ocf_printhost::cups
   include ocf_printhost::enforcer

@@ -16,7 +16,7 @@ class ocf_www {
   include ocf::firewall::allow_web
   include ocf::limits
   include ocf::tmpfs
-  include ocf::ssl::default_incommon
+  include ocf::ssl::default
 
   class { 'ocf::nfs':
     cron => false,
@@ -40,6 +40,9 @@ class ocf_www {
       threadsperchild => 50,
       serverlimit     => 100;
   }
+
+  # Restart apache if any cert changes occur
+  Class['ocf::ssl::default'] ~> Class['Apache::Service']
 
   include ocf_www::lets_encrypt
   include ocf_www::logging

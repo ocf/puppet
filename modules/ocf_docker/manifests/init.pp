@@ -1,13 +1,16 @@
 class ocf_docker {
   include ocf::firewall::allow_web
   include ocf::packages::docker
-  require ocf::ssl::default_incommon
+  require ocf::ssl::default
 
   class { 'nginx':
     manage_repo  => false,
     confd_purge  => true,
     server_purge => true,
   }
+
+  # Restart nginx if any cert changes occur
+  Class['ocf::ssl::default'] ~> Class['Nginx::Service']
 
   nginx::resource::upstream { 'docker-registry':
     members => ['127.0.0.1:5000'];

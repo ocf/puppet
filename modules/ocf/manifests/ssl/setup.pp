@@ -10,6 +10,8 @@ class ocf::ssl::setup {
       # the ssl-cert package creates the ssl-cert group
       require => Package['ssl-cert'];
 
+    # TODO: Remove the incommon intermediate once we are confident enough that
+    # using Let's Encrypt certs is working well and is sustainable
     '/etc/ssl/certs/incommon-intermediate.crt':
       source => 'puppet:///modules/ocf/ssl/incommon-intermediate.crt',
       mode   => '0644';
@@ -23,5 +25,21 @@ class ocf::ssl::setup {
     '/etc/ssl/dhparam.pem':
       source => 'puppet:///modules/ocf/ssl/dhparam.pem',
       mode   => '0444';
+
+    '/etc/ssl/lets-encrypt':
+      ensure => directory,
+      owner  => ocfletsencrypt;
+
+    '/etc/ssl/lets-encrypt/le-account.key':
+      content   => file('/opt/puppet/shares/private/lets-encrypt-account.key'),
+      owner     => ocfletsencrypt,
+      show_diff => false,
+      mode      => '0400';
+
+    '/var/lib/lets-encrypt':
+      ensure  => directory,
+      owner   => ocfletsencrypt,
+      group   => ssl-cert,
+      require => Package['ssl-cert'];
   }
 }

@@ -33,7 +33,7 @@ class ocf_www::site::www {
     ssl                 => true,
     ssl_key             => "/etc/ssl/private/${::fqdn}.key",
     ssl_cert            => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain           => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl_chain           => "/etc/ssl/private/${::fqdn}.intermediate",
 
     headers             => ['always set Strict-Transport-Security max-age=31536000'],
     request_headers     => ['set X-Forwarded-Proto https'],
@@ -142,6 +142,6 @@ class ocf_www::site::www {
       ssl                  => true,
       ssl_key              => "/etc/ssl/private/${::fqdn}.key",
       ssl_cert             => "/etc/ssl/private/${::fqdn}.crt",
-      ssl_chain            => '/etc/ssl/certs/incommon-intermediate.crt';
+      ssl_chain            => "/etc/ssl/private/${::fqdn}.intermediate";
   }
 }

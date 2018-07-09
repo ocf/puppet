@@ -1,5 +1,5 @@
 class ocf_mirrors {
-  include ocf::ssl::default_incommon
+  include ocf::ssl::default
   require ocf::packages::rsync
 
   include ocf_mirrors::ftp
@@ -75,6 +75,9 @@ class ocf_mirrors {
   }
   include apache::mod::headers
   include apache::mod::status
+
+  # Restart apache if any cert changes occur
+  Class['ocf::ssl::default'] ~> Class['Apache::Service']
 
   # The Apache project requires very particular configuration:
   # https://www.apache.org/info/how-to-mirror.html#Configuration
@@ -157,7 +160,7 @@ class ocf_mirrors {
     ssl               => true,
     ssl_key           => "/etc/ssl/private/${::fqdn}.key",
     ssl_cert          => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain         => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl_chain         => "/etc/ssl/private/${::fqdn}.intermediate",
   }
 
   file { '/opt/mirrors/bin/report-sizes':

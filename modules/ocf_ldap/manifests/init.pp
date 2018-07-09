@@ -1,5 +1,5 @@
 class ocf_ldap {
-  include ocf::ssl::default_incommon
+  include ocf::ssl::default
 
   # Install libarchive-zip-perl for crc32 command for calculating hashes of
   # ldif files in /etc/ldap/slapd.d, slapd is the ldap server
@@ -11,6 +11,7 @@ class ocf_ldap {
         '/etc/ldap/sasl2/slapd.conf',
       ],
       Augeas['/etc/default/slapd'],
+      Class['ocf::ssl::default'],
     ],
   }
 

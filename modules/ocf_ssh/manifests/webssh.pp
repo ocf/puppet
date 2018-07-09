@@ -14,6 +14,9 @@ class ocf_ssh::webssh {
     server_purge => true,
   }
 
+  # Restart nginx if any cert changes occur
+  Class['ocf::ssl::default'] ~> Class['Nginx::Service']
+
   nginx::resource::upstream { 'webssh':
     members => ['localhost:4200'];
   }

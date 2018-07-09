@@ -2,9 +2,10 @@ class ocf_irc::ircd {
   package { 'inspircd':; }
 
   service { 'inspircd':
-    restart => 'service inspircd reload',
-    enable  => true,
-    require => Package['inspircd'],
+    restart   => 'service inspircd reload',
+    enable    => true,
+    require   => Package['inspircd'],
+    subscribe => Class['ocf::ssl::default'],
   }
 
   $passwords = parsejson(file("/opt/puppet/shares/private/${::hostname}/ircd-passwords"))
