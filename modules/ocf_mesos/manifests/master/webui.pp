@@ -5,11 +5,7 @@ class ocf_mesos::master::webui(
     $marathon_fqdn,
     $marathon_http_password,
 ) {
-  require ocf::ssl::default_incommon
-
-  ocf::ssl::bundle { 'wildcard.agent.mesos.ocf.berkeley.edu':
-    intermediate_source => 'puppet:///modules/ocf/ssl/incommon-intermediate.crt',
-  }
+  require ocf::ssl::default
 
   # We limit access to ocfroot only via PAM.
   file {
@@ -48,6 +44,9 @@ class ocf_mesos::master::webui(
 
     require           => Ocf::Repackage['nginx-extras', 'libnginx-mod-http-auth-pam'],
   }
+
+  # Restart nginx if any cert changes occur
+  Class['ocf::ssl::default'] ~> Class['Nginx::Service']
 
   nginx::resource::upstream {
     'mesos':
@@ -199,8 +198,8 @@ class ocf_mesos::master::webui(
         server_name      => [$host],
         proxy            => "http://${slave}-agent",
         ssl              => true,
-        ssl_cert         => '/etc/ssl/private/wildcard.agent.mesos.ocf.berkeley.edu.bundle',
-        ssl_key          => '/etc/ssl/private/wildcard.agent.mesos.ocf.berkeley.edu.key',
+        ssl_cert         => "/etc/ssl/private/${::fqdn}.bundle",
+        ssl_key          => "/etc/ssl/private/${::fqdn}.key",
         ssl_dhparam      => '/etc/ssl/dhparam.pem',
         listen_port      => 443,
 
@@ -221,7 +220,7 @@ class ocf_mesos::master::webui(
 
         require          => [
           File['/etc/pam.d/mesos_master_webui'],
-          Ocf::Ssl::Bundle['wildcard.agent.mesos.ocf.berkeley.edu'],
+          Class['ocf::ssl::default'],
         ];
 
       "${slave}-agent-http-redirect":
