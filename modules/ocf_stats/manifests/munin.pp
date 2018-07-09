@@ -11,6 +11,11 @@ class ocf_stats::munin {
     require => Package['munin'];
   }
 
+  $cname = $::host_env ? {
+    'dev'  => 'dev-munin',
+    'prod' => 'munin',
+  }
+
   file {
     '/etc/munin/munin.conf':
       source  => 'puppet:///modules/ocf_stats/munin/munin.conf',
@@ -21,8 +26,8 @@ class ocf_stats::munin {
       source => 'puppet:///modules/ocf_stats/munin/gen-munin-nodes',
       mode   => '0755';
     '/usr/local/bin/mail-munin-alert':
-      source => 'puppet:///modules/ocf_stats/munin/mail-munin-alert',
-      mode   => '0755';
+      content => template('ocf_stats/munin/mail-munin-alert.erb'),
+      mode    => '0755';
   }
 
   # Generate munin nodes on the 3rd minute of every hour to avoid conflicting
@@ -37,11 +42,6 @@ class ocf_stats::munin {
 
   include apache::mod::fcgid
   include apache::mod::rewrite
-
-  $cname = $::host_env ? {
-    'dev'  => 'dev-munin',
-    'prod' => 'munin',
-  }
 
   apache::vhost {
     'munin':
