@@ -14,9 +14,10 @@ define ocf::ssl::lets_encrypt(
       mode      => '0400';
 
     '/var/lib/lets-encrypt':
-      ensure => directory,
-      owner  => ocfletsencrypt,
-      group  => sys;
+      ensure  => directory,
+      owner   => ocfletsencrypt,
+      group   => ssl-cert,
+      require => Package['ssl-cert'];
   }
 
   if $challenge_type == 'http' {
@@ -27,9 +28,10 @@ define ocf::ssl::lets_encrypt(
         '/var/lib/lets-encrypt/.well-known',
         '/var/lib/lets-encrypt/.well-known/acme-challenge',
       ]:
-        ensure => directory,
-        owner  => ocfletsencrypt,
-        group  => sys;
+        ensure  => directory,
+        owner   => ocfletsencrypt,
+        group   => ssl-cert,
+        require => Package['ssl-cert'];
 
       '/usr/local/bin/ocf-lets-encrypt':
         source  => 'puppet:///modules/ocf/ssl/ocf-lets-encrypt',
@@ -47,8 +49,16 @@ define ocf::ssl::lets_encrypt(
     $letsencrypt_ddns_key = assert_type(Stdlib::Base64, hiera('letsencrypt::ddns::key'))
 
     # TODO: Move these somewhere else so this defined resource can be used
-    # multiple times without issues
+    # multiple times without issues with resources colliding
     file {
+      '/var/lib/lets-encrypt/certs':
+        ensure  => directory,
+        owner   => ocfletsencrypt,
+        group   => ssl-cert,
+        mode    => '0640',
+        recurse => true,
+        require => [Package['ssl-cert'], Exec[$title]];
+
       '/var/lib/lets-encrypt/domains.txt':
         owner   => ocfletsencrypt,
         group   => ssl-cert,
