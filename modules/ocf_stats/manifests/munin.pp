@@ -48,6 +48,8 @@ class ocf_stats::munin {
       servername    => "${cname}.ocf.berkeley.edu",
       port          => 443,
       docroot       => '/var/cache/munin/www/static/',
+      docroot_owner => 'munin',
+      docroot_group => 'munin',
 
       ssl           => true,
       ssl_key       => "/etc/ssl/private/${::fqdn}.key",
@@ -97,7 +99,9 @@ class ocf_stats::munin {
           sethandler   => 'fcgid-script',
           auth_require => 'all granted',
         }
-      ];
+      ],
+
+      require       => Package['munin'];
 
     'munin-redirect':
       servername      => "${cname}.ocf.berkeley.edu",
