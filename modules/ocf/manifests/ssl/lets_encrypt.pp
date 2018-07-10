@@ -24,7 +24,7 @@ define ocf::ssl::lets_encrypt(
     }
   } else {
     ocf::repackage { 'dehydrated':
-      backport_on => stretch,
+      backport_on => ['jessie', 'stretch'],
     }
     package { 'dehydrated-hook-ddns-tsig':
       require => Ocf::Repackage['dehydrated'],
@@ -43,10 +43,11 @@ define ocf::ssl::lets_encrypt(
         recurse => true,
         require => [Package['ssl-cert'], Exec[$title]];
 
+      # https://github.com/lukas2511/dehydrated/blob/master/docs/domains_txt.md
       '/var/lib/lets-encrypt/domains.txt':
         owner   => ocfletsencrypt,
         group   => ssl-cert,
-        content => join($domains, ' '),
+        content => "${join($domains, ' ')} > ${title}",
         notify  => Exec[$title];
 
       '/etc/dehydrated/config':
@@ -77,7 +78,7 @@ define ocf::ssl::lets_encrypt(
     # dehydrated config changes, or the domain list changes then this should
     # run again, even if the cert will not expire soon.
     exec { $title:
-      command     => "/usr/bin/dehydrated --cron --alias ${title} --privkey /etc/ssl/lets-encrypt/le-account.key",
+      command     => '/usr/bin/dehydrated --cron --privkey /etc/ssl/lets-encrypt/le-account.key',
       user        => ocfletsencrypt,
       refreshonly => true,
       require     => [

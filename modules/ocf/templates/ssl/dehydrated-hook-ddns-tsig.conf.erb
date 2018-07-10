@@ -5,4 +5,4 @@ verbosity = 1
 key_name = letsencrypt.ocf.io
 key_secret = "<%= @letsencrypt_ddns_key -%>"
 key_algorithm = hmac-md5
-dns_rewrite = s/^_acme-challenge\.(.*)\.(ocf\.berkeley\.edu|ocf\.io)$/\1.letsencrypt.ocf.io/
+dns_rewrite = s/^_acme-challenge\.(.*)(ocf\.berkeley\.edu|ocf\.io)$/\1letsencrypt.ocf.io/
