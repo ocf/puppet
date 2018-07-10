@@ -52,20 +52,11 @@ class ocf_dhcp {
       require => [File['/usr/local/sbin/gen-desktop-leases'], Package['python3-ocflib']];
   }
 
-  # Allow BOOTP (IPv4 only)
-  firewall_multi { '101 allow bootps':
+  # Allow DHCP server traffic
+  firewall_multi { '101 allow dhcp server':
     chain  => 'PUPPET-INPUT',
     proto  => 'udp',
     dport  => 67,
     action => 'accept',
-  }
-
-  # Allow DHCP Server (IPv6 only)
-  firewall_multi { '101 allow dhcpv6-server':
-    provider => 'ip6tables',
-    chain    => 'PUPPET-INPUT',
-    proto    => 'udp',
-    dport    => 547,
-    action   => 'accept',
   }
 }
