@@ -5,7 +5,6 @@ class ocf_stats {
     default_vhost => false,
   }
 
-  include apache
   include ocf_stats::labstats
   include ocf_stats::munin
 }
