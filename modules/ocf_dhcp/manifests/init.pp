@@ -52,11 +52,20 @@ class ocf_dhcp {
       require => [File['/usr/local/sbin/gen-desktop-leases'], Package['python3-ocflib']];
   }
 
-  # Allow DHCP server traffic
-  firewall_multi { '101 allow dhcp server':
-    chain  => 'PUPPET-INPUT',
-    proto  => 'udp',
-    dport  => 67,
-    action => 'accept',
+  firewall_multi {
+    '101 allow incoming dhcp':
+      chain  => 'PUPPET-INPUT',
+      proto  => 'udp',
+      dport  => 67,
+      action => 'accept';
+
+    # Allow outgoing DHCP to any special devices that may be configured to use it
+    # Conntrack may not be able to track DHCP due to the unusual IP address
+    # rules it uses. Thus we specially add a rule here.
+    '101 allow outgoing dhcp':
+      chain  => 'PUPPET-OUTPUT',
+      proto  => 'udp',
+      sport  => 67,
+      action => 'accept';
   }
 }

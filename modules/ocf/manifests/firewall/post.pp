@@ -1,6 +1,18 @@
 class ocf::firewall::post {
   require ocf::networking
 
+  # Allow outgoing traffic for connections initiated by special devices
+  ocf::firewall::firewall46 {
+    '995 allow outgoing RELATED and ESTABLISHED traffic':
+      opts   => {
+        'chain'  => 'PUPPET-OUTPUT',
+        'proto'  => 'all',
+        'state'  => ['RELATED', 'ESTABLISHED'],
+        'action' => 'accept',
+      },
+      before => undef;
+  }
+
   # Only allow root and postfix to connect to anthrax port 25; everyone else
   # must use the sendmail interface.
   # firewall-multi doesn't multiplex this so we have to do it manually :(
