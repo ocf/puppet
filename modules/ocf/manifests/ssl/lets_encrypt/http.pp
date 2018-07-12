@@ -1,4 +1,4 @@
-define ocf::ssl::lets_encrypt::http {
+class ocf::ssl::lets_encrypt::http {
   package { ['acme-tiny', 'python3-openssl']:; }
 
   file {

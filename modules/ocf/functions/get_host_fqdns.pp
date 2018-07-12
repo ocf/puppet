@@ -6,10 +6,7 @@
 # If there's a host with hostname 'death' and DNS A records 'dev-vhost' and DNS
 # CNAME records 'www', then this function (with the suffix 'ocf.io' would
 # return ['death.ocf.io', 'dev-vhost.ocf.io', 'www.ocf.io']
-function ocf::get_host_fqdns(String $suffix = 'ocf.berkeley.edu') {
-  suffix(delete(concat(
-    [$::hostname],
-    delete($::dnsA, '@'),
-    $::dnsCname,
-  ), ''), ".${suffix}")
+function ocf::get_host_fqdns(String $suffix = 'ocf.berkeley.edu') >> Array[String] {
+  $dns_entries = concat([$::hostname], delete($::dnsA, '@'), $::dnsCname)
+  suffix(delete($dns_entries, ''), ".${suffix}")
 }
