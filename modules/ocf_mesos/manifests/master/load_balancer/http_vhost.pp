@@ -10,18 +10,22 @@ define ocf_mesos::master::load_balancer::http_vhost(
   $server_name,
   $service_port,
   $server_aliases = [],
-  $ssl            = false,
-  $ssl_dir        = $title,
+  $ssl            = true,
+  $ssl_domains    = [$server_name],
   $ssl_dhparam    = '/etc/ssl/dhparam.pem',
 ) {
+  ocf::ssl::bundle { $server_name:
+    domains => $ssl_domains,
+  }
+
   ocf::nginx_proxy { $title:
     server_name    => $server_name,
     server_aliases => $server_aliases,
     proxy          => "http://localhost:${service_port}",
 
     ssl            => $ssl,
-    ssl_cert       => "/opt/share/docker/secrets/${ssl_dir}/${server_name}.crt",
-    ssl_key        => "/opt/share/docker/secrets/${ssl_dir}/${server_name}.key",
+    ssl_cert       => "/etc/ssl/private/${server_name}.crt",
+    ssl_key        => "/etc/ssl/private/${server_name}.key",
     ssl_dhparam    => $ssl_dhparam,
   }
 }

@@ -73,7 +73,6 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     server_name    => 'rt.ocf.berkeley.edu',
     server_aliases => ['rt'],
     service_port   => 10001,
-    ssl            => true,
   }
 
   # Port 10002 is used by ocfweb-web and proxied to by ocf_www
@@ -82,22 +81,18 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     server_name    => 'pma.ocf.berkeley.edu',
     server_aliases => ['pma', 'phpmyadmin', 'phpmyadmin.ocf.berkeley.edu'],
     service_port   => 10003,
-    ssl            => true,
+    ssl_domains    => ['pma.ocf.berkeley.edu', 'phpmyadmin.ocf.berkeley.edu'],
   }
 
   ocf_mesos::master::load_balancer::http_vhost { 'ocfweb-static':
     server_name  => 'static.ocf.berkeley.edu',
     service_port => 10004,
-    ssl          => true,
-    ssl_dir      => 'ocfweb',
   }
 
   ocf_mesos::master::load_balancer::http_vhost { 'ircbot':
     server_name    => 'ircbot.ocf.berkeley.edu',
     server_aliases => ['ircbot'],
     service_port   => 10005,
-    ssl            => true,
-    ssl_dir        => 'ircbot',
   }
 
   # Port 10006 is unused
@@ -106,7 +101,6 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     server_name    => 'templates.ocf.berkeley.edu',
     server_aliases => ['templates'],
     service_port   => 10007,
-    ssl            => true,
   }
 
   # Port 10008 is used by thelounge, it is proxied to by ocf_irc
@@ -116,6 +110,6 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     server_name    => 'metabase.ocf.berkeley.edu',
     server_aliases => ['mb', 'metabase', 'mb.ocf.berkeley.edu'],
     service_port   => 10010,
-    ssl            => true,
+    ssl_domains    => ['metabase.ocf.berkeley.edu', 'mb.ocf.berkeley.edu'],
   }
 }
