@@ -7,7 +7,8 @@ class ocf::ssl::setup {
 
   file {
     default:
-      # the ssl-cert package creates the ssl-cert group
+      # The ssl-cert package creates the ssl-cert group and the /etc/ssl/certs
+      # and /etc/ssl/private directories (along with /etc/ssl if needed)
       require => Package['ssl-cert'];
 
     # TODO: Remove the incommon intermediate once we are confident enough that
@@ -37,9 +38,8 @@ class ocf::ssl::setup {
       mode      => '0400';
 
     '/var/lib/lets-encrypt':
-      ensure  => directory,
-      owner   => ocfletsencrypt,
-      group   => ssl-cert,
-      require => Package['ssl-cert'];
+      ensure => directory,
+      owner  => ocfletsencrypt,
+      group  => ssl-cert;
   }
 }

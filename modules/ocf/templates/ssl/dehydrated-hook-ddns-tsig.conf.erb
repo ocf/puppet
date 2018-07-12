@@ -1,7 +1,8 @@
 [DEFAULT]
 name_server_ip = 169.229.226.22
 verbosity = 1
-# XXX: Do not put the key name in quotes, or it will not work
+# WARNING: Do not put the key name in quotes, or it will not work. This does
+# not seem to be actually documented anywhere
 key_name = letsencrypt.ocf.io
 key_secret = "<%= @letsencrypt_ddns_key -%>"
 key_algorithm = hmac-md5

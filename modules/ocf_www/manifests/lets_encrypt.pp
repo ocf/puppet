@@ -1,7 +1,5 @@
 class ocf_www::lets_encrypt {
-  ocf::ssl::lets_encrypt { 'www':
-    challenge_type => 'http',
-  }
+  include ocf::ssl::lets_encrypt::http
 
   file {
     '/usr/local/bin/lets-encrypt-update':

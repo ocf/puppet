@@ -10,17 +10,7 @@ class ocf::ssl::default {
     $extra_domains = []
   }
 
-  $domains = suffix(delete(concat(
-    [$::hostname],
-    delete($::dnsA, '@'),
-    $::dnsCname,
-  ), ''), '.ocf.berkeley.edu') + suffix(delete(concat(
-    [$::hostname],
-    delete($::dnsA, '@'),
-    $::dnsCname,
-  ), ''), '.ocf.io') + $extra_domains
-
   ocf::ssl::bundle { $::fqdn:
-    domains => $domains,
+    domains => ocf::get_host_fqdns() + ocf::get_host_fqdns('ocf.io') + $extra_domains,
   }
 }

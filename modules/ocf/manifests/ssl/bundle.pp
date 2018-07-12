@@ -5,7 +5,7 @@ define ocf::ssl::bundle(
   require ocf::ssl::setup
 
   if $use_lets_encrypt {
-    ocf::ssl::lets_encrypt { $title:
+    ocf::ssl::lets_encrypt::dns { $title:
       domains => $domains,
     }
 
@@ -17,10 +17,11 @@ define ocf::ssl::bundle(
 
     file {
       default:
+        owner     => 'root',
         group     => 'ssl-cert',
         show_diff => false,
         require   => [
-          Ocf::Ssl::Lets_encrypt[$title],
+          Ocf::Ssl::Lets_encrypt::Dns[$title],
           File['/var/lib/lets-encrypt'],
         ];
 
@@ -49,6 +50,7 @@ define ocf::ssl::bundle(
 
     file {
       default:
+        owner     => 'root',
         group     => 'ssl-cert',
         show_diff => false;
 
