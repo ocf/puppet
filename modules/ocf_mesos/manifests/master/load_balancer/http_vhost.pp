@@ -11,11 +11,19 @@ define ocf_mesos::master::load_balancer::http_vhost(
   $service_port,
   $server_aliases = [],
   $ssl            = true,
-  $ssl_domains    = [$server_name],
   $ssl_dhparam    = '/etc/ssl/dhparam.pem',
 ) {
-  ocf::ssl::bundle { $server_name:
-    domains => $ssl_domains,
+  # TODO: Maybe move this into ocf::nginx_proxy sometime?
+  if $ssl {
+    $matching_aliases = filter($server_aliases) |$alias| {
+      $alias =~ /\.ocf\.berkeley\.edu$/ or $alias =~ /\.ocf\.io$/
+    }
+    ocf::ssl::bundle { $server_name:
+      domains => [$server_name] + $matching_aliases,
+    }
+
+    # Restart nginx if any cert changes occur
+    Ocf::Ssl::Bundle[$server_name] ~> Class['Nginx::Service']
   }
 
   ocf::nginx_proxy { $title:
