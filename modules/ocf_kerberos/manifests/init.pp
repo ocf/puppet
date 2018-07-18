@@ -76,7 +76,7 @@ class ocf_kerberos {
     '101 allow kpasswd':
       opts => {
         chain  => 'PUPPET-INPUT',
-        proto  => 'tcp',
+        proto  => 'udp',
         dport  => 464,
         action => 'accept',
       };
