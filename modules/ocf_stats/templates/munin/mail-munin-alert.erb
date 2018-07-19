@@ -61,10 +61,14 @@ def send_alert(host, plugin, mail_to=MAIL_TO):
         ldap_entry.get('dnsCname', []) + ldap_entry.get('dnsA', []),
     )) or '(none)'
 
+<% if @host_env == 'dev' -%>
+    subject = '[<%= @hostname %>] Munin alert for {} ({[type]})'.format(host, ldap_entry)
+<% else -%>
     subject = 'Munin alert for {} ({[type]})'.format(host, ldap_entry)
+<% end -%>
     body = (
         '{status}\n'
-        'See graph at https://munin.ocf.berkeley.edu/ocf.berkeley.edu/{host}/{plugin}.html\n'
+        'See graph at https://<%= @cname %>.ocf.berkeley.edu/ocf.berkeley.edu/{host}/{plugin}.html\n'
         '\n'
         'Host details:\n'
         '  - Type: {ldap_entry[type]}\n'
@@ -107,3 +111,9 @@ def main(argv):
 
 if __name__ == '__main__':
     main(argv)
+
+
+# Local Variables:
+# mode: python
+# End:
+# vim: ft=python
