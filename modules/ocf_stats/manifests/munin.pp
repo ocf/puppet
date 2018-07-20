@@ -42,11 +42,6 @@ class ocf_stats::munin {
   include apache::mod::fcgid
   include apache::mod::rewrite
 
-  $cname = $::host_env ? {
-    'dev'  => 'dev-munin',
-    'prod' => 'munin',
-  }
-
   # Restart apache if any cert changes occur
   Class['ocf::ssl::default'] ~> Class['Apache::Service']
 
