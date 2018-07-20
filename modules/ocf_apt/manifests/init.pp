@@ -1,6 +1,6 @@
 class ocf_apt {
   include ocf::firewall::allow_web
-  include ocf_ssl::default_bundle
+  include ocf::ssl::default
 
   user { 'ocfapt':
     comment => 'OCF Apt',
@@ -102,6 +102,6 @@ class ocf_apt {
     ssl               => true,
     ssl_key           => "/etc/ssl/private/${::fqdn}.key",
     ssl_cert          => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain         => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl_chain         => "/etc/ssl/private/${::fqdn}.intermediate",
   }
 }

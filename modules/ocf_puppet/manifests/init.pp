@@ -1,5 +1,5 @@
 class ocf_puppet {
-  include ocf_ssl::default_bundle
+  include ocf::ssl::default
   include ocf_puppet::environments
   include ocf_puppet::firewall_input
   include ocf_puppet::puppetboard

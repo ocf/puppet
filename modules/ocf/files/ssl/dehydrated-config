@@ -1,0 +1,10 @@
+BASEDIR="/var/lib/lets-encrypt"
+
+HOOK="/usr/share/dehydrated-hook-ddns-tsig/dehydrated-hook-ddns-tsig.py"
+CHALLENGETYPE="dns-01"
+
+DEHYDRATED_USER="ocfletsencrypt"
+
+# Using the staging CA seems to need a different account key, so make sure to
+# use a different key from the one for the production CA
+#CA="https://acme-staging-v02.api.letsencrypt.org/directory"

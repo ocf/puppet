@@ -2,7 +2,8 @@ class ocf_printhost::cups {
   package { ['cups', 'cups-bsd']: }
 
   service { 'cups':
-    require => Package['cups', 'cups-bsd'],
+    require   => Package['cups', 'cups-bsd'],
+    subscribe => Class['ocf::ssl::default'],
   }
 
   file {

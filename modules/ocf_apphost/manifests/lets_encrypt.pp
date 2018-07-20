@@ -1,5 +1,5 @@
 class ocf_apphost::lets_encrypt {
-  include ocf::lets_encrypt
+  include ocf::ssl::lets_encrypt::http
 
   file {
     '/usr/local/bin/lets-encrypt-update':

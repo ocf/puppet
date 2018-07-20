@@ -51,6 +51,6 @@ class ocf_www::site::unavailable {
     ssl       => true,
     ssl_key   => "/etc/ssl/private/${::fqdn}.key",
     ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl_chain => "/etc/ssl/private/${::fqdn}.intermediate",
   }
 }

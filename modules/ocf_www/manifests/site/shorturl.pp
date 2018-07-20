@@ -1,13 +1,4 @@
 class ocf_www::site::shorturl {
-  # TODO: automate Let's Encrypt renewal of this cert
-  # Make sure this gets renewed before April 21 2018
-  file {
-    '/etc/ssl/private/ocf.io.crt':
-      source => 'puppet:///private/ssl/ocf.io.crt',
-      mode   => '0644',
-      notify => Service['httpd'];
-  }
-
   $canonical_url = $::host_env ? {
     'dev'  => 'https://dev-ocf-io.ocf.berkeley.edu/',
     'prod' => 'https://ocf.io/',
@@ -20,9 +11,9 @@ class ocf_www::site::shorturl {
     docroot       => '/var/www/html',
 
     ssl           => true,
-    ssl_key       => '/etc/ssl/lets-encrypt/le-vhost.key',
-    ssl_cert      => '/etc/ssl/private/ocf.io.crt',
-    ssl_chain     => '/etc/ssl/certs/lets-encrypt.crt',
+    ssl_key       => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
 
     rewrites      => [
       # Short URLs

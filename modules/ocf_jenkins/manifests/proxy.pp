@@ -6,10 +6,13 @@ class ocf_jenkins::proxy {
     server_tokens => off,
   }
 
+  # Restart nginx if any cert changes occur
+  Class['ocf::ssl::default'] ~> Class['Nginx::Service']
+
   ocf::nginx_proxy { 'jenkins.ocf.berkeley.edu':
     server_aliases => [
       $::hostname,
-      $::fqdn
+      $::fqdn,
     ],
     ssl            => true,
     proxy          => 'http://localhost:8080',

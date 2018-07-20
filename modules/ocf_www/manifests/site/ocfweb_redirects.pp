@@ -16,7 +16,7 @@ class ocf_www::site::ocfweb_redirects {
     ssl           => true,
     ssl_key       => "/etc/ssl/private/${::fqdn}.key",
     ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain     => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
 
     rewrites      => [
       {rewrite_rule => '^/(change-password(/.*)?)?$ https://www.ocf.berkeley.edu/account/password [R=301,L]'},
@@ -57,7 +57,7 @@ class ocf_www::site::ocfweb_redirects {
     ssl           => true,
     ssl_key       => "/etc/ssl/private/${::fqdn}.key",
     ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain     => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
 
     rewrites      => [
       {rewrite_rule => '^/(.*)$ https://www.ocf.berkeley.edu/docs/$1 [R=301]'},
@@ -98,7 +98,7 @@ class ocf_www::site::ocfweb_redirects {
     ssl           => true,
     ssl_key       => "/etc/ssl/private/${::fqdn}.key",
     ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain     => '/etc/ssl/certs/incommon-intermediate.crt',
+    ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
 
     rewrites      => [
       {rewrite_rule => '^/lab.html$ https://www.ocf.berkeley.edu/about/lab/open-source [R=301,L]'},

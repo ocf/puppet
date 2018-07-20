@@ -42,6 +42,14 @@ class ocf_stats::munin {
   include apache::mod::fcgid
   include apache::mod::rewrite
 
+  $cname = $::host_env ? {
+    'dev'  => 'dev-munin',
+    'prod' => 'munin',
+  }
+
+  # Restart apache if any cert changes occur
+  Class['ocf::ssl::default'] ~> Class['Apache::Service']
+
   apache::vhost {
     'munin':
       servername    => "${cname}.ocf.berkeley.edu",
@@ -53,7 +61,7 @@ class ocf_stats::munin {
       ssl           => true,
       ssl_key       => "/etc/ssl/private/${::fqdn}.key",
       ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
-      ssl_chain     => '/etc/ssl/certs/incommon-intermediate.crt',
+      ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
 
       headers       => ['always set Strict-Transport-Security max-age=31536000'],
 

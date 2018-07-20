@@ -18,11 +18,22 @@ class ocf_irc::znc {
       owner   => ocfznc,
       group   => ocfznc,
       mode    => '0700',
-      require => User['ocfznc'],
+      require => User['ocfznc'];
+
+    '/var/lib/znc/znc.pem':
+      ensure => link,
+      group  => ocfznc,
+      owner  => ocfznc,
+      target => "/etc/ssl/private/${::fqdn}.pem";
   }
 
   ocf::systemd::service { 'znc':
-    source  => 'puppet:///modules/ocf_irc/znc.service',
-    require => [Package['znc'], File['/var/lib/znc']],
+    source    => 'puppet:///modules/ocf_irc/znc.service',
+    require   => [
+      Package['znc'],
+      File['/var/lib/znc'],
+      File['/var/lib/znc/znc.pem'],
+    ],
+    subscribe => Class['ocf::ssl::default'],
   }
 }
