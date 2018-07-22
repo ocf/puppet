@@ -7,4 +7,5 @@ class ocf_stats {
 
   include ocf_stats::labstats
   include ocf_stats::munin
+  include ocf_stats::prometheus
 }
