@@ -71,6 +71,7 @@ class ocf_stats::prometheus {
       request_headers     => ['set X-Forwarded-Proto https'],
 
       rewrites            => [
+        {rewrite_rule => '^/grafana/(.*)$ http://127.0.0.1:8990/$1 [P]'},
         {rewrite_rule => '^/(.*)$ http://127.0.0.1:9090/$1 [P]'},
       ];
 
