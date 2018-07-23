@@ -38,6 +38,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/facebook$ https://goo.gl/forms/dEzJmyRMwAPWCDAY2 [R]'},
       {rewrite_rule => '^/faq$ https://www.ocf.berkeley.edu/docs/faq/ [R]'},
       {rewrite_rule => '^/gh/([^/]*)(/(?!blob/)(?!tree/)(?!info/)(?!issue)(?!pull).+)$ https://ocf.io/gh/$1/blob/master$2 [R]'},
+      {rewrite_rule => '^/gh/i(/.*)?$ https://github.com/ocf/ircbot$1 [R]'},
       {rewrite_rule => '^/gh/l(/.*)?$ https://github.com/ocf/ocflib$1 [R]'},
       {rewrite_rule => '^/gh/p(/.*)?$ https://github.com/ocf/puppet$1 [R]'},
       {rewrite_rule => '^/gh/u(/.*)?$ https://github.com/ocf/utils$1 [R]'},
