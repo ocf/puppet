@@ -74,7 +74,7 @@ class ocf_stats::prometheus {
         {rewrite_rule => '^/(.*)$ http://127.0.0.1:9090/$1 [P]'},
       ];
 
-    'prometheus-redirect':
+    'prometheus-http-redirect':
       servername      => "${cname}.ocf.berkeley.edu",
       serveraliases   => [
         $cname,
