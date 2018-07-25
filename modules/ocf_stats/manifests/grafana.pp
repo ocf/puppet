@@ -5,8 +5,8 @@ class ocf_stats::grafana {
   }
 
   $canonical_url = $::host_env ? {
-    'dev'  => 'dev-prometheus',
-    'prod' => 'prometheus',
+    'dev'  => 'dev-prometheus.ocf.berkeley.edu',
+    'prod' => 'prometheus.ocf.berkeley.edu',
   }
 
   class { 'grafana':
@@ -22,8 +22,8 @@ class ocf_stats::grafana {
       server           => {
         http_addr => '127.0.0.1',
         http_port => 8990,
-        domain    => "${canonical_url}.ocf.berkeley.edu",
-        root_url  => "https://${canonical_url}.ocf.berkeley.edu/grafana/",
+        domain    => $canonical_url,
+        root_url  => "https://${canonical_url}/grafana/",
       },
       database         => {
         type => 'sqlite3',
@@ -49,7 +49,7 @@ class ocf_stats::grafana {
           name      => 'Prometheus',
           type      => 'prometheus',
           access    => 'direct',
-          url       => 'https://prometheus.ocf.berkeley.edu/',
+          url       => "https://${canonical_url}/",
           isDefault => true,
         },
       ],
