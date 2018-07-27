@@ -38,6 +38,7 @@ devices_ipv46:
 internal_zone_exceptions:
     - tsunami
     - werewolves
+    - vampires
     - death
     - dev-tsunami
     - dev-werewolves
