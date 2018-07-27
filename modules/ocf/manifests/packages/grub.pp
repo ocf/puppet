@@ -10,8 +10,8 @@ class ocf::packages::grub {
   # need os-prober anyway to detect other OSes since we don't have other OSes,
   # and we'd rather not have data corruption in the future:
   # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=788062
-  if $::lsbdistid == 'Debian' {
-    # grub-pc isn't available on Raspbian, for example
+  if $::lsbdistid != 'Raspbian' {
+    # grub-pc isn't available on Raspbian
     ocf::repackage { 'grub-pc':
       recommends => false;
     }

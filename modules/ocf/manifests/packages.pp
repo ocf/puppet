@@ -21,7 +21,7 @@ class ocf::packages {
   # Packages to automatically update to be the latest version. This should be
   # kept short, since apt-dater should be used to update almost all packages.
   #
-  # TODO: Fix with the Raspberry Pi
+  # TODO: Fix with the Raspberry Pi?
   if $::lsbdistid == 'Debian' {
     package {
       # Ensure ocflib is the latest version to quickly push out changes in lab
