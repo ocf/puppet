@@ -60,8 +60,11 @@ class ocf_mesos::master::webui(
   $mesos_agent_auth_header = base64('encode', "ocf:${mesos_agent_http_password}", 'strict')
   $marathon_auth_header = base64('encode', "marathon:${marathon_http_password}", 'strict')
 
-  $mesos_sub_filter = lookup('mesos_slaves').map |$slave| {
-      "':5051\",\"hostname\":\"${slave}\"' ':443\",\"hostname\":\"${slave}.agent.mesos.ocf.berkeley.edu\"'"
+  $mesos_sub_filter = lookup('mesos_slaves').map |$slave, $slave_ip| {
+    [
+      "'\"hostname\":\"${slave}\",\"port\":5051' '\"hostname\":\"${slave}.agent.mesos.ocf.berkeley.edu\",\"port\":443'",
+      "'${slave_ip}:5051' '${slave_ip}:443'",
+    ]
   }
 
   nginx::resource::server {
@@ -129,7 +132,7 @@ class ocf_mesos::master::webui(
         # This is what enables talking to the agents, and thus retrieving stdout/stderr from the UI.
         'proxy_set_header' => 'Accept-Encoding ""',  # prevent gzip
         'sub_filter_once'  => 'off',
-        'sub_filter'       => $mesos_sub_filter,
+        'sub_filter'       => flatten($mesos_sub_filter),
         'sub_filter_types' => 'text/javascript',
       },
 
@@ -186,7 +189,7 @@ class ocf_mesos::master::webui(
   }
 
   # Mesos agent proxies
-  lookup('mesos_slaves').each |String $slave| {
+  keys(lookup('mesos_slaves')).each |String $slave| {
     $host = "${slave}.agent.mesos.ocf.berkeley.edu"
 
     nginx::resource::upstream { "${slave}-agent":

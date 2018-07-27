@@ -14,10 +14,12 @@ mesos_masters:
     monsoon: 2
 
 mesos_slaves:
-    - jaws
-    - hal
-    - pandemic
-    - riptide
+  # This is not great, but we need these IPs to replace content returned from
+  # the Mesos dashboard so that links to logs work correctly
+  hal: 169.229.226.10
+  jaws: 169.229.226.12
+  pandemic: 169.229.226.14
+  riptide: 169.229.226.16
 
 browser_homepage: https://www.ocf.berkeley.edu/about/lab/open-source
 
