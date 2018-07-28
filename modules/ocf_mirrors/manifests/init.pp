@@ -23,7 +23,6 @@ class ocf_mirrors {
   include ocf_mirrors::puppetlabs
   include ocf_mirrors::qt
   include ocf_mirrors::raspbian
-  include ocf_mirrors::rasppi
   include ocf_mirrors::tails
   include ocf_mirrors::tanglu
   include ocf_mirrors::trisquel

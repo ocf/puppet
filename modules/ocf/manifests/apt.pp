@@ -78,7 +78,7 @@ class ocf::apt($stage = 'first') {
         };
 
       'archive-rpi':
-        location => 'http://mirrors/archive-raspberrypi/debian/',
+        location => 'http://archive.raspberrypi.org/debian/',
         release  => $dist,
         repos    => 'main ui',
         include  => {
