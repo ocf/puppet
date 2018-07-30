@@ -1,10 +1,6 @@
 class ocf_decal {
-
+  include apache
   include ocf_decal::website
-
-  class { 'apache':
-    default_vhost => false;
-  }
 
   user { 'ocfdecal':
     comment => 'DeCal management account',

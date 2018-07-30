@@ -57,14 +57,13 @@ class ocf_mirrors {
 
   class {
     '::apache':
-      default_vhost => false,
-      keepalive     => 'on',
-      log_formats   => {
+      keepalive   => 'on',
+      log_formats => {
         # A custom log format that counts bytes transferred by accesses (mod_logio)
         io_count => '%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O',
       },
       # "false" lets us define the class below with custom args
-      mpm_module    => false;
+      mpm_module  => false;
 
     '::apache::mod::worker':
       startservers    => 8,
