@@ -32,7 +32,7 @@ define ocf_mesos::master::load_balancer::http_vhost(
     proxy          => "http://localhost:${service_port}",
 
     ssl            => $ssl,
-    ssl_cert       => "/etc/ssl/private/${server_name}.crt",
+    ssl_cert       => "/etc/ssl/private/${server_name}.bundle",
     ssl_key        => "/etc/ssl/private/${server_name}.key",
     ssl_dhparam    => $ssl_dhparam,
   }
