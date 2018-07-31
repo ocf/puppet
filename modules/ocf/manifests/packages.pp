@@ -20,11 +20,15 @@ class ocf::packages {
 
   # Packages to automatically update to be the latest version. This should be
   # kept short, since apt-dater should be used to update almost all packages.
-  package {
-    # Ensure ocflib is the latest version to quickly push out changes in lab
-    # hours, etc. We control releases on this, so this should be safe.
-    'python3-ocflib':
-      ensure => latest;
+  #
+  # TODO: Fix with the Raspberry Pi?
+  if $::lsbdistid == 'Debian' {
+    package {
+      # Ensure ocflib is the latest version to quickly push out changes in lab
+      # hours, etc. We control releases on this, so this should be safe.
+      'python3-ocflib':
+        ensure => latest;
+    }
   }
 
   # Packages to remove
@@ -68,7 +72,6 @@ class ocf::packages {
   # common packages for all ocf machines
   package {
     [
-    'aactivator',
     'apt-dater-host',
     'beep',
     'bsdmainutils',
@@ -79,7 +82,6 @@ class ocf::packages {
     'dnsutils',
     'dtach',
     'finger',
-    'fluffy',
     'gist',
     'hexedit',
     'htop',
@@ -123,6 +125,16 @@ class ocf::packages {
     'unzip',
     'whois',
     ]:;
+  }
+
+  # Packages to only install on Debian (not on Raspbian for example)
+  if $::lsbdistid == 'Debian' {
+    package {
+      [
+        'aactivator',
+        'fluffy',
+      ]:;
+    }
   }
 
   ocf::repackage {

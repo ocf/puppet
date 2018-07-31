@@ -36,10 +36,15 @@ class ocf::networking(
       $iface = 'eth0'
     }
   } else {
-    # Find the first network interface that starts with 'en', since those are
-    # ethernet interfaces. (Won't work for the raspberry pi, since it uses wifi)
     $ifaces_array = split($::interfaces, ',')
-    $br_iface = grep($ifaces_array, 'en.+')[0]
+    if $::lsbdistid == 'Raspbian' {
+      # The raspberry pi has wifi, so we use that for networking
+      $br_iface = grep($ifaces_array, 'wl.+')[0]
+    } else {
+      # Find the first network interface that starts with 'en', since those are
+      # ethernet interfaces.
+      $br_iface = grep($ifaces_array, 'en.+')[0]
+    }
 
     # If using bridged networking, use the interface found above as the
     # interface being bridged to.
@@ -53,7 +58,8 @@ class ocf::networking(
         # necessarily correct, falling back will help make sure VMs upgraded
         # from jessie have networking configured when they reboot, since they
         # retain the old 'eth0' interface name until after reboot.
-        # XXX find out how to predict new interface names
+        #
+        # TODO: find out how to predict new interface names
         $iface = 'ens3'
       }
     }
