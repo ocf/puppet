@@ -6,8 +6,8 @@
 # sudo -u ocfapt /opt/apt/bin/reprepro [...]
 #
 # Example usage:
-#  - reprepro includedeb jessie my.deb  # add a new package
-#  - reprepro list jessie  # list packages in jessie dist
+#  - reprepro includedeb buster my.deb  # add a new package
+#  - reprepro list buster  # list packages in buster dist
 #  - reprepro export  # re-export dists (usually not needed)
 
 if [[ "$USER" != "ocfapt" ]]; then

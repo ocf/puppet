@@ -23,3 +23,13 @@ Codename: stretch-backports
 Architectures: amd64 i386 source
 Components: main
 SignWith: D72A0AF4
+
+Codename: buster
+Architectures: amd64 i386 source
+Components: main
+SignWith: D72A0AF4
+
+Codename: buster-backports
+Architectures: amd64 i386 source
+Components: main
+SignWith: D72A0AF4
