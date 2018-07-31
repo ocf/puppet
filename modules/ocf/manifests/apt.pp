@@ -11,18 +11,11 @@ class ocf::apt($stage = 'first') {
 
   $repos = 'main contrib non-free'
 
-  # Stretch is somehow classified as sid by Puppet, so this just makes sure
-  # that packages are installed from stretch repos instead of from sid ones
-  $dist = $::lsbdistcodename ? {
-    'jessie'        => 'jessie',
-    /(sid|stretch)/ => 'stretch',
-  }
-
   if $::lsbdistid == 'Debian' {
     apt::source {
       'debian':
         location => 'http://mirrors/debian/',
-        release  => $dist,
+        release  => $::lsbdistcodename,
         repos    => $repos,
         include  => {
           src => true
@@ -38,7 +31,7 @@ class ocf::apt($stage = 'first') {
 
       'debian-security':
         location => 'http://mirrors/debian-security/',
-        release  => "${dist}/updates",
+        release  => "${::lsbdistcodename}/updates",
         repos    => $repos,
         include  => {
           src => true
@@ -46,7 +39,7 @@ class ocf::apt($stage = 'first') {
 
       'ocf':
         location => 'http://apt/',
-        release  => $dist,
+        release  => $::lsbdistcodename,
         repos    => 'main',
         include  => {
           src => true
@@ -71,7 +64,7 @@ class ocf::apt($stage = 'first') {
     apt::source {
       'raspbian':
         location => 'http://mirrors/raspbian/raspbian/',
-        release  => $dist,
+        release  => $::lsbdistcodename,
         repos    => 'main contrib non-free rpi',
         include  => {
           src => true
@@ -79,7 +72,7 @@ class ocf::apt($stage = 'first') {
 
       'archive-rpi':
         location => 'http://archive.raspberrypi.org/debian/',
-        release  => $dist,
+        release  => $::lsbdistcodename,
         repos    => 'main ui',
         include  => {
           src => true
