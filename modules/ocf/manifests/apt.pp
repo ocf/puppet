@@ -60,6 +60,12 @@ class ocf::apt($stage = 'first') {
       location => 'http://mirrors/debian/';
     }
 
+    # Pin anything coming from *-backports to be lower than normal priority
+    apt::pin { 'ocf-backports':
+      priority => 200,
+      codename => "${::lsbdistcodename}-backports",
+    }
+
   } elsif $::lsbdistid == 'Raspbian' {
     apt::source {
       'raspbian':
