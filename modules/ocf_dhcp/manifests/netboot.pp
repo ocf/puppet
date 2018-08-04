@@ -6,6 +6,11 @@ class ocf_dhcp::netboot {
     '/opt/tftp':
       ensure  => directory;
 
+    '/opt/preseed':
+      ensure  => directory,
+      source  => 'puppet:///modules/ocf_dhcp/preseed',
+      recurse => true;
+
     '/etc/default/tftpd-hpa':
       source  => 'puppet:///modules/ocf_dhcp/netboot/tftpd-hpa',
       require => [Package['tftpd-hpa'], File['/opt/tftp']];

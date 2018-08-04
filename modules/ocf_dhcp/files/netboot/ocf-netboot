@@ -33,6 +33,7 @@ finnix="http://contrib.ocf.berkeley.edu/finnix.tar.gz"
 dban="http://sourceforge.net/projects/dban/files/latest/download"
 memtest="http://www.memtest.org/download/5.01/memtest86+-5.01.bin.gz"
 tftpdir='/opt/tftp'
+preseeddir='/opt/preseed'
 
 # Remove old pxe files
 rm -rf $tftpdir
@@ -82,6 +83,7 @@ for dist in "${dists[@]}"; do
 
         echo "Adding OCF preseed file into installer menu..."
         cd $tftpdir
+        cp -r $preseeddir $tftpdir
 
         # Add OCF install options, set as default if menu dist and arch
         # The first item overwrites the existing install menu option, as we do
@@ -91,12 +93,12 @@ for dist in "${dists[@]}"; do
                 menu label OCF Automated Install ($label)
                 menu default
                 kernel debian-installer/$arch/linux
-                append auto=true priority=critical locale=en_US keymap=us vga=788 initrd=debian-installer/$arch/initrd.gz -- quiet" > $txt_cfg
+                append auto=true priority=critical locale=en_US keymap=us vga=788 initrd=debian-installer/$arch/initrd.gz url=tftp://dhcp/preseed/$dist -- quiet" > $txt_cfg
         else
             echo "label ocf-$label
                 menu label OCF Automated Install ($label)
                 kernel $da_dir/debian-installer/$arch/linux
-                append auto=true priority=critical locale=en_US keymap=us vga=788 initrd=$da_dir/debian-installer/$arch/initrd.gz -- quiet" >> $txt_cfg
+                append auto=true priority=critical locale=en_US keymap=us vga=788 initrd=$da_dir/debian-installer/$arch/initrd.gz url=tftp://dhcp/preseed/$dist -- quiet" >> $txt_cfg
         fi
     done
 done
