@@ -29,8 +29,8 @@ txt_cfg="$menu_path/boot-screens/txt.cfg"
 #   - scp finnix.tar.gz supernova:~staff/public_html/contrib/
 # Note that the "fat" initrd requires ~0.75 GB of memory, so if you're
 # testing with a VM, be sure to give it sufficient RAM.
-finnix="http://contrib.ocf.berkeley.edu/finnix.tar.gz"
-dban="http://sourceforge.net/projects/dban/files/latest/download"
+finnix="https://www.ocf.berkeley.edu/~staff/finnix.tar.gz"
+dban="https://sourceforge.net/projects/dban/files/latest/download"
 memtest="http://www.memtest.org/download/5.01/memtest86+-5.01.bin.gz"
 tftpdir='/opt/tftp'
 preseeddir='/opt/preseed'
