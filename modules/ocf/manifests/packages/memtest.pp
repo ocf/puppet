@@ -1,3 +1,5 @@
 class ocf::packages::memtest {
-  package { 'memtest86+': }
+  if $::lsbdistid != 'Raspbian' {
+    package { 'memtest86+': }
+  }
 }
