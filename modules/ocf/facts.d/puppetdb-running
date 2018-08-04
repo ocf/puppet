@@ -9,7 +9,8 @@ fqdn=$(hostname -f)
 # warnings: https://tickets.puppetlabs.com/browse/PUP-8566
 puppet_ssl_path=$(puppet agent --configprint ssldir)
 
-if curl 'https://puppetdb:8081/pdb/meta/v1/version' -s --tlsv1 \
+if [ -f /usr/bin/curl ] && curl 'https://puppetdb:8081/pdb/meta/v1/version' \
+        -s --tlsv1 \
         --cacert "$puppet_ssl_path/certs/ca.pem" \
         --cert "$puppet_ssl_path/certs/$fqdn.pem" \
         --key "$puppet_ssl_path/private_keys/$fqdn.pem" \
