@@ -1,4 +1,5 @@
 class ocf_decal::website {
+  include ocf::ssl::default
   include apache::mod::rewrite
 
   file {
@@ -8,24 +9,10 @@ class ocf_decal::website {
       group   => www-data,
       mode    => '0755',
       require => User['ocfdecal'];
-    ['/srv/ssl', '/srv/ssl/decal']:
-      ensure  => directory,
-      owner   => ocfdecal,
-      group   => www-data,
-      mode    => '0440',
-      require => User['ocfdecal'];
-    '/srv/ssl/decal/decal.key':
-      source  => 'puppet:///private/decal.key',
-      mode    => '0440',
-      require => File['/srv/ssl/decal'];
-    '/srv/ssl/decal/decal.crt':
-      source  => 'puppet:///private/decal.crt',
-      mode    => '0440',
-      require => File['/srv/ssl/decal'];
-    '/etc/ssl/certs/lets-encrypt.crt':
-      source => 'puppet:///private/lets-encrypt.crt',
-      mode   => '0640';
   }
+
+  # Restart apache if any cert changes occur
+  Class['ocf::ssl::default'] ~> Class['Apache::Service']
 
   apache::vhost { 'decal-http-redirect':
     servername      => 'decal.ocf.berkeley.edu',
@@ -56,9 +43,9 @@ class ocf_decal::website {
     redirect_dest   => 'https://decal.ocf.berkeley.edu/',
 
     ssl             => true,
-    ssl_key         => '/srv/ssl/decal/decal.key',
-    ssl_cert        => '/srv/ssl/decal/decal.crt',
-    ssl_chain       => '/etc/ssl/certs/lets-encrypt.crt',
+    ssl_key         => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert        => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain       => "/etc/ssl/private/${::fqdn}.intermediate",
 }
 
   apache::vhost { 'decal-ssl':
@@ -71,8 +58,8 @@ class ocf_decal::website {
     override      => ['All'],
 
     ssl           => true,
-    ssl_key       => '/srv/ssl/decal/decal.key',
-    ssl_cert      => '/srv/ssl/decal/decal.crt',
-    ssl_chain     => '/etc/ssl/certs/lets-encrypt.crt',
+    ssl_key       => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
   }
 }
