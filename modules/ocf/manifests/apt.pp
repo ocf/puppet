@@ -98,11 +98,16 @@ class ocf::apt($stage = 'first') {
 
   # TODO: Add the puppetlabs repo to buster when it is available
   if $::lsbdistcodename in ['jessie', 'stretch'] {
+    $puppetlabs_repo = $::lsbdistcodename ? {
+      'jessie'  => 'PC1',
+      'stretch' => 'puppet',
+    }
+
     apt::source {
       'puppetlabs':
         location => 'http://mirrors/puppetlabs/apt/',
         release  => $::lsbdistcodename,
-        repos    => 'PC1',
+        repos    => $puppetlabs_repo,
         include  => {
           src => true
         };
