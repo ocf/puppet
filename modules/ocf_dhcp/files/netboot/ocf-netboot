@@ -13,7 +13,7 @@ set -euo pipefail
 # Whichever architecture and distribution is first in the arrays is the default,
 # and is (ab)used for the PXE boot menu.
 archs=(amd64)
-dists=(stretch jessie)
+dists=(stretch buster jessie)
 menu_arch="${archs[0]}"
 menu_dist="${dists[0]}"
 menu_path="debian-installer/$menu_arch"
@@ -42,8 +42,16 @@ chmod 755 $tftpdir
 
 for dist in "${dists[@]}"; do
     for arch in "${archs[@]}"; do
-        netboot="http://mirrors/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
-        fw="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$dist/current/firmware.tar.gz"
+        if [ "$dist" != "buster" ]; then
+            netboot="http://mirrors/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
+            fw="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$dist/current/firmware.tar.gz"
+        else
+            # TODO: Currently the daily image is broken, so use one that works with the firmware
+            # Once buster becomes stable this should be removed and added to the section above,
+            # and replaced with the new testing release.
+            netboot="https://d-i.debian.org/daily-images/amd64/daily/netboot/netboot.tar.gz"
+            fw=""
+        fi
 
         fwdir=$(mktemp -d)
         label="${dist}-${arch}"
