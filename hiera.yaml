@@ -18,10 +18,10 @@ hierarchy:
     path: "type/%{::type}.yaml"
 
   - name: "Virtual or physical"
-    path: "is_virtual/%{::is_virtual}"
+    path: "is_virtual/%{::is_virtual}.yaml"
 
   - name: "OS version"
-    path: "os/%{::lsbdistcodename}"
+    path: "os/%{::lsbdistcodename}.yaml"
 
   - name: "Common defaults"
     path: "common.yaml"
