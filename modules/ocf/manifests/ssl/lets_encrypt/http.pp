@@ -1,7 +1,10 @@
 class ocf::ssl::lets_encrypt::http {
   require ocf::ssl::setup
 
-  package { ['acme-tiny', 'python3-openssl']:; }
+  ocf::repackage { 'acme-tiny':
+    backport_on => ['jessie', 'stretch'],
+  }
+  package { 'python3-openssl':; }
 
   file {
     [
