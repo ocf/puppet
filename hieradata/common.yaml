@@ -54,3 +54,5 @@ staffvm_src_range_6: 2607:f140:8801::1:200-2607:f140:8801::1:252
 
 # Don't configure the default Apache vhost unless otherwise specified
 apache::default_vhost: false
+# Avoid ISP alerts about supposedly outdated Apache
+apache::server_tokens: Minor
