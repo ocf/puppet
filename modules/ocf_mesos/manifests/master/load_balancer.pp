@@ -94,7 +94,11 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     service_port   => 10005,
   }
 
-  # Port 10006 is unused
+  ocf_mesos::master::load_balancer::http_vhost { 'metabase':
+    server_name    => 'metabase.ocf.berkeley.edu',
+    server_aliases => ['mb', 'metabase', 'mb.ocf.berkeley.edu'],
+    service_port   => 10006,
+  }
 
   ocf_mesos::master::load_balancer::http_vhost { 'templates':
     server_name    => 'templates.ocf.berkeley.edu',
@@ -104,10 +108,6 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
 
   # Port 10008 is used by thelounge, it is proxied to by ocf_irc
   # Port 10009 is used by puppetboard, it is proxied to by ocf_puppet
+  # Port 10010 cannot be used due to https://github.com/moby/moby/issues/37507
 
-  ocf_mesos::master::load_balancer::http_vhost { 'metabase':
-    server_name    => 'metabase.ocf.berkeley.edu',
-    server_aliases => ['mb', 'metabase', 'mb.ocf.berkeley.edu'],
-    service_port   => 10010,
-  }
 }
