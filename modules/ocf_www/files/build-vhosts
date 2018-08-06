@@ -55,7 +55,7 @@ class SSL(namedtuple('SSL', ('fqdn',))):
         return str(SSL_BUNDLE / (self.fqdn + '.bundle'))
 
 
-class System_SSL(namedtuple('System_SSL', ('fqdn',))):
+class SystemSSL(namedtuple('SystemSSL', ('fqdn',))):
     """Tells where to find the standard OCF SSL files for this host (wildcards,
     fqdn.o.b.e, etc.).
     """
@@ -180,7 +180,7 @@ def build_config(src_vhosts, template, dev_config=False):
                 fqdn=dev_alias,
                 user=user,
                 comment='{} (dev alias of {})'.format(dev_alias, domain),
-                ssl=System_SSL(getfqdn()),
+                ssl=SystemSSL(getfqdn()),
                 bind_type='socket',
                 bind_dest=vhost['socket'],
             ))
