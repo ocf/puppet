@@ -15,7 +15,7 @@ class ocf_apphost::proxy {
 
     '/etc/nginx/sites-enabled/default':
       ensure  => file, # originally a link
-      source  => 'puppet:///modules/ocf_apphost/default',
+      content => template('ocf_apphost/default-vhost.erb'),
       require => Package['nginx'],
       notify  => Service['nginx'];
 
