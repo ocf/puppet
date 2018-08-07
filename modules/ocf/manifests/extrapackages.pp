@@ -28,6 +28,7 @@ class ocf::extrapackages {
     'autojump',
     'automake',
     'biber',
+    'bind9utils',
     'bison',
     'bogofilter',
     'build-essential',
