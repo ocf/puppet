@@ -18,7 +18,16 @@ acl "ucb" {
 
 // Options
 options {
-  directory "/var/cache/bind";
+  // This directory is used to search for any relative directives
+  // (including $INCLUDE in zone files)
+  directory "/srv/dns/etc/zones";
+
+  // Where to store more permanent keys (non-managed keys)
+  key-directory "/etc/bind/keys";
+
+  // This directory is used to store any managed keys (auto-updated DNSSEC keys
+  // for example)
+  managed-keys-directory "/var/cache/bind";
 
   // Forward requests to campus nameservers
   forwarders {
@@ -32,7 +41,6 @@ options {
 
   dnssec-enable yes;
   dnssec-lookaside auto;
-  key-directory "/etc/bind/keys";
 
   // Don't validate DNSSEC yet, since mesos-dns doesn't support it
   // dnssec-must-be-secure doesn't work either unfortunately :(
