@@ -9,6 +9,7 @@ import tempfile
 from collections import namedtuple
 from itertools import chain
 from pathlib import Path
+from socket import getfqdn
 
 import jinja2
 from ocflib.account.search import user_is_sorried
@@ -23,6 +24,7 @@ NGINX_SITE_CONFIG = '/etc/nginx/sites-enabled/virtual'
 
 LETS_ENCRYPT_SSL = Path('/services/http/ssl')
 SSL_BUNDLE = Path('/etc/ssl/apphost')
+SYSTEM_SSL = Path('/etc/ssl/private')
 
 APP_DIR = Path('/srv/apps')
 
@@ -51,6 +53,20 @@ class SSL(namedtuple('SSL', ('fqdn',))):
     @property
     def bundle(self):
         return str(SSL_BUNDLE / (self.fqdn + '.bundle'))
+
+
+class SystemSSL(namedtuple('SystemSSL', ('fqdn',))):
+    """Tells where to find the standard OCF SSL files for this host (wildcards,
+    fqdn.o.b.e, etc.).
+    """
+
+    @property
+    def bundle(self):
+        return str(SYSTEM_SSL / (self.fqdn + '.bundle'))
+
+    @property
+    def key(self):
+        return str(SYSTEM_SSL / (self.fqdn + '.key'))
 
 
 class VirtualHost(namedtuple('VirtualHost', (
@@ -157,22 +173,32 @@ def build_config(src_vhosts, template, dev_config=False):
         )
         vhosts.add(primary)
 
-        # for app vhosts, define a dev vhost as well (HTTP only)
+        # for app vhosts, define a dev vhost as well
         if bind_type == 'socket':
             dev_alias = primary.dev_alias(dev_config)
             vhosts.add(VirtualHost(
                 fqdn=dev_alias,
                 user=user,
                 comment='{} (dev alias of {})'.format(dev_alias, domain),
-                ssl=None,
+                ssl=SystemSSL(getfqdn()),
                 bind_type='socket',
                 bind_dest=vhost['socket'],
+            ))
+
+            vhosts.add(VirtualHost(
+                fqdn=dev_alias,
+                user=user,
+                comment='{0} (dev alias of {1}, redirect to {0})'.format(dev_alias, domain),
+                ssl=None,
+                bind_type='redirect',
+                bind_dest='https://' + dev_alias,
             ))
 
         redirects = set()
         if use_ssl:
             # Redirect from http://{domain} to https://{domain}
             redirects.add((primary.fqdn, None))
+
         for alias in vhost['aliases']:
             # Redirect from http://{alias} to http(s)://{domain}
             redirects.add((alias, None))

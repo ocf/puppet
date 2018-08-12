@@ -1,7 +1,10 @@
 class ocf_apphost::proxy {
+  include ocf::ssl::default
+
   package { 'nginx':; }
   service { 'nginx':
-    require => Package['nginx'];
+    require   => Package['nginx'],
+    subscribe => Class['ocf::ssl::default'],
   }
 
   file {
@@ -12,7 +15,7 @@ class ocf_apphost::proxy {
 
     '/etc/nginx/sites-enabled/default':
       ensure  => file, # originally a link
-      source  => 'puppet:///modules/ocf_apphost/default',
+      content => template('ocf_apphost/default-vhost.erb'),
       require => Package['nginx'],
       notify  => Service['nginx'];
 
@@ -29,15 +32,21 @@ class ocf_apphost::proxy {
       mode   => '0755';
   }
 
-  $build_args = $::host_env ? {
-    'dev'  => '--dev',
-    'prod' => '',
+  # TODO: Remove this once vampires has taken the place of werewolves and no
+  # longer needs to be the dev host
+  if $::hostname == 'vampires' {
+    $build_args = '--dev'
+  } else {
+    $build_args = $::host_env ? {
+      'dev'  => '--dev',
+      'prod' => '',
+    }
   }
 
   cron {
     'build-vhosts':
       command => "chronic /usr/local/bin/build-vhosts ${build_args} app",
       minute  => '*/10',
-      require => Package['nginx'];
+      require => [Package['nginx'], Class['ocf::ssl::default']];
   }
 }

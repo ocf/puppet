@@ -1,0 +1,25 @@
+# HTTP default vhost
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name apphost.ocf.berkeley.edu;
+
+    location / {
+        deny all;
+    }
+}
+
+# HTTPS default vhost
+server {
+    listen 443 default_server;
+    listen [::]:443 default_server;
+    server_name apphost.ocf.berkeley.edu;
+
+    ssl on;
+    ssl_certificate /etc/ssl/private/<%= @fqdn %>.bundle;
+    ssl_certificate_key /etc/ssl/private/<%= @fqdn %>.key;
+
+    location / {
+        deny all;
+    }
+}
