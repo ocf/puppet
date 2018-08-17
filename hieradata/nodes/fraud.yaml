@@ -1,0 +1,1 @@
+ocf::firewall::reject_unrecognized_input: false

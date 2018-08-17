@@ -1,6 +1,0 @@
-classes:
-    - ocf_kvm
-
-ocf::networking::bridge: true
-# TODO: temporary, remove
-ocf::firewall::reject_unrecognized_input: false
