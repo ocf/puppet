@@ -9,6 +9,12 @@ pipeline {
   }
 
   stages {
+   stage('check-gh-trust') {
+      steps {
+        checkGitHubAccess()
+      }
+    }
+
     stage('install-dependencies') {
       steps {
         sh 'make vendor'
