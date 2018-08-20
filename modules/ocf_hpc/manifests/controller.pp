@@ -24,4 +24,15 @@ class ocf_hpc::controller {
       File['/etc/slurm-llnl/cgroup.conf']
     ],
   }
+
+  # Set up script to autoadd LDAP group members to SLURM.
+  file { '/usr/local/bin/add_slurm_users.py':
+    source => 'puppet:///modules/ocf_hpc/add_slurm_users.py',
+    owner  => 'slurm',
+    mode   => '0755',
+  } -> cron { 'add_slurm_users':
+    command => '/usr/local/bin/add_slurm_users.py',
+    user    => 'slurm',
+    minute  => '*/15',
+  }
 }
