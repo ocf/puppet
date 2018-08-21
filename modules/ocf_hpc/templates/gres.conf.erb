@@ -1,5 +1,6 @@
 # These are the gres devices available on this node.
 
+# Since the nvidia_gpu_info fact comes in as a JSON-formatted string, we have to convert it back into a hash.
 <% JSON.parse(@nvidia_gpu_info).each do |index, model| -%>
 Name=gpu File=/dev/nvidia<%= index %> Type=<%= model %>
 <% end -%>

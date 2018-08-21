@@ -1,5 +1,5 @@
-# Currently there is a 'Gres=...' entry that should be changed to dynamically handle
-# gres resources on selected nodes
+# We do a nested iteration over the nvidia_gpu_info fact to configure GRES.
+# In addition, nvidia_gpu_info comes in as a JSON-formatted string, so we have to convert back into a hash first.
 <% @slurm_nodes_facts.each do |facts| -%>
 NodeName=<%= facts["hostname"] %> NodeAddr=<%= facts["ipaddress"] %> CPUs=<%= facts["processorcount"] %> Sockets=<%= facts["physicalprocessorcount"] %> CoresPerSocket=<%= facts["cores_per_socket"] %> ThreadsPerCore=<%= facts["threads_per_core"] %> RealMemory=<%= facts["memorysize_mb"].floor %> Gres=<% JSON.parse(facts["nvidia_gpu_info"]).each do |_, model| -%>gpu:<%= model %>:1,<% end -%> State=UNKNOWN
 <% end -%>

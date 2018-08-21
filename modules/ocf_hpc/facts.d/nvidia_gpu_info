@@ -30,6 +30,9 @@ def main():
         gpu_model_number = 'nv' + re.sub('[^0-9]', '', gpu_string.split(',')[0])
         nvidia_gpu_info_dict[gpu_index] = gpu_model_number
 
+    # To convert the dictionary into a Ruby hash, it's easiest to spit it out as a JSON-formatted string,
+    # since all custom facts are strings by default. We convert it back into a hash in the SLURM configuration
+    # templates.
     print('nvidia_gpu_info={}'.format(json.dumps(nvidia_gpu_info_dict)))
 
 
