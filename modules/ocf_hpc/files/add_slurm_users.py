@@ -4,14 +4,14 @@ Script that adds users in the 'ocfhpc' LDAP group to SLURM as a SLURM user.
 '''
 import subprocess
 
-from ocflib.account.utils import list_group
-
+from ocflib.account import search
+from ocflib.account import utils
 
 DEFAULT_ACCOUNT = 'users'
 
 
 def main():
-    ocfhpc_ldap_user_set = set(list_group('ocfhpc'))
+    ocfhpc_ldap_user_set = set(utils.list_group('ocfhpc'))
 
     # This produces a newline-separated list of SLURM users.
     ocfhpc_slurm_user_list = subprocess.run(
@@ -27,6 +27,11 @@ def main():
         return
 
     for new_user in users_to_be_added:
+
+        if not search.user_exists(new_user):
+            print('User {} in the HPC LDAP group does not exist.'.format(new_user))
+            continue
+
         # Add a new user to SLURM and commit changes immediately.
         subprocess.run(['sacctmgr', '-i', 'add', 'user', new_user, 'account={}'.format(DEFAULT_ACCOUNT)])
 
