@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+import re
+import shutil
+import subprocess
+
+
+def main():
+    if not shutil.which('nvidia-smi'):
+        return
+
+    try:
+        nvidia_smi_output = subprocess.run(['nvidia-smi', '--query-gpu=name,index', '--format=csv,noheader'],
+                                           stdout=subprocess.PIPE,
+                                           universal_newlines=True,
+                                           check=True,
+                                           ).stdout
+    except subprocess.CalledProcessError:
+        return
+
+    nvidia_gpu_list = nvidia_smi_output.split('\n')[:-1]
+
+    nvidia_gpu_info_dict = {}
+
+    for gpu_string in nvidia_gpu_list:
+        # Used for determining what the numbers of the GPU's device files in /dev
+        gpu_index = int(gpu_string.split(',')[1])
+        # Strip all except numbers and add 'nv' in front to distinguish from number of GPUs
+        # when specifying type in SLURM.
+        gpu_model_number = 'nv' + re.sub('[^0-9]', '', gpu_string.split(',')[0])
+        nvidia_gpu_info_dict[gpu_index] = gpu_model_number
+
+    print('nvidia_gpu_info={}'.format(nvidia_gpu_info_dict))
+
+
+if __name__ == '__main__':
+    main()
