@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import json
 import re
 import shutil
 import subprocess
@@ -29,7 +30,7 @@ def main():
         gpu_model_number = 'nv' + re.sub('[^0-9]', '', gpu_string.split(',')[0])
         nvidia_gpu_info_dict[gpu_index] = gpu_model_number
 
-    print('nvidia_gpu_info={}'.format(nvidia_gpu_info_dict))
+    print('nvidia_gpu_info={}'.format(json.dumps(nvidia_gpu_info_dict)))
 
 
 if __name__ == '__main__':
