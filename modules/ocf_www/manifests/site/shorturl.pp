@@ -63,7 +63,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/mlk$ https://www.ocf.berkeley.edu/mlk [R]'},
       {rewrite_rule => '^/mon$ https://munin.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/mysql$ https://www.ocf.berkeley.edu/docs/services/mysql/ [R]'},
-      {rewrite_rule => '^/opstaff-schedule$ https://docs.google.com/spreadsheets/d/1LUyU2AFY6YV403UkKUf_DhYn_-iqJGIO91JRRchGM8A/edit?usp=sharing [R]'},
+      {rewrite_rule => '^/opstaff-schedule$ https://docs.google.com/spreadsheets/d/185MB6nxajC1SsTXWW3lsgSXESomYdW_6pbUiEEFjisU/edit?usp=sharing [R]'},
       {rewrite_rule => '^/os$ https://docs.google.com/spreadsheets/d/185MB6nxajC1SsTXWW3lsgSXESomYdW_6pbUiEEFjisU/edit?usp=sharing [R]'},
       {rewrite_rule => '^/password$ https://www.ocf.berkeley.edu/account/password [R]'},
       {rewrite_rule => '^/printerlog$ https://docs.google.com/spreadsheets/d/1f4rLSmVt11oeFmO1yUUcXa-JcyFmDtloTWrYYPfYJoU/edit?usp=sharing [R]'},
