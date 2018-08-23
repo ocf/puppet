@@ -5,30 +5,27 @@ import shutil
 import subprocess
 
 
+def strip_non_ints(string):
+    return re.sub('[^0-9]', '', string)
+
+
 def main():
     if not shutil.which('nvidia-smi'):
+        print('NVIDIA drivers not installed; machine probably does not have NVIDIA GPUs.')
         return
 
-    try:
-        nvidia_smi_output = subprocess.run(['nvidia-smi', '--query-gpu=name,index', '--format=csv,noheader'],
-                                           stdout=subprocess.PIPE,
-                                           universal_newlines=True,
-                                           check=True,
-                                           ).stdout
-    except subprocess.CalledProcessError:
-        return
-
+    nvidia_smi_output = subprocess.check_output(('nvidia-smi', '--query-gpu=name,index', '--format=csv,noheader'),
+                                                universal_newlines=True)
     nvidia_gpu_list = nvidia_smi_output.split('\n')[:-1]
-
     nvidia_gpu_info_dict = {}
 
     for gpu_string in nvidia_gpu_list:
-        # Used for determining what the numbers of the GPU's device files in /dev
-        gpu_index = int(gpu_string.split(',')[1])
+        # gpu_index is used for determining what the numbers of the GPU's device files in /dev
+        gpu_model, gpu_index = gpu_string.split(',', 1)
         # Strip all except numbers and add 'nv' in front to distinguish from number of GPUs
         # when specifying type in SLURM.
-        gpu_model_number = 'nv' + re.sub('[^0-9]', '', gpu_string.split(',')[0])
-        nvidia_gpu_info_dict[gpu_index] = gpu_model_number
+        gpu_model_number = 'nv' + strip_non_ints(gpu_model)
+        nvidia_gpu_info_dict[int(gpu_index)] = gpu_model_number
 
     # To convert the dictionary into a Ruby hash, it's easiest to spit it out as a JSON-formatted string,
     # since all custom facts are strings by default. We convert it back into a hash in the SLURM configuration
