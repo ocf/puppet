@@ -106,6 +106,12 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     service_port   => 10007,
   }
 
+  ocf_mesos::master::load_balancer::http_vhost { 'grafana':
+    server_name    => 'grafana.ocf.berkeley.edu',
+    server_aliases => ['grafana'],
+    service_port   => 10011,
+  }
+
   # Port 10008 is used by thelounge, it is proxied to by ocf_irc
   # Port 10009 is used by puppetboard, it is proxied to by ocf_puppet
   # Port 10010 cannot be used due to https://github.com/moby/moby/issues/37507
