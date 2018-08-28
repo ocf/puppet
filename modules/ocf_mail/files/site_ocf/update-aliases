@@ -5,7 +5,7 @@ set -o pipefail
 
 staff=$(getent group ocfstaff | cut -d':' -f4)
 
-echo "staff-current: ${staff}" > /etc/aliases-group
+echo "staff-current: ocfstaff@lists.berkeley.edu,${staff}" > /etc/aliases-group
 /usr/sbin/postalias hash:/etc/aliases-group
 
 # update aliases-local
