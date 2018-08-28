@@ -50,7 +50,6 @@ autoload run-help
 
 setopt appendhistory extendedglob notify
 unsetopt autocd nomatch
-bindkey -v
 autoload -U colors && colors
 
 autoload -U compinit promptinit
