@@ -70,6 +70,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/password$ https://www.ocf.berkeley.edu/account/password [R]'},
       {rewrite_rule => '^/printerlog$ https://docs.google.com/spreadsheets/d/1f4rLSmVt11oeFmO1yUUcXa-JcyFmDtloTWrYYPfYJoU/edit?usp=sharing [R]'},
       {rewrite_rule => '^/printing$ https://www.ocf.berkeley.edu/announcements/2016-02-09/printing [R]'},
+      {rewrite_rule => '^/projects$ https://discourse.ocf.berkeley.edu/c/projects [R]'},
       {rewrite_rule => '^/rt$ https://rt.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/rt/([0-9]+)$ https://rt.ocf.berkeley.edu/Ticket/Display.html?id=$1 [R]'},
       {rewrite_rule => '^/senate-resolution$ https://docs.google.com/document/d/1UwjX4BJIzeQ6XjGBHu2rA51XUjywTBtPTzJN2CMGU4o/edit [R]'},
