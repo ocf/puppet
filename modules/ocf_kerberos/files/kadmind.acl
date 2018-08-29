@@ -5,6 +5,7 @@ andycui/admin@OCF.BERKELEY.EDU          all,get-keys
 baisang/admin@OCF.BERKELEY.EDU          all,get-keys
 ckuehl/admin@OCF.BERKELEY.EDU           all,get-keys
 daradib/admin@OCF.BERKELEY.EDU          all,get-keys
+ethanhs/admin@OCF.BERKELEY.EDU          all,get-keys
 jvperrin/admin@OCF.BERKELEY.EDU         all,get-keys
 kpengboy/admin@OCF.BERKELEY.EDU         all,get-keys
 kuoh/admin@OCF.BERKELEY.EDU             all,get-keys
@@ -31,6 +32,7 @@ andycui/root@OCF.BERKELEY.EDU           change-password                         
 baisang/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 ckuehl/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 daradib/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
+ethanhs/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 jvperrin/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 kpengboy/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 kuoh/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
