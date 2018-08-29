@@ -142,6 +142,16 @@ class ocf::packages {
       backport_on => jessie,
   }
 
+  if $::lsbdistcodename != 'jessie' {
+    package {
+      [
+        'python3.7',
+        'python3.7-dev',
+        'python3.7-venv',
+      ]:;
+    }
+  }
+
   if $::lsbdistcodename == 'jessie' {
     package {
       # in jessie, install python-pip-whl to avoid problems where a system-wide
