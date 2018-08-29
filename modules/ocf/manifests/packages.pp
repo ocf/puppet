@@ -142,7 +142,7 @@ class ocf::packages {
       backport_on => jessie,
   }
 
-  if $::lsbdistcodename == 'stretch' or $::lsbdistcodename == 'buster' {
+  if $::lsbdistcodename != 'jessie' {
     package {
       [
         'python3.7',
