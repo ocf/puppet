@@ -83,4 +83,12 @@ class ocf_desktop::packages {
     ['virt-manager', 'virt-viewer']:
       recommends => false;
   }
+
+  # Install libegl1-mesa-dev from stretch-backports so that libgtk-3-dev can be
+  # properly installed
+  ocf::repackage {
+    'libegl1-mesa-dev':
+      backport_on => 'stretch',
+      before      => Package['libgtk-3-dev'];
+  }
 }
