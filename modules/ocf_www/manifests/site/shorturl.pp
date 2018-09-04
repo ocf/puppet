@@ -79,6 +79,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/servers$ https://www.ocf.berkeley.edu/docs/staff/backend/servers/ [R]'},
       {rewrite_rule => '^/signin$ https://goo.gl/forms/E19EllYyluDfrlWw1 [R]'},
       {rewrite_rule => '^/shorturl$ https://github.com/ocf/puppet/blob/master/modules/ocf_www/manifests/site/shorturl.pp [R]'},
+      {rewrite_rule => '^/slack$ https://www.ocf.berkeley.edu/docs/contact/slack/ [R]'},
       {rewrite_rule => '^/social-?rules$ https://www.recurse.com/social-rules [R]'},
       {rewrite_rule => '^/ssh$ https://www.ocf.berkeley.edu/docs/services/shell/ [R]'},
       {rewrite_rule => '^/staff$ https://www.ocf.berkeley.edu/about/staff [R]'},
