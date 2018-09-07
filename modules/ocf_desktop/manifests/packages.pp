@@ -13,7 +13,7 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['arandr', 'atom', 'blender', 'claws-mail', 'eog', 'evince-gtk', 'filezilla',
+    ['arandr', 'atom', 'blender', 'claws-mail', 'eog', 'evince', 'filezilla',
       'florence', 'freeplane', 'geany', 'gimp', 'gnome-calculator', 'gparted',
       'hexchat', 'imagej', 'inkscape', 'lyx', 'musescore', 'mpv', 'mssh',
       'mumble', 'numlockx', 'simple-scan', 'ssh-askpass-gnome', 'texlive',
@@ -34,21 +34,39 @@ class ocf_desktop::packages {
     ['armagetronad', 'gl-117', 'gnome-games', 'minecraft-launcher', 'redeclipse',
       'wesnoth', 'wesnoth-music']:;
     # graphics/plotting
-    ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
+    ['r-cran-rgl', 'jupyter-qtconsole']:;
     # input method editors
     ['fcitx', 'fcitx-libpinyin', 'fcitx-rime', 'fcitx-hangul', 'fcitx-mozc']:;
     # nonfree packages
     ['firmware-linux']:;
     # notifications
     ['libnotify-bin', 'notification-daemon']:;
-    # performance improvements
-    ['preload']:;
     # security tools
     ['scdaemon']:;
     # utilities
     ['wakeonlan']:;
     # Xorg
     ['xclip', 'xsel', 'xserver-xorg', 'xscreensaver', 'freerdp-x11']:;
+  }
+
+  if $::lsbdistcodename == 'stretch' {
+    package {
+      [
+        # preload hasn't been updated since 2009, and I'm not sure we really
+        # get anything out of it in terms of performance improvements at this
+        # point anyway.
+        'preload',
+
+        # We custom-packaged this for stretch (initially) in
+        # https://github.com/ocf/rstudio/tree/debian-stretch-build, but the
+        # upstream download page now has a download link for stretch
+        # (https://www.rstudio.com/products/rstudio/download/#download)
+        # We could either package this for buster (faster), or wait until it is
+        # released upstream (likely only after buster is stable) and include
+        # the package from there.
+        'rstudio',
+      ]:;
+    }
   }
 
   # Remove some packages
