@@ -60,7 +60,8 @@ class ocf_mesos::master::webui(
   $mesos_agent_auth_header = base64('encode', "ocf:${mesos_agent_http_password}", 'strict')
   $marathon_auth_header = base64('encode', "marathon:${marathon_http_password}", 'strict')
 
-  $mesos_sub_filter = lookup('mesos_slaves').map |$slave, $slave_ip| {
+  $mesos_sub_filter = lookup('mesos_slaves').map |$slave| {
+    $slave_ip = ldap_attr($slave, 'ipHostNumber')
     [
       "'\"hostname\":\"${slave}\",\"port\":5051' '\"hostname\":\"${slave}.agent.mesos.ocf.berkeley.edu\",\"port\":443'",
       "'${slave_ip}:5051' '${slave_ip}:443'",
@@ -189,7 +190,7 @@ class ocf_mesos::master::webui(
   }
 
   # Mesos agent proxies
-  keys(lookup('mesos_slaves')).each |String $slave| {
+  lookup('mesos_slaves').each |String $slave| {
     $host = "${slave}.agent.mesos.ocf.berkeley.edu"
 
     nginx::resource::upstream { "${slave}-agent":

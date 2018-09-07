@@ -21,7 +21,7 @@ class ocf_puppet::puppetmaster {
     notify  => Service['puppetserver'],
   }
 
-  $docker_private_hosts = union(keys(lookup('mesos_masters')), keys(lookup('mesos_slaves')))
+  $docker_private_hosts = union(keys(lookup('mesos_masters')), lookup('mesos_slaves'))
 
   # Allow Mesos agents and masters to access docker secrets
   puppet_authorization::rule { 'private-docker':
