@@ -1,4 +1,4 @@
-class ocf_stats::labstats {
+class ocf_labstats {
   include ocf::firewall::output_printers
 
   user {
@@ -26,7 +26,7 @@ class ocf_stats::labstats {
 
     '/opt/stats/bin':
       ensure  => directory,
-      source  => 'puppet:///modules/ocf_stats/stats/bin',
+      source  => 'puppet:///modules/ocf_labstats/bin',
       mode    => '0755',
       recurse => true,
       require => File['/opt/stats/ocfstats-password'],

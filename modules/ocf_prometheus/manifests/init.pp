@@ -1,11 +1,14 @@
 # prometheus daemon config
-class ocf_stats::prometheus {
+class ocf_prometheus {
+  include apache
   include apache::mod::proxy
   include apache::mod::proxy_http
+  include ocf::firewall::allow_web
+  include ocf::ssl::default
 
   file {
     '/usr/local/bin/gen-prometheus-nodes':
-      source => 'puppet:///modules/ocf_stats/prometheus/gen-prometheus-nodes',
+      source => 'puppet:///modules/ocf_prometheus/gen-prometheus-nodes',
       mode   => '0755';
   }
 
