@@ -1,2 +1,4 @@
 classes:
-    - ocf_stats
+    - ocf_labstats
+    - ocf_munin
+    - ocf_prometheus

@@ -1,6 +1,8 @@
 # munin master config
-class ocf_stats::munin {
+class ocf_munin {
+  include apache
   include ocf::firewall::allow_web
+  include ocf::ssl::default
 
   package {
     ['munin', 'nmap']:;
@@ -17,15 +19,15 @@ class ocf_stats::munin {
 
   file {
     '/etc/munin/munin.conf':
-      source  => 'puppet:///modules/ocf_stats/munin/munin.conf',
+      source  => 'puppet:///modules/ocf_munin/munin.conf',
       mode    => '0644',
       notify  => Service['munin'],
       require => Package['munin'];
     '/usr/local/bin/gen-munin-nodes':
-      source => 'puppet:///modules/ocf_stats/munin/gen-munin-nodes',
+      source => 'puppet:///modules/ocf_munin/gen-munin-nodes',
       mode   => '0755';
     '/usr/local/bin/mail-munin-alert':
-      content => template('ocf_stats/munin/mail-munin-alert.erb'),
+      content => template('ocf_munin/mail-munin-alert.erb'),
       mode    => '0755';
   }
 
