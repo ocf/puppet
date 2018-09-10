@@ -3,6 +3,7 @@ import json
 import re
 import shutil
 import subprocess
+import sys
 
 
 def strip_non_ints(string):
@@ -11,12 +12,11 @@ def strip_non_ints(string):
 
 def main():
     if not shutil.which('nvidia-smi'):
-        print('NVIDIA drivers not installed; machine probably does not have NVIDIA GPUs.')
+        print('NVIDIA drivers not installed; machine probably does not have NVIDIA GPUs.', file=sys.stderr)
         return
 
-    nvidia_smi_output = subprocess.check_output(('nvidia-smi', '--query-gpu=name,index', '--format=csv,noheader'),
-                                                universal_newlines=True)
-    nvidia_gpu_list = nvidia_smi_output.split('\n')[:-1]
+    nvidia_smi_output = subprocess.check_output(('nvidia-smi', '--query-gpu=name,index', '--format=csv,noheader'))
+    nvidia_gpu_list = nvidia_smi_output.decode('utf-8').split('\n')[:-1]
     nvidia_gpu_info_dict = {}
 
     for gpu_string in nvidia_gpu_list:
