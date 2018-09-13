@@ -25,6 +25,19 @@ class ocf_desktop {
   include ocf_desktop::wireshark
   include ocf_desktop::xsession
 
+  $opstaff_workstation = lookup('opstaff')
+
+  # Add the printing credentials only on opstaff desktop
+  if $opstaff_workstation {
+    file {
+      '/etc/ocfprinting.json':
+        source    => 'puppet:///private/ocfprinting.json',
+        group     => opstaff,
+        mode      => '0640',
+        show_diff => false;
+    }
+  }
+
   # Allow HTTP and HTTPS
   include ocf::firewall::allow_web
 
