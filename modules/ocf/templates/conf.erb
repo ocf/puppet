@@ -1,0 +1,6 @@
+<% @config.each do |section, passwords| -%>
+[<%= section %>]
+<% passwords.each do |title, value| -%>
+<%= title %>=<%= value %>
+<% end -%>
+<% end -%>
