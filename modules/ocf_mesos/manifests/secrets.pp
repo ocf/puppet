@@ -33,6 +33,20 @@ class ocf_mesos::secrets {
       show_diff => false;
   }
 
+  ocf::conf { '/opt/share/docker/secrets/slackbridge/slackbridge.conf':
+    mode   => '0644',
+    layout => {
+      'irc'   => {
+        'nickserv_pass' => 'ocf::slackbridge::nickserv_pass',
+      },
+      'slack' => {
+        'token' => 'ocf::slackbridge::token',
+        'user'  => 'ocf::slackbridge::user',
+      },
+    },
+  }
+
+
   ocf_mesos::slave::attribute { 'secrets':
     value => 'true',  # lint:ignore:quoted_booleans
   }
