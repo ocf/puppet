@@ -17,5 +17,6 @@ define ocf::configbuilder(
     owner     => $owner,
     group     => $group,
     show_diff => $show_diff,
+    force     => $force,
   }
 }
