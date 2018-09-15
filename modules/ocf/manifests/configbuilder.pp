@@ -1,4 +1,4 @@
-define ocf::conf(
+define ocf::configbuilder(
   $layout = {},
   $owner = 'root',
   $group = 'root',

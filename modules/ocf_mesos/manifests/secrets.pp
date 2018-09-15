@@ -33,7 +33,7 @@ class ocf_mesos::secrets {
       show_diff => false;
   }
 
-  ocf::conf { '/opt/share/docker/secrets/slackbridge/slackbridge.conf':
+  ocf::confbuilder { '/opt/share/docker/secrets/slackbridge/slackbridge.conf':
     mode   => '0644',
     layout => {
       'irc'   => {
