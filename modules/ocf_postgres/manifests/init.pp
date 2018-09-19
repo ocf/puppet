@@ -1,14 +1,24 @@
 class ocf_postgres {
+
+  include ocf::ssl::default
+
   class { 'postgresql::server':
-    postgres_password => hiera('postgres::root'),
-    #                      type    db       usr srcaddr   auth
+    postgres_password => hiera('postgres::rootpw'),
+    # https://www.postgresql.org/docs/current/static/auth-pg-hba-conf.html
     ipv4acls          => ['hostssl sameuser all 0.0.0.0/0 md5'],
-    ipv6acls          => ['hostssl sameuser all ::/0 md5'];
+    ipv6acls          => ['hostssl sameuser all ::/0 md5'],
   }
 
-  # defaults to localhost
-  postgresql::server::config_entry { 'listen_addresses':
-    value => '*';
+  postgresql::server::config_entry {
+    # defaults to localhost
+    'listen_addresses':
+      value => '*';
+    'ssl':
+      value => 'on';
+    'ssl_cert_file':
+      value => "/etc/ssl/private/${::fqdn}.crt";
+    'ssl_key_file':
+      value => "/etc/ssl/private/${::fqdn}.key";
   }
 
   ocf::firewall::firewall46 {
@@ -20,4 +30,6 @@ class ocf_postgres {
         action => 'accept',
       };
   }
+
+  Class['ocf::ssl::default'] ~> Class['Postgresql::Server']
 }
