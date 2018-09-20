@@ -108,9 +108,6 @@ class ocf::apt($stage = 'first') {
         location => 'http://mirrors/puppetlabs/apt/',
         release  => $::lsbdistcodename,
         repos    => $puppetlabs_repo,
-        include  => {
-          src => true
-        };
     }
 
     # Add the puppetlabs apt repo key
