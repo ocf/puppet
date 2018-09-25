@@ -41,7 +41,7 @@ class ocf_prometheus {
       },
       {
         'job_name'        => 'node',
-        'scrape_interval' => '5s',
+        'scrape_interval' => '10s',
         'scrape_timeout'  => '5s',
 
         'file_sd_configs' => [
