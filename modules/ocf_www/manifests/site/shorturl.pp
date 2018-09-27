@@ -82,6 +82,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/rt$ https://rt.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/rt/([0-9]+)$ https://rt.ocf.berkeley.edu/Ticket/Display.html?id=$1 [R]'},
       {rewrite_rule => '^/senate-resolution$ https://docs.google.com/document/d/1UwjX4BJIzeQ6XjGBHu2rA51XUjywTBtPTzJN2CMGU4o/edit [R]'},
+      {rewrite_rule => '^/senate-presentation$ https://docs.google.com/presentation/d/1BAOAVScdA-W7CgN_LPYVywwgroDaoWGQdRPMtjfbwuc/edit?usp=sharing [R]'},
       {rewrite_rule => '^/servers$ https://www.ocf.berkeley.edu/docs/staff/backend/servers/ [R]'},
       {rewrite_rule => '^/signin$ https://goo.gl/forms/j2NU4u3T1pMKIPpu1 [R]'},
       {rewrite_rule => '^/shorturl$ https://github.com/ocf/puppet/blob/master/modules/ocf_www/manifests/site/shorturl.pp [R]'},
