@@ -24,6 +24,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/account$ https://www.ocf.berkeley.edu/docs/services/account/ [R]'},
       {rewrite_rule => '^/apphost$ https://www.ocf.berkeley.edu/docs/services/webapps/ [R]'},
       {rewrite_rule => '^/announce$ https://groups.google.com/a/lists.berkeley.edu/forum/#!forum/ocf [NE,R]'},
+      {rewrite_rule => '^/archiso$ http://mirrors.ocf.berkeley.edu/archlinux/iso/latest/archlinux-2018.09.01-x86_64.iso [R]'},
       {rewrite_rule => '^/bjb$ https://leprosy.ocf.berkeley.edu/bjb [R]'},
       {rewrite_rule => '^/bod(/.*)?$ https://www.ocf.berkeley.edu/~staff/bod$1 [R]'},
       {rewrite_rule => '^/buy$ https://goo.gl/forms/ps9iHn36zTdVtHlp1 [R]'},
