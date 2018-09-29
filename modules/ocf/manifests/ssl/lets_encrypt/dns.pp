@@ -1,5 +1,7 @@
 define ocf::ssl::lets_encrypt::dns(
   Array[String] $domains = [$::fqdn],
+  String $owner = ocfletsencrypt,
+  String $group = ssl-cert,
 ) {
   require ocf::ssl::lets_encrypt::dns_common
 
@@ -23,7 +25,7 @@ define ocf::ssl::lets_encrypt::dns(
     # This exec can be notified to get it to run dehydrated again, even if the
     # cert will not expire soon.
     command     => '/usr/bin/dehydrated --cron --privkey /etc/ssl/lets-encrypt/le-account.key',
-    user        => ocfletsencrypt,
+    user        => $owner,
     refreshonly => true,
     require     => Package['dehydrated-hook-ddns-tsig'],
     subscribe   => [
@@ -40,8 +42,8 @@ define ocf::ssl::lets_encrypt::dns(
     # https://github.com/lukas2511/dehydrated/issues/544
     "/var/lib/lets-encrypt/certs/${title}":
       ensure  => directory,
-      owner   => ocfletsencrypt,
-      group   => ssl-cert,
+      owner   => $owner,
+      group   => $group,
       mode    => '0640',
       recurse => true,
       require => [Package['ssl-cert'], File['/var/lib/lets-encrypt/certs']],

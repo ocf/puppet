@@ -2,8 +2,13 @@
 # To build and deploy private keys, use the `ocf::ssl::bundle` type.
 # (Or include `ocf::ssl::default` if you just want the default one that includes
 # the FQDN and all aliases of a server.)
+
 class ocf::ssl::setup {
   package { 'ssl-cert':; }
+
+  user { 'ocfletsencrypt':
+    groups => ['ssl-cert', 'sys'],
+  }
 
   file {
     default:
