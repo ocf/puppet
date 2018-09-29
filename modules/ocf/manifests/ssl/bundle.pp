@@ -1,12 +1,16 @@
 define ocf::ssl::bundle(
   Boolean $use_lets_encrypt = true,
   Array[String] $domains = [$title],
+  String $owner = ocfletsencrypt,
+  String $group = ssl-cert,
 ) {
   require ocf::ssl::setup
 
   if $use_lets_encrypt {
     ocf::ssl::lets_encrypt::dns { $title:
       domains => $domains,
+      owner   => $owner,
+      group   => $group,
     }
 
     $intermediate_source = 'puppet:///modules/ocf/ssl/lets-encrypt.crt'
@@ -41,6 +45,7 @@ define ocf::ssl::bundle(
         source => $intermediate_source,
         mode   => '0644';
     }
+
   } else {
     # TODO: Remove this branch once we are confident enough that using Let's
     # Encrypt certs is working well and is sustainable
