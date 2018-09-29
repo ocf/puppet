@@ -31,5 +31,5 @@ class ocf_postgres {
       };
   }
 
-  Class['ocf::ssl::default'] ~> Class['Postgresql::Server']
+  Class['Ocf::Ssl::Default'] ~> Class['Postgresql::Server']
 }
