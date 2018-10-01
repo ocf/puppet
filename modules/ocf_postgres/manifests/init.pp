@@ -16,7 +16,7 @@ class ocf_postgres {
     'ssl':
       value => 'on';
     'ssl_cert_file':
-      value => "/etc/ssl/private/${::fqdn}.crt";
+      value => "/etc/ssl/private/${::fqdn}.fullchain";
     'ssl_key_file':
       value => "/etc/ssl/private/${::fqdn}.key";
   }
