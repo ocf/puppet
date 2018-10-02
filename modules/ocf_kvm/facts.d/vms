@@ -11,7 +11,9 @@ def run_command(command_args):
     return list(filter(None, output))
 
 
-if __name__ == '__main__' and os.path.isfile('/usr/bin/virsh'):
+if (__name__ == '__main__' and
+    os.path.isfile('/usr/bin/virsh') and
+        subprocess.call(('/bin/systemctl', 'is-active', '--quiet', 'libvirtd')) == 0):
     vms_all = run_command(('/usr/bin/virsh', 'list', '--name', '--all'))
     vms_inactive = run_command(('/usr/bin/virsh', 'list', '--name', '--inactive'))
 
