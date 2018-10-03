@@ -1,5 +1,6 @@
 classes:
     - ocf::packages::docker
     - ocf_ocfweb::dev_config
+    - ocf::ssl::default
 
 owner: dkessler
