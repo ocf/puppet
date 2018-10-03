@@ -116,7 +116,12 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     service_port   => 10011,
   }
 
-  # Ports 10013-10019 are reserved for code intelligence servers for sourcegraph
+  ocf_mesos::master::load_balancer::http_vhost { 'sourcegraph':
+    server_name    => 'sourcegraph.ocf.berkeley.edu',
+    server_aliases => ['sourcegraph'],
+    service_port   => 10012,
+  }
 
+  # Ports 10013-10019 are reserved for code intelligence servers for sourcegraph
   # Port 10020 is used by snmp_exporter, it is contacted directly by Prometheus
 }

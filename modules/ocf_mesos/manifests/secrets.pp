@@ -31,6 +31,16 @@ class ocf_mesos::secrets {
       purge     => true,
       force     => true,
       show_diff => false;
+
+    # Create a couple scratch directories for sourcegraph to use for temporary
+    # data storage
+    #
+    # This isn't great, but I think it's better than creating a whole new repo
+    # for sourcegraph and this temporary directory only stores session
+    # information and cloned repos anyway
+    ['/opt/share/docker/sourcegraph', '/opt/share/docker/sourcegraph/redis']:
+      ensure => directory,
+      mode   => '0700';
   }
 
   ocf_mesos::slave::attribute { 'secrets':
