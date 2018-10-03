@@ -23,7 +23,7 @@ class ocf_prometheus {
     creates => '/var/local/prometheus-nodes.json',
   }
 
-  class { '::prometheus':
+  class { '::prometheus::server':
     version        => '2.0.0',
     extra_options  => '--web.listen-address="127.0.0.1:9090"',
     alerts         => {},
