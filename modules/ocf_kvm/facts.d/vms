@@ -2,6 +2,7 @@
 import json
 import os.path
 import subprocess
+import sys
 
 
 def run_command(command_args):
@@ -11,7 +12,16 @@ def run_command(command_args):
     return list(filter(None, output))
 
 
-if __name__ == '__main__' and os.path.isfile('/usr/bin/virsh'):
+if __name__ == '__main__':
+    # if virsh is not installed, give up
+    if not os.path.isfile('/usr/bin/virsh'):
+        sys.exit()
+
+    # if libvirtd is not running, virsh will not be able to connect to
+    # the system libvirt daemon
+    if subprocess.call(('/bin/systemctl', 'is-active', '--quiet', 'libvirtd')) != 0:
+        sys.exit()
+
     vms_all = run_command(('/usr/bin/virsh', 'list', '--name', '--all'))
     vms_inactive = run_command(('/usr/bin/virsh', 'list', '--name', '--inactive'))
 
