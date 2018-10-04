@@ -116,4 +116,5 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     service_port   => 10011,
   }
 
+  # Port 10013 is used by snmp_exporter, it is contacted directly by Prometheus
 }
