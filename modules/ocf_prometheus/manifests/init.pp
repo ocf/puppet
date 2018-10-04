@@ -24,7 +24,7 @@ class ocf_prometheus {
   }
 
   class { '::prometheus::server':
-    version        => '2.0.0',
+    version        => '2.4.2',
     extra_options  => '--web.listen-address="127.0.0.1:9090"',
     alerts         => {},
     scrape_configs => [
