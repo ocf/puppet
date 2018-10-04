@@ -84,11 +84,14 @@ class ocf_desktop::packages {
       recommends => false;
   }
 
-  # Install libegl1-mesa-dev from stretch-backports so that libgtk-3-dev can be
-  # properly installed
   ocf::repackage {
+    # Install libegl1-mesa-dev from stretch-backports so that libgtk-3-dev can be
+    # properly installed
     'libegl1-mesa-dev':
       backport_on => 'stretch',
       before      => Package['libgtk-3-dev'];
+    # tilix is only available in backports
+    'tilix':
+      backport_on => 'stretch';
   }
 }
