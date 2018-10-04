@@ -115,6 +115,8 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     server_aliases => ['grafana'],
     service_port   => 10011,
   }
+  
+  # Ports 10013-10019 are reserved for code intelligence servers
 
-  # Port 10013 is used by snmp_exporter, it is contacted directly by Prometheus
+  # Port 10020 is used by snmp_exporter, it is contacted directly by Prometheus
 }
