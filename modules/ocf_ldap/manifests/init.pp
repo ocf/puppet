@@ -130,7 +130,4 @@ class ocf_ldap {
     ],
     require => Package['sasl2-bin'],
   }
-  service { 'saslauthd':
-    ensure => running,
-  }
 }
