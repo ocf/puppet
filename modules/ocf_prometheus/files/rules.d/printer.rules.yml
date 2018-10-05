@@ -1,0 +1,14 @@
+# Nicer names for the printer metrics
+groups:
+  - name: printer
+    rules:
+    - record: printer_toner
+      expr: prtMarkerSuppliesLevel{hrDeviceIndex="1",prtMarkerSuppliesIndex="1"}
+    - record: printer_toner_max
+      expr: prtMarkerSuppliesMaxCapacity{hrDeviceIndex="1",prtMarkerSuppliesIndex="1"}
+    - record: printer_maintkit
+      expr: prtMarkerSuppliesLevel{hrDeviceIndex="1",prtMarkerSuppliesIndex="2"}
+    - record: printer_maintkit_max
+      expr: prtMarkerSuppliesMaxCapacity{hrDeviceIndex="1",prtMarkerSuppliesIndex="2"}
+    - record: printer_lifetime_pages
+      expr: prtMarkerLifeCount{hrDeviceIndex="1",prtMarkerIndex="1"}
