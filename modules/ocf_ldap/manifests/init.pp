@@ -120,4 +120,17 @@ class ocf_ldap {
         action => 'accept',
       };
   }
+
+  package { ['sasl2-bin']:; }
+  augeas { '/etc/default/saslauthd':
+    context => '/files/etc/default/saslauthd',
+    changes => [
+      'set MECHANISMS \'"kerberos5"\'',
+      'set START \'"yes"\'',
+    ],
+    require => Package['sasl2-bin'],
+  }
+  service { 'saslauthd':
+    ensure => running,
+  }
 }
