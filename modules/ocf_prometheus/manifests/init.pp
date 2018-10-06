@@ -35,7 +35,7 @@ class ocf_prometheus {
     require => File['/usr/local/bin/gen-prometheus-printers'];
   }
 
-  exec { 'gen-promethues-printers-initial':
+  exec { 'gen-prometheus-printers-initial':
     command => '/usr/local/bin/gen-prometheus-printers /var/local/prometheus-printers.json',
     creates => '/var/local/prometheus-printers.json',
   }
