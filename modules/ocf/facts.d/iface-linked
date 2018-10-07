@@ -1,0 +1,8 @@
+#!/bin/bash 
+set -euo pipefail
+
+for i in /sys/class/net/en*; do
+    if ethtool "$(basename $i)" | grep -q "Link detected: yes"; then
+        echo "$(basename $i)"
+    fi
+done

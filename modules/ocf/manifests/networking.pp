@@ -36,13 +36,13 @@ class ocf::networking(
       $iface = 'eth0'
     }
   } else {
-    $ifaces_array = split($::interfaces, ',')
     if $::lsbdistid == 'Raspbian' {
       # The raspberry pi has wifi, so we use that for networking
+      $ifaces_array = split($::interfaces, ',')
       $br_iface = grep($ifaces_array, 'wl.+')[0]
     } else {
-      # Find the first network interface that starts with 'en', since those are
-      # ethernet interfaces.
+      # Get network interfaces that are plugged into a port, and grab the first one for now
+      $ifaces_array = split($::iface_linked, "\n")
       $br_iface = grep($ifaces_array, 'en.+')[0]
     }
 
