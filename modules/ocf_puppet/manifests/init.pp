@@ -3,7 +3,7 @@ class ocf_puppet {
   include ocf_puppet::environments
   include ocf_puppet::firewall_input
   include ocf_puppet::puppetboard
-  include ocf_puppet::puppetmaster
+  include ocf_puppet::puppetserver
 
   file { '/etc/sudoers.d/ocfdeploy-puppet':
     content => "ocfdeploy ALL=NOPASSWD: /opt/puppetlabs/scripts/update-prod\n";
