@@ -1,4 +1,4 @@
-class ocf_puppet::puppetmaster {
+class ocf_puppet::puppetserver {
   package {
     ['puppetserver', 'puppet-lint', 'augeas-tools']:;
   }
@@ -30,6 +30,17 @@ class ocf_puppet::puppetmaster {
     match_request_method => ['get', 'post'],
     allow                => suffix($docker_private_hosts, '.ocf.berkeley.edu'),
     sort_order           => 500,
+    path                 => '/etc/puppetlabs/puppetserver/conf.d/auth.conf',
+    require              => Package['puppetserver'],
+    notify               => Service['puppetserver'],
+  }
+
+  puppet_authorization::rule { 'allow-puppetserver-cli':
+    match_request_path   => '/puppet-ca/v1/(?:certificate|certificate_status)',
+    match_request_type   => 'regex',
+    match_request_method => ['get', 'post', 'put', 'delete'],
+    allow                => $::fqdn,
+    sort_order           => 998,
     path                 => '/etc/puppetlabs/puppetserver/conf.d/auth.conf',
     require              => Package['puppetserver'],
     notify               => Service['puppetserver'],
