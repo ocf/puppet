@@ -1,8 +1,26 @@
 #!/bin/bash
 set -euo pipefail
 
-for i in /sys/class/net/en*; do
-    if ethtool "$(basename $i)" | grep -q "Link detected: yes"; then
-        echo "$(basename $i)"
-    fi
-done
+# Get network interfaces that are plugged into a port, and grab the first one
+# that looks like a ethernet-like interface
+
+selected_iface=''
+ifaces=$(ls /sys/class/net/ | grep ^en)
+
+# Only do this check if ethtool is actually installed
+if [ -f /sbin/ethtool ]; then
+    for iface in $ifaces; do
+        if /sbin/ethtool $iface | grep -q "Link detected: yes"; then
+            selected_iface=$iface
+            break
+        fi
+    done
+fi
+
+# If no interface has been found that looks suitable, fall back to a sensible
+# default (the first ethernet-like interface on the system)
+if [ "$selected_iface" != "" ]; then
+    echo "iface_linked=$selected_iface"
+else
+    echo "iface_linked=${ifaces[0]}"
+fi

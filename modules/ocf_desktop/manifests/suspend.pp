@@ -15,8 +15,6 @@ class ocf_desktop::suspend {
   package {
     # ACPI support
     'acpi-support-base':;
-    # install ethtool to allow script to enable WOL
-    'ethtool':;
     # power management
     'pm-utils':;
   }

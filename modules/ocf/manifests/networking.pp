@@ -41,9 +41,7 @@ class ocf::networking(
       $ifaces_array = split($::interfaces, ',')
       $br_iface = grep($ifaces_array, 'wl.+')[0]
     } else {
-      # Get network interfaces that are plugged into a port, and grab the first one for now
-      $ifaces_array = split($::iface_linked, "\n")
-      $br_iface = grep($ifaces_array, 'en.+')[0]
+      $br_iface = $::iface_linked
     }
 
     # If using bridged networking, use the interface found above as the
