@@ -35,6 +35,7 @@ class ocf_puppet::puppetserver {
     notify               => Service['puppetserver'],
   }
 
+  # allow the puppetmaster itself to get/set all certificate information
   puppet_authorization::rule { 'allow-puppetserver-cli':
     match_request_path   => '/puppet-ca/v1/(?:certificate|certificate_status)',
     match_request_type   => 'regex',
