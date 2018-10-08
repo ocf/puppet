@@ -41,7 +41,6 @@ internal_zone_exceptions:
     - werewolves
     - vampires
     - death
-    - dev-tsunami
     - dev-werewolves
     - dev-death
 
