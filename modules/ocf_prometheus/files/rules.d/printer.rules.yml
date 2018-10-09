@@ -4,11 +4,32 @@ groups:
     rules:
     - record: printer_toner
       expr: prtMarkerSuppliesLevel{hrDeviceIndex="1",prtMarkerSuppliesIndex="1"}
+      labels:
+        prtMarkerSuppliesIndex: ''
+        hrDeviceIndex: ''
     - record: printer_toner_max
       expr: prtMarkerSuppliesMaxCapacity{hrDeviceIndex="1",prtMarkerSuppliesIndex="1"}
+      labels:
+        prtMarkerSuppliesIndex: ''
+        hrDeviceIndex: ''
     - record: printer_maintkit
       expr: prtMarkerSuppliesLevel{hrDeviceIndex="1",prtMarkerSuppliesIndex="2"}
+      labels:
+        prtMarkerSuppliesIndex: ''
+        hrDeviceIndex: ''
     - record: printer_maintkit_max
       expr: prtMarkerSuppliesMaxCapacity{hrDeviceIndex="1",prtMarkerSuppliesIndex="2"}
+      labels:
+        prtMarkerSuppliesIndex: ''
+        hrDeviceIndex: ''
     - record: printer_lifetime_pages
       expr: prtMarkerLifeCount{hrDeviceIndex="1",prtMarkerIndex="1"}
+      labels:
+        prtMarkerIndex: ''
+        hrDeviceIndex: ''
+
+    - alert: LowToner
+      expr: (printer_toner / printer_toner_max) < 0.02
+      annotations:
+        summary: "Low toner on {{ $labels.instance }}"
+        description: "{{ $labels.instance }} toner is at level {{ $value }}, replace it soon!"
