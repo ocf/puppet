@@ -20,7 +20,7 @@ mesos_slaves:
     - pandemic
     - riptide
 
-browser_homepage: https://www.ocf.berkeley.edu/about/lab/open-source
+browser_homepage: https://www.ocf.berkeley.edu/about/lab/vote
 
 #special devices
 devices_ipv4_only:
