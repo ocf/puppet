@@ -9,6 +9,15 @@ class ocf_postgres {
     ipv6acls          => ['hostssl sameuser all ::/0 md5'],
   }
 
+  file {
+    # copies proper .pgpass file for ocfbackups to authenticate on backup
+    '/opt/share/.pgpass':
+      source          => 'puppet:///private/backups/.pgpass',
+      mode            => '0600',
+      owner           => 'ocfbackups', 	
+      show_diff       => false;
+  }
+
   postgresql::server::config_entry {
     # defaults to localhost
     'listen_addresses':
