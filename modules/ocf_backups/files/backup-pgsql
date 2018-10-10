@@ -1,8 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-# Dumps the entire PostgreSQL instance to one .sql file. 
+# Dumps the entire PostgreSQL instance to one .sql file.
 # Requires that a valid ~/.pgpass file be available on the PostgreSQL host
 ssh -K ocfbackups@postgres 'pg_dumpall -U postgres -h localhost | pigz' > pgsql-all-$(date +%F).sql.gz
-
-
