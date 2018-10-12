@@ -164,6 +164,12 @@ def send_printer_mail(message, job, quo):
 
 def prehook(c, r, job):
     quo = quota.get_quota(c, job.user)
+    import inspect
+    _, _, _, argvals = inspect.getargvalues(inspect.currentframe())
+    with open('~/enforcer_debug.txt', 'w+') as f:
+        for argname in argvals:
+            f.write(argname + ': ' + argvals[argname] + '\n')
+
     if job.pages > quo.daily:
         send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
         msg = NOTIFY_QUOTA_MESSAGE.format(
