@@ -1,10 +1,42 @@
-class ocf_filehost {
+class ocf_filehost(
+  String $storage_device
+) {
   package { ['quotatool', 'nfs-kernel-server']:; }
 
-  file { '/etc/exports':
-    source  => 'puppet:///modules/ocf_filehost/exports',
-    require => Package['nfs-kernel-server'],
+  file {
+    '/etc/exports':
+      source  => 'puppet:///modules/ocf_filehost/exports',
+      require => Package['nfs-kernel-server'];
+
+    '/opt/homes':
+      ensure  => directory;
   }
+
+  mount {
+    '/opt/homes':
+      ensure  => mounted,
+      atboot  => true,
+      device  => $storage_device,
+      fstype  => 'ext4',
+      options => 'noacl,noatime,nodev,usrquota';
+
+    '/home':
+      ensure  => mounted,
+      atboot  => true,
+      device  => '/opt/homes/home',
+      fstype  => 'none',
+      options => 'bind',
+      require => File['/opt/homes'];
+
+    '/services':
+      ensure  => mounted,
+      atboot  => true,
+      device  => '/opt/homes/services',
+      fstype  => 'none',
+      options => 'bind',
+      require => File['/opt/homes'];
+  }
+
 
   augeas { '/etc/default/nfs-kernel-server':
     lens    => 'Shellvars.lns',
@@ -28,7 +60,7 @@ class ocf_filehost {
   } ~>
   service {
     'nfs-server':
-      subscribe => File['/etc/exports'],
+      subscribe => [File['/etc/exports'], Mount['/opt/homes']],
   }
 
   include ocf::firewall::nfs

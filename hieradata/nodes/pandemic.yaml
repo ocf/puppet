@@ -10,3 +10,4 @@ ocf::packages::ntp::peers:
     - hal.ocf.berkeley.edu
     - jaws.ocf.berkeley.edu
     - riptide.ocf.berkeley.edu
+    - dataloss.ocf.berkeley.edu

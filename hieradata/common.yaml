@@ -19,6 +19,7 @@ mesos_slaves:
     - hal
     - pandemic
     - riptide
+    - dataloss
 
 browser_homepage: https://www.ocf.berkeley.edu/about/lab/vote
 
