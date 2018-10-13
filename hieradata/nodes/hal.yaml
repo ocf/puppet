@@ -11,3 +11,4 @@ ocf::packages::ntp::peers:
     - jaws.ocf.berkeley.edu
     - pandemic.ocf.berkeley.edu
     - riptide.ocf.berkeley.edu
+    - dataloss.ocf.berkeley.edu
