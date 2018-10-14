@@ -98,7 +98,7 @@ class ocf_mesos::master::webui(
       ],
 
       proxy_set_header => [
-        'X-Forwarded-Protocol $scheme',
+        'X-Forwarded-Proto $scheme',
         'X-Forwarded-For $proxy_add_x_forwarded_for',
         'Host $http_host',
         "Authorization 'Basic ${mesos_auth_header}'",
@@ -138,7 +138,7 @@ class ocf_mesos::master::webui(
       },
 
       proxy_set_header    => [
-        'X-Forwarded-Protocol $scheme',
+        'X-Forwarded-Proto $scheme',
         'X-Forwarded-For $proxy_add_x_forwarded_for',
         'Host $http_host',
         "Authorization 'Basic ${mesos_auth_header}'",
@@ -171,7 +171,7 @@ class ocf_mesos::master::webui(
       ],
 
       proxy_set_header => [
-        'X-Forwarded-Protocol $scheme',
+        'X-Forwarded-Proto $scheme',
         'X-Forwarded-For $proxy_add_x_forwarded_for',
         'Host $http_host',
         "Authorization 'Basic ${marathon_auth_header}'",
@@ -216,7 +216,7 @@ class ocf_mesos::master::webui(
         ],
 
         proxy_set_header => [
-          'X-Forwarded-Protocol $scheme',
+          'X-Forwarded-Proto $scheme',
           'X-Forwarded-For $proxy_add_x_forwarded_for',
           'Host $http_host',
           "Authorization 'Basic ${mesos_agent_auth_header}'",

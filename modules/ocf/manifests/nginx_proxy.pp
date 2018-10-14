@@ -20,7 +20,7 @@ define ocf::nginx_proxy(
   $base_headers = [
     'Host $host',
     'X-Forwarded-For $proxy_add_x_forwarded_for',
-    'X-Forwarded-Protocol $scheme',
+    'X-Forwarded-Proto $scheme',
     'X-Real-IP $remote_addr',
   ]
 
