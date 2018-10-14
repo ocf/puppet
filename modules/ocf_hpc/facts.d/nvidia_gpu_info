@@ -11,6 +11,7 @@ def strip_non_ints(string):
 
 def main():
     if not shutil.which('nvidia-smi'):
+        print('nvidia_gpu_info={}')
         return
 
     nvidia_smi_output = subprocess.check_output(('nvidia-smi', '--query-gpu=name,index', '--format=csv,noheader'))
