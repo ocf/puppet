@@ -1,11 +1,12 @@
 class ocf_hpc::compute {
   require ocf_hpc
 
-  # install proprietary nvidia drivers
+  # install proprietary nvidia drivers and CUDA.
   ocf::repackage {
-    ['nvidia-driver', 'nvidia-settings', 'nvidia-cuda-toolkit']:
+    ['nvidia-driver', 'nvidia-settings']:
       backport_on => stretch;
   }
+  package { 'nvidia-cuda-toolkit': }
 
   file { '/etc/slurm-llnl/gres.conf':
     content => template('ocf_hpc/gres.conf.erb'),
