@@ -20,7 +20,7 @@ class ocf_desktop::packages {
       'xarchiver', 'xcape', 'xterm', 'zenmap']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils',
-      'gnome-icon-theme', 'redshift', 'xfce4-whiskermenu-plugin']:;
+      'gnome-icon-theme', 'redshift', 'xfce4-whiskermenu-plugin', 'arc-theme']:;
     # desktop helpers
     ['libimage-exiftool-perl']:;
     # display manager
