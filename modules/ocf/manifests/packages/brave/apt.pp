@@ -10,9 +10,6 @@ class ocf::packages::brave::apt {
     location     => 'https://s3-us-west-2.amazonaws.com/brave-apt',
     release      => $::lsbdistcodename,
     repos        => 'main',
-    include      => {
-      src => false
-    },
     require      => Apt::Key['brave'],
   }
 }

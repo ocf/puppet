@@ -10,9 +10,6 @@ class ocf::packages::docker::apt {
     location => '[arch=amd64] https://download.docker.com/linux/debian',
     release  => $::lsbdistcodename,
     repos    => 'stable',
-    include  => {
-      src => false
-    },
     require  => [Apt::Key['docker'], Package['apt-transport-https']],
   }
 }

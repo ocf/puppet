@@ -10,9 +10,6 @@ class ocf::packages::vscode::apt {
     location     => 'http://packages.microsoft.com/repos/vscode',
     release      => 'stable',
     repos        => 'main',
-    include      => {
-      src => false
-    },
     require      => Apt::Key['vscode'],
   }
 }

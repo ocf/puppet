@@ -21,9 +21,6 @@ class ocf::packages::chrome::apt {
       location => '[arch=amd64] http://dl.google.com/linux/chrome/deb/',
       release  => 'stable',
       repos    => 'main',
-      include  => {
-        src => false
-      },
       require  => Apt::Key['google'];
   }
 }
