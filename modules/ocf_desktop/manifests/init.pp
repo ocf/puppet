@@ -5,6 +5,7 @@ class ocf_desktop {
   include ocf::packages::cups
   include ocf::packages::firefox
   include ocf::packages::pulse
+  include ocf::packages::vscode
 
   include ocf_mesos::slave
 
