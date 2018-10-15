@@ -4,7 +4,7 @@ class ocf_prometheus::alertmanager {
       opts   => {
         chain       => 'PUPPET-OUTPUT',
         proto       => 'tcp',
-        destination => ['anthrax'],
+        destination => 'smtp',
         dport       => 25,
         uid         => 'alertmanager',
         action      => 'accept',
