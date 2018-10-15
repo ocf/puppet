@@ -1,4 +1,2 @@
 classes:
   - ocf_postgres
-
-ocf::ssl::default::owner: root
