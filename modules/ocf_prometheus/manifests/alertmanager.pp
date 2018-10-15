@@ -1,7 +1,7 @@
 class ocf_prometheus::alertmanager {
   ocf::firewall::firewall46 {
     '995 allow prometheus alertmanager to send on SMTP port':
-      opts   => {
+      opts    => {
         chain       => 'PUPPET-OUTPUT',
         proto       => 'tcp',
         destination => 'smtp',
@@ -9,7 +9,8 @@ class ocf_prometheus::alertmanager {
         uid         => 'alertmanager',
         action      => 'accept',
       },
-      before => undef,
+      before  => undef,
+      require => User['alertmanager'],
   }
 
   class { '::prometheus::alertmanager':
