@@ -1,21 +1,13 @@
 class ocf_postgres {
-
-  include ocf::ssl::default
+  class { 'ocf::ssl::default':
+    owner => 'root',
+  }
 
   class { 'postgresql::server':
     postgres_password => hiera('postgres::rootpw'),
     # https://www.postgresql.org/docs/current/static/auth-pg-hba-conf.html
     ipv4acls          => ['hostssl sameuser all 0.0.0.0/0 md5'],
     ipv6acls          => ['hostssl sameuser all ::/0 md5'],
-  }
-
-  file {
-    # copies proper .pgpass file for ocfbackups to authenticate on backup
-    '/opt/share/.pgpass':
-      source    => 'puppet:///private/backups/pgpass',
-      mode      => '0600',
-      owner     => 'ocfbackups',
-      show_diff => false;
   }
 
   postgresql::server::config_entry {
@@ -25,7 +17,7 @@ class ocf_postgres {
     'ssl':
       value => 'on';
     'ssl_cert_file':
-      value => "/etc/ssl/private/${::fqdn}.fullchain";
+      value => "/etc/ssl/private/${::fqdn}.bundle";
     'ssl_key_file':
       value => "/etc/ssl/private/${::fqdn}.key";
   }
@@ -41,4 +33,14 @@ class ocf_postgres {
   }
 
   Class['Ocf::Ssl::Default'] ~> Class['Postgresql::Server']
+
+  file {
+    # copies proper .pgpass file for ocfbackups to authenticate on backup
+    '/opt/share/.pgpass':
+      source    => 'puppet:///private/pgpass',
+      mode      => '0600',
+      owner     => 'ocfbackups',
+      show_diff => false;
+  }
+
 }
