@@ -7,7 +7,8 @@ class ocf::ssl::setup {
   package { 'ssl-cert':; }
 
   user { 'ocfletsencrypt':
-    groups => ['ssl-cert', 'sys'],
+    groups     => ['ssl-cert', 'sys'],
+    forcelocal => false,
   }
 
   file {
