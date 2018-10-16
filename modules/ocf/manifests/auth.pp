@@ -47,7 +47,8 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   cron {
     'nss-updatedb':
       command => 'nss_updatedb ldap > /dev/null',
-      hour    => '6',
+      # run at a random time between 10am and 4:59pm
+      hour    => 10 + fqdn_rand(7),
       minute  => fqdn_rand(60),
       require => Package['nss-updatedb'],
   }
