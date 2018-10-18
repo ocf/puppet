@@ -59,14 +59,19 @@ class ocf_desktop::xsession {
   }
 
   # wallpaper symlink
-  $wallpaper = $staff_only ? {
-    true  => 'background-staff.svg',
-    false => 'background.svg',
+  $login_screen = $staff_only ? {
+    true    => 'login-staff.png',
+    default => 'login.png',
   }
 
   file { '/opt/share/wallpaper':
     ensure  => link,
-    target  => "/opt/share/xsession/images/${wallpaper}",
+    target  => '/opt/share/xsession/images/background.png',
+    require => File['/opt/share/xsession/images'];
+  }
+  file { '/opt/share/login':
+    ensure  => link,
+    target  => "/opt/share/xsession/images/${login_screen}",
     require => File['/opt/share/xsession/images'];
   }
 

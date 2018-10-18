@@ -6,7 +6,7 @@
       <property name="monitor0" type="empty">
         <property name="image-path" type="string" value="/opt/share/wallpaper"/>
         <property name="workspace0" type="empty">
-          <property name="backdrop-cycle-enable" type="bool" value="true"/>
+          <property name="backdrop-cycle-enable" type="bool" value="false"/>
           <property name="backdrop-cycle-random-order" type="bool" value="true"/>
           <property name="backdrop-cycle-timer" type="uint" value="1"/>
         </property>
@@ -14,7 +14,7 @@
       <property name="monitor1" type="empty">
         <property name="image-path" type="string" value="/opt/share/wallpaper"/>
         <property name="workspace0" type="empty">
-          <property name="backdrop-cycle-enable" type="bool" value="true"/>
+          <property name="backdrop-cycle-enable" type="bool" value="false"/>
           <property name="backdrop-cycle-random-order" type="bool" value="true"/>
           <property name="backdrop-cycle-timer" type="uint" value="1"/>
         </property>
@@ -22,7 +22,7 @@
       <property name="monitor2" type="empty">
         <property name="image-path" type="string" value="/opt/share/wallpaper"/>
         <property name="workspace0" type="empty">
-          <property name="backdrop-cycle-enable" type="bool" value="true"/>
+          <property name="backdrop-cycle-enable" type="bool" value="false"/>
           <property name="backdrop-cycle-random-order" type="bool" value="true"/>
           <property name="backdrop-cycle-timer" type="uint" value="1"/>
         </property>
