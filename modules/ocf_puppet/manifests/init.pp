@@ -9,6 +9,11 @@ class ocf_puppet {
     content => "ocfdeploy ALL=NOPASSWD: /opt/puppetlabs/scripts/update-prod\n";
   }
 
-  # Staff need to use virtualenv to run tests.
-  package { 'virtualenv': }
+  package {
+    # Keychain is useful for managing SSH and GPG agents
+    'keychain':;
+
+    # Staff need to use virtualenv to run tests.
+    'virtualenv':;
+  }
 }
