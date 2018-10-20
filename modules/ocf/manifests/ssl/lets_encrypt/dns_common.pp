@@ -6,7 +6,7 @@ class ocf::ssl::lets_encrypt::dns_common {
     require => Package['dehydrated'],
   }
 
-  $letsencrypt_ddns_key = assert_type(Stdlib::Base64, hiera('letsencrypt::ddns::key'))
+  $letsencrypt_ddns_key = assert_type(Stdlib::Base64, lookup('letsencrypt::ddns::key'))
 
   file {
     '/var/lib/lets-encrypt/certs':

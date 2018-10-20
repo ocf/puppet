@@ -4,7 +4,7 @@ class ocf_ns {
     require => Package['bind9'];
   }
 
-  $letsencrypt_ddns_key = assert_type(Stdlib::Base64, hiera('letsencrypt::ddns::key'))
+  $letsencrypt_ddns_key = assert_type(Stdlib::Base64, lookup('letsencrypt::ddns::key'))
 
   file {
     '/etc/bind/named.conf.options':

@@ -39,7 +39,7 @@ class ocf_mirrors {
     password => '*',
   }
 
-  $ocfstats_password = hiera('ocfstats::mysql::password')
+  $ocfstats_password = lookup('ocfstats::mysql::password')
 
   file {
     ['/opt/mirrors', '/opt/mirrors/ftp', '/opt/mirrors/project', '/opt/mirrors/bin']:

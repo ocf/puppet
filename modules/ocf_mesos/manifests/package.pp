@@ -13,7 +13,7 @@ class ocf_mesos::package {
   # TODO: if we decide that we *won't* have servers which are both masters and
   # agents (we don't currently), we could simplify this
   $is_master = tagged('ocf_mesos::master')
-  $is_slave = tagged('ocf_mesos::slave') and !hiera('ocf_mesos::slave::disabled', false)
+  $is_slave = tagged('ocf_mesos::slave') and !lookup('ocf_mesos::slave::disabled', {default_value => false})
   service {
     'mesos-master':
       ensure  => $is_master,

@@ -4,7 +4,7 @@ class ocf_mesos::slave($attributes = {}) {
   include ocf_mesos::package
 
   $masters = lookup('mesos_masters')
-  $zookeeper_password = hiera('mesos::zookeeper::password')
+  $zookeeper_password = lookup('mesos::zookeeper::password')
 
   # TODO: can we not duplicate this between slave/master?
   # looks like: mesos0:2181,mesos1:2181,mesos2:2181
@@ -29,8 +29,8 @@ class ocf_mesos::slave($attributes = {}) {
   }
 
 
-  $ocf_mesos_master_password = hiera('mesos::master::password')
-  $ocf_mesos_slave_password = hiera('mesos::slave::password')
+  $ocf_mesos_master_password = lookup('mesos::master::password')
+  $ocf_mesos_slave_password = lookup('mesos::slave::password')
 
   file {
     default:

@@ -19,7 +19,7 @@ class ocf_labstats {
       *      => $file_defaults;
 
     '/opt/stats/ocfstats-password':
-      content => hiera('ocfstats::mysql::password'),
+      content => lookup('ocfstats::mysql::password'),
       mode    => '0600',
       require => File['/opt/stats'],
       *       => $file_defaults;
