@@ -2,11 +2,12 @@ class ocf_hpc::compute {
   require ocf_hpc
 
   # install proprietary nvidia drivers and CUDA.
-  ocf::repackage {
-    ['nvidia-driver', 'nvidia-settings']:
+  ocf::repackage { ['nvidia-driver', 'nvidia-settings', 'nvidia-cuda-toolkit']:
       backport_on => stretch;
+  } -> file { '/etc/modules-load.d/nvidia-uvm.conf':
+    # The nvidia-uvm kernel module, which is needed for CUDA apps, can't be loaded as needed from within Singularity.
+    content => 'nvidia-uvm';
   }
-  package { 'nvidia-cuda-toolkit': }
 
   file { '/etc/slurm-llnl/gres.conf':
     content => template('ocf_hpc/gres.conf.erb'),
