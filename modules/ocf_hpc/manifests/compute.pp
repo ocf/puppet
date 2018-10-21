@@ -6,7 +6,7 @@ class ocf_hpc::compute {
       backport_on => stretch;
   } -> file { '/etc/modules-load.d/nvidia-uvm.conf':
     # The nvidia-uvm kernel module, which is needed for CUDA apps, can't be loaded as needed from within Singularity.
-    content => 'nvidia-uvm';
+    content => "nvidia-uvm\n";
   }
 
   file { '/etc/slurm-llnl/gres.conf':
