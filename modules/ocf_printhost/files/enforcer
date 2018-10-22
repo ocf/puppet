@@ -166,7 +166,7 @@ def prehook(c, r, job):
     quo = quota.get_quota(c, job.user)
     import inspect
     _, _, _, argvals = inspect.getargvalues(inspect.currentframe())
-    with open('~/enforcer_debug.txt', 'w+') as f:
+    with open('/~/enforcer_debug.txt', 'w+') as f:
         for argname in argvals:
             f.write(argname + ': ' + argvals[argname] + '\n')
 
