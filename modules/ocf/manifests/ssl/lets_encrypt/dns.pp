@@ -1,7 +1,7 @@
 define ocf::ssl::lets_encrypt::dns(
   Array[String] $domains = [$::fqdn],
-  String $owner = ocfletsencrypt,
-  String $group = ssl-cert,
+  String $owner = 'ocfletsencrypt',
+  String $group = 'ssl-cert',
 ) {
   require ocf::ssl::lets_encrypt::dns_common
 

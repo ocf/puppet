@@ -1,8 +1,8 @@
 define ocf::ssl::bundle(
   Boolean $use_lets_encrypt = true,
   Array[String] $domains = [$title],
-  String $owner = ocfletsencrypt,
-  String $group = ssl-cert,
+  String $owner = 'ocfletsencrypt',
+  String $group = 'ssl-cert',
 ) {
   require ocf::ssl::setup
 
@@ -16,7 +16,6 @@ define ocf::ssl::bundle(
     $intermediate_source = 'puppet:///modules/ocf/ssl/lets-encrypt.crt'
     $cert_path = "/var/lib/lets-encrypt/certs/${title}/cert.pem"
     $key_path = "/var/lib/lets-encrypt/certs/${title}/privkey.pem"
-    $fullchain_path = "/var/lib/lets-encrypt/certs/${title}/fullchain.pem"
     $cert_source = "file://${cert_path}"
     $key_source = "file://${key_path}"
 
@@ -40,12 +39,6 @@ define ocf::ssl::bundle(
         ensure => symlink,
         links  => manage,
         target => $cert_path,
-        mode   => '0644';
-
-      "/etc/ssl/private/${title}.fullchain":
-        ensure => symlink,
-        links  => manage,
-        target => $fullchain_path,
         mode   => '0644';
 
       "/etc/ssl/private/${title}.intermediate":
