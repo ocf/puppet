@@ -2,9 +2,9 @@
 # /etc/ssl/private/$cert_name.{key,crt,bundle,intermediate}
 
 class ocf::ssl::default(
-  String $owner = ocfletsencrypt,
-  String $group = ssl-cert,
-){
+  String $owner = 'ocfletsencrypt',
+  String $group = 'ssl-cert',
+) {
   # Attempt to collect all domains for a host to include in a SSL certificate.
   # The '@' record needs to be handled in a special case, since
   # "@.ocf.berkeley.edu" and "@.ocf.io" are both not valid domains
