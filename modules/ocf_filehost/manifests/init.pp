@@ -18,7 +18,8 @@ class ocf_filehost(
       atboot  => true,
       device  => $storage_device,
       fstype  => 'ext4',
-      options => 'noacl,noatime,nodev,usrquota';
+      options => 'noacl,noatime,nodev,usrquota',
+      require => File['/opt/homes'];
 
     '/home':
       ensure  => mounted,
@@ -26,7 +27,7 @@ class ocf_filehost(
       device  => '/opt/homes/home',
       fstype  => 'none',
       options => 'bind',
-      require => File['/opt/homes'];
+      require => Mount['/opt/homes'];
 
     '/services':
       ensure  => mounted,
@@ -34,9 +35,8 @@ class ocf_filehost(
       device  => '/opt/homes/services',
       fstype  => 'none',
       options => 'bind',
-      require => File['/opt/homes'];
+      require => Mount['/opt/homes'];
   }
-
 
   augeas { '/etc/default/nfs-kernel-server':
     lens    => 'Shellvars.lns',
