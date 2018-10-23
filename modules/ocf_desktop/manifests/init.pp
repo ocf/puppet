@@ -4,6 +4,7 @@ class ocf_desktop {
   include ocf::packages::chrome
   include ocf::packages::cups
   include ocf::packages::firefox
+  include ocf::packages::paper_icons
   include ocf::packages::pulse
   include ocf::packages::vscode
 

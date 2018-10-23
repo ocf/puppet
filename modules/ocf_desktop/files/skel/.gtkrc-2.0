@@ -1,0 +1,14 @@
+style "my-xfdesktop-icon-view" {
+
+    XfdesktopIconView::shadow-blur-radius = 0
+    XfdesktopIconView::shadow-x-offset = 0
+    XfdesktopIconView::shadow-y-offset = 0
+
+    base[SELECTED] = "#101010"
+    base[ACTIVE] = "#303030"
+
+    fg[NORMAL] = "#000000"
+    fg[SELECTED] = "#ffffff"
+    fg[ACTIVE] = "#ffffff"
+}
+widget_class "*XfdesktopIconView*" style "my-xfdesktop-icon-view"

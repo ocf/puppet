@@ -164,6 +164,12 @@ class ocf_desktop::xsession {
       require => File['/etc/skel/.config'];
   }
 
+  # Fix desktop icon text color
+  file {
+    '/etc/skel/.gtkrc-2.0':
+      source => 'puppet:///modules/ocf_desktop/skel/.gtkrc-2.0';
+  }
+
   # disable user switching and screen locking (prevent non-staff users from
   # executing the necessary binaries)
   file { '/usr/bin/xflock4':
