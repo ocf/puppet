@@ -117,6 +117,16 @@ NOTIFY_JOB_ERROR = dedent("""\
         Please contact a staff member for assistance.\
 """)
 
+NOTIFY_PROHIBITED_FILE_TYPE = dedent("""\
+        I'm afraid I can't let you do that.
+        Please download your file as a PDF before downloading.
+        {file_type} files disagree with my software.\
+""")
+
+PROHIBITED_FILE_TYPES = [
+    ('Google Doc', lambda job: job.doc_name[-14:] == ' - Google Docs')
+]
+
 
 def read_config():
     conf = ConfigParser()
@@ -164,11 +174,15 @@ def send_printer_mail(message, job, quo):
 
 def prehook(c, r, job):
     quo = quota.get_quota(c, job.user)
-    import inspect
-    _, _, _, argvals = inspect.getargvalues(inspect.currentframe())
-    with open('/~/enforcer_debug.txt', 'w+') as f:
-        for argname in argvals:
-            f.write(argname + ': ' + argvals[argname] + '\n')
+
+    # A stop gap until we figure out why some file types aren't printing correctly
+    for file_type, prohibited in PROHIBITED_FILE_TYPES:
+        if prohibited(job):
+            msg = NOTIFY_PROHIBITED_FILE_TYPE.format(
+                file_type=file_type,
+            )
+            r.publish(job.user, msg)
+            sys.exit(255)
 
     if job.pages > quo.daily:
         send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
