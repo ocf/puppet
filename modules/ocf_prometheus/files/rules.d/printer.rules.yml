@@ -4,11 +4,39 @@ groups:
     rules:
     - record: printer_toner
       expr: prtMarkerSuppliesLevel{hrDeviceIndex="1",prtMarkerSuppliesIndex="1"}
+      labels:
+        prtMarkerSuppliesIndex: ''
+        hrDeviceIndex: ''
     - record: printer_toner_max
       expr: prtMarkerSuppliesMaxCapacity{hrDeviceIndex="1",prtMarkerSuppliesIndex="1"}
+      labels:
+        prtMarkerSuppliesIndex: ''
+        hrDeviceIndex: ''
     - record: printer_maintkit
       expr: prtMarkerSuppliesLevel{hrDeviceIndex="1",prtMarkerSuppliesIndex="2"}
+      labels:
+        prtMarkerSuppliesIndex: ''
+        hrDeviceIndex: ''
     - record: printer_maintkit_max
       expr: prtMarkerSuppliesMaxCapacity{hrDeviceIndex="1",prtMarkerSuppliesIndex="2"}
+      labels:
+        prtMarkerSuppliesIndex: ''
+        hrDeviceIndex: ''
     - record: printer_lifetime_pages
       expr: prtMarkerLifeCount{hrDeviceIndex="1",prtMarkerIndex="1"}
+      labels:
+        prtMarkerIndex: ''
+        hrDeviceIndex: ''
+
+    - alert: LowToner
+      # Sometimes the printer will randomly report -2 toner and then jump back
+      # to the "actual" level.  We take the median over the last 30 minutes to
+      # smooth out these spikes.
+      expr: (quantile_over_time(0.5, printer_toner[30m])/printer_toner_max) < 0.03
+      annotations:
+        summary: "Low toner on {{ $labels.instance }}"
+        description: "{{ $labels.instance }} toner is at level {{ $value }}, replace it soon!"
+    - alert: PrinterDown
+      expr: up{job="printer"} == 0
+      annotations:
+        summary: "Printer {{ $labels.instance }} is down"
