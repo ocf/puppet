@@ -118,13 +118,12 @@ NOTIFY_JOB_ERROR = dedent("""\
 """)
 
 NOTIFY_PROHIBITED_FILE_TYPE = dedent("""\
-        I'm afraid I can't let you do that.
-        Please download your file as a PDF before downloading.
-        {file_type} files disagree with my software.\
+        Unfortunately we don't support printing {file_type}.
+        Please download your file as PDF, then try again.\
 """)
 
 PROHIBITED_FILE_TYPES = [
-    ('Google Doc', lambda job: job.doc_name[-14:] == ' - Google Docs')
+    ('Google Doc', lambda job: job.doc_name.endswith(' - Google Docs'))
 ]
 
 
