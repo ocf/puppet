@@ -117,12 +117,12 @@ NOTIFY_JOB_ERROR = dedent("""\
         Please contact a staff member for assistance.\
 """)
 
-NOTIFY_PROHIBITED_FILE_TYPE = dedent("""\
-        Unfortunately we don't support printing {file_type}.
-        Please download your file as PDF, then try again.\
+NOTIFY_PROBLEMATIC_FILE_SOURCE = dedent("""\
+        Unfortunately we don't support printing {file_source}.
+        Please download your file as a PDF, then try again.\
 """)
 
-PROHIBITED_FILE_TYPES = [
+PROBLEMATIC_FILE_SOURCE = [
     ('Google Doc', lambda job: job.doc_name.endswith(' - Google Docs'))
 ]
 
@@ -175,10 +175,10 @@ def prehook(c, r, job):
     quo = quota.get_quota(c, job.user)
 
     # A stop gap until we figure out why some file types aren't printing correctly
-    for file_type, prohibited in PROHIBITED_FILE_TYPES:
-        if prohibited(job):
-            msg = NOTIFY_PROHIBITED_FILE_TYPE.format(
-                file_type=file_type,
+    for file_source, problematic in PROBLEMATIC_FILE_SOURCE:
+        if problematic(job):
+            msg = NOTIFY_PROBLEMATIC_FILE_SOURCE.format(
+                file_source=file_source,
             )
             r.publish(job.user, msg)
             sys.exit(255)
