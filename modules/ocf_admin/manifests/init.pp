@@ -44,6 +44,12 @@ class ocf_admin {
       group     => ocfstaff,
       mode      => '0640',
       show_diff => false;
+
+    '/etc/ucbldap.passwd':
+      content   => lookup('ucbldap::password'),
+      group     => ocfstaff,
+      mode      => '0640',
+      show_diff => false;
   }
 
   # Allow 8000-8999 for ocfweb etc. dev work
