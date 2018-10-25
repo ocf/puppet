@@ -82,6 +82,11 @@ class ocf::networking(
       value => 'fq';
     'net.ipv4.tcp_congestion_control':
       value => 'bbr';
+
+  # disable IPv6 - SLAAC doesn't work for us yet
+  # https://moffle.fuqu.jp/ocf/%23rebuild/20181024#L123
+  sysctl { 'net.ipv6.conf.all.autoconf':
+    value => '0';
   }
 
   # Make sure these are absent so predictable network iface names get used
