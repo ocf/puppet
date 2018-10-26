@@ -76,6 +76,14 @@ class ocf::networking(
       require => Package['resolvconf'];
   }
 
+  # Enable TCP BBR congestion control
+  sysctl {
+    'net.core.default_qdisc':
+      value => 'fq';
+    'net.ipv4.tcp_congestion_control':
+      value => 'bbr';
+  }
+
   # Make sure these are absent so predictable network iface names get used
   file {
     [
