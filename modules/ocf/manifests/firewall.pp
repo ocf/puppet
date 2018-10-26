@@ -1,6 +1,6 @@
 class ocf::firewall(
   $reject_unrecognized_input = true,
-  ) {
+) {
   # Install prerequisite packages (that is, netfilter-persistent)
   include firewall
   require ocf::firewall::chains
