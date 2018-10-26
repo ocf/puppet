@@ -12,11 +12,19 @@ class ocf::firewall::pre {
       proto  => 'icmp',
       action => 'accept';
 
-    '000 accept all icmpv6':
+    '000 deny ipv6 router advertisement':
+      chain    => 'PUPPET-INPUT',
+      proto    => 'ipv6-icmp',
+      action   => 'reject',
+      icmp     => ['router-advertisement'],
+      provider => 'ip6tables';
+
+    '001 accept all icmpv6':
       chain    => 'PUPPET-INPUT',
       proto    => 'ipv6-icmp',
       action   => 'accept',
       provider => 'ip6tables';
+
   }
 
   ocf::firewall::firewall46 {
