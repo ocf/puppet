@@ -118,12 +118,12 @@ NOTIFY_JOB_ERROR = dedent("""\
 """)
 
 NOTIFY_PROBLEMATIC_FILE_SOURCE = dedent("""\
-        Unfortunately we don't support printing {file_source}.
-        Please download your file as a PDF, then try again.\
+        Unfortunately, printing from {file_source} results in formatting issues.
+        Please download your file as a PDF and print from desktop instead of web browser.\
 """)
 
 PROBLEMATIC_FILE_SOURCE = [
-    ('Google Doc', lambda job: job.doc_name.endswith(' - Google Docs'))
+    ('Google Docs', lambda job: job.doc_name.endswith(' - Google Docs'))
 ]
 
 
