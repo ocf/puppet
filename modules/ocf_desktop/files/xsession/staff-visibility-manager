@@ -3,7 +3,7 @@ import sys
 import os
 import re
 
-LAUNCHER_SETTINGS_PATH = os.path.expanduser('~/.config/xfce4/panel/launcher-25/switch.desktop')
+LAUNCHER_SETTINGS_PATH = os.path.expanduser('~/.config/xfce4/panel/launcher-21/switch.desktop')
     
 def changePanelState(file_path, icon_name, visibility):    
     with open(file_path, 'r') as f:
