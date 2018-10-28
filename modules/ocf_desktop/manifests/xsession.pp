@@ -38,6 +38,10 @@ class ocf_desktop::xsession {
       mode    => '0755',
       source  => 'puppet:///modules/ocf_desktop/xsession/paper-genmon',
       require => File['/opt/share/xsession/icons'];
+    # script for visibility toggling on the lap map
+    '/usr/local/bin/staff-visibility-manager':
+      mode    => '0755',
+      source  => 'puppet:///modules/ocf_desktop/xsession/staff-visibility-manager';
     # list of possible xsessions
     '/usr/share/xsessions':
       ensure  => directory,
