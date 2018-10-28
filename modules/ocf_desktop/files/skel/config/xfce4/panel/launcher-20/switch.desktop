@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Exec=/home/r/rr/rrchan/remote/staff-visibility-manager
+Icon=user-invisible
+StartupNotify=false
+Terminal=false
+Categories=Utility;X-XFCE;X-Xfce-Toplevel;
+OnlyShowIn=XFCE;
+Name=Currently Invisible
+Comment=Toggles your visibility as staff on the lab map
+X-XFCE-Source=file:///usr/share/applications/xfce4-about.desktop
+Visibility=Invisible
+Path=
