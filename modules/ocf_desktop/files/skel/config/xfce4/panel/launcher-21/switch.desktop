@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Exec=/home/r/rr/rrchan/remote/staff-visibility-manager
+Exec=/usr/local/bin/staff-visibility-manager
 Icon=user-invisible
 StartupNotify=false
 Terminal=false
