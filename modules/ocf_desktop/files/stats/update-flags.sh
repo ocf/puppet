@@ -13,5 +13,5 @@ FLAGS=$1
 # when a user is logged or once during cleanup, otherwise, stay silent
 if [[ -n "$STATE" ]]; then
     curl -H "Content-Type: application/json" -X POST -d "{\"user\": \"$CUR_USER\", \"state\":\"$STATE\", \"flags\": \"$FLAGS\"}" \
-         http://supernova.ocf.berkeley.edu:8390/api/session/log 2>/dev/null
+         https://www.ocf.berkeley.edu/api/session/log 2>/dev/null
 fi
