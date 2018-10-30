@@ -29,6 +29,11 @@ class ocf_desktop::stats {
       mode   => '0555',
       owner  => ocfstats,
       source => 'puppet:///modules/ocf_desktop/stats/update-flags.sh';
+      
+    '/opt/stats/staff-visibility.py':
+      mode   => '0555',
+      owner  => ocfstats,
+      source => 'puppet:///modules/ocf_desktop/stats/staff-visibility.py';
   }
 
   cron { 'labstats':
