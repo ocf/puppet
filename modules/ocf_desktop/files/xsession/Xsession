@@ -126,7 +126,7 @@ sleep 8 && /usr/local/bin/fix-audio &
 /usr/bin/xautolock -locker /usr/local/bin/auto-lock -time 7 -noclose &
 
 # Remove staff-only buttons from panels of non-staff
-opt/share/puppet/staffpanel.py
+/opt/share/puppet/staffpanel.py
 
 # Source custom rc shared across desktops
 [ -f ~/remote/.desktoprc ] && . ~/remote/.desktoprc
