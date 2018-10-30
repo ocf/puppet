@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Exec=/usr/local/bin/staff-visibility-manager
+Exec=/opt/stats/staff-visibility.py
 Icon=user-invisible
 StartupNotify=false
 Terminal=false
