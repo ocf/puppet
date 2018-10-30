@@ -8,7 +8,8 @@ LAUNCHER_SETTINGS_PATH = os.path.expanduser('~/.config/xfce4/panel/launcher-21/s
 
 def main(argv=None):
     #Removes the visibility toggle button from the panel if the user is not staff
-    if not is_staff(current_user()):
+    notstaff = not is_staff(current_user())
+    if notstaff:
         os.remove(LAUNCHER_SETTINGS_PATH)
 
 if __name__ == '__main__':
