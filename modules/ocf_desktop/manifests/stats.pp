@@ -24,6 +24,11 @@ class ocf_desktop::stats {
       mode   => '0555',
       owner  => ocfstats,
       source => 'puppet:///modules/ocf_desktop/stats/update-delay.sh';
+      
+    '/opt/stats/update-flags.sh':
+      mode   => '0555',
+      owner  => ocfstats,
+      source => 'puppet:///modules/ocf_desktop/stats/update-flags.sh';
   }
 
   cron { 'labstats':
