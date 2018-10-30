@@ -1,8 +1,4 @@
 #!/bin/bash
-
-# don't trigger on desktop-like VMs
-[ "$(facter virtual)" == "physical" ] || exit 0
-
 # state can be "active" "cleanup"
 # "active" implies a current logged-in session
 # "cleanup" triggers closing of the session
