@@ -24,11 +24,11 @@ def main(argv=None):
             semester_quota = quota.semesterly
 
     print('<img>{}</img>'.format(IMAGE_PATH))
-    print('<txt> {} {} left today | {} {} left this semester </txt>'.format(daily_quota,
-                                                                            'page' if daily_quota == 1 else 'pages',
-                                                                            semester_quota,
-                                                                            'page' if semester_quota == 1 else 'pages'
-                                                                            ))
+
+    PANEL_TEXT = '<txt> {} {} left today | {} {} left this semester </txt>'
+    print(PANEL_TEXT.format(daily_quota, 'page' if daily_quota == 1 else 'pages',
+                            semester_quota, 'page' if semester_quota == 1 else 'pages'
+                            ))
 
 
 if __name__ == '__main__':
