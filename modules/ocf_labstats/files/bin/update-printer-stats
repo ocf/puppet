@@ -13,12 +13,6 @@ def update_printer_stats(ocfstats_pass, printer):
         current_toner, max_toner = get_toner(printer)
         lifetime_pages = get_lifetime_pages(printer)
     except OSError as ex:
-        print(
-            '{}\nError reading data from {}, check that it is on'.format(
-                ex, printer,
-            ),
-            file=sys.stderr
-        )
         return
 
     with get_connection(user='ocfstats', password=ocfstats_pass) as c:
