@@ -11,8 +11,10 @@ import os
 import subprocess
 import sys
 from subprocess import DEVNULL
+from syslog import syslog
 
 from ocflib.lab.hours import Day
+from requests import ConnectionError
 
 
 def file_is_open(path):
@@ -30,11 +32,21 @@ def main(argv=None):
         if not args.quiet:
             print('[ocf-suspend] {}'.format(line), file=sys.stderr)
 
+        # Log to the syslog whether the script is in quiet mode or not
+        #
+        # This is useful for debugging or figuring out why a desktop didn't
+        # sleep when it should have.
+        syslog(line)
+
     # Don't sleep if...
     # ...lab is open
-    if Day.from_date().is_open() and not args.force:
-        report('not suspending as lab is open')
-        return 1
+    try:
+        if Day.from_date().is_open() and not args.force:
+            report('not suspending as lab is open')
+            return 1
+    except ConnectionError:
+        report('Could not connect to check lab hours')
+        return 255
 
     # ...we're installing packages
     if file_is_open('/var/lib/dpkg/lock'):
