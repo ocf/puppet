@@ -5,10 +5,10 @@ class ocf_desktop::drivers {
   if $::gfx_brand == 'nvidia' {
     # Install nvidia-driver from backports so that it loads properly
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=903770
-    ocf::repackage { ['nvidia-driver', 'libgl1-nvidia-glx:i386']:
+    ocf::repackage { ['nvidia-driver', 'libgl1-nvidia-glx:i386', 'nvidia-cuda-toolkit']:
       backport_on => 'stretch';
     }
-    package { ['xserver-xorg-video-nvidia', 'nvidia-settings', 'nvidia-cuda-toolkit', 'nvidia-cuda-mps']:; }
+    package { ['xserver-xorg-video-nvidia', 'nvidia-settings', 'nvidia-cuda-mps']:; }
 
     file { '/etc/X11/xorg.conf':
       source => 'puppet:///modules/ocf_desktop/drivers/nvidia/xorg.conf';
