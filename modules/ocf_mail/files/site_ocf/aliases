@@ -2,7 +2,6 @@
 root: root@g.ocf.berkeley.edu
 puppet: puppet@g.ocf.berkeley.edu
 rt: rt@g.ocf.berkeley.edu
-rt-ops: rt-ops@g.ocf.berkeley.edu
 mon: mon@g.ocf.berkeley.edu
 
 postmaster: sm
