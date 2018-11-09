@@ -40,3 +40,28 @@ groups:
       expr: up{job="printer"} == 0
       annotations:
         summary: "Printer {{ $labels.instance }} is down"
+
+    - alert: CUPSClassInconsistent
+      # This expression essentially checks how many times each printer is
+      # specified. It should either be specified 0 times (out of rotation) or
+      # twice (in rotation on both single and double).
+      #
+      # The next alert ensures that single printers are not in the double class,
+      # and vice-versa.
+      expr: sum(label_replace(cups_class, "printername", "$1", "printer", "(.*)-.*")) by (printername, instance) == 1
+      for: 2m
+      annotations:
+        summary: "Printer {{ $labels.printername }} is in rotation on either single or double, but not both"
+        remediation: "https://{{ $labels.instance }}.ocf.berkeley.edu/classes/"
+
+    - alert: SingleClassMismatch
+      expr: cups_class{class="single", printer!~".*-single"}
+      annotations:
+        summary: "Printer {{ $labels.printer }} is in rotation on the single class"
+        remediation: "https://{{ $labels.instance }}.ocf.berkeley.edu/classes/single"
+
+    - alert: DoubleClassMismatch
+      expr: cups_class{class="double", printer!~".*-double"}
+      annotations:
+        summary: "Printer {{ $labels.printer }} is in rotation on the double class"
+        remediation: "https://{{ $labels.instance }}.ocf.berkeley.edu/classes/double"
