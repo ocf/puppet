@@ -25,6 +25,7 @@ def main():
     conn = cups.Connection()
     for cups_class, printers in conn.getClasses().items():
         for printer in printers:
+            # class is a reserved keyword, so we have to pass it via dictionary
             classes.labels(**{'class': cups_class, 'printer': printer}).set(1)
 
     write_to_textfile(sys.argv[1], registry)
