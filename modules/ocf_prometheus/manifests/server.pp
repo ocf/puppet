@@ -78,7 +78,7 @@ class ocf_prometheus::server {
       {
         'job_name'        => 'printer',
         'scrape_interval' => '30s',
-        'scrape_timeout'  => '5s',
+        'scrape_timeout'  => '20s',
 
         'file_sd_configs' => [
           {
