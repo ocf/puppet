@@ -4,7 +4,7 @@ class ocf_postgres {
   }
 
   class { 'postgresql::server':
-    postgres_password => hiera('postgres::rootpw'),
+    postgres_password => lookup('postgres::rootpw'),
     # https://www.postgresql.org/docs/current/static/auth-pg-hba-conf.html
     ipv4acls          => ['hostssl sameuser all 0.0.0.0/0 md5'],
     ipv6acls          => ['hostssl sameuser all ::/0 md5'],

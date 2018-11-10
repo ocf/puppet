@@ -19,7 +19,7 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
 
   # keepalived config
   package { 'keepalived':; }
-  $keepalived_secret = hiera('mesos::keepalived::secret')
+  $keepalived_secret = lookup('mesos::keepalived::secret')
 
   # Virtual addresses are owned by all of the mesos masters.
   # At a given time, only one master will actually have the IP, but

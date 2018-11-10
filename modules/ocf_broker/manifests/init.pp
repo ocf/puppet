@@ -15,7 +15,7 @@ class ocf_broker {
       notify  => Service['redis-server'];
     }
 
-    $redis_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], hiera('broker::redis::password'))
+    $redis_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], lookup('broker::redis::password'))
 
     augeas { '/etc/redis/redis.conf':
         lens      => 'Spacevars.simple_lns',

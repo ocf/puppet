@@ -1,6 +1,6 @@
 # owners always get sudo and login
-ocf::auth::ulogin: [["%{hiera('owner')}", 'ALL']]
-ocf::auth::usudo: ["%{hiera('owner')}"]
+ocf::auth::ulogin: [["%{lookup('owner')}", 'ALL']]
+ocf::auth::usudo: ["%{lookup('owner')}"]
 # ocfroot gets nopasswd as well, since we don't want root staffers typing their
 # passwords into staff VMs
 ocf::auth::nopasswd: true

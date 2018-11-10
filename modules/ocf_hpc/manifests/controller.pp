@@ -1,7 +1,7 @@
 class ocf_hpc::controller {
   require ocf_hpc
 
-  $slurmdbd_mysql_password = hiera('hpc::controller::slurmdbd_mysql_password')
+  $slurmdbd_mysql_password = lookup('hpc::controller::slurmdbd_mysql_password')
 
   package { 'slurmdbd': } -> file { '/etc/slurm-llnl/slurmdbd.conf':
     content   => template('ocf_hpc/slurmdbd.conf.erb'),

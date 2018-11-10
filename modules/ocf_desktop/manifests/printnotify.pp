@@ -11,7 +11,7 @@ class ocf_desktop::printnotify {
     require => User['ocfbroker'],
   }
 
-  $redis_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], hiera('broker::redis::password'))
+  $redis_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], lookup('broker::redis::password'))
 
   file {
     '/opt/share/broker':
