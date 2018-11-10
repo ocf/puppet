@@ -28,6 +28,16 @@ groups:
         prtMarkerIndex: ''
         hrDeviceIndex: ''
 
+    # We don't use tray 1, so don't include them in this record
+    - record: printer_tray
+      expr: prtInputCurrentLevel{hrDeviceIndex="1", prtInputIndex!="1"}
+      labels:
+        hrDeviceIndex: ''
+    - record: printer_tray_max
+      expr: prtInputMaxCapacity{hrDeviceIndex="1", prtInputIndex!="1"}
+      labels:
+        hrDeviceIndex: ''
+
     - alert: LowToner
       # Sometimes the printer will randomly report -2 toner and then jump back
       # to the "actual" level.  We take the median over the last 30 minutes to
