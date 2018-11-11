@@ -21,7 +21,7 @@ mesos_slaves:
     - riptide
     - dataloss
 
-browser_homepage: https://www.ocf.berkeley.edu/about/lab/survey
+browser_homepage: https://www.ocf.berkeley.edu/about/lab/open-source
 
 #special devices
 devices_ipv4_only:
