@@ -288,7 +288,7 @@ def test_and_overwrite_config(config_path, new_config, target):
 def process_app_vhosts():
     """Perform extra tasks specific to app vhosts.
 
-    This includes checking for membership in the ocfdev group and fixing
+    This includes checking for membership in the ocfapphost group and fixing
     socket permissions. Returns true if nginx should reload."""
     def groups_for_user(user):
         return (g.gr_name for g in grp.getgrall() if user in g.gr_mem)
@@ -297,10 +297,10 @@ def process_app_vhosts():
     for domain, vhost in get_app_vhosts().items():
         user = vhost['username']
 
-        # Warn about ocfdev group
-        if 'ocfdev' not in groups_for_user(user):
+        # Warn about ocfapphost group
+        if 'ocfapphost' not in groups_for_user(user):
             report(
-                "Warning: user '{}' not in group ocfdev but has app vhost '{}'"
+                "Warning: user '{}' not in group ocfapphost but has app vhost '{}'"
                 .format(user, domain)
             )
 

@@ -17,10 +17,10 @@ class ocf_apphost {
     recurse => true,
     purge   => true;
   }
-  if $::ocf_dev {
-    $devs = split($::ocf_dev, ',')
+  if $::ocf_apphost {
+    $devs = split($::ocf_apphost, ',')
   } else {
-    # ocf_dev is empty on the first run which causes a runtime error above
+    # ocf_apphost is empty on the first run which causes a runtime error above
     $devs = []
   }
   $devs.each |$user| {
