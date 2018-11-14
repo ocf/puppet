@@ -118,7 +118,7 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
 
   ocf_mesos::master::load_balancer::http_vhost { 'sourcegraph':
     server_name    => 'sourcegraph.ocf.berkeley.edu',
-    server_aliases => ['sourcegraph'],
+    server_aliases => ['sg', 'sourcegraph', 'sg.ocf.berkeley.edu'],
     service_port   => 10012,
   }
 
