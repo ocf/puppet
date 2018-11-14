@@ -12,7 +12,7 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['arandr', 'atom', 'claws-mail', 'eog', 'evince-gtk', 'filezilla',
+    ['arandr', 'atom', 'blender', 'claws-mail', 'eog', 'evince-gtk', 'filezilla',
       'florence', 'freeplane', 'geany', 'gimp', 'gnome-calculator', 'gparted',
       'hexchat', 'imagej', 'inkscape', 'lyx', 'mpv', 'mssh', 'mumble', 'numlockx',
       'simple-scan', 'ssh-askpass-gnome', 'texmaker', 'texstudio', 'vlc',
