@@ -1,6 +1,6 @@
 classes:
     - ocf_apphost
 
-ocf::auth::glogin: [[ocfdev, ALL]]
+ocf::auth::glogin: [[ocfapphost, ALL]]
 
 staff_only: false
