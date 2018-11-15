@@ -12,7 +12,7 @@
 #
 # Non sensitive generated configuration data is in common.yaml.
 class ocf_kubernetes::master {
-  include ocf::packages::docker_kube
+  include ocf::packages::docker_kubernetes
   include ocf::packages::kubernetes
 
   $etcd_version = lookup('kubernetes::etcd_version')
@@ -22,8 +22,9 @@ class ocf_kubernetes::master {
   class { 'kubernetes':
     controller        => true,
     manage_etcd       => true,
-    # puppetlabs-kubernetes is a little confused here.
-    # This will be fixed in an upcoming version
+    # note that etcd_* variables are chained.
+    # This will be fixed in an upcoming version, and
+    # we will only have to specify etcd_version.
     etcd_version      => $etcd_version,
     etcd_archive      => "etcd-v${etcd_version}-linux-amd64.tar.gz",
     etcd_source       => "https://github.com/etcd-io/etcd/releases/download/v${etcd_version}/etcd-v${etcd_version}-linux-amd64.tar.gz",

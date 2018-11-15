@@ -64,7 +64,12 @@ kubernetes::kubernetes_package_version: 1.12.2-00
 kubernetes::docker_version: 18.06.1~ce~3-0~debian # 18.06.01 is the highest supported version to work with kubernetes
 kubernetes::etcd_version: 3.2.25
 kubernetes::container_runtime: docker
+# This is the file used to bootstrap flannel, which facilitates cluster networking.
+# It is one of the first things deployed by the master via kubectl create.
 kubernetes::cni_network_provider: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+# This is the virtual network that flannel uses by default.
+# Changing this would require also deploying a modified version of kube-flannel.yml,
+# as it is hardcoded in the version they distribute.
 kubernetes::cni_pod_cidr: 10.244.0.0/16
 kubernetes::etcd_initial_cluster: hozer-75=https://169.229.226.75:2380
 kubernetes::etcd_peers:
