@@ -160,6 +160,8 @@ class ocf::extrapackages {
     'r-cran-markdown',
     'r-cran-xml2',
     'r-cran-zoo',
+    'rbenv',
+    'ruby-build',
     'ruby-dev',
     'ruby-fcgi',
     'ruby-ronn',
