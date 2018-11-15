@@ -25,3 +25,9 @@ hierarchy:
 
   - name: "Common defaults"
     path: "common.yaml"
+
+  - name: "Kubernetes hosts"
+    path: "kubernetes/hosts/%{::hostname}.yaml"
+
+  - name: "Kubernetes os"
+    path: "kubernetes/os/%{::osfamily}.yaml"
