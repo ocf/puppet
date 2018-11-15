@@ -7,6 +7,7 @@ After=docker.service
 User=root
 ExecStart=/usr/bin/docker run --rm \
     -v /var/lib/registry:/var/lib/registry \
+    -e 'REGISTRY_STORAGE_DELETE_ENABLED=true' \
     -p 127.0.0.1:5000:5000 \
     --name registry \
     registry:2
