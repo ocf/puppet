@@ -19,6 +19,12 @@ class ocf_kubernetes::master {
   $etcd_archive = "etcd-v${etcd_version}-linux-amd64.tar.gz"
   $etcd_source  = "https://github.com/etcd-io/etcd/releases/download/v${etcd_version}/${etcd_archive}"
 
+  file {
+    '/etc/profile.d/kubeconfig.sh':
+      mode    => '0755',
+      content => 'export KUBECONFIG=/etc/kubernetes/admin.conf';
+  }
+
   class { 'kubernetes':
     controller        => true,
     manage_etcd       => true,
