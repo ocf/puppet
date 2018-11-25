@@ -18,6 +18,7 @@ mod 'puppetlabs-firewall',             '1.12.0'
 mod 'puppetlabs-hocon',                '1.0.0'
 mod 'puppetlabs-inifile',              '2.2.2' # Dependency of puppetlabs-puppetdb
 mod 'puppetlabs-kubernetes',           '3.1.0'
+mod 'puppetlabs-haproxy',              '2.2.0'
 mod 'puppetlabs-postgresql',           '5.4.0' # Dependency of puppetlabs-puppetdb
 mod 'puppetlabs-puppet_authorization', '0.4.0'
 mod 'puppetlabs-puppetdb',             '6.0.2'

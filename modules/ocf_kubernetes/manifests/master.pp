@@ -14,6 +14,7 @@
 class ocf_kubernetes::master {
   include ocf::packages::docker_kubernetes
   include ocf::packages::kubernetes
+  include ocf_kubernetes::loadbalancer
 
   $etcd_version = lookup('kubernetes::etcd_version')
   $etcd_archive = "etcd-v${etcd_version}-linux-amd64.tar.gz"
