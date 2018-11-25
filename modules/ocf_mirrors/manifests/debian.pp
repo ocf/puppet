@@ -1,7 +1,7 @@
 class ocf_mirrors::debian {
   ocf_mirrors::ftpsync {
     'debian':
-      rsync_host  => 'ftp.us.debian.org',
+      rsync_host  => 'mirrors.mit.edu',
       cron_minute => '10';
 
     'debian-security':
