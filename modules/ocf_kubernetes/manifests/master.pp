@@ -40,13 +40,16 @@ class ocf_kubernetes::master {
     create_repos      => false,
   }
 
-  class { 'ocf_kubernetes::ingress':
-    require => Class['kubernetes'];
-  }
-
   file {
     '/etc/profile.d/kubeconfig.sh':
       mode    => '0755',
-      content => 'export KUBECONFIG=/etc/kubernetes/admin.conf';
+      content => "export KUBECONFIG=/etc/kubernetes/admin.conf\n";
+  }
+
+  class { 'ocf_kubernetes::ingress':
+    require => [
+      Class['kubernetes'],
+      File['/etc/profile.d/kubeconfig.sh'],
+    ],
   }
 }

@@ -8,6 +8,6 @@ class ocf_kubernetes::package::first_stage {
   apt::source { 'kubernetes':
     location => 'https://apt.kubernetes.io',
     repos    => 'main',
-    release  => 'kubernetes-xenial',
+    release  => 'kubernetes-stretch',
   }
 }

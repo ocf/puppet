@@ -9,9 +9,10 @@ metadata:
 spec:
   type: NodePort
   externalIPs:
-    <% @kubernetes_workers_ipv4.each do |ip| %>
-    - <%= ip %>
-    <% end %>
+    <% @kubernetes_workers_ipv4.each do |ip| -%>
+  - <%= ip %>
+    <% end -%>
+
   ports:
     - name: http
       port: 80
