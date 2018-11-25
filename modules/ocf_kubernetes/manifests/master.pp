@@ -41,4 +41,9 @@ class ocf_kubernetes::master {
     manage_docker     => false,
     create_repos      => false,
   }
+
+  class { 'ocf_kubernetes::ingress':
+    require => Class['kubernetes'];
+  }
+
 }

@@ -78,3 +78,6 @@ kubernetes::kube_api_advertise_address: "%{::ipaddress}"
 kubernetes::api_server_count: 1
 kubernetes::install_dashboard: true
 kubernetes::controller_address: 169.229.226.75:6443
+kubernetes::workers_ipv4:
+    - 169.229.226.73
+    - 169.229.226.74
