@@ -13,17 +13,14 @@
 # Non sensitive generated configuration data is in common.yaml.
 class ocf_kubernetes::master {
   include ocf::packages::docker_kubernetes
-  include ocf::packages::kubernetes
   include ocf_kubernetes::loadbalancer
 
   $etcd_version = lookup('kubernetes::etcd_version')
   $etcd_archive = "etcd-v${etcd_version}-linux-amd64.tar.gz"
   $etcd_source  = "https://github.com/etcd-io/etcd/releases/download/v${etcd_version}/${etcd_archive}"
 
-  file {
-    '/etc/profile.d/kubeconfig.sh':
-      mode    => '0755',
-      content => 'export KUBECONFIG=/etc/kubernetes/admin.conf';
+  class { 'ocf_kubernetes::package::first_stage':
+    stage => first,
   }
 
   class { 'kubernetes':
@@ -47,4 +44,9 @@ class ocf_kubernetes::master {
     require => Class['kubernetes'];
   }
 
+  file {
+    '/etc/profile.d/kubeconfig.sh':
+      mode    => '0755',
+      content => 'export KUBECONFIG=/etc/kubernetes/admin.conf';
+  }
 }
