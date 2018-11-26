@@ -1,3 +1,5 @@
 /var/log/apache2 admin(rw,fsid=0,no_subtree_check,no_root_squash) \
                  ssh(ro,fsid=0,no_subtree_check,root_squash) \
-                 apphost(ro,fsid=0,no_subtree_check,root_squash)
+                 dev-ssh(ro,fsid=0,no_subtree_check,root_squash) \
+                 apphost(ro,fsid=0,no_subtree_check,root_squash) \
+                 dev-apphost(ro,fsid=0,no_subtree_check,root_squash)
