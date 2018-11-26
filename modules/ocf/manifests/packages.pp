@@ -95,6 +95,7 @@ class ocf::packages {
     'mtr',
     'net-tools',
     'netcat-openbsd',
+    'parted',
     'pigz',
     'powertop',
     'pv',
