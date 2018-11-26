@@ -21,6 +21,7 @@ class ocf::extrapackages {
   package {
     # misc. packages helpful for users
     [
+    'ack',
     'alpine',
     'apache2-dev',
     'apache2-utils',
@@ -40,8 +41,11 @@ class ocf::extrapackages {
     'cowsay',
     'debhelper',
     'default-jdk',
+    'default-libmysqlclient-dev',
     'dh-systemd',
+    'dh-virtualenv',
     'elinks',
+    'elpa-markdown-mode',
     'emacs',
     'flex',
     'fortune-mod',
@@ -60,6 +64,9 @@ class ocf::extrapackages {
     'ipython',
     'ipython3',
     'irssi',
+    'jupyter-console',
+    'jupyter-core',
+    'jupyter-notebook',
     'keychain',
     'libcrack2-dev',
     'libdbi-perl',
@@ -97,6 +104,14 @@ class ocf::extrapackages {
     'octave',
     'pandoc',
     'pdfchain',
+    'php-cli',
+    'php-curl',
+    'php-gd',
+    'php-mbstring',
+    'php-mcrypt',
+    'php-mysql',
+    'php-sqlite3',
+    'php-xml',
     'pkg-config',
     'pkpgcounter',
     'postgresql-client',
@@ -116,6 +131,7 @@ class ocf::extrapackages {
     'python-mock',
     'python-mysqldb',
     'python-nose',
+    'python-notebook',
     'python-numpy',
     'python-pandas',
     'python-progressbar',
@@ -140,6 +156,7 @@ class ocf::extrapackages {
     'python3-mock',
     'python3-mysqldb',
     'python3-nose',
+    'python3-notebook',
     'python3-pandas',
     'python3-progressbar',
     'python3-pytest',
@@ -150,20 +167,23 @@ class ocf::extrapackages {
     'qrencode',
     'quilt',
     'r-base',
-    'r10k',
-    'rails',
     'r-cran-data.table',
+    'r-cran-dplyr',
     'r-cran-ggplot2',
     'r-cran-jsonlite',
     'r-cran-lubridate',
     'r-cran-magrittr',
     'r-cran-markdown',
+    'r-cran-tidyr',
     'r-cran-xml2',
     'r-cran-zoo',
+    'r10k',
+    'rails',
     'rbenv',
     'ruby-build',
     'ruby-dev',
     'ruby-fcgi',
+    'ruby-mysql2',
     'ruby-ronn',
     'ruby-sqlite3',
     'scala',
@@ -179,6 +199,7 @@ class ocf::extrapackages {
     'texlive-latex-extra',
     'texlive-publishers',
     'texlive-science',
+    'tox',
     'twine',
     'vagrant',
     'valgrind',
@@ -187,85 +208,6 @@ class ocf::extrapackages {
     'zlib1g-dev',
     'znc',
     ]:;
-  }
-
-  if $::lsbdistcodename == 'jessie' {
-    package {
-      [
-        # Renamed to "ack" in stretch
-        'ack-grep',
-
-        # Replaced by jupyter-* packages in stretch with separate ipykernel
-        # packages. We install python*-notebook in stretch which depend on
-        # the ipykernel packages.
-        'ipython-notebook',
-        'ipython3-notebook',
-
-        # These have been replaced by more generic php-* instead of php5-*
-        # packages in stretch.
-        'php5-cli',
-        'php5-curl',
-        'php5-gd',
-        'php5-mcrypt',
-        'php5-mysql',
-        'php5-sqlite',
-
-        # We should probably package this for stretch, since it's useful to have
-        # with puppet without having to have a whole virtualenv just for that.
-        # It would probably be pretty easy to package too...
-        'pre-commit',
-
-        # Replaced by ruby-mysql2 in stretch
-        'ruby-mysql',
-
-        # Replaced by default-libmysqlclient-dev in stretch
-        # (it's actually in jessie backports, but not worth the headache)
-        'libmysqlclient-dev',
-      ]:;
-    }
-  } else {
-    package {
-      [
-        'ack',
-        'default-libmysqlclient-dev',
-        'elpa-markdown-mode',
-        'jupyter-console',
-        'jupyter-core',
-        'jupyter-notebook',
-        'php-cli',
-        'php-curl',
-        'php-gd',
-        'php-mcrypt',
-        'php-mysql',
-        'php-sqlite3',
-        'python-notebook',
-        'python3-notebook',
-        'ruby-mysql2',
-      ]:;
-    }
-  }
-
-  ocf::repackage { 'dh-virtualenv':
-    backport_on => 'jessie',
-  }
-
-  ocf::repackage { 'r-cran-dplyr':
-      backport_on => 'jessie';
-  } ->
-  package { 'r-cran-tidyr': }
-
-  if $::lsbdistcodename == 'jessie' {
-    # We add python3.5 and tox2  on jessie so we can test our code against it
-    # (in preparation for stretch).
-    package {
-      ['python3.5', 'python3.5-dev']:;
-      'python-tox':
-        ensure  => purged;
-      'tox':
-        require => Package['python-tox'];
-    }
-  } else {
-    package { 'tox':; }
   }
 
   # install wp-cli
