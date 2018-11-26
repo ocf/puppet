@@ -39,10 +39,9 @@ devices_ipv46:
 
 internal_zone_exceptions:
     - tsunami
-    - werewolves
     - vampires
+    - dev-vampires
     - death
-    - dev-werewolves
     - dev-death
 
 # IPv4 and IPv6 src ranges for types of servers

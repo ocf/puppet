@@ -32,15 +32,9 @@ class ocf_apphost::proxy {
       mode   => '0755';
   }
 
-  # TODO: Remove this once vampires has taken the place of werewolves and no
-  # longer needs to be the dev host
-  if $::hostname == 'vampires' {
-    $build_args = '--dev'
-  } else {
-    $build_args = $::host_env ? {
-      'dev'  => '--dev',
-      'prod' => '',
-    }
+  $build_args = $::host_env ? {
+    'dev'  => '--dev',
+    'prod' => '',
   }
 
   cron {

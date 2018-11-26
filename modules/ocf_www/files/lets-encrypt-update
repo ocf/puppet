@@ -104,7 +104,7 @@ def main():
     if args.target == 'web':
         vhosts, target_domain = get_vhosts(), 'death.ocf.berkeley.edu'
     else:
-        vhosts, target_domain = get_app_vhosts(), 'werewolves.ocf.berkeley.edu'
+        vhosts, target_domain = get_app_vhosts(), 'vampires.ocf.berkeley.edu'
 
     domains = all_domains(vhosts)
     eligible = eligible_domains(domains, target_domain)
