@@ -71,11 +71,6 @@ class ocf_docker {
         'auth_basic_user_file' => '/opt/share/docker.htpasswd',
       },
 
-      raw_append          => [
-        'location /_ping { auth_basic off; }',
-        'location /v1/_ping { auth_basic off; }',
-      ],
-
       require             => File['/opt/share/docker.htpasswd'],
       subscribe           => File['/opt/share/docker.htpasswd'];
   }
