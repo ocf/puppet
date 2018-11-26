@@ -2,6 +2,17 @@ class ocf_ssh::webssh {
   include ocf::firewall::allow_web
 
   package { ['shellinabox']:; }
+  -> augeas { '/etc/default/shellinabox':
+    lens    => 'Shellvars.lns',
+    incl    => '/etc/default/shellinabox',
+    changes => [
+      # Only listen on localhost for connections since we are proxying through
+      # nginx. Also disable SSL since we are proxying through nginx and due to
+      # https://github.com/shellinabox/shellinabox/issues/371
+      "set SHELLINABOX_ARGS '\"--no-beep --disable-ssl --localhost-only\"'",
+    ],
+  }
+  ~> service { 'shellinabox':; }
 
   case $::hostname {
     tsunami: { $webssh_fqdn = 'ssh.ocf.berkeley.edu' }
