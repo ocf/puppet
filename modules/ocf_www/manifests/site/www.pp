@@ -105,6 +105,7 @@ class ocf_www::site::www {
       serveraliases        => [
         'www',
         'dev-www',
+        'dev-www.ocf.berkeley.edu',
         'ocf.berkeley.edu',
         'dev-ocf.berkeley.edu',
         'secure',
