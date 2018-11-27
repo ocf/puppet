@@ -51,6 +51,7 @@ class ocf::extrapackages {
     'fortune-mod',
     'gdb',
     'gem2deb',
+    'genisoimage',
     'ghc',
     'git-buildpackage',
     'golang',
