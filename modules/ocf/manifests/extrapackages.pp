@@ -47,6 +47,7 @@ class ocf::extrapackages {
     'elinks',
     'elpa-markdown-mode',
     'emacs',
+    'epic5',
     'flex',
     'fortune-mod',
     'gdb',
