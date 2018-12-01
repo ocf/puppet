@@ -1,0 +1,17 @@
+auto br0
+iface br0 inet manual
+  bridge_ports <%= @bridged_iface %>
+  bridge_stp off
+  bridge_maxwait 0
+
+<%- if @logical_primary_interface == 'br0' -%>
+iface br0 inet static
+  address <%= @ipaddress %>
+  netmask <%= @netmask %>
+  gateway <%= @gateway %>
+
+iface br0 inet6 static
+  address <%= @ipaddress6 %>
+  netmask <%= @netmask6 %>
+  gateway <%= @gateway6 %>
+<%- end -%>
