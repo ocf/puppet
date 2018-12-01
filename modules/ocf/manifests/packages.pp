@@ -81,7 +81,6 @@ class ocf::packages {
     'debian-security-support',
     'dnsutils',
     'dtach',
-    'ethtool',
     'finger',
     'gist',
     'hexedit',
