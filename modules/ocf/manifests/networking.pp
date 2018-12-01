@@ -1,5 +1,6 @@
 class ocf::networking(
     $bridge     = false,
+    $bond       = false,
 
     $ipaddress  = $::ipHostNumber,  # lint:ignore:variable_is_lowercase
     $netmask    = '255.255.255.0',
@@ -12,61 +13,71 @@ class ocf::networking(
     $domain      = 'ocf.berkeley.edu',
     $nameservers = ['2607:f140:8801::1:22', '169.229.226.22', '8.8.8.8'],
 ) {
-  $fqdn = $::clientcert
-  $hostname = regsubst($::clientcert, '^([\w-]+)\..*$', '\1')
 
   if size($nameservers) > 3 {
     fail("Can't have more than 3 nameservers")
   }
 
+  $fqdn = $::clientcert
+  $hostname = regsubst($::clientcert, '^([\w-]+)\..*$', '\1')
+  $linked_ifaces_array = split($::ifaces_linked, ' ')
+  $first_active_iface = $linked_ifaces_array[0]
+
   # packages
-  if $bridge {
-    package { 'bridge-utils': }
+  if $bond {
+    package { 'ifenslave': }
   }
 
   package { 'resolvconf':
     ensure => purged,
   }
 
-  if $::lsbdistcodename == 'jessie' {
-    if $bridge {
-      $iface = 'br0'
-      $br_iface = 'eth0'
-    } else {
-      $iface = 'eth0'
-    }
-  } else {
-    if $::lsbdistid == 'Raspbian' {
-      # The raspberry pi has wifi, so we use that for networking
-      $ifaces_array = split($::interfaces, ',')
-      $br_iface = grep($ifaces_array, 'wl.+')[0]
-    } else {
-      $br_iface = $::iface_linked
-    }
+  # $logical_primary_interface is the one we want to add the IP address to.
+  # in the basic case, it's just the active physical interface (desktops, VMs)
+  # it could also be a bridge interface or bond interface with one or more
+  # physical interfaces slaved to it.
 
-    # If using bridged networking, use the interface found above as the
-    # interface being bridged to.
-    if $bridge {
-      $iface = 'br0'
+  if $bridge {
+    $logical_primary_interface = 'br0'
+
+    if $bond {
+      $bridged_iface = 'bond0'
     } else {
-      if $br_iface and ($br_iface != '') {
-        $iface = $br_iface
-      } else {
-        # This is the default ethernet interface name on new VMs. While not
-        # necessarily correct, falling back will help make sure VMs upgraded
-        # from jessie have networking configured when they reboot, since they
-        # retain the old 'eth0' interface name until after reboot.
-        #
-        # TODO: find out how to predict new interface names
-        $iface = 'ens3'
-      }
+      $bridged_iface = $first_active_iface
+    }
+  } elsif $bond {
+    $logical_primary_interface = 'bond0'
+  } else {
+    $logical_primary_interface = $first_active_iface
+  }
+
+  if $::lsbdistid == 'Raspbian' {
+    # The raspberry pi has wifi, so we use that for networking
+    $logical_primary_interface = 'wlan0'
+  }
+
+  if $bridge {
+    file { '/etc/network/interfaces.d/br0':
+      content => template('ocf/networking/interface_bridge.erb');
+    }
+  }
+
+  if $bond {
+    file { '/etc/network/interfaces.d/bond0':
+      content => template('ocf/networking/interface_bond.erb');
+    }
+  }
+
+  unless ($bond or $bridge) {
+    file { "/etc/network/interfaces.d/${logical_primary_interface}":
+      content => template('ocf/networking/interface_normal.erb');
     }
   }
 
   # network configuration
   file {
     '/etc/network/interfaces':
-      content => template('ocf/networking/interfaces.erb');
+      source => 'puppet:///modules/ocf/networking/interfaces';
     '/etc/hostname':
       content => "${hostname}\n";
     '/etc/hosts':
@@ -119,8 +130,8 @@ class ocf::networking(
     firewall_multi { '100 allow traffic to/from VMs':
       chain    => 'FORWARD',
       proto    => 'all',
-      iniface  => $iface,
-      outiface => $iface,
+      iniface  => $bridged_iface,
+      outiface => $bridged_iface,
       action   => 'accept',
     }
   }

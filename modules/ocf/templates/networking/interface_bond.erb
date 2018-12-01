@@ -1,0 +1,19 @@
+auto bond0
+
+iface bond0 inet manual
+  slaves <%= @ifaces_linked %>
+  bond-mode 802.3ad
+  bond-miimon 100
+  bond-lacp-rate 1
+
+<%- if @logical_primary_interface == 'bond0' -%>
+iface bond0 inet static
+  address <%= @ipaddress %>
+  netmask <%= @netmask %>
+  gateway <%= @gateway %>
+
+iface bond0 inet6 static
+  address <%= @ipaddress6 %>
+  netmask <%= @netmask6 %>
+  gateway <%= @gateway6 %>
+<% end %>
