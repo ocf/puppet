@@ -78,6 +78,10 @@ class ocf::networking(
   file {
     '/etc/network/interfaces':
       source => 'puppet:///modules/ocf/networking/interfaces';
+    '/etc/network/interfaces.d':
+      ensure  => directory,
+      recurse => true,
+      purge   => true;
     '/etc/hostname':
       content => "${hostname}\n";
     '/etc/hosts':
