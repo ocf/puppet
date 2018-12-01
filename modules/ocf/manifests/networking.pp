@@ -134,8 +134,8 @@ class ocf::networking(
     firewall_multi { '100 allow traffic to/from VMs':
       chain    => 'FORWARD',
       proto    => 'all',
-      iniface  => $bridged_iface,
-      outiface => $bridged_iface,
+      iniface  => 'br0',
+      outiface => 'br0',
       action   => 'accept',
     }
   }
