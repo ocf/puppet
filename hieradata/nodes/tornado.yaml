@@ -1,2 +1,4 @@
 classes:
     - ocf_tv
+
+browser_homepage: https://www.ocf.berkeley.edu/tv/labmap
