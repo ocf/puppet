@@ -6,8 +6,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt_cleanup() {
     echo "Cleaning up..."
-    # update cache then remove downloaded package archives, unused packages, and old config files
-    /usr/bin/aptitude update --quiet > /dev/null
+    # Remove downloaded package archives, unused packages, and old config files. Updating is done through puppet's ::apt class.
     /usr/bin/aptitude clean --quiet > /dev/null
     /usr/bin/aptitude purge --assume-yes --quiet '?garbage' > /dev/null
     /usr/bin/aptitude purge --assume-yes --quiet '?config-files' > /dev/null

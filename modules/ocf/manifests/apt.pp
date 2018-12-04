@@ -2,7 +2,13 @@ class ocf::apt($stage = 'first') {
   package { ['aptitude', 'imvirt', 'apt-transport-https', 'lsb-release']:; }
 
   class { '::apt':
-    purge => {
+    # Run apt update at every Puppet run.
+    update => {
+      frequency => 'always',
+      loglevel  => 'debug',
+    },
+
+    purge  => {
       'sources.list'   => true,
       'sources.list.d' => true,
       'preferences.d'  => true,
