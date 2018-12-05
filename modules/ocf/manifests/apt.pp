@@ -43,6 +43,31 @@ class ocf::apt($stage = 'first') {
           src => true
         };
 
+      # Debian primary mirror backup, in case ours goes down.
+      'debian-backup':
+        location => 'ftp://ftp.us.debian.org/debian/',
+        release  => $::lsbdistcodename,
+        repos    => $repos,
+        include  => {
+          src => true
+        };
+
+      'debian-updates-backup':
+        location => 'ftp://ftp.us.debian.org/debian/',
+        release  => "${::lsbdistcodename}-updates",
+        repos    => $repos,
+        include  => {
+          src => true
+        };
+
+      'debian-security-backup':
+        location => 'ftp://ftp.us.debian.org/debian-security/',
+        release  => "${::lsbdistcodename}/updates",
+        repos    => $repos,
+        include  => {
+          src => true
+        };
+
       'ocf':
         location => 'http://apt/',
         release  => $::lsbdistcodename,
