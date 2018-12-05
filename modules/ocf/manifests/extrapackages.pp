@@ -16,6 +16,7 @@ class ocf::extrapackages {
   include ocf::packages::mysql
   include ocf::packages::mysql_server
   include ocf::packages::nmap
+  include ocf::packages::kubernetes::apt
 
   # other packages
   package {
@@ -70,6 +71,7 @@ class ocf::extrapackages {
     'jupyter-core',
     'jupyter-notebook',
     'keychain',
+    'kubectl',
     'libcrack2-dev',
     'libdbi-perl',
     'libexpect-perl',
