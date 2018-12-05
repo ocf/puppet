@@ -4,6 +4,7 @@ classes:
     - ocf_mesos::secrets
 
 ocf::networking::bridge: true
+ocf::networking::bond: true
 
 ocf::packages::ntp::master: true
 ocf::packages::ntp::peers:
