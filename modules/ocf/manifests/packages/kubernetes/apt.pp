@@ -4,10 +4,9 @@ class ocf::packages::kubernetes::apt {
     source  => 'https://packages.cloud.google.com/apt/doc/apt-key.gpg',
     require => Package['apt-transport-https'],
   }
-
   apt::source { 'kubernetes':
     location => 'https://apt.kubernetes.io',
     repos    => 'main',
-    release  => 'kubernetes-xenial',
+    release  => 'kubernetes-stretch',
   }
 }

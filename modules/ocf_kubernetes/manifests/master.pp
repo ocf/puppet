@@ -14,16 +14,11 @@
 class ocf_kubernetes::master {
   include ocf::packages::docker_kubernetes
   include ocf::packages::kubernetes
+  include ocf_kubernetes::loadbalancer
 
   $etcd_version = lookup('kubernetes::etcd_version')
   $etcd_archive = "etcd-v${etcd_version}-linux-amd64.tar.gz"
   $etcd_source  = "https://github.com/etcd-io/etcd/releases/download/v${etcd_version}/${etcd_archive}"
-
-  file {
-    '/etc/profile.d/kubeconfig.sh':
-      mode    => '0755',
-      content => 'export KUBECONFIG=/etc/kubernetes/admin.conf';
-  }
 
   class { 'kubernetes':
     controller        => true,
@@ -40,5 +35,18 @@ class ocf_kubernetes::master {
     # is not staged before the package is added.
     manage_docker     => false,
     create_repos      => false,
+  }
+
+  file {
+    '/etc/profile.d/kubeconfig.sh':
+      mode    => '0755',
+      content => "export KUBECONFIG=/etc/kubernetes/admin.conf\n";
+  }
+
+  class { 'ocf_kubernetes::ingress':
+    require => [
+      Class['kubernetes'],
+      File['/etc/profile.d/kubeconfig.sh'],
+    ],
   }
 }
