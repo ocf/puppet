@@ -7,7 +7,7 @@ class ocf_kubernetes::loadbalancer {
   haproxy::frontend { 'kubernetes-frontend':
     mode    => 'http',
     bind    => {
-      "${::ipaddress}:80"   => [],
+      '0.0.0.0:80'   => [],
       # TODO: Listen on 443 when we add TLS
       #"$::ipaddress:443"  =>  ['ssl', 'crt', '/path/to/cert.pem']
     },
@@ -20,10 +20,11 @@ class ocf_kubernetes::loadbalancer {
   haproxy::backend { 'kubernetes-backend':
     options => {
       option         => [
-        'forwardfor'
+        'forwardfor',
       ],
       'mode'         => 'http',
-      'balance'      => 'roundrobin',
+      'balance'      => 'source',
+      'hash-type'    => 'consistent',
       'http-request' => 'set-header X-Forwarded-Port %[dst_port]',
       # TODO: this does nothing until we add TLS
       'http-request' => 'add-header X-Forwarded-Proto https if { ssl_fc }',
