@@ -79,9 +79,6 @@ kubernetes::api_server_count: 1
 kubernetes::install_dashboard: true
 kubernetes::controller_address: 169.229.226.75:6443
 kubernetes::nginx_version: '0.21.0'
-kubernetes::workers_ipv4:
-    - 169.229.226.73
-    - 169.229.226.74
 kubernetes::worker_nodes:
     - hozer-73
     - hozer-74

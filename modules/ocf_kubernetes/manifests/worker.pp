@@ -8,10 +8,7 @@
 # class is added.
 class ocf_kubernetes::worker {
   include ocf::packages::docker_kubernetes
-
-  class { 'ocf_kubernetes::package::first_stage':
-    stage => first,
-  }
+  include ocf::packages::kubernetes
 
   class { 'kubernetes':
     worker        => true,
