@@ -12,6 +12,7 @@
 # without concerns of redeclaring ocf::packages with different parameters.
 class ocf::extrapackages {
   # special snowflake packages that require some config
+  include ocf::packages::kubernetes::apt
   include ocf::packages::matplotlib
   include ocf::packages::mysql
   include ocf::packages::mysql_server
@@ -70,6 +71,7 @@ class ocf::extrapackages {
     'jupyter-core',
     'jupyter-notebook',
     'keychain',
+    'kubectl',
     'libcrack2-dev',
     'libdbi-perl',
     'libexpect-perl',
