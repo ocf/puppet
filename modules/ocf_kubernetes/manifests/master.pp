@@ -20,21 +20,66 @@ class ocf_kubernetes::master {
   $etcd_archive = "etcd-v${etcd_version}-linux-amd64.tar.gz"
   $etcd_source  = "https://github.com/etcd-io/etcd/releases/download/v${etcd_version}/${etcd_archive}"
 
+  class { 'ocf_kubernetes::package::first_stage':
+    stage => first,
+  }
+
+  # Passwords for the static token file
+  # https://kubernetes.io/docs/reference/access-authn-authz/authentication/#static-token-file
+  $ocf_jenkins_deploy_token = lookup('kubernetes::jenkins_token')
+
+  file {
+    '/etc/kubernetes-ocf':
+      ensure  => directory,
+      recurse => true,
+      purge   => true;
+
+    '/etc/kubernetes-ocf/static-tokens.csv':
+      content   => template('ocf_kubernetes/static-tokens.csv.erb'),
+      mode      => '0400',
+      show_diff => false;
+
+    '/etc/kubernetes-ocf/abac.jsonl':
+      source => 'puppet:///modules/ocf_kubernetes/abac.jsonl',
+      mode   => '0755';
+  }
+
   class { 'kubernetes':
-    controller        => true,
-    manage_etcd       => true,
+    controller                => true,
+    manage_etcd               => true,
     # note that etcd_* variables are chained.
     # This will be fixed in an upcoming version, and
     # we will only have to specify etcd_version.
-    etcd_version      => $etcd_version,
-    etcd_archive      => "etcd-v${etcd_version}-linux-amd64.tar.gz",
-    etcd_source       => "https://github.com/etcd-io/etcd/releases/download/v${etcd_version}/etcd-v${etcd_version}-linux-amd64.tar.gz",
-    install_dashboard => true,
+    etcd_version              => $etcd_version,
+    etcd_archive              => "etcd-v${etcd_version}-linux-amd64.tar.gz",
+    etcd_source               => "https://github.com/etcd-io/etcd/releases/download/v${etcd_version}/etcd-v${etcd_version}-linux-amd64.tar.gz",
+    install_dashboard         => true,
     # If we let puppetlabs-kubernetes manage docker then
     # there are dependency issues because they apt add key
     # is not staged before the package is added.
-    manage_docker     => false,
-    create_repos      => false,
+    manage_docker             => false,
+    create_repos              => false,
+
+    apiserver_cert_extra_sans => [
+      'kubernetes.ocf.berkeley.edu',
+    ],
+
+    apiserver_extra_arguments => [
+      'authorization-mode: Node,RBAC,ABAC',
+      'token-auth-file: /etc/kubernetes-ocf/static-tokens.csv',
+      'authorization-policy-file: /etc/kubernetes-ocf/abac.jsonl',
+    ],
+
+    kubeadm_extra_config      => {
+      apiServerExtraVolumes => [
+        {
+          name      => 'ocf-auth',
+          hostPath  => '/etc/kubernetes-ocf',
+          mountPath => '/etc/kubernetes-ocf',
+          writeable => false,
+        },
+      ],
+    },
   }
 
   file {
