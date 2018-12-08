@@ -4,11 +4,11 @@ class ocf_irc::znc {
   package { 'znc': }
 
   ocf::systemuser { 'ocfznc':
-    groups  => ['ssl-cert'],
     opts    => {
       comment => 'IRC Bouncer Server',
       home    => '/var/lib/znc',
       shell   => '/bin/false',
+      groups  => ['ssl-cert'],
     },
     require => Package['ssl-cert'],
   }

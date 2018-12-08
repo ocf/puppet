@@ -121,17 +121,18 @@ class ocf_jenkins {
   ocf::systemuser {
     default:
       shell   => '/bin/bash',
-      groups  => ['docker'],
       require => Package['docker-ce'];
 
     'jenkins-slave':
       opts => {
+        groups  => ['docker'],
         comment => 'OCF Jenkins Slave',
         home    => '/opt/jenkins/slave/',
       };
 
     'jenkins-deploy':
       opts => {
+        groups  => ['docker'],
         comment => 'OCF Jenkins Deploy',
         home    => '/opt/jenkins/deploy/',
       };
