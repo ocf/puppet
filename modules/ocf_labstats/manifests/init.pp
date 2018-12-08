@@ -1,12 +1,11 @@
 class ocf_labstats {
   include ocf::firewall::output_printers
 
-  user {
-    'ocfstats':
-      comment => 'OCF Lab Stats',
-      home    => '/opt/stats',
-      system  => true,
-      groups  => 'sys';
+  ocf::systemuser { 'ocfstats':
+      opts    => {
+        comment => 'OCF Lab Stats',
+        home    => '/opt/stats',
+      },
   }
 
   $file_defaults = {

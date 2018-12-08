@@ -1,8 +1,9 @@
 class ocf_desktop::printnotify {
-  user { 'ocfbroker':
+  ocf::systemuser { 'ocfbroker':
     ensure => present,
-    shell  => '/bin/false',
-    system =>  true,
+    opts   =>  {
+      shell  => '/bin/false',
+    }
   }
 
   # enable regular users to run notification script as ocfbroker

@@ -1,10 +1,9 @@
 class ocf_desktop::stats {
-  user {
-    'ocfstats':
+  ocf::systemuser { 'ocfstats':
+    opts    => {
       comment => 'OCF Desktop Stats',
       home    => '/opt/stats',
-      system  => true,
-      groups  => 'sys';
+    },
   }
 
   file {

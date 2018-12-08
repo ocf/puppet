@@ -2,12 +2,12 @@ class ocf_apt {
   include ocf::firewall::allow_web
   include ocf::ssl::default
 
-  user { 'ocfapt':
-    comment => 'OCF Apt',
-    home    => '/opt/apt',
-    groups  => ['sys'],
-    shell   => '/bin/false',
-    system  => true,
+  ocf::systemuser { 'ocfapt':
+    opts => {
+      comment => 'OCF Apt',
+      home    => '/opt/apt',
+      shell   => '/bin/false',
+    },
   }
 
   ocf::repackage { 'reprepro':

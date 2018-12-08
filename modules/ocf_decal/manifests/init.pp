@@ -2,12 +2,13 @@ class ocf_decal {
   include apache
   include ocf_decal::website
 
-  user { 'ocfdecal':
-    comment => 'DeCal management account',
-    home    => '/opt/ocfdecal',
-    shell   => '/bin/bash',
-    groups  => 'www-data',
-    system  => true,
+  ocf::systemuser { 'ocfdecal':
+    groups => ['www-data'],
+    opts   => {
+      comment => 'DeCal management account',
+      home    => '/opt/ocfdecal',
+      shell   => '/bin/bash',
+    },
   }
 
   file {

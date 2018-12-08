@@ -12,15 +12,15 @@ class ocf_mail {
     subscribe => Class['ocf::ssl::default'],
   }
 
-  user { 'ocfmail':
+  ocf::systemuser { 'ocfmail':
     ensure  => present,
-    name    => ocfmail,
-    gid     => ocfmail,
-    groups  => [sys],
-    home    => '/var/mail',
-    shell   => '/bin/false',
-    system  => true,
     require => Group['ocfmail'],
+    opts    => {
+      name  => ocfmail,
+      gid   => ocfmail,
+      home  => '/var/mail',
+      shell => '/bin/false',
+    },
   }
 
   group { 'ocfmail':

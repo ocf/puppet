@@ -118,22 +118,23 @@ class ocf_jenkins {
       group   => root;
   }
 
-  user {
-    'jenkins-slave':
-      comment => 'OCF Jenkins Slave',
-      home    => '/opt/jenkins/slave/',
-      groups  => ['sys', 'docker'],
+  ocf::systemuser {
+    default:
       shell   => '/bin/bash',
-      system  => true,
+      groups  => ['docker'],
       require => Package['docker-ce'];
 
+    'jenkins-slave':
+      opts => {
+        comment => 'OCF Jenkins Slave',
+        home    => '/opt/jenkins/slave/',
+      };
+
     'jenkins-deploy':
-      comment => 'OCF Jenkins Deploy',
-      home    => '/opt/jenkins/deploy/',
-      groups  => ['sys', 'docker'],
-      shell   => '/bin/bash',
-      system  => true,
-      require => Package['docker-ce'];
+      opts => {
+        comment => 'OCF Jenkins Deploy',
+        home    => '/opt/jenkins/deploy/',
+      };
   }
 
   # mount jenkins slave workspace as tmpfs for speed

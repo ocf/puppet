@@ -28,15 +28,15 @@ class ocf_mirrors {
   include ocf_mirrors::trisquel
   include ocf_mirrors::ubuntu
 
-  user { 'mirrors':
-    comment  => 'OCF Mirroring',
-    home     => '/opt/mirrors',
-    groups   => ['sys'],
-    shell    => '/bin/bash',
-    system   => true,
+  ocf::systemuser { 'mirrors':
+    opts => {
+      comment  => 'OCF Mirroring',
+      home     => '/opt/mirrors',
+      shell    => '/bin/bash',
 
-    # Set to have no password, only allow key-based login
-    password => '*',
+      # Set to have no password, only allow key-based login
+      password => '*',
+    },
   }
 
   $ocfstats_password = lookup('ocfstats::mysql::password')
