@@ -20,10 +20,6 @@ class ocf_kubernetes::master {
   $etcd_archive = "etcd-v${etcd_version}-linux-amd64.tar.gz"
   $etcd_source  = "https://github.com/etcd-io/etcd/releases/download/v${etcd_version}/${etcd_archive}"
 
-  class { 'ocf_kubernetes::package::first_stage':
-    stage => first,
-  }
-
   # Passwords for the static token file
   # https://kubernetes.io/docs/reference/access-authn-authz/authentication/#static-token-file
   $ocf_jenkins_deploy_token = lookup('kubernetes::jenkins_token')
