@@ -28,6 +28,27 @@ groups:
         prtMarkerIndex: ''
         hrDeviceIndex: ''
 
+    # Error states for the printers, as specified by
+    # https://tools.ietf.org/html/rfc1759#section-2.2.13.2.1
+    # The snmp_exporter exposes these bitstrings as a label. The ugly (but
+    # simplest) way of extracting these bits is by doing regex on the hex
+    # string.
+    # We could theoretically do this for each bit, but we get paper/toner info
+    # from other metrics. So we only do doorOpen, jammed, and offline.
+    # TODO(dkessler) I am 80% sure the bit alignment/direction is correct here.
+    #                We'll know for sure when the next paperjam happens :P
+    - record: printer_door_open
+      # 5th bit
+      expr: max(hrPrinterDetectedErrorState{hrDeviceIndex="1",hrPrinterDetectedErrorState=~"0x.[89ABCDEF]"}) without (hrPrinterDetectedErrorState, hrDeviceIndex)
+
+    - record: printer_jammed
+      # 6th bit
+      expr: max(hrPrinterDetectedErrorState{hrDeviceIndex="1",hrPrinterDetectedErrorState=~"0x.[4567CDEF]"}) without (hrPrinterDetectedErrorState, hrDeviceIndex)
+
+    - record: printer_offline
+      # 7th bit
+      expr: max(hrPrinterDetectedErrorState{hrDeviceIndex="1",hrPrinterDetectedErrorState=~"0x.[2367ABEF]"}) without (hrPrinterDetectedErrorState, hrDeviceIndex)
+
     # We don't use tray 1, so don't include them in this record
     - record: printer_tray
       expr: prtInputCurrentLevel{hrDeviceIndex="1", prtInputIndex!="1"}
