@@ -1,14 +1,15 @@
 Puppet::Functions.create_function(:'ldap_attr') do
   dispatch :up do
-    param 'String', :host
-    param 'String', :attr
+    param 'String',           :host
+    param 'String',           :attr
+    optional_param 'Boolean', :multi
   end
 
-  def up(host, attr)
-    # Shell out to ldapsearch, and use a regex to find the desired attribute
-    #
-    # Not the cleanest solution, but the ruby ldap library is a separate gem,
-    # and it would be annoying to install it alongside puppet
-    /^#{attr}: (.*)/.match(`/usr/bin/ldapsearch -LLL -x cn=#{host} #{attr}`)[1]
+  def up(host, attr, multi = false)
+    attrs = `/usr/bin/ldapsearch -LLL -x cn=#{host}`.
+      scan(/#{attr}: (.*)/).
+      flatten()
+    return attrs.first if not multi
+    attrs
   end
 end

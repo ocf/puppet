@@ -14,7 +14,7 @@
 class ocf_kubernetes::master {
   include ocf::packages::docker_kubernetes
   include ocf::packages::kubernetes
-  include ocf_kubernetes::loadbalancer
+  include ocf_kubernetes::master::loadbalancer
 
   $etcd_version = lookup('kubernetes::etcd_version')
   $etcd_archive = "etcd-v${etcd_version}-linux-amd64.tar.gz"
@@ -84,7 +84,7 @@ class ocf_kubernetes::master {
       content => "export KUBECONFIG=/etc/kubernetes/admin.conf\n";
   }
 
-  class { 'ocf_kubernetes::ingress':
+  class { 'ocf_kubernetes::master::ingress::nginx':
     require => [
       Class['kubernetes'],
       File['/etc/profile.d/kubeconfig.sh'],

@@ -1,0 +1,3 @@
+<% @cnames.each do |cname| %>
+/etc/ssl/private/<%= cname %><%= @primary_domain %>.pem <%= cname %><%= @primary_domain -%> <% @alt_domains.each do |domain| -%><%= cname -%><%= domain -%> <% end -%>
+<% end %>
