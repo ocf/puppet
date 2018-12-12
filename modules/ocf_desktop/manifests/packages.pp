@@ -27,8 +27,8 @@ class ocf_desktop::packages {
     # fonts
     ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea',
       'fonts-crosextra-carlito', 'fonts-hack-otf', 'fonts-inconsolata',
-      'fonts-linuxlibertine', 'fonts-noto-unhinted', 'fonts-unfonts-core',
-      'ttf-ancient-fonts', ]:;
+      'fonts-linuxlibertine', 'fonts-noto-unhinted', 'fonts-symbola',
+      'fonts-unfonts-core']:;
     # FUSE
     ['fuse', 'exfat-fuse']:;
     # games
