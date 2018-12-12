@@ -9,7 +9,7 @@ class ocf_kubernetes::master::loadbalancer {
     mode    => 'http',
     bind    => {
       '0.0.0.0:80'  => [],
-      '0.0.0.0:443' => ['ssl', 'crt-list', '/etc/ssl/ocf-certs.txt'],
+      '0.0.0.0:443' => ['ssl', 'crt', "/etc/ssl/private/${::fqdn}.pem"],
     },
     options => {
       'default_backend' => 'kubernetes-backend',
@@ -32,23 +32,5 @@ class ocf_kubernetes::master::loadbalancer {
     ports             => ['80'],
     ipaddresses       => $kubernetes_workers_ipv4,
     server_names      => $kubernetes_worker_nodes;
-  }
-
-  # The primary domain for the SANS cert, which is the name of the pem file.
-  $primary_domain = '.ocf.berkeley.edu'
-
-  # These domains are also included in the *.ocf.berkeley.edu.pem file.
-  # We'll need to list them all in the ocf-certs.txt file so HAProxy
-  # knows which domains each cert covers.
-  $alt_domains = ['.ocf.io']
-
-  $cnames = ldap_attr($::hostname, 'dnsCname', true)
-
-  file { '/etc/ssl/ocf-certs.txt':
-    mode    => '0400',
-    owner   => 'haproxy',
-    group   => 'haproxy',
-    content => template('ocf_kubernetes/master/loadbalancer/ssl/ocf-certs.txt.erb'),
-    notify  => Haproxy::Service[haproxy],
   }
 }
