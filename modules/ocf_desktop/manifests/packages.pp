@@ -1,6 +1,7 @@
 class ocf_desktop::packages {
   include ocf::extrapackages
   include ocf::packages::docker
+  include ocf::packages::fonts
 
   # Install packages specific to desktops
   #
@@ -24,11 +25,6 @@ class ocf_desktop::packages {
     ['libimage-exiftool-perl']:;
     # display manager
     ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
-    # fonts
-    ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea',
-      'fonts-crosextra-carlito', 'fonts-hack-otf', 'fonts-inconsolata',
-      'fonts-linuxlibertine', 'fonts-noto-unhinted', 'fonts-symbola',
-      'fonts-unfonts-core']:;
     # FUSE
     ['fuse', 'exfat-fuse']:;
     # games

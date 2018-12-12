@@ -3,6 +3,7 @@ class ocf_tv {
 
   include ocf::packages::chrome
   include ocf::packages::firefox
+  include ocf::packages::fonts
   include ocf_desktop::drivers
   include ocf_desktop::steam
 
@@ -22,9 +23,6 @@ class ocf_tv {
       'x11vnc',
       'xinit',
     ]:;
-
-    # fonts
-    ['cm-super', 'fonts-croscore', 'fonts-crosextra-caladea', 'fonts-crosextra-carlito', 'fonts-inconsolata', 'fonts-linuxlibertine', 'fonts-unfonts-core', 'ttf-ancient-fonts']:;
 
     # nonfree packages
     ['ttf-mscorefonts-installer']:;
