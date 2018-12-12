@@ -88,7 +88,7 @@ tasksel tasksel/first multiselect standard
 #
 # TODO: Change to using puppet-agent (and use their mirrored repo) when
 # puppetlabs releases it for buster
-d-i pkgsel/include string openssh-server build-essential puppet
+d-i pkgsel/include string openssh-server build-essential puppet ethtool
 
 # Whether to upgrade packages after debootstrap.
 d-i pkgsel/upgrade select full-upgrade
