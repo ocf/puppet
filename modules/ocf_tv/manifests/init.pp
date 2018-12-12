@@ -23,9 +23,6 @@ class ocf_tv {
       'x11vnc',
       'xinit',
     ]:;
-
-    # nonfree packages
-    ['ttf-mscorefonts-installer']:;
   }
 
   user { 'ocftv':

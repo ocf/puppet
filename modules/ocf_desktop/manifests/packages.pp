@@ -34,7 +34,7 @@ class ocf_desktop::packages {
     # input method editors
     ['fcitx', 'fcitx-libpinyin', 'fcitx-rime', 'fcitx-hangul', 'fcitx-mozc']:;
     # nonfree packages
-    ['firmware-linux', 'ttf-mscorefonts-installer', 'nvidia-smi']:;
+    ['firmware-linux', 'nvidia-smi']:;
     # notifications
     ['libnotify-bin', 'notification-daemon']:;
     # performance improvements

@@ -11,4 +11,7 @@ class ocf::packages::fonts {
       'fonts-unfonts-core']:;
   }
 
+  # contrib/non-free fonts - consider removing
+  package { 'ttf-mscorefonts-installer': }
+
 }
