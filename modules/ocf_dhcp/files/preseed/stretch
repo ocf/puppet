@@ -97,7 +97,7 @@ d-i apt-setup/local0/key string \
 tasksel tasksel/first multiselect standard
 
 # Individual additional packages to install
-d-i pkgsel/include string openssh-server build-essential puppet-agent
+d-i pkgsel/include string openssh-server build-essential puppet-agent ethtool
 # Whether to upgrade packages after debootstrap.
 d-i pkgsel/upgrade select full-upgrade
 
