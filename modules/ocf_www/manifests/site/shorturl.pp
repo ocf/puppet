@@ -78,6 +78,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/os$ https://docs.google.com/spreadsheets/d/185MB6nxajC1SsTXWW3lsgSXESomYdW_6pbUiEEFjisU/edit?usp=sharing [R]'},
       {rewrite_rule => '^/password$ https://www.ocf.berkeley.edu/account/password [R]'},
       {rewrite_rule => '^/printerlog$ https://docs.google.com/spreadsheets/d/1f4rLSmVt11oeFmO1yUUcXa-JcyFmDtloTWrYYPfYJoU/edit?usp=sharing [R]'},
+      {rewrite_rule => '^/printers$ https://grafana.ocf.berkeley.edu/d/SKl6_71iz [R]'},
       {rewrite_rule => '^/printing$ https://www.ocf.berkeley.edu/announcements/2016-02-09/printing [R]'},
       {rewrite_rule => '^/projects$ https://discourse.ocf.berkeley.edu/c/projects [R]'},
       {rewrite_rule => '^/register2vote$ https://www.vote.org/register-to-vote/ [R]'},
