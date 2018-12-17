@@ -16,7 +16,6 @@ mesos_masters:
 
 mesos_slaves:
     - jaws
-    - hal
     - pandemic
     - riptide
     - dataloss
