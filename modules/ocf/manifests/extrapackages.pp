@@ -47,7 +47,7 @@ class ocf::extrapackages {
     'dh-virtualenv',
     'elinks',
     'elpa-markdown-mode',
-    'emacs',
+    'emacs25',
     'epic5',
     'flex',
     'fortune-mod',
