@@ -9,7 +9,7 @@
 class ocf_kubernetes::worker {
   include ocf::packages::docker_kubernetes
   include ocf::packages::kubernetes
-  include ocf_kubernetes::secrets
+  include ocf_kubernetes::worker::secrets
 
   class { 'kubernetes':
     worker        => true,

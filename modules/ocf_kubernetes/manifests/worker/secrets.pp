@@ -1,4 +1,4 @@
-class ocf_kubernetes::secrets {
+class ocf_kubernetes::worker::secrets {
   # The way we manage secrets in Kubernetes is that we put them in the Puppet
   # private share under "docker", which is made available to the Kubernetes
   # workers via a special file share, "private-docker".
