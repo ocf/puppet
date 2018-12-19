@@ -36,10 +36,12 @@
         keyfile="/etc/ssl/private/<%= @fqdn -%>.key"
         priority="NORMAL:-MD5">
 
-# Allow connections on 6697 (TLS only)
-# Port 25580 is localhost-only for anope services to connect
+# Allow public connections on 6697 (TLS only)
 <bind address="" port="6697" type="clients" ssl="gnutls">
+# Port 25580 is localhost-only for anope services to connect
 <bind address="127.0.0.1" port="25580" type="servers">
+# Port 6667 is localhost-only for automation scripts
+<bind address="127.0.0.1" port="6667">
 
 # Link to the anope server, only allow local connections
 <link name="services.irc.ocf.berkeley.edu"
@@ -100,6 +102,9 @@
       vhost="ocf.gods"
       override="KICK MODEOP MODEDEOP MODEVOICE MODEDEVOICE MODEHALFOP MODEDEHALFOP OTHERMODE">
 
+<type name="ReloadCert" classes="Shutdown">
+
+
 # Store oper credentials in mysql
 <database name="ocfirc"
           user="ocfirc"
@@ -113,6 +118,13 @@
 
 <files motd="/etc/inspircd/inspircd.motd"
        rules="/etc/inspircd/inspircd.rules">
+
+
+# Automated user for reloading certs
+<oper name="ocf-cert-reload"
+      password="<%= @passwords['cert-reload-pass'] -%>"
+      host="*@localhost *@<%= @fqdn -%>"
+      type="ReloadCert">
 
 # Allow both regular users and opers to join up to 200 channels
 <channels users="200" opers="200">
