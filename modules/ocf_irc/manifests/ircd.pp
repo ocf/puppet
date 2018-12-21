@@ -6,6 +6,13 @@ class ocf_irc::ircd {
     enable    => true,
     require   => Package['inspircd'],
     subscribe => Class['ocf::ssl::default'],
+  } ->
+  cron { 'reload-irc-cert':
+    command => 'chronic /usr/local/bin/reload-ssl.sh /etc/inspircd/reload_pass',
+    hour    => 0,
+    minute  => 0,
+    weekday => 0,
+    user    => 'irc',
   }
 
   $passwords = parsejson(file("/opt/puppet/shares/private/${::hostname}/ircd-passwords"))
@@ -29,5 +36,14 @@ class ocf_irc::ircd {
 
     '/etc/inspircd/inspircd.motd':
       source  => 'puppet:///modules/ocf_irc/ircd.motd';
+
+    '/usr/local/bin/reload-ssl.sh':
+      source => 'puppet:///modules/ocf_irc/reload-ssl.sh',
+      mode   => '0755';
+
+    '/etc/inspircd/reload_pass':
+      content   => $passwords['cert-reload-pass'],
+      mode      => '0640',
+      show_diff => false;
   }
 }
