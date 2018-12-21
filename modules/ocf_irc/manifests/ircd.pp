@@ -11,6 +11,7 @@ class ocf_irc::ircd {
     command => 'chronic /usr/local/bin/reload-ssl.sh /etc/inspircd/reload_pass',
     hour    => 0,
     minute  => 0,
+    weekday => 0,
     user    => 'irc',
   }
 
