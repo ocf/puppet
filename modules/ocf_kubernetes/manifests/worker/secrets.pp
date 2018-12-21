@@ -24,7 +24,7 @@ class ocf_kubernetes::worker::secrets {
       ensure => directory,
       mode   => '0700';
 
-    '/opt/share/docker/secrets':
+    '/opt/share/kubernetes/secrets':
       mode      => '0644',
       source    => 'puppet:///private-docker/',
       recurse   => true,
