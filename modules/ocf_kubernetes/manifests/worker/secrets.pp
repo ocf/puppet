@@ -20,7 +20,7 @@ class ocf_kubernetes::worker::secrets {
   # Only some Kubernetes workers have this class. Some (e.g. desktops) don't,
   # and so won't run jobs that require secrets.
   file {
-    '/opt/share/docker':
+    '/opt/share/kubernetes':
       ensure => directory,
       mode   => '0700';
 
