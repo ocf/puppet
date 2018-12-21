@@ -24,15 +24,17 @@ class ocf_kubernetes::master::ingress::nginx {
 
   # Add ingress-nginx to the cluster
   exec { 'init-ingress':
-    command => "kubectl apply -f ${ingress_nginx_url}",
-    require => Package['kubectl'];
+    environment => ['KUBECONFIG=/etc/kubernetes/admin.conf'],
+    command     => "kubectl apply -f ${ingress_nginx_url}",
+    require     => Package['kubectl'];
   } ->
 
   # Set up a NodePort service so all kubernetes workers
   # are running an instance of ingress-nginx.
   exec { 'expose-ingress':
-    command   => 'kubectl apply -f /etc/ocf-kubernetes/manifests/ingress/ingress-expose.yaml',
-    subscribe => File['/etc/ocf-kubernetes/manifests/ingress/ingress-expose.yaml'],
-    require   => Package['kubectl'];
+    environment => ['KUBECONFIG=/etc/kubernetes/admin.conf'],
+    command     => 'kubectl apply -f /etc/ocf-kubernetes/manifests/ingress/ingress-expose.yaml',
+    subscribe   => File['/etc/ocf-kubernetes/manifests/ingress/ingress-expose.yaml'],
+    require     => Package['kubectl'];
   }
 }

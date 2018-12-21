@@ -85,9 +85,6 @@ class ocf_kubernetes::master {
   }
 
   class { 'ocf_kubernetes::master::ingress::nginx':
-    require => [
-      Class['kubernetes'],
-      File['/etc/profile.d/kubeconfig.sh'],
-    ],
+    require => Class['kubernetes'],
   }
 }
