@@ -21,7 +21,7 @@ define ocf::ssl::lets_encrypt::dns(
 
   $have_cert_info = $title in $parsed_cert_info
   if $have_cert_info {
-    $cert_expires_soon = ($parsed_cert_info[$title]['days_to_expiration'] + 0) < 30
+    $cert_expires_soon = $parsed_cert_info[$title]['days_to_expiration'] < 30
     # we subtract out any domains that are in the cert, and see if any are left
     $cert_has_all_domains = ($domains - $parsed_cert_info[$title]['cert_names']) =~ Array[String, 0, 0]
   }
