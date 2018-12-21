@@ -25,17 +25,17 @@ class ocf_kubernetes::master {
   $ocf_jenkins_deploy_token = lookup('kubernetes::jenkins_token')
 
   file {
-    '/etc/kubernetes-ocf':
+    '/etc/ocf-kubernetes':
       ensure  => directory,
       recurse => true,
       purge   => true;
 
-    '/etc/kubernetes-ocf/static-tokens.csv':
+    '/etc/ocf-kubernetes/static-tokens.csv':
       content   => template('ocf_kubernetes/static-tokens.csv.erb'),
       mode      => '0400',
       show_diff => false;
 
-    '/etc/kubernetes-ocf/abac.jsonl':
+    '/etc/ocf-kubernetes/abac.jsonl':
       source => 'puppet:///modules/ocf_kubernetes/abac.jsonl',
       mode   => '0755';
   }
@@ -62,16 +62,16 @@ class ocf_kubernetes::master {
 
     apiserver_extra_arguments => [
       'authorization-mode: Node,RBAC,ABAC',
-      'token-auth-file: /etc/kubernetes-ocf/static-tokens.csv',
-      'authorization-policy-file: /etc/kubernetes-ocf/abac.jsonl',
+      'token-auth-file: /etc/ocf-kubernetes/static-tokens.csv',
+      'authorization-policy-file: /etc/ocf-kubernetes/abac.jsonl',
     ],
 
     kubeadm_extra_config      => {
       apiServerExtraVolumes => [
         {
           name      => 'ocf-auth',
-          hostPath  => '/etc/kubernetes-ocf',
-          mountPath => '/etc/kubernetes-ocf',
+          hostPath  => '/etc/ocf-kubernetes',
+          mountPath => '/etc/ocf-kubernetes',
           writeable => false,
         },
       ],
