@@ -8,10 +8,7 @@ class ocf_irc::ircd {
     subscribe => Class['ocf::ssl::default'],
   } ->
   cron { 'reload-irc-cert':
-    # We can't use chronic here to suppress output because telnet will return an
-    # "error" code of 1 if the server disconnects, which it will for this
-    # script.
-    command => '/usr/local/bin/reload-ssl.sh /etc/inspircd/reload_pass > /dev/null',
+    command => 'chronic /usr/local/bin/reload-ssl.sh /etc/inspircd/reload_pass',
     hour    => 0,
     minute  => 0,
     user    => 'irc',
