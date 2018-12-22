@@ -105,24 +105,34 @@ def get_access_token(creds):
         return response['access_token']
 
 
-def upload_to_box(creds):
+def upload_to_box(creds, quiet):
     """Uploads the archive to box at the configured location"""
     lftp_cmd = '''
         set ftps:initial-prot ""
         set ftp:ssl-force true
         set ftp:ssl-protect-data true
         open {box_ftp}
-        user ocf@berkeley.edu {passwd}
+        user {email} {passwd}
         mirror -R --parallel={concurr} {archive} {folder}
     '''.format(
         box_ftp=BOX_FTP,
+        email=creds['email'],
         passwd=creds['password'],
         concurr=MAX_CONCURR_UPLOADS,
         archive=ARCHIVE,
         folder=FOLDER,
     )
 
-    subprocess.run(['lftp', '--norc'], input=lftp_cmd.encode()).check_output()
+    if quiet:
+        stdout_pipe = subprocess.DEVNULL
+    else:
+        stdout_pipe = None
+
+    subprocess.run(
+        ['lftp', '--norc'],
+        input=lftp_cmd.encode(),
+        stdout=stdout_pipe,
+    ).check_returncode()
 
 
 def get_folder_id(access_token, folder_name):
@@ -189,12 +199,13 @@ def main(args):
     with open('/opt/share/backups/box-creds.json') as f:
         creds = json.load(f)
 
+    # Used for statistics, shown at the end of the run.
     start_time = time.time()
     file_bytes = sum(os.path.getsize(ARCHIVE + '/' + f) for f in files)
     if not args.quiet:
         print('Uploading {}...'.format(humanize_bytes(file_bytes)))
 
-    upload_to_box(creds)
+    upload_to_box(creds, args.quiet)
 
     # Get a shared link from Box.com's API and share it with certain emails
     access_token = get_access_token(creds)
@@ -202,6 +213,7 @@ def main(args):
     add_collaborators(access_token, folder_id, BOX_EMAILS)
     link = get_shared_link(access_token, folder_id)
 
+    # Print statistics about the backup time, size, and speed
     total_time = time.time() - start_time
     transfer_rate = file_bytes / (1000000 * total_time)
     print('Box.com upload complete!')
