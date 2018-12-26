@@ -34,8 +34,10 @@ class ocf_prometheus::server {
     '/etc/prometheus/rules.d':
       ensure  => 'directory',
       source  => 'puppet:///modules/ocf_prometheus/rules.d',
-      recurse => true;
-  }
+      recurse => true,
+      ignore  => '*.swp',
+      purge   => true,
+  } -> Service[prometheus]
 
   class { '::prometheus::server':
     version              => '2.4.2',
