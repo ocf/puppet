@@ -1,0 +1,13 @@
+groups:
+  - name: mirror
+    rules:
+    - alert: MirrorOutOfDate
+      expr: mirror_updated_upstream - mirror_updated_local > 86400 # 24 hours
+      annotations:
+        summary: "Mirror {{ $labels.project }} has not been updated in {{ humanizeDuration $value }}"
+        # We have to re-run the query, once for the upstream and once for local,
+        # to generate this annotations. Yes, the template syntax is ugly. If you
+        # can think of a better way to write this, submit a PR ;)
+        description: |-
+          Local mirror: {{ with $labels.project | printf "mirror_updated_local{project=%q}" | query | first }}{{ humanizeTimestamp .Value }}{{end}},
+          Upstream mirror: {{ with $labels.project | printf "mirror_updated_upstream{project=%q}" | query | first }}{{ humanizeTimestamp .Value }}{{end}}
