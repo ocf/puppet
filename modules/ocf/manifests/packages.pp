@@ -116,6 +116,7 @@ class ocf::packages {
     'python3-requests',
     'python3-tabulate',
     'quota',
+    'reptyr',
     'screen',
     'systemd-sysv',
     'tcpdump',
