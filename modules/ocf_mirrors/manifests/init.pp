@@ -188,4 +188,15 @@ class ocf_mirrors {
     hour        => 0,
     environment => ["OCFSTATS_PWD=${ocfstats_password}"];
   }
+
+  package { ['python3-prometheus-client']: }
+  file {
+    '/opt/mirrors/prometheus':
+      ensure => directory,
+      owner  => 'mirrors',
+      group  => 'mirrors',
+  }
+  class { 'prometheus::node_exporter':
+    extra_options =>  '--collector.textfile.directory /opt/mirrors/prometheus',
+  }
 }

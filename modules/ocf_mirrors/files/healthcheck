@@ -16,6 +16,9 @@ from datetime import timedelta
 
 import dateutil.parser
 import requests
+from prometheus_client import CollectorRegistry
+from prometheus_client import Gauge
+from prometheus_client import write_to_textfile
 
 Mirror = namedtuple('Mirror', ['url', 'updated_at'])
 
@@ -105,6 +108,30 @@ def get_mirrors(url_first, url_second, get_updated):
             max(mirror_first, mirror_second, key=lambda z: z.updated_at))
 
 
+def write_prometheus(project, local, upstream):
+    registry = CollectorRegistry()
+    updated_upstream = Gauge(
+        'mirror_updated_upstream',
+        'When the upstream mirror was last updated',
+        ['project'],
+        registry=registry,
+    )
+    updated_upstream.labels(project=project).set(upstream.timestamp())
+
+    updated_local = Gauge(
+        'mirror_updated_local',
+        'When the local mirror was last updated',
+        ['project'],
+        registry=registry,
+    )
+    updated_local.labels(project=project).set(local.timestamp())
+
+    write_to_textfile(
+        '/opt/mirrors/prometheus/{}.prom'.format(project),
+        registry,
+    )
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
@@ -121,6 +148,12 @@ if __name__ == '__main__':
 
     # Assume our mirror is out of date
     local_mirror, upstream_mirror = get_mirrors(args.url_first, args.url_second, update_func(args.type))
+
+    write_prometheus(
+        args.project,
+        local_mirror.updated_at,
+        upstream_mirror.updated_at,
+    )
 
     # instead of comparing against current time, compare against the master server;
     # this helps avoid flaky monitoring if the upstream archive isn't updated
