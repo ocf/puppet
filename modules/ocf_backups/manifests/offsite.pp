@@ -1,6 +1,6 @@
 # Things for helping with offsite backups.
 class ocf_backups::offsite {
-  package { 'python3-pycurl':; }
+  package { ['lftp', 'python3-pycurl']:; }
 
   file {
     '/opt/share/backups/create-encrypted-backup':
