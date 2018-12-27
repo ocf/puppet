@@ -23,4 +23,17 @@ class ocf_admin::create {
       mode   => '0444',
       source => 'puppet:///private/create.pub';
   }
+
+  # temporary, for removing the old redis
+  package { 'redis-server':
+    ensure => 'absent',
+  }
+
+  package { 'hitch':
+    ensure => 'absent',
+  }
+
+  user { '_hitch':
+    ensure => 'absent',
+  }
 }
