@@ -3,30 +3,36 @@ groups:
   - name: printer
     rules:
     - record: printer_toner
-      expr: prtMarkerSuppliesLevel{hrDeviceIndex="1",prtMarkerSuppliesIndex="1"}
+      expr: prtMarkerSuppliesLevel/prtMarkerSuppliesMaxCapacity{hrDeviceIndex="1",prtMarkerSuppliesIndex="1"}
       labels:
         prtMarkerSuppliesIndex: ''
         hrDeviceIndex: ''
-    - record: printer_toner_max
-      expr: prtMarkerSuppliesMaxCapacity{hrDeviceIndex="1",prtMarkerSuppliesIndex="1"}
-      labels:
-        prtMarkerSuppliesIndex: ''
-        hrDeviceIndex: ''
+
     - record: printer_maintkit
-      expr: prtMarkerSuppliesLevel{hrDeviceIndex="1",prtMarkerSuppliesIndex="2"}
+      expr: prtMarkerSuppliesLevel/prtMarkerSuppliesMaxCapacity{hrDeviceIndex="1",prtMarkerSuppliesIndex="2"}
       labels:
         prtMarkerSuppliesIndex: ''
         hrDeviceIndex: ''
-    - record: printer_maintkit_max
-      expr: prtMarkerSuppliesMaxCapacity{hrDeviceIndex="1",prtMarkerSuppliesIndex="2"}
-      labels:
-        prtMarkerSuppliesIndex: ''
-        hrDeviceIndex: ''
+
     - record: printer_lifetime_pages
       expr: prtMarkerLifeCount{hrDeviceIndex="1",prtMarkerIndex="1"}
       labels:
         prtMarkerIndex: ''
         hrDeviceIndex: ''
+
+    # Some notes on the printer_paper metric:
+    # * We don't use tray 1, so don't include them in this record
+    # * The tray never goes above "40%" capacity, so divide by 0.4 at the end
+    # * We rename the label "prtInputIndex" to "tray" which is clearer
+    - record: printer_paper
+      expr: |
+        label_replace(
+          prtInputCurrentLevel/prtInputMaxCapacity{hrDeviceIndex="1", prtInputIndex!="1"}/0.4,
+          "tray", "$1", "prtInputIndex", "(.*)"
+        )
+      labels:
+        hrDeviceIndex: ''
+        prtInputIndex: ''
 
     # Error states for the printers, as specified by
     # https://tools.ietf.org/html/rfc1759#section-2.2.13.2.1
@@ -49,21 +55,11 @@ groups:
       # 7th bit
       expr: max(hrPrinterDetectedErrorState{hrDeviceIndex="1",hrPrinterDetectedErrorState=~"0x.[2367ABEF]"}) without (hrPrinterDetectedErrorState, hrDeviceIndex)
 
-    # We don't use tray 1, so don't include them in this record
-    - record: printer_tray
-      expr: prtInputCurrentLevel{hrDeviceIndex="1", prtInputIndex!="1"}
-      labels:
-        hrDeviceIndex: ''
-    - record: printer_tray_max
-      expr: prtInputMaxCapacity{hrDeviceIndex="1", prtInputIndex!="1"}
-      labels:
-        hrDeviceIndex: ''
-
     - alert: LowToner
       # Sometimes the printer will randomly report -2 toner and then jump back
       # to the "actual" level.  We take the median over the last 30 minutes to
       # smooth out these spikes.
-      expr: (quantile_over_time(0.5, printer_toner[30m])/printer_toner_max) < 0.03
+      expr: quantile_over_time(0.5, printer_toner[30m]) < 0.03
       annotations:
         summary: "Low toner on {{ $labels.instance }}"
         description: "{{ $labels.instance }} toner is at level {{ $value }}, replace it soon!"
