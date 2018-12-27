@@ -30,8 +30,6 @@ define ocf_mirrors::monitoring(
     cron { "${title}-health":
       command => "${project_path}/health ${title} ${local_url} ${upstream_url} --type=${type}",
       user    => mirrors,
-      hour    => '*/6',
-      minute  => '0';
     }
   } else {
     file { "${project_path}/health":
