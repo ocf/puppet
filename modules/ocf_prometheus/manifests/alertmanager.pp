@@ -27,6 +27,13 @@ class ocf_prometheus::alertmanager {
     route         => {
       group_by => ['alertname'],
       receiver => 'ocf_lowprio',
+      routes   => [
+        {
+          # Repeat MirrorOutOfDate alerts every 24h, instead of the default 4h
+          match           => {'alertname' => 'MirrorOutOfDate'},
+          repeat_interval => '24h',
+        },
+      ],
     },
 
     receivers     => [
