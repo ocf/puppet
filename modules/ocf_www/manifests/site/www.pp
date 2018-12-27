@@ -47,6 +47,8 @@ class ocf_www::site::www {
           '%{REQUEST_URI} !^/~',
           # ...and not if it's a special Apache thing (e.g. autoindex icons)
           '%{REQUEST_URI} !^/icons/',
+          # ...hide ocfweb metrics
+          '%{REQUEST_URI} !^/metrics',
         ],
         rewrite_rule => '^/(.*)$ http://lb.ocf.berkeley.edu:10002/$1 [P]',
       }
