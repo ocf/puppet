@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Test if the Debian-style or timestamp mirror hasn't been updated recently.
+"""Write Prometheus metrics to a textfile for a mirror.
 
 This detects most problems caused by both failed syncs to our direct upstream
 as well as cases where the upstream is out-of-date.
@@ -12,7 +12,6 @@ import argparse
 import sys
 from collections import namedtuple
 from datetime import datetime
-from datetime import timedelta
 
 import dateutil.parser
 import requests
@@ -99,15 +98,6 @@ def get_updated_manjaro(mirror_url):
     return dateutil.parser.parse(updated_line.split('=', 1)[1])
 
 
-def get_mirrors(url_first, url_second, get_updated):
-    """Given two mirror urls, return two Mirror
-    namedtuples ordered (asc) by sync date."""
-    mirror_first = Mirror(url_first, get_updated(url_first))
-    mirror_second = Mirror(url_second, get_updated(url_second))
-    return (min(mirror_first, mirror_second, key=lambda z: z.updated_at),
-            max(mirror_first, mirror_second, key=lambda z: z.updated_at))
-
-
 def write_prometheus(project, local, upstream):
     registry = CollectorRegistry()
     updated_upstream = Gauge(
@@ -136,34 +126,26 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('project', type=str, help='Project title')
-    parser.add_argument('url_first', type=str, help='URL of local or upstream mirror')
-    parser.add_argument('url_second', type=str, help='URL of local or upstream mirror')
+    parser.add_argument('url_local', type=str, help='URL of local mirror')
+    parser.add_argument('url_upstream', type=str, help='URL of upstream mirror')
     parser.add_argument('-t', '--type', type=str, default='debian')
 
     # ensure we aren't comparing a mirror against itself
     args = parser.parse_args()
-    if args.url_first == args.url_second:
+
+    if args.url_local == args.url_upstream:
         print('Local and upstream urls cannot be equal... Exiting!')
         sys.exit(1)
 
-    # Assume our mirror is out of date
-    local_mirror, upstream_mirror = get_mirrors(args.url_first, args.url_second, update_func(args.type))
+    get_updated = update_func(args.type)
+
+    local_mirror = Mirror(args.url_local, get_updated(args.url_local))
+    upstream_mirror = Mirror(args.url_upstream, get_updated(args.url_upstream))
 
     write_prometheus(
         args.project,
         local_mirror.updated_at,
         upstream_mirror.updated_at,
     )
-
-    # instead of comparing against current time, compare against the master server;
-    # this helps avoid flaky monitoring if the upstream archive isn't updated
-    delta = upstream_mirror.updated_at - local_mirror.updated_at
-    if delta > timedelta(hours=24):
-        print('Warning: {} has not been updated in {}'.format(args.project, delta))
-        print('    Local mirror: {}'.format(local_mirror.updated_at))
-        print('        {}'.format(local_mirror.url))
-        print('    Upstream mirror: {}'.format(upstream_mirror.updated_at))
-        print('        {}'.format(upstream_mirror.url))
-        sys.exit(1)
 
 # vim: ft=python
