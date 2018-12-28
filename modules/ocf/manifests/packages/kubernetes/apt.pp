@@ -7,6 +7,7 @@ class ocf::packages::kubernetes::apt {
   apt::source { 'kubernetes':
     location => 'https://apt.kubernetes.io',
     repos    => 'main',
-    release  => 'kubernetes-stretch',
+    # NOTE: we can't use kubernetes-stretch because kubelet isn't included.
+    release  => 'kubernetes-xenial',
   }
 }

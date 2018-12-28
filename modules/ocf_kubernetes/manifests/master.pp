@@ -49,7 +49,7 @@ class ocf_kubernetes::master {
     etcd_version              => $etcd_version,
     etcd_archive              => "etcd-v${etcd_version}-linux-amd64.tar.gz",
     etcd_source               => "https://github.com/etcd-io/etcd/releases/download/v${etcd_version}/etcd-v${etcd_version}-linux-amd64.tar.gz",
-    install_dashboard         => true,
+    install_dashboard         => false,
     # If we let puppetlabs-kubernetes manage docker then
     # there are dependency issues because they apt add key
     # is not staged before the package is added.
