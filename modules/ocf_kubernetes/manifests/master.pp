@@ -87,4 +87,15 @@ class ocf_kubernetes::master {
   class { 'ocf_kubernetes::master::ingress::nginx':
     require => Class['kubernetes'],
   }
+
+  # Monkey patch puppetlabs-kubernetes.
+  # See more: https://github.com/puppetlabs/puppetlabs-kubernetes/issues/190
+  # TODO: remove when issue is resolved.
+  File['/etc/systemd/system/etcd.service'] ~> Exec['systemd-reload']
+
+  exec { 'etcd-service-restart':
+    command     => 'systemctl restart etcd.service',
+    refreshonly => true,
+    require     => Exec['systemd-reload'],
+  }
 }
