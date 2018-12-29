@@ -10,8 +10,8 @@ class ocf_mirrors::centos_debuginfo {
 
   ocf_mirrors::monitoring {
     'centos-debuginfo':
-      type          => 'unix_timestamp',
       ensure        => absent,
+      type          => 'unix_timestamp',
       upstream_path => '/',
       upstream_host => 'debuginfo.centos.org',
       ts_path       => 'TIME';
