@@ -1,2 +1,0 @@
-#!/bin/sh -eu
-/usr/local/bin/rsync-no-vanished -aqzH --delete --exclude "4" --exclude "5" debuginfo.centos.org::centos-debuginfo /opt/mirrors/ftp/centos-debuginfo

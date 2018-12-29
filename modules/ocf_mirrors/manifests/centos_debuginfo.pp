@@ -11,15 +11,13 @@ class ocf_mirrors::centos_debuginfo {
   ocf_mirrors::monitoring {
     'centos-debuginfo':
       type          => 'unix_timestamp',
-      upstream_host => 'debuginfo.centos.org',
+      ensure        => absent,
       upstream_path => '/',
+      upstream_host => 'debuginfo.centos.org',
       ts_path       => 'TIME';
   }
 
-  ocf_mirrors::timer {
-    'centos-debuginfo':
-      exec_start => '/opt/mirrors/project/centos-debuginfo/sync-archive',
-      hour       => '0/3',
-      minute     => '56';
+  ocf::systemd::timer { 'centos-debuginfo':
+    ensure => absent;
   }
 }
