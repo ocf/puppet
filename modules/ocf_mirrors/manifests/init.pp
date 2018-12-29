@@ -10,6 +10,7 @@ class ocf_mirrors {
   include ocf_mirrors::archlinux
   include ocf_mirrors::centos
   include ocf_mirrors::centos_altarch
+  include ocf_mirrors::centos_debuginfo
   include ocf_mirrors::debian
   include ocf_mirrors::finnix
   include ocf_mirrors::firewall_input
