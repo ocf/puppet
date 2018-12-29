@@ -131,7 +131,7 @@ class ocf_prometheus::server {
         'relabel_configs'     => [
           {
             source_labels => ['__meta_marathon_app'],
-            regex         => '(/grafana)',
+            regex         => '/grafana|/ocfweb/web',
             action        => 'keep',
           },
           {
