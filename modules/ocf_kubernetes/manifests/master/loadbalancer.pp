@@ -5,6 +5,10 @@ class ocf_kubernetes::master::loadbalancer {
   $kubernetes_workers_ipv4 = $kubernetes_worker_nodes.map |$worker| { ldap_attr($worker, 'ipHostNumber') }
   $haproxy_ssl = "/etc/ssl/private/${::fqdn}.pem"
 
+  class { 'ocf_kubernetes::master::loadbalancer::ssl':
+    vip => 'lb-kubernetes',
+  }
+
   # At any given time, only one kubernetes master will hold
   # the first IP. The master holding the IP will handle all
   # HAProxy requests and send them into the cluster.
