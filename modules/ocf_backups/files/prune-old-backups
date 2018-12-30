@@ -107,7 +107,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '-q', '--quiet',
         action='store_true',
-        help='do not output progress or information to stdout',
+        help='Do not output progress or information to stdout.',
     )
 
     args = parser.parse_args()
