@@ -7,6 +7,8 @@
 # with the small requirement that kubernetes::worker
 # class is added.
 class ocf_kubernetes::worker {
+  package { 'nfs-common': }
+
   include ocf::packages::docker_kubernetes
   include ocf::packages::kubernetes
   include ocf_kubernetes::worker::secrets
