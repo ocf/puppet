@@ -71,7 +71,21 @@ def is_old_backup(filename):
 
     return datetime.date.today() - backup_date > RETENTION_TIME
 
-def main(args):
+def main():
+    parser = argparse.ArgumentParser(description='Prune old Box.com backups')
+    parser.add_argument(
+        '-n', '--dry-run',
+        action='store_true',
+        help='Show which backups would be deleted, but do not delete.'
+    )
+    parser.add_argument(
+        '-q', '--quiet',
+        action='store_true',
+        help='Do not output progress or information to stdout.',
+    )
+
+    args = parser.parse_args()
+
     with open(CREDS_PATH) as f:
         creds = json.load(f)
 
@@ -92,17 +106,4 @@ def main(args):
         delete_items(to_delete)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Prune old Box.com backups')
-    parser.add_argument(
-        '-n', '--dry-run',
-        action='store_true',
-        help='Show which backups would be deleted, but do not delete.'
-    )
-    parser.add_argument(
-        '-q', '--quiet',
-        action='store_true',
-        help='Do not output progress or information to stdout.',
-    )
-
-    args = parser.parse_args()
-    sys.exit(main(args))
+    sys.exit(main())
