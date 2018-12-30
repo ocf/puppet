@@ -1,0 +1,128 @@
+#!/usr/bin/env python3
+
+import argparse
+import datetime
+import json
+import shlex
+import subprocess
+import sys
+import textwrap
+
+RETENTION_TIME = datetime.timedelta(days=180) # 6 months
+
+BOX_FTP = 'ftps://ftp.box.com:990'
+BACKUP_PREFIX = 'ocf-backup-'
+
+LFTP_INIT = '''
+    set ftps:initial-prot ""
+    set ftp:ssl-force true
+    set ftp:ssl-protect-data true
+    open {box_ftp}
+    user {email} {passwd}
+'''
+
+def parse_date(dtstr):
+    """Converts a 'YYYY-MM-DD' formatted string to a datetime.date object."""
+    if len(dtstr) != 10:
+        raise ValueError
+
+    year = int(dtstr[0:4])
+
+    if dtstr[4] != '-':
+        raise ValueError
+
+    month = int(dtstr[5:7])
+
+    if dtstr[7] != '-':
+        raise ValueError
+
+    day = int(dtstr[8:10])
+
+    return datetime.date(year, month, day)
+
+def list_items(creds):
+    """List all items at the root of the Box.com folder."""
+    lftp_cmd = (LFTP_INIT + 'renlist').format(
+        box_ftp=BOX_FTP,
+        email=creds['email'],
+        passwd=creds['password'],
+    )
+
+    p = subprocess.run(
+        ['lftp', '--norc'],
+        input=lftp_cmd.encode(),
+        stdout=subprocess.PIPE,
+    )
+
+    p.check_returncode()
+
+    return p.stdout.decode().splitlines()
+
+def delete_items(creds, items, quiet):
+    lftp_cmd = (LFTP_INIT + 'rm -r {items}').format(
+        box_ftp=BOX_FTP,
+        email=creds['email'],
+        passwd=creds['password'],
+        items=' '.join(shlex.quote(item) for item in items)
+    )
+
+    if quiet:
+        stdout_pipe = subprocess.DEVNULL
+    else:
+        stdout_pipe = None
+
+    p = subprocess.run(
+        ['lftp', '--norc'],
+        input=lftp_cmd.encode(),
+        stdout=stdout_pipe
+    ).check_returncode()
+
+def is_old_backup(filename):
+    """Returns true if this backup is old enough to be deleted."""
+    start, _, end = filename.partition(BACKUP_PREFIX)
+
+    # Not a backup
+    if start:
+        return False
+
+    try:
+        backup_date = parse_date(end)
+    except ValueError:
+        return False
+
+    return datetime.date.today() - backup_date > RETENTION_TIME
+
+def main(args):
+    with open('/opt/share/backups/box-creds.json') as f:
+        creds = json.load(f)
+
+    items = set(list_items(creds))
+
+    to_delete = {item for item in items if is_old_backup(item)}
+
+    if not args.quiet:
+        print('Items to keep:')
+        print(textwrap.indent('\n'.join(sorted(items - to_delete)), '  '))
+        print()
+
+        print('Items to delete:')
+        print(textwrap.indent('\n'.join(sorted(to_delete)), '  '))
+
+    if args.dry_run:
+        return
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Prune old Box.com backups')
+    parser.add_argument(
+        '-n', '--dry-run',
+        action='store_true',
+        help='Show which backups would be deleted, but do not delete.'
+    )
+    parser.add_argument(
+        '-q', '--quiet',
+        action='store_true',
+        help='do not output progress or information to stdout',
+    )
+
+    args = parser.parse_args()
+    sys.exit(main(args))
