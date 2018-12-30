@@ -10,8 +10,9 @@ import textwrap
 
 RETENTION_TIME = datetime.timedelta(days=180) # 6 months
 
-BOX_FTP = 'ftps://ftp.box.com:990'
 BACKUP_PREFIX = 'ocf-backup-'
+BOX_FTP = 'ftps://ftp.box.com:990'
+CREDS_PATH = '/opt/share/backups/box-creds.json'
 
 LFTP_INIT = '''
     set ftps:initial-prot ""
@@ -78,7 +79,7 @@ def is_old_backup(filename):
     return datetime.date.today() - backup_date > RETENTION_TIME
 
 def main(args):
-    with open('/opt/share/backups/box-creds.json') as f:
+    with open(CREDS_PATH) as f:
         creds = json.load(f)
 
     items = set(list_items(creds))
@@ -93,8 +94,8 @@ def main(args):
         print('Items to delete:')
         print(textwrap.indent('\n'.join(sorted(to_delete)), '  '))
 
-    if args.dry_run:
-        return
+    if not args.dry_run:
+        delete_items(to_delete)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Prune old Box.com backups')
