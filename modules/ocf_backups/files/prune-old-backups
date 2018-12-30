@@ -23,22 +23,7 @@ LFTP_INIT = '''
 
 def parse_date(dtstr):
     """Converts a 'YYYY-MM-DD' formatted string to a datetime.date object."""
-    if len(dtstr) != 10:
-        raise ValueError
-
-    year = int(dtstr[0:4])
-
-    if dtstr[4] != '-':
-        raise ValueError
-
-    month = int(dtstr[5:7])
-
-    if dtstr[7] != '-':
-        raise ValueError
-
-    day = int(dtstr[8:10])
-
-    return datetime.date(year, month, day)
+    return datetime.datetime.strptime(dtstr, "%Y-%m-%d").date()
 
 def list_items(creds):
     """List all items at the root of the Box.com folder."""
