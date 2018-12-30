@@ -11,6 +11,10 @@ class ocf_backups::offsite {
       source => 'puppet:///modules/ocf_backups/upload-to-box',
       mode   => '0755';
 
+    '/opt/share/backups/prune-old-backups':
+      source => 'puppet:///modules/ocf_backups/prune-old-backups',
+      mode   => '0755';
+
     '/opt/share/backups/keys':
       ensure  => directory,
       source  => 'puppet:///modules/ocf_backups/keys',
