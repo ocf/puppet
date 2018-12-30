@@ -1,9 +1,0 @@
-# We don't root_squash admin, ssh, or apphost because they need to access
-# /services/crontabs/$server/ as root.
-/opt/homes admin(rw,fsid=0,no_subtree_check,no_root_squash) \
-           www(rw,fsid=0,no_subtree_check,root_squash) \
-           dev-www(rw,fsid=0,no_subtree_check,root_squash) \
-           ssh(rw,fsid=0,no_subtree_check,no_root_squash) \
-           dev-ssh(rw,fsid=0,no_subtree_check,no_root_squash) \
-           apphost(rw,fsid=0,no_subtree_check,no_root_squash) \
-           dev-apphost(rw,fsid=0,no_subtree_check,no_root_squash)

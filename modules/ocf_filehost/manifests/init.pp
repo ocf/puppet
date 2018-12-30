@@ -3,11 +3,23 @@ class ocf_filehost(
 ) {
   package { ['quotatool', 'nfs-kernel-server']:; }
 
-  file {
-    '/etc/exports':
-      source  => 'puppet:///modules/ocf_filehost/exports',
-      require => Package['nfs-kernel-server'];
+  concat { '/etc/exports':
+    require => Package['nfs-kernel-server'];
+  }
 
+  ocf_filehost::nfs_export {
+    '/opt/homes':
+      # We don't root_squash admin, ssh, or apphost because they need to access
+      # /services/crontabs/$server/ as root.
+      options => ['rw', 'fsid=0', 'no_subtree_check', 'no_root_squash'],
+      hosts   => ['admin', 'www', 'dev-www', 'ssh', 'dev-ssh', 'apphost', 'dev-apphost'];
+
+  '/opt/homes/services/mastodon':
+      options => ['rw'],
+      hosts   => lookup('kubernetes::worker_nodes');
+  }
+
+  file {
     '/opt/homes':
       ensure  => directory;
   }
@@ -60,7 +72,7 @@ class ocf_filehost(
   } ~>
   service {
     'nfs-server':
-      subscribe => [File['/etc/exports'], Mount['/opt/homes']],
+      subscribe => [Concat['/etc/exports'], Mount['/opt/homes']],
   }
 
   include ocf::firewall::nfs
