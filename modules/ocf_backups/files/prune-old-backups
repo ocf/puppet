@@ -20,48 +20,41 @@ LFTP_INIT = '''
     set ftp:ssl-protect-data true
     open {box_ftp}
     user {email} {passwd}
+    {command}
 '''
 
 def parse_date(dtstr):
     """Converts a 'YYYY-MM-DD' formatted string to a datetime.date object."""
     return datetime.datetime.strptime(dtstr, "%Y-%m-%d").date()
 
+def lftp_cmd(creds, command, out=subprocess.PIPE):
+    """Runs an lftp command and returns the output as a binary string."""
+    cmd = LFTP_INIT.format(
+        box_ftp=BOX_FTP,
+        email=creds['email'],
+        passwd=creds['password'],
+        command=command,
+    )
+
+    p = subprocess.run(['lftp', '--norc'], input=cmd.encode(), stdout=out)
+    p.check_returncode()
+    return p.stdout
+
 def list_items(creds):
     """List all items at the root of the Box.com folder."""
-    lftp_cmd = (LFTP_INIT + 'renlist').format(
-        box_ftp=BOX_FTP,
-        email=creds['email'],
-        passwd=creds['password'],
-    )
-
-    p = subprocess.run(
-        ['lftp', '--norc'],
-        input=lftp_cmd.encode(),
-        stdout=subprocess.PIPE,
-    )
-
-    p.check_returncode()
-
-    return p.stdout.decode().splitlines()
+    return lftp_cmd(creds, 'renlist').decode().splitlines()
 
 def delete_items(creds, items, quiet):
-    lftp_cmd = (LFTP_INIT + 'rm -r {items}').format(
-        box_ftp=BOX_FTP,
-        email=creds['email'],
-        passwd=creds['password'],
-        items=' '.join(shlex.quote(item) for item in items)
-    )
-
     if quiet:
         stdout_pipe = subprocess.DEVNULL
     else:
         stdout_pipe = None
 
-    p = subprocess.run(
-        ['lftp', '--norc'],
-        input=lftp_cmd.encode(),
-        stdout=stdout_pipe
-    ).check_returncode()
+    lftp_cmd(
+        creds,
+        'rm -r ' + ' '.join(shlex.quote(item) for item in items),
+        out=stdout_pipe,
+    )
 
 def is_old_backup(filename):
     """Returns true if this backup is old enough to be deleted."""
@@ -87,12 +80,13 @@ def main(args):
     to_delete = {item for item in items if is_old_backup(item)}
 
     if not args.quiet:
-        print('Items to keep:')
-        print(textwrap.indent('\n'.join(sorted(items - to_delete)), '  '))
-        print()
-
         print('Items to delete:')
         print(textwrap.indent('\n'.join(sorted(to_delete)), '  '))
+        print()
+
+        print('Items to keep:')
+        print(textwrap.indent('\n'.join(sorted(items - to_delete)), '  '))
+
 
     if not args.dry_run:
         delete_items(to_delete)
