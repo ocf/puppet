@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mastodon-nfs-pv
+spec:
+  capacity:
+    storage: 30Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    path: /opt/homes/services/mastodon
+    server: filehost.ocf.berkeley.edu
+    readOnly: false

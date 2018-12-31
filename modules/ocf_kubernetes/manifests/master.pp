@@ -30,6 +30,10 @@ class ocf_kubernetes::master {
       recurse => true,
       purge   => true;
 
+    '/etc/ocf-kubernetes/manifests':
+      ensure => directory,
+      mode   => '0700';
+
     '/etc/ocf-kubernetes/static-tokens.csv':
       content   => template('ocf_kubernetes/static-tokens.csv.erb'),
       mode      => '0400',
@@ -85,6 +89,10 @@ class ocf_kubernetes::master {
   }
 
   class { 'ocf_kubernetes::master::ingress::nginx':
+    require => Class['kubernetes'],
+  }
+
+  class { 'ocf_kubernetes::master::persistent_volume':
     require => Class['kubernetes'],
   }
 

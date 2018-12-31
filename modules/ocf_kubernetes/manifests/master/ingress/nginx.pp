@@ -9,10 +9,6 @@ class ocf_kubernetes::master::ingress::nginx {
     default:
       require =>  Package['kubeadm', 'kubectl'];
 
-    '/etc/ocf-kubernetes/manifests':
-      ensure => directory,
-      mode   => '0700';
-
     '/etc/ocf-kubernetes/manifests/ingress':
       ensure => directory,
       mode   => '0700';
