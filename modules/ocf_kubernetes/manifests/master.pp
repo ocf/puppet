@@ -98,4 +98,16 @@ class ocf_kubernetes::master {
     refreshonly => true,
     require     => Exec['systemd-reload'],
   }
+
+  # Allow kubernetes to talk to each other on all ports.
+  # This includes etcd ports 2378, 2379, and others
+  # for internal kubernetes communication.
+  $etcd_peers = lookup('kubernetes::etcd_peers')
+  firewall_multi {
+    '101 allow kubernetes master communication (IPv4)':
+      chain  => 'PUPPET-INPUT',
+      source => $etcd_peers,
+      proto  => ['tcp', 'udp'],
+      action => 'accept';
+  }
 }
