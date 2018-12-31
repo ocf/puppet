@@ -79,7 +79,7 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
 
   ocf_mesos::master::load_balancer::http_vhost { 'pma':
     server_name    => 'pma.ocf.berkeley.edu',
-    server_aliases => ['pma', 'phpmyadmin', 'phpmyadmin.ocf.berkeley.edu'],
+    server_aliases => ['pma', 'pma.ocf.io', 'phpmyadmin', 'phpmyadmin.ocf.io', 'phpmyadmin.ocf.berkeley.edu'],
     service_port   => 10003,
   }
 
@@ -90,19 +90,19 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
 
   ocf_mesos::master::load_balancer::http_vhost { 'ircbot':
     server_name    => 'ircbot.ocf.berkeley.edu',
-    server_aliases => ['ircbot'],
+    server_aliases => ['ircbot', 'ircbot.ocf.io'],
     service_port   => 10005,
   }
 
   ocf_mesos::master::load_balancer::http_vhost { 'metabase':
     server_name    => 'metabase.ocf.berkeley.edu',
-    server_aliases => ['mb', 'metabase', 'mb.ocf.berkeley.edu'],
+    server_aliases => ['metabase', 'metabase.ocf.io', 'mb', 'mb.ocf.io', 'mb.ocf.berkeley.edu'],
     service_port   => 10006,
   }
 
   ocf_mesos::master::load_balancer::http_vhost { 'templates':
     server_name    => 'templates.ocf.berkeley.edu',
-    server_aliases => ['templates'],
+    server_aliases => ['templates', 'templates.ocf.io'],
     service_port   => 10007,
   }
 
@@ -112,13 +112,13 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
 
   ocf_mesos::master::load_balancer::http_vhost { 'grafana':
     server_name    => 'grafana.ocf.berkeley.edu',
-    server_aliases => ['grafana'],
+    server_aliases => ['grafana', 'grafana.ocf.io'],
     service_port   => 10011,
   }
 
   ocf_mesos::master::load_balancer::http_vhost { 'sourcegraph':
     server_name    => 'sourcegraph.ocf.berkeley.edu',
-    server_aliases => ['sg', 'sourcegraph', 'sg.ocf.berkeley.edu'],
+    server_aliases => ['sourcegraph', 'sourcegraph.ocf.io', 'sg', 'sg.ocf.io', 'sg.ocf.berkeley.edu'],
     service_port   => 10012,
   }
 
