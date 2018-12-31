@@ -4,6 +4,7 @@ import os
 from datetime import date
 from datetime import timedelta
 from datetime import datetime
+import traceback
 
 import pymysql
 
@@ -14,9 +15,7 @@ LOG_NAMES = ['mirrors.ocf.berkeley.edu_access.log', 'mirrors.ocf.berkeley.edu-ss
 
 def process_log(dists, fn, log_date):
     with open(fn, 'r') as f:
-        n = 0
-        for line in f:
-            n += 1
+        for n, line in enumerate(f, 1):
             stats = line.split()
 
             # apache log date format looks like [11/Jul/2017:00:05:16 -0700]
@@ -26,7 +25,9 @@ def process_log(dists, fn, log_date):
             try:
                 line_date = datetime.strptime(stats[3][1:12], '%d/%b/%Y')
             except ValueError:
-                continue
+                print('Error on line {}:\\  {}\\'.format(n, line))
+                traceback.print_exc()
+
             if line_date.date() != log_date:
                 continue
 
