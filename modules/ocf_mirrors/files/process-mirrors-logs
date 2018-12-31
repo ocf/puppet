@@ -23,7 +23,10 @@ def process_log(dists, fn, log_date):
             # line.split()[3][1:12] = 11/Jul/2017
             # we need to dump dates that don't match because
             # logrotate rotates the logs at 6am
-            line_date = datetime.strptime(stats[3][1:12], '%d/%b/%Y')
+            try:
+                line_date = datetime.strptime(stats[3][1:12], '%d/%b/%Y')
+            except ValueError:
+                continue
             if line_date.date() != log_date:
                 continue
 
