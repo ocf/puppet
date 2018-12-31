@@ -5,7 +5,6 @@ import datetime
 import json
 import shlex
 import subprocess
-import sys
 import textwrap
 
 RETENTION_TIME = datetime.timedelta(days=180) # 6 months
@@ -106,4 +105,4 @@ def main():
         delete_items(to_delete)
 
 if __name__ == '__main__':
-    sys.exit(main())
+    main()
