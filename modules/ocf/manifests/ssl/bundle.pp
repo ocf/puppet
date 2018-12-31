@@ -6,71 +6,43 @@ define ocf::ssl::bundle(
 ) {
   require ocf::ssl::setup
 
-  if $use_lets_encrypt {
-    ocf::ssl::lets_encrypt::dns { $title:
-      domains => $domains,
-      owner   => $owner,
-      group   => $group,
-    }
+  ocf::ssl::lets_encrypt::dns { $title:
+    domains => $domains,
+    owner   => $owner,
+    group   => $group,
+  }
 
-    $intermediate_source = 'puppet:///modules/ocf/ssl/lets-encrypt.crt'
-    $cert_path = "/var/lib/lets-encrypt/certs/${title}/cert.pem"
-    $key_path = "/var/lib/lets-encrypt/certs/${title}/privkey.pem"
-    $cert_source = "file://${cert_path}"
-    $key_source = "file://${key_path}"
+  $intermediate_source = 'puppet:///modules/ocf/ssl/lets-encrypt.crt'
+  $cert_path = "/var/lib/lets-encrypt/certs/${title}/cert.pem"
+  $key_path = "/var/lib/lets-encrypt/certs/${title}/privkey.pem"
+  $cert_source = "file://${cert_path}"
+  $key_source = "file://${key_path}"
 
-    file {
-      default:
-        owner     => 'root',
-        group     => 'ssl-cert',
-        show_diff => false,
-        require   => [
-          Ocf::Ssl::Lets_encrypt::Dns[$title],
-          File['/var/lib/lets-encrypt'],
-        ];
+  file {
+    default:
+      owner     => 'root',
+      group     => 'ssl-cert',
+      show_diff => false,
+      require   => [
+        Ocf::Ssl::Lets_encrypt::Dns[$title],
+        File['/var/lib/lets-encrypt'],
+      ];
 
-      "/etc/ssl/private/${title}.key":
-        ensure => symlink,
-        links  => manage,
-        target => $key_path,
-        mode   => '0640';
+    "/etc/ssl/private/${title}.key":
+      ensure => symlink,
+      links  => manage,
+      target => $key_path,
+      mode   => '0640';
 
-      "/etc/ssl/private/${title}.crt":
-        ensure => symlink,
-        links  => manage,
-        target => $cert_path,
-        mode   => '0644';
+    "/etc/ssl/private/${title}.crt":
+      ensure => symlink,
+      links  => manage,
+      target => $cert_path,
+      mode   => '0644';
 
-      "/etc/ssl/private/${title}.intermediate":
-        source => $intermediate_source,
-        mode   => '0644';
-    }
-
-  } else {
-    # TODO: Remove this branch once we are confident enough that using Let's
-    # Encrypt certs is working well and is sustainable
-    $intermediate_source = 'puppet:///modules/ocf/ssl/incommon-intermediate.crt'
-    $cert_source = "puppet:///private/ssl/${title}.crt"
-    $key_source = "puppet:///private/ssl/${title}.key"
-
-    file {
-      default:
-        owner     => 'root',
-        group     => 'ssl-cert',
-        show_diff => false;
-
-      "/etc/ssl/private/${title}.key":
-        source => $key_source,
-        mode   => '0640';
-
-      "/etc/ssl/private/${title}.crt":
-        source => $cert_source,
-        mode   => '0644';
-
-      "/etc/ssl/private/${title}.intermediate":
-        source => $intermediate_source,
-        mode   => '0644';
-    }
+    "/etc/ssl/private/${title}.intermediate":
+      source => $intermediate_source,
+      mode   => '0644';
   }
 
   # ssl bundle (cert + intermediates)
