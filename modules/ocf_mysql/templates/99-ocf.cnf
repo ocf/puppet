@@ -1,6 +1,10 @@
 [mysqld]
 bind-address = ::
 
+# enable encrypted connections
+ssl-cert=/etc/ssl/private/<%= @fqdn %>.crt
+ssl-key=/etc/ssl/private/<%= @fqdn %>.key
+
 # https://mariadb.com/kb/en/mariadb/optimizing-key_buffer_size/
 key_buffer_size = 128M
 
