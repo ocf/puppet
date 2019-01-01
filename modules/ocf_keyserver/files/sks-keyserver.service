@@ -1,0 +1,17 @@
+[Unit]
+Description=OCF SKS Keyserver Instance
+Requires=network-online.target docker.service
+After=docker.service
+
+[Service]
+User=root
+ExecStart=/usr/bin/docker run --rm \
+    -v /var/lib/sks:/var/lib/sks \
+    -p 127.0.0.1:11370:11370/tcp \
+    -p 127.0.0.1:11371:11371/tcp \
+    --name sks-keyserver \
+    zhusj/sks
+Restart=always
+
+[Install]
+WantedBy=docker.service
