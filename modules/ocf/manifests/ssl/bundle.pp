@@ -1,5 +1,4 @@
 define ocf::ssl::bundle(
-  Boolean $use_lets_encrypt = true,
   Array[String] $domains = [$title],
   String $owner = 'ocfletsencrypt',
   String $group = 'ssl-cert',
