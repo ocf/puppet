@@ -51,6 +51,18 @@ class ocf_puppet::puppetserver {
     notify               => Service['puppetserver'],
   }
 
+  # let anyone get the ocfweb certs
+  puppet_authorization::rule { 'ocfweb-cert':
+    match_request_path   => '^/puppet/v3/file_(content|metadata)s?/private-docker/ocfweb/puppet-certs$',
+    match_request_type   => 'regex',
+    match_request_method => ['get', 'post'],
+    allow                => '*.ocf.berkeley.edu',
+    sort_order           => 500,
+    path                 => '/etc/puppetlabs/puppetserver/conf.d/auth.conf',
+    require              => Package['puppetserver'],
+    notify               => Service['puppetserver'],
+  }
+
   file {
     '/etc/puppetlabs/puppet/fileserver.conf':
       source  => 'puppet:///modules/ocf_puppet/fileserver.conf',
