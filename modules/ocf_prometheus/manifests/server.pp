@@ -44,7 +44,7 @@ class ocf_prometheus::server {
       recurse => true,
       ignore  => '*.swp',
       purge   => true,
-  } -> Service[prometheus]
+  } ~> Service[prometheus]
 
   class { '::prometheus::server':
     version              => '2.6.0',
