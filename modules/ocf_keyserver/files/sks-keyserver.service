@@ -1,10 +1,9 @@
 [Unit]
 Description=OCF SKS Keyserver Instance
 Requires=network-online.target docker.service
-After=docker.service
+After=network-online.target docker.service
 
 [Service]
-User=root
 # we proxy hkp from a different port so nginx can claim 11371
 ExecStart=/usr/bin/docker run --rm \
     -v /var/lib/sks:/var/lib/sks \
@@ -15,4 +14,4 @@ ExecStart=/usr/bin/docker run --rm \
 Restart=always
 
 [Install]
-WantedBy=docker.service
+WantedBy=multi-user.target
