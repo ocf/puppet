@@ -12,8 +12,7 @@ class ocf_keyserver {
 
     '/var/lib/sks/membership':
       source  => 'puppet:///modules/ocf_keyserver/membership';
-  }
-
+  } ~>
   ocf::systemd::service { 'sks-keyserver':
     source  => 'puppet:///modules/ocf_keyserver/sks-keyserver.service',
     require => [
