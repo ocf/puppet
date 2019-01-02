@@ -29,5 +29,12 @@ class ocf_ocfweb::dev_config($group = 'ocfstaff') {
       group     => $group,
       mode      => '0640',
       show_diff => false;
+
+    '/etc/ocfweb/puppet-certs':
+      ensure    => 'directory',
+      source    => 'puppet:///private-docker/ocfweb/puppet-certs',
+      recurse   => true,
+      purge     => true,
+      show_diff => false;
   }
 }
