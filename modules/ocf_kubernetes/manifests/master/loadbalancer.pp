@@ -59,7 +59,7 @@ class ocf_kubernetes::master::loadbalancer {
   } ->
   haproxy::balancermember { 'kubernetes-ingress-worker':
     listening_service => 'kubernetes-frontend',
-    ports             => ['80'],
+    ports             => ['31234'],
     ipaddresses       => $kubernetes_workers_ipv4,
     server_names      => $kubernetes_worker_nodes;
   }
