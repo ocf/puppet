@@ -69,7 +69,7 @@ kubernetes::cni_network_provider: https://raw.githubusercontent.com/coreos/flann
 # Changing this would require also deploying a modified version of kube-flannel.yml,
 # as it is hardcoded in the version they distribute.
 kubernetes::cni_pod_cidr: 10.244.0.0/16
-kubernetes::etcd_initial_cluster: hozer-75=https://169.229.226.75:2380,hozer-76=https://169.229.226.76:2380,coup=https://169.229.226.77:2380
+kubernetes::etcd_initial_cluster: deadlock=https://169.229.226.75:2380,autocrat=https://169.229.226.76:2380,coup=https://169.229.226.77:2380
 kubernetes::etcd_peers:
     - 169.229.226.75
     - 169.229.226.76
