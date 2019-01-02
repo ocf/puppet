@@ -19,6 +19,19 @@ class ocf_kubernetes::master {
   $etcd_version = lookup('kubernetes::etcd_version')
   $etcd_archive = "etcd-v${etcd_version}-linux-amd64.tar.gz"
   $etcd_source  = "https://github.com/etcd-io/etcd/releases/download/v${etcd_version}/${etcd_archive}"
+  $etcd_peers = lookup('kubernetes::etcd_peers')
+
+  # Allow kubernetes to talk to each other on all ports.
+  # This includes etcd ports 2378, 2379, and others
+  # for internal kubernetes communication.
+  firewall_multi {
+    '101 allow kubernetes master communication (IPv4)':
+      chain  => 'PUPPET-INPUT',
+      source => $etcd_peers,
+      proto  => ['tcp', 'udp'],
+      action => 'accept',
+      before => Class['kubernetes']
+  }
 
   # Passwords for the static token file
   # https://kubernetes.io/docs/reference/access-authn-authz/authentication/#static-token-file
@@ -94,28 +107,5 @@ class ocf_kubernetes::master {
 
   class { 'ocf_kubernetes::master::persistent_volume':
     require => Class['kubernetes'],
-  }
-
-  # Monkey patch puppetlabs-kubernetes.
-  # See more: https://github.com/puppetlabs/puppetlabs-kubernetes/issues/190
-  # TODO: remove when issue is resolved.
-  File['/etc/systemd/system/etcd.service'] ~> Exec['systemd-reload']
-
-  exec { 'etcd-service-restart':
-    command     => 'systemctl restart etcd.service',
-    refreshonly => true,
-    require     => Exec['systemd-reload'],
-  }
-
-  # Allow kubernetes to talk to each other on all ports.
-  # This includes etcd ports 2378, 2379, and others
-  # for internal kubernetes communication.
-  $etcd_peers = lookup('kubernetes::etcd_peers')
-  firewall_multi {
-    '101 allow kubernetes master communication (IPv4)':
-      chain  => 'PUPPET-INPUT',
-      source => $etcd_peers,
-      proto  => ['tcp', 'udp'],
-      action => 'accept';
   }
 }
