@@ -1,6 +1,6 @@
 class ocf_keyserver {
+  require ocf::ssl::default
   include ocf::firewall::allow_web
-  include ocf::ssl::default
   include ocf::packages::docker
 
   file {
@@ -12,7 +12,6 @@ class ocf_keyserver {
 
     '/var/lib/sks/membership':
       source  => 'puppet:///modules/ocf_keyserver/membership';
-
   }
 
   ocf::systemd::service { 'sks-keyserver':
