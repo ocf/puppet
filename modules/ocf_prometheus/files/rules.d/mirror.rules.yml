@@ -3,7 +3,9 @@ groups:
     rules:
     - alert: MirrorOutOfDate
       expr: mirror_updated_upstream - mirror_updated_local > 86400 # 24 hours
+      for: 1h
       annotations:
+        dashboard: https://grafana.ocf.berkeley.edu/d/Jo_bRsyiz/mirrors
         summary: "Mirror {{ $labels.project }} has not been updated in {{ humanizeDuration $value }}"
         # We have to re-run the query, once for the upstream and once for local,
         # to generate this annotations. Yes, the template syntax is ugly. If you
