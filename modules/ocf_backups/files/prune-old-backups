@@ -44,6 +44,11 @@ def list_items(creds):
     return lftp_cmd(creds, 'renlist').decode().splitlines()
 
 def delete_items(creds, items, quiet):
+    if not items:
+        if not quiet:
+            print('Nothing to delete')
+        return
+
     if quiet:
         stdout_pipe = subprocess.DEVNULL
     else:
@@ -99,7 +104,6 @@ def main():
 
         print('Items to keep:')
         print(textwrap.indent('\n'.join(sorted(items - to_delete)), '  '))
-
 
     if not args.dry_run:
         delete_items(creds, to_delete, args.quiet)
