@@ -42,7 +42,6 @@ define ocf::nginx_proxy(
           # HSTS header
           'Strict-Transport-Security' => 'max-age=31536000',
         }, $headers),
-
         *                => $nginx_options;
 
       "${title}-redirect":
@@ -51,8 +50,6 @@ define ocf::nginx_proxy(
           'return' => "301 https://${server_name}\$request_uri"
         },
 
-        # We have to specify www_root even though we always redirect/proxy
-        www_root          => '/var/www',
         add_header        => $headers,
         *                 => $nginx_options;
     }
@@ -76,8 +73,6 @@ define ocf::nginx_proxy(
             'Strict-Transport-Security' => 'max-age=31536000',
           }, $headers),
 
-          # We have to specify www_root even though we always redirect/proxy
-          www_root          => '/var/www',
           *                 => $nginx_options;
       }
     }
