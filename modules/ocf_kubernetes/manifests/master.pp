@@ -98,7 +98,8 @@ class ocf_kubernetes::master {
   file {
     '/etc/profile.d/kubeconfig.sh':
       mode    => '0755',
-      content => "export KUBECONFIG=/etc/kubernetes/admin.conf\n";
+      source  => 'puppet:///modules/ocf_kubernetes/kubeconfig.sh',
+      require => Class['kubernetes'],
   }
 
   class { 'ocf_kubernetes::master::ingress::nginx':
