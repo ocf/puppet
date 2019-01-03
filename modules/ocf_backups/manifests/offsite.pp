@@ -35,5 +35,11 @@ class ocf_backups::offsite {
       weekday => '6',
       hour    => '12',
       minute  => '0';
+
+    'prune-old-backups':
+      command => 'chronic /opt/share/backups/prune-old-backups',
+      user    => root,
+      hour    => '0',
+      minute  => '0';
   }
 }

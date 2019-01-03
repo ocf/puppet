@@ -102,7 +102,7 @@ def main():
 
 
     if not args.dry_run:
-        delete_items(to_delete)
+        delete_items(creds, to_delete, args.quiet)
 
 if __name__ == '__main__':
     main()
