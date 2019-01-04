@@ -24,9 +24,7 @@ class ocf_mesos::master::webui(
   }
 
   # We need the PAM authentication module, so install nginx-extras.
-  ocf::repackage { ['nginx-extras', 'libnginx-mod-http-auth-pam']:
-    backport_on => jessie,
-  }
+  package { ['nginx-extras', 'libnginx-mod-http-auth-pam']:; }
 
   class { 'nginx':
     manage_repo       => false,
@@ -42,7 +40,7 @@ class ocf_mesos::master::webui(
     package_name      => 'emacs24',
     package_ensure    => absent,
 
-    require           => Ocf::Repackage['nginx-extras', 'libnginx-mod-http-auth-pam'],
+    require           => Package['nginx-extras', 'libnginx-mod-http-auth-pam'],
   }
 
   # Restart nginx if any cert changes occur

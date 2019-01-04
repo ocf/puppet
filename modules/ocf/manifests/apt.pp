@@ -88,26 +88,13 @@ class ocf::apt($stage = 'first') {
     }
   }
 
-  # workaround Debian #793444 by disabling pdiffs
-  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=793444
-  if $::lsbdistcodename == 'jessie' {
-    file { '/etc/apt/apt.conf.d/99-workaround-debian-793444':
-      content => "Acquire::PDiffs \"false\";\n";
-    }
-  }
-
   # TODO: Add the puppetlabs repo to buster when it is available
-  if $::lsbdistcodename in ['jessie', 'stretch'] {
-    $puppetlabs_repo = $::lsbdistcodename ? {
-      'jessie'  => 'PC1',
-      'stretch' => 'puppet',
-    }
-
+  if $::lsbdistcodename == 'stretch' {
     apt::source {
       'puppetlabs':
         location => 'http://mirrors/puppetlabs/apt/',
         release  => $::lsbdistcodename,
-        repos    => $puppetlabs_repo,
+        repos    => 'puppet',
     }
 
     # Add the puppetlabs apt repo key
