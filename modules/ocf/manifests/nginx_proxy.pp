@@ -42,22 +42,39 @@ define ocf::nginx_proxy(
           # HSTS header
           'Strict-Transport-Security' => 'max-age=31536000',
         }, $headers),
-
         *                => $nginx_options;
 
       "${title}-redirect":
-        # We have to specify www_root even though we always redirect/proxy
-        www_root          => '/var/www',
-
         server_name       => concat([$server_name], $server_aliases),
-
         server_cfg_append => {
           'return' => "301 https://${server_name}\$request_uri"
         },
 
         add_header        => $headers,
-
         *                 => $nginx_options;
+    }
+
+    if size($server_aliases) > 0 {
+      nginx::resource::server {
+        "${title}-aliases-redirect":
+          server_name       => $server_aliases,
+          server_cfg_append => {
+            'return' => "301 https://${server_name}\$request_uri"
+          },
+
+          listen_port       => 443,
+          ssl               => true,
+          ssl_cert          => $ssl_cert,
+          ssl_key           => $ssl_key,
+          ssl_dhparam       => $ssl_dhparam,
+
+          add_header        => merge({
+            # HSTS header
+            'Strict-Transport-Security' => 'max-age=31536000',
+          }, $headers),
+
+          *                 => $nginx_options;
+      }
     }
   } else {
     nginx::resource::server { $title:

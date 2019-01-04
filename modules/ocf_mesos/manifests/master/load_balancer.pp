@@ -71,7 +71,7 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
 
   ocf_mesos::master::load_balancer::http_vhost { 'rt':
     server_name    => 'rt.ocf.berkeley.edu',
-    server_aliases => ['rt'],
+    server_aliases => ['rt', 'rt.ocf.io'],
     service_port   => 10001,
   }
 
