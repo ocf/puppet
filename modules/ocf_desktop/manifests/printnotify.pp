@@ -20,7 +20,7 @@ class ocf_desktop::printnotify {
       owner  => 'ocfbroker';
 
     '/opt/share/broker/broker.conf':
-      content => template('ocf/broker/broker.conf.erb'),
+      content   => template('ocf/broker/broker.conf.erb'),
       mode      => '0400',
       owner     => 'ocfbroker',
       show_diff => false;
