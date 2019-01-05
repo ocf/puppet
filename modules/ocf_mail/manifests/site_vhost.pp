@@ -4,10 +4,7 @@ class ocf_mail::site_vhost {
   # Configure an "smtp" PAM service that authenticates against MySQL.
   # To test this, you can install pamtester and try:
   # $ pamtester smtp ckuehl@dev-vhost.ocf.berkeley.edu authenticate
-  ocf::repackage { 'libpam-mysql':
-    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=758660 (caused rt#5753)
-    backport_on => jessie,
-  }
+  package { 'libpam-mysql':; }
 
   $mysql_ro_password = lookup('ocfmail::mysql::ro_password')
 
@@ -16,11 +13,11 @@ class ocf_mail::site_vhost {
       content   => template('ocf_mail/site_vhost/pam-mysql.conf.erb'),
       mode      => '0600',
       show_diff => false,
-      require   => Ocf::Repackage['libpam-mysql'];
+      require   => Package['libpam-mysql'];
 
     '/etc/pam.d/smtp':
       source  => 'puppet:///modules/ocf_mail/site_vhost/pam',
-      require => Ocf::Repackage['libpam-mysql'];
+      require => Package['libpam-mysql'];
   }
 
   # Configure the saslauthd instance used by Postfix.

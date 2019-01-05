@@ -13,7 +13,7 @@ set -euo pipefail
 # Whichever architecture and distribution is first in the arrays is the default,
 # and is (ab)used for the PXE boot menu.
 archs=(amd64)
-dists=(stretch buster jessie)
+dists=(stretch buster)
 menu_arch="${archs[0]}"
 menu_dist="${dists[0]}"
 menu_path="debian-installer/$menu_arch"

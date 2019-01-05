@@ -111,10 +111,14 @@ class ocf::packages {
     'python3',
     'python3-dateutil',
     'python3-dev',
+    'python3-dnspython',
     'python3-paramiko',
     'python3-pip',
     'python3-requests',
     'python3-tabulate',
+    'python3.7',
+    'python3.7-dev',
+    'python3.7-venv',
     'quota',
     'reptyr',
     'screen',
@@ -136,30 +140,6 @@ class ocf::packages {
         'aactivator',
         'fluffy',
       ]:;
-    }
-  }
-
-  ocf::repackage {
-    'python3-dnspython':
-      backport_on => jessie,
-  }
-
-  if $::lsbdistcodename != 'jessie' {
-    package {
-      [
-        'python3.7',
-        'python3.7-dev',
-        'python3.7-venv',
-      ]:;
-    }
-  }
-
-  if $::lsbdistcodename == 'jessie' {
-    package {
-      # in jessie, install python-pip-whl to avoid problems where a system-wide
-      # python module (e.g. requests) is updated, resulting in pip breaking
-      # (see rt#3268, Debian #744145)
-      'python-pip-whl':;
     }
   }
 }
