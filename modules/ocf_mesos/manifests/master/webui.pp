@@ -36,12 +36,6 @@ class ocf_mesos::master::webui(
       'load_module' => '"modules/ngx_http_auth_pam_module.so"',
     },
 
-    # remove once we're on stretch:
-    # a random package we don't care about, so that the nginx module won't try
-    # to install nginx and screw with our backport
-    package_name      => 'emacs24',
-    package_ensure    => absent,
-
     require           => Ocf::Repackage['nginx-extras', 'libnginx-mod-http-auth-pam'],
   }
 
