@@ -31,6 +31,15 @@ class ocf_prometheus::server {
   }
 
   file {
+    # TODO: we can probably get rid of our need for this by using firewall rules
+    # insetad of HTTP basic auth, but this is easiest for now.
+    '/etc/prometheus/docker_metrics_passwd':
+      content   => lookup('prometheus::docker_metrics_password'),
+      show_diff => false,
+      owner     => 'prometheus',
+      group     => 'prometheus',
+      mode      => '0400';
+
     '/etc/prometheus/marathon_passwd':
       content   => lookup('mesos::marathon::http_password'),
       show_diff => false,
@@ -128,6 +137,11 @@ class ocf_prometheus::server {
           },
         ],
 
+        basic_auth            => {
+          username      => 'prometheus',
+          password_file => '/etc/prometheus/docker_metrics_passwd',
+        },
+
         'relabel_configs'     => [
           {
             source_labels => ['__meta_marathon_app'],
@@ -136,7 +150,7 @@ class ocf_prometheus::server {
           },
           {
             source_labels => ['__meta_marathon_app'],
-            target_label  => 'marathon_app',
+            target_label  => 'app',
           },
           {
             source_labels => ['__meta_marathon_image'],
