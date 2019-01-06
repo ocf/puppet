@@ -11,7 +11,7 @@ SNAPSHOT_PATH="/dev/vg-backups/backups-snapshot"
 
 # import staff keys into temporary gpg dir
 gpgdir=$(mktemp -d)
-gpg --homedir "$gpgdir" --quiet --import /opt/share/backups/keys/*.asc
+gpg --homedir "$gpgdir" --no-tty --quiet --import /opt/share/backups/keys/*.asc
 
 # make a LVM snapshot
 if [ -e "$SNAPSHOT_PATH" ]; then
@@ -40,6 +40,7 @@ mkdir "$ARCHIVE_DIRECTORY"
 compress_and_encrypt() {
     dd if="$SNAPSHOT_PATH" bs=32M | pigz |
         gpg --homedir "$gpgdir" \
+            --no-tty \
             --quiet \
             --encrypt \
             --trust-model always \
