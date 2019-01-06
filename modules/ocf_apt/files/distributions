@@ -4,16 +4,6 @@
 # The distribution will then be empty, but will at least be
 # requestable by apt clients and not error.
 
-Codename: jessie
-Architectures: amd64 i386 source
-Components: main
-SignWith: D72A0AF4
-
-Codename: jessie-backports
-Architectures: amd64 i386 source
-Components: main
-SignWith: D72A0AF4
-
 Codename: stretch
 Architectures: amd64 i386 source
 Components: main

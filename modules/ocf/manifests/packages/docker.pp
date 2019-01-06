@@ -6,7 +6,7 @@
 # exploiting kernel bugs, etc.).
 #
 # Containers are helpful for testing things. For example:
-#   docker run -ti debian:jessie bash
+#   docker run -ti debian:stretch bash
 #
 class ocf::packages::docker($admin_group = undef,
                             $autoclean = true,
@@ -16,11 +16,9 @@ class ocf::packages::docker($admin_group = undef,
     stage => first,
   }
 
-  if $::lsbdistcodename != 'jessie' {
-    package {
-      ['aufs-dkms', 'aufs-tools']:
-        ensure => purged;
-    }
+  package {
+    ['aufs-dkms', 'aufs-tools']:
+      ensure => purged;
   }
 
   # Don't install AUFS stuff

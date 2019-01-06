@@ -1,4 +1,4 @@
-class ocf_prometheus::http {
+class ocf_prometheus::proxy {
   include apache
   include apache::mod::proxy
   include apache::mod::proxy_http

@@ -35,6 +35,3 @@ end
 <%= info_line('Puppet environment', @environment) if @environment.to_s != 'production' -%>
 <%= info_line('Owner',              @owner) -%>
 <%= info_line('DNS names',          ([*@dnsA] || []) + ([*@dnsCname] || [])) -%>
-<%- if @lsbdistcodename == 'jessie' -%>
-<%= bold(yellow("I'm still running jessie! Help me get upgraded: https://ocf.io/stretch")) %>
-<%- end -%>

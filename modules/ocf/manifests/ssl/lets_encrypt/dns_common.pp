@@ -1,6 +1,6 @@
 class ocf::ssl::lets_encrypt::dns_common {
   ocf::repackage { 'dehydrated':
-    backport_on => ['jessie', 'stretch'],
+    backport_on => ['stretch'],
   }
   package { 'dehydrated-hook-ddns-tsig':
     require => Package['dehydrated'],
