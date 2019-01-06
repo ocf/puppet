@@ -40,6 +40,20 @@ class ocf_www {
       serverlimit     => 100;
   }
 
+  # Prometheus user needed for the prometheus-apache-exporter daemon,
+  # which runs as user "prometheus"
+  user {
+    'prometheus':
+      comment => 'prometheus user for running exporters',
+      system  => true,
+  }
+
+  ocf::repackage {
+    # prometheus-apache-exporter is only available in backports
+    'prometheus-apache-exporter':
+      backport_on => 'stretch';
+  }
+
   # Restart apache if any cert changes occur
   Class['ocf::ssl::default'] ~> Class['Apache::Service']
 

@@ -123,6 +123,13 @@ class ocf_prometheus::server {
         ]
       },
       {
+        job_name        => 'www_apache',
+        scrape_interval => '10s',
+        scrape_timeout  => '10s',
+
+        static_configs  => [{targets => ['www:9117']}],
+      },
+      {
         'job_name'            => 'marathon',
         'scrape_interval'     => '10s',
         'scrape_timeout'      => '10s',
