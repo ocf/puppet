@@ -1,5 +1,5 @@
 [Unit]
-Description=Sync timer for <%= @title %>
+Description=<% if @type == "sync" %>Sync<% elsif @type == "monitor" %>Monitoring<% end %> timer for <%= @title %>
 After=network.target
 Wants=network.target
 

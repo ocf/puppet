@@ -4,6 +4,7 @@ define ocf_mirrors::timer(
   $day = '*',
   $month = '*',
   $year = '*',
+  $type = 'sync',
   $exec_user = 'mirrors',
   $exec_start = '',
   $environments = {},

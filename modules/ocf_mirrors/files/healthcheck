@@ -10,6 +10,7 @@ mirrors.kernel.org).
 """
 import argparse
 import sys
+import time
 from collections import namedtuple
 from datetime import datetime
 
@@ -115,6 +116,14 @@ def write_prometheus(project, local, upstream):
         registry=registry,
     )
     updated_local.labels(project=project).set(local.timestamp())
+
+    last_run = Gauge(
+        'mirror_healthcheck_last_run',
+        'When the healthcheck last successfully ran',
+        ['project'],
+        registry=registry,
+    )
+    last_run.labels(project=project).set(time.time())
 
     write_to_textfile(
         '/opt/mirrors/prometheus/{}.prom'.format(project),

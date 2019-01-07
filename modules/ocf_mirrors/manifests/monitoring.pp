@@ -27,17 +27,17 @@ define ocf_mirrors::monitoring(
       owner  => mirrors,
       group  => mirrors,
     } ->
-    cron { "${title}-health":
-      command => "${project_path}/health ${title} ${local_url} ${upstream_url} --type=${type}",
-      user    => mirrors,
-      minute  => '*/5',
+    ocf_mirrors::timer { "${title}-health":
+      exec_start => "${project_path}/health ${title} ${local_url} ${upstream_url} --type=${type}",
+      minute     => '0/5',
+      type       => 'monitor',
     }
   } else {
     file { "${project_path}/health":
       ensure => absent;
     }
 
-    cron { "${title}-health":
+    ocf::systemd::timer { "${title}-health":
       ensure => absent,
       user   => mirrors;
     }
