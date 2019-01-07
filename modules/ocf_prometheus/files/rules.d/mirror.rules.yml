@@ -7,9 +7,18 @@ groups:
       annotations:
         dashboard: https://grafana.ocf.berkeley.edu/d/Jo_bRsyiz/mirrors
         summary: "Mirror {{ $labels.project }} has not been updated in {{ humanizeDuration $value }}"
+        suggestion: "On fallingrocks: read the logs by running `journalctl -eu {{ $labels.project }}` or `journalctl -eu ftpsync-{{ $labels.project }}`."
+
         # We have to re-run the query, once for the upstream and once for local,
         # to generate this annotations. Yes, the template syntax is ugly. If you
         # can think of a better way to write this, submit a PR ;)
         description: |-
           Local mirror: {{ with $labels.project | printf "mirror_updated_local{project=%q}" | query | first }}{{ humanizeTimestamp .Value }}{{end}},
           Upstream mirror: {{ with $labels.project | printf "mirror_updated_upstream{project=%q}" | query | first }}{{ humanizeTimestamp .Value }}{{end}}
+
+    - alert: HealthcheckNotRunning
+      expr: time() - mirror_healthcheck_last_run > 10800 # 3 hours
+      annotations:
+        dashboard: https://grafana.ocf.berkeley.edu/d/Jo_bRsyiz/mirrors
+        summary: "Healthcheck for {{ $labels.project }} has not been run in {{ humanizeDuration $value }}"
+        suggestion: "On fallingrocks: read the logs by running `journalctl -eu {{ $labels.project }}-health`."
