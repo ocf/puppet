@@ -61,64 +61,64 @@ class ocf_prometheus::server {
     external_url         => 'https://prometheus.ocf.berkeley.edu',
     rule_files           => [ '/etc/prometheus/rules.d/*.yml' ],
     alertmanagers_config => [{
-      'scheme'         => 'https',
-      'path_prefix'    => '/alertmanager',
-      'static_configs' => [{
-        'targets' => ['prometheus.ocf.berkeley.edu'],
+      scheme         => 'https',
+      path_prefix    => '/alertmanager',
+      static_configs => [{
+        targets => ['prometheus.ocf.berkeley.edu'],
       }],
     }],
     scrape_configs       => [
       {
-        'job_name'        => 'prometheus',
-        'scrape_interval' => '10s',
-        'scrape_timeout'  => '10s',
-        'static_configs'  => [
+        job_name        => 'prometheus',
+        scrape_interval => '10s',
+        scrape_timeout  => '10s',
+        static_configs  => [
           {
-            'targets' => [ 'localhost:9090' ],
-            'labels'  => { 'alias' => 'Prometheus' },
+            targets => [ 'localhost:9090' ],
+            labels  => { 'alias' => 'Prometheus' },
           },
         ],
       },
       {
-        'job_name'        => 'node',
-        'scrape_interval' => '10s',
-        'scrape_timeout'  => '5s',
+        job_name        => 'node',
+        scrape_interval => '10s',
+        scrape_timeout  => '5s',
 
-        'file_sd_configs' => [
+        file_sd_configs => [
           {
-            'files'            => [ '/var/local/prometheus-nodes.json' ],
+            files            => [ '/var/local/prometheus-nodes.json' ],
             # Prometheus will auto-detect updates to this file, so this
             # refresh interval is only a fallback.
-            'refresh_interval' => '1h',
+            refresh_interval => '1h',
           },
         ],
       },
       {
-        'job_name'        => 'printer',
-        'scrape_interval' => '30s',
-        'scrape_timeout'  => '20s',
+        job_name        => 'printer',
+        scrape_interval => '30s',
+        scrape_timeout  => '20s',
 
-        'file_sd_configs' => [
+        file_sd_configs => [
           {
-            'files'            => [ '/var/local/prometheus-printers.json' ],
-            'refresh_interval' => '1h',
+            files            => [ '/var/local/prometheus-printers.json' ],
+            refresh_interval => '1h',
           },
         ],
 
-        'metrics_path'    => '/snmp',
-        'params'          => { 'module' => [ 'printer' ]},
+        metrics_path    => '/snmp',
+        params          => { 'module' => [ 'printer' ]},
 
         # Relabel trick to make sure we scrape from the exporter and not from
         # the printers themselves, see
         # https://github.com/prometheus/snmp_exporter#prometheus-configuration
-        'relabel_configs' => [
+        relabel_configs => [
           {
-            'source_labels' => [ '__address__' ],
-            'target_label'  => '__param_target',
+            source_labels => [ '__address__' ],
+            target_label  => '__param_target',
           },
           {
-            'target_label' => '__address__',
-            'replacement'  => 'lb.ocf.berkeley.edu:10020',
+            target_label => '__address__',
+            replacement  => 'lb.ocf.berkeley.edu:10020',
           },
         ]
       },
@@ -130,26 +130,26 @@ class ocf_prometheus::server {
         static_configs  => [{targets => ['www:9117']}],
       },
       {
-        'job_name'            => 'marathon',
-        'scrape_interval'     => '10s',
-        'scrape_timeout'      => '10s',
+        job_name            => 'marathon',
+        scrape_interval     => '10s',
+        scrape_timeout      => '10s',
 
-        'marathon_sd_configs' => [
+        marathon_sd_configs => [
           {
-            'servers'    => keys(lookup('mesos_masters')).map |$m| { "http://${m}:8080" },
-            'basic_auth' => {
+            servers    => keys(lookup('mesos_masters')).map |$m| { "http://${m}:8080" },
+            basic_auth => {
               username      => 'marathon',
               password_file => '/etc/prometheus/marathon_passwd',
             },
           },
         ],
 
-        basic_auth            => {
+        basic_auth          => {
           username      => 'prometheus',
           password_file => '/etc/prometheus/docker_metrics_passwd',
         },
 
-        'relabel_configs'     => [
+        relabel_configs     => [
           {
             source_labels => ['__meta_marathon_app'],
             regex         => '/grafana|/ocfweb/web',
