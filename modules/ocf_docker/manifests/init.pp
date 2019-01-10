@@ -2,7 +2,6 @@ class ocf_docker {
   include ocf::firewall::allow_web
   include ocf::packages::docker
   require ocf::ssl::default
-
   include ocf_docker::deckschrubber
 
   class { 'nginx':

@@ -8,13 +8,15 @@ class ocf_docker::deckschrubber {
   file { '/opt/docker/registry/garbage-collect':
     source  => 'puppet:///modules/ocf_docker/garbage-collect',
     mode    => '0755',
-    require => Package['deckschrubber'],
+    require => [
+      Package['deckschrubber'],
+      File['/var/lib/registry'],
+    ],
   } ->
   cron { 'registry-gc':
-    command  => '/opt/docker/registry/garbage-collect',
-    user     => 'root',
-    monthday => 1,
-    hour     => 7,
-    minute   => 0,
+    command => '/opt/docker/registry/garbage-collect',
+    weekday => 'Sunday',
+    hour    => 7,
+    minute  => 0,
   }
 }
