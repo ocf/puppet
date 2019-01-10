@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+# Always make sure the registry is started, no matter what fails.
+trap 'systemctl start docker-registry' EXIT
+
 # Delete all images older than 2 months.
 deckschrubber -repos 9999 -month 2
 
@@ -9,6 +12,3 @@ docker run --rm \
     -v /var/lib/registry:/var/lib/registry \
     registry:2 \
     registry garbage-collect /etc/docker/registry/config.yml
-
-# Always make sure the registry is started, no matter what fails.
-trap 'systemctl start docker-registry' EXIT
