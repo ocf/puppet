@@ -3,6 +3,8 @@ class ocf_docker {
   include ocf::packages::docker
   require ocf::ssl::default
 
+  include ocf_docker::deckschrubber
+
   class { 'nginx':
     manage_repo  => false,
     confd_purge  => true,
