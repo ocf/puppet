@@ -1,4 +1,5 @@
 class ocf_hpc::compute {
+  require ocf_hpc
 
   # install proprietary nvidia drivers and CUDA.
   ocf::repackage { ['nvidia-driver', 'nvidia-settings', 'nvidia-cuda-toolkit']:

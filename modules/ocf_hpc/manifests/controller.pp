@@ -1,4 +1,5 @@
 class ocf_hpc::controller {
+  require ocf_hpc
 
   $slurmdbd_mysql_password = lookup('hpc::controller::slurmdbd_mysql_password')
 
