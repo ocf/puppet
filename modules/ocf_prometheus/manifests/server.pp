@@ -169,6 +169,13 @@ class ocf_prometheus::server {
           },
         ],
       },
+      {
+        job_name        => 'slurm',
+        scrape_interval => '30s',
+        scrape_timeout  => '30s',
+
+        static_configs  => [{targets => ['hpcctl:9341']}],
+      },
     ]
   }
 }
