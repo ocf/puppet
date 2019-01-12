@@ -83,3 +83,7 @@ kubernetes::nginx_version: '0.21.0'
 kubernetes::worker_nodes:
     - hozer-73
     - hozer-74
+kubernetes::master_nodes:
+    - coup
+    - autocrat
+    - deadlock

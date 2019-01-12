@@ -39,6 +39,18 @@ class ocf_puppet::puppetserver {
     notify               => Service['puppetserver'],
   }
 
+  # Allow kubernetes masters to access kubernetes secrets
+  puppet_authorization::rule { 'kubernetes-secrets':
+    match_request_path   => '^/puppet/v3/file_(content|metadata)s?/kubernetes-secrets$',
+    match_request_type   => 'regex',
+    match_request_method => ['get'],
+    allow                => suffix(lookup('kubernetes::master_nodes'), '.ocf.berkeley.edu'),
+    sort_order           => 500,
+    path                 => '/etc/puppetlabs/puppetserver/conf.d/auth.conf',
+    require              => Package['puppetserver'],
+    notify               => Service['puppetserver'],
+  }
+
   # allow the puppetmaster itself to get/set all certificate information
   puppet_authorization::rule { 'allow-puppetserver-cli':
     match_request_path   => '/puppet-ca/v1/(?:certificate|certificate_status)',
