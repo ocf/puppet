@@ -35,4 +35,13 @@ class ocf_hpc::controller {
     user    => 'slurm',
     minute  => '*/15',
   }
+
+  # Set up a Prometheus exporter for SLURM, running on port 9341.
+  package { 'prometheus-slurm-exporter': } ~>
+  service { 'prometheus-slurm-exporter':
+    ensure     => 'running',
+    enable     => true,
+    hasrestart => true,
+    require    => Service['slurmctld'],
+  }
 }
