@@ -1,4 +1,4 @@
-class ocf_mirrors::kde {
+class ocf_mirrors::projects::kde {
   file {
     '/opt/mirrors/project/kde':
       ensure  => directory,

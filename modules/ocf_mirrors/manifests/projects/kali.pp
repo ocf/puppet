@@ -1,4 +1,4 @@
-class ocf_mirrors::kali {
+class ocf_mirrors::projects::kali {
   ocf_mirrors::ftpsync {
     'kali':
       rsync_host  => 'archive.kali.org',

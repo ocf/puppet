@@ -1,4 +1,4 @@
-class ocf_mirrors::qt {
+class ocf_mirrors::projects::qt {
   file {
     '/opt/mirrors/project/qt':
       ensure  => directory,

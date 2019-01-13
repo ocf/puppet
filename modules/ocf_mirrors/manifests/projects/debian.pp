@@ -1,4 +1,4 @@
-class ocf_mirrors::debian {
+class ocf_mirrors::projects::debian {
   ocf_mirrors::ftpsync {
     'debian':
       rsync_host  => 'mirrors.mit.edu',

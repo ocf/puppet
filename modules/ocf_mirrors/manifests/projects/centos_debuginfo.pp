@@ -1,4 +1,4 @@
-class ocf_mirrors::centos_debuginfo {
+class ocf_mirrors::projects::centos_debuginfo {
   file { '/opt/mirrors/project/centos-debuginfo':
     ensure  => directory,
     source  => 'puppet:///modules/ocf_mirrors/project/centos-debuginfo/',

@@ -1,4 +1,4 @@
-class ocf_mirrors::parrot {
+class ocf_mirrors::projects::parrot {
   file {
     '/opt/mirrors/project/parrot':
       ensure  => directory,

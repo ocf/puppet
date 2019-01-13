@@ -1,4 +1,4 @@
-class ocf_mirrors::tanglu {
+class ocf_mirrors::projects::tanglu {
   ocf_mirrors::ftpsync { 'tanglu':
     rsync_host  => 'archive.tanglu.org',
     cron_minute => '40',

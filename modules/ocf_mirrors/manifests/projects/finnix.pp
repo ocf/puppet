@@ -1,4 +1,4 @@
-class ocf_mirrors::finnix {
+class ocf_mirrors::projects::finnix {
   file {
     default:
       owner => mirrors,

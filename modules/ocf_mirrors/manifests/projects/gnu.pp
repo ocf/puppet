@@ -1,4 +1,4 @@
-class ocf_mirrors::gnu {
+class ocf_mirrors::projects::gnu {
   file {
     '/opt/mirrors/project/gnu':
       ensure  => directory,

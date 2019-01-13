@@ -1,4 +1,4 @@
-class ocf_mirrors::trisquel {
+class ocf_mirrors::projects::trisquel {
   ocf_mirrors::ftpsync {
     'trisquel':
       rsync_host  => 'rsync.trisquel.info',

@@ -1,4 +1,4 @@
-class ocf_mirrors::apache {
+class ocf_mirrors::projects::apache {
   file {
     '/opt/mirrors/project/apache':
       ensure  => directory,
