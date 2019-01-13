@@ -109,4 +109,8 @@ class ocf_kubernetes::master {
   class { 'ocf_kubernetes::master::persistent_volume':
     require => Class['kubernetes'],
   }
+
+  class { 'ocf_kubernetes::master::secrets':
+    require => Class['kubernetes'],
+  }
 }
