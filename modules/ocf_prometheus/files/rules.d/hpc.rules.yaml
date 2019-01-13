@@ -1,0 +1,17 @@
+groups:
+  - name: slurm
+    rules:
+      - record: slurm_nodes_healthy
+        expr: >
+          slurm_nodes_alloc + slurm_nodes_comp + slurm_nodes_idle
+          + slurm_nodes_mix + slurm_nodes_resv
+
+      - alert: SlurmNoNodesHealthy
+        expr: slurm_nodes_healthy == 0
+        for: 5m
+        annotations:
+          dashboard: https://grafana.ocf.berkeley.edu/d/N7Sb3nwik/hpc-slurm-dashboard
+          summary: "All HPC compute nodes are currently unhealthy, and not accepting jobs."
+          suggestion: >
+            "On hpcctl, re-up unhealthy nodes by running
+            `scontrol update nodename=[node name] state=resume`."
