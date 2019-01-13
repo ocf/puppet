@@ -14,9 +14,14 @@ class ocf_filehost(
       options => ['rw', 'fsid=0', 'no_subtree_check', 'no_root_squash'],
       hosts   => ['admin', 'www', 'dev-www', 'ssh', 'dev-ssh', 'apphost', 'dev-apphost'];
 
+  '/opt/homes/services/discourse':
+      options => ['rw'],
+      hosts   => lookup('kubernetes::worker_nodes');
+  
   '/opt/homes/services/mastodon':
       options => ['rw'],
       hosts   => lookup('kubernetes::worker_nodes');
+
   }
 
   file {
