@@ -1,4 +1,4 @@
-class ocf_mirrors::kde_applicationdata {
+class ocf_mirrors::projects::kde_applicationdata {
   file {
     '/opt/mirrors/project/kde-applicationdata':
       ensure  => directory,

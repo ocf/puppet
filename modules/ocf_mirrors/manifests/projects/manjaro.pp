@@ -1,4 +1,4 @@
-class ocf_mirrors::manjaro {
+class ocf_mirrors::projects::manjaro {
   file {
     '/opt/mirrors/project/manjaro':
       ensure  => directory,

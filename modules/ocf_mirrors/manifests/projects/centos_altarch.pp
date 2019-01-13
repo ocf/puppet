@@ -1,4 +1,4 @@
-class ocf_mirrors::centos_altarch {
+class ocf_mirrors::projects::centos_altarch {
   file { '/opt/mirrors/project/centos-altarch':
     ensure  => directory,
     source  => 'puppet:///modules/ocf_mirrors/project/centos-altarch/',

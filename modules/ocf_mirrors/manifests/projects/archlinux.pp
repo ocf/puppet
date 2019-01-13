@@ -1,4 +1,4 @@
-class ocf_mirrors::archlinux {
+class ocf_mirrors::projects::archlinux {
   file {
     '/opt/mirrors/project/archlinux':
       ensure  => directory,

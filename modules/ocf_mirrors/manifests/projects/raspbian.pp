@@ -1,4 +1,4 @@
-class ocf_mirrors::raspbian {
+class ocf_mirrors::projects::raspbian {
   ocf_mirrors::ftpsync { 'raspbian':
     rsync_host  => 'archive.raspbian.org',
     rsync_path  => 'archive',

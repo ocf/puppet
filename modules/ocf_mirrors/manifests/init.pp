@@ -1,32 +1,32 @@
 class ocf_mirrors {
-  include ocf::ssl::default
+  require ocf::ssl::default
   require ocf::packages::rsync
 
   include ocf_mirrors::ftp
   include ocf_mirrors::rsync
+  include ocf_mirrors::firewall_input
 
   # projects
-  include ocf_mirrors::apache
-  include ocf_mirrors::archlinux
-  include ocf_mirrors::centos
-  include ocf_mirrors::centos_altarch
-  include ocf_mirrors::centos_debuginfo
-  include ocf_mirrors::debian
-  include ocf_mirrors::finnix
-  include ocf_mirrors::firewall_input
-  include ocf_mirrors::gnu
-  include ocf_mirrors::kali
-  include ocf_mirrors::kde
-  include ocf_mirrors::kde_applicationdata
-  include ocf_mirrors::manjaro
-  include ocf_mirrors::parrot
-  include ocf_mirrors::puppetlabs
-  include ocf_mirrors::qt
-  include ocf_mirrors::raspbian
-  include ocf_mirrors::tails
-  include ocf_mirrors::tanglu
-  include ocf_mirrors::trisquel
-  include ocf_mirrors::ubuntu
+  include ocf_mirrors::projects::apache
+  include ocf_mirrors::projects::archlinux
+  include ocf_mirrors::projects::centos
+  include ocf_mirrors::projects::centos_altarch
+  include ocf_mirrors::projects::centos_debuginfo
+  include ocf_mirrors::projects::debian
+  include ocf_mirrors::projects::finnix
+  include ocf_mirrors::projects::gnu
+  include ocf_mirrors::projects::kali
+  include ocf_mirrors::projects::kde
+  include ocf_mirrors::projects::kde_applicationdata
+  include ocf_mirrors::projects::manjaro
+  include ocf_mirrors::projects::parrot
+  include ocf_mirrors::projects::puppetlabs
+  include ocf_mirrors::projects::qt
+  include ocf_mirrors::projects::raspbian
+  include ocf_mirrors::projects::tails
+  include ocf_mirrors::projects::tanglu
+  include ocf_mirrors::projects::trisquel
+  include ocf_mirrors::projects::ubuntu
 
   user { 'mirrors':
     comment  => 'OCF Mirroring',

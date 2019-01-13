@@ -1,4 +1,4 @@
-class ocf_mirrors::tails {
+class ocf_mirrors::projects::tails {
   file {
     '/opt/mirrors/project/tails':
       ensure  => directory,

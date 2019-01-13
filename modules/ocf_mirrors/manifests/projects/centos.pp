@@ -1,4 +1,4 @@
-class ocf_mirrors::centos {
+class ocf_mirrors::projects::centos {
   file { '/opt/mirrors/project/centos':
     ensure  => directory,
     source  => 'puppet:///modules/ocf_mirrors/project/centos/',

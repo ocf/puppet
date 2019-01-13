@@ -1,4 +1,4 @@
-class ocf_mirrors::puppetlabs {
+class ocf_mirrors::projects::puppetlabs {
   ocf_mirrors::ftpsync { 'puppetlabs':
     rsync_host  => 'rsync.puppet.com',
     rsync_path  => 'packages/apt',
