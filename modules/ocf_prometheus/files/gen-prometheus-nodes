@@ -9,7 +9,7 @@ from ocflib.infra.hosts import hosts_by_filter
 
 hosts = []
 for vals in hosts_by_filter('(|(type=server)(type=desktop)(type=staffvm))'):
-    cn, ip, host_type = vals['cn'][0], vals['ipHostNumber'][0], vals['type'][0]
+    cn, ip, host_type = vals['cn'][0], vals['ipHostNumber'][0], vals['type']
 
     hosts.append({
         'targets': [ip + ':9100'],
