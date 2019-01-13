@@ -21,7 +21,7 @@ class ocf_kubernetes::master::loadbalancer::ssl(
   }
 
   ocf::ssl::bundle { $::fqdn:
-    domains => flatten($vfqdns),
+    domains => [$::fqdn] + flatten($vfqdns),
     owner   => $owner,
     group   => $group,
   }
