@@ -17,7 +17,7 @@ class ocf_filehost(
   '/opt/homes/services/discourse':
       options => ['rw'],
       hosts   => lookup('kubernetes::worker_nodes');
-  
+
   '/opt/homes/services/mastodon':
       options => ['rw'],
       hosts   => lookup('kubernetes::worker_nodes');
