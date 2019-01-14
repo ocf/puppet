@@ -127,4 +127,14 @@ class ocf_puppet::puppetserver {
       target  => '/opt/puppetlabs/shares',
       require => Package['puppetserver'];
   }
+
+  vcsrepo { '/opt/puppetlabs/shares/etc':
+    ensure   => latest,
+    provider => git,
+    revision => 'master',
+    source   => 'https://github.com/ocf/etc.git',
+    owner    => puppet,
+    group    => puppet,
+    require  => File['/opt/puppetlabs/shares'];
+  }
 }
