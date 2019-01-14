@@ -10,7 +10,8 @@ from ocflib.account.utils import is_staff
 
 
 # number of messages a single account can send per day without being flagged
-MAIL_PER_DAY = 75
+USER_MAIL_PER_DAY = 45
+VHOST_MAIL_PER_DAY = 75
 
 REGEX_EXTRACT_DOMAIN = re.compile('^.*@(.*)$')
 REGEX_EXTRACT_USER = re.compile('^(.*)@.*$')
@@ -97,7 +98,7 @@ def sending_too_much_mail(entry):
     uid, count = entry
     try:
         user = get_user_from_uid(uid)
-        return int(uid) >= 1000 and count > MAIL_PER_DAY and user not in SYSTEM_USERS
+        return int(uid) >= 1000 and count > USER_MAIL_PER_DAY and user not in SYSTEM_USERS
     except TypeError:
         return False  # no uid, so can't flag them
 
@@ -109,7 +110,7 @@ def vhost_sending_too_much_mail(entry):
         entry: a (address, count) tuple
     """
     addr, count = entry
-    return count > MAIL_PER_DAY
+    return count > VHOST_MAIL_PER_DAY
 
 
 if __name__ == '__main__':
