@@ -7,17 +7,23 @@ class ocf::packages::brave {
     stage =>  first,
   }
 
-  package { 'brave':; }
+  # New install instructions, per https://brave-browser.readthedocs.io/en/latest/installing-brave.html#linux
+  package { 'brave-browser':; } ->
 
   # TODO: Change this to a global config
   # if/when Brave adds support for it.
   file {
-    '/etc/skel/.config/brave':
+    [
+      '/etc/skel/.config/BraveSoftware/',
+      '/etc/skel/.config/BraveSoftware/Brave-Browser/',
+      '/etc/skel/.config/BraveSoftware/Brave-Browser/Default'
+    ]:
       ensure  => directory,
-      require => [File['/etc/skel/.config'], Package['brave']];
+      require => File['/etc/skel/.config'],
+  } ->
 
-    '/etc/skel/.config/brave/session-store-1':
-      content => template('ocf/brave/session-store-1.erb'),
-      require => [File['/etc/skel/.config/brave'], Package['brave']];
+  file {
+    '/etc/skel/.config/BraveSoftware/Brave-Browser/Default/Preferences':
+      content => template('ocf/brave/Preferences.erb'),
   }
 }

@@ -39,9 +39,11 @@ Icon=libreoffice-startcenter" > $HOME/Desktop/office.desktop
 
 echo "[Desktop Entry]
 Name=Brave
-Exec=brave --user-data-dir-name=brave -- %U
+StartupNotify=true
+Terminal=false
+Exec=/usr/bin/brave-browser %U
 Type=Application
-Icon=brave" > $HOME/Desktop/brave.desktop
+Icon=brave-browser" > $HOME/Desktop/brave.desktop
 
 # Firefox
 echo "[Desktop Entry]
