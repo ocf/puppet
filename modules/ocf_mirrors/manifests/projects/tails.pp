@@ -11,8 +11,8 @@ class ocf_mirrors::projects::tails {
 
   ocf_mirrors::monitoring { 'tails':
     type          => 'unix_timestamp',
-    upstream_host => 'archive.torproject.org',
-    upstream_path => '/amnesia.boum.org/tails',
+    upstream_host => 'mirrors.edge.kernel.org',
+    upstream_path => '/tails',
     ts_path       => 'project/trace',
   }
 
