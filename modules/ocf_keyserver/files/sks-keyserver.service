@@ -10,7 +10,9 @@ ExecStart=/usr/bin/docker run --rm \
     -p 0.0.0.0:11370:11370/tcp \
     -p 127.0.0.1:11372:11371/tcp \
     --name sks-keyserver \
+    --cgroup-parent /system.slice/sks-keyserver.service \
     zhusj/sks
+CPUQuota=50%
 Restart=always
 
 [Install]
