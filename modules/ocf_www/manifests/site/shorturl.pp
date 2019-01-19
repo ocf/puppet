@@ -81,6 +81,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/printers$ https://grafana.ocf.berkeley.edu/d/SKl6_71iz [R]'},
       {rewrite_rule => '^/printing$ https://www.ocf.berkeley.edu/announcements/2016-02-09/printing [R]'},
       {rewrite_rule => '^/projects$ https://discourse.ocf.berkeley.edu/c/projects [R]'},
+      {rewrite_rule => '^/referendum-cost-breakdown$ https://docs.google.com/spreadsheets/d/1vIwrHlYtn1IcFH-1pTbUw2JvKNsR4rwlUzCJUbapID8/edit?usp=sharing [R]'},
       {rewrite_rule => '^/register2vote$ https://www.vote.org/register-to-vote/ [R]'},
       {rewrite_rule => '^/rt$ https://rt.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/rt/([0-9]+)$ https://rt.ocf.berkeley.edu/Ticket/Display.html?id=$1 [R]'},
