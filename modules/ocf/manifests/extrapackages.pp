@@ -218,19 +218,6 @@ class ocf::extrapackages {
         # http://php.net/manual/en/migration71.deprecated.php
         'php-mcrypt',
 
-        # pkpgcounter comes from pykota, which is unmaintained upstream, so we
-        # need to find a replacement or forward port it for buster. We had this
-        # same problem with pykota from wheezy to jessie but with pykota as a
-        # broader package. Looks like pkpgcounter is finally joining pykota and
-        # we should move off it somehow and find some other way to count pages.
-        'pkpgcounter',
-
-        # This is a compatability package and really just installs python-pil
-        # as a dependency. We should either install python-pil and python3-pil
-        # or just avoid installing this system-wide and have people use
-        # virtualenvs instead.
-        'python-imaging',
-
         # This isn't available as php-dba unfortunately (that's just a virtual
         # package for this), and with virtual packages puppet will try to
         # install them every run, leading to unnecessary noise
