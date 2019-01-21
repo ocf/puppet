@@ -58,15 +58,21 @@ class ocf_desktop::xsession {
       purge   => true;
   }
 
-  # wallpaper symlink
-  $wallpaper = $staff_only ? {
-    true  => 'background-staff.svg',
-    false => 'background.svg',
-  }
-
   file { '/opt/share/wallpaper':
     ensure  => link,
-    target  => "/opt/share/xsession/images/${wallpaper}",
+    target  => '/opt/share/xsession/images/background.png',
+    require => File['/opt/share/xsession/images'];
+  }
+
+  # select which login background to use
+  $login_screen = $staff_only ? {
+    true    => 'login-staff.png',
+    default => 'login.png',
+  }
+
+  file { '/opt/share/login':
+    ensure  => link,
+    target  => "/opt/share/xsession/images/${login_screen}",
     require => File['/opt/share/xsession/images'];
   }
 
@@ -157,6 +163,12 @@ class ocf_desktop::xsession {
     '/etc/skel/.config/xfce4/panel/datetime-7.rc':
       source  => 'puppet:///modules/ocf_desktop/datetime-7-stretch.rc',
       require => File['/etc/skel/.config'];
+  }
+
+  # Fix desktop icon text color
+  file {
+    '/etc/skel/.gtkrc-2.0':
+      source => 'puppet:///modules/ocf_desktop/skel/.gtkrc-2.0';
   }
 
   # disable user switching and screen locking (prevent non-staff users from

@@ -19,8 +19,9 @@ class ocf_desktop::packages {
       'simple-scan', 'ssh-askpass-gnome', 'texmaker', 'texstudio', 'vlc',
       'xarchiver', 'xcape', 'xterm', 'zenmap']:;
     # desktop
-    ['desktop-base', 'anacron', 'accountsservice', 'desktop-file-utils',
-      'gnome-icon-theme', 'redshift', 'xfce4-whiskermenu-plugin']:;
+    ['desktop-base', 'anacron', 'accountsservice', 'arc-theme',
+      'desktop-file-utils', 'gnome-icon-theme', 'paper-icon-theme', 'redshift',
+      'xfce4-whiskermenu-plugin']:;
     # desktop helpers
     ['libimage-exiftool-perl']:;
     # display manager
