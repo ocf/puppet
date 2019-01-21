@@ -11,7 +11,7 @@ class ocf_mirrors::projects::archlinux {
 
   ocf_mirrors::monitoring { 'archlinux':
     type          => 'unix_timestamp',
-    upstream_host => 'mirrors.lug.mtu.edu',
+    upstream_host => 'mirrors.rit.edu',
     ts_path       => 'lastsync',
   }
 
