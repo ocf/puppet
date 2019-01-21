@@ -1,3 +1,7 @@
 #!/bin/sh -eu
+
+# The official "tier 0" syncing endpoint
+# fallingrocks' IP is whitelisted, so if it ever changes, we need to email them to
+# get access again.
 /usr/local/bin/rsync-no-vanished -rtlH --delete-after --delay-updates --safe-links \
-	rsync://mirrors.rit.edu/archlinux/ /opt/mirrors/ftp/archlinux
+	rsync://rsync.archlinux.org/ftp_tier1/ /opt/mirrors/ftp/archlinux
