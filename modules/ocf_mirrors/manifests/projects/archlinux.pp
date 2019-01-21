@@ -18,7 +18,6 @@ class ocf_mirrors::projects::archlinux {
   ocf_mirrors::timer {
     'archlinux':
       exec_start => '/opt/mirrors/project/archlinux/sync-archive',
-      hour       => '0/3',
       minute     => '22';
   }
 }
