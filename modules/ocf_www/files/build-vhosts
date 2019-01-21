@@ -152,7 +152,6 @@ def build_config(src_vhosts, template, dev_config=False):
     for domain, vhost in src_vhosts.items():
         user = vhost['username']
         ssl = SSL(domain)
-        use_ssl = 'nossl' not in vhost['flags'] and ssl.is_valid
 
         # Exactly one must be true
         assert ('socket' in vhost) != ('docroot' in vhost)
@@ -167,11 +166,16 @@ def build_config(src_vhosts, template, dev_config=False):
             fqdn=domain,
             user=user,
             comment='{} (user {})'.format(domain, user),
-            ssl=ssl if use_ssl else None,
+            ssl=ssl,
             bind_type=bind_type,
             bind_dest=bind_dest,
         )
-        vhosts.add(primary)
+        # Only add the full vhost if SSL is valid (redirects, like HTTP ->
+        # HTTPS are added regardless)
+        #
+        # We used to support non-HTTPS vhosts, but no longer do (rt#5347)
+        if ssl.is_valid:
+            vhosts.add(primary)
 
         # for app vhosts, define a dev vhost as well
         if bind_type == 'socket':
@@ -188,23 +192,22 @@ def build_config(src_vhosts, template, dev_config=False):
             vhosts.add(VirtualHost(
                 fqdn=dev_alias,
                 user=user,
-                comment='{0} (dev alias of {1}, redirect to {0})'.format(dev_alias, domain),
+                comment='{} (dev alias of {}, redirect to HTTPS)'.format(dev_alias, domain),
                 ssl=None,
                 bind_type='redirect',
                 bind_dest='https://' + dev_alias,
             ))
 
-        redirects = set()
-        if use_ssl:
-            # Redirect from http://{domain} to https://{domain}
-            redirects.add((primary.fqdn, None))
+        # Redirect from http://{domain} to https://{domain} for all vhosts
+        redirects = {(primary.fqdn, None)}
 
         for alias in vhost['aliases']:
-            # Redirect from http://{alias} to http(s)://{domain}
+            # Redirect from http://{alias} to https://{domain}
             redirects.add((alias, None))
             ssl = SSL(alias)
+
             if ssl.is_valid:
-                # Redirect from https://{alias} to http(s)://{domain}
+                # Redirect from https://{alias} to https://{domain}
                 redirects.add((alias, ssl))
 
         for fqdn, ssl in redirects:
@@ -312,7 +315,7 @@ def process_app_vhosts():
 
         # Regenerate SSL bundle if older than cert
         for ssl in chain((SSL(domain),), map(SSL, vhost['aliases'])):
-            if 'nossl' not in vhost['flags'] and ssl.is_valid and (
+            if ssl.is_valid and (
                 not os.path.exists(ssl.bundle) or
                 os.path.getmtime(ssl.bundle) < os.path.getmtime(ssl.cert)
             ):
