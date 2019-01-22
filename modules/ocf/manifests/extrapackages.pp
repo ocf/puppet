@@ -12,6 +12,7 @@
 # without concerns of redeclaring ocf::packages with different parameters.
 class ocf::extrapackages {
   # special snowflake packages that require some config
+  include ocf::packages::emacs
   include ocf::packages::kubernetes
   include ocf::packages::matplotlib
   include ocf::packages::mysql
@@ -47,7 +48,6 @@ class ocf::extrapackages {
     'dh-virtualenv',
     'elinks',
     'elpa-markdown-mode',
-    'emacs',
     'epic5',
     'flex',
     'fortune-mod',
