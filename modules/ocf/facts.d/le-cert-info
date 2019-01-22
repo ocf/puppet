@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+import json
+import os
+import sys
+from datetime import datetime
+
+LETSENCRYPT_CERT_DIR = '/var/lib/lets-encrypt/certs/'
+
+
+def print_info(data):
+    print('le_cert_info=' + json.dumps(data))
+
+
+try:
+    from cryptography import x509
+    from cryptography.hazmat.backends import default_backend
+except ImportError:
+    print_info({})
+    sys.exit()
+
+cert_data = {}
+
+for title in os.listdir(LETSENCRYPT_CERT_DIR):
+    try:
+        with open(os.path.join(LETSENCRYPT_CERT_DIR, title, 'cert.pem'), 'rb') as pem_file:
+            pem_data = pem_file.read()
+    except FileNotFoundError:
+        continue
+    except PermissionError as e:
+        print('try running this command as root or ocfletsencrypt', file=sys.stderr)
+        raise e
+
+    cert = x509.load_pem_x509_certificate(pem_data, default_backend())
+    san = cert.extensions.get_extension_for_oid(x509.oid.ExtensionOID.SUBJECT_ALTERNATIVE_NAME)
+    cert_data[title] = {
+        'cert_names': san.value.get_values_for_type(x509.DNSName),
+        'days_to_expiration': (cert.not_valid_after - datetime.today()).days,
+    }
+
+print_info(cert_data)
