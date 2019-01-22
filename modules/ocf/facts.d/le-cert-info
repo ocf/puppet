@@ -20,7 +20,13 @@ except ImportError:
 
 cert_data = {}
 
-for title in os.listdir(LETSENCRYPT_CERT_DIR):
+try:
+    titles = os.listdir(LETSENCRYPT_CERT_DIR)
+except FileNotFoundError:
+    print_info(cert_data)
+    sys.exit()
+
+for title in titles:
     try:
         with open(os.path.join(LETSENCRYPT_CERT_DIR, title, 'cert.pem'), 'rb') as pem_file:
             pem_data = pem_file.read()
