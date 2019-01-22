@@ -60,6 +60,14 @@ class ocf::apt($stage = 'first') {
       codename => "${::lsbdistcodename}-backports",
     }
 
+    # Except emacs of course
+    apt::pin { 'emacs-backports':
+      codename => 'stretch-backports',
+      packages => 'emacs',
+      priority => 600,
+    }
+
+
     if $::lsbdistcodename != 'buster' {
       # TODO: Submit patch to puppetlabs-apt to enable having includes for
       # apt::backports (so that we can include the source too)
