@@ -7,6 +7,11 @@ class ocf::packages::brave {
     stage =>  first,
   }
 
+  # Remove the old version of brave
+  package { 'brave':
+    ensure => purged
+  }
+
   # New install instructions, per https://brave-browser.readthedocs.io/en/latest/installing-brave.html#linux
   package { 'brave-browser':; } ->
 
