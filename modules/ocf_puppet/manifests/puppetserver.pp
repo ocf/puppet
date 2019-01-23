@@ -75,6 +75,18 @@ class ocf_puppet::puppetserver {
     notify               => Service['puppetserver'],
   }
 
+  # let anyone get etc configs
+  puppet_authorization::rule { 'allow-etc':
+    match_request_path   => '^/puppet/v3/file_(content|metadata)s?/etc$',
+    match_request_type   => 'regex',
+    match_request_method => ['get', 'post'],
+    allow                => '*.ocf.berkeley.edu',
+    sort_order           => 500,
+    path                 => '/etc/puppetlabs/puppetserver/conf.d/auth.conf',
+    require              => Package['puppetserver'],
+    notify               => Service['puppetserver'],
+  }
+
   file {
     '/etc/puppetlabs/puppet/fileserver.conf':
       source  => 'puppet:///modules/ocf_puppet/fileserver.conf',
