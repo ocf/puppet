@@ -41,7 +41,7 @@ echo "[Desktop Entry]
 Name=Brave
 StartupNotify=true
 Terminal=false
-Exec=/usr/bin/brave-browser %U
+Exec=/usr/bin/brave-browser --password-store=basic %U
 Type=Application
 Icon=brave-browser" > $HOME/Desktop/brave.desktop
 

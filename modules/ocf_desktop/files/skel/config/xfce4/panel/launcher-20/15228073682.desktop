@@ -2,7 +2,7 @@
 Name=Brave
 Comment=Brave laptop and desktop browser
 GenericName=Web Browser
-Exec=/usr/bin/brave-browser %U
+Exec=/usr/bin/brave-browser --password-store=basic %U
 Icon=brave-browser
 Type=Application
 StartupNotify=true
