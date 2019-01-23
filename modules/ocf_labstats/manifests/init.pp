@@ -53,10 +53,5 @@ class ocf_labstats {
       command => '/opt/stats/bin/update-printer-stats',
       minute  => '*/5',
       *       => $cron_defaults;
-
-    'low-toner-alert':
-      command => '/opt/stats/bin/low-toner-alert',
-      minute  => '*/15',
-      *       => $cron_defaults;
   }
 }
