@@ -31,7 +31,7 @@ staffer's environment has the same name as their user name:
     drwxr-xr-x 5 tzhu    ocf  4.0K Sep  2 17:46 tzhu
     drwxr-xr-x 6 willh   ocf  4.0K Oct  9 13:56 willh
 
-The puppetmaster has service CNAME `puppet`, so you can connect to it via `ssh
+The puppetmaster has the service CNAME `puppet`, so you can connect to it via `ssh
 puppet`.
 
 You should make your changes in your puppet environment and test them before
