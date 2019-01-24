@@ -1,4 +1,5 @@
 classes:
     - ocf_ocfweb::dev_config
+    - ocf::ssl::default
 
 owner: ethanhs
