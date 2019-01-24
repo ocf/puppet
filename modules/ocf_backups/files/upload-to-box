@@ -113,7 +113,7 @@ def upload_to_box(creds, quiet):
         set ftp:ssl-protect-data true
         open {box_ftp}
         user {email} {passwd}
-        mirror -R --parallel={concurr} {archive} {folder}
+        mirror -R --no-overwrite --parallel={concurr} {archive} {folder}
     '''.format(
         box_ftp=BOX_FTP,
         email=creds['email'],
