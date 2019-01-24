@@ -50,18 +50,18 @@ class ocf_desktop::packages {
 
   # Remove some packages
   package {
+    default:
+      ensure => purged;
     # causes the fcitx menu to vanish
-    'ayatana-indicator-application':
-      ensure => purged;
+    'ayatana-indicator-application':;
+    # meant for personal machines, and has invasive prompt
+    'gnome-keyring':;
     # dependencies conflict with backports
-    'remmina':
-      ensure => purged;
+    'remmina':;
     # causes gid conflicts
-    'sane-utils':
-      ensure => purged;
+    'sane-utils':;
     # xpdf takes over as default sometimes
-    'xpdf':
-      ensure => purged;
+    'xpdf':;
   }
 
   # install packages without recommends
