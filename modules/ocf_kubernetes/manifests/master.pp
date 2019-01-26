@@ -95,6 +95,27 @@ class ocf_kubernetes::master {
     },
   }
 
+  # Give ocfroot access to the admin.conf file. This file contains the client
+  # cert for the "kubernetes-admin" role, granting permissions to do anything
+  # in the cluster.
+  file {
+    '/etc/kubernetes/admin.conf':
+      content => undef, # NOTE: kubeadm creates this file
+      owner   => 'root',
+      group   => 'ocfroot',
+      mode    => '0440',
+      require => Class['kubernetes'],
+  } ->
+
+  # Proxy script for ocfroot to run kubectl as a cluster admin.
+  file {
+    '/usr/local/bin/ocf-kubectl':
+      content => "!#/bin/bash\nKUBECONFIG=/etc/kubernetes/admin.conf kubectl \"$@\"\n",
+      owner   => 'root',
+      group   => 'ocfroot',
+      mode    => '0554',
+  }
+
   file {
     '/etc/profile.d/kubeconfig.sh':
       mode    => '0755',
