@@ -11,7 +11,7 @@ class ocf_docker::deckschrubber {
     ],
   } ->
   cron { 'registry-clean':
-    command => '/opt/share/puppet/docker-registry-clean',
+    command => 'chronic /opt/share/puppet/docker-registry-clean',
     weekday => 'Sunday',
     hour    => 7,
     minute  => 0,
