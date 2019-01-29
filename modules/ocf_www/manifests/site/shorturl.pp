@@ -66,6 +66,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/join$ https://www.ocf.berkeley.edu/account/register/ [R]'},
       {rewrite_rule => '^/joinfamily2018$ https://goo.gl/forms/wJSM44ZgsnReXhj33 [R]'},
       {rewrite_rule => '^/joinstaff2018$ https://docs.google.com/presentation/d/1cClkPLQcwVBy0arnDVwuesWxk-2d_RroyrNl8huMwkM/edit?usp=sharing [R]'},
+      {rewrite_rule => '^/joinstaff$ https://docs.google.com/presentation/d/1az5nFcRBa2d2U8p12ijntcEhZzNM8Sv6mxEjTrv4MXg/edit [R]'},
       {rewrite_rule => '^/register$ https://www.ocf.berkeley.edu/account/register/ [R]'},
       {rewrite_rule => '^/reserve$ https://www.ocf.berkeley.edu/docs/services/lab/lab-reservation-policy/ [R]'},
       {rewrite_rule => '^/lab$ https://www.ocf.berkeley.edu/docs/services/lab/ [R]'},
