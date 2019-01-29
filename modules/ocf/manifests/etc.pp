@@ -7,5 +7,7 @@ class ocf::etc {
     mode    => '0755',
     purge   => true,
     recurse => true,
+    backup  => false,
+    force   => true,
   }
 }
