@@ -131,4 +131,4 @@ sleep 8 && /usr/local/bin/fix-audio &
 [ -f ~/remote/.desktoprc ] && . ~/remote/.desktoprc
 
 # Rebind superkey
-xcape -e 'Super_L=Control_L|Alt_L|Shift_L'
+xcape -e 'Super_L=Control_R|Alt_L|Shift_R'
