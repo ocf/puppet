@@ -6,6 +6,8 @@ import subprocess
 import sys
 import time
 from io import BytesIO
+from itertools import chain
+from tempfile import NamedTemporaryFile
 
 import pycurl
 import pymysql
@@ -20,9 +22,8 @@ BOX_EMAILS = [
     'jvperrin@ocf.berkeley.edu',
     'kpeng3.4@berkeley.edu',
 ]
-BOX_FTP = 'ftps://ftp.box.com:990'
+BOX_FTP = 'ftp://ftp.box.com'
 FOLDER = 'ocf-backup-' + time.strftime('%Y-%m-%d')
-MAX_CONCURR_UPLOADS = 10
 
 # To get the OAuth keys for an account:
 #
@@ -107,20 +108,16 @@ def get_access_token(creds):
 
 def upload_to_box(creds, quiet):
     """Uploads the archive to box at the configured location"""
-    lftp_cmd = '''
-        set ftps:initial-prot ""
-        set ftp:ssl-force true
-        set ftp:ssl-protect-data true
-        open {box_ftp}
-        user {email} {passwd}
-        mirror -R --no-overwrite --parallel={concurr} {archive} {folder}
-    '''.format(
-        box_ftp=BOX_FTP,
-        email=creds['email'],
-        passwd=creds['password'],
-        concurr=MAX_CONCURR_UPLOADS,
-        archive=ARCHIVE,
-        folder=FOLDER,
+
+    # Specify each file and its destination on the command line
+    # -T file1 ftp://.../destfolder/ -T file2 ftp://.../destfolder/ ...
+    file_args = chain.from_iterable(
+        (
+            '-T',
+            os.path.join(ARCHIVE, filename),
+            '{}/{}/'.format(BOX_FTP, FOLDER),
+        )
+        for filename in os.listdir(ARCHIVE)
     )
 
     if quiet:
@@ -128,11 +125,30 @@ def upload_to_box(creds, quiet):
     else:
         stdout_pipe = None
 
-    subprocess.run(
-        ['lftp', '--norc'],
-        input=lftp_cmd.encode(),
-        stdout=stdout_pipe,
-    ).check_returncode()
+    # curl takes credentials with a "netrc file"
+    netrc_creds = 'machine ftp.box.com login {email} password {passwd}'.format(
+        email=creds['email'],
+        passwd=creds['password'],
+    )
+    with NamedTemporaryFile(mode='w', delete=True) as netrc_file:
+        netrc_file.write(netrc_creds)
+        netrc_file.flush()
+
+        subprocess.run(
+            [
+                'curl',
+                '-1',
+                '--disable-epsv',
+                '--ftp-skip-pasv-ip',
+                '--ftp-ssl',
+                '--netrc-file', netrc_file.name,
+                '--ftp-create-dirs',
+                '--globoff',
+                *file_args,
+            ],
+            check=True,
+            stdout=stdout_pipe,
+        )
 
 
 def get_folder_id(access_token, folder_name):
