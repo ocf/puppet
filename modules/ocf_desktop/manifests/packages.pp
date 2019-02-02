@@ -45,7 +45,7 @@ class ocf_desktop::packages {
     # utilities
     ['wakeonlan']:;
     # Xorg
-    ['xclip', 'xsel', 'xserver-xorg', 'xscreensaver']:;
+    ['xclip', 'xsel', 'xserver-xorg', 'xscreensaver', 'freerdp-x11']:;
   }
 
   # Remove some packages
