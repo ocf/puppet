@@ -22,6 +22,7 @@ BOX_EMAILS = [
     'jvperrin@ocf.berkeley.edu',
     'kpeng3.4@berkeley.edu',
 ]
+# This still use FTPS (over TLS) since we run curl with the -1 option
 BOX_FTP = 'ftp://ftp.box.com'
 FOLDER = 'ocf-backup-' + time.strftime('%Y-%m-%d')
 
