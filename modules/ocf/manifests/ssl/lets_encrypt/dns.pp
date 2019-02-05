@@ -5,10 +5,6 @@ define ocf::ssl::lets_encrypt::dns(
 ) {
   require ocf::ssl::lets_encrypt::dns_common
 
-  # we use this package in the le_cert_info fact, to gather information about
-  # whatever certs are currently present
-  package { 'python3-cryptography':; }
-
   concat::fragment { $title:
     target  => '/var/lib/lets-encrypt/domains.txt',
     content => "${join($domains, ' ')} > ${title}",
