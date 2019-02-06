@@ -3,11 +3,20 @@ class ocf_mesos::package {
     stage => first,
   }
 
+  # at this time, v1.7.1 requires glibc >= 2.27 but stretch provides 2.24
+  $mesos_version = '1.7.0-2.0.3'
+
   # We need Java 8 to be the default java.
   include ocf::packages::java
   ocf::repackage { 'mesos':
     # mesos recommends zookeeper
-    recommends => false,
+    recommends => false;
+  } ->
+  apt::pin { 'mesos':
+    ensure   => present,
+    packages => ['mesos'],
+    priority => 1001,
+    version  => $mesos_version;
   }
 
   # TODO: if we decide that we *won't* have servers which are both masters and
