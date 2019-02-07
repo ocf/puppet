@@ -73,7 +73,6 @@ class ocf::packages {
   package {
     [
       'apt-dater-host',
-      'asciinema',
       'beep',
       'bsdmainutils',
       'cpufrequtils',

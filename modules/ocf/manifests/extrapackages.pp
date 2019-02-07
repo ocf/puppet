@@ -27,6 +27,7 @@ class ocf::extrapackages {
     'alpine',
     'apache2-dev',
     'apache2-utils',
+    'asciinema',
     'autoconf',
     'autojump',
     'automake',
