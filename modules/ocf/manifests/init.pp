@@ -21,6 +21,6 @@ class ocf {
   include ocf::walldeny
 
   if $::lsbdistid != 'Raspbian' {
-    include prometheus::node_exporter
+    include ocf::nodeexporter
   }
 }
