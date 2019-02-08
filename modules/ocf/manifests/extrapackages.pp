@@ -113,7 +113,6 @@ class ocf::extrapackages {
     'php-bz2',
     'php-cli',
     'php-curl',
-    'php-dba',
     'php-gd',
     'php-mbstring',
     'php-mcrypt',
@@ -122,6 +121,7 @@ class ocf::extrapackages {
     'php-soap',
     'php-xml',
     'php-zip',
+    'php7.0-dba', # This isn't available as php-dba unfortunately
     'pkg-config',
     'pkpgcounter',
     'postgresql-client',
