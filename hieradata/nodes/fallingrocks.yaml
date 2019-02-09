@@ -1,3 +1,5 @@
 classes:
     - ocf_apt
     - ocf_mirrors
+
+prometheus::node_exporter::extra_options: "--collector.textfile.directory /opt/mirrors/prometheus"
