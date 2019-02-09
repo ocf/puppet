@@ -87,3 +87,6 @@ kubernetes::master_nodes:
     - coup
     - autocrat
     - deadlock
+
+# Prometheus config
+prometheus::node_exporter::version: 0.17.0

@@ -18,8 +18,4 @@ class ocf_printhost::monitor {
     command => '/usr/local/bin/monitor-cups /var/local/prometheus/cups.prom',
     # Run every minute
   }
-
-  class { 'prometheus::node_exporter':
-    extra_options => '--collector.textfile.directory /var/local/prometheus',
-  }
 }

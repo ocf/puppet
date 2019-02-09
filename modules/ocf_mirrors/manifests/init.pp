@@ -196,7 +196,4 @@ class ocf_mirrors {
       owner  => 'mirrors',
       group  => 'mirrors',
   }
-  class { 'prometheus::node_exporter':
-    extra_options =>  '--collector.textfile.directory /opt/mirrors/prometheus',
-  }
 }
