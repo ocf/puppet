@@ -1,6 +1,8 @@
 class ocf_kubernetes::master::loadbalancer {
   include ::haproxy
 
+  include ocf::firewall::allow_web
+
   $kubernetes_worker_nodes = lookup('kubernetes::worker_nodes')
   $kubernetes_workers_ipv4 = $kubernetes_worker_nodes.map |$worker| { ldap_attr($worker, 'ipHostNumber') }
   $haproxy_ssl = "/etc/ssl/private/${::fqdn}.pem"
