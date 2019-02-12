@@ -29,7 +29,8 @@ class ocf_desktop::packages {
     # FUSE
     ['fuse', 'exfat-fuse']:;
     # games
-    ['armagetronad', 'gl-117', 'gnome-games', 'minecraft-launcher', 'wesnoth', 'wesnoth-music']:;
+    ['armagetronad', 'gl-117', 'gnome-games', 'minecraft-launcher', 'redeclipse',
+      'wesnoth', 'wesnoth-music']:;
     # graphics/plotting
     ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
     # input method editors
