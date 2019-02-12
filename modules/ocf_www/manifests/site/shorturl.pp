@@ -62,6 +62,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/hours$ https://ocf.io/lab#hours [R,NE]'},
       {rewrite_rule => '^/hpc$ https://www.ocf.berkeley.edu/docs/services/hpc/ [R]'},
       {rewrite_rule => '^/https$ https://status.ocf.berkeley.edu/2014/10/moving-wwwocfberkeleyedu-to-https-only.html [R]'},
+      {rewrite_rule => '^/infra$ https://docs.google.com/presentation/d/1tc41z4nJ-UfCSLhg1k_cgaTn0pYrzCiOd3cfoJv9j8Y/edit [R]'},
       {rewrite_rule => '^/job$ https://docs.google.com/document/d/1oS3ma415LbtuyeEuuoucWKYLcWOJaWmzhv2nIs5f718/edit [R]'},
       {rewrite_rule => '^/join$ https://www.ocf.berkeley.edu/account/register/ [R]'},
       {rewrite_rule => '^/joinstaff$ https://docs.google.com/presentation/d/1az5nFcRBa2d2U8p12ijntcEhZzNM8Sv6mxEjTrv4MXg/edit [R]'},
