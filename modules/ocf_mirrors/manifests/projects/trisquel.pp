@@ -15,7 +15,7 @@ class ocf_mirrors::projects::trisquel {
   ocf_mirrors::monitoring { 'trisquel':
     type          => 'debian',
     dist_to_check => 'flidas',
-    upstream_host => 'devel.trisquel.info',
-    upstream_path => '/archive/trisquel',
+    upstream_host => 'mirror.fsf.org',
+    upstream_path => '/trisquel',
   }
 }
