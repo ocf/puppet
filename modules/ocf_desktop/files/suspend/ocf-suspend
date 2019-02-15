@@ -13,8 +13,7 @@ import sys
 from subprocess import DEVNULL
 from syslog import syslog
 
-from ocflib.lab.hours import Day
-from requests import ConnectionError
+from ocflib.lab.hours2 import read_hours_listing
 
 
 def file_is_open(path):
@@ -40,13 +39,9 @@ def main(argv=None):
 
     # Don't sleep if...
     # ...lab is open
-    try:
-        if Day.from_date().is_open() and not args.force:
-            report('not suspending as lab is open')
-            return 1
-    except ConnectionError:
-        report('Could not connect to check lab hours')
-        return 255
+    if read_hours_listing().is_open() and not args.force:
+        report('not suspending as lab is open')
+        return 1
 
     # ...we're installing packages
     if file_is_open('/var/lib/dpkg/lock'):

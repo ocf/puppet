@@ -5,7 +5,7 @@ import time
 
 from gi.repository import Notify
 from ocflib.account.utils import is_staff
-from ocflib.lab.hours import Day
+from ocflib.lab.hours2 import read_hours_listing
 from ocflib.misc.whoami import current_user
 
 
@@ -37,7 +37,7 @@ def main():
     today = datetime.datetime.today()
     closing_times = [
         datetime.datetime.combine(today.date(), hour.close).timestamp()
-        for hour in Day.from_date().hours
+        for hour in read_hours_listing().hours_on_date()
     ]
 
     s = sched.scheduler(time.time)
