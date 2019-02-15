@@ -134,6 +134,10 @@ class ocf::packages {
     ]:;
   }
 
+  ocf::repackage { 'python3-attr':
+    backport_on =>  ['stretch'],
+  }
+
   # Packages to only install on Debian (not on Raspbian for example)
   if $::lsbdistid == 'Debian' {
     package {

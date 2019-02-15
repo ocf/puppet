@@ -4,7 +4,7 @@ from subprocess import call
 from subprocess import check_output
 from time import sleep
 
-from ocflib.lab.hours import Day
+from ocflib.lab.hours2 import read_hours_listing
 
 
 def main():
@@ -14,7 +14,7 @@ def main():
     # extra delay if we will be closed delay minutes from now
     bonus = 90
     now = datetime.datetime.now()
-    tto = Day.from_date(now).time_to_open()
+    tto = read_hours_listing().time_to_open()
     if tto >= datetime.timedelta(minutes=delay):
         berkeley_time = 10
         # this min makes it so wait should log out the sooner of 10 minutes before we open
