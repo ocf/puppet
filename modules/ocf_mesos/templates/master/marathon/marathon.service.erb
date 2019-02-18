@@ -7,7 +7,7 @@ Wants=network.target
 EnvironmentFile=/opt/share/mesos/master/marathon-environ
 # mesos_leader_ui_url to allow viewing stdout/stderr (rt#5645)
 # reconciliation_interval to speed up recovery during restarts (rt#5651)
-ExecStart=/usr/bin/marathon \
+ExecStart=/usr/share/marathon/bin/marathon \
     --master zk://<%= @zookeeper_host %>/mesos \
     --zk zk://<%= @zookeeper_host %>/marathon \
     --hostname <%= @marathon_hostname %> \
