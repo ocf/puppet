@@ -73,10 +73,10 @@ def main():
 
     # Set the cert's expiration
     builder = builder.not_valid_before(
-        datetime.datetime.today() - datetime.timedelta(minutes=1)
+        datetime.datetime.utcnow() - datetime.timedelta(minutes=1)
     )
     builder = builder.not_valid_after(
-        datetime.datetime.today() + CERT_VALID_FOR,
+        datetime.datetime.utcnow() + CERT_VALID_FOR,
     )
 
     builder = builder.serial_number(x509.random_serial_number())
