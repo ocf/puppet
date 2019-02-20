@@ -9,6 +9,7 @@ class ocf_mirrors {
   # projects
   include ocf_mirrors::projects::apache
   include ocf_mirrors::projects::archlinux
+  include ocf_mirrors::projects::archlinuxcn
   include ocf_mirrors::projects::centos
   include ocf_mirrors::projects::centos_altarch
   include ocf_mirrors::projects::centos_debuginfo
