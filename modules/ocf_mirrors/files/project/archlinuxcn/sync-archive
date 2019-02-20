@@ -1,0 +1,5 @@
+#!/bin/sh -eu
+
+/usr/local/bin/rsync-no-vanished -rtlH --delete-after --delay-updates \
+	--safe-links --password-file=/opt/mirrors/project/archlinuxcn/sync_password \
+	ucb-ocf@sync.repo.archlinuxcn.org::repo /opt/mirrors/ftp/archlinuxcn
