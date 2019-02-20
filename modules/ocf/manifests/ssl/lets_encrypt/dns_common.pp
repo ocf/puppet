@@ -6,12 +6,6 @@ class ocf::ssl::lets_encrypt::dns_common {
     require => Package['dehydrated'],
   }
 
-  # we use this package in the le_cert_info fact, to gather information about
-  # whatever certs are currently present
-  ocf::repackage { 'python3-cryptography':
-    backport_on => ['stretch'],
-  }
-
   $letsencrypt_ddns_key = assert_type(Stdlib::Base64, lookup('letsencrypt::ddns::key'))
 
   file {

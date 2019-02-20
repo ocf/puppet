@@ -138,6 +138,11 @@ class ocf::packages {
     backport_on =>  ['stretch'],
   }
 
+  ocf::repackage { 'python3-cryptography':
+    backport_on => ['stretch'],
+  }
+
+
   # Packages to only install on Debian (not on Raspbian for example)
   if $::lsbdistid == 'Debian' {
     package {
