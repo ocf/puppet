@@ -95,6 +95,32 @@ class ocf_kubernetes::master {
     },
   }
 
+  user { 'kubernetes-ca':
+    ensure =>  present,
+    name   =>  'kubernetes-ca',
+    groups =>  [sys],
+    shell  =>  '/bin/false',
+    system =>  true,
+  }
+
+  # Override the Kubernetes configuration directory, created by
+  # the puppetlabs-kubernetes config module, to have owner kubernetes-ca
+  # and not be readable by any user
+  File<|title == '/etc/kubernetes'|> {
+    owner => 'kubernetes-ca',
+    mode  => '0700',
+  }
+
+  # cert signing script
+  file {
+    '/usr/local/bin/certsign':
+      mode   => '0755',
+      source =>'puppet:///modules/ocf_kubernetes/certsign';
+
+    '/etc/sudoers.d/certsign':
+      content =>  "ALL ALL=(kubernetes-ca) NOPASSWD: /usr/local/bin/certsign\n";
+  }
+
   file {
     '/etc/profile.d/kubeconfig.sh':
       mode    => '0755',
