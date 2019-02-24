@@ -37,8 +37,10 @@ def all_domains(vhosts):
     """
     return (
         set(vhosts.keys()) |
-        set(chain.from_iterable(vhost.get('aliases', [])
-                                for vhost in vhosts.values()))
+        set(chain.from_iterable(
+            vhost.get('aliases', [])
+            for vhost in vhosts.values()
+        ))
     )
 
 

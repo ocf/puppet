@@ -21,9 +21,8 @@ repos:
         -   --no-arrow_on_right_operand_line-check
         -   --no-variable_is_lowercase-check
 -   repo: https://github.com/pre-commit/pre-commit-hooks.git
-    sha: v0.9.5
+    sha: v2.1.0
     hooks:
-    -   id: autopep8-wrapper
     -   id: check-added-large-files
     -   id: check-docstring-first
     -   id: check-executables-have-shebangs
@@ -39,6 +38,10 @@ repos:
     -   id: mixed-line-ending
     -   id: trailing-whitespace
         exclude: \.preseed$
+-   repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: 'v1.4.3'
+    hooks:
+    -   id: autopep8
 -   repo: https://gitlab.com/pycqa/flake8
     rev: '3.7.3'
     hooks:

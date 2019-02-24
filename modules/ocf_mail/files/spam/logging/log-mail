@@ -121,7 +121,8 @@ if __name__ == '__main__':
         parsed = (
             # received header with uid comes from the first relay
             parse_received_for_uid(received[-1]) or
-            # received header with smtp username comes from the last (*this* smtp server)
+            # received header with smtp username comes from the last (*this*
+            # smtp server)
             parse_received_for_auth(received[0]) or
             {}
         )
