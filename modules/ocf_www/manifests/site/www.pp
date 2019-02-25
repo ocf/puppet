@@ -7,6 +7,9 @@
 #
 #   * Users need to be able to run CGI and PHP under /~user/ as their own
 #     user account.
+#
+#   * Mastodon needs to control .well-known/host-meta to shorten Mastodon
+#     identifiers
 class ocf_www::site::www {
   include apache::mod::actions
   include apache::mod::alias
@@ -40,6 +43,10 @@ class ocf_www::site::www {
     proxy_preserve_host => true,
 
     rewrites            => [
+      {
+        comment      => 'redirect .well-known/host-meta to mastodon',
+        rewrite_rule => '/.well-known/host-meta https://mastodon.ocf.berkeley.edu/.well-known/host-meta',
+      },
       {
         comment      => 'proxy to ocfweb',
         rewrite_cond => [
