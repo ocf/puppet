@@ -18,7 +18,9 @@ class ocf_ocfweb::dev_config($group = 'ocfstaff') {
   # ocfweb depends on, but we can't just declare the package
   # because it conflicts with extrapackages, which is declared in
   # ocf_admin along with this manifest (for supernova)
-  ensure_packages(['libcrack2-dev'])
+  if !defined(Package['libcrack2-dev']) {
+    package { 'libcrack2-dev': }
+  }
 
   # Install some packages for generating puppet diffs
   # TODO: Move this somewhere else alongside the puppet certs added below
