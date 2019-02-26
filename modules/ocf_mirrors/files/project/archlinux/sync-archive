@@ -1,4 +1,4 @@
-#!/bin/sh -eu
+#!/bin/bash -eu
 
 # The official "tier 0" syncing endpoint
 # fallingrocks' IP is whitelisted, so if it ever changes, we need to email them to
@@ -43,5 +43,3 @@ rsync_cmd \
     --exclude='/iso' \
     "${source_url}" \
     "${target}"
-
-#echo "Last sync was $(date -d @$(cat ${target}/lastsync))"
