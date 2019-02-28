@@ -22,6 +22,14 @@ class ocf_filehost(
       options => ['rw'],
       hosts   => lookup('kubernetes::worker_nodes');
 
+  '/opt/homes/services/kanboard/data':
+      options => ['rw'],
+      hosts   => lookup('kubernetes::worker_nodes');
+
+  '/opt/homes/services/kanboard/plugins':
+      options => ['rw'],
+      hosts   => lookup('kubernetes::worker_nodes');
+
   }
 
   file {
