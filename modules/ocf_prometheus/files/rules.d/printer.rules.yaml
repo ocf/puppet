@@ -39,10 +39,6 @@ groups:
     # The snmp_exporter exposes these bitstrings as a label. The ugly (but
     # simplest) way of extracting these bits is by doing regex on the hex
     # string.
-    # We could theoretically do this for each bit, but we get paper/toner info
-    # from other metrics. So we only do doorOpen, jammed, and offline.
-    # TODO(dkessler) I am 80% sure the bit alignment/direction is correct here.
-    #                We'll know for sure when the next paperjam happens :P
     - record: printer_door_open
       # 5th bit
       expr: max(hrPrinterDetectedErrorState{hrDeviceIndex="1",hrPrinterDetectedErrorState=~"0x.[89ABCDEF]"}) without (hrPrinterDetectedErrorState, hrDeviceIndex)
