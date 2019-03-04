@@ -1,5 +1,5 @@
 users:
-- name: ocfstaffer
+- name: kerberos-staff-login
   user:
     exec:
       command: "/opt/share/utils/sbin/gen-kubernetes-cert"
@@ -8,13 +8,13 @@ users:
 clusters:
 - name: prod
   cluster:
-    certificate-authority-data: <%= @cluster_cert_base64.gsub(/\n/, "") %>
+    certificate-authority-data: <%= @cluster_cert_base64.delete("\n") %>
     server: https://kubernetes:6443
 
 contexts:
 - name: prod
   context:
     cluster: prod
-    user: ocfstaffer
+    user: kerberos-staff-login
 
 current-context: prod
