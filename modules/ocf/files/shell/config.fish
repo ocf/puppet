@@ -14,6 +14,7 @@ set -x PATH /opt/share/utils/bin \
     /usr/lib \
     /sbin \
     /usr/games
+set -x KUBECONFIG /etc/kubectl.conf
 
 if test -e /opt/puppetlabs/bin
     set -x PATH $PATH /opt/puppetlabs/bin
