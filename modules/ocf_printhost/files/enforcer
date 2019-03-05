@@ -258,7 +258,7 @@ def main(argv):
             except Exception:
                 pass
         # Don't retry; it's not going to print the second time.
-        sys.exit(1)
+        sys.exit(255)
 
 
 if __name__ == '__main__':
