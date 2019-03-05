@@ -34,17 +34,20 @@ class ocf_kubernetes::master::loadbalancer {
   service { 'keepalived': }
 
   $vip = 'lb-kubernetes'
+
+  class { 'ocf_kubernetes::master::loadbalancer::ssl':
+    vip => $vip,
+  }
+
+  # Redirect from "cname.ocf.io" to "cname.ocf.berkeley.edu" for each cname.
   $cnames = ldap_attr($vip, 'dnsCname', true)
   $alias_redirects = flatten($cnames.map |$domain| {
+    # When accessing domains from within the OCF subnet, going to the hostname
+    # (e.g. typing "labmap/" into the web browser) should also redirect.
     prefix(['.ocf.io', ''], $domain).map |$fqdn| {
       {'redirect' => "prefix https://${domain}.ocf.berkeley.edu code 301 if { hdr(host) -i ${fqdn} }"}
     }
   })
-
-
-  class { 'ocf_kubernetes::master::loadbalancer::ssl':
-    vip => $vip,
-  } ->
 
   haproxy::frontend { 'kubernetes-frontend':
     mode    => 'http',
@@ -52,11 +55,11 @@ class ocf_kubernetes::master::loadbalancer {
       '0.0.0.0:80'  => [],
       '0.0.0.0:443' => ['ssl', 'crt', $haproxy_ssl],
     },
-    options => [
-      {'default_backend' => 'kubernetes-backend'},
-    ] + $alias_redirects + [
-      {'redirect'        => 'scheme https code 301 if !{ ssl_fc }'},
-    ];
+    options =>
+    [{'default_backend' => 'kubernetes-backend'}]
+    + $alias_redirects
+    + [{'redirect'      => 'scheme https code 301 if !{ ssl_fc }'}],
+    require => Class['ocf_kubernetes::master::loadbalancer::ssl'];
   } ->
   haproxy::backend { 'kubernetes-backend':
     options => {
