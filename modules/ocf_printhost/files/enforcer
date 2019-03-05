@@ -181,7 +181,7 @@ def prehook(c, r, job):
                 file_source=file_source,
             )
             r.publish(job.user, msg)
-            sys.exit(1)
+            sys.exit(255)
 
     if job.pages > quo.daily:
         send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
@@ -190,7 +190,7 @@ def prehook(c, r, job):
             quota=quo.daily,
         )
         r.publish(job.user, msg)
-        sys.exit(1)
+        sys.exit(255)
 
 
 def posthook(c, r, job, success):
