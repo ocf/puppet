@@ -117,6 +117,15 @@ NOTIFY_JOB_ERROR = dedent("""\
         Please contact a staff member for assistance.\
 """)
 
+NOTIFY_PROBLEMATIC_FILE_SOURCE = dedent("""\
+        Unfortunately, printing from {file_source} results in formatting issues.
+        Please download your file as a PDF and print from desktop instead of web browser.\
+""")
+
+PROBLEMATIC_FILE_SOURCE = [
+    ('Google Docs', lambda job: job.doc_name.endswith(' - Google Docs'))
+]
+
 
 def read_config():
     conf = ConfigParser()
@@ -164,6 +173,16 @@ def send_printer_mail(message, job, quo):
 
 def prehook(c, r, job):
     quo = quota.get_quota(c, job.user)
+
+    # A stop gap until we figure out why some file types aren't printing correctly
+    for file_source, problematic in PROBLEMATIC_FILE_SOURCE:
+        if problematic(job):
+            msg = NOTIFY_PROBLEMATIC_FILE_SOURCE.format(
+                file_source=file_source,
+            )
+            r.publish(job.user, msg)
+            sys.exit(255)
+
     if job.pages > quo.daily:
         send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
         msg = NOTIFY_QUOTA_MESSAGE.format(
@@ -239,7 +258,7 @@ def main(argv):
             except Exception:
                 pass
         # Don't retry; it's not going to print the second time.
-        sys.exit(255)
+        sys.exit(1)
 
 
 if __name__ == '__main__':
