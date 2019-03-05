@@ -1,0 +1,20 @@
+users:
+- name: kerberos-staff-login
+  user:
+    exec:
+      command: "/opt/share/utils/sbin/gen-kubernetes-cert"
+      apiVersion: "client.authentication.k8s.io/v1beta1"
+
+clusters:
+- name: prod
+  cluster:
+    certificate-authority-data: <%= @cluster_cert_base64.delete("\n") %>
+    server: https://kubernetes:6443
+
+contexts:
+- name: prod
+  context:
+    cluster: prod
+    user: kerberos-staff-login
+
+current-context: prod
