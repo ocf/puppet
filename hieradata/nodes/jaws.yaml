@@ -1,7 +1,6 @@
 classes:
     - ocf_kvm
-    - ocf_mesos::slave
-    - ocf_mesos::secrets
+    - ocf_kubernetes::worker
 
 ocf::networking::bridge: true
 ocf::networking::bond: true
