@@ -61,6 +61,18 @@ class ocf_kubernetes::master::loadbalancer {
     + [{'redirect'      => 'scheme https code 301 if !{ ssl_fc }'}],
     require => Class['ocf_kubernetes::master::loadbalancer::ssl'];
   } ->
+  haproxy::frontend { 'kubernetes-proxy-frontend':
+    # This is used for hosts that don't directly point to lb-kubernetes, but
+    # are instead reverse proxied from another server (like puppet, www, irc)
+    # This points to the same backend as other requests, but doesn't handle
+    # alias redirects or TLS termination. In these cases, TLS is handled by the
+    # upstream reverse proxy.
+    mode    => 'http',
+    bind    => {
+      '0.0.0.0:4080' => [],
+    },
+    options => {'default_backend' => 'kubernetes-backend'},
+  } ->
   haproxy::backend { 'kubernetes-backend':
     options => {
       option         => [
