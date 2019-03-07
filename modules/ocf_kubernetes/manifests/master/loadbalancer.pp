@@ -45,7 +45,7 @@ class ocf_kubernetes::master::loadbalancer {
     # When accessing domains from within the OCF subnet, going to the hostname
     # (e.g. typing "labmap/" into the web browser) should also redirect.
     prefix(['.ocf.io', ''], $domain).map |$fqdn| {
-      {'redirect' => "prefix https://${domain}.ocf.berkeley.edu code 301 if { hdr(host) -i ${fqdn} }"}
+      {'redirect' => "prefix https://${domain}.ocf.berkeley.edu%[capture.req.uri] code 301 if { hdr(host) -i ${fqdn} }"}
     }
   })
 
