@@ -5,7 +5,6 @@
 #
 # Note that `date` returned is the current date (and not one parsed from
 # message headers), since we don't really trust headers more than necessary.
-import email
 import email.utils
 import io
 import json
