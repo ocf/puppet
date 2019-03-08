@@ -42,10 +42,20 @@ class ocf_mesos::master::webui(
 
   nginx::resource::upstream {
     'mesos':
-      members => ['localhost:5050'];
+      members => {
+        'localhost:5050' =>  {
+          server => 'localhost',
+          port   => 5050,
+        }
+      };
 
     'marathon':
-      members => ['localhost:8080'];
+      members => {
+        'localhost:8080' => {
+          server => 'localhost',
+          port   => 8080,
+        }
+      };
   }
 
   $mesos_auth_header = base64('encode', "ocf:${mesos_http_password}", 'strict')
@@ -180,7 +190,12 @@ class ocf_mesos::master::webui(
     $host = "${slave}.agent.mesos.ocf.berkeley.edu"
 
     nginx::resource::upstream { "${slave}-agent":
-      members => ["${slave}:5051"],
+      members => {
+        "${slave}:5051" => {
+          server => $slave,
+          port   => 5051,
+        },
+      }
     }
 
     nginx::resource::server {

@@ -29,7 +29,12 @@ class ocf_ssh::webssh {
   Class['ocf::ssl::default'] ~> Class['Nginx::Service']
 
   nginx::resource::upstream { 'webssh':
-    members => ['localhost:4200'];
+    members => {
+      'localhost:4200' => {
+        server => 'localhost',
+        port   => 4200,
+      }
+    }
   }
 
   nginx::resource::server {

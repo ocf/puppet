@@ -14,7 +14,12 @@ class ocf_docker {
   Class['ocf::ssl::default'] ~> Class['Nginx::Service']
 
   nginx::resource::upstream { 'docker-registry':
-    members => ['127.0.0.1:5000'];
+    members => {
+      'localhost:5000' => {
+        server => 'localhost',
+        port   => 5000,
+      }
+    },
   }
 
   # Docker registries currently must be entirely unauthenticated (including
