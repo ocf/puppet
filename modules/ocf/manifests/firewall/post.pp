@@ -113,6 +113,26 @@ class ocf::firewall::post {
       before    => undef;
   }
 
+  # blanket-allow stuff from staffvms
+  $staffvm_src_range_4 = lookup('staffvm_src_range_4')
+  $staffvm_src_range_6 = lookup('staffvm_src_range_6')
+  firewall_multi {
+    '998 allow from staffvms (IPv4)':
+      chain     => 'PUPPET-INPUT',
+      src_range => $staffvm_src_range_4,
+      proto     => 'all',
+      action    => 'accept',
+      before    => undef;
+
+    '998 allow from staffvms (IPv6)':
+      provider  => 'ip6tables',
+      chain     => 'PUPPET-INPUT',
+      src_range => $staffvm_src_range_6,
+      proto     => 'all',
+      action    => 'accept',
+      before    => undef;
+  }
+
   # These rules intentionally apply only to addresses within our network as a reminder that
   # it is the external firewall's job to filter external packets.
 
