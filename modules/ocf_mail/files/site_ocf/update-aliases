@@ -4,8 +4,10 @@
 set -o pipefail
 
 staff=$(getent group ocfstaff | cut -d':' -f4)
+hpc_users=$(getent group ocfhpc | cut -d':' -f4)
 
 echo "staff-current: ${staff}" > /etc/aliases-group
+echo "hpc-users: ${hpc_users}" >> /etc/aliases-group
 /usr/sbin/postalias hash:/etc/aliases-group
 
 # update aliases-local
