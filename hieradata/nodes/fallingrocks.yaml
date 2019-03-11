@@ -1,3 +1,5 @@
+ocf::networking::bond: true
+
 classes:
     - ocf_apt
     - ocf_mirrors
