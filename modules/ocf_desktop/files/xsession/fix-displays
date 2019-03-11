@@ -9,10 +9,15 @@ def get_monitors():
     lines = subprocess.check_output(['xrandr']).decode('utf8').splitlines()
     return [line.split()[0] for line in lines if ' connected' in line]
 
+def get_hostname():
+    lines = subprocess.check_output(['hostname']).decode('utf8').splitlines()
+    hostname = lines[0] if lines else None
+    return hostname
 
 if __name__ == '__main__':
     time.sleep(1)
     monitors = get_monitors()
+    hostname = get_hostname()
 
     # tile monitors side-by-side
     prev = None
@@ -22,8 +27,8 @@ if __name__ == '__main__':
         prev = monitor
 
     # special case: 3 monitors
-    # middle monitor is rotated left 90 degrees
-    if len(monitors) == 3:
+    # middle monitor is rotated left 90 degrees for eruption
+    if len(monitors) == 3 and hostname == 'eruption':
         # left/right monitors are moved down a bit; move middle up to compensate
         middle_offset = -305
         right_offset = 320
