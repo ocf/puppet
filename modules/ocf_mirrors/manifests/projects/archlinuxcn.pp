@@ -21,7 +21,6 @@ class ocf_mirrors::projects::archlinuxcn {
   ocf_mirrors::monitoring { 'archlinuxcn':
     type          => 'unix_timestamp',
     upstream_host => 'mirrors.tuna.tsinghua.edu.cn',
-    upstream_path => 'archlinuxcn',
     ts_path       => 'lastupdate',
   }
 
