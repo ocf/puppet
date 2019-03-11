@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Tile multiple monitors side-by-side
 import re
+import socket
 import subprocess
 import time
 
@@ -9,15 +10,11 @@ def get_monitors():
     lines = subprocess.check_output(['xrandr']).decode('utf8').splitlines()
     return [line.split()[0] for line in lines if ' connected' in line]
 
-def get_hostname():
-    lines = subprocess.check_output(['hostname']).decode('utf8').splitlines()
-    hostname = lines[0] if lines else None
-    return hostname
 
 if __name__ == '__main__':
     time.sleep(1)
     monitors = get_monitors()
-    hostname = get_hostname()
+    hostname = socket.gethostname()
 
     # tile monitors side-by-side
     prev = None
