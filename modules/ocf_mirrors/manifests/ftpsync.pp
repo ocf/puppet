@@ -31,7 +31,7 @@ define ocf_mirrors::ftpsync(
       ensure => link,
       target => "${project_path}/distrib/etc/common";
 
-    "${project_path}/etc/ftpsync-${title}.conf":
+    "${project_path}/etc/ftpsync.conf":
       content => template('ocf_mirrors/ftpsync.conf.erb'),
       mode    => '0644';
   }
@@ -49,7 +49,7 @@ define ocf_mirrors::ftpsync(
       environments => { 'BASEDIR' => $project_path },
       hour         => $cron_hour,
       minute       => $cron_minute,
-      require      => File["${project_path}/bin", "${project_path}/etc/ftpsync-${title}.conf"],
+      require      => File["${project_path}/bin", "${project_path}/etc/ftpsync.conf"],
     }
   } else {
     cron { "ftpsync-${title}":
@@ -57,7 +57,7 @@ define ocf_mirrors::ftpsync(
       user    => 'mirrors',
       minute  => $cron_minute,
       hour    => $cron_hour,
-      require => File["${project_path}/bin", "${project_path}/etc/ftpsync-${title}.conf"];
+      require => File["${project_path}/bin", "${project_path}/etc/ftpsync.conf"];
     }
   }
 }
