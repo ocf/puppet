@@ -10,7 +10,7 @@
 #  - reprepro list buster  # list packages in buster dist
 #  - reprepro export  # re-export dists (usually not needed)
 
-if [[ "$USER" != "ocfapt" ]]; then
+if [[ "$(whoami)" != "ocfapt" ]]; then
 	echo "This script must be run as the ocfapt user."
 	exit 1
 fi
