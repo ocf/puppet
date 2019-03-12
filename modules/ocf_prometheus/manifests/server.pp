@@ -56,7 +56,7 @@ class ocf_prometheus::server {
   } ~> Service[prometheus]
 
   class { '::prometheus::server':
-    version              => '2.6.0',
+    version              => '2.8.0',
     extra_options        => '--web.listen-address="127.0.0.1:9090"',
     external_url         => 'https://prometheus.ocf.berkeley.edu',
     rule_files           => [ '/etc/prometheus/rules.d/*.yaml' ],
