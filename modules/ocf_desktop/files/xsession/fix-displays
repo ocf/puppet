@@ -23,8 +23,7 @@ if __name__ == '__main__':
             subprocess.check_call(['xrandr', '--output', monitor, '--right-of', prev])
         prev = monitor
 
-    # special case: 3 monitors
-    # middle monitor is rotated left 90 degrees for eruption
+    # special case for eruption: middle monitor is rotated left 90 degrees
     if len(monitors) == 3 and hostname == 'eruption':
         # left/right monitors are moved down a bit; move middle up to compensate
         middle_offset = -305
