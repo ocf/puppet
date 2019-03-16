@@ -16,9 +16,23 @@ if __name__ == '__main__':
     monitors = get_monitors()
     hostname = socket.gethostname()
 
-    # tile monitors side-by-side
+    # tile monitors side-by-side, based on physical ports
+    #
+    # For example, with the below grahpics card, excluing DVI port
+    # Left most monitor should go to the left most port (DP 1) and so on
+    #
+    # +------------------------------------------------+
+    # |   +----------------+    | +------------------+ |
+    # |   |    D V I       |    | |  |  Exhaust   |  | |
+    # |   +----------------+    | +------------------+ |
+    # +------------------------------------------------+
+    # |   +-------+ +--------+  +-------+   +-------+  |
+    # |   +  DP 1 | |  HDMI  |  +  DP 2 |   +  DP 3 |  |
+    # |    \------+ \-------/    \------+    \------+  |
+    # +------------------------------------------------+
+
     prev = None
-    for monitor in monitors:
+    for monitor in sorted(monitors):
         if prev:
             subprocess.check_call(['xrandr', '--output', monitor, '--right-of', prev])
         prev = monitor
