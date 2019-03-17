@@ -1,15 +1,11 @@
 class ocf_kubernetes::master::loadbalancer {
-  include ::haproxy
-
   include ocf::firewall::allow_web
 
   $kubernetes_worker_nodes = lookup('kubernetes::worker_nodes')
-  $kubernetes_workers_ipv4 = $kubernetes_worker_nodes.map |$worker| { ldap_attr($worker, 'ipHostNumber') }
-  $haproxy_ssl = "/etc/ssl/private/${::fqdn}.pem"
 
   # At any given time, only one kubernetes master will hold
   # the first IP. The master holding the IP will handle all
-  # HAProxy requests and send them into the cluster.
+  # nginx requests and send them into the cluster.
   #
   # TODO: If we expose TCP services, we may need to add more.
   #
@@ -40,57 +36,104 @@ class ocf_kubernetes::master::loadbalancer {
   }
 
   # Redirect from "cname.ocf.io" to "cname.ocf.berkeley.edu" for each cname.
-  $cnames = ldap_attr($vip, 'dnsCname', true)
-  $alias_redirects = flatten($cnames.map |$domain| {
-    # When accessing domains from within the OCF subnet, going to the hostname
-    # (e.g. typing "labmap/" into the web browser) should also redirect.
-    prefix(['.ocf.io', ''], $domain).map |$fqdn| {
-      {'redirect' => "prefix https://${domain}.ocf.berkeley.edu code 301 if { hdr(host) -i ${fqdn} }"}
-    }
-  })
+  # Don't include wildcard entries.
+  $cnames = ldap_attr($vip, 'dnsCname', true).filter |$cname| { $cname !~ /\*/ }
 
-  haproxy::frontend { 'kubernetes-frontend':
-    mode    => 'http',
-    bind    => {
-      '0.0.0.0:80'  => [],
-      '0.0.0.0:443' => ['ssl', 'crt', $haproxy_ssl],
-    },
-    options =>
-    [{'default_backend' => 'kubernetes-backend'}]
-    + $alias_redirects
-    + [{'redirect'      => 'scheme https code 301 if !{ ssl_fc }'}],
-    require => Class['ocf_kubernetes::master::loadbalancer::ssl'];
-  } ->
-  haproxy::frontend { 'kubernetes-proxy-frontend':
-    # This is used for hosts that don't directly point to lb-kubernetes, but
-    # are instead reverse proxied from another server (like puppet, www, irc)
-    # This points to the same backend as other requests, but doesn't handle
-    # alias redirects or TLS termination. In these cases, TLS is handled by the
-    # upstream reverse proxy.
-    mode    => 'http',
-    bind    => {
-      '0.0.0.0:4080' => [],
-    },
-    options => {'default_backend' => 'kubernetes-backend'},
-  } ->
-  haproxy::backend { 'kubernetes-backend':
-    options => {
-      option         => [
-        'forwardfor',
-      ],
-      'mode'         => 'http',
-      'balance'      => 'source',
-      'hash-type'    => 'consistent',
-      'http-request' => 'add-header X-Forwarded-Proto https if { ssl_fc }',
-    }
-  } ->
-  haproxy::balancermember { 'kubernetes-ingress-worker':
-    listening_service => 'kubernetes-frontend',
-    ports             => ['31234'],
-    ipaddresses       => $kubernetes_workers_ipv4,
-    server_names      => $kubernetes_worker_nodes;
+  package { ['nginx-extras']:; }
+
+  class { 'nginx':
+    manage_repo  => false,
+    confd_purge  => true,
+    server_purge => true,
+
+    require      => Package['nginx-extras'],
   }
 
-  # Reload HAProxy if any of the certs change
-  Concat[$haproxy_ssl] ~> Haproxy::Service[haproxy]
+  $upstream_workers = Hash.new($kubernetes_worker_nodes.map |String $worker| {
+    [
+      "${worker}:31234",
+      {
+        server => $worker,
+        port   => 31234,
+      },
+    ]
+  })
+  nginx::resource::upstream {
+    'kubernetes':
+      members => $upstream_workers
+  }
+
+  nginx::resource::server {
+    'ingress-proxy':
+      server_name      => ['_'],
+      proxy            => 'http://kubernetes',
+      proxy_set_header => [
+        'Host $host',
+        'X-Forwarded-For $proxy_add_x_forwarded_for',
+        'X-Forwarded-Proto $scheme',
+        'X-Real-IP $remote_addr',
+      ],
+
+      listen_port      => 443,
+      listen_options   => 'default_server',
+      ssl              => true,
+      ssl_cert         => "/etc/ssl/private/${::fqdn}.bundle",
+      ssl_key          => "/etc/ssl/private/${::fqdn}.key",
+      ssl_dhparam      => '/etc/ssl/dhparam.pem',
+
+      add_header       => {
+        'Strict-Transport-Security' =>  'max-age=31536000',
+      };
+
+    'ingress-proxy-redirect':
+      server_name       => ['_'],
+      listen_port       => 80,
+      listen_options    => 'default_server',
+      server_cfg_append => {
+        'return' => '301 https://$host$request_uri'
+      };
+
+    'downstream-proxy':
+      # This is used for hosts that don't directly point to lb-kubernetes, but
+      # are instead reverse proxied from another server (like puppet, www, irc)
+      # This points to the same backend as other requests, but doesn't handle
+      # alias redirects or TLS termination. In these cases, TLS is handled by
+      # the upstream reverse proxy.
+      server_name      => ['_'],
+      listen_port      => 4080,
+      ipv6_listen_port => 4080,
+      listen_options   => 'default_server',
+      proxy            => 'http://kubernetes',
+      proxy_set_header => [
+        'Host $host',
+      ];
+  }
+
+  # Redirect from "cname.ocf.io" to "cname.ocf.berkeley.edu" for each cname.
+  $cnames.each |$domain| {
+    nginx::resource::server {
+      "${domain}-http-direct":
+        server_name       => prefix(['.ocf.io', ''], $domain),
+        listen_port       => 80,
+        server_cfg_append => {
+          'return' => "301 https://${domain}.ocf.berkeley.edu\$request_uri"
+        };
+
+      "${domain}-alias-redirect":
+        server_name       => ["${domain}.ocf.io"],
+        listen_port       => 443,
+        ssl               => true,
+        ssl_cert          => "/etc/ssl/private/${::fqdn}.bundle",
+        ssl_key           => "/etc/ssl/private/${::fqdn}.key",
+        ssl_dhparam       => '/etc/ssl/dhparam.pem',
+
+        add_header        => {
+          'Strict-Transport-Security' =>  'max-age=31536000',
+        },
+
+        server_cfg_append => {
+          'return' => "301 https://${domain}.ocf.berkeley.edu\$request_uri"
+        };
+    }
+  }
 }
