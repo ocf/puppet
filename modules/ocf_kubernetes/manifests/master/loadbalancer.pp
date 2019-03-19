@@ -65,31 +65,33 @@ class ocf_kubernetes::master::loadbalancer {
 
   nginx::resource::server {
     'ingress-proxy':
-      server_name      => ['_'],
-      proxy            => 'http://kubernetes',
-      proxy_set_header => [
+      server_name         => ['_'],
+      proxy               => 'http://kubernetes',
+      proxy_set_header    => [
         'Host $host',
         'X-Forwarded-For $proxy_add_x_forwarded_for',
         'X-Forwarded-Proto $scheme',
         'X-Real-IP $remote_addr',
       ],
 
-      listen_port      => 443,
-      listen_options   => 'default_server',
-      ssl              => true,
-      ssl_cert         => "/etc/ssl/private/${::fqdn}.bundle",
-      ssl_key          => "/etc/ssl/private/${::fqdn}.key",
-      ssl_dhparam      => '/etc/ssl/dhparam.pem',
+      listen_port         => 443,
+      listen_options      => 'default_server',
+      ipv6_listen_options => 'default_server',
+      ssl                 => true,
+      ssl_cert            => "/etc/ssl/private/${::fqdn}.bundle",
+      ssl_key             => "/etc/ssl/private/${::fqdn}.key",
+      ssl_dhparam         => '/etc/ssl/dhparam.pem',
 
-      add_header       => {
+      add_header          => {
         'Strict-Transport-Security' =>  'max-age=31536000',
       };
 
     'ingress-proxy-redirect':
-      server_name       => ['_'],
-      listen_port       => 80,
-      listen_options    => 'default_server',
-      server_cfg_append => {
+      server_name         => ['_'],
+      listen_port         => 80,
+      listen_options      => 'default_server',
+      ipv6_listen_options => 'default_server',
+      server_cfg_append   => {
         'return' => '301 https://$host$request_uri'
       };
 
@@ -99,12 +101,13 @@ class ocf_kubernetes::master::loadbalancer {
       # This points to the same backend as other requests, but doesn't handle
       # alias redirects or TLS termination. In these cases, TLS is handled by
       # the upstream reverse proxy.
-      server_name      => ['_'],
-      listen_port      => 4080,
-      ipv6_listen_port => 4080,
-      listen_options   => 'default_server',
-      proxy            => 'http://kubernetes',
-      proxy_set_header => [
+      server_name         => ['_'],
+      listen_port         => 4080,
+      ipv6_listen_port    => 4080,
+      listen_options      => 'default_server',
+      ipv6_listen_options => 'default_server',
+      proxy               => 'http://kubernetes',
+      proxy_set_header    => [
         'Host $host',
       ];
   }
