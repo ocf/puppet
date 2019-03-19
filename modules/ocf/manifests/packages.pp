@@ -45,6 +45,9 @@ class ocf::packages {
       # nonfree shareware with "40-day trial"
       'rar',
       'unrar',
+
+      # slows down desktop unsleeps by ~1 minute
+      'avahi-daemon',
     ]:
       ensure => purged;
   }
