@@ -131,7 +131,7 @@ class ocf::extrapackages {
     'python-flake8',
     'python-flask',
     'python-flup',
-    'python-imaging',
+    'python-pil',
     'python-jaxml',
     'python-lxml',
     'python-minimal',
