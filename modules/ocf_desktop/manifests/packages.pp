@@ -46,7 +46,7 @@ class ocf_desktop::packages {
     # utilities
     ['wakeonlan']:;
     # Xorg
-    ['xclip', 'xsel', 'xserver-xorg', 'xscreensaver', 'freerdp-x11']:;
+    ['xclip', 'xsel', 'xserver-xorg', 'xscreensaver', 'rdesktop']:;
   }
 
   if $::lsbdistcodename == 'stretch' {
