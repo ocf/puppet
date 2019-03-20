@@ -121,7 +121,6 @@ class ocf::extrapackages {
     'php-zip',
     'php-dba',
     'pkg-config',
-    'pkpgcounter',
     'postgresql-client',
     'pssh',
     'puppet-lint',
