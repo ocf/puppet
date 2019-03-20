@@ -120,7 +120,7 @@ class ocf::extrapackages {
     'php-soap',
     'php-xml',
     'php-zip',
-    'php7.0-dba', # This isn't available as php-dba unfortunately
+    'php-dba',
     'pkg-config',
     'pkpgcounter',
     'postgresql-client',
