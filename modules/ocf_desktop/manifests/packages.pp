@@ -39,8 +39,6 @@ class ocf_desktop::packages {
     ['firmware-linux', 'nvidia-smi']:;
     # notifications
     ['libnotify-bin', 'notification-daemon']:;
-    # performance improvements
-    ['preload']:;
     # security tools
     ['scdaemon']:;
     # utilities
