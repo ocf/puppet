@@ -114,7 +114,6 @@ class ocf::extrapackages {
     'php-curl',
     'php-gd',
     'php-mbstring',
-    'php-mcrypt',
     'php-mysql',
     'php-sqlite3',
     'php-soap',
