@@ -93,7 +93,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   }
 
   exec { 'pam-auth-update':
-    command     => 'pam-auth-update --package',
+    command     => 'pam-auth-update --package --enable mkhomedir',
     refreshonly => true
   }
 
