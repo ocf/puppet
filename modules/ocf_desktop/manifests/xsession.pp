@@ -2,7 +2,8 @@ class ocf_desktop::xsession {
   $staff_only = lookup('staff_only')
 
   require ocf_desktop::packages
-  include ocf_desktop::xfce
+  include ocf_desktop::gnome
+  include ocf_desktop::gdm
 
   # Xsession configuration
   file {
@@ -76,57 +77,57 @@ class ocf_desktop::xsession {
     require => File['/opt/share/xsession/images'];
   }
 
-  # lightdm configuration
-  # install lightdm as login manager with minimal bloat
-  file {
-    '/etc/lightdm/lightdm.conf':
-      source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm.conf';
-    '/etc/lightdm/lightdm-gtk-greeter.conf':
-      source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm-gtk-greeter.conf';
-    '/etc/X11/default-display-manager':
-      content => "/usr/sbin/lightdm\n";
-    '/etc/lightdm/session-setup':
-      mode   => '0755',
-      source => 'puppet:///modules/ocf_desktop/xsession/lightdm/session-setup';
-    # kill child processes on logout
-    '/etc/lightdm/session-cleanup':
-      mode   => '0755',
-      source => 'puppet:///modules/ocf_desktop/xsession/lightdm/session-cleanup';
-  }
+  # # lightdm configuration
+  # # install lightdm as login manager with minimal bloat
+  # file {
+  #   '/etc/lightdm/lightdm.conf':
+  #     source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm.conf';
+  #   '/etc/lightdm/lightdm-gtk-greeter.conf':
+  #     source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm-gtk-greeter.conf';
+  #   '/etc/X11/default-display-manager':
+  #     content => "/usr/sbin/lightdm\n";
+  #   '/etc/lightdm/session-setup':
+  #     mode   => '0755',
+  #     source => 'puppet:///modules/ocf_desktop/xsession/lightdm/session-setup';
+  #   # kill child processes on logout
+  #   '/etc/lightdm/session-cleanup':
+  #     mode   => '0755',
+  #     source => 'puppet:///modules/ocf_desktop/xsession/lightdm/session-cleanup';
+  # }
 
-  # overwrite greeter strings with OCF ones
-  package {'gettext':;}
+  # # overwrite greeter strings with OCF ones
+  # package {'gettext':;}
 
-  $po = $staff_only ? {
-    true    => 'lightdm-gtk-greeter-staff.po',
-    default => 'lightdm-gtk-greeter.po',
-  }
+  # $po = $staff_only ? {
+  #   true    => 'lightdm-gtk-greeter-staff.po',
+  #   default => 'lightdm-gtk-greeter.po',
+  # }
 
-  file { "/opt/share/xsession/${po}":
-    source  => "puppet:///modules/ocf_desktop/xsession/lightdm/${po}";
-  }
+  # file { "/opt/share/xsession/${po}":
+  #   source  => "puppet:///modules/ocf_desktop/xsession/lightdm/${po}";
+  # }
 
-  exec { 'lightdm-greeter-compile-po':
-    command     => "msgfmt -o /usr/share/locale/en_US/LC_MESSAGES/lightdm-gtk-greeter.mo \
-                    /opt/share/xsession/${po}",
-    subscribe   => File["/opt/share/xsession/${po}"],
-    refreshonly => true,
-    require     => Package['lightdm-gtk-greeter', 'gettext'];
-  }
+  # exec { 'lightdm-greeter-compile-po':
+  #   command     => "msgfmt -o /usr/share/locale/en_US/LC_MESSAGES/lightdm-gtk-greeter.mo \
+  #                   /opt/share/xsession/${po}",
+  #   subscribe   => File["/opt/share/xsession/${po}"],
+  #   refreshonly => true,
+  #   require     => Package['lightdm-gtk-greeter', 'gettext'];
+  # }
 
-  # add pam_trimspaces to lightdm PAM stack
-  augeas { 'lightdm-pam_trimspaces':
-    context => '/files/etc/pam.d/lightdm',
-    changes => [
-      'ins #comment after #comment[1]',
-      'set #comment[2] "Strip leading and trailing space from username"',
-      'ins 01 after #comment[2]',
-      'set 01/type auth',
-      'set 01/control requisite',
-      'set 01/module pam_trimspaces.so',
-    ],
-    onlyif  => 'match *[module = "pam_trimspaces.so"] size == 0';
-  }
+  # # add pam_trimspaces to lightdm PAM stack
+  # augeas { 'lightdm-pam_trimspaces':
+  #   context => '/files/etc/pam.d/lightdm',
+  #   changes => [
+  #     'ins #comment after #comment[1]',
+  #     'set #comment[2] "Strip leading and trailing space from username"',
+  #     'ins 01 after #comment[2]',
+  #     'set 01/type auth',
+  #     'set 01/control requisite',
+  #     'set 01/module pam_trimspaces.so',
+  #   ],
+  #   onlyif  => 'match *[module = "pam_trimspaces.so"] size == 0';
+  # }
 
   # use ocf logo on login screen
   file {

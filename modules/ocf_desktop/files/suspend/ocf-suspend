@@ -86,7 +86,7 @@ def main(argv=None):
         # Enable wake-on-LAN and go to sleep.
         report('going to sleep')
         subprocess.check_call(('/sbin/ethtool', '-s', 'eth0', 'wol', 'g'), stdout=DEVNULL, stderr=DEVNULL)
-        if subprocess.call(('/usr/sbin/pm-suspend'), stdout=DEVNULL, stderr=DEVNULL) != 0:
+        if subprocess.call(('/bin/systemctl start suspend.target'), stdout=DEVNULL, stderr=DEVNULL) != 0:
             report('failed to suspend')
 
 

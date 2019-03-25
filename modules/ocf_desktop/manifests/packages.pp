@@ -25,14 +25,15 @@ class ocf_desktop::packages {
     # desktop helpers
     ['libimage-exiftool-perl']:;
     # display manager
-    ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
+    [#'lightdm', 'lightdm-gtk-greeter', 
+      'libpam-trimspaces']:;
     # FUSE
     ['fuse', 'exfat-fuse']:;
     # games
     ['armagetronad', 'gl-117', 'gnome-games', 'minecraft-launcher', 'redeclipse',
       'wesnoth', 'wesnoth-music']:;
     # graphics/plotting
-    ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
+    ['r-cran-rgl', 'jupyter-qtconsole']:;
     # input method editors
     ['fcitx', 'fcitx-libpinyin', 'fcitx-rime', 'fcitx-hangul', 'fcitx-mozc']:;
     # nonfree packages
@@ -53,8 +54,8 @@ class ocf_desktop::packages {
       ensure => purged;
     # causes the fcitx menu to vanish
     'ayatana-indicator-application':;
-    # meant for personal machines, and has invasive prompt
-    'gnome-keyring':;
+    # old greeter
+    'lightdm':;
     # dependencies conflict with backports
     'remmina':;
     # causes gid conflicts

@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=GNOME
+Exec=gnome-session

@@ -1,6 +1,8 @@
 classes:
     - ocf_desktop
 
+# note: might be able to restrict gdm to tty1
+ocf::auth::ulogin: [[Debian-gdm, LOCAL]]
 ocf::auth::glogin: [[ocf, LOCAL]]
 ocf::auth::gsudo: [ocfstaff]
 
