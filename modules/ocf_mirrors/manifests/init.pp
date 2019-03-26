@@ -15,11 +15,13 @@ class ocf_mirrors {
   include ocf_mirrors::projects::centos_debuginfo
   include ocf_mirrors::projects::debian
   include ocf_mirrors::projects::finnix
+  include ocf_mirrors::projects::freebsd
   include ocf_mirrors::projects::gnu
   include ocf_mirrors::projects::kali
   include ocf_mirrors::projects::kde
   include ocf_mirrors::projects::kde_applicationdata
   include ocf_mirrors::projects::manjaro
+  include ocf_mirrors::projects::openbsd
   include ocf_mirrors::projects::parrot
   include ocf_mirrors::projects::puppetlabs
   include ocf_mirrors::projects::qt
