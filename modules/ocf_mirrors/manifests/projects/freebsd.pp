@@ -11,7 +11,8 @@ class ocf_mirrors::projects::freebsd {
 
   ocf_mirrors::monitoring { 'freebsd':
     type          => 'unix_timestamp',
-    upstream_host => 'mirrors.mit.edu',
+    upstream_host => 'mirror.math.princeton.edu',
+    upstream_path => '/pub/FreeBSD',
     ts_path       => 'TIMESTAMP';
   }
 
