@@ -24,7 +24,7 @@ class ocf_puppet::puppetboard {
       $::hostname,
       $::fqdn,
     ],
-    proxy          => 'http://lb.ocf.berkeley.edu:10009',
+    proxy          => 'http://lb-kubernetes.ocf.berkeley.edu:4080',
     ssl            => true,
   }
 }
