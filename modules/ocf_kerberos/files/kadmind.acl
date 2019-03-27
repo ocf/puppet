@@ -20,6 +20,7 @@ mcint/admin@OCF.BERKELEY.EDU            all,get-keys
 mdcha/admin@OCF.BERKELEY.EDU            all,get-keys
 shasan/admin@OCF.BERKELEY.EDU           all,get-keys
 wporr/admin@OCF.BERKELEY.EDU            all,get-keys
+yichizh/admin@OCF.BERKELEY.EDU          all,get-keys
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
@@ -43,6 +44,7 @@ mcint/root@OCF.BERKELEY.EDU             change-password                         
 mdcha/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
 shasan/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 wporr/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
+yichizh/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 
 # create
 create/admin@OCF.BERKELEY.EDU           add,get,change-password                 *@OCF.BERKELEY.EDU
