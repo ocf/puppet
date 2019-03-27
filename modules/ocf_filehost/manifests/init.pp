@@ -15,19 +15,19 @@ class ocf_filehost(
       hosts   => ['admin', 'www', 'dev-www', 'ssh', 'dev-ssh', 'apphost', 'dev-apphost'];
 
   '/opt/homes/services/discourse':
-      options => ['rw'],
+      options => ['rw', 'no_subtree_check'],
       hosts   => lookup('kubernetes::worker_nodes');
 
   '/opt/homes/services/mastodon':
-      options => ['rw'],
+      options => ['rw', 'no_subtree_check'],
       hosts   => lookup('kubernetes::worker_nodes');
 
   '/opt/homes/services/kanboard/data':
-      options => ['rw'],
+      options => ['rw', 'no_subtree_check'],
       hosts   => lookup('kubernetes::worker_nodes');
 
   '/opt/homes/services/kanboard/plugins':
-      options => ['rw'],
+      options => ['rw', 'no_subtree_check'],
       hosts   => lookup('kubernetes::worker_nodes');
 
   }
