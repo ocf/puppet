@@ -11,7 +11,7 @@ class ocf_mirrors::projects::openbsd {
 
   ocf_mirrors::monitoring { 'openbsd':
     type          => 'unix_timestamp',
-    upstream_host => 'mirrors.mit.edu',
+    upstream_host => 'ftp.openbsd.org',
     upstream_path => '/pub/OpenBSD',
     ts_path       => 'timestamp';
   }
