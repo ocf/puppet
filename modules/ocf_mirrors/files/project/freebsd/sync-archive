@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -azH --safe-links --delete-after --delay-updates --no-motd \
+ rsync://mirrors.rit.edu/FreeBSD /opt/mirrors/ftp/freebsd

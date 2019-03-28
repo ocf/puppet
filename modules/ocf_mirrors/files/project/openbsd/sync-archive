@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -azH --safe-links --delete-after --delay-updates --no-motd \
+ rsync://ftp3.usa.openbsd.org/ftp /opt/mirrors/ftp/openbsd
