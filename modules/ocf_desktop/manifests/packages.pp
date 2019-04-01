@@ -36,7 +36,7 @@ class ocf_desktop::packages {
     # input method editors
     ['fcitx', 'fcitx-libpinyin', 'fcitx-rime', 'fcitx-hangul', 'fcitx-mozc']:;
     # nonfree packages
-    ['firmware-linux', 'nvidia-smi']:;
+    ['firmware-linux']:;
     # notifications
     ['libnotify-bin', 'notification-daemon']:;
     # performance improvements
