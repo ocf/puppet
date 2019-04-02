@@ -10,10 +10,12 @@ class ocf::packages::kubernetes::apt {
     # NOTE: we can't use kubernetes-stretch because kubelet isn't included.
     release  => 'kubernetes-xenial',
   }
+
   # This comes from the local variable of the same name in
   # github.com/puppetlabs/puppetlabs-kubernetes/blob/master/manifests/packages.pp,
   # which unfortunately is not exposed.
   $kube_packages = ['kubelet', 'kubectl', 'kubeadm']
+  $kube_package_version = lookup('kubernetes::kubernetes_package_version')
   # Pins each package in $kube_packages to the hiera-specified version,
   # so it won't get upgraded automatically by apt.
   file { '/etc/apt/preferences.d/kubernetes.pref':
