@@ -1,4 +1,6 @@
 # This file is managed by Puppet. DO NOT EDIT.
+# Pins each package in $kube_packages to the hiera-specified version,
+# so it won't get upgraded automatically by apt.
 <% @kube_packages.each do |pkg| -%>
 Package: <%= pkg %>
 Pin: version <%= scope().call_function('hiera', ['kubernetes::kubernetes_package_version']) %>

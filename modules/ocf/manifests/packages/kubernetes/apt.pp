@@ -14,6 +14,8 @@ class ocf::packages::kubernetes::apt {
   # github.com/puppetlabs/puppetlabs-kubernetes/blob/master/manifests/packages.pp,
   # which unfortunately is not exposed.
   $kube_packages = ['kubelet', 'kubectl', 'kubeadm']
+  # Pins each package in $kube_packages to the hiera-specified version,
+  # so it won't get upgraded automatically by apt.
   file { '/etc/apt/preferences.d/kubernetes.pref':
     ensure  => file,
     content => template('ocf/apt/kubernetes-pin.pref.erb'),
