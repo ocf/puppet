@@ -10,4 +10,12 @@ class ocf::packages::kubernetes::apt {
     # NOTE: we can't use kubernetes-stretch because kubelet isn't included.
     release  => 'kubernetes-xenial',
   }
+  # This comes from the local variable of the same name in
+  # github.com/puppetlabs/puppetlabs-kubernetes/blob/master/manifests/packages.pp,
+  # which unfortunately is not exposed.
+  $kube_packages = ['kubelet', 'kubectl', 'kubeadm']
+  file { '/etc/apt/preferences.d/kubernetes.pref':
+    ensure  => file,
+    content => template('ocf/apt/kubernetes-pin.pref.erb'),
+  }
 }
