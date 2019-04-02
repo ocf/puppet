@@ -21,7 +21,7 @@ class ocf_dhcp {
       changes => [
         'rm INTERFACESv4',
         'rm INTERFACESv6',
-        "set INTERFACES '\"${ocf::networking::iface}\"'",
+        "set INTERFACES '\"${ocf::networking::logical_primary_interface}\"'",
       ],
       require => Package['isc-dhcp-server'];
   }
