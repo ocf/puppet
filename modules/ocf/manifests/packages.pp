@@ -96,6 +96,7 @@ class ocf::packages {
       'man-db',
       'moreutils',
       'mtr',
+      'ncdu',
       'net-tools',
       'netcat-openbsd',
       'parted',
