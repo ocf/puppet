@@ -1,6 +1,12 @@
 class ocf_kubernetes::master::loadbalancer {
   include ocf::firewall::allow_web
 
+  $extra_aliases = {
+    'pma'      => ['phpmyadmin'],
+    'metabase' => ['mb'],
+    'sourcegraph' => ['sg'],
+  }
+
   $kubernetes_worker_nodes = lookup('kubernetes::worker_nodes')
 
   # At any given time, only one kubernetes master will hold
@@ -114,16 +120,32 @@ class ocf_kubernetes::master::loadbalancer {
 
   # Redirect from "cname.ocf.io" to "cname.ocf.berkeley.edu" for each cname.
   $cnames.each |$domain| {
+    $main_fqdns = prefix(['.ocf.io', ''], $domain)
+
+    # Get the list of aliases for this name, or an empty list if there are none
+    $extra_names = flatten([$extra_aliases[$domain]]).filter |$val| {
+      $val =~ NotUndef
+    }
+
+    # Append .ocf.berkeley.edu, .ocf.io, and empty string for each of the extra aliases
+    $extra_fqdns = flatten($extra_names.map |$name| {
+      prefix(['.ocf.berkeley.edu', '.ocf.io', ''], $name)
+    })
+
+    $redir_fqdns = $main_fqdns + $extra_fqdns
+
+    notify {$redir_fqdns:}
+
     nginx::resource::server {
       "${domain}-http-direct":
-        server_name       => prefix(['.ocf.io', ''], $domain),
+        server_name       => $redir_fqdns,
         listen_port       => 80,
         server_cfg_append => {
           'return' => "301 https://${domain}.ocf.berkeley.edu\$request_uri"
         };
 
       "${domain}-alias-redirect":
-        server_name       => ["${domain}.ocf.io"],
+        server_name       => $redir_fqdns,
         listen_port       => 443,
         ssl               => true,
         ssl_cert          => "/etc/ssl/private/${::fqdn}.bundle",
