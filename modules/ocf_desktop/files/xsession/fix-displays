@@ -30,8 +30,19 @@ if __name__ == '__main__':
     # |    \------+ \-------/    \------+    \------+  |
     # +------------------------------------------------+
 
+    is_daisy_chaining = any(monitor.endswith('.8') for monitor in monitors)
+    if is_daisy_chaining:
+        sorted_monitors = list(sorted(monitors, reverse=True))
+    else:
+        sorted_monitors = list(sorted(monitors))
+
     prev = None
-    for monitor in sorted(monitors):
+    for monitor in sorted_monitors:
         if prev:
             subprocess.check_call(['xrandr', '--output', monitor, '--right-of', prev])
         prev = monitor
+
+    if is_daisy_chaining:
+        # Disable power saving, this is necessary for some reason
+        subprocess.check_call(['xset', 'dpms', 'force', 'off'])
+        subprocess.check_call(['xset', 'dpms', 'force', 'on'])
