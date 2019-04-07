@@ -31,7 +31,7 @@ class ocf_filehost(
       hosts   => lookup('kubernetes::worker_nodes');
 
   '/opt/homes/services/nfs-provisioner':
-      options => ['rw', 'no_subtree_check'],
+      options => ['rw', 'no_subtree_check', 'no_root_squash'],
       hosts   => lookup('kubernetes::worker_nodes');
 
   }
