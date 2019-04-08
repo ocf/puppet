@@ -1,0 +1,11 @@
+#!/bin/bash -eu
+# Update addresses that are allowed to send mail to protected addresses.
+
+set -o pipefail
+
+# staff
+getent group ocfstaff | cut -d: -f4 | \
+	sed 's/,\|$/@ocf.berkeley.edu OK\n/g' \
+	> /etc/postfix/ocf/staff-access
+
+/usr/sbin/postmap /etc/postfix/ocf/staff-access

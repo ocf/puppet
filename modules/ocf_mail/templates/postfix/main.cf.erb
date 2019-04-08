@@ -131,14 +131,23 @@ smtpd_sender_restrictions =
 
 # restrictions on recipient addresses
 # reject bad users/auth, non-existant domains, open relay
+# if going to an internal/external mailing list (staff@ or
+# hpc-users@), check that sender is staff
 smtpd_recipient_restrictions =
     check_recipient_access hash:/etc/postfix/ocf/sorry-postfix,
     check_recipient_access hash:/etc/postfix/ocf/nomail-in-postfix,
+    check_recipient_access texthash:/etc/postfix/ocf/protected-destinations,
     permit_sasl_authenticated,
     reject_non_fqdn_recipient,
     reject_unknown_recipient_domain,
     permit_mynetworks,
     reject_unauth_destination,
+
+# restrictions on internal/external mailing lists
+smtpd_restriction_classes = staff_only
+staff_only =
+    check_sender_access hash:/etc/postfix/ocf/staff-access,
+    reject
 
 # restrictions before DATA command
 # MAILER-DAEMON should not have multiple recipients, do not speak too early
