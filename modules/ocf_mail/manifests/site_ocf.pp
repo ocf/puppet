@@ -20,6 +20,15 @@ class ocf_mail::site_ocf {
         Service['postfix']
       ];
 
+    'update-access':
+      command => '/usr/local/sbin/update-access',
+      user    => root,
+      minute  => '*/15',
+      require => [
+        File['/usr/local/sbin/update-access'],
+        Service['postfix']
+      ];
+
     'update-nomail-hashes':
       command => '/usr/local/sbin/update-nomail-hashes',
       user    => root,
@@ -72,6 +81,9 @@ class ocf_mail::site_ocf {
     '/etc/postfix/ocf/helo_access':
       source  => 'puppet:///modules/ocf_mail/site_ocf/postfix/helo_access',
       require => Service['postfix'];
+    '/etc/postfix/ocf/protected-destinations':
+      source  => 'puppet:///modules/ocf_mail/site_ocf/postfix/protected-destinations',
+      require => Service['postfix'];
 
     # aliases and hashes
     '/etc/aliases':
@@ -81,6 +93,9 @@ class ocf_mail::site_ocf {
     '/usr/local/sbin/update-aliases':
       mode   => '0755',
       source => 'puppet:///modules/ocf_mail/site_ocf/update-aliases';
+    '/usr/local/sbin/update-access':
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_mail/site_ocf/update-access';
     '/usr/local/sbin/update-nomail-hashes':
       mode   => '0755',
       source => 'puppet:///modules/ocf_mail/site_ocf/update-nomail-hashes';

@@ -32,7 +32,7 @@ site-manager: sm
 owner-sm: officers
 
 staff: staff-current
-wheel: staff-current
+wheel: officers
 owner-staff: wheel
 
 # request tracker
