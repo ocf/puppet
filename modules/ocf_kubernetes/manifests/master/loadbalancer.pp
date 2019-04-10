@@ -35,10 +35,6 @@ class ocf_kubernetes::master::loadbalancer {
     vip => $vip,
   }
 
-  # Redirect from "cname.ocf.io" to "cname.ocf.berkeley.edu" for each cname.
-  # Don't include wildcard entries.
-  $cnames = ldap_attr($vip, 'dnsCname', true).filter |$cname| { $cname !~ /\*/ }
-
   package { ['nginx-extras']:; }
 
   class { 'nginx':
@@ -112,31 +108,43 @@ class ocf_kubernetes::master::loadbalancer {
       ];
   }
 
-  # Redirect from "cname.ocf.io" to "cname.ocf.berkeley.edu" for each cname.
-  $cnames.each |$domain| {
-    nginx::resource::server {
-      "${domain}-http-direct":
-        server_name       => prefix(['.ocf.io', ''], $domain),
-        listen_port       => 80,
-        server_cfg_append => {
-          'return' => "301 https://${domain}.ocf.berkeley.edu\$request_uri"
-        };
+  ocf_kubernetes::master::loadbalancer::http_redirect { 'grafana':
+    server_name    => 'grafana.ocf.berkeley.edu',
+    server_aliases => ['grafana', 'grafana.ocf.io'],
+  }
 
-      "${domain}-alias-redirect":
-        server_name       => ["${domain}.ocf.io"],
-        listen_port       => 443,
-        ssl               => true,
-        ssl_cert          => "/etc/ssl/private/${::fqdn}.bundle",
-        ssl_key           => "/etc/ssl/private/${::fqdn}.key",
-        ssl_dhparam       => '/etc/ssl/dhparam.pem',
+  ocf_kubernetes::master::loadbalancer::http_redirect { 'kanboard':
+    server_name    => 'kanboard.ocf.berkeley.edu',
+    server_aliases => ['kanboard', 'kanboard.ocf.io'],
+  }
 
-        add_header        => {
-          'Strict-Transport-Security' =>  'max-age=31536000',
-        },
+  ocf_kubernetes::master::loadbalancer::http_redirect { 'labmap':
+    server_name    => 'labmap.ocf.berkeley.edu',
+    server_aliases => ['labmap', 'labmap.ocf.io'],
+  }
 
-        server_cfg_append => {
-          'return' => "301 https://${domain}.ocf.berkeley.edu\$request_uri"
-        };
-    }
+  ocf_kubernetes::master::loadbalancer::http_redirect { 'mastodon':
+    server_name    => 'mastodon.ocf.berkeley.edu',
+    server_aliases => ['mastodon', 'mastodon.ocf.io'],
+  }
+
+  ocf_kubernetes::master::loadbalancer::http_redirect { 'pma':
+    server_name    => 'pma.ocf.berkeley.edu',
+    server_aliases => ['pma', 'pma.ocf.io', 'phpmyadmin', 'phpmyadmin.ocf.io', 'phpmyadmin.ocf.berkeley.edu'],
+  }
+
+  ocf_kubernetes::master::loadbalancer::http_redirect { 'metabase':
+    server_name    => 'metabase.ocf.berkeley.edu',
+    server_aliases => ['metabase', 'metabase.ocf.io'],
+  }
+
+  ocf_kubernetes::master::loadbalancer::http_redirect { 'rt':
+    server_name    => 'rt.ocf.berkeley.edu',
+    server_aliases => ['rt', 'rt.ocf.io'],
+  }
+
+  ocf_kubernetes::master::loadbalancer::http_redirect { 'templates':
+    server_name    => 'templates.ocf.berkeley.edu',
+    server_aliases => ['templates', 'templates.ocf.io'],
   }
 }
