@@ -92,5 +92,11 @@ class ocf_filehost(
       subscribe => [Concat['/etc/exports'], Mount['/opt/homes']],
   }
 
+  # This service is required for remote file locking in nfsv3. For some reason it doesn't start automatically with nfs-server
+  service { 'rpc-statd':
+    ensure => 'running',
+    enable => true,
+  }
+
   include ocf::firewall::nfs
 }
