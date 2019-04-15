@@ -32,53 +32,53 @@ site-manager: sm
 owner-sm: officers
 
 staff: staff-current
-wheel: officers
-owner-staff: wheel
+wheel: staff-current
+owner-staff: root
 
 # request tracker
 bod: "|/usr/bin/rt-mailgate --queue 'bod' --action correspond --url https://rt.ocf.berkeley.edu"
 bod-comment: "|/usr/bin/rt-mailgate --queue 'bod' --action comment --url https://rt.ocf.berkeley.edu"
-owner-bod: wheel
+owner-bod: root
 
 bureaucracy: "|/usr/bin/rt-mailgate --queue 'bureaucracy' --action correspond --url https://rt.ocf.berkeley.edu"
 bureaucracy-comment: "|/usr/bin/rt-mailgate --queue 'bureaucracy' --action comment --url https://rt.ocf.berkeley.edu"
-owner-bureaucracy: wheel
+owner-bureaucracy: root
 
 devnull: "|/usr/bin/rt-mailgate --queue 'devnull' --action correspond --url https://rt.ocf.berkeley.edu"
 devnull-comment: "|/usr/bin/rt-mailgate --queue 'devnull' --action comment --url https://rt.ocf.berkeley.edu"
-owner-devnull: wheel
+owner-devnull: root
 
 help: "|/usr/bin/rt-mailgate --queue 'help' --action correspond --url https://rt.ocf.berkeley.edu"
 help-comment: "|/usr/bin/rt-mailgate --queue 'help' --action comment --url https://rt.ocf.berkeley.edu"
-owner-help: wheel
+owner-help: root
 
 hostmaster: "|/usr/bin/rt-mailgate --queue 'hostmaster' --action correspond --url https://rt.ocf.berkeley.edu"
 hostmaster-comment: "|/usr/bin/rt-mailgate --queue 'hostmaster' --action comment --url https://rt.ocf.berkeley.edu"
-owner-hostmaster: wheel
+owner-hostmaster: root
 
 lending: "|/usr/bin/rt-mailgate --queue 'lending' --action correspond --url https://rt.ocf.berkeley.edu"
 lending-comment: "|/usr/bin/rt-mailgate --queue 'lending' --action comment --url https://rt.ocf.berkeley.edu"
-owner-lending: wheel
+owner-lending: root
 
 operations: "|/usr/bin/rt-mailgate --queue 'operations' --action correspond --url https://rt.ocf.berkeley.edu"
 operations-comment: "|/usr/bin/rt-mailgate --queue 'operations' --action comment --url https://rt.ocf.berkeley.edu"
-owner-operations: wheel
+owner-operations: root
 
 projects: "|/usr/bin/rt-mailgate --queue 'projects' --action correspond --url https://rt.ocf.berkeley.edu"
 projects-comment: "|/usr/bin/rt-mailgate --queue 'projects' --action comment --url https://rt.ocf.berkeley.edu"
-owner-projects: wheel
+owner-projects: root
 
 security: "|/usr/bin/rt-mailgate --queue 'security' --action correspond --url https://rt.ocf.berkeley.edu"
 security-comment: "|/usr/bin/rt-mailgate --queue 'security' --action comment --url https://rt.ocf.berkeley.edu"
-owner-security: wheel
+owner-security: root
 
 techtalks: "|/usr/bin/rt-mailgate --queue 'techtalks' --action correspond --url https://rt.ocf.berkeley.edu"
 techtalks-comment: "|/usr/bin/rt-mailgate --queue 'techtalks' --action comment --url https://rt.ocf.berkeley.edu"
-owner-techtalks: wheel
+owner-techtalks: root
 
 todo: "|/usr/bin/rt-mailgate --queue 'todo' --action correspond --url https://rt.ocf.berkeley.edu"
 todo-comment: "|/usr/bin/rt-mailgate --queue 'todo' --action comment --url https://rt.ocf.berkeley.edu"
-owner-todo: wheel
+owner-todo: root
 
 # accounts only used for sending
 atool: /dev/null
