@@ -67,6 +67,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/join$ https://www.ocf.berkeley.edu/account/register/ [R]'},
       {rewrite_rule => '^/joinstaff$ https://docs.google.com/presentation/d/1az5nFcRBa2d2U8p12ijntcEhZzNM8Sv6mxEjTrv4MXg/edit [R]'},
       {rewrite_rule => '^/k$ https://kanboard.ocf.berkeley.edu/ [R]'},
+      {rewrite_rule => '^/k/a$ https://kanboard.ocf.berkeley.edu/?controller=BoardViewController&action=show&project_id=2 [R]'},
       {rewrite_rule => '^/k/([0-9]+)$ https://kanboard.ocf.berkeley.edu/?controller=TaskViewController&action=show&task_id=$1 [R]'},
       {rewrite_rule => '^/register$ https://www.ocf.berkeley.edu/account/register/ [R]'},
       {rewrite_rule => '^/reserve$ https://www.ocf.berkeley.edu/docs/services/lab/lab-reservation-policy/ [R]'},
