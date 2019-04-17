@@ -195,7 +195,6 @@ class ocf::extrapackages {
     'ruby-mysql2',
     'ruby-ronn',
     'ruby-sqlite3',
-    'rubygem-kubernetes-deploy',
     'scala',
     'screenfetch',
     'shellcheck',
