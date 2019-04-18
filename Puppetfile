@@ -12,7 +12,7 @@ mod 'puppet-nginx',                    '0.16.0'
 mod 'puppet-archive',                  '3.2.0' # Dependency of puppet-prometheus
 mod 'puppet-prometheus',               '6.2.0'
 mod 'puppetlabs-apache',               '3.1.0'
-mod 'puppetlabs-apt',                  '4.5.1'
+mod 'puppetlabs-apt',                  '6.3.0'
 mod 'puppetlabs-concat',               '4.2.1'
 mod 'puppetlabs-firewall',             '1.12.0'
 mod 'puppetlabs-hocon',                '1.0.0'
