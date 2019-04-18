@@ -20,7 +20,7 @@ class ocf_irc::webirc {
       $::hostname,
       $::fqdn,
     ],
-    proxy          => 'http://lb.ocf.berkeley.edu:10008',
+    proxy          => 'http://lb-kubernetes.ocf.berkeley.edu:4080',
     ssl            => true,
   }
 }
