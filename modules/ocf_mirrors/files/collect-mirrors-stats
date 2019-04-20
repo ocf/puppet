@@ -150,8 +150,7 @@ if __name__ == '__main__':
 
     # ...and rsync
     for log_filename in rsync_log_files:
-        # print("rsync processing", log_filename)
-        rx, tx = process_rsync_log(log_filename)
+        tx, rx = process_rsync_log(log_filename)
         projects[log_filename.stem]['up'] += rx
         projects[log_filename.stem]['down'] += tx
 
