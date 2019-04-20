@@ -56,6 +56,9 @@ class ocf_mirrors {
       source => 'puppet:///modules/ocf_mirrors/README.html',
       owner  => mirrors,
       group  => mirrors;
+
+    '/var/log/rsync':
+      ensure => directory;
   }
 
   class {
@@ -181,12 +184,12 @@ class ocf_mirrors {
     mode   => '0755',
   }
 
-  file { '/usr/local/sbin/process-mirrors-logs':
-    source => 'puppet:///modules/ocf_mirrors/process-mirrors-logs',
+  file { '/usr/local/sbin/collect-mirrors-stats':
+    source => 'puppet:///modules/ocf_mirrors/collect-mirrors-stats',
     mode   => '0755',
   } ->
   cron { 'mirrors-stats':
-    command     => '/usr/local/sbin/process-mirrors-logs --quiet',
+    command     => '/usr/local/sbin/collect-mirrors-stats --quiet',
     minute      => 0,
     hour        => 0,
     environment => ["OCFSTATS_PWD=${ocfstats_password}"];
