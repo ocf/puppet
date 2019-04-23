@@ -59,6 +59,16 @@ class ocf_kubernetes::master::loadbalancer {
       members => $upstream_workers
   }
 
+  # websocket support
+  # see https://www.nginx.com/blog/websocket-nginx/
+  nginx::resource::map { 'connection_upgrade':
+    string   => '$http_upgrade',
+    default  => upgrade,
+    mappings => {
+      "''"    => close,
+    }
+  }
+
   nginx::resource::server {
     'ingress-proxy':
       server_name         => ['_'],
@@ -68,6 +78,8 @@ class ocf_kubernetes::master::loadbalancer {
         'X-Forwarded-For $proxy_add_x_forwarded_for',
         'X-Forwarded-Proto $scheme',
         'X-Real-IP $remote_addr',
+        'Upgrade $http_upgrade',
+        'Connection $connection_upgrade',
       ],
 
       listen_port         => 443,
