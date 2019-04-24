@@ -10,7 +10,18 @@ class ocf_desktop::suspend {
     '/etc/acpi/events/powerbtn-acpi-support':
       source  => 'puppet:///modules/ocf_desktop/suspend/powerbtn-acpi-support',
       require => Package['acpi-support-base'];
+
+    # place files to handle daisy chain sleep issue
+    '/usr/lib/pm-utils/sleep.d/999fix-daisy':
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_desktop/suspend/fix-daisy';
+
+    # place files to handle daisy chain sleep issue
+    '/usr/lib/pm-utils/power.d/fix-daisy':
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_desktop/suspend/fix-daisy';
   }
+
 
   package {
     # ACPI support
