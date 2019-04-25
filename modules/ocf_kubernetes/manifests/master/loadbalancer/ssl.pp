@@ -18,5 +18,7 @@ class ocf_kubernetes::master::loadbalancer::ssl(
     domains => [$::fqdn] + flatten($vfqdns),
     owner   => $owner,
     group   => $group,
-  }
+  } ~>
+  # Restart nginx if any cert changes occur
+  Class['Nginx::Service']
 }
