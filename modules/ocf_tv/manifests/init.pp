@@ -14,12 +14,12 @@ class ocf_tv {
 
   package {
     [
-      'python3-usb',
       'arandr',
       'ffmpeg',
       'feh',
       'i3',
       'nodm',
+      'python3-usb',
       'vlc',
       'x11vnc',
       'xinit',
