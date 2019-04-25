@@ -14,6 +14,7 @@ class ocf_tv {
 
   package {
     [
+      'python3-usb',
       'arandr',
       'ffmpeg',
       'feh',
