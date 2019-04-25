@@ -19,6 +19,7 @@ class ocf_tv {
       'feh',
       'i3',
       'nodm',
+      'python3-usb',
       'vlc',
       'x11vnc',
       'xinit',
