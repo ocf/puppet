@@ -11,12 +11,15 @@ class ocf_desktop::suspend {
       source  => 'puppet:///modules/ocf_desktop/suspend/powerbtn-acpi-support',
       require => Package['acpi-support-base'];
 
-    # place files to handle daisy chain sleep issue
+    # place files to handle daisy chain sleep issue:
+    # when using daisy chaining on nvidia graphics card on debian,
+    # primary monitor is on but the rest of the daisy chained
+    # monitors are asleep, and does not wake up.
     '/usr/lib/pm-utils/sleep.d/999fix-daisy':
       mode   => '0755',
       source => 'puppet:///modules/ocf_desktop/suspend/fix-daisy';
 
-    # place files to handle daisy chain sleep issue
+    # place files to handle daisy chain sleep issue as described above
     '/usr/lib/pm-utils/power.d/fix-daisy':
       mode   => '0755',
       source => 'puppet:///modules/ocf_desktop/suspend/fix-daisy';
