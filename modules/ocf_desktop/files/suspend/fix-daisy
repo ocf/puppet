@@ -7,3 +7,5 @@
 # below code forces the monitors to wake up
 
 xset dpms force off
+xset dpms force on
+xset dpms 0 0 0
