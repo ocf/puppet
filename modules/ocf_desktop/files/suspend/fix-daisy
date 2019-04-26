@@ -1,7 +1,4 @@
 #!/bin/bash
 
-case "$1" in
-    resume)
-        xset dpms force off
-        xset dpms force on
-esac
+xset dpms force off
+xset dpms force on
