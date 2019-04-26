@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# when using daisy chaining on nvidia graphics card on debian,
+# primary monitor is on but the rest of the daisy chained
+# monitors are asleep, and does not wake up.
+#
+# below code forces the monitors to wake up
+
+xset dpms force off
+xset dpms force on
+xset dpms 0 0 0

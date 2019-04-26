@@ -10,7 +10,23 @@ class ocf_desktop::suspend {
     '/etc/acpi/events/powerbtn-acpi-support':
       source  => 'puppet:///modules/ocf_desktop/suspend/powerbtn-acpi-support',
       require => Package['acpi-support-base'];
+
+    # script to handle daisy chained monitors not waking up
+    '/usr/lib/pm-utils/sleep.d/999fix-daisy':
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_desktop/suspend/fix-daisy';
+
+    # script to handle daisy chained monitors not waking up
+    '/usr/lib/pm-utils/power.d/fix-daisy':
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_desktop/suspend/fix-daisy';
+
+    # script to handle daisy chained monitors not waking up
+    '/usr/local/bin/fix-daisy':
+      mode   => '0755',
+      source => 'puppet:///modules/ocf_desktop/suspend/fix-daisy';
   }
+
 
   package {
     # ACPI support
