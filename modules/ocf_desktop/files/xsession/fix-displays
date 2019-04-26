@@ -58,6 +58,4 @@ if __name__ == '__main__':
         prev = monitor
 
     if daisy_chained:
-        # Disable power saving, this is necessary for some reason
-        subprocess.check_call(['xset', 'dpms', 'force', 'off'])
-        subprocess.check_call(['xset', 'dpms', 'force', 'on'])
+        subprocess.check_call(['fix-daisy'])
