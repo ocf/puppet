@@ -1,4 +1,7 @@
 #!/bin/bash
 
-xset dpms force off
-xset dpms force on
+case "$1" in
+    resume)
+        xset dpms force off
+        xset dpms force on
+esac
