@@ -14,6 +14,7 @@ import argparse
 import sys
 
 import yaml
+from ldap3.utils.conv import escape_filter_chars
 from ocflib.infra.hosts import hostname_from_domain
 from ocflib.infra.hosts import hosts_by_filter
 
@@ -27,7 +28,11 @@ def main():
     args = parser.parse_args()
 
     hostname = hostname_from_domain(args.hostname)
-    search = hosts_by_filter('(&(objectclass=puppetClient)(cn={}))'.format(hostname))
+    search = hosts_by_filter(
+        '(&(objectclass=puppetClient)(cn={}))'.format(
+            escape_filter_chars(hostname)
+        )
+    )
 
     if len(search) == 1:
         host = search[0]
