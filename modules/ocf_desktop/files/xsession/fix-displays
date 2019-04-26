@@ -11,6 +11,9 @@ def get_monitors():
 
 
 def is_daisy_chaining(monitors):
+    # DisplayPort "daisy chaining" utilizes Multi-Stream-Transport feature
+    # that enables several video streams to be carried over single DP port
+    #
     # Check if using daisy chain, if a monitor is daisy chained, the numbering
     # of monitors follows this format (empirically observed, may break if nvidia
     # changes something in the future).
