@@ -3,3 +3,4 @@ ocf::packages::docker::image_max_age: '672h'
 
 classes:
     - ocf_admin
+    - ocf_ocfweb::dev_config
