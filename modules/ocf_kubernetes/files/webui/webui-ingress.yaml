@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: webui-ingress
+  namespace: kube-system
+spec:
+  rules:
+    - host: kube.ocf.berkeley.edu
+      http:
+        paths:
+          - backend:
+              serviceName: kubernetes-dashboard
+              servicePort: 80
+
+    - host: kubeadmin.ocf.berkeley.edu
+      http:
+        paths:
+          - backend:
+              serviceName: kubernetes-dashboard
+              servicePort: 80

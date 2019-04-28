@@ -31,6 +31,8 @@ repos:
     -   id: check-xml
         exclude: ^modules/ocf_desktop/files/pam/.*\.xml$
     -   id: check-yaml
+        args:
+        -   --allow-multiple-documents
     -   id: debug-statements
     -   id: double-quote-string-fixer
     -   id: detect-private-key
