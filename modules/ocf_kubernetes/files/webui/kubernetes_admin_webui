@@ -1,0 +1,13 @@
+# Restrict access to the Kubernetes WebUI to ocfroot users only.
+# We do this because it allows some very destructive actions.
+#
+# Note that this PAM service is used only for authentication to the nginx
+# proxy. The WebUI does not support PAM itself-- instead, we pass a bearer token
+# which authenticates to an admin user.
+
+@include common-auth
+@include common-account
+@include common-password
+@include common-session
+
+auth    sufficient    pam_listfile.so onerr=fail item=group sense=allow file=/opt/share/kubernetes-admin-groups

@@ -15,6 +15,7 @@ class ocf_kubernetes::master {
   include ocf::packages::docker_kubernetes
   include ocf::packages::kubernetes
   include ocf_kubernetes::master::loadbalancer
+  include ocf_kubernetes::master::webui
 
   $etcd_version = lookup('kubernetes::etcd_version')
   $etcd_archive = "etcd-v${etcd_version}-linux-amd64.tar.gz"
@@ -36,6 +37,10 @@ class ocf_kubernetes::master {
   # Passwords for the static token file
   # https://kubernetes.io/docs/reference/access-authn-authz/authentication/#static-token-file
   $ocf_jenkins_deploy_token = lookup('kubernetes::jenkins_token')
+
+  # Used for dashboard users
+  $ocf_admin_token = lookup('kubernetes::admin_token')
+  $ocf_viewer_token = lookup('kubernetes::viewer_token')
 
   file {
     '/etc/ocf-kubernetes':
