@@ -60,7 +60,7 @@ apache::server_tokens: Minor
 kubernetes::kubernetes_version: 1.14.1
 kubernetes::kubernetes_package_version: 1.14.1-00
 kubernetes::docker_version: 18.06.2~ce~3-0~debian # 18.06.02 is the highest supported version to work with kubernetes
-kubernetes::etcd_version: 3.2.25
+kubernetes::etcd_version: 3.3.10
 kubernetes::container_runtime: docker
 # This is the file used to bootstrap flannel, which facilitates cluster networking.
 # It is one of the first things deployed by the master via kubectl create.
