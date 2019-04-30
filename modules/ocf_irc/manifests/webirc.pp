@@ -5,7 +5,7 @@ class ocf_irc::webirc {
     'prod' => 'irc.ocf.berkeley.edu',
   }
 
-  # Nginx is used to proxy to Marathon and to supply a HTTP -> HTTPS redirect
+  # Nginx is used to proxy to Kubernetes and to supply a HTTP -> HTTPS redirect
   class { 'nginx':
     manage_repo  => false,
     confd_purge  => true,
@@ -20,7 +20,7 @@ class ocf_irc::webirc {
       $::hostname,
       $::fqdn,
     ],
-    proxy          => 'http://lb.ocf.berkeley.edu:10008',
+    proxy          => 'http://lb-kubernetes.ocf.berkeley.edu:4080',
     ssl            => true,
   }
 }
