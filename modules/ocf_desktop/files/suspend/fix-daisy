@@ -6,6 +6,11 @@
 #
 # below code forces the monitors to wake up
 
-xset dpms force off
-xset dpms force on
-xset dpms 0 0 0
+# only run xset commands if there are more than one monitors
+if (( $(xrandr | grep -ce '\sconnected') > 1 ))
+then
+    echo "42"
+    xset dpms force off
+    xset dpms force on
+    xset dpms 0 0 0
+fi
