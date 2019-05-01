@@ -10,3 +10,6 @@
 *.swp
 
 /venv
+
+# ignore Puppet resource types
+/.resource_types/
