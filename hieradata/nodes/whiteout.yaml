@@ -1,4 +1,4 @@
 classes:
     - ocf_printhost
 
-prometheus::node_exporter::extra_options: "--collector.textfile.directory /var/local/prometheus"
+prometheus::node_exporter::extra_options: "--collector.textfile.directory /srv/prometheus"
