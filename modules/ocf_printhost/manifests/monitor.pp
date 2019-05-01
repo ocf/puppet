@@ -2,7 +2,7 @@ class ocf_printhost::monitor {
   package { ['libcups2-dev', 'python3-cups', 'python3-prometheus-client']: }
 
   file {
-    '/var/local/prometheus':
+    '/srv/prometheus':
       ensure => directory;
   } ->
   file {
@@ -11,11 +11,11 @@ class ocf_printhost::monitor {
       mode   => '0755';
   } ->
   exec { 'monitor-cups-initial':
-    command => '/usr/local/bin/monitor-cups /var/local/prometheus/cups.prom',
-    creates => '/var/local/prometheus/cups.prom',
+    command => '/usr/local/bin/monitor-cups /srv/prometheus/cups.prom',
+    creates => '/srv/prometheus/cups.prom',
   } ->
   cron { 'monitor-cups':
-    command => '/usr/local/bin/monitor-cups /var/local/prometheus/cups.prom',
+    command => '/usr/local/bin/monitor-cups /srv/prometheus/cups.prom',
     # Run every minute
   }
 }
