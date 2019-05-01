@@ -193,10 +193,6 @@ class ocf_mirrors {
   }
 
   package { ['python3-prometheus-client']: }
-  # Temporary-- to be moved to all hosts
-  file { '/srv/prometheus':
-    ensure =>directory;
-  } ->
   File<|title == '/srv/prometheus'|> {
     owner => 'mirrors',
     group => 'mirrors',
