@@ -12,6 +12,7 @@ class ocf {
   include ocf::motd
   include ocf::munin::node
   include ocf::networking
+  include ocf::node_exporter
   include ocf::packages
   include ocf::puppet
   include ocf::rootpw
@@ -19,8 +20,4 @@ class ocf {
   include ocf::systemd
   include ocf::utils
   include ocf::walldeny
-
-  if $::lsbdistid != 'Raspbian' {
-    include prometheus::node_exporter
-  }
 }

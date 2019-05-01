@@ -91,3 +91,4 @@ kubernetes::master_nodes:
 
 # Prometheus config
 prometheus::node_exporter::version: 0.17.0
+prometheus::node_exporter::extra_options: '--collector.textfile.directory /srv/prometheus'
