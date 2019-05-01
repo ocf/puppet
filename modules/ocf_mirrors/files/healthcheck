@@ -126,7 +126,7 @@ def write_prometheus(project, local, upstream):
     last_run.labels(project=project).set(time.time())
 
     write_to_textfile(
-        '/opt/mirrors/prometheus/{}.prom'.format(project),
+        '/srv/prometheus/{}.prom'.format(project),
         registry,
     )
 
