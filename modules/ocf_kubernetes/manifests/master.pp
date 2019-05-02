@@ -112,8 +112,20 @@ class ocf_kubernetes::master {
   # the puppetlabs-kubernetes config module, to have owner kubernetes-ca
   # and not be readable by any user
   File<|title == '/etc/kubernetes'|> {
-    owner => 'kubernetes-ca',
-    mode  => '0700',
+    owner   => 'kubernetes-ca',
+    mode    => '0700',
+  }
+  File<|title == '/etc/kubernetes/pki'|> {
+    owner   => 'kubernetes-ca',
+    mode    => '0700',
+  }
+  File<|title == '/etc/kubernetes/pki/ca.key'|> {
+    owner   => 'kubernetes-ca',
+    mode    => '0600',
+  }
+  File<|title == '/etc/kubernetes/pki/ca.crt'|> {
+    owner   => 'kubernetes-ca',
+    mode    => '0600',
   }
 
   # cert signing script
