@@ -6,6 +6,6 @@ define ocf_kubernetes::apply(
   exec { "kubectl-apply-${title}":
     environment => ["KUBECONFIG=${config}"],
     command     => "kubectl apply -f ${target}",
-    require     => [Package['kubectl'], Class['kubernetes']],
+    require     => Package['kubectl'],
   }
 }
