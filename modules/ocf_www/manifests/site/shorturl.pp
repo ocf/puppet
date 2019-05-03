@@ -111,8 +111,6 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/s/(.+)$ https://www.ocf.berkeley.edu/api/shorturl/$1 [R]'},
       {rewrite_rule => '^/stf-cost-breakdown$ https://docs.google.com/spreadsheets/d/1U3YfU5S1hyi4c9u1vME84lz5hQPz23LKWCaD8mq4JHI/edit [R]'},
       {rewrite_rule => '^/survey$ https://goo.gl/forms/sk1s0dnuxDY71vBR2 [R]'},
-      {rewrite_rule => '^/thedon$ https://mastodon.ocf.berkeley.edu [R]'},
-      {rewrite_rule => '^/thedong$ https://mastodon.ocf.berkeley.edu [R]'},
       {rewrite_rule => '^/tw(/.*)?$ https://ocf.io/twitter$1 [R]'},
       {rewrite_rule => '^/twitter(/.*)?$ https://twitter.com/ucbocf$1 [R]'},
       {rewrite_rule => '^/tv(/.*)?$ https://www.ocf.berkeley.edu/tv$1 [R]'},
