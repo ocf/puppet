@@ -106,6 +106,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/staff_hours$ https://ocf.io/staff-hours [R]'},
       {rewrite_rule => '^/stats(/.*)?$ https://www.ocf.berkeley.edu/stats$1 [R]'},
       {rewrite_rule => '^/status$ https://status.ocf.berkeley.edu/ [R]'},
+      {rewrite_rule => '^/swag$ https://ocf.io/s/swag [R]'},
       {rewrite_rule => '^/buster$ https://www.ocf.berkeley.edu/docs/staff/backend/buster/ [R]'},
       {rewrite_rule => '^/s/(.+)$ https://www.ocf.berkeley.edu/api/shorturl/$1 [R]'},
       {rewrite_rule => '^/stf-cost-breakdown$ https://docs.google.com/spreadsheets/d/1U3YfU5S1hyi4c9u1vME84lz5hQPz23LKWCaD8mq4JHI/edit [R]'},
