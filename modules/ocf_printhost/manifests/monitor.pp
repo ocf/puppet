@@ -1,10 +1,8 @@
 class ocf_printhost::monitor {
+  include ocf::node_exporter
+
   package { ['libcups2-dev', 'python3-cups', 'python3-prometheus-client']: }
 
-  file {
-    '/srv/prometheus':
-      ensure => directory;
-  } ->
   file {
     '/usr/local/bin/monitor-cups':
       source => 'puppet:///modules/ocf_printhost/monitor-cups',
