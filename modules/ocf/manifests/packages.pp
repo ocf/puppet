@@ -121,6 +121,7 @@ class ocf::packages {
       'python3-pip',
       'python3-requests',
       'python3-tabulate',
+      'python3-venv',
       'python3.7',
       'python3.7-dev',
       'python3.7-venv',
