@@ -69,19 +69,11 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
   # Port 10000 is unused, it used to be used for fluffy, and then was used for
   # a trivial testing service, but is now unused again
 
-  ocf_mesos::master::load_balancer::http_vhost { 'rt':
-    server_name    => 'rt.ocf.berkeley.edu',
-    server_aliases => ['rt', 'rt.ocf.io'],
-    service_port   => 10001,
-  }
+  # Port 10001, rt, was migrated to Kubernetes.
 
   # Port 10002 is used by ocfweb-web and proxied to by ocf_www
 
-  ocf_mesos::master::load_balancer::http_vhost { 'pma':
-    server_name    => 'pma.ocf.berkeley.edu',
-    server_aliases => ['pma', 'pma.ocf.io', 'phpmyadmin', 'phpmyadmin.ocf.io', 'phpmyadmin.ocf.berkeley.edu'],
-    service_port   => 10003,
-  }
+  # Port 10003, pma, was migrated to Kubernetes.
 
   ocf_mesos::master::load_balancer::http_vhost { 'ocfweb-static':
     server_name  => 'static.ocf.berkeley.edu',
@@ -94,27 +86,15 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     service_port   => 10005,
   }
 
-  ocf_mesos::master::load_balancer::http_vhost { 'metabase':
-    server_name    => 'metabase.ocf.berkeley.edu',
-    server_aliases => ['metabase', 'metabase.ocf.io', 'mb', 'mb.ocf.io', 'mb.ocf.berkeley.edu'],
-    service_port   => 10006,
-  }
+  # Port 10006, metabase, was migrated to Kubernetes.
 
-  ocf_mesos::master::load_balancer::http_vhost { 'templates':
-    server_name    => 'templates.ocf.berkeley.edu',
-    server_aliases => ['templates', 'templates.ocf.io'],
-    service_port   => 10007,
-  }
+  # Port 10007, templates, was migrated to Kubernetes.
 
   # Port 10008 is used by thelounge, it is proxied to by ocf_irc
   # Port 10009 is used by puppetboard, it is proxied to by ocf_puppet
   # Port 10010 cannot be used due to https://github.com/moby/moby/issues/37507
 
-  ocf_mesos::master::load_balancer::http_vhost { 'grafana':
-    server_name    => 'grafana.ocf.berkeley.edu',
-    server_aliases => ['grafana', 'grafana.ocf.io'],
-    service_port   => 10011,
-  }
+  # Port 10011, grafana, was migrated to Kubernetes.
 
   ocf_mesos::master::load_balancer::http_vhost { 'sourcegraph':
     server_name    => 'sourcegraph.ocf.berkeley.edu',
