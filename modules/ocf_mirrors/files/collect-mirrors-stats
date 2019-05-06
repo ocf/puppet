@@ -29,7 +29,7 @@ RSYNC_LOG_REGEX = re.compile(
 )
 
 
-def log_to_mysql(projects, log_date=date.today(), quiet=False):
+def log_to_mysql(projects, log_date, quiet=False):
     with get_connection(user='ocfstats', password=OCFSTATS_PWD) as cursor:
         for name, data in projects.items():
             cursor.execute(
@@ -172,8 +172,8 @@ def main(args):
             ))
 
     # and send it to mysql
-    if not args.dry_run:
-        log_to_mysql(projects=projects, dt=args.date)
+    if args.no_dry_run:
+        log_to_mysql(projects=projects, log_date=args.date)
 
 
 if __name__ == '__main__':
@@ -181,8 +181,8 @@ if __name__ == '__main__':
                                                  'and store in ocfstats')
     parser.add_argument('-q', '--quiet', action='store_true',
                         help='do not print stats after collecting them')
-    parser.add_argument('-n', '--dry-run', action='store_true',
-                        help='dry-run mode, do not write statistics to the database')
+    parser.add_argument('-n', '--no-dry-run', action='store_true',
+                        help='disable dry-run mode, i.e. write statistics to the database')
     parser.add_argument('--apache', nargs='*',
                         help='Apache log file(s) to process')
     parser.add_argument('--rsync', nargs='*',
