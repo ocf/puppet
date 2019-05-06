@@ -176,6 +176,13 @@ class ocf_prometheus::server {
 
         static_configs  => [{targets => ['hpcctl:9341']}],
       },
+      {
+        job_name        => 'postfix',
+        scrape_interval => '10s',
+        scrape_timeout  => '10s',
+
+        static_configs  => [{targets =>['smtp:9154']}],
+      },
     ]
   }
 }
