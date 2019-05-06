@@ -67,4 +67,7 @@ class ocf_mail {
         action => 'accept',
       };
   }
+
+  # Backported from sid
+  package { ['prometheus-postfix-exporter']:; }
 }
