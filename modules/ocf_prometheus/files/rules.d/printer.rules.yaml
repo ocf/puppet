@@ -61,6 +61,6 @@ groups:
         description: "{{ $labels.instance }} toner is at level {{ $value }}, replace it soon!"
     - alert: PrinterDown
       expr: up{job="printer"} == 0
-      for: 1m
+      for: 2m
       annotations:
         summary: "Printer {{ $labels.instance }} is down"
