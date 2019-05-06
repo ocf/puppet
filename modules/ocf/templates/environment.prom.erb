@@ -1,0 +1,8 @@
+<%
+def prometheus_escape(text)
+    return text.gsub(/([\\"\n])/, {"\n"=>"\\n", "\\"=>"\\\\", "\""=>"\\\""})
+end
+-%>
+# HELP ocf_env The Puppet environment this node is on
+# TYPE ocf_env gauge
+ocf_env{environment="<%= prometheus_escape(@environment) %>"} 1.0
