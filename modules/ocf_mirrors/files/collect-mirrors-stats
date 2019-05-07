@@ -1,0 +1,195 @@
+#!/usr/bin/python3
+"""
+Parses Apache and rsync mirrors log files to collect traffic information.
+
+Data is stored in MySQL and displayed in ocfweb.
+"""
+import argparse
+import os
+import re
+import sys
+from datetime import date
+from datetime import timedelta
+from pathlib import Path
+
+from ocflib.lab.stats import get_connection
+from ocflib.lab.stats import humanize_bytes
+
+OCFSTATS_PWD = os.environ.get('OCFSTATS_PWD', None)
+MIRRORS_DATA_PATH = Path('/opt/mirrors/ftp')
+APACHE_LOG_PATH = Path('/var/log/apache2')
+APACHE_LOG_FILES = [
+    Path('mirrors.ocf.berkeley.edu_access.log'),
+    Path('mirrors.ocf.berkeley.edu-ssl_access_ssl.log')
+]
+RSYNC_LOG_PATH = Path('/var/log/rsync')
+RSYNC_LOG_REGEX = re.compile(
+    r'(?P<date>.+) \[.*\] sent (?P<sentbytes>\d+) bytes\s+'
+    r'received (?P<rcvdbytes>\d+) bytes\s+total size.+'
+)
+
+
+def log_to_mysql(projects, log_date, quiet=False):
+    with get_connection(user='ocfstats', password=OCFSTATS_PWD) as cursor:
+        for name, data in projects.items():
+            cursor.execute(
+                'INSERT INTO `mirrors` (`date`, `dist`, `up`, `down`) '
+                'VALUES (%s, %s, %s, %s)',
+                (log_date, name, data['up'], data['down'])
+            )
+
+
+def process_apache_log(projects, fn, log_date):
+    """Extract transfer data for a given day for all projects from an Apache log file.
+
+    We iteratively populate projects from all the log files in
+    consideration (4 by default) to avoid reading the entire file
+    repeatedly for multiple projects and to avoid having to merge
+    dictionaries.
+
+    A log line looks like so:
+    183.83.68.242 - - [03/May/2019:06:25:59 -0700] \
+    "GET /kali/pool/main/b/boost1.67/libboost-serialization1.67.0_1.67.0-13_amd64.deb HTTP/1.1" 200 319360 \
+    "-" "Debian APT-HTTP/1.3 (1.8.0~beta1)" 697 324120
+
+    log_date is a date str formated as %d/%b/%Y to match the apache format
+    """
+
+    with fn.open('r') as f:
+        for n, line in enumerate(f, 1):
+            log_line = line.split()
+
+            # > 14 fields suggests the line belongs to a valid request and not something strange
+            if len(log_line) < 14:
+                continue
+
+            # apache log date format looks like [11/Jul/2017:00:05:16 -0700]
+            # line.split()[3][1:12] = 11/Jul/2017
+            # we need to dump dates that don't match because
+            # logrotate rotates the logs at 6am
+            line_date = log_line[3][1:12]
+
+            # do a straight string cmp which is faster than strptime
+            if line_date != log_date:
+                continue
+
+            # extract dist name from request url
+            # '/debian/pool/main/h/hwdata/...' -> 'debian'
+            requested_path = Path(log_line[6])
+            if len(requested_path.parts) > 1:
+                project = requested_path.parts[1]
+            else:
+                project = 'other'
+
+            # the 8th field is the response status code
+            # record if we returned http 2xx/3xx
+            if log_line[8][0] in ('2', '3') and project in projects:
+                projects[project]['up'] += int(log_line[-2])
+                projects[project]['down'] += int(log_line[-1])
+            else:
+                projects['other']['up'] += int(log_line[-2])
+                projects['other']['down'] += int(log_line[-1])
+
+    return projects
+
+
+def process_rsync_log(filename):
+    """Parse Tx/Rx information out of an rsyncd log file.
+
+    This function is project-agnostic.
+
+    An rsync log line looks as follows:
+    2019/04/21 08:14:28 [44385] sent 118288 bytes  received 117 bytes  total size 118066
+    """
+
+    tx = 0
+    rx = 0
+    with filename.open('r') as f:
+        for line in f.readlines():
+            stats = RSYNC_LOG_REGEX.match(line)
+            if stats is not None:
+                tx += int(stats.group('sentbytes'))
+                rx += int(stats.group('rcvdbytes'))
+
+    return tx, rx
+
+
+def main(args):
+    # first, figure out what projects we're getting stats for
+    sources = []
+    for project in MIRRORS_DATA_PATH.iterdir():
+        if project.is_dir():
+            sources.append(project.name)
+
+    sources.append('other')  # catchall
+
+    # then, figure out which Apache logs we're pulling stats from
+    if args.apache:
+        apache_log_files = args.apache
+    else:
+        apache_log_files = []
+        for log_name in APACHE_LOG_FILES:
+            # logrotate rotates the log at 6am, but this script
+            # runs at midnight. So to capture 24h of data, we need
+            # to parse the rotated log as well. (the .1 file)
+            log = APACHE_LOG_PATH / log_name
+            apache_log_files.append(log)
+            apache_log_files.append(log.with_suffix('.log.1'))
+
+    # and the same for rsync
+    if args.rsync:
+        rsync_log_files = args.rsync
+    else:
+        rsync_log_files = []
+        for log_file in RSYNC_LOG_PATH.iterdir():
+            rsync_log_files.append(log_file)
+
+    # set up data structures
+    projects = {}
+    for project in sources:
+        projects[project] = {'up': 0, 'down': 0}
+
+    # format the date to do fast string matching rather than strptime on every line
+    log_date = args.date.strftime('%d/%b/%Y')
+    # pull the data itself from apache
+    for log_filename in apache_log_files:
+        projects = process_apache_log(projects, log_filename, log_date)
+
+    # ...and rsync
+    for log_filename in rsync_log_files:
+        tx, rx = process_rsync_log(log_filename)
+        # log files are named <project>.log
+        projects[log_filename.stem]['up'] += rx
+        projects[log_filename.stem]['down'] += tx
+
+    # print out some stats!
+    if not args.quiet:
+        for project in projects:
+            print('{:20} {:10} {:10}'.format(
+                project,
+                humanize_bytes(projects[project]['up']),
+                humanize_bytes(projects[project]['down'])
+            ))
+
+    # and send it to mysql
+    if args.no_dry_run:
+        log_to_mysql(projects=projects, log_date=args.date)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Process mirrors logs to calculate network usage '
+                                                 'and store in ocfstats')
+    parser.add_argument('-q', '--quiet', action='store_true',
+                        help='do not print stats after collecting them')
+    parser.add_argument('-n', '--no-dry-run', action='store_true',
+                        help='disable dry-run mode, i.e. write statistics to the database')
+    parser.add_argument('--apache', nargs='*',
+                        help='Apache log file(s) to process')
+    parser.add_argument('--rsync', nargs='*',
+                        help='rsync log files(s) to process')
+    parser.add_argument('date', nargs='?', default=date.today() - timedelta(1),
+                        help='date for use in filtering log entries')
+
+    args = parser.parse_args()
+
+    sys.exit(main(args))
