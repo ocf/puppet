@@ -1,6 +1,4 @@
 class ocf_printhost::monitor {
-  include ocf::node_exporter
-
   package { ['libcups2-dev', 'python3-cups', 'python3-prometheus-client']: }
 
   file {
@@ -11,6 +9,7 @@ class ocf_printhost::monitor {
   exec { 'monitor-cups-initial':
     command => '/usr/local/bin/monitor-cups /srv/prometheus/cups.prom',
     creates => '/srv/prometheus/cups.prom',
+    require => File['/srv/prometheus'],
   } ->
   cron { 'monitor-cups':
     command => '/usr/local/bin/monitor-cups /srv/prometheus/cups.prom',
