@@ -60,6 +60,19 @@ class ocf_kubernetes::master {
     '/etc/ocf-kubernetes/abac.jsonl':
       source => 'puppet:///modules/ocf_kubernetes/abac.jsonl',
       mode   => '0755';
+
+  }
+
+  File['/etc/kubernetes/pki'] {
+    owner  => 'kubernetes-ca',
+  }
+
+  File['/etc/kubernetes/pki/ca.crt'] {
+    owner  => 'kubernetes-ca',
+  }
+
+  File['/etc/kubernetes/pki/ca.key'] {
+    owner  => 'kubernetes-ca',
   }
 
   class { 'kubernetes':
@@ -88,15 +101,11 @@ class ocf_kubernetes::master {
       'authorization-policy-file: /etc/ocf-kubernetes/abac.jsonl',
     ],
 
-    kubeadm_extra_config      => {
-      apiServerExtraVolumes => [
-        {
-          name      => 'ocf-auth',
-          hostPath  => '/etc/ocf-kubernetes',
-          mountPath => '/etc/ocf-kubernetes',
-          writeable => false,
-        },
-      ],
+    apiserver_extra_volumes   => {
+      'ocf-auth' => {
+        hostPath  => '/etc/ocf-kubernetes',
+        mountPath => '/etc/ocf-kubernetes',
+      },
     },
   }
 
