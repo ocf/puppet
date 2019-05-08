@@ -14,7 +14,12 @@ def main():
         print('nvidia_gpu_info={}')
         return
 
-    nvidia_smi_output = subprocess.check_output(('nvidia-smi', '--query-gpu=name,index', '--format=csv,noheader'))
+    try:
+        nvidia_smi_output = subprocess.check_output(('nvidia-smi', '--query-gpu=name,index', '--format=csv,noheader'),
+                                                    timeout=10)
+    except subprocess.TimeoutExpired:
+        print('nvidia_gpu_info={}')
+        return
     nvidia_gpu_list = nvidia_smi_output.decode('utf-8').split('\n')[:-1]
     nvidia_gpu_info_dict = {}
 
