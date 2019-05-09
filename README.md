@@ -40,7 +40,8 @@ pushing them to GitHub to be deployed into production.
 ### Setting up your puppet environment
 
 If you're using your puppet environment for the first time, there's a little
-setup you'll have to do. `cd` into your puppet environment and run:
+setup you'll have to do. `cd` into your puppet environment
+(`/opt/puppet/env/you`) and run:
 
     you@lightning:/opt/puppet/env/you$ git pull
     you@lightning:/opt/puppet/env/you$ make
@@ -51,16 +52,15 @@ install the appropriate third-party modules and the pre-commit hooks.
 ### Testing using your puppet environment
 
 Before pushing, you should test your changes by switching at least one of the
-affected servers to your puppet environment and triggering a run. We store node
-definitions in LDAP, so changing a server's environment requires a `/admin`
-Kerberos principal or root on the server (each server's host keytab allows
-changing its own environment).
+affected servers to your puppet environment and triggering a run. Changing
+environments requires root, so if you don't have root, you will need to ask a
+root staffer to change the environment.
 
-The easiest way to change the environment is to SSH to the server and run
-`puppet-trigger`, providing the `-e` option.
+If you have root, you can change a host's environment with the `puppet-trigger`
+command:
 
     ckuehl@supernova:~$ ssh raptors
-    ckuehl@raptors:~$ sudo puppet-trigger -e ckuehl -t
+    ckuehl@raptors:~$ sudo puppet-trigger -te ckuehl
 
 This changes the environment to `ckuehl` and triggers a run.
 
