@@ -54,6 +54,9 @@ options {
   // Only allow recursive queries from OCF
   recursion yes;
   allow-recursion { "ocf"; "localhost"; };
+
+  // Use an RPZ to modify some recursive queries
+  response-policy { zone "rpz"; };
 };
 
 // Query URIBL directly because campus nameservers are often blocked
