@@ -154,6 +154,7 @@ class ocf::packages {
       [
         'aactivator',
         'fluffy',
+        'xournal',
       ]:;
     }
   }
