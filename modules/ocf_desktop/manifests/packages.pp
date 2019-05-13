@@ -17,7 +17,7 @@ class ocf_desktop::packages {
       'florence', 'freeplane', 'geany', 'gimp', 'gnome-calculator', 'gparted',
       'hexchat', 'imagej', 'inkscape', 'lyx', 'musescore', 'mpv', 'mssh',
       'mumble', 'numlockx', 'simple-scan', 'ssh-askpass-gnome', 'texmaker',
-      'texstudio', 'vlc', 'xarchiver', 'xcape', 'xterm', 'zenmap']:;
+      'texstudio', 'vlc', 'xarchiver', 'xcape', 'xournal', 'xterm', 'zenmap']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'arc-theme',
       'desktop-file-utils', 'gnome-icon-theme', 'paper-icon-theme', 'redshift',
