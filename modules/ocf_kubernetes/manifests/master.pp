@@ -62,6 +62,21 @@ class ocf_kubernetes::master {
       mode   => '0755';
   }
 
+  # These are needed because puppetlabs-kubernetes sets the permissions to 600
+  # but the certsign script, running under kubernetes-ca, needs to access them
+
+  File['/etc/kubernetes/pki'] {
+    owner  => 'kubernetes-ca',
+  }
+
+  File['/etc/kubernetes/pki/ca.crt'] {
+    owner  => 'kubernetes-ca',
+  }
+
+  File['/etc/kubernetes/pki/ca.key'] {
+    owner  => 'kubernetes-ca',
+  }
+
   class { 'kubernetes':
     controller                => true,
     manage_etcd               => true,
@@ -88,15 +103,11 @@ class ocf_kubernetes::master {
       'authorization-policy-file: /etc/ocf-kubernetes/abac.jsonl',
     ],
 
-    kubeadm_extra_config      => {
-      apiServerExtraVolumes => [
-        {
-          name      => 'ocf-auth',
-          hostPath  => '/etc/ocf-kubernetes',
-          mountPath => '/etc/ocf-kubernetes',
-          writeable => false,
-        },
-      ],
+    apiserver_extra_volumes   => {
+      'ocf-auth' => {
+        hostPath  => '/etc/ocf-kubernetes',
+        mountPath => '/etc/ocf-kubernetes',
+      },
     },
   }
 
