@@ -1,5 +1,0 @@
-classes:
-    - ocf::ssl::default
-    - ocf::packages::docker
-
-owner: mattmcal
