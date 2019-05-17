@@ -6,9 +6,6 @@ class ocf_desktop {
   include ocf::packages::firefox
   include ocf::packages::pulse
   include ocf::packages::vscode
-
-  include ocf_mesos::slave
-
   include ocf_desktop::crondeny
   include ocf_desktop::defaults
   include ocf_desktop::firewall_output
