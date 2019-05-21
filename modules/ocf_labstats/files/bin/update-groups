@@ -31,7 +31,7 @@ def main():
     with open('/opt/stats/ocfstats-password') as f:
         ocfstats_password = f.read().rstrip()
 
-    update_group(ocfstats_password, 'staff', list_staff() + ['pubstaff'])
+    update_group(ocfstats_password, 'staff', list_staff())
     update_group(ocfstats_password, 'opstaff', list_staff('opstaff'))
 
 if __name__ == '__main__':
