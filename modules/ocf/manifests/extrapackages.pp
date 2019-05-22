@@ -120,7 +120,7 @@ class ocf::extrapackages {
     'php-soap',
     'php-xml',
     'php-zip',
-    'php-dba',
+    'php7.3-dba',
     'pkg-config',
     'postgresql-client',
     'pssh',
