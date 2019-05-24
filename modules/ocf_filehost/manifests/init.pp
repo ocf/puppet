@@ -12,28 +12,7 @@ class ocf_filehost(
       # We don't root_squash admin, ssh, or apphost because they need to access
       # /services/crontabs/$server/ as root.
       options => ['rw', 'fsid=0', 'no_subtree_check', 'no_root_squash'],
-      hosts   => ['admin', 'www', 'dev-www', 'ssh', 'dev-ssh', 'apphost', 'dev-apphost'];
-
-  '/opt/homes/services/discourse':
-      options => ['rw', 'no_subtree_check'],
-      hosts   => lookup('kubernetes::worker_nodes');
-
-  '/opt/homes/services/mastodon':
-      options => ['rw', 'no_subtree_check'],
-      hosts   => lookup('kubernetes::worker_nodes');
-
-  '/opt/homes/services/kanboard/data':
-      options => ['rw', 'no_subtree_check'],
-      hosts   => lookup('kubernetes::worker_nodes');
-
-  '/opt/homes/services/kanboard/plugins':
-      options => ['rw', 'no_subtree_check'],
-      hosts   => lookup('kubernetes::worker_nodes');
-
-  '/opt/homes/services/nfs-provisioner':
-      options => ['rw', 'no_subtree_check', 'no_root_squash'],
-      hosts   => lookup('kubernetes::worker_nodes');
-
+      hosts   => concat(['admin', 'www', 'dev-www', 'ssh', 'dev-ssh', 'apphost', 'dev-apphost'], lookup('kubernetes::worker_nodes'));
   }
 
   file {
