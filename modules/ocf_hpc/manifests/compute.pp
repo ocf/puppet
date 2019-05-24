@@ -8,6 +8,14 @@ class ocf_hpc::compute {
     # The nvidia-uvm kernel module, which is needed for CUDA apps, can't be loaded as needed from within Singularity.
     content => "nvidia-uvm\n";
   }
+  # This has to be run for software within a singularity container to use CUDA after a boot:
+  # see https://github.com/sylabs/singularity/issues/2203
+  cron { 'nvidia-modprobe':
+    command => 'nvidia-modprobe -u -c=0',
+    special => 'reboot',
+    user    => 'root',
+    require => Package['nvidia-driver'],
+  }
 
   file { '/etc/slurm-llnl/gres.conf':
     content => template('ocf_hpc/gres.conf.erb'),
