@@ -13,7 +13,7 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['arandr', 'atom', 'blender', 'claws-mail', 'eog', 'evince-gtk', 'filezilla',
+    ['arandr', 'atom', 'blender', 'claws-mail', 'eog', 'evince', 'filezilla',
       'florence', 'freeplane', 'geany', 'gimp', 'gnome-calculator', 'gparted',
       'hexchat', 'imagej', 'inkscape', 'lyx', 'musescore', 'mpv', 'mssh',
       'mumble', 'numlockx', 'simple-scan', 'ssh-askpass-gnome', 'texlive',
@@ -38,7 +38,7 @@ class ocf_desktop::packages {
     # input method editors
     ['fcitx', 'fcitx-libpinyin', 'fcitx-rime', 'fcitx-hangul', 'fcitx-mozc']:;
     # nonfree packages
-    ['firmware-linux']:;
+    ['linux-firmware']:;
     # notifications
     ['libnotify-bin', 'notification-daemon']:;
     # performance improvements

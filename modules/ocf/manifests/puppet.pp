@@ -1,6 +1,10 @@
 class ocf::puppet($stage = 'first') {
   if lookup('puppet_agent') {
-    $puppet_pkg = 'puppet-agent'
+    if $::lsbdistid == 'Ubuntu' {
+      $puppet_pkg = 'puppet'
+    } else {
+      $puppet_pkg = 'puppet-agent'
+    }
 
     package { $puppet_pkg:; }
 

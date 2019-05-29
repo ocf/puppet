@@ -89,12 +89,17 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   file { [ "${pamconfig}/consolekit", "${pamconfig}/gnome-keyring", "${pamconfig}/ldap", "${pamconfig}/libpam-mount" ]:
     ensure => absent,
     backup => false,
-    notify => Exec['pam-auth-update']
+    notify => Exec['pam-auth-update-mkhomedir']
   }
 
   exec { 'pam-auth-update':
     command     => 'pam-auth-update --package',
     refreshonly => true
+  }
+
+  exec { 'pam-auth-update-mkhomedir':
+    command     => 'pam-auth-update --enable mkhomedir',
+    refreshonly => true;
   }
 
   # PAM user/group access controls

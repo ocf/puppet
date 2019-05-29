@@ -9,7 +9,7 @@ class ocf_desktop::suspend {
     # run script when power button is pushed
     '/etc/acpi/events/powerbtn-acpi-support':
       source  => 'puppet:///modules/ocf_desktop/suspend/powerbtn-acpi-support',
-      require => Package['acpi-support-base'];
+      require => Package['acpi-support'];
 
     # script to handle daisy chained monitors not waking up
     '/usr/lib/pm-utils/sleep.d/999fix-daisy':
@@ -30,7 +30,7 @@ class ocf_desktop::suspend {
 
   package {
     # ACPI support
-    'acpi-support-base':;
+    'acpi-support':;
     # power management
     'pm-utils':;
   }

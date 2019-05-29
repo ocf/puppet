@@ -9,14 +9,15 @@ class ocf::apt($stage = 'first') {
     };
   }
 
-  $repos = 'main contrib non-free'
+  $debian_repos = 'main contrib non-free'
+  $ubuntu_repos = 'main restricted universe multiverse'
 
   if $::lsbdistid == 'Debian' {
     apt::source {
       'debian':
         location => 'http://mirrors/debian/',
         release  => $::lsbdistcodename,
-        repos    => $repos,
+        repos    => $debian_repos,
         include  => {
           src => true
         };
@@ -24,7 +25,7 @@ class ocf::apt($stage = 'first') {
       'debian-updates':
         location => 'http://mirrors/debian/',
         release  => "${::lsbdistcodename}-updates",
-        repos    => $repos,
+        repos    => $debian_repos,
         include  => {
           src => true
         };
@@ -32,7 +33,7 @@ class ocf::apt($stage = 'first') {
       'debian-security':
         location => 'http://mirrors/debian-security/',
         release  => "${::lsbdistcodename}/updates",
-        repos    => $repos,
+        repos    => $debian_repos,
         include  => {
           src => true
         };
@@ -85,6 +86,54 @@ class ocf::apt($stage = 'first') {
         include  => {
           src => true
         };
+    }
+  } elsif $::lsbdistid == 'Ubuntu' {
+    apt::source {
+      'ubuntu':
+        location => 'http://mirrors/ubuntu/',
+        release  => $::lsbdistcodename,
+        repos    => $ubuntu_repos,
+        include  => {
+          src => true
+        };
+
+      'ubuntu-updates':
+        location => 'http://mirrors/ubuntu/',
+        release  => "${::lsbdistcodename}-updates",
+        repos    => $ubuntu_repos,
+        include  => {
+          src => true
+        };
+
+      'ocf':
+        location => 'http://apt/',
+        release  => $::lsbdistcodename,
+        repos    => 'main',
+        include  => {
+          src => true
+        };
+
+      'ocf-backports':
+        location => 'http://apt/',
+        release  => "${::lsbdistcodename}-backports",
+        repos    => 'main',
+        include  => {
+          src => true
+        };
+    }
+
+    # Pin anything coming from *-backports to be lower than normal priority
+    apt::pin { 'ocf-backports':
+      priority => 200,
+      codename => "${::lsbdistcodename}-backports",
+    }
+
+    if $::lsbdistcodename != 'buster' {
+      # TODO: Submit patch to puppetlabs-apt to enable having includes for
+      # apt::backports (so that we can include the source too)
+      class { 'apt::backports':
+        location => 'http://mirrors/ubuntu/';
+      }
     }
   }
 

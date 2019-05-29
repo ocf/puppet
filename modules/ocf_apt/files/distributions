@@ -23,3 +23,13 @@ Codename: buster-backports
 Architectures: amd64 i386 source
 Components: main
 SignWith: D72A0AF4
+
+Codename: bionic
+Architectures: amd64 i386 source
+Components: main
+SignWith: D72A0AF4
+
+Codename: bionic-backports
+Architectures: amd64 i386 source
+Components: main
+SignWith: D72A0AF4

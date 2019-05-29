@@ -1,13 +1,13 @@
 class ocf::packages::firefox {
   $browser_homepage = lookup('browser_homepage')
 
-  package { 'firefox-esr':; }
+  package { 'firefox':; }
 
   file {
     # disable caching, history, blacklisting, and set homepage
-    '/etc/firefox-esr/firefox-esr.js':
+    '/etc/firefox/syspref.js':
       content => template('ocf/firefox/prefs.js.erb'),
-      require => Package['firefox-esr'];
+      require => Package['firefox'];
     # TODO: start maximized by default
   }
 }
