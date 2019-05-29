@@ -129,6 +129,12 @@ class ocf_kubernetes::master::loadbalancer {
     server_aliases => ['grafana', 'grafana.ocf.io'],
   }
 
+  ocf_kubernetes::master::loadbalancer::http_redirect { 'ircbot':
+    server_name    => 'ircbot.ocf.berkeley.edu',
+    server_aliases => ['ircbot', 'ircbot.ocf.io'],
+  }
+
+
   ocf_kubernetes::master::loadbalancer::http_redirect { 'kanboard':
     server_name    => 'kanboard.ocf.berkeley.edu',
     server_aliases => ['kanboard', 'kanboard.ocf.io'],
