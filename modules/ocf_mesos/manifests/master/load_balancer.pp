@@ -80,11 +80,7 @@ class ocf_mesos::master::load_balancer($marathon_http_password) {
     service_port => 10004,
   }
 
-  ocf_mesos::master::load_balancer::http_vhost { 'ircbot':
-    server_name    => 'ircbot.ocf.berkeley.edu',
-    server_aliases => ['ircbot', 'ircbot.ocf.io'],
-    service_port   => 10005,
-  }
+  # Port 10005, ircbot, was migrated to Kubernetes.
 
   # Port 10006, metabase, was migrated to Kubernetes.
 
