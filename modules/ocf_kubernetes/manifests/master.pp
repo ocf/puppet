@@ -60,6 +60,16 @@ class ocf_kubernetes::master {
     '/etc/ocf-kubernetes/abac.jsonl':
       source => 'puppet:///modules/ocf_kubernetes/abac.jsonl',
       mode   => '0755';
+
+    '/etc/ocf-kubernetes/manifests/rbac.yaml':
+      source => 'puppet:///modules/ocf_kubernetes/rbac.yaml',
+      mode   => '0755';
+  }
+
+  ocf_kubernetes::apply {
+    'rbac':
+      target    => '/etc/ocf-kubernetes/manifests/rbac.yaml',
+      subscribe => File['/etc/ocf-kubernetes/manifests/rbac.yaml'];
   }
 
   # These are needed because puppetlabs-kubernetes sets the permissions to 600
