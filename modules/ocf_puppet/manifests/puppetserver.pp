@@ -39,12 +39,12 @@ class ocf_puppet::puppetserver {
     notify               => Service['puppetserver'],
   }
 
-  # Allow kubernetes masters to access kubernetes secrets
+  # Allow Jenkins to access kubernetes secrets
   puppet_authorization::rule { 'kubernetes-secrets':
     match_request_path   => '^/puppet/v3/file_(content|metadata)s?/kubernetes-secrets$',
     match_request_type   => 'regex',
     match_request_method => ['get'],
-    allow                => suffix(lookup('kubernetes::master_nodes'), '.ocf.berkeley.edu'),
+    allow                => 'reaper.ocf.berkeley.edu',
     sort_order           => 500,
     path                 => '/etc/puppetlabs/puppetserver/conf.d/auth.conf',
     require              => Package['puppetserver'],

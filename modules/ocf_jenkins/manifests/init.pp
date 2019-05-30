@@ -17,6 +17,16 @@ class ocf_jenkins {
     stage => first,
   }
 
+  file {
+    '/etc/ocf-kubernetes/secrets':
+      ensure => 'directory',
+      source => 'puppet:///kubernetes-secrets',
+      purge  => true,
+      owner  => jenkins-deploy,
+      group  => jenkins-deploy,
+      mode   => '0700';
+  }
+
   include ocf_jenkins::proxy
 
   package { 'jenkins':; }
