@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/chriskuehl/puppet-pre-commit-hooks.git
-    rev: v2.0.2
+    rev: v2.1.0
     hooks:
     -   id: puppet-validate
         # TODO: Remove this version pinning. The problem here seems to be that
@@ -20,6 +20,9 @@ repos:
         -   --no-puppet_url_without_modules-check
         -   --no-arrow_on_right_operand_line-check
         -   --no-variable_is_lowercase-check
+    -   id: epp-validate
+    -   id: r10k-validate
+    -   id: ruby-validate
 -   repo: https://github.com/pre-commit/pre-commit-hooks.git
     rev: v2.2.1
     hooks:
