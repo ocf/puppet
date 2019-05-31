@@ -52,7 +52,8 @@ compress_and_encrypt() {
             --recipient kpengboy@ocf.berkeley.edu \
             --recipient abizer@ocf.berkeley.edu \
             --recipient benzhang4@gmail.com \
-            --recipient daniel@dkess.me
+            --recipient daniel@dkess.me \
+            --recipient cooperc@ocf.berkeley.edu
 }
 
 split_parts() {
