@@ -150,6 +150,11 @@ class ocf_kubernetes::master::loadbalancer {
     server_aliases => ['rt', 'rt.ocf.io'],
   }
 
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'sourcegraph':
+    server_name    => 'sourcegraph.ocf.berkeley.edu',
+    server_aliases => ['sg', 'sg.ocf.io', 'sourcegraph', 'sourcegraph.ocf.io', 'sg.ocf.berkeley.edu'],
+  }
+
   ocf_kubernetes::master::loadbalancer::http_vhost { 'templates':
     server_name    => 'templates.ocf.berkeley.edu',
     server_aliases => ['templates', 'templates.ocf.io'],
