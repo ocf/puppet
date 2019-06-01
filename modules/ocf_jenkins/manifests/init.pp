@@ -18,13 +18,20 @@ class ocf_jenkins {
   }
 
   file {
-    '/etc/ocf-kubernetes/secrets':
+    '/etc/ocf-kubernetes':
       ensure => 'directory',
-      source => 'puppet:///kubernetes-secrets',
       purge  => true,
-      owner  => jenkins-deploy,
-      group  => jenkins-deploy,
-      mode   => '0700';
+  }
+
+  file {
+    '/etc/ocf-kubernetes/secrets':
+      ensure  => 'directory',
+      source  => 'puppet:///kubernetes-secrets',
+      recurse => true,
+      purge   => true,
+      owner   => jenkins-deploy,
+      group   => jenkins-deploy,
+      mode    => '0700';
   }
 
   include ocf_jenkins::proxy
