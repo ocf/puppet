@@ -74,38 +74,13 @@ class ocf_kubernetes::master::loadbalancer {
   }
 
   nginx::resource::server {
-    'ingress-proxy':
-      server_name         => ['_'],
-      proxy               => 'http://kubernetes',
-      proxy_set_header    => [
-        'Host $host',
-        'X-Forwarded-For $proxy_add_x_forwarded_for',
-        'X-Forwarded-Proto $scheme',
-        'X-Real-IP $remote_addr',
-        'Upgrade $http_upgrade',
-        'Connection $connection_upgrade',
-      ],
-
-      listen_port         => 443,
-      listen_options      => 'default_server',
-      ipv6_listen_options => 'default_server',
-      ssl                 => true,
-      ssl_cert            => "/etc/ssl/private/${::fqdn}.bundle",
-      ssl_key             => "/etc/ssl/private/${::fqdn}.key",
-      ssl_dhparam         => '/etc/ssl/dhparam.pem',
-
-      add_header          => {
-        'Strict-Transport-Security' =>  'max-age=31536000',
-      };
-
-    'ingress-proxy-redirect':
+    'catch-unknown':
       server_name         => ['_'],
       listen_port         => 80,
+      ipv6_listen_port    => 80,
       listen_options      => 'default_server',
       ipv6_listen_options => 'default_server',
-      server_cfg_append   => {
-        'return' => '301 https://$host$request_uri'
-      };
+      raw_append          => 'return 444;';
 
     'downstream-proxy':
       # This is used for hosts that don't directly point to lb-kubernetes, but
@@ -124,58 +99,58 @@ class ocf_kubernetes::master::loadbalancer {
       ];
   }
 
-  ocf_kubernetes::master::loadbalancer::http_redirect { 'grafana':
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'grafana':
     server_name    => 'grafana.ocf.berkeley.edu',
     server_aliases => ['grafana', 'grafana.ocf.io'],
   }
 
-  ocf_kubernetes::master::loadbalancer::http_redirect { 'ircbot':
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'ircbot':
     server_name    => 'ircbot.ocf.berkeley.edu',
     server_aliases => ['ircbot', 'ircbot.ocf.io'],
   }
 
 
-  ocf_kubernetes::master::loadbalancer::http_redirect { 'kanboard':
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'kanboard':
     server_name    => 'kanboard.ocf.berkeley.edu',
     server_aliases => ['kanboard', 'kanboard.ocf.io'],
   }
 
-  ocf_kubernetes::master::loadbalancer::http_redirect { 'kube':
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'kube':
     server_name    => 'kube.ocf.berkeley.edu',
     server_aliases => ['kube', 'kube.ocf.io'],
   }
 
-  ocf_kubernetes::master::loadbalancer::http_redirect { 'kubeadmin':
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'kubeadmin':
     server_name    => 'kubeadmin.ocf.berkeley.edu',
     server_aliases => ['kubeadmin', 'kubeadmin.ocf.io'],
   }
 
-  ocf_kubernetes::master::loadbalancer::http_redirect { 'labmap':
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'labmap':
     server_name    => 'labmap.ocf.berkeley.edu',
     server_aliases => ['labmap', 'labmap.ocf.io'],
   }
 
-  ocf_kubernetes::master::loadbalancer::http_redirect { 'mastodon':
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'mastodon':
     server_name    => 'mastodon.ocf.berkeley.edu',
     server_aliases => ['mastodon', 'mastodon.ocf.io'],
   }
 
-  ocf_kubernetes::master::loadbalancer::http_redirect { 'pma':
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'pma':
     server_name    => 'pma.ocf.berkeley.edu',
     server_aliases => ['pma', 'pma.ocf.io', 'phpmyadmin', 'phpmyadmin.ocf.io', 'phpmyadmin.ocf.berkeley.edu'],
   }
 
-  ocf_kubernetes::master::loadbalancer::http_redirect { 'metabase':
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'metabase':
     server_name    => 'metabase.ocf.berkeley.edu',
     server_aliases => ['metabase', 'metabase.ocf.io'],
   }
 
-  ocf_kubernetes::master::loadbalancer::http_redirect { 'rt':
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'rt':
     server_name    => 'rt.ocf.berkeley.edu',
     server_aliases => ['rt', 'rt.ocf.io'],
   }
 
-  ocf_kubernetes::master::loadbalancer::http_redirect { 'templates':
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'templates':
     server_name    => 'templates.ocf.berkeley.edu',
     server_aliases => ['templates', 'templates.ocf.io'],
   }
