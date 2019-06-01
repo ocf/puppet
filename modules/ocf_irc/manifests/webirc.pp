@@ -13,7 +13,7 @@ class ocf_irc::webirc {
   }
 
   # Restart nginx if any cert changes occur
-  Class['ocf::ssl::default'] ~> Class['Nginx::Service']
+  Ocf::Ssl::Bundle[$::fqdn] ~> Class['Nginx::Service']
 
   ocf::nginx_proxy { $webirc_fqdn:
     server_aliases => [

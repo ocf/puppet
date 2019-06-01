@@ -1,9 +1,20 @@
 class ocf_irc {
-  include ocf::ssl::default
   include ocf_irc::ircd
   include ocf_irc::services
   include ocf_irc::webirc
   include ocf_irc::znc
+
+  # The prod server also needs a cert for ocf.berkeley.edu, since we use XMPP
+  # domain delegation. See https://prosody.im/doc/certificates#which_domain
+  if $::host_env == 'prod' {
+    ocf::ssl::bundle { $::fqdn:
+      domains =>  ocf::get_host_fqdns() + ocf::get_host_fqdns('ocf.io') + ['ocf.berkeley.edu'],
+    }
+  } else {
+    ocf::ssl::bundle { $::fqdn:
+      domains =>  ocf::get_host_fqdns() + ocf::get_host_fqdns('ocf.io'),
+    }
+  }
 
   # Make the irc user able to read the certs for running the IRCd with SSL
   user { 'irc':
