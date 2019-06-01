@@ -118,7 +118,7 @@ class ocf_prometheus::server {
           },
           {
             target_label => '__address__',
-            replacement  => 'lb.ocf.berkeley.edu:10020',
+            replacement  => 'snmp-exporter.ocf.berkeley:4080',
           },
         ]
       },
