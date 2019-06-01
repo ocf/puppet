@@ -115,16 +115,6 @@ class ocf_kubernetes::master::loadbalancer {
     server_aliases => ['kanboard', 'kanboard.ocf.io'],
   }
 
-  ocf_kubernetes::master::loadbalancer::http_vhost { 'kube':
-    server_name    => 'kube.ocf.berkeley.edu',
-    server_aliases => ['kube', 'kube.ocf.io'],
-  }
-
-  ocf_kubernetes::master::loadbalancer::http_vhost { 'kubeadmin':
-    server_name    => 'kubeadmin.ocf.berkeley.edu',
-    server_aliases => ['kubeadmin', 'kubeadmin.ocf.io'],
-  }
-
   ocf_kubernetes::master::loadbalancer::http_vhost { 'labmap':
     server_name    => 'labmap.ocf.berkeley.edu',
     server_aliases => ['labmap', 'labmap.ocf.io'],

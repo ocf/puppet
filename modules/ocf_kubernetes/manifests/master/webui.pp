@@ -34,67 +34,49 @@ class ocf_kubernetes::master::webui {
   $kubernetes_admin_token = lookup('kubernetes::admin_token')
   $kubernetes_viewer_token = lookup('kubernetes::viewer_token')
 
-  nginx::resource::server {
+  ocf::nginx_proxy {
     'kubernetes-admin':
-      server_name      => ['kubeadmin.ocf.berkeley.edu'],
+      server_name      => 'kubeadmin.ocf.berkeley.edu',
+      server_aliases   => ['kubeadmin', 'kubeadmin.ocf.io'],
       proxy            => 'http://kubernetes',
       proxy_set_header => [
-        'Host $host',
-        'X-Forwarded-For $proxy_add_x_forwarded_for',
-        'X-Forwarded-Proto $scheme',
-        'X-Real-IP $remote_addr',
         "Authorization 'Bearer ${kubernetes_admin_token}'",
       ],
 
-      listen_port      => 443,
       ssl              => true,
-      ssl_cert         => "/etc/ssl/private/${::fqdn}.bundle",
-      ssl_key          => "/etc/ssl/private/${::fqdn}.key",
-      ssl_dhparam      => '/etc/ssl/dhparam.pem',
 
-      add_header       => {
-        'Strict-Transport-Security' =>  'max-age=31536000',
+      nginx_options    => {
+        # has a sensitive authorization header
+        mode       => '0600',
+
+        raw_append => [
+          'auth_pam "OCF Kubernetes Admin";',
+          'auth_pam_service_name kubernetes_admin_webui;',
+        ],
       },
 
-      # has a sensitive authorization header
-      mode             => '0600',
-
-      raw_append       => [
-        'auth_pam "OCF Kubernetes Admin";',
-        'auth_pam_service_name kubernetes_admin_webui;',
-      ],
-
-      require          =>  File['/etc/pam.d/kubernetes_admin_webui'];
+      require          => File['/etc/pam.d/kubernetes_admin_webui'];
 
     'kubernetes-viewer':
-      server_name      => ['kube.ocf.berkeley.edu'],
+      server_name      => 'kube.ocf.berkeley.edu',
+      server_aliases   => ['kube', 'kube.ocf.io'],
       proxy            => 'http://kubernetes',
       proxy_set_header => [
-        'Host $host',
-        'X-Forwarded-For $proxy_add_x_forwarded_for',
-        'X-Forwarded-Proto $scheme',
-        'X-Real-IP $remote_addr',
         "Authorization 'Bearer ${kubernetes_viewer_token}'",
       ],
 
-      listen_port      => 443,
       ssl              => true,
-      ssl_cert         => "/etc/ssl/private/${::fqdn}.bundle",
-      ssl_key          => "/etc/ssl/private/${::fqdn}.key",
-      ssl_dhparam      => '/etc/ssl/dhparam.pem',
 
-      add_header       => {
-        'Strict-Transport-Security' =>  'max-age=31536000',
+      nginx_options    => {
+        # has a sensitive authorization header
+        mode       => '0600',
+
+        raw_append => [
+          'auth_pam "OCF Kubernetes View";',
+          'auth_pam_service_name kubernetes_viewer_webui;',
+        ],
       },
 
-      # has a sensitive authorization header
-      mode             => '0600',
-
-      raw_append       => [
-        'auth_pam "OCF Kubernetes View";',
-        'auth_pam_service_name kubernetes_viewer_webui;',
-      ],
-
-      require          =>  File['/etc/pam.d/kubernetes_viewer_webui'];
+      require          => File['/etc/pam.d/kubernetes_viewer_webui'];
   }
 }
