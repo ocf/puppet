@@ -2,6 +2,26 @@ class ocf_kubernetes::master::loadbalancer {
   include ocf::firewall::allow_web
 
   $kubernetes_worker_nodes = lookup('kubernetes::worker_nodes')
+  $death_ipv4 = lookup('death_ipv4')
+  $death_ipv6 = lookup('death_ipv6')
+
+  # Allow death to talk to Kubernetes (ocfweb)
+  firewall_multi {
+    '101 accept from death (IPv4)':
+      chain  => 'PUPPET-INPUT',
+      source => $death_ipv4,
+      proto  => 'tcp',
+      dport  => [4080],
+      action => 'accept';
+
+    '101 accept from death (IPv6)':
+      chain    => 'PUPPET-INPUT',
+      source   => $death_ipv6,
+      proto    => 'tcp',
+      dport    => [4080],
+      action   => 'accept',
+      provider => 'ip6tables';
+  }
 
   # At any given time, only one kubernetes master will hold
   # the first IP. The master holding the IP will handle all
