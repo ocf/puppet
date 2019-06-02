@@ -51,6 +51,9 @@ internal_zone_range_6: 2607:f140:8801::1:5-2607:f140:8801::1:90
 desktop_src_range_6: 2607:f140:8801::1:100-2607:f140:8801::1:139
 staffvm_src_range_6: 2607:f140:8801::1:200-2607:f140:8801::1:252
 
+death_ipv4: 169.229.226.23
+death_ipv6: 2607:f140:8801::1:23
+
 # Don't configure the default Apache vhost unless otherwise specified
 apache::default_vhost: false
 # Avoid ISP alerts about supposedly outdated Apache
