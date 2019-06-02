@@ -2,7 +2,7 @@
 # aliases to their canonical URLs
 define ocf_kubernetes::master::loadbalancer::http_vhost(
   $server_name,
-  $server_aliases,
+  $server_aliases=[],
 ) {
   ocf::nginx_proxy { $title:
     server_name      => $server_name,
