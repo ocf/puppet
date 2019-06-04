@@ -45,7 +45,17 @@ class ocf_irc::xmpp {
     'prod' => 'ocf.berkeley.edu',
   }
 
+  $irc_server = $::host_env ? {
+    'dev'  => 'dev-irc.ocf.berkeley.edu',
+    'prod' =>  'irc.ocf.berkeley.edu',
+  }
+
   $mysql_password = lookup('xmpp::prosody_mysql_password')
+
+  $component_password = $::host_env ? {
+    'dev'  => lookup('xmpp::dev_biboumi_component_password'),
+    'prod' =>  lookup('xmpp::biboumi_component_password'),
+  }
 
   file {
     '/etc/prosody/prosody.cfg.lua':

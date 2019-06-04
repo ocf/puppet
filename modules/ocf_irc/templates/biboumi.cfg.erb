@@ -1,0 +1,11 @@
+hostname=<%= @irc_server %>
+password=<%= @component_password %>
+xmpp_server_ip=127.0.0.1
+port=5347
+admin=help@ocf.berkeley.edu
+db_name=postgres://<%= @psql_user %>:<%= @psql_password %>@postgres/<%= @psql_user %>
+fixed_irc_server=<%= @irc_server %>
+persistent_by_default=true
+realname_customization=false
+realname_from_jid=true
+log_level=1

@@ -1,4 +1,5 @@
 class ocf_irc {
+  include ocf_irc::biboumi
   include ocf_irc::ircd
   include ocf_irc::services
   include ocf_irc::webirc
