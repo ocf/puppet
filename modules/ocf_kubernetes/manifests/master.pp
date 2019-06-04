@@ -57,10 +57,6 @@ class ocf_kubernetes::master {
       mode      => '0400',
       show_diff => false;
 
-    '/etc/ocf-kubernetes/abac.jsonl':
-      source => 'puppet:///modules/ocf_kubernetes/abac.jsonl',
-      mode   => '0755';
-
     '/etc/ocf-kubernetes/manifests/rbac.yaml':
       source => 'puppet:///modules/ocf_kubernetes/rbac.yaml',
       mode   => '0755';
@@ -108,9 +104,8 @@ class ocf_kubernetes::master {
     ],
 
     apiserver_extra_arguments => [
-      'authorization-mode: Node,RBAC,ABAC',
+      'authorization-mode: Node,RBAC',
       'token-auth-file: /etc/ocf-kubernetes/static-tokens.csv',
-      'authorization-policy-file: /etc/ocf-kubernetes/abac.jsonl',
     ],
 
     apiserver_extra_volumes   => {
