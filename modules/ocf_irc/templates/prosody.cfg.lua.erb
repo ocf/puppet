@@ -77,4 +77,7 @@ log = {
 VirtualHost "<%= @vhost_name %>"
   enabled = true
 
+Component "<%= @irc_server %>"
+  component_secret = "<%= @component_password %>"
+
 Include "conf.d/*.cfg.lua"
