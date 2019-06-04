@@ -1,0 +1,77 @@
+admins = {}
+
+use_libevent = true
+
+modules_enabled = {
+    "admin_adhoc";
+    "blocking";
+    "blocklist";
+    "carbons";
+    "cloud_notify";
+    "csi";
+    "csi_battery_saver";
+    "dialback";
+    "disco";
+    "mam";
+    "pep";
+    "ping";
+    "posix";
+    "register";
+    "roster";
+    "saslauth";
+    "smacks";
+    "time";
+    "tls";
+    "uptime";
+    "vcard";
+    "version";
+}
+
+-- We may want to change this later, dpeending on how self-service account
+-- registration ends up working
+allow_registration = false
+
+daemonize = true
+
+ssl = {
+    options = {
+        "no_sslv2",
+        "no_sslv3",
+        "no_ticket",
+        "no_compression",
+        "cipher_server_preference",
+        "single_dh_use",
+        "single_ecdh_use",
+    };
+    ciphers = "DH+AES:ECDH+AES:+ECDH+SHA:AES:!PSK:!SRP:!DSS:!ADH:!AECDH";
+    curve = "secp521r1";
+    key = "/etc/ssl/private/<%= @fqdn -%>.key";
+    certificate = "/etc/ssl/private/<%= @fqdn -%>.bundle";
+}
+
+c2s_require_encryption = true
+s2s_require_encryption = true
+s2s_secure_auth = true
+
+pidfile = "/var/run/prosody/prosody.pid"
+
+-- Store hashed passwords in database instead of plaintext
+authentication = "internal_hashed"
+
+storage = "sql"
+
+sql = {
+    driver = "MySQL",
+    database = "prosody",
+    username = "prosody",
+    password = "<%= @mysql_password %>",
+    host = "mysql",
+}
+
+log = {
+    info = "/var/log/prosody/prosody.log";
+    error = "/var/log/prosody/prosody.err";
+    "*syslog";
+}
+
+Include "conf.d/*.cfg.lua"
