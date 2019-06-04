@@ -4,7 +4,6 @@ use_libevent = true
 
 modules_enabled = {
     "admin_adhoc";
-    "blocking";
     "blocklist";
     "carbons";
     "cloud_notify";
@@ -26,6 +25,9 @@ modules_enabled = {
     "vcard";
     "version";
 }
+
+-- mam: never expire archived messages
+archive_expires_after = "never"
 
 -- We may want to change this later, dpeending on how self-service account
 -- registration ends up working
