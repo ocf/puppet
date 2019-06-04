@@ -34,6 +34,6 @@ class ocf_irc::znc {
       File['/var/lib/znc'],
       File['/var/lib/znc/znc.pem'],
     ],
-    subscribe => Class['ocf::ssl::default'],
+    subscribe => Ocf::Ssl::Bundle[$::fqdn],
   }
 }

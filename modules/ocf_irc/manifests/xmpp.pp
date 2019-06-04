@@ -1,10 +1,8 @@
 class ocf_irc::xmpp {
-  # lua-dbi-mysql is needed to connect to MySQL
-  #package { ['lua-dbi-mysql']: }
-
   # When upgrading to buster, these can be installed from the regular buster
   # repo
   ocf::repackage {
+    # lua-dbi-mysql is needed to connect to MySQL
     'lua-dbi-common':
       backport_on => ['stretch'];
 
@@ -42,6 +40,8 @@ class ocf_irc::xmpp {
 
   $vhost_name = $::host_env ? {
     'dev'  => 'dev-xmpp.ocf.berkeley.edu',
+    # We use an SRV record in our DNS configuration so this host actually points
+    # to the XMPP server.
     'prod' => 'ocf.berkeley.edu',
   }
 
