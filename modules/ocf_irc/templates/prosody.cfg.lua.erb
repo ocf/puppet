@@ -74,4 +74,7 @@ log = {
     "*syslog";
 }
 
+VirtualHost "<%= @vhost_name %>"
+  enabled = true
+
 Include "conf.d/*.cfg.lua"
