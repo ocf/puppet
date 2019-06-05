@@ -13,6 +13,7 @@
 class ocf::extrapackages {
   # special snowflake packages that require some config
   include ocf::packages::emacs
+  include ocf::packages::imagemagick
   include ocf::packages::kubectl
   include ocf::packages::matplotlib
   include ocf::packages::mysql
