@@ -15,6 +15,7 @@ class ocf_www {
   include ocf::extrapackages
   include ocf::firewall::allow_web
   include ocf::limits
+  include ocf::moinmoin
   include ocf::tmpfs
   include ocf::ssl::default
 
