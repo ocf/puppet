@@ -1,7 +1,7 @@
 # Base class for ceph
 
 class ocf_ceph {
-  include ocf::packages::ceph
+  require ocf::packages::ceph
 
   $ceph_mons_list = lookup('ceph::mons')
   $ceph_mons = $ceph_mons_list.join(',')

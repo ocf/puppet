@@ -3,7 +3,7 @@
 # If you have issues just dd if=/dev/zero the disk and try again
 
 class ocf_ceph::osd($disks=[]) {
-  include ocf_ceph
+  require ocf_ceph
 
   $bootstrap_osd_key = lookup('ceph::bootstrap_osd_key')
 

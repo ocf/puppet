@@ -4,8 +4,8 @@
 # Then run puppet again
 
 class ocf_ceph::mon {
-  include ocf_ceph
-  include ocf_ceph::admin
+  require ocf_ceph
+  require ocf_ceph::admin
 
   $mon_key = lookup('ceph::mon_key')
 
