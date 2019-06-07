@@ -101,4 +101,6 @@ ceph::mons:
   - pandemic
   - scurvy
 
+# UUID of our ceph cluster
+# This is fixed per cluster, we shouldn't ever need to change this
 ceph::fsid: a910ccd1-1116-4873-b3f9-c2cb7eed4e56
