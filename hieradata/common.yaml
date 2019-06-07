@@ -95,3 +95,10 @@ kubernetes::master_nodes:
 # Prometheus config
 prometheus::node_exporter::version: 0.17.0
 prometheus::node_exporter::extra_options: '--collector.textfile.directory /srv/prometheus'
+
+# Ceph configuration
+ceph::mons:
+  - pandemic
+  - scurvy
+
+ceph::fsid: a910ccd1-1116-4873-b3f9-c2cb7eed4e56

@@ -1,0 +1,26 @@
+[global]
+# ID of the ceph cluster
+fsid = a910ccd1-1116-4873-b3f9-c2cb7eed4e56
+
+# Initial ceph monitors
+mon_host = <%= @ceph_mons %>
+mon_addr = <%= @ceph_mon_ips %>
+
+# IP of current node, needed for monitor bootstraping
+public_addr = <%= @ip_addr %>
+
+# enable authentication by default
+auth_cluster_required = cephx
+auth_service_required = cephx
+auth_client_required = cephx
+auth_supported = cephx
+
+# Write 3 replicas if possible
+osd_pool_default_size = 3
+
+# Allow pool deletion for debugging purposes
+mon_allow_pool_delete = true
+
+# Interal ceph stuff I don't understand, bump if ceph ever complains
+osd_pool_default_pg_num = 512
+osd_pool_default_pgp_num = 512
