@@ -3,6 +3,8 @@
 class ocf_ceph {
   require ocf::packages::ceph
 
+  $ceph_fsid = lookup('ceph::fsid')
+
   $ceph_mons_list = lookup('ceph::mons')
   $ceph_mons = $ceph_mons_list.join(',')
   $ceph_mon_ips = $ceph_mons_list.map

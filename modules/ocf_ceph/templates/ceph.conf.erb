@@ -1,6 +1,6 @@
 [global]
 # ID of the ceph cluster
-fsid = a910ccd1-1116-4873-b3f9-c2cb7eed4e56
+fsid = <%= @ceph_fsid %>
 
 # Initial ceph monitors
 mon_host = <%= @ceph_mons %>
