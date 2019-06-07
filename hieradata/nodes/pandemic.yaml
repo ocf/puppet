@@ -1,6 +1,18 @@
 classes:
     - ocf_kvm
     - ocf_kubernetes::worker
+    - ocf_ceph::mon
+    - ocf_ceph::osd
+
+ocf_ceph::osd::disks:
+    - /dev/sda
+    - /dev/sdb
+    - /dev/sdc
+    - /dev/sdd
+    - /dev/sde
+    - /dev/sdf
+    - /dev/sdg
+    - /dev/sdh
 
 ocf::networking::bridge: true
 ocf::networking::bond: true

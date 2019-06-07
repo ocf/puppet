@@ -1,0 +1,12 @@
+[mon.]
+    key = <%= @mon_key %>
+    caps mon = "allow *"
+[client.admin]
+    key = <%= @admin_key %>
+    caps mon = "allow *"
+    caps osd = "allow *"
+    caps mds = "allow *"
+    caps mgr = "allow *"
+[client.bootstrap-osd]
+    key = <%= @bootstrap_osd_key %>
+    caps mon = "profile bootstrap-osd"
