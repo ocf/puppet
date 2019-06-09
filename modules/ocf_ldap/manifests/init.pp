@@ -22,7 +22,7 @@ class ocf_ldap {
 
   file {
     '/etc/ldap/slapd.conf':
-      content => template('ocf_/ldap/slapd.conf.erb'),
+      content => template('ocf_ldap/slapd.conf.erb'),
       require => Package['slapd'];
 
     '/etc/ldap/schema/ocf.schema':
@@ -49,6 +49,7 @@ class ocf_ldap {
   augeas { '/etc/default/slapd':
     context => '/files/etc/default/slapd',
     changes => [
+      'set SLAPD_CONF=/etc/ldap/slapd.conf',
       'set SLAPD_SERVICES \'"ldaps:///"\'',
       'touch KRB5_KTNAME/export',
       'set KRB5_KTNAME /etc/ldap/krb5.keytab',
