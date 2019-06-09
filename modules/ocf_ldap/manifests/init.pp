@@ -21,6 +21,10 @@ class ocf_ldap {
   }
 
   file {
+    '/etc/ldap/slapd.conf':
+      content => template('ocf_/ldap/slapd.conf.erb'),
+      require => Package['slapd'];
+
     '/etc/ldap/schema/ocf.schema':
       source  => 'puppet:///modules/ocf_ldap/ocf.schema',
       require => Package['slapd'];
