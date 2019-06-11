@@ -30,7 +30,6 @@ class ocf_ceph::mon {
     command => "ceph auth add mgr.${::hostname} ${mgr_perms}",
     unless  => "ceph auth get mgr.${::hostname}",
   } ->
-
   exec { "export-mgr-key-${::hostname}":
     command => "ceph auth export mgr.${::hostname} -o ${mgr_keyring_file}",
     creates => $mgr_keyring_file,
@@ -40,7 +39,6 @@ class ocf_ceph::mon {
     command => "ceph auth add mds.${::hostname} ${mds_perms}",
     unless  => "ceph auth get mds.${::hostname}",
   } ->
-
   exec { "export-mds-key-${::hostname}":
     command => "ceph auth export mds.${::hostname} -o ${mds_keyring_file}",
     creates => $mds_keyring_file,
