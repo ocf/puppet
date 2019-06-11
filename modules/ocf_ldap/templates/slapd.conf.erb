@@ -18,6 +18,9 @@ TLSCertificateFile /etc/ssl/private/<%= @fqdn -%>.crt
 TLSCertificateKeyFile /etc/ssl/private/<%= @fqdn -%>.key
 TLSCACertificateFile /etc/ssl/private/<%= @fqdn -%>.intermediate
 
+# Query return size limit
+sizelimit -1
+
 ## Map Kerberos principals to LDAP
 sasl-realm OCF.BERKELEY.EDU
 # users
