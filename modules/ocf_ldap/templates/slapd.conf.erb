@@ -16,7 +16,7 @@ lastmod on
 TLSCipherSuite SECURE256:!AES-128-CBC:!ARCFOUR-128:!CAMELLIA-128-CBC:!3DES-CBC:!CAMELLIA-128-CBC
 TLSCertificateFile /etc/ssl/private/<%= @fqdn -%>.crt
 TLSCertificateKeyFile /etc/ssl/private/<%= @fqdn -%>.key
-TLSCACertificateFile /etc/ssl/certs/incommon-intermediate.crt
+TLSCACertificateFile /etc/ssl/private/<%= @fqdn -%>.intermediate
 
 ## Map Kerberos principals to LDAP
 sasl-realm OCF.BERKELEY.EDU
