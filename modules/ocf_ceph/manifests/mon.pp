@@ -1,7 +1,4 @@
 # Ceph monitor + manager + metadata server configuration
-# To bootstap, run puppet once, then run
-# sudo -u ceph ceph-mon --mkfs -i $hostname --keyring /var/lib/ceph/mon-bootstrap-keyring
-# Then run puppet again
 
 class ocf_ceph::mon {
   require ocf_ceph
@@ -24,6 +21,11 @@ class ocf_ceph::mon {
       ensure => directory,
       owner  => 'ceph',
       group  => 'ceph',
+  }
+
+  exec { "bootstrap-mgr-${::hostname}":
+    command => "sudo -u ceph ceph-mon --mkfs -i ${::hostname} --keyring /var/lib/ceph/mon-bootstrap-keyring",
+    creates => "/var/lib/ceph/mon/ceph-${::hostname}/keyring",
   }
 
   exec { "make-mgr-key-${::hostname}":
