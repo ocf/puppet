@@ -1,6 +1,9 @@
 # Ceph object store daemon configuration
 # Set ocf_ceph::osd::disks to be the disks allocated to ceph
-# If you have issues just dd if=/dev/zero the disk and try again
+# Sometimes while applying the configuration, there might be an error
+# "Can't open /dev/sdx exclusively. Mounted filesystem?"
+# If that is the case, use the workaround here
+# https://docs.oracle.com/cd/E52668_01/E96266/html/ceph-luminous-issues-27748402.html
 
 class ocf_ceph::osd($disks=[]) {
   require ocf_ceph
