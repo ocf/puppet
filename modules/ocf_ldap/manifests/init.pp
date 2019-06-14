@@ -66,7 +66,7 @@ class ocf_ldap {
     #
     # Make sure this occurs before the rsync backup for rsnapshot, since this
     # ensures we have a more recent daily backup stored on our backup server
-    command => "/usr/sbin/ldap-git-backup --ldif-cmd 'slapcat -s cn=config; slapcat'",
+    command => '/usr/sbin/ldap-git-backup',
     minute  => 0,
     hour    => 1,
     require => Package['ldap-git-backup'];
