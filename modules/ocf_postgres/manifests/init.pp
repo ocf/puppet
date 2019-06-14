@@ -32,6 +32,20 @@ class ocf_postgres {
       };
   }
 
+  # Postgres expects the letsencrypt certs to be owned by root
+  # The renewal script expects the letsencrypt certs to be owned by ocfletsencrypt
+  # We change the owner to ocfletsencrypt before the renewal script runs
+  # Then we change the owner back to root after it runs
+  exec { 'chown-letsencrypt':
+    command => 'chown -R ocfletsencrypt:ssl-cert /var/lib/lets-encrypt/certs',
+    before  => Class['Ocf::Ssl::Default'],
+  }
+
+  exec { 'chown-root':
+    command => 'chown -R root:ssl-cert /var/lib/lets-encrypt/certs',
+    require => Class['Ocf::Ssl::Default'],
+  }
+
   Class['Ocf::Ssl::Default'] ~> Class['Postgresql::Server']
 
   file {
