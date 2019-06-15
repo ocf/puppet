@@ -1,0 +1,12 @@
+#!/bin/bash
+set -euo pipefail
+
+FACT="polkit_priv_drop"
+pkg=$(dpkg-query -s policykit-1 2>/dev/null)
+[[ $? -ne 0 ]] && echo "$FACT=false"
+version=$(echo "$pkg" | grep Version | cut -d' ' -f2)
+if dpkg --compare-versions "$version" 'ge' '0.115'; then
+    echo "$FACT=true"
+else
+    echo "$FACT=false"
+fi
