@@ -11,9 +11,16 @@ class ocf::packages::grub {
   # and we'd rather not have data corruption in the future:
   # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=788062
   if $::lsbdistid != 'Raspbian' {
-    # grub-pc isn't available on Raspbian
-    ocf::repackage { 'grub-pc':
-      recommends => false;
+    # grub-pc or grub-efi aren't available on Raspbian.
+    if $::is_efi_host {
+      ocf::repackage { 'grub-efi':
+        recommends => false,
+      }
+    }
+    else {
+      ocf::repackage { 'grub-pc':
+        recommends => false,
+      }
     }
   }
   package { 'os-prober':
