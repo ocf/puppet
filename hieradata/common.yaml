@@ -84,7 +84,7 @@ kubernetes::install_dashboard: false
 kubernetes::controller_address: 169.229.226.75:6443
 kubernetes::nginx_version: '0.21.0'
 kubernetes::worker_nodes:
-    - jaws
+    - pandemic
     - hozer-73
     - hozer-74
 kubernetes::master_nodes:
