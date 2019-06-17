@@ -1,6 +1,5 @@
 classes:
     - ocf_kvm
-    - ocf_kubernetes::worker
 
 ocf::networking::bridge: true
 ocf::networking::bond: true
