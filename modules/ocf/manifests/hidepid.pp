@@ -36,7 +36,7 @@ class ocf::hidepid {
     remounts => true,
     device   => '/proc',
     fstype   => 'procfs',
-    options  => "rw,hidepid=2,gid=${group_cap_ptrace}",
+    options  => "rw,hidepid=2,gid=${group_cap_ptrace},gid=ocfstaff",
     require  => Group[$group_cap_ptrace];
   }
 }
