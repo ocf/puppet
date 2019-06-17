@@ -3,8 +3,6 @@ class ocf_desktop::stats {
     'ocfstats':
       comment => 'OCF Desktop Stats',
       home    => '/opt/stats',
-      system  => true,
-      groups  => 'sys';
   }
 
   file {

@@ -8,7 +8,6 @@ class ocf_irc::znc {
     groups  => [ssl-cert],
     home    => '/var/lib/znc',
     shell   => '/bin/false',
-    system  => true,
     require => Package['ssl-cert'],
   }
 

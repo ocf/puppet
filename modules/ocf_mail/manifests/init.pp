@@ -19,14 +19,12 @@ class ocf_mail {
     groups  => [sys],
     home    => '/var/mail',
     shell   => '/bin/false',
-    system  => true,
     require => Group['ocfmail'],
   }
 
   group { 'ocfmail':
     ensure => present,
     name   => ocfmail,
-    system => true,
   }
 
   file { '/etc/postfix/main.cf':

@@ -1,9 +1,7 @@
 class ocf_ssh::makeservices {
   user { 'ocfmakexmpp':
     comment => 'OCF user to create XMPP accounts',
-    groups  => ['sys'],
     shell   => '/bin/false',
-    system  => true,
   }
 
   # enable regular users to run makemysql.py as mysql

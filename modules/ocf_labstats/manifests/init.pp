@@ -5,8 +5,6 @@ class ocf_labstats {
     'ocfstats':
       comment => 'OCF Lab Stats',
       home    => '/opt/stats',
-      system  => true,
-      groups  => 'sys';
   }
 
   $file_defaults = {
