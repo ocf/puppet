@@ -45,7 +45,6 @@ class ocf_www {
   user {
     'prometheus':
       comment => 'prometheus user for running exporters',
-      system  => true,
   }
 
   ocf::repackage {

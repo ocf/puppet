@@ -34,9 +34,7 @@ class ocf_mirrors {
   user { 'mirrors':
     comment  => 'OCF Mirroring',
     home     => '/opt/mirrors',
-    groups   => ['sys'],
     shell    => '/bin/bash',
-    system   => true,
 
     # Set to have no password, only allow key-based login
     password => '*',

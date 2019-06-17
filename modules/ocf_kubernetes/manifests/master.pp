@@ -119,9 +119,7 @@ class ocf_kubernetes::master {
   user { 'kubernetes-ca':
     ensure =>  present,
     name   =>  'kubernetes-ca',
-    groups =>  [sys],
     shell  =>  '/bin/false',
-    system =>  true,
   }
 
   # Override the Kubernetes configuration directory, created by
