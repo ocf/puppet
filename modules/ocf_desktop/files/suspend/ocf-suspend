@@ -10,6 +10,8 @@ import argparse
 import os
 import subprocess
 import sys
+from datetime import datetime
+from datetime import time
 from subprocess import DEVNULL
 from syslog import syslog
 
@@ -19,6 +21,17 @@ from ocflib.lab.hours import read_hours_listing
 def file_is_open(path):
     """Return whether a file is open by any process on the system."""
     return subprocess.call(('lsof', '--', path), stdout=DEVNULL, stderr=DEVNULL) == 0
+
+
+def is_atdp_hours():
+    """Return whether the given time is during atdp hours.
+    If not provided, when defaults to now.
+    """
+    days = [0, 2, 4]  # Monday, Wednesday, Friday
+    open_time = time(8, 15)  # 8:15 AM
+    close_time = time(16, 30)  # 4:30 PM
+    when = datetime.now()
+    return when.weekday() in days and open_time <= when.time() <= close_time
 
 
 def main(argv=None):
@@ -39,7 +52,7 @@ def main(argv=None):
 
     # Don't sleep if...
     # ...lab is open
-    if read_hours_listing().is_open() and not args.force:
+    if (read_hours_listing().is_open() or is_atdp_hours()) and not args.force:
         report('not suspending as lab is open')
         return 1
 
