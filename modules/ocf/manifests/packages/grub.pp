@@ -12,7 +12,7 @@ class ocf::packages::grub {
   # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=788062
   if $::lsbdistid != 'Raspbian' {
     # grub-pc or grub-efi aren't available on Raspbian.
-    if $::is_efi_host {
+    if str2bool($::is_efi_host) {
       ocf::repackage { 'grub-efi':
         recommends => false,
       }
