@@ -4,9 +4,10 @@ class ocf_staffvm::docker_group {
 
     $owner = lookup('owner')
 
-    ensure_resource('user', $owner)
-    User[$owner] {
-      groups +> 'docker'
+    user { $owner:
+      groups     => ['docker'],
+      system     => false,
+      membership => minimum,
     }
   }
 }
