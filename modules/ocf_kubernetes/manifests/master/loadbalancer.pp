@@ -55,20 +55,6 @@ class ocf_kubernetes::master::loadbalancer {
     vip => $vip,
   }
 
-  # The PAM module is needed for the web UI auth prompt
-  package { ['nginx-extras', 'libnginx-mod-http-auth-pam']:; }
-
-  class { 'nginx':
-    manage_repo       => false,
-    confd_purge       => true,
-    server_purge      => true,
-    nginx_cfg_prepend =>  {
-      'load_module' =>  '"modules/ngx_http_auth_pam_module.so"',
-    },
-
-    require           =>  Package['nginx-extras', 'libnginx-mod-http-auth-pam'],
-  }
-
   $upstream_workers = Hash.new($kubernetes_worker_nodes.map |String $worker| {
     [
       "${worker}:31234",
@@ -137,6 +123,16 @@ class ocf_kubernetes::master::loadbalancer {
   ocf_kubernetes::master::loadbalancer::http_vhost { 'kanboard':
     server_name    => 'kanboard.ocf.berkeley.edu',
     server_aliases => ['kanboard', 'kanboard.ocf.io'],
+  }
+
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'kube':
+    server_name    => 'kube.ocf.berkeley.edu',
+    server_aliases => ['kube', 'kube.ocf.io'],
+  }
+
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'kubeadmin':
+    server_name    => 'kubeadmin.ocf.berkeley.edu',
+    server_aliases => ['kubeadmin', 'kubeadmin.ocf.io'],
   }
 
   ocf_kubernetes::master::loadbalancer::http_vhost { 'labmap':
