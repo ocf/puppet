@@ -5,21 +5,6 @@ staff_only: true
 opstaff: false
 puppet_agent: true
 
-# Mesos/Marathon configuration
-#
-# The numerical values are the "mesos#" hostname, which is also used as the
-# Zookeeper ID (it requires numerical IDs).
-mesos_masters:
-    whirlwind: 0
-    pileup: 1
-    monsoon: 2
-
-mesos_slaves:
-    - jaws
-    - pandemic
-    - riptide
-    - dataloss
-
 browser_homepage: https://www.ocf.berkeley.edu/about/lab/open-source
 
 #special devices

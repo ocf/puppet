@@ -109,13 +109,6 @@ class ocf_jenkins {
       mode      => '0640',
       show_diff => false;
 
-    '/opt/jenkins/deploy/.ocf-marathon':
-      source    => 'puppet:///private/ocf-marathon',
-      owner     => root,
-      group     => jenkins-deploy,
-      mode      => '0640',
-      show_diff => false;
-
     '/opt/jenkins/deploy/.docker':
       ensure => directory,
       owner  => root,
