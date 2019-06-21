@@ -15,7 +15,6 @@ class ocf_kubernetes::master {
   include ocf::packages::docker_kubernetes
   include ocf::packages::kubernetes
   include ocf_kubernetes::master::loadbalancer
-  include ocf_kubernetes::master::webui
 
   $etcd_version = lookup('kubernetes::etcd_version')
   $etcd_archive = "etcd-v${etcd_version}-linux-amd64.tar.gz"
@@ -66,6 +65,21 @@ class ocf_kubernetes::master {
     'rbac':
       target    => '/etc/ocf-kubernetes/manifests/rbac.yaml',
       subscribe => File['/etc/ocf-kubernetes/manifests/rbac.yaml'];
+  }
+
+  # Kubernetes webui configuration
+  # The webui needs to live in the kube-system namespace so it cannot be
+  # declared in the kube-webui repository
+
+  file {
+    '/etc/ocf-kubernetes/manifests/webui.yaml':
+      source => 'puppet:///modules/ocf_kubernetes/webui.yaml',
+  }
+
+  ocf_kubernetes::apply {
+    'webui':
+      target    => '/etc/ocf-kubernetes/manifests/webui.yaml',
+      subscribe => File['/etc/ocf-kubernetes/manifests/webui.yaml'],
   }
 
   # These are needed because puppetlabs-kubernetes sets the permissions to 600
