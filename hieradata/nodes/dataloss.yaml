@@ -1,7 +1,5 @@
 classes:
   - ocf_filehost
-  - ocf_mesos::slave
-  - ocf_mesos::secrets
 
 ocf::packages::ntp::master: true
 ocf::packages::ntp::peers:
@@ -11,7 +9,3 @@ ocf::packages::ntp::peers:
   - riptide.ocf.berkeley.edu
 
 ocf_filehost::storage_device: '/dev/md/nfs'
-
-ocf_mesos::slave::attributes:
-  nfs:
-      value: 'true'

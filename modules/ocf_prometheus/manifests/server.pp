@@ -40,13 +40,6 @@ class ocf_prometheus::server {
       group     => 'prometheus',
       mode      => '0400';
 
-    '/etc/prometheus/marathon_passwd':
-      content   => lookup('mesos::marathon::http_password'),
-      show_diff => false,
-      owner     => 'prometheus',
-      group     => 'prometheus',
-      mode      => '0400';
-
     '/etc/prometheus/rules.d':
       ensure  => 'directory',
       source  => 'puppet:///modules/ocf_prometheus/rules.d',
@@ -128,46 +121,6 @@ class ocf_prometheus::server {
         scrape_timeout  => '10s',
 
         static_configs  => [{targets => ['www:9117']}],
-      },
-      {
-        job_name            => 'marathon',
-        scrape_interval     => '10s',
-        scrape_timeout      => '10s',
-
-        marathon_sd_configs => [
-          {
-            servers    => keys(lookup('mesos_masters')).map |$m| { "http://${m}:8080" },
-            basic_auth => {
-              username      => 'marathon',
-              password_file => '/etc/prometheus/marathon_passwd',
-            },
-          },
-        ],
-
-        basic_auth          => {
-          username      => 'prometheus',
-          password_file => '/etc/prometheus/docker_metrics_passwd',
-        },
-
-        relabel_configs     => [
-          {
-            source_labels => ['__meta_marathon_app'],
-            regex         => '/grafana|/ocfweb/web',
-            action        => 'keep',
-          },
-          {
-            source_labels => ['__meta_marathon_app'],
-            target_label  => 'app',
-          },
-          {
-            source_labels => ['__meta_marathon_image'],
-            target_label  => 'marathon_image',
-          },
-          {
-            source_labels => ['__meta_marathon_task'],
-            target_label  => 'marathon_task',
-          },
-        ],
       },
       {
         job_name        => 'slurm',

@@ -21,13 +21,9 @@ class ocf_puppet::puppetserver {
     notify  => Service['puppetserver'],
   }
 
-  $docker_private_hosts = union(
-    keys(lookup('mesos_masters')),
-    lookup('mesos_slaves'),
-    lookup('kubernetes::worker_nodes'),
-  )
+  $docker_private_hosts = lookup('kubernetes::worker_nodes')
 
-  # Allow Mesos agents and masters to access docker secrets
+  # Allow Kubernetes workers to access docker secrets
   puppet_authorization::rule { 'private-docker':
     match_request_path   => '^/puppet/v3/file_(content|metadata)s?/private-docker$',
     match_request_type   => 'regex',
