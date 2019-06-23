@@ -15,8 +15,5 @@ class ocf_puppet {
 
     # Staff need to use virtualenv to run tests.
     'virtualenv':;
-
-    # Provides google-authenticator utility for generating google authenticator OTP secrets
-    'libpam-google-authenticator':;
   }
 }

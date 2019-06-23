@@ -1,0 +1,13 @@
+# use /root principal to sudo
+auth requisite pam_krb5.so minimum_uid=1000 alt_auth_map=%s/root only_alt_auth no_ccache
+# at this point, yubikey auth is sufficient
+auth sufficient pam_yubico.so id=<%= @yubico_api_keys['id'] %> key=<%= @yubico_api_keys['key'] %> authfile=/etc/otp/yubikeys
+# if yubikey auth fails, fall back to google authenticator
+auth required pam_google_authenticator.so secret=/etc/otp/google-authenticator/${USER} user=root echo_verification_code
+account required pam_permit.so
+
+# sensible defaults including logging
+@include common-session-noninteractive
+
+# reset user limits
+session required pam_limits.so

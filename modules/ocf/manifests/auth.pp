@@ -182,7 +182,8 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   }
 
   # sudo user/group access controls
-  package { 'sudo': }
+  $yubico_api_keys = lookup('ocf::auth::yubico_api_keys')
+  package { ['sudo', 'libpam-google-authenticator', 'libpam-yubico']: }
   file {
     '/etc/otp':
       mode      => '0400',
@@ -192,11 +193,16 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
       force     => true,
       show_diff => false;
     '/etc/pam.d/sudo':
-      source  => 'puppet:///modules/ocf/auth/pam/sudo',
-      require => Package['sudo'];
+      mode      => '0400',
+      content   => template('ocf/auth/pam-sudo.erb'),
+      show_diff => false,
+      require   => [
+        Package['sudo', 'libpam-google-authenticator', 'libpam-yubico'],
+        File['/etc/otp'],
+      ];
     '/etc/sudoers':
       mode    => '0440',
-      content => template('ocf/sudoers.erb'),
+      content => template('ocf/auth/sudoers.erb'),
       require => Package['sudo'];
   }
 }
