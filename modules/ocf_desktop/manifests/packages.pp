@@ -41,7 +41,7 @@ class ocf_desktop::packages {
     # notifications
     ['libnotify-bin', 'notification-daemon']:;
     # security tools
-    ['scdaemon']:;
+    ['scdaemon', 'yubikey-manager']:;
     # utilities
     ['wakeonlan']:;
     # Xorg
