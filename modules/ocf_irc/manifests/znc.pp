@@ -8,7 +8,6 @@ class ocf_irc::znc {
     groups  => [ssl-cert],
     home    => '/var/lib/znc',
     shell   => '/bin/false',
-    system  => true,
     require => Package['ssl-cert'],
   }
 
@@ -34,6 +33,6 @@ class ocf_irc::znc {
       File['/var/lib/znc'],
       File['/var/lib/znc/znc.pem'],
     ],
-    subscribe => Class['ocf::ssl::default'],
+    subscribe => Ocf::Ssl::Bundle[$::fqdn],
   }
 }

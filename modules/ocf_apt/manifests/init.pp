@@ -5,9 +5,7 @@ class ocf_apt {
   user { 'ocfapt':
     comment => 'OCF Apt',
     home    => '/opt/apt',
-    groups  => ['sys'],
     shell   => '/bin/false',
-    system  => true,
   }
 
   package { 'reprepro':; }

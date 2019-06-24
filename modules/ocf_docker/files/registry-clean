@@ -4,8 +4,8 @@ set -euo pipefail
 # Always make sure the registry is started, no matter what fails.
 trap 'systemctl start docker-registry' EXIT
 
-# Delete all images older than 2 months.
-deckschrubber -repos 9999 -month 2
+# Delete all images older than a month.
+deckschrubber -repos 9999 -month 1
 
 systemctl stop docker-registry
 docker run --rm \

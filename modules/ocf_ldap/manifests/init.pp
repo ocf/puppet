@@ -6,10 +6,10 @@ class ocf_ldap {
   package { ['slapd', 'libarchive-zip-perl']:; }
   service { 'slapd':
     subscribe => [
-      File[
-        '/etc/ldap/krb5.keytab',
+      File['/etc/ldap/schema/ocf.schema',
+        '/etc/ldap/schema/puppet.schema',
         '/etc/ldap/sasl2/slapd.conf',
-      ],
+        '/etc/ldap/krb5.keytab'],
       Augeas['/etc/default/slapd'],
       Class['ocf::ssl::default'],
     ],
@@ -21,6 +21,18 @@ class ocf_ldap {
   }
 
   file {
+    '/etc/ldap/slapd.conf':
+      content => template('ocf_ldap/slapd.conf.erb'),
+      require => Package['slapd'];
+
+    '/etc/ldap/schema/ocf.schema':
+      source  => 'puppet:///modules/ocf_ldap/ocf.schema',
+      require => Package['slapd'];
+
+    '/etc/ldap/schema/puppet.schema':
+      source  => 'puppet:///modules/ocf_ldap/puppet.schema',
+      require => Package['slapd'];
+
     '/etc/ldap/sasl2/slapd.conf':
       source  => 'puppet:///modules/ocf_ldap/sasl2-slapd',
       require => Package['slapd', 'libsasl2-modules-gssapi-mit'];
@@ -37,6 +49,7 @@ class ocf_ldap {
   augeas { '/etc/default/slapd':
     context => '/files/etc/default/slapd',
     changes => [
+      'set SLAPD_CONF /etc/ldap/slapd.conf',
       'set SLAPD_SERVICES \'"ldaps:///"\'',
       'touch KRB5_KTNAME/export',
       'set KRB5_KTNAME /etc/ldap/krb5.keytab',
@@ -53,7 +66,7 @@ class ocf_ldap {
     #
     # Make sure this occurs before the rsync backup for rsnapshot, since this
     # ensures we have a more recent daily backup stored on our backup server
-    command => "/usr/sbin/ldap-git-backup --ldif-cmd 'slapcat -s cn=config; slapcat'",
+    command => '/usr/sbin/ldap-git-backup',
     minute  => 0,
     hour    => 1,
     require => Package['ldap-git-backup'];

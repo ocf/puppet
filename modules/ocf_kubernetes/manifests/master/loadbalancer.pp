@@ -119,6 +119,11 @@ class ocf_kubernetes::master::loadbalancer {
       ];
   }
 
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'auth':
+    server_name    => 'auth.ocf.berkeley.edu',
+    server_aliases => ['auth', 'auth.ocf.io'],
+  }
+
   ocf_kubernetes::master::loadbalancer::http_vhost { 'grafana':
     server_name    => 'grafana.ocf.berkeley.edu',
     server_aliases => ['grafana', 'grafana.ocf.io'],
@@ -128,7 +133,6 @@ class ocf_kubernetes::master::loadbalancer {
     server_name    => 'ircbot.ocf.berkeley.edu',
     server_aliases => ['ircbot', 'ircbot.ocf.io'],
   }
-
 
   ocf_kubernetes::master::loadbalancer::http_vhost { 'kanboard':
     server_name    => 'kanboard.ocf.berkeley.edu',
@@ -158,6 +162,11 @@ class ocf_kubernetes::master::loadbalancer {
   ocf_kubernetes::master::loadbalancer::http_vhost { 'rt':
     server_name    => 'rt.ocf.berkeley.edu',
     server_aliases => ['rt', 'rt.ocf.io'],
+  }
+
+  ocf_kubernetes::master::loadbalancer::http_vhost { 'inventory':
+    server_name    => 'inventory.ocf.berkeley.edu',
+    server_aliases => ['inventory', 'inventory.ocf.io'],
   }
 
   ocf_kubernetes::master::loadbalancer::http_vhost { 'sourcegraph':

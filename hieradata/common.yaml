@@ -5,21 +5,6 @@ staff_only: true
 opstaff: false
 puppet_agent: true
 
-# Mesos/Marathon configuration
-#
-# The numerical values are the "mesos#" hostname, which is also used as the
-# Zookeeper ID (it requires numerical IDs).
-mesos_masters:
-    whirlwind: 0
-    pileup: 1
-    monsoon: 2
-
-mesos_slaves:
-    - jaws
-    - pandemic
-    - riptide
-    - dataloss
-
 browser_homepage: https://www.ocf.berkeley.edu/about/lab/open-source
 
 #special devices
@@ -84,7 +69,7 @@ kubernetes::install_dashboard: false
 kubernetes::controller_address: 169.229.226.75:6443
 kubernetes::nginx_version: '0.21.0'
 kubernetes::worker_nodes:
-    - jaws
+    - pandemic
     - hozer-73
     - hozer-74
 kubernetes::master_nodes:

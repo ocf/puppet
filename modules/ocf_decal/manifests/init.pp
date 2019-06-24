@@ -7,7 +7,6 @@ class ocf_decal {
     home    => '/opt/ocfdecal',
     shell   => '/bin/bash',
     groups  => 'www-data',
-    system  => true,
   }
 
   file {

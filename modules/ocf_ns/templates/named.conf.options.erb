@@ -35,17 +35,11 @@ options {
     128.32.136.9;
     128.32.206.12;
     128.32.136.12;
-    169.229.2.171;
-    169.229.203.4;
   };
 
   dnssec-enable yes;
   dnssec-lookaside auto;
-
-  // Don't validate DNSSEC yet, since mesos-dns doesn't support it
-  // dnssec-must-be-secure doesn't work either unfortunately :(
-  // Neither does using disable-algorithms on only the mesos zone
-  dnssec-validation no;
+  dnssec-validation yes;
 
   // Allow queries from anywhere and zone transfers from OCF/UCB
   allow-query { any; };

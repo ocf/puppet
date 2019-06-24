@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+
+if [ -d /sys/firmware/efi/efivars ]; then
+  echo 'is_efi_host=true'
+else
+  echo 'is_efi_host=false'
+fi

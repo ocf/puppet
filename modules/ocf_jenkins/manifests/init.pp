@@ -109,13 +109,6 @@ class ocf_jenkins {
       mode      => '0640',
       show_diff => false;
 
-    '/opt/jenkins/deploy/.ocf-marathon':
-      source    => 'puppet:///private/ocf-marathon',
-      owner     => root,
-      group     => jenkins-deploy,
-      mode      => '0640',
-      show_diff => false;
-
     '/opt/jenkins/deploy/.docker':
       ensure => directory,
       owner  => root,
@@ -136,21 +129,18 @@ class ocf_jenkins {
   }
 
   user {
-    'jenkins-slave':
-      comment => 'OCF Jenkins Slave',
-      home    => '/opt/jenkins/slave/',
+    default:
       groups  => ['sys', 'docker'],
       shell   => '/bin/bash',
-      system  => true,
       require => Package['docker-ce'];
+
+    'jenkins-slave':
+      comment => 'OCF Jenkins Slave',
+      home    => '/opt/jenkins/slave/';
 
     'jenkins-deploy':
       comment => 'OCF Jenkins Deploy',
-      home    => '/opt/jenkins/deploy/',
-      groups  => ['sys', 'docker'],
-      shell   => '/bin/bash',
-      system  => true,
-      require => Package['docker-ce'];
+      home    => '/opt/jenkins/deploy/';
   }
 
   # mount jenkins slave workspace as tmpfs for speed

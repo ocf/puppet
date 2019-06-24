@@ -6,7 +6,7 @@ class ocf_puppet::puppetboard {
     'prod' => 'puppet.ocf.berkeley.edu',
   }
 
-  # Nginx is used to proxy to Marathon and to supply a HTTP -> HTTPS redirect
+  # Nginx is used to proxy to Kubernetes and to supply a HTTP -> HTTPS redirect
   class { 'nginx':
     manage_repo  => false,
     confd_purge  => true,

@@ -5,7 +5,7 @@ class ocf_irc::ircd {
     restart   => 'service inspircd reload',
     enable    => true,
     require   => Package['inspircd'],
-    subscribe => Class['ocf::ssl::default'],
+    subscribe => Ocf::Ssl::Bundle[$::fqdn],
   } ->
   cron { 'reload-irc-cert':
     command => 'chronic /usr/local/bin/reload-ssl.sh /etc/inspircd/reload_pass',

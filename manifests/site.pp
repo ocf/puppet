@@ -8,6 +8,10 @@ stage { 'first': before => Stage['main'] }
 
 ### global defaults ###
 
+# We almost always intend to create system users/groups
+User { system => true, groups => ['sys'] }
+Group { system => true }
+
 # default path for executions
 Exec { path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' }
 
