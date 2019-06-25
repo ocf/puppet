@@ -11,8 +11,9 @@ input=$(mktemp --suffix='.pdf')
 cat - > "$input"
 
 # If the file is not a PDF, then just pass it thorugh
-# (Note that all PDFs start with "%PDF")
-if [ "$(head -c 4 "$input")" != "%PDF" ]; then
+mimetype="$(file -bi "$input")"
+
+if [ "${mimetype%%;*}" != "application/pdf" ]; then
     cat "$input"
     exit
 fi
