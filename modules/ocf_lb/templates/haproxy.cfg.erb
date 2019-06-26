@@ -1,0 +1,57 @@
+global
+  daemon
+  log localhost local0
+  # TODO: send to syslog
+  maxconn 4000
+  pidfile /var/run/haproxy.pid
+  user haproxy
+  group sys
+  chroot /var/lib/haproxy
+
+defaults
+  timeout connect 10s
+  timeout client 30s
+  timeout server 30s
+  option httplog
+  log global
+  option redispatch
+  retries 3
+
+frontend lb-http
+  bind 0.0.0.0:80
+  mode http
+
+  # https redirect
+  redirect scheme https code 301 if !{ ssl_fc }
+
+frontend lb-https
+  bind 0.0.0.0:443 ssl crt /etc/ssl/private/<%= @fqdn %>.pem
+  mode http
+
+  <%- @kubernetes_prod_aliases.each do |service_name, aliases| -%>
+  redirect prefix https://<%= service_name %> code 301 if { hdr(host) -i <%= aliases.join(' ') %> }
+  use_backend kubernetes-prod if { hdr(host) -i <%= service_name %> }
+  <%- end -%>
+
+
+# Some services don't need SSL termination
+# Either because it has already been done (ocfweb, irc)
+# Or because it doesn't need it (snmp_exporter)
+# As all such traffic should be internal, it is placed on a firewall'd port
+frontend lb-proxy
+  bind 0.0.0.0:4080
+
+  <%- @kubernetes_prod_proxy.each do |proxy_name| -%>
+  use_backend kubernetes-prod if { hdr(host) -i <%= proxy_name %>.ocf.berkeley.edu }
+  <%- end -%>
+
+backend kubernetes-prod
+  balance source
+  hash-type consistent
+  http-request add-header X-Forwarded-Proto https if { ssl_fc }
+  http-request add-header X-Forwarded-Port %[dst_port]
+  mode http
+  option forwardfor
+  <%- @kubernetes_prod_workers.each do |hostname, ip| -%>
+  server <%= hostname %> <%= ip %>:31234
+  <%- end -%>
