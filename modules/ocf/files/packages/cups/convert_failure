@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+"""A script to send an email to the root mailing list upon failure of
+the convert program, when used in the raster-filter script, a
+Tea4CUPS filter.
+
+Jobs printed from one of the desktops, or from supernova or tsunami,
+first go through raster-filter, which calls convert to reduce the
+density of any PDFs, essentially rasterizing them. If convert happens
+to fail, raster-filter will pipe stderr from convert to this script,
+which takes in stdin and includes it in an email to root@ocf. Thus,
+this script should not be called casually by regular users!
+
+Based off the enforcer script for whiteout, and the
+email_ldapsync_problem script
+"""
+import os
+import socket
+import sys
+from textwrap import dedent
+
+from ocflib.misc import mail
+
+ERROR_MSG = dedent("""\
+        raster-filter encountered the following error while running convert:
+
+        {stdin}
+
+
+        tea4cups environment variables:
+        {tea_vars}
+
+        ====
+        Hostname: {hostname}
+        """.format(
+    stdin=sys.stdin.read(),
+    tea_vars='\n'.join('  {}: {}'.format(k, v)
+                       for k, v in os.environ.items() if k.startswith('TEA')),
+    hostname=socket.getfqdn()
+)
+)
+
+if __name__ == '__main__':
+    mail.send_mail(
+        mail.MAIL_ROOT,
+        '[raster-filter] Problem report from ' + socket.getfqdn(),
+        ERROR_MSG,
+        sender='raster-filter <root@ocf.berkeley.edu>'
+    )

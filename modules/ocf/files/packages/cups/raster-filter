@@ -21,8 +21,9 @@ fi
 # Rasterizing PDF...
 output=$(mktemp --suffix='.pdf')
 
-if ! convert -density 250 "$input" "$output" 2> /tmp/error; then
-    echo 'Convert failed.'
+if ! convert -density 250 "$input" "$output" 2>&1 | "/usr/local/bin/convert_failure"; then
+    cat "$input"
+    exit
 fi
 
 # Done rasterizing
