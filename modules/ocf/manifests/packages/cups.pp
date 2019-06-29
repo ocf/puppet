@@ -28,6 +28,10 @@ class ocf::packages::cups {
     '/etc/cups/tea4cups.conf':
       source  => 'puppet:///modules/ocf/packages/cups/tea4cups.conf',
       require => Package['cups-tea4cups'];
+    # set convert_failure script for raster-filter
+    '/usr/local/bin/convert_failure':
+      source => 'puppet:///modules/ocf/packages/cups/convert_failure',
+      mode   => '0755';
   }
 
   service { 'cups':
