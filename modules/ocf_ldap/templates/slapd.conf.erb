@@ -33,6 +33,10 @@ moduleload   back_mdb
 database     mdb
 suffix       dc=OCF,dc=Berkeley,dc=EDU
 
+## OCF virtual attribute overlay
+moduleload   ocfvirt
+overlay      ocfvirt
+
 ## LMDB database parameters
 directory    /var/lib/ldap
 maxsize      2147483648
