@@ -13,7 +13,6 @@ this script should not be called casually by regular users!
 Based off the enforcer script for whiteout, and the
 email_ldapsync_problem script
 """
-import os
 import socket
 import sys
 from textwrap import dedent
@@ -26,23 +25,26 @@ ERROR_MSG = dedent("""\
         {stdin}
 
 
-        tea4cups environment variables:
-        {tea_vars}
-
         ====
         Hostname: {hostname}
-        """.format(
-    stdin=sys.stdin.read(),
-    tea_vars='\n'.join('  {}: {}'.format(k, v)
-                       for k, v in os.environ.items() if k.startswith('TEA')),
-    hostname=socket.getfqdn()
-)
-)
+""")
+
+
+def main():
+    if sys.stdin.isatty():
+        sys.stderr.write('script should not be called interactively. Aborting...')
+    else:
+        error_message = ERROR_MSG.format(stdin=sys.stdin.read(),
+                                         hostname=socket.getfqdn()
+                                         )
+
+        mail.send_mail(
+            mail.MAIL_ROOT,
+            '[raster-filter] Problem report from ' + socket.getfqdn(),
+            error_message,
+            sender='raster-filter <root@ocf.berkeley.edu>'
+        )
+
 
 if __name__ == '__main__':
-    mail.send_mail(
-        mail.MAIL_ROOT,
-        '[raster-filter] Problem report from ' + socket.getfqdn(),
-        ERROR_MSG,
-        sender='raster-filter <root@ocf.berkeley.edu>'
-    )
+    main()
