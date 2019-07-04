@@ -57,7 +57,7 @@ class ocf_www::site::www {
           # ...hide ocfweb metrics
           '%{REQUEST_URI} !^/metrics',
         ],
-        rewrite_rule => '^/(.*)$ http://lb-kubernetes.ocf.berkeley.edu:4080/$1 [P]',
+        rewrite_rule => '^/(.*)$ http://lb.ocf.berkeley.edu:4080/$1 [P]',
       }
     ],
 

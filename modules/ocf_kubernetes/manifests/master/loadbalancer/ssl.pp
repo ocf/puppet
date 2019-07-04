@@ -20,5 +20,5 @@ class ocf_kubernetes::master::loadbalancer::ssl(
     group   => $group,
   } ~>
   # Restart nginx if any cert changes occur
-  Class['Nginx::Service']
+  Service['haproxy']
 }

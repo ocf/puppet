@@ -1,0 +1,71 @@
+global
+  daemon
+  log localhost local0
+  maxconn 4000
+  pidfile /var/run/haproxy.pid
+  user haproxy
+  group sys
+  chroot /var/lib/haproxy
+  tune.ssl.default-dh-param 2048
+
+defaults
+  timeout connect 10s
+  timeout client 30s
+  timeout server 30s
+  option httplog
+  log global
+  option redispatch
+  retries 3
+
+frontend lb-http
+  bind 0.0.0.0:80
+  mode http
+
+  # redirect * to *.ocf.berkeley.edu
+  http-request redirect prefix https://%[hdr(host)].ocf.berkeley.edu unless { hdr_end(host) -i ocf.berkeley.edu ocf.io }
+
+  # https redirect
+  redirect scheme https code 301 if !{ ssl_fc }
+
+frontend lb-https
+  bind 0.0.0.0:443 ssl crt /etc/ssl/private/<%= @fqdn %>.pem
+  mode http
+
+  # redirect *.ocf.io to *.ocf.berkeley.edu
+  http-request redirect prefix https://%[hdr(host),regsub(ocf.io$,ocf.berkeley.edu)] if { hdr_end(host) -i ocf.io }
+
+  # redirect aliases, eg. sg.ocf.berkeley.edu -> sourcegraph.ocf.berkeley.edu
+  <%- @kubernetes_aliases.each do |service_name, aliases| -%>
+  http-request redirect prefix https://<%= service_name %> code 301 if { hdr(host) -i <%= aliases %> }
+  <%- end -%>
+
+  # send dev-kubernetes traffic into the cluster
+  use_backend kubernetes if { hdr_end(host) -i dev-kubernetes.ocf.berkeley.edu }
+
+  <%- @kubernetes_services.each do |service_name| -%>
+  use_backend kubernetes if { hdr(host) -i <%= service_name %>.ocf.berkeley.edu }
+  <%- end -%>
+
+
+# Some services don't need SSL termination
+# Either because it has already been done (ocfweb, irc)
+# Or because it doesn't need it (snmp_exporter)
+# As all such traffic should be internal, it is placed on a externally firewalled port
+frontend lb-internal-http
+  bind 0.0.0.0:4080
+  mode http
+
+  <%- @kubernetes_internal_services.each do |proxy_name| -%>
+  use_backend kubernetes if { hdr(host) -i <%= proxy_name %>.ocf.berkeley.edu <%= proxy_name %>.ocf.berkeley.edu:4080 }
+  <%- end -%>
+
+backend kubernetes
+  balance source
+  hash-type consistent
+  http-request add-header X-Forwarded-Proto https if { ssl_fc }
+  http-request add-header X-Forwarded-Port %[dst_port]
+  mode http
+  option forwardfor
+  <%- @kubernetes_workers.each do |hostname, ip| -%>
+  server <%= hostname %> <%= ip %>:31234
+  <%- end -%>
