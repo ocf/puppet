@@ -10,6 +10,7 @@ class ocf_kubernetes::master::loadbalancer {
     'auth',
     'grafana',
     'ircbot',
+    'irclogs',
     'kanboard',
     'kube',
     'kubeadmin',
