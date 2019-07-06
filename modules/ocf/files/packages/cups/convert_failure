@@ -9,9 +9,6 @@ density of any PDFs, essentially rasterizing them. If convert happens
 to fail, raster-filter will pipe stderr from convert to this script,
 which takes in stdin and includes it in an email to root@ocf. Thus,
 this script should not be called casually by regular users!
-
-Based off the enforcer script for whiteout, and the
-email_ldapsync_problem script
 """
 import socket
 import sys
@@ -34,9 +31,10 @@ def main():
     if sys.stdin.isatty():
         sys.stderr.write('script should not be called interactively. Aborting...')
     else:
-        error_message = ERROR_MSG.format(stdin=sys.stdin.read(),
-                                         hostname=socket.getfqdn()
-                                         )
+        error_message = ERROR_MSG.format(
+            stdin=sys.stdin.read(),
+            hostname=socket.getfqdn()
+        )
 
         mail.send_mail(
             mail.MAIL_ROOT,
