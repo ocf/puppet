@@ -3,12 +3,13 @@ class ocf_ldap {
 
   # Install libarchive-zip-perl for crc32 command for calculating hashes of
   # ldif files in /etc/ldap/slapd.d, slapd is the ldap server
-  package { ['slapd', 'libarchive-zip-perl']:; }
+  package { ['slapd', 'ocf-ldap-overlay', 'libarchive-zip-perl']:; }
   service { 'slapd':
     subscribe => [
       File['/etc/ldap/schema/ocf.schema',
         '/etc/ldap/schema/puppet.schema',
         '/etc/ldap/sasl2/slapd.conf',
+        '/etc/ldap/slapd.conf',
         '/etc/ldap/krb5.keytab'],
       Augeas['/etc/default/slapd'],
       Class['ocf::ssl::default'],
@@ -23,7 +24,7 @@ class ocf_ldap {
   file {
     '/etc/ldap/slapd.conf':
       content => template('ocf_ldap/slapd.conf.erb'),
-      require => Package['slapd'];
+      require => Package['slapd', 'ocf-ldap-overlay'];
 
     '/etc/ldap/schema/ocf.schema':
       source  => 'puppet:///modules/ocf_ldap/ocf.schema',
