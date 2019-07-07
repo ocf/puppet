@@ -171,6 +171,7 @@ class ocf::extrapackages {
     'python3-progressbar',
     'python3-pytest',
     'python3-pytest-cov',
+    'python3-requests-oauthlib',
     'python3-sleekxmpp',
     'python3-stdeb',
     'python3-sympy',
