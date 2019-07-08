@@ -34,7 +34,7 @@ class ocf_desktop::packages {
     ['armagetronad', 'gl-117', 'gnome-games', 'minecraft-launcher', 'redeclipse',
       'wesnoth', 'wesnoth-music']:;
     # graphics/plotting
-    ['r-cran-rgl', 'jupyter-qtconsole']:;
+    ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
     # input method editors
     ['fcitx', 'fcitx-libpinyin', 'fcitx-rime', 'fcitx-hangul', 'fcitx-mozc']:;
     # nonfree packages
@@ -56,15 +56,6 @@ class ocf_desktop::packages {
         # get anything out of it in terms of performance improvements at this
         # point anyway.
         'preload',
-
-        # We custom-packaged this for stretch (initially) in
-        # https://github.com/ocf/rstudio/tree/debian-stretch-build, but the
-        # upstream download page now has a download link for stretch
-        # (https://www.rstudio.com/products/rstudio/download/#download)
-        # We could either package this for buster (faster), or wait until it is
-        # released upstream (likely only after buster is stable) and include
-        # the package from there.
-        'rstudio',
       ]:;
     }
   }
