@@ -5,9 +5,6 @@
 + : ALL : cron crond
 + : root : ALL
 + : debian-security-support : LOCAL
-# TODO: Restrict this to only be on desktops (graphical installs)
-+ : lightdm : LOCAL
-#################################################################
 + : ocfbackups : hal.ocf.berkeley.edu
 + : ocfdeploy : reaper.ocf.berkeley.edu LOCAL
 <% @ulogin.each do |user,from| -%>
