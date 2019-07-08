@@ -31,8 +31,8 @@ class ocf_desktop::packages {
     # FUSE
     ['fuse', 'exfat-fuse']:;
     # games
-    ['armagetronad', 'gl-117', 'gnome-games', 'minecraft-launcher', 'redeclipse',
-      'wesnoth', 'wesnoth-music']:;
+    ['armagetronad', 'gl-117', 'gnome-games', 'redeclipse', 'wesnoth',
+      'wesnoth-music']:;
     # graphics/plotting
     ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
     # input method editors
@@ -56,6 +56,10 @@ class ocf_desktop::packages {
         # get anything out of it in terms of performance improvements at this
         # point anyway.
         'preload',
+
+        # The minecraft launcher requires java 8 of some kind (openjdk-8-jre
+        # for instance), and buster only comes with openjdk 11
+        'minecraft-launcher',
       ]:;
     }
   }
