@@ -1,0 +1,13 @@
+#!/bin/bash -eu
+
+ssh_cmd="ssh -p 2222 -o StrictHostKeyChecking=no -i /opt/jenkins/deploy/ssh_cli jenkins-deploy@localhost"
+
+# Taken from https://stackoverflow.com/a/25647793 and modified to use SSH
+# instead of the jenkins-cli jar
+updates=$($ssh_cmd list-plugins | grep -e ')$' | awk '{ print $1 }');
+if [ ! -z "${updates}" ]; then
+    echo "Updating Jenkins Plugins: ${updates}"
+    $ssh_cmd install-plugin ${updates}
+    echo "Restarting Jenkins..."
+    $ssh_cmd safe-restart
+fi
