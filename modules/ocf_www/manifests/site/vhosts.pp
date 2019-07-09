@@ -12,13 +12,6 @@ class ocf_www::site::vhosts {
     '/opt/share/vhost-web.jinja':
       source  => 'puppet:///modules/ocf_www/vhost-web.jinja';
 
-    '/etc/ssl/private/vhosts':
-      ensure  => directory,
-      source  => 'puppet:///private/ssl/vhosts',
-      recurse => true,
-      owner   => root,
-      mode    => '0600';
-
     '/var/www/suexec':
       ensure  => directory,
       require => Package['httpd'];
