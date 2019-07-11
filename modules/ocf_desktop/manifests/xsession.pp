@@ -158,10 +158,10 @@ class ocf_desktop::xsession {
       recurse => true;
   }
 
-  # Overwrite datetime file to add larger font on stretch
+  # Overwrite datetime file to add a larger font
   file {
     '/etc/skel/.config/xfce4/panel/datetime-7.rc':
-      source  => 'puppet:///modules/ocf_desktop/datetime-7-stretch.rc',
+      source  => 'puppet:///modules/ocf_desktop/datetime-7.rc',
       require => File['/etc/skel/.config'];
   }
 
