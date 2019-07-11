@@ -115,15 +115,12 @@ class ocf::extrapackages {
     'php-curl',
     'php-gd',
     'php-mbstring',
-    'php-mcrypt',
     'php-mysql',
     'php-sqlite3',
     'php-soap',
     'php-xml',
     'php-zip',
-    'php7.0-dba', # This isn't available as php-dba unfortunately
     'pkg-config',
-    'pkpgcounter',
     'postgresql-client',
     'pssh',
     'puppet-lint',
@@ -134,7 +131,6 @@ class ocf::extrapackages {
     'python-flake8',
     'python-flask',
     'python-flup',
-    'python-imaging',
     'python-jaxml',
     'python-lxml',
     'python-minimal',
@@ -213,6 +209,27 @@ class ocf::extrapackages {
     'zlib1g-dev',
     'znc',
     ]:;
+  }
+
+  if $::lsbdistcodename == 'stretch' {
+    package {
+      [
+        # php-mcrypt is deprecated since PHP 7.1 in favor of using openssl
+        # instead and buster has PHP 7.3:
+        # http://php.net/manual/en/migration71.deprecated.php
+        'php-mcrypt',
+
+        # This isn't available as php-dba unfortunately (that's just a virtual
+        # package for this), and with virtual packages puppet will try to
+        # install them every run, leading to unnecessary noise
+        'php7.0-dba',
+      ]:;
+    }
+  } elsif $::lsbdistcodename == 'buster' {
+    # This isn't available as php-dba unfortunately (that's just a virtual
+    # package for this), and with virtual packages puppet will try to install
+    # them every run, leading to unnecessary noise
+    package { 'php7.3-dba':; }
   }
 
   # install wp-cli

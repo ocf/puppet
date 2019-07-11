@@ -22,8 +22,6 @@ class ocf_desktop::drivers {
       ],
       notify  => Exec['update-grub'],
     }
-  } elsif $::gfx_brand == 'intel' {
-    package { ['libgl1-mesa-glx:i386']:; }
   }
 
   # this is used even with nvidia drivers
