@@ -7,9 +7,10 @@ set -euo pipefail
     cd /opt/mirrors/ftp
     find -mindepth 1 -maxdepth 1 -type d |
         sort |
-	cut -d/ -f2 |
-	grep -vE '^\.' |
-	xargs nice ionice du -hs
+        cut -d/ -f2 |
+        grep -vE '^\.' |
+        (xargs nice ionice du -hs || true)
+        2> >(grep -v '^du: cannot access' >&2)
 
     echo -n 'Last updated: '
     date
