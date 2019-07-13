@@ -40,6 +40,17 @@ class ocf::packages::docker($admin_group = undef,
       require => Package['docker-ce'],
       notify  => Exec['docker-socket-update'];
     }
+
+    # Make sure that the docker socket only starts after networking is up so it
+    # can set the correct SocketGroup, otherwise it might not be able to
+    # contact LDAP to set the correct owning group and docker will fail to
+    # start entirely on boot.
+    ocf::systemd::override { 'docker-socket-wait-for-networking':
+      unit    => 'docker.socket',
+      content => "[Unit]\nAfter=network-online.target\nWants=network-online.target\n",
+      require => Package['docker-ce'],
+      notify  => Exec['docker-socket-update'];
+    }
   }
 
   if $autoclean {
