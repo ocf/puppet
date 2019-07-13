@@ -9,7 +9,7 @@ set -euo pipefail
         sort |
         cut -d/ -f2 |
         grep -vE '^\.' |
-        (xargs nice ionice du -hs || true)
+        (xargs nice ionice du -hs || true) \
         2> >(grep -v '^du: cannot access' >&2)
 
     echo -n 'Last updated: '
