@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=OCF File Storage
+Exec=thunar remote
+Icon=media-floppy

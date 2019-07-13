@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Chrome
+Exec=google-chrome --start-maximized --password-store=basic
+Type=Application
+Icon=google-chrome

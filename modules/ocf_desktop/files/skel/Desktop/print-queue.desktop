@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Print Queue
+Exec=x-www-browser http://printhost/jobs/
+Icon=xfce-printer
