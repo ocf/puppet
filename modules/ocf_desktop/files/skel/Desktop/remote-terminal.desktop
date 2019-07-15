@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Remote Terminal
+Exec=x-terminal-emulator -e "ssh -Kt tsunami"
+Icon=/opt/share/xsession/icons/ssh-terminal.png

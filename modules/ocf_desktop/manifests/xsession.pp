@@ -156,6 +156,11 @@ class ocf_desktop::xsession {
       ensure  => directory,
       source  => 'puppet:///modules/ocf_desktop/skel/config',
       recurse => true;
+    '/etc/skel/Desktop':
+      ensure  => directory,
+      source  => 'puppet:///modules/ocf_desktop/skel/Desktop',
+      mode    => '0755',
+      recurse => true;
   }
 
   # Overwrite datetime file to add a larger font

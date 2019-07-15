@@ -1,8 +1,5 @@
 # This file is sourced by Xsession, not executed.
 
-## Create desktop
-mkdir -p $HOME/Desktop
-
 # try to create tmp and .local/.steam symlinks
 [ -e ~/tmp ] || ln -s "/var/local/tmp/$USER/" ~/tmp
 
@@ -14,93 +11,13 @@ done
 # Put xfce tmp files on tmpfs
 export XDG_DATA_HOME="$HOME/.xdg"
 
-## Create desktop icons
-
-# Print Queue
-echo "[Desktop Entry]
-Type=Application
-Name=Print Queue
-Exec=x-www-browser http://printhost/jobs/
-Icon=xfce-printer" > $HOME/Desktop/printq.desktop
-
-# Word Processor
-echo "[Desktop Entry]
-Name=Word Processor
-Exec=libreoffice --writer
-Type=Application
-Icon=libreoffice-writer" > $HOME/Desktop/writer.desktop
-
-# LibreOffice
-echo "[Desktop Entry]
-Name=LibreOffice
-Exec=libreoffice
-Type=Application
-Icon=libreoffice-startcenter" > $HOME/Desktop/office.desktop
-
-echo "[Desktop Entry]
-Name=Brave
-StartupNotify=true
-Terminal=false
-Exec=/usr/bin/brave-browser %U
-Type=Application
-Icon=brave-browser" > $HOME/Desktop/brave.desktop
-
-# Firefox
-echo "[Desktop Entry]
-Name=Firefox
-Exec=firefox
-Type=Application
-Icon=firefox-esr" > $HOME/Desktop/firefox.desktop
-
-# Chrome
-echo "[Desktop Entry]
-Name=Chrome
-Exec=google-chrome --start-maximized --password-store=basic
-Type=Application
-Icon=google-chrome" > $HOME/Desktop/chrome.desktop
-
-# Terminal
-echo "[Desktop Entry]
-Type=Application
-Name=Terminal
-Exec=x-terminal-emulator
-Icon=terminal" > $HOME/Desktop/terminal.desktop
-
-# Remote Terminal
-echo "[Desktop Entry]
-Type=Application
-Name=Remote Terminal
-Exec=x-terminal-emulator -e "ssh -Kt tsunami"
-Icon=/opt/share/xsession/icons/ssh-terminal.png" > $HOME/Desktop/remote-terminal.desktop
-
-# Scanner if connected by USB
-if lsusb | grep -qE '(Fujitsu|CanoScan|Canon, Inc)'; then
-  echo "[Desktop Entry]
-  Type=Application
-  Name=Scanner
-  Exec=simple-scan
-  Icon=scanner" > $HOME/Desktop/scanner.desktop
+# Remove scanner desktop icon if not detected as connected over USB
+if lsusb | grep -vqE '(Fujitsu|CanoScan|Canon, Inc)'; then
+  rm $HOME/Desktop/scanner.desktop
 fi
 
-## OCF File Storage, only if available
-
-if [ -d "$HOME/remote" -a -z "`find "$HOME/remote" -maxdepth 0 -empty`" ]; then
-  # Create bookmark
-  echo "file://$HOME/remote OCF File Storage" > $HOME/.gtk-bookmarks
-  # Create desktop icon
-  echo "[Desktop Entry]
-  Type=Application
-  Name=OCF File Storage
-  Exec=thunar $HOME/remote
-  Icon=media-floppy" > $HOME/Desktop/sftp.desktop
-else
-  rmdir $HOME/remote
-  rm $HOME/.gtk-bookmarks
-  rm $HOME/Desktop/sftp.desktop
-fi
-
-# Make launchers executable
-chmod +x $HOME/Desktop/*.desktop
+# Add OCF File Storage gtk bookmark
+echo "file://$HOME/remote OCF File Storage" > $HOME/.gtk-bookmarks
 
 # Set a reasonable keyboard repeat rate
 xset r on
@@ -127,8 +44,10 @@ sleep 8 && /usr/local/bin/fix-audio &
 # Auto logout inactive users
 /usr/bin/xautolock -locker /usr/local/bin/auto-lock -time 7 -noclose &
 
-# Source custom rc shared across desktops
-[ -f ~/remote/.desktoprc ] && . ~/remote/.desktoprc
-
 # Rebind superkey
 xcape -e 'Super_L=Control_R|Alt_L|Shift_R'
+
+# Source custom rc shared across desktops
+# NOTE: This should always be right at the end of this file so that users can
+# overwrite whatever settings that they dislike
+[ -f ~/remote/.desktoprc ] && . ~/remote/.desktoprc
