@@ -1,5 +1,0 @@
-layout=3
-date_font=Sans Bold 8
-time_font=Sans 13
-date_format=%a, %b %d, %Y
-time_format=%a %b %d, %Y %l:%M %p
