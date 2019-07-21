@@ -45,6 +45,14 @@ class ocf_irc::xmpp {
     'prod' => 'ocf.berkeley.edu',
   }
 
+  # The subdomain used for Multi-User Chats (MUCs)
+  $muc_name = $::host_env ? {
+    # This doesn't resolve in DNS, but it doesn't matter since this won't be
+    # exposed publicly. See https://prosody.im/doc/chatrooms#dns
+    'dev'  => 'dev-xmpp-muc.ocf.berkeley.edu',
+    'prod' => 'xmpp.ocf.berkeley.edu',
+  }
+
   $irc_server = $::host_env ? {
     'dev'  => 'dev-irc.ocf.berkeley.edu',
     'prod' =>  'irc.ocf.berkeley.edu',

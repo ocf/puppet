@@ -77,4 +77,9 @@ VirtualHost "<%= @vhost_name %>"
 Component "<%= @irc_server %>"
   component_secret = "<%= @component_password %>"
 
+Component "<%= @muc_name %>" "muc"
+  modules_enabled = { "muc_mam" }
+  muc_log_presences = true
+  restrict_room_creation = "local"
+
 Include "conf.d/*.cfg.lua"
