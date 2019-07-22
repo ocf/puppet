@@ -1,14 +1,6 @@
 class ocf_desktop::drivers {
   include ocf::apt::i386
 
-  # Don't send emails from Debconf on configuring desktops since they aren't
-  # useful emails (we reboot after setting up a new desktop with drivers, etc.
-  # anyway) https://manpages.debian.org/stable/debconf-doc/debconf.conf.5.en.html
-  file { '/root/.debconfrc':
-    content => "Admin-Email:\n",
-    before  => Package['xserver-xorg-video-nvidia'],
-  }
-
   # install proprietary nvidia drivers
   if $::gfx_brand == 'nvidia' {
     # Install nvidia-driver from backports so that it loads properly
