@@ -1,11 +1,22 @@
-#!/bin/bash -eu
-# Update addresses that are allowed to send mail to protected addresses.
+#!/bin/bash
+# Update addresses that are allowed to send to protected addresses. Those
+# being OCF addresses and corresponding LDAP forwarding addresses of staff
+set -euo pipefail
 
-set -o pipefail
+TMP=$(mktemp /tmp/staff-access.XXXXX)
+ACCESS_FILE="/etc/postfix/ocf/staff-access"
 
-# staff
-getent group ocfstaff | cut -d: -f4 | \
-	sed 's/,\|$/@ocf.berkeley.edu OK\n/g' \
-	> /etc/postfix/ocf/staff-access
+# Load the keytab so we can pull the mail attr from LDAP
+kinit -t /etc/postfix/ocf/smtp-krb5.keytab smtp/anthrax.ocf.berkeley.edu
 
-/usr/sbin/postmap /etc/postfix/ocf/staff-access
+staff_members="$(getent group ocfstaff | cut -d: -f4 | tr ',' ' ')"
+
+for user in $staff_members; do
+	echo "$user@ocf.berkeley.edu OK" >> "$TMP"
+	attr_mail="$(ldapsearch -Q -LLL uid="$user" mail | grep ^mail: | tr -d ' ' | cut -d: -f2)"
+	echo "$attr_mail OK" >> "$TMP"
+done
+
+mv "$TMP" "$ACCESS_FILE"
+
+/usr/sbin/postmap "$ACCESS_FILE"
