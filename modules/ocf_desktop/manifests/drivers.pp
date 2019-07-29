@@ -1,6 +1,13 @@
 class ocf_desktop::drivers {
   include ocf::apt::i386
 
+  # fallout from #704
+  # This should be replaced by an augeas rule or similar, clearing the
+  # Admin-Email setting in the debconf configuration.
+  file { '/root/.debconfrc':
+    ensure => absent;
+  }
+
   # install proprietary nvidia drivers
   if $::gfx_brand == 'nvidia' {
     # Install nvidia-driver from backports so that it loads properly
