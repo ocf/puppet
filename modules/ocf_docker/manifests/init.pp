@@ -87,7 +87,7 @@ class ocf_docker {
 
     '/opt/share/docker.htpasswd':
       owner     => 'www-data',
-      source    => 'puppet:///private/htpasswd',
+      content   => "ocfbot:${lookup(ocf_docker::hashed_password)}\n",
       mode      => '0400',
       show_diff => false,
       require   => Package['nginx'];

@@ -13,7 +13,7 @@ class ocf_mysql {
 
     '/root/.my.cnf':
       mode      => '0600',
-      source    => 'puppet:///private/root-my.cnf',
+      content   => template('ocf_mysql/root-my.cnf.erb'),
       show_diff => false;
   } ~>
   service { 'mariadb': }

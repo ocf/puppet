@@ -48,15 +48,15 @@
       ipaddr="localhost"
       port="25580"
       allowmask="127.0.0.0/8"
-      sendpass="<%= @passwords['anope-link'] -%>"
-      recvpass="<%= @passwords['anope-link'] -%>">
+      sendpass="<%= scope['ocf_irc::anope_link_password'] -%>"
+      recvpass="<%= scope['ocf_irc::anope_link_password'] -%>">
 
 <uline server="services.irc.ocf.berkeley.edu" silent="yes">
 
 
 # Passwords needed to kill/restart the IRCd while connected to it
-<power diepass="<%= @passwords['diepass'] -%>"
-       restartpass="<%= @passwords['restartpass'] -%>"
+<power diepass="<%= scope['ocf_irc::die_password'] -%>"
+       restartpass="<%= scope['ocf_irc::restart_password'] -%>"
        pause="5">
 
 
@@ -78,7 +78,7 @@
          useident="no" localmax="5" globalmax="5">
 
 # Cloaking for the OCF subnet
-<cloak mode="full" key="<%= @passwords['cloak-key'] -%>" prefix="OCF-">
+<cloak mode="full" key="<%= scope['ocf_irc::cloak_key'] -%>" prefix="OCF-">
 
 
 # Allow overrides when users are opers
@@ -108,7 +108,7 @@
 # Store oper credentials in mysql
 <database name="ocfirc"
           user="ocfirc"
-          pass="<%= @passwords['ocfirc-mysql'] -%>"
+          pass="<%= scope['ocf_irc::mysql_password'] -%>"
           host="mysql.ocf.berkeley.edu"
           port="3306"
           id="irc">
@@ -122,7 +122,7 @@
 
 # Automated user for reloading certs
 <oper name="ocf-cert-reload"
-      password="<%= @passwords['cert-reload-pass'] -%>"
+      password="<%= scope['ocf_irc::cert_reload_password'] -%>"
       host="*@localhost *@<%= @fqdn -%>"
       type="ReloadCert">
 

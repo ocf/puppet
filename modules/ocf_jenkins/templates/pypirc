@@ -1,0 +1,7 @@
+[distutils]
+index-servers=pypi
+
+[pypi]
+repository = https://upload.pypi.org/legacy/
+username = ocfdeploy
+password = <%= scope['ocf_jenkins::pypi_password'] -%>

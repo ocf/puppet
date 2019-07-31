@@ -1,0 +1,10 @@
+{
+        "auths": {
+                "docker-push.ocf.berkeley.edu": {
+                        "auth": "<%= scope['ocf_jenkins::docker_push_auth'] -%>"
+                },
+                "https://index.docker.io/v1/": {
+                        "auth": "<%= scope['ocf_jenkins::docker_hub_auth'] -%>"
+                }
+        }
+}

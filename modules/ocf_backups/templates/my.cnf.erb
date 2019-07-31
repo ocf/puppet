@@ -1,0 +1,9 @@
+[mysqldump]
+host = mysql.ocf.berkeley.edu
+user = ocfbackups
+password = <%= scope['ocfbackups::mysql::password'] -%>
+
+[mysql]
+host = mysql.ocf.berkeley.edu
+user = ocfbackups
+password = <%= scope['ocfbackups::mysql::password'] -%>

@@ -22,7 +22,7 @@ class ocf_backups::offsite {
 
     # Box.com credentials and API id/secret
     '/opt/share/backups/box-creds.json':
-      source    => 'puppet:///private/box-creds.json',
+      content   => template('ocf_backups/box-creds.json.erb'),
       mode      => '0600',
       show_diff => false;
   }

@@ -29,7 +29,7 @@ class ocf_desktop {
   if $opstaff_workstation {
     file {
       '/etc/ocfprinting.json':
-        source    => 'puppet:///private/ocfprinting.json',
+        content   => template('ocf_admin/ocfprinting.json.erb'),
         group     => opstaff,
         mode      => '0640',
         show_diff => false;

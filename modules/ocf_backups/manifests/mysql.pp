@@ -3,7 +3,7 @@ class ocf_backups::mysql {
 
   file {
     '/opt/share/backups/my.cnf':
-      source    => 'puppet:///private/backups/my.cnf',
+      content   => template('ocf_backups/my.cnf.erb'),
       mode      => '0600',
       show_diff => false;
 

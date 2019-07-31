@@ -21,7 +21,7 @@ class ocf_ssh::makeservices {
       owner  => 'mysql';
 
     '/opt/share/makeservices/makemysql.conf':
-      source    => 'puppet:///private/makeservices/makemysql.conf',
+      content   => template('ocf_ssh/makemysql.conf.erb'),
       show_diff => false;
 
     '/opt/share/makexmpp':
@@ -30,7 +30,7 @@ class ocf_ssh::makeservices {
       owner  => 'ocfmakexmpp';
 
     '/opt/share/makexmpp/makexmpp.conf':
-      source    => 'puppet:///private/makeservices/makexmpp.conf',
+      content   => template('ocf_ssh/makexmpp.conf.erb'),
       show_diff => false;
   }
 }

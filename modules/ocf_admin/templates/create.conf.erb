@@ -1,0 +1,16 @@
+[encryption]
+key=/etc/ocf-create/create.key
+
+[redis]
+uri=rediss://:<%= scope['broker::redis::password'] -%>@broker.ocf.berkeley.edu:6378
+
+[mysql]
+uri=mysql+pymysql://ocfcreate:<%= scope['create::mysql::password'] -%>@mysql/ocfcreate
+
+[kerberos]
+keytab=/etc/ocf-create/create.keytab
+principal=create/admin
+
+[celery]
+broker=rediss://:<%= scope['broker::redis::password'] -%>@broker.ocf.berkeley.edu:6378
+backend=rediss://:<%= scope['broker::redis::password'] -%>@broker.ocf.berkeley.edu:6378

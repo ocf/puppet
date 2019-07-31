@@ -1,0 +1,7 @@
+#!/bin/sh
+# set superuser password to prevent modifying kernel options during boot
+cat << EOF
+set superusers="root"
+export superusers
+password_pbkdf2 root grub.pbkdf2.sha512.10000.<%= scope['ocf_desktop::hashed_root_password'] -%>
+EOF

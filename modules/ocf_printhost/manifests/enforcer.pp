@@ -44,7 +44,7 @@ class ocf_printhost::enforcer {
       ';
 
     '/opt/share/enforcer-mysql.defaults':
-      source    => 'puppet:///private/enforcer-mysql.defaults',
+      content   => templates('ocf_printhost/enforcer-mysql.defaults.erb'),
       mode      => '0600',
       show_diff => false;
   }
