@@ -97,7 +97,7 @@ class ocf_ldap {
       '/var/backups/ldap/.git/hooks/post-commit':
         content => "git push -q git@github.com:ocf/ldap master\n",
         mode    => '0755',
-        require => [Package['ldap-git-backup'], File['/root/.ssh/id_rsa']];
+        require => Package['ldap-git-backup'];
 
       '/root/.ssh':
         ensure => directory,
@@ -113,7 +113,8 @@ class ocf_ldap {
       file {  '/root/.ssh/id_rsa':
         source    => 'puppet:///private/id_rsa',
         mode      => '0600',
-        show_diff => false;
+        show_diff => false,
+        before    => File['/var/backups/ldap/.git/hooks/post-commit'];
       }
     }
   }

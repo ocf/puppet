@@ -13,7 +13,8 @@ class ocf_apphost::lets_encrypt {
       source    => 'puppet:///private/lets-encrypt-vhost.key',
       owner     => ocfletsencrypt,
       show_diff => false,
-      mode      => '0400';
+      mode      => '0400',
+      before    => Cron['lets-encrypt-update'],
     }
   }
 
@@ -23,8 +24,7 @@ class ocf_apphost::lets_encrypt {
       user        => ocfletsencrypt,
       environment => ['MAILTO=root', 'PATH=/bin:/usr/bin:/usr/local/bin'],
       special     => hourly,
-      require     => File['/usr/local/bin/lets-encrypt-update',
-                          '/etc/ssl/lets-encrypt/le-vhost.key'],
+      require     => File['/usr/local/bin/lets-encrypt-update'],
     }
   }
 }
