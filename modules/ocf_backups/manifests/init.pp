@@ -13,10 +13,13 @@ class ocf_backups {
       ensure => directory,
       group  => ocfroot,
       mode   => '0750';
+  }
 
+  if $::use_private_share {
     # keytab for ocfbackups user, used to rsync from remote servers
-    '/opt/share/backups/ocfbackups.keytab':
+    file { '/opt/share/backups/ocfbackups.keytab':
       source => 'puppet:///private/ocfbackups.keytab',
       mode   => '0600';
+    }
   }
 }

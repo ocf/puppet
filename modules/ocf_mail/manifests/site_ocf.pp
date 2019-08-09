@@ -44,7 +44,6 @@ class ocf_mail::site_ocf {
       special => 'hourly',
       require => [
         File['/usr/local/sbin/update-cred-cache'],
-        File['/etc/postfix/ocf/smtp-krb5.keytab'],
         Service['postfix']
       ];
 
@@ -54,19 +53,22 @@ class ocf_mail::site_ocf {
       special => 'reboot',
       require => [
         File['/usr/local/sbin/update-cred-cache'],
-        File['/etc/postfix/ocf/smtp-krb5.keytab'],
         Service['postfix']
       ];
   }
 
-  file {
-    '/etc/postfix/ocf/smtp-krb5.keytab':
+  if $::use_private_share {
+    file { '/etc/postfix/ocf/smtp-krb5.keytab':
       mode    => '0600',
       owner   => root,
       group   => root,
       source  => 'puppet:///private/smtp-krb5.keytab',
-      require => Package['postfix'];
+      require => Package['postfix'],
+      before  => Cron['update-cred-cache', 'update-cred-cache-reboot'],
+    }
+  }
 
+  file {
     '/etc/postfix/ldap-aliases.cf':
       mode    => '0644',
       source  => 'puppet:///modules/ocf_mail/site_ocf/postfix/ldap-aliases.cf',

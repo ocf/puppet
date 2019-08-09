@@ -9,8 +9,7 @@ class ocf_ldap {
       File['/etc/ldap/schema/ocf.schema',
         '/etc/ldap/schema/puppet.schema',
         '/etc/ldap/sasl2/slapd.conf',
-        '/etc/ldap/slapd.conf',
-        '/etc/ldap/krb5.keytab'],
+        '/etc/ldap/slapd.conf'],
       Augeas['/etc/default/slapd'],
       Class['ocf::ssl::default'],
     ],
@@ -37,14 +36,18 @@ class ocf_ldap {
     '/etc/ldap/sasl2/slapd.conf':
       source  => 'puppet:///modules/ocf_ldap/sasl2-slapd',
       require => Package['slapd', 'libsasl2-modules-gssapi-mit'];
+  }
 
-    '/etc/ldap/krb5.keytab':
+  if $::use_private_share {
+    file { '/etc/ldap/krb5.keytab':
       source    => 'puppet:///private/krb5-ldap.keytab',
       owner     => openldap,
       group     => openldap,
       mode      => '0600',
       show_diff => false,
-      require   => Package['slapd', 'heimdal-clients'];
+      require   => Package['slapd', 'heimdal-clients'],
+      notify    => Service['slapd'],
+    }
   }
 
   augeas { '/etc/default/slapd':
@@ -100,15 +103,18 @@ class ocf_ldap {
         ensure => directory,
         mode   => '0700';
 
-      '/root/.ssh/id_rsa':
-        source    => 'puppet:///private/id_rsa',
-        mode      => '0600',
-        show_diff => false;
-
       # This is to stop backups from sending emails every time a new IP is used
       # See rt#4724 for more information
       '/root/.ssh/known_hosts':
         source => 'puppet:///modules/ocf_ldap/github_known_hosts';
+    }
+
+    if $::use_private_share {
+      file {  '/root/.ssh/id_rsa':
+        source    => 'puppet:///private/id_rsa',
+        mode      => '0600',
+        show_diff => false;
+      }
     }
   }
 

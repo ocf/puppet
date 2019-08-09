@@ -13,17 +13,21 @@ class ocf_admin::create {
       content   => template('ocf_admin/create.conf.erb'),
       mode      => '0440',
       show_diff => false;
+  }
 
-    '/etc/ocf-create/create.keytab':
-      mode   => '0400',
-      source => 'puppet:///private/create.keytab';
+  if $::use_private_share {
+    file {
+      '/etc/ocf-create/create.keytab':
+        mode   => '0400',
+        source => 'puppet:///private/create.keytab';
 
-    '/etc/ocf-create/create.key':
-      mode   => '0400',
-      source => 'puppet:///private/create.key';
+      '/etc/ocf-create/create.key':
+        mode   => '0400',
+        source => 'puppet:///private/create.key';
 
-    '/etc/ocf-create/create.pub':
-      mode   => '0444',
-      source => 'puppet:///private/create.pub';
+      '/etc/ocf-create/create.pub':
+        mode   => '0444',
+        source => 'puppet:///private/create.pub';
+    }
   }
 }

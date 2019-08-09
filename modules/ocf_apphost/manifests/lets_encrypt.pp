@@ -6,12 +6,15 @@ class ocf_apphost::lets_encrypt {
       source  => 'puppet:///modules/ocf_www/lets-encrypt-update',
       mode    => '0755',
       require => File['/usr/local/bin/ocf-lets-encrypt'];
+  }
 
-    '/etc/ssl/lets-encrypt/le-vhost.key':
+  if $::use_private_share {
+    file { '/etc/ssl/lets-encrypt/le-vhost.key':
       source    => 'puppet:///private/lets-encrypt-vhost.key',
       owner     => ocfletsencrypt,
       show_diff => false,
       mode      => '0400';
+    }
   }
 
   if $::host_env == 'prod' {
