@@ -14,6 +14,9 @@ class ocf_ssh::makeservices {
     content => "ALL ALL=(ocfmakexmpp) NOPASSWD: /opt/share/utils/makeservices/makexmpp-real\n",
   }
 
+  $mysql_root_password = lookup('ocf_mysql::root_password')
+  $xmpp_root_password = lookup('xmpp::root_password')
+
   file {
     '/opt/share/makeservices':
       ensure => directory,

@@ -1,6 +1,8 @@
 class ocf_mysql {
   require ocf::ssl::default;
 
+  $mysql_root_password = lookup('ocf_mysql::root_password')
+
   class { 'ocf::packages::mysql_server':
     manage_service => false,
   } ->

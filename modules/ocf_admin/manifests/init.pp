@@ -26,6 +26,7 @@ class ocf_admin {
     ]:;
   }
 
+  $ocfprinting_mysql_password = lookup('ocfprinting::mysql::password')
   file {
     '/opt/passwords':
       source    => 'puppet:///private/passwords',

@@ -50,6 +50,8 @@ class ocf_jenkins {
     notify  => Service['jenkins'];
   }
 
+  $jenkins_creds = lookup('jenkins_creds')
+
   file {
     '/opt/jenkins':
       ensure => directory;

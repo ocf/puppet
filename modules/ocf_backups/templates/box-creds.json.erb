@@ -1,7 +1,7 @@
 {
   "email": "ocf@berkeley.edu",
-  "password": "<%= scope['ocfbackups::box::password'] -%>",
-  "api_client_id": "<%= scope['ocfbackups::box::api_client_id'] -%>",
-  "api_client_secret": "<%= scope['ocfbackups::box::api_client_secret'] -%>",
-  "mysql_password": "<%= scope['ocfbackups::mysql::password'] -%>"
+  "password": "<%= @box_creds['password'] -%>",
+  "api_client_id": "<%= @box_creds['api_client_id'] -%>",
+  "api_client_secret": "<%= @box_creds['api_client_secret'] -%>",
+  "mysql_password": "<%= @ocfbackups_mysql_password -%>"
 }

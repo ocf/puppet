@@ -3,5 +3,5 @@
 cat << EOF
 set superusers="root"
 export superusers
-password_pbkdf2 root grub.pbkdf2.sha512.10000.<%= scope['ocf_desktop::hashed_root_password'] -%>
+password_pbkdf2 root grub.pbkdf2.sha512.10000.<%= @hashed_root_password %>
 EOF

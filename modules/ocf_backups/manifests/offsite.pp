@@ -2,6 +2,8 @@
 class ocf_backups::offsite {
   package { ['lftp', 'python3-pycurl']:; }
 
+  $box_creds = lookup('ocfbackups::box')
+  $ocfbackups_mysql_password = lookup('ocfbackups::mysql::password')
   file {
     '/opt/share/backups/create-encrypted-backup':
       source => 'puppet:///modules/ocf_backups/create-encrypted-backup',

@@ -1,6 +1,7 @@
 class ocf_backups::mysql {
   include ocf::packages::mysql
 
+  $ocfbackups_mysql_password = lookup('ocfbackups::mysql::password')
   file {
     '/opt/share/backups/my.cnf':
       content   => template('ocf_backups/my.cnf.erb'),

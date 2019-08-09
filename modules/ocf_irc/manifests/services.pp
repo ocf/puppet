@@ -6,6 +6,7 @@ class ocf_irc::services {
     require => Package['anope'],
   }
 
+  $irc_creds = lookup('irc_creds')
   $root_nicks = ['waf', 'nattofriends', 'ckuehl', 'jvperrin', 'mattmcal', 'abizer', 'dkessler']
 
   file {

@@ -15,6 +15,8 @@ class ocf_irc::ircd {
     user    => 'irc',
   }
 
+  $irc_creds = lookup('irc_creds')
+
   file {
     default:
       require => Package['inspircd'],
@@ -40,7 +42,7 @@ class ocf_irc::ircd {
       mode   => '0755';
 
     '/etc/inspircd/reload_pass':
-      content   => lookup('ocf_irc::cert_reload_password'),
+      content   => $irc_creds['cert_reload_password'],
       mode      => '0640',
       show_diff => false;
   }

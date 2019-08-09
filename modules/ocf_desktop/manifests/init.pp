@@ -24,6 +24,7 @@ class ocf_desktop {
   include ocf_desktop::xsession
 
   $opstaff_workstation = lookup('opstaff')
+  $ocfprinting_mysql_password = lookup('ocfprinting::mysql::password')
 
   # Add the printing credentials only on opstaff desktop
   if $opstaff_workstation {
