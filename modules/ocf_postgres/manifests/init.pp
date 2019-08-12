@@ -37,7 +37,7 @@ class ocf_postgres {
   file {
     # copies proper .pgpass file for ocfbackups to authenticate on backup
     '/opt/share/.pgpass':
-      source    => 'puppet:///private/pgpass',
+      content   => "localhost:5432:*:postgres:${lookup(postgres::rootpw)}\n",
       mode      => '0600',
       owner     => 'ocfbackups',
       show_diff => false;

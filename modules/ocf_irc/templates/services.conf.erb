@@ -14,7 +14,7 @@ uplink {
 
     port = 25580
 
-    password = "<%= @passwords['anope-link'] -%>"
+    password = "<%= @irc_creds['anope_link_password'] -%>"
 }
 
 serverinfo {
@@ -47,7 +47,7 @@ networkinfo {
 
 options {
     casemap = "rfc1459"
-    seed = <%= @passwords['seed'] %>
+    seed = <%= @irc_creds['services_seed'] %>
 
     strictpasswords = yes
     badpasslimit = 5
@@ -174,7 +174,7 @@ module {
         database = "ocfirc"
         server = "mysql.ocf.berkeley.edu"
         username = "ocfirc"
-        password = "<%= @passwords['ocfirc-mysql'] -%>"
+        password = "<%= @irc_creds['mysql_password'] -%>"
         port = 3306
     }
 }

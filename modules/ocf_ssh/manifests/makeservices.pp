@@ -14,6 +14,9 @@ class ocf_ssh::makeservices {
     content => "ALL ALL=(ocfmakexmpp) NOPASSWD: /opt/share/utils/makeservices/makexmpp-real\n",
   }
 
+  $mysql_root_password = lookup('ocf_mysql::root_password')
+  $xmpp_root_password = lookup('xmpp::root_password')
+
   file {
     '/opt/share/makeservices':
       ensure => directory,
@@ -21,7 +24,7 @@ class ocf_ssh::makeservices {
       owner  => 'mysql';
 
     '/opt/share/makeservices/makemysql.conf':
-      source    => 'puppet:///private/makeservices/makemysql.conf',
+      content   => template('ocf_ssh/makemysql.conf.erb'),
       show_diff => false;
 
     '/opt/share/makexmpp':
@@ -30,7 +33,7 @@ class ocf_ssh::makeservices {
       owner  => 'ocfmakexmpp';
 
     '/opt/share/makexmpp/makexmpp.conf':
-      source    => 'puppet:///private/makeservices/makexmpp.conf',
+      content   => template('ocf_ssh/makexmpp.conf.erb'),
       show_diff => false;
   }
 }

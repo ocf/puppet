@@ -15,7 +15,7 @@ class ocf_irc::ircd {
     user    => 'irc',
   }
 
-  $passwords = parsejson(file("/opt/puppet/shares/private/${::hostname}/ircd-passwords"))
+  $irc_creds = lookup('irc_creds')
 
   file {
     default:
@@ -42,7 +42,7 @@ class ocf_irc::ircd {
       mode   => '0755';
 
     '/etc/inspircd/reload_pass':
-      content   => $passwords['cert-reload-pass'],
+      content   => $irc_creds['cert_reload_password'],
       mode      => '0640',
       show_diff => false;
   }

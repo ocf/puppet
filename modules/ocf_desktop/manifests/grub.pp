@@ -1,7 +1,9 @@
 class ocf_desktop::grub {
+  $hashed_root_password = lookup('ocf_desktop::hashed_root_password')
+
   # password protection to prevent modifying kernel options
   file { '/etc/grub.d/01_ocf':
-    content   => file('/opt/puppet/shares/private/desktop/grub/01_ocf'),
+    content   => template('ocf_desktop/01_ocf.erb'),
     mode      => '0500',
     show_diff => false,
     notify    => Exec['update-grub'];

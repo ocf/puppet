@@ -15,7 +15,7 @@ class ocf_mirrors::projects::finnix {
     # we are registered with the Finnix project and have a password for the
     # master upstream mirror
     '/opt/mirrors/project/finnix/password':
-      source    => 'puppet:///private/mirrors/finnix',
+      content   => lookup('mirrors::finnix_sync_password'),
       mode      => '0600',
       show_diff => false;
   }

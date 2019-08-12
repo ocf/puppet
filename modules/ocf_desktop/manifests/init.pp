@@ -24,12 +24,13 @@ class ocf_desktop {
   include ocf_desktop::xsession
 
   $opstaff_workstation = lookup('opstaff')
+  $ocfprinting_mysql_password = lookup('ocfprinting::mysql::password')
 
   # Add the printing credentials only on opstaff desktop
   if $opstaff_workstation {
     file {
       '/etc/ocfprinting.json':
-        source    => 'puppet:///private/ocfprinting.json',
+        content   => template('ocf_admin/ocfprinting.json.erb'),
         group     => opstaff,
         mode      => '0640',
         show_diff => false;

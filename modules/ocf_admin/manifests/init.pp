@@ -26,6 +26,7 @@ class ocf_admin {
     ]:;
   }
 
+  $ocfprinting_mysql_password = lookup('ocfprinting::mysql::password')
   file {
     '/opt/passwords':
       source    => 'puppet:///private/passwords',
@@ -34,13 +35,13 @@ class ocf_admin {
       show_diff => false;
 
     '/etc/ocfprinting.json':
-      source    => 'puppet:///private/ocfprinting.json',
+      content   => template('ocf_admin/ocfprinting.json.erb'),
       group     => ocfstaff,
       mode      => '0640',
       show_diff => false;
 
     '/etc/ocfstats-ro.passwd':
-      source    => 'puppet:///private/ocfstats-ro.passwd',
+      content   => lookup('ocfstats::mysql::ro_password'),
       group     => ocfstaff,
       mode      => '0640',
       show_diff => false;

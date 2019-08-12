@@ -50,6 +50,8 @@ class ocf_jenkins {
     notify  => Service['jenkins'];
   }
 
+  $jenkins_creds = lookup('jenkins_creds')
+
   file {
     '/opt/jenkins':
       ensure => directory;
@@ -79,7 +81,7 @@ class ocf_jenkins {
       show_diff => false;
 
     '/opt/jenkins/deploy/.pypirc':
-      source    => 'puppet:///private/pypirc',
+      content   => template('ocf_jenkins/pypirc'),
       owner     => root,
       group     => jenkins-deploy,
       mode      => '0640',
@@ -92,7 +94,7 @@ class ocf_jenkins {
       mode   => '0750';
 
     '/opt/jenkins/deploy/.docker/config.json':
-      source    => 'puppet:///private/docker-config.json',
+      content   => template('ocf_jenkins/docker-config.json.erb'),
       owner     => root,
       group     => jenkins-deploy,
       mode      => '0640',
