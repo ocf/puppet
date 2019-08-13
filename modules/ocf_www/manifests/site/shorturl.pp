@@ -33,7 +33,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/d$ https://discourse.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/d/([0-9]+)$ https://discourse.ocf.berkeley.edu/t/$1 [R]'},
       {rewrite_rule => '^/decal(/.*)?$ https://decal.ocf.berkeley.edu$1 [R]'},
-      {rewrite_rule => '^/decalform$ https://docs.google.com/forms/d/e/1FAIpQLSdM-fxPBzNtPA3RgzcxYLmZAo-pGCCS9fkLYdDZiNCbKjickw/viewform$1 [R]'},
+      {rewrite_rule => '^/decalform$ https://docs.google.com/forms/d/e/1FAIpQLSdM-fxPBzNtPA3RgzcxYLmZAo-pGCCS9fkLYdDZiNCbKjickw/viewform [R]'},
       {rewrite_rule => '^/docs(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
       {rewrite_rule => '^/email-update$ https://status.ocf.berkeley.edu/2014/06/email-discontinuation-update-forward.html [R]'},
       {rewrite_rule => '^/eligibility$ https://www.ocf.berkeley.edu/docs/membership/eligibility/ [R]'},
