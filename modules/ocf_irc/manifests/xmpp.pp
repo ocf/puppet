@@ -1,19 +1,30 @@
 class ocf_irc::xmpp {
   # When upgrading to buster, these can be installed from the regular buster
   # repo
-  ocf::repackage {
-    # lua-dbi-mysql is needed to connect to MySQL
-    'lua-dbi-common':
-      backport_on => ['stretch'];
+  if $::lsbdistcodename != 'buster' {
+    ocf::repackage {
+      # lua-dbi-mysql is needed to connect to MySQL
+      'lua-dbi-common':
+        backport_on => ['stretch'];
 
-    'lua-dbi-mysql':
-      backport_on => ['stretch'];
+      'lua-dbi-mysql':
+        backport_on => ['stretch'];
 
-    'prosody':
-      backport_on => ['stretch'];
+      'prosody':
+        backport_on => ['stretch'];
 
-    'prosody-modules':
-      backport_on => ['stretch'];
+      'prosody-modules':
+        backport_on => ['stretch'];
+    }
+  } else {
+    package {
+      [
+        'prosody',
+        'prosody-modules',
+        'lua-dbi-common',
+        'lua-dbi-mysql'
+      ]:;
+    }
   }
 
   service { 'prosody':

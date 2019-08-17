@@ -1,7 +1,13 @@
 class ocf_irc::biboumi {
-  ocf::repackage { 'biboumi':
-    backport_on => ['stretch'],
-    require     => Package['prosody'],
+  if $::lsbdistcodename != 'buster' {
+    ocf::repackage { 'biboumi':
+      backport_on => ['stretch'],
+      require     => Package['prosody'],
+    }
+  } else {
+    package { 'biboumi':
+      require => Package['prosody'],
+    }
   }
 
   service { 'biboumi':

@@ -17,6 +17,17 @@ class ocf_irc::ircd {
 
   $passwords = parsejson(file("/opt/puppet/shares/private/${::hostname}/ircd-passwords"))
 
+  if $::lsbdistcodename == 'buster' {
+    # Disable the AppArmor profile for inspircd, since it prevents us from
+    # accessing the necessary TLS certs
+    file { '/etc/apparmor.d/disable/usr.sbin.inspircd':
+      ensure  => 'link',
+      target  => '/etc/apparmor.d/usr.sbin.inspircd',
+      require => Package['inspircd'],
+    }
+  }
+
+
   file {
     default:
       require => Package['inspircd'],
