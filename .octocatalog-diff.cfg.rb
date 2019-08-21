@@ -29,7 +29,7 @@ module OctocatalogDiff
 
       # TODO: Figure out why this has SSL errors when setting this to true
       # Have a look at https://github.com/github/octocatalog-diff/blob/master/doc/advanced-storeconfigs.md
-      #settings[:storeconfigs] = true
+      settings[:storeconfigs] = true
 
       settings[:bootstrap_script] = 'bin/bootstrap'
 
