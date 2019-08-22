@@ -21,22 +21,21 @@ module OctocatalogDiff
       settings[:hiera_path] = 'hieradata'
 
       settings[:puppetdb_url] = 'https://puppetdb:8081'
-      settings[:puppetdb_ssl_ca] = 'keys/ca.pem'
-      settings[:puppetdb_ssl_client_key] = File.read("keys/puppetboard.puppetdb.pem.private")
-      settings[:puppetdb_ssl_client_cert] = File.read("keys/puppetboard.puppetdb.pem.cert")
+      # TODO: Don't piggyback off the ocfweb puppet key/certs
+      settings[:puppetdb_ssl_ca] = '/etc/ocfweb/puppet-certs/puppet-ca.pem'
+      settings[:puppetdb_ssl_client_key] = File.read("/etc/ocfweb/puppet-certs/puppet-private.pem")
+      settings[:puppetdb_ssl_client_cert] = File.read("/etc/ocfweb/puppet-certs/puppet-cert.pem")
 
       settings[:enc] = 'modules/ocf_puppet/files/ldap-enc'
-
-      # TODO: Figure out why this has SSL errors when setting this to true
-      # Have a look at https://github.com/github/octocatalog-diff/blob/master/doc/advanced-storeconfigs.md
       settings[:storeconfigs] = true
-
       settings[:bootstrap_script] = 'bin/bootstrap'
-
       settings[:puppet_binary] = '/opt/puppetlabs/bin/puppet'
 
       # TODO: Set this back to origin/master once my changes are merged to master
       settings[:from_env] = 'origin/octocatalog-diff-test'
+      # This is used to cache third-party/vendored modules so that they don't
+      # have to be installed each time (saves about 2 minutes per run)
+      settings[:master_cache_branch] = settings[:from_env]
 
       settings[:validate_references] = %w(before notify require subscribe)
       settings[:header] = :default
