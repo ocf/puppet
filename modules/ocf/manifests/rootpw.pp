@@ -6,8 +6,10 @@
 #
 # To regenerate the root password, see /opt/share/utils/staff/puppet/gen-rootpw
 class ocf::rootpw($stage = 'first') {
-  user { 'root':
-    groups   => ['root'],
-    password => Sensitive(file('/opt/puppet/shares/private/rootpw')),
+  if $::use_private_share {
+    user { 'root':
+      groups   => ['root'],
+      password => Sensitive(file('/opt/puppet/shares/private/rootpw')),
+    }
   }
 }
