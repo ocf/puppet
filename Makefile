@@ -16,4 +16,31 @@ install-hooks: venv
 	venv/bin/pre-commit install -f --install-hooks
 
 vendor: Puppetfile
-	r10k puppetfile install
+	r10k puppetfile install --verbose --color
+
+# Run octocatalog-diff for a particular hostname
+# Add a --debug flag to get much more verbose output
+diff_%:
+	octocatalog-diff \
+		-n $*.ocf.berkeley.edu \
+		--enc-override environment=production,parameters::use_private_share=false \
+		--ignore 'Ini_setting[puppet.conf/master/storeconfigs]' \
+		--ignore 'Ini_setting[puppet.conf/master/storeconfigs_backend]' \
+		--ignore 'Ini_setting[puppetdbserver_urls]' \
+		--ignore 'Ini_setting[soft_write_failure]' \
+		--ignore 'File[/tmp/*/routes.yaml]' \
+		--display-detail-add
+
+# Run octocatalog-diff across all nodes that can be fetched from puppetdb
+# TODO: Make this faster by just selecting a single node from each class we
+# care about (or not selecting all desktops/hozers for example)
+all_diffs:
+	curl -s --tlsv1 \
+		--cacert /etc/ocfweb/puppet-certs/puppet-ca.pem \
+		--cert /etc/ocfweb/puppet-certs/puppet-cert.pem \
+		--key /etc/ocfweb/puppet-certs/puppet-private.pem \
+		https://puppetdb:8081/pdb/query/v4/nodes \
+	| jq -r '.[] | .certname' \
+	| cut -d '.' -f 1 \
+	| sort \
+	| xargs -n 1 -P $(shell grep -c ^processor /proc/cpuinfo) -I @ $(MAKE) -i -s diff_@
