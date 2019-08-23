@@ -51,6 +51,12 @@ Cron {
   environment => 'PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin'
 }
 
+# Fix puppet's utterly broken virtual package code by disabling virtual packages
+# https://github.com/ocf/puppet/issues/735
+Package {
+  allow_virtual => false,
+}
+
 Firewall_multi {
   require => Class['ocf::firewall::pre'],
   before  => Class['ocf::firewall::post'],
