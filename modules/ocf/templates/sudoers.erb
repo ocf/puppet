@@ -16,10 +16,10 @@ ocfdeploy ALL=NOPASSWD: /usr/local/sbin/puppet-trigger
 # User specification
 %ocfroot ALL=(ALL) <%= @nopasswd ? 'NOPASSWD:' : '' %> ALL
 <% @gsudo.each do |group| -%>
-%<%= group %> ALL=(ALL) <%= @nopasswd ? 'NOPASSWD:' : '' %> ALL
+%<%= group %> ALL=(ALL) NOPASSWD: ALL
 <% end -%>
 <% @usudo.each do |user| -%>
-<%= user %> ALL=(ALL) <%= @nopasswd ? 'NOPASSWD:' : '' %> ALL
+<%= user %> ALL=(ALL) NOPASSWD: ALL
 <% end -%>
 
 # This needs to be positioned lower in this file to not be overridden by
