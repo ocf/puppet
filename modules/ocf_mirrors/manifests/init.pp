@@ -14,6 +14,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::centos_altarch
   include ocf_mirrors::projects::centos_debuginfo
   include ocf_mirrors::projects::debian
+  include ocf_mirrors::projects::emacs_lisp_archive
   include ocf_mirrors::projects::finnix
   include ocf_mirrors::projects::freebsd
   include ocf_mirrors::projects::gnu
