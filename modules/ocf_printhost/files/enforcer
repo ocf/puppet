@@ -122,7 +122,9 @@ NOTIFY_PROBLEMATIC_FILE_SOURCE = dedent("""\
         Please download your file as a PDF and print from desktop instead of web browser.\
 """)
 
-PROBLEMATIC_FILE_SOURCE = []
+PROBLEMATIC_FILE_SOURCE = [
+    ('Google Docs', lambda job: job.doc_name.endswith(' - Google Docs'))
+]
 
 
 def read_config():
