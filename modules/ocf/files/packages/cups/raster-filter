@@ -18,6 +18,14 @@ if [ "${mimetype%%;*}" != "application/pdf" ]; then
     exit
 fi
 
+# Don't rasterize if size >5M
+size=$(du "$input" | cut -f1)
+[ "$size" -lt 5120 ] || exec cat "$input"
+
+# Or if size > 20 pages
+len=$(pdftk "$input" dump_data | awk '/NumberOfPages/{print $2}')
+[ -z "$len" -o "$len" -gt 20 ] && exec cat "$input"
+
 # Rasterizing PDF...
 output=$(mktemp --suffix='.pdf')
 error=$(mktemp)
