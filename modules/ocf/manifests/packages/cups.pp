@@ -17,9 +17,20 @@ class ocf::packages::cups {
       content => 'letter';
     # set printer configurations
     '/etc/cups/printers.conf':
-      source => 'puppet:///modules/ocf/packages/cups/printers.conf',
-      group  => 'lp',
-      mode   => '0600';
+      source  => 'puppet:///modules/ocf/packages/cups/printers.conf',
+      group   => 'lp',
+      require => Package['cups', 'cups-bsd'],
+      notify  => Service['cups'];
+    '/etc/cups/ppd/single.ppd':
+      content => epp('ocf/cups/raster.ppd.epp', { 'double' => false }),
+      group   => 'lp',
+      require => Package['cups', 'cups-bsd'],
+      notify  => Service['cups'];
+    '/etc/cups/ppd/double.ppd':
+      content => epp('ocf/cups/raster.ppd.epp', { 'double' => true }),
+      group   => 'lp',
+      require => Package['cups', 'cups-bsd'],
+      notify  => Service['cups'];
     # set rasterizing filter
     '/usr/lib/cups/filter/raster-filter':
       source => 'puppet:///modules/ocf/packages/cups/raster-filter',
