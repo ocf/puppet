@@ -2,7 +2,6 @@ classes:
     - ocf_desktop
 
 ocf::auth::glogin: [[ocf, LOCAL]]
-ocf::auth::gsudo: [ocfstaff]
 ocf::auth::ulogin: [[lightdm, LOCAL]]
 
 # Allow ocfroot to use docker without sudo
