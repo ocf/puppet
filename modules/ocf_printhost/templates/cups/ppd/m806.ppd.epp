@@ -44,8 +44,6 @@
 *ShortNickName: "HP LaserJet M806 (ocf)"
 *NickName: "HP LaserJet M806 (ocf)"
 
-*cupsFilter: "application/pdf 0 ocfps"
-
 *% Duplexing options
 
 *cupsEvenDuplex: False
