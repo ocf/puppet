@@ -18,9 +18,9 @@ if [ "${mimetype%%;*}" != "application/pdf" ]; then
     exit
 fi
 
-# Don't rasterize if size >5M
+# Don't rasterize if size >1M
 size=$(du "$input" | cut -f1)
-[ "$size" -lt 5120 ] || exec cat "$input"
+[ "$size" -lt 1024 ] || exec cat "$input"
 
 # Or if size > 20 pages
 len=$(pdftk "$input" dump_data | awk '/NumberOfPages/{print $2}')

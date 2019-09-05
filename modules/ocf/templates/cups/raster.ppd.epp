@@ -25,6 +25,9 @@
 *PSVersion: "(3010.000) 0"
 *LanguageLevel: "3"
 
+*% rasterize the pdf
+*cupsFilter "application/pdf 0 raster-filter"
+
 *% this stuff copied from m80 ppds
 *cupsEvenDuplex: False
 *cupsManualCopies: False

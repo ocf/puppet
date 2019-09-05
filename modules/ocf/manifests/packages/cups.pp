@@ -1,7 +1,7 @@
 class ocf::packages::cups {
 
   # install cups
-  package { [ 'cups', 'cups-bsd', 'cups-tea4cups' ]: }
+  package { [ 'cups', 'cups-bsd']: }
 
   file {
     # set print server destination
@@ -35,10 +35,6 @@ class ocf::packages::cups {
     '/usr/lib/cups/filter/raster-filter':
       source => 'puppet:///modules/ocf/packages/cups/raster-filter',
       mode   => '0755';
-    # set tea4cups configurations
-    '/etc/cups/tea4cups.conf':
-      source  => 'puppet:///modules/ocf/packages/cups/tea4cups.conf',
-      require => Package['cups-tea4cups'];
     # set convert_failure script for raster-filter
     '/usr/local/bin/convert_failure':
       source => 'puppet:///modules/ocf/packages/cups/convert_failure',
