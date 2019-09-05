@@ -22,15 +22,13 @@ class ocf::packages::cups {
       require => Package['cups', 'cups-bsd'],
       notify  => Service['cups'];
     '/etc/cups/ppd/single.ppd':
-      # content => epp('ocf/cups/raster.ppd.epp', { 'double' => false }),
-      # group   => 'lp',
-      ensure  => absent,
+      content => epp('ocf/cups/raster.ppd.epp', { 'double' => false }),
+      group   => 'lp',
       require => Package['cups', 'cups-bsd'],
       notify  => Service['cups'];
     '/etc/cups/ppd/double.ppd':
-      # content => epp('ocf/cups/raster.ppd.epp', { 'double' => true }),
-      # group   => 'lp',
-      ensure  => absent,
+      content => epp('ocf/cups/raster.ppd.epp', { 'double' => true }),
+      group   => 'lp',
       require => Package['cups', 'cups-bsd'],
       notify  => Service['cups'];
     # set rasterizing filter
