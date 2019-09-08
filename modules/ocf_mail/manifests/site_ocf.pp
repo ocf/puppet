@@ -44,6 +44,7 @@ class ocf_mail::site_ocf {
       special => 'hourly',
       require => [
         File['/usr/local/sbin/update-cred-cache'],
+        Ocf::Privatefile['/etc/postfix/ocf/smtp-krb5.keytab'],
         Service['postfix']
       ];
 
@@ -53,6 +54,7 @@ class ocf_mail::site_ocf {
       special => 'reboot',
       require => [
         File['/usr/local/sbin/update-cred-cache'],
+        Ocf::Privatefile['/etc/postfix/ocf/smtp-krb5.keytab'],
         Service['postfix']
       ];
   }
@@ -63,7 +65,6 @@ class ocf_mail::site_ocf {
     group   => root,
     source  => 'puppet:///private/smtp-krb5.keytab',
     require => Package['postfix'],
-    before  => Cron['update-cred-cache', 'update-cred-cache-reboot'],
   }
 
   file {

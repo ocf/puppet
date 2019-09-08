@@ -1,3 +1,20 @@
+# This class exists to abstract out accesses to the puppet private share so
+# that octocatalog-diff can generally ignore them and replace the file contents
+# with dummy contents. It does not and should not have access to the private
+# share, since it could accidentally leak secrets and will show output in
+# jenkins logs that are public.
+#
+# Initially this defined type didn't exist and conditionals using the
+# $::use_private_share conditional were used around everything that used the
+# private share. This worked ok, but led to dependency issues where a resource
+# that would normally exist was then hidden behind a conditional and wouldn't
+# be seen by octocatalog-diff. This approach is better because it can provide a
+# dummy file and a more consistent experience across all usages of the private
+# share.
+#
+# This also gives a convenient interface to enforce file parameters like
+# show_diff and backup that we don't want to be set to true for any private
+# resources.
 define ocf::privatefile(
   String $path = $title,
   Optional[String] $source = undef,
@@ -27,10 +44,7 @@ define ocf::privatefile(
 
   if $::use_private_share {
     if $content_path {
-      # For some reason, puppet-lint thinks the file function call (or
-      # $content) are top-scope variables when they are not, so the check is
-      # ignored for now.
-      $file_opts = $opts + {content => file($content)} # lint:ignore:variable_scope
+      $file_opts = $opts + {content => file($content_path)}
     } elsif $source {
       $file_opts = $opts + {source => $source}
     }

@@ -23,14 +23,13 @@ class ocf::kerberos {
   ocf::privatefile { '/etc/krb5.keytab':
     mode   => '0600',
     source => 'puppet:///private/krb5.keytab',
-    before => Augeas['/etc/ssh/sshd_config/GSSAPIKeyExchange'],
   }
 
   # enable SSH host key verification
   augeas { '/etc/ssh/sshd_config/GSSAPIKeyExchange':
     context => '/files/etc/ssh/sshd_config',
     changes => 'set GSSAPIKeyExchange yes',
-    require => [ Package['openssh-server'], File['/etc/krb5.conf'] ],
+    require => [ Package['openssh-server'], File['/etc/krb5.conf'], Ocf::Privatefile['/etc/krb5.keytab'] ],
     notify  => Service['ssh']
   }
 

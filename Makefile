@@ -1,3 +1,5 @@
+WORKSPACE ?= ${HOME}/.cache
+
 .PHONY: all
 all: vendor install-hooks
 
@@ -18,11 +20,19 @@ install-hooks: venv
 vendor: Puppetfile
 	r10k puppetfile install --verbose --color
 
+.PHONY: octocatalog-diff-uncached
+$(WORKSPACE)/.octocatalog-diff-cache:
+octocatalog-diff-uncached:
+	octocatalog-diff \
+		--bootstrap-then-exit \
+		--bootstrapped-from-dir=$(WORKSPACE)/.octocatalog-diff-cache
+
 # Run octocatalog-diff for a particular hostname
 # Add a --debug flag to get much more verbose output
-diff_%:
+diff_%: $(WORKSPACE)/.octocatalog-diff-cache
 	octocatalog-diff \
 		-n $*.ocf.berkeley.edu \
+		--bootstrapped-to-dir=$(WORKSPACE)/.octocatalog-diff-cache \
 		--enc-override environment=production,parameters::use_private_share=false \
 		--ignore 'Ini_setting[puppet.conf/master/storeconfigs]' \
 		--ignore 'Ini_setting[puppet.conf/master/storeconfigs_backend]' \
@@ -33,8 +43,9 @@ diff_%:
 
 # Run octocatalog-diff across all nodes that can be fetched from puppetdb
 # TODO: Make this faster by just selecting a single node from each class we
-# care about (or not selecting all desktops/hozers for example)
-all_diffs:
+# care about (not selecting all desktops/hozers for example)
+#all_diffs: $(WORKSPACE)/.octocatalog-diff-cache
+all_diffs: octocatalog-diff-uncached
 	curl -s --tlsv1 \
 		--cacert /etc/ocfweb/puppet-certs/puppet-ca.pem \
 		--cert /etc/ocfweb/puppet-certs/puppet-cert.pem \
@@ -43,4 +54,4 @@ all_diffs:
 	| jq -r '.[] | .certname' \
 	| cut -d '.' -f 1 \
 	| sort \
-	| xargs -n 1 -P $(shell grep -c ^processor /proc/cpuinfo) -I @ $(MAKE) -i -s diff_@
+	| xargs -n 1 -P $(shell grep -c ^processor /proc/cpuinfo) -I @ $(MAKE) -s diff_@

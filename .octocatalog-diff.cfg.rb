@@ -31,16 +31,22 @@ module OctocatalogDiff
       settings[:bootstrap_script] = 'bin/bootstrap'
       settings[:puppet_binary] = '/opt/puppetlabs/bin/puppet'
 
-      # TODO: Set this back to origin/master once my changes are merged to master
+      # TODO: Set this to origin/master once the octocatalog-diff changes are
+      # merged to master
       settings[:from_env] = 'origin/octocatalog-diff-test'
       # This is used to cache third-party/vendored modules so that they don't
-      # have to be installed each time (saves about 2 minutes per run)
+      # have to be installed each time (saves about 2 minutes per run, at least
+      # on a host with relatively slow I/O like a staff VM, this is much faster
+      # on reaper for instance)
       settings[:master_cache_branch] = settings[:from_env]
 
       settings[:validate_references] = %w(before notify require subscribe)
       settings[:header] = :default
 
-      settings[:cached_master_dir] = File.join(ENV['HOME'], '.octocatalog-diff-cache')
+      settings[:cached_master_dir] = File.join(
+        (ENV['WORKSPACE'] || File.join(ENV['HOME'], '.cache')),
+        '.octocatalog-diff-cache'
+      )
       settings[:safe_to_delete_cached_master_dir] = settings[:cached_master_dir]
 
       settings[:basedir] = Dir.pwd

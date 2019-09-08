@@ -10,6 +10,7 @@ class ocf_ldap {
         '/etc/ldap/schema/puppet.schema',
         '/etc/ldap/sasl2/slapd.conf',
         '/etc/ldap/slapd.conf'],
+      Ocf::Privatefile['/etc/ldap/krb5.keytab'],
       Augeas['/etc/default/slapd'],
       Class['ocf::ssl::default'],
     ],
@@ -44,7 +45,6 @@ class ocf_ldap {
     group   => openldap,
     mode    => '0600',
     require => Package['slapd', 'heimdal-clients'],
-    notify  => Service['slapd'],
   }
 
   augeas { '/etc/default/slapd':
@@ -94,7 +94,8 @@ class ocf_ldap {
       '/var/backups/ldap/.git/hooks/post-commit':
         content => "git push -q git@github.com:ocf/ldap master\n",
         mode    => '0755',
-        require => Package['ldap-git-backup'];
+        require => [Package['ldap-git-backup'],
+                    Ocf::Privatefile['/root/.ssh/id_rsa']];
 
       '/root/.ssh':
         ensure => directory,
@@ -109,7 +110,6 @@ class ocf_ldap {
     ocf::privatefile { '/root/.ssh/id_rsa':
       source => 'puppet:///private/id_rsa',
       mode   => '0600',
-      before => File['/var/backups/ldap/.git/hooks/post-commit'];
     }
   }
 

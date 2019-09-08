@@ -28,6 +28,21 @@ pipeline {
       }
     }
 
+    stage('octocatalog-diff') {
+      // Don't run this on the master branch yet, since it's really made for
+      // testing PRs and changes, it should always show no diffs on master.
+      // However, it might be useful on master in the future in some kind of
+      // mode to just show that all catalogs actually compile.
+      when {
+        not {
+          branch 'master'
+        }
+      }
+      steps {
+        sh 'make all_diffs'
+      }
+    }
+
     stage('update-prod') {
       when {
         branch 'master'
