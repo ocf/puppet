@@ -15,19 +15,17 @@ class ocf_admin::create {
       show_diff => false;
   }
 
-  if $::use_private_share {
-    file {
-      '/etc/ocf-create/create.keytab':
-        mode   => '0400',
-        source => 'puppet:///private/create.keytab';
+  ocf::privatefile {
+    '/etc/ocf-create/create.keytab':
+      mode   => '0400',
+      source => 'puppet:///private/create.keytab';
 
-      '/etc/ocf-create/create.key':
-        mode   => '0400',
-        source => 'puppet:///private/create.key';
+    '/etc/ocf-create/create.key':
+      mode   => '0400',
+      source => 'puppet:///private/create.key';
 
-      '/etc/ocf-create/create.pub':
-        mode   => '0444',
-        source => 'puppet:///private/create.pub';
-    }
+    '/etc/ocf-create/create.pub':
+      mode   => '0444',
+      source => 'puppet:///private/create.pub';
   }
 }

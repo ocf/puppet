@@ -5,7 +5,6 @@ class ocf_hpc {
 
   package { 'slurm-wlm': }
 
-  # TODO: Rename $::use_private_share to something more representative of what it does
   if str2bool($::puppetdb_running) {
     $slurm_nodes_facts_query = puppetdb_query('inventory[facts] { resources { type = "Class" and title = "Ocf_hpc::Compute" } }')
     # To avoid a circular dependency, fallback to empty values if no nodes match the query.
@@ -42,18 +41,13 @@ class ocf_hpc {
 
   # SLURM uses MUNGE for authentication. Each host needs to have
   # the same munge.key, and have synced clocks.
-  package { 'munge': }
-
-  if $::use_private_share {
-    file { '/etc/munge/munge.key':
-      source  => 'puppet:///private/munge.key',
-      mode    => '0400',
-      owner   => 'munge',
-      group   => 'munge',
-      require => Package['munge'],
-      notify  => Service['munge'],
-    }
-  }
+  package { 'munge': } ->
+  ocf::privatefile { '/etc/munge/munge.key':
+    source => 'puppet:///private/munge.key',
+    mode   => '0400',
+    owner  => 'munge',
+    group  => 'munge',
+  } ~>
   service { 'munge':
     ensure     => 'running',
     enable     => true,

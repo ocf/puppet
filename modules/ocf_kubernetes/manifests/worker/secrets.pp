@@ -35,14 +35,11 @@ class ocf_kubernetes::worker::secrets {
       mode   => '0700';
   }
 
-  if $::use_private_share {
-    file { '/opt/share/kubernetes/secrets':
-      mode      => '0644',
-      source    => 'puppet:///private-docker/',
-      recurse   => true,
-      purge     => true,
-      force     => true,
-      show_diff => false;
-    }
+  ocf::privatefile { '/opt/share/kubernetes/secrets':
+    mode    => '0644',
+    source  => 'puppet:///private-docker/',
+    recurse => true,
+    purge   => true,
+    force   => true;
   }
 }

@@ -38,16 +38,13 @@ class ocf_ldap {
       require => Package['slapd', 'libsasl2-modules-gssapi-mit'];
   }
 
-  if $::use_private_share {
-    file { '/etc/ldap/krb5.keytab':
-      source    => 'puppet:///private/krb5-ldap.keytab',
-      owner     => openldap,
-      group     => openldap,
-      mode      => '0600',
-      show_diff => false,
-      require   => Package['slapd', 'heimdal-clients'],
-      notify    => Service['slapd'],
-    }
+  ocf::privatefile { '/etc/ldap/krb5.keytab':
+    source  => 'puppet:///private/krb5-ldap.keytab',
+    owner   => openldap,
+    group   => openldap,
+    mode    => '0600',
+    require => Package['slapd', 'heimdal-clients'],
+    notify  => Service['slapd'],
   }
 
   augeas { '/etc/default/slapd':
@@ -109,13 +106,10 @@ class ocf_ldap {
         source => 'puppet:///modules/ocf_ldap/github_known_hosts';
     }
 
-    if $::use_private_share {
-      file {  '/root/.ssh/id_rsa':
-        source    => 'puppet:///private/id_rsa',
-        mode      => '0600',
-        show_diff => false,
-        before    => File['/var/backups/ldap/.git/hooks/post-commit'];
-      }
+    ocf::privatefile { '/root/.ssh/id_rsa':
+      source => 'puppet:///private/id_rsa',
+      mode   => '0600',
+      before => File['/var/backups/ldap/.git/hooks/post-commit'];
     }
   }
 

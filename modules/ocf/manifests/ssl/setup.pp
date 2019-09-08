@@ -43,12 +43,9 @@ class ocf::ssl::setup {
       group  => ssl-cert;
   }
 
-  if $::use_private_share {
-    file { '/etc/ssl/lets-encrypt/le-account.key':
-      content   => file('/opt/puppet/shares/private/lets-encrypt-account.key'),
-      owner     => ocfletsencrypt,
-      show_diff => false,
-      mode      => '0400';
-    }
+  ocf::privatefile { '/etc/ssl/lets-encrypt/le-account.key':
+    content_path => '/opt/puppet/shares/private/lets-encrypt-account.key',
+    owner        => ocfletsencrypt,
+    mode         => '0400';
   }
 }

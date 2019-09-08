@@ -37,35 +37,33 @@ class ocf_apt {
       group   => root;
   }
 
-  if $::use_private_share {
-    file { '/opt/apt/etc/private.key':
-      source => 'puppet:///private/apt/private.key',
-      mode   => '0400';
-    }
+  ocf::privatefile { '/opt/apt/etc/private.key':
+    source => 'puppet:///private/apt/private.key',
+    mode   => '0400';
+  }
 
-    exec {
-      'import-apt-gpg':
-        command     => 'rm -rf /opt/apt/.gnupg && gpg --import /opt/apt/etc/private.key',
-        user        => ocfapt,
-        refreshonly => true,
-        subscribe   => File['/opt/apt/etc/private.key'];
+  exec {
+    'import-apt-gpg':
+      command     => 'rm -rf /opt/apt/.gnupg && gpg --import /opt/apt/etc/private.key',
+      user        => ocfapt,
+      refreshonly => true,
+      subscribe   => Ocf::Privatefile['/opt/apt/etc/private.key'];
 
-      'export-gpg-pubkey':
-        command => 'gpg --output /opt/apt/ftp/pubkey.gpg --export D72A0AF4',
-        creates => '/opt/apt/ftp/pubkey.gpg',
-        require => Exec['import-apt-gpg'];
+    'export-gpg-pubkey':
+      command => 'gpg --output /opt/apt/ftp/pubkey.gpg --export D72A0AF4',
+      creates => '/opt/apt/ftp/pubkey.gpg',
+      require => Exec['import-apt-gpg'];
 
-      'initial-reprepro-export':
-        command => '/opt/apt/bin/reprepro export',
-        user    => ocfapt,
-        creates => '/opt/apt/ftp/dists',
-        require => [
-          Package['reprepro'],
-          File['/opt/apt/bin', '/opt/apt/etc', '/opt/apt/db', '/opt/apt/ftp'],
-          Exec['import-apt-gpg'],
-          User['ocfapt'],
-        ];
-    }
+    'initial-reprepro-export':
+      command => '/opt/apt/bin/reprepro export',
+      user    => ocfapt,
+      creates => '/opt/apt/ftp/dists',
+      require => [
+        Package['reprepro'],
+        File['/opt/apt/bin', '/opt/apt/etc', '/opt/apt/db', '/opt/apt/ftp'],
+        Exec['import-apt-gpg'],
+        User['ocfapt'],
+      ];
   }
 
   apache::vhost { 'apt.ocf.berkeley.edu':

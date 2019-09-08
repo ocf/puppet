@@ -42,13 +42,10 @@ class ocf_ocfweb::dev_config($group = 'ocfstaff') {
       show_diff => false;
   }
 
-  if $::use_private_share {
-    file { '/etc/ocfweb/puppet-certs':
-      ensure    => 'directory',
-      source    => 'puppet:///private-docker/ocfweb/puppet-certs',
-      recurse   => true,
-      purge     => true,
-      show_diff => false;
-    }
+  ocf::privatefile { '/etc/ocfweb/puppet-certs':
+    ensure  => 'directory',
+    source  => 'puppet:///private-docker/ocfweb/puppet-certs',
+    recurse => true,
+    purge   => true;
   }
 }

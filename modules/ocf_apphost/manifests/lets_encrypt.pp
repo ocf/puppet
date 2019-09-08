@@ -8,14 +8,11 @@ class ocf_apphost::lets_encrypt {
       require => File['/usr/local/bin/ocf-lets-encrypt'];
   }
 
-  if $::use_private_share {
-    file { '/etc/ssl/lets-encrypt/le-vhost.key':
-      source    => 'puppet:///private/lets-encrypt-vhost.key',
-      owner     => ocfletsencrypt,
-      show_diff => false,
-      mode      => '0400',
-      before    => Cron['lets-encrypt-update'],
-    }
+  ocf::privatefile { '/etc/ssl/lets-encrypt/le-vhost.key':
+    source => 'puppet:///private/lets-encrypt-vhost.key',
+    owner  => ocfletsencrypt,
+    mode   => '0400',
+    before => Cron['lets-encrypt-update'],
   }
 
   if $::host_env == 'prod' {

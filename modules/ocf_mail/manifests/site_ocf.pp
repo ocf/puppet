@@ -57,15 +57,13 @@ class ocf_mail::site_ocf {
       ];
   }
 
-  if $::use_private_share {
-    file { '/etc/postfix/ocf/smtp-krb5.keytab':
-      mode    => '0600',
-      owner   => root,
-      group   => root,
-      source  => 'puppet:///private/smtp-krb5.keytab',
-      require => Package['postfix'],
-      before  => Cron['update-cred-cache', 'update-cred-cache-reboot'],
-    }
+  ocf::privatefile { '/etc/postfix/ocf/smtp-krb5.keytab':
+    mode    => '0600',
+    owner   => root,
+    group   => root,
+    source  => 'puppet:///private/smtp-krb5.keytab',
+    require => Package['postfix'],
+    before  => Cron['update-cred-cache', 'update-cred-cache-reboot'],
   }
 
   file {

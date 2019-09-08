@@ -103,22 +103,18 @@ class ocf_jenkins {
       group   => root;
   }
 
-  if $::use_private_share {
-    file {
-      '/opt/jenkins/deploy/ocfdeploy.keytab':
-        source    => 'puppet:///private/ocfdeploy.keytab',
-        owner     => root,
-        group     => jenkins-deploy,
-        mode      => '0640',
-        show_diff => false;
+  ocf::privatefile {
+    '/opt/jenkins/deploy/ocfdeploy.keytab':
+      source => 'puppet:///private/ocfdeploy.keytab',
+      owner  => root,
+      group  => jenkins-deploy,
+      mode   => '0640';
 
-      '/opt/jenkins/deploy/ssh_cli':
-        source    => 'puppet:///private/ssh_cli',
-        owner     => jenkins-deploy,
-        group     => jenkins-deploy,
-        mode      => '0640',
-        show_diff => false;
-    }
+    '/opt/jenkins/deploy/ssh_cli':
+      source => 'puppet:///private/ssh_cli',
+      owner  => jenkins-deploy,
+      group  => jenkins-deploy,
+      mode   => '0640';
   }
 
   # We set up two separate jenkins users:
