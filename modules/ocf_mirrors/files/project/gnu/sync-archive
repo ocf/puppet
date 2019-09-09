@@ -1,3 +1,3 @@
 #!/bin/sh -eu
 /usr/local/bin/rsync-no-vanished -rltpHS --delete-excluded \
-	rsync://mirror.keystealth.org/gnu/ /opt/mirrors/ftp/gnu
+	rsync://mirrors.tripadvisor.com/gnu/ /opt/mirrors/ftp/gnu
