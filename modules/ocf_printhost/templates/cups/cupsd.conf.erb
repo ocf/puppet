@@ -22,8 +22,8 @@ Listen /var/run/cups/cups.sock
     PreserveJobFiles On
 <% end %>
 
-# Limit memory usage
-LimitRequestBody 256m
+# Don't limit request size
+LimitRequestBody 0
 
 # Enable printer sharing
 Browsing Off
