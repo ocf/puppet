@@ -49,8 +49,9 @@ module OctocatalogDiff
       )
       settings[:safe_to_delete_cached_master_dir] = settings[:cached_master_dir]
 
-      settings[:basedir] = Dir.pwd
-      # settings[:basedir] = ENV['WORKSPACE'] # May work with Jenkins
+      # Use the workspace directory if it exists (on Jenkins), otherwise just
+      # the current directory
+      settings[:basedir] = (ENV['WORKSPACE'] || Dir.pwd)
 
       # This method must return the 'settings' hash.
       settings
