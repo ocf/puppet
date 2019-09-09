@@ -39,6 +39,17 @@ pipeline {
         }
       }
       steps {
+        // Fetch in the master branch so that octocatalog-diff can diff against
+        // it. Jenkins by default only clones in branches that are needed and
+        // doesn't add any others.
+        //
+        // See https://github.com/allegro/axion-release-plugin/issues/195 and
+        // https://medium.com/rocket-travel-engineering/running-advanced-git-commands-in-a-declarative-multibranch-jenkinsfile-e82b075dbc53
+        // for example
+        sh 'git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master'
+        // TODO: Remove this branch once octocatalog-diff is switched to origin/master:
+        sh 'git config --add remote.origin.fetch +refs/heads/octocatalog-diff-test:refs/remotes/origin/octocatalog-diff-test'
+        sh 'git fetch --no-tags'
         sh 'make all_diffs'
       }
     }
