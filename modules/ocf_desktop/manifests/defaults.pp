@@ -13,5 +13,9 @@ class ocf_desktop::defaults {
   file { '/usr/share/applications/pdfopen.desktop':
     source  => 'puppet:///modules/ocf_desktop/xsession/pdfopen.desktop',
     require => File['/usr/local/bin/pdf-open'];
+  } ~>
+  exec { 'refresh mimeinfo.cache':
+    command     => 'update-desktop-database',
+    refreshonly => true;
   }
 }
