@@ -19,6 +19,7 @@ class ocf::packages::cups {
     '/etc/cups/printers.conf':
       source  => 'puppet:///modules/ocf/packages/cups/printers.conf',
       group   => 'lp',
+      mode    => '0600',
       require => Package['cups', 'cups-bsd'],
       notify  => Service['cups'];
     '/etc/cups/ppd/single.ppd':
