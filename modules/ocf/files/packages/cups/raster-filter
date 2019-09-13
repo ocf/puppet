@@ -10,34 +10,52 @@ input=$(mktemp --suffix='.pdf')
 # Feed filter input into temporary file
 cat - > "$input"
 
+# If it's empty, check the 6th command line argument for the file
+if [ ! -s "$input" ]; then
+    cp "$6" "$input"
+fi
+
 # If the file is not a PDF, then just pass it thorugh
 mimetype="$(file -bi "$input")"
 
+echo "${mimetype%%;*}" > /tmp/mimetype
 if [ "${mimetype%%;*}" != "application/pdf" ]; then
-    cat "$input"
-    exit
+    exec cat "$input"
 fi
 
-# Don't rasterize if size >1M
-size=$(du "$input" | cut -f1)
-[ "$size" -lt 1024 ] || exec cat "$input"
+# Returns a filename of a PDF to be processed further
+make_pdf() {
+    # Don't rasterize if size >1M
+    size=$(du "$1" | cut -f1)
+    if [ "$size" -ge 1024 ]; then
+        pdf_output="$input"
+	return
+    fi
 
-# Or if size > 20 pages
-len=$(pdftk "$input" dump_data | awk '/NumberOfPages/{print $2}')
-[ -z "$len" -o "$len" -gt 20 ] && exec cat "$input"
+    # Or if size > 20 pages
+    len=$(pdftk "$1" dump_data | awk '/NumberOfPages/{print $2}')
+    if [ -z "$len" -o "$len" -gt 20 ]; then
+        pdf_output="$input"
+	return
+    fi
 
-# Rasterizing PDF...
-output=$(mktemp --suffix='.pdf')
-error=$(mktemp)
+    # Rasterizing PDF...
+    pdf_output=$(mktemp --suffix='.pdf')
+    error=$(mktemp)
 
-convert -density 250 "$input" "$output" 2> "$error"
+    convert -density 250 "$input" "$pdf_output" 2> "$error"
 
-# Check exit status of convert
-if [ "$?" -ne 0 ]; then
-    cat "$error" | "/usr/local/bin/convert_failure"
-    cat "$input"
-    exit
-fi
+    # Check exit status of convert
+    if [ "$?" -ne 0 ]; then
+        cat "$error" | "/usr/local/bin/convert_failure"
+	# Don't exit because we still want to attempt to print *something*
+    fi
+}
 
-# Done rasterizing
-cat "$output"
+# Rasterize the pdf, putting a filename into pdf_output
+make_pdf
+
+ps_output=$(mktemp --suffix='.ps')
+pdftops "${@:1:5}" "$pdf_output" > "$ps_output"
+
+exec cat "$ps_output"
