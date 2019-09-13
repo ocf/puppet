@@ -38,10 +38,6 @@ class ocf_printhost::cups {
       group   => 'lp',
       mode    => '0600',
       source  => 'puppet:///modules/ocf_printhost/cups/classes.conf';
-
-    '/usr/lib/cups/filter/ocfps/':
-      source => 'puppet:///modules/ocf_printhost/ocfps',
-      mode   => '0755';
   }
 
   ['logjam', 'papercut', 'pagefault'].each |String $printer| {
