@@ -71,7 +71,7 @@ PRINTER_ERROR_MESSAGE = Message(
 
         This email is from the OCF to let you know that your most recent print
         job failed due to a printer error. If there's something wrong with the
-        printers, please alert the publications staff at the desk.
+        printers, please alert the operations staff at the desk.
 
         """) + USER_ERROR_INFO + dedent("""
 
