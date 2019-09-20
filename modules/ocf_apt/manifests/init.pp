@@ -39,6 +39,8 @@ class ocf_apt {
 
   ocf::privatefile { '/opt/apt/etc/private.key':
     source => 'puppet:///private/apt/private.key',
+    owner  => 'ocfapt',
+    group  => 'ocfapt',
     mode   => '0400';
   }
 
