@@ -15,13 +15,14 @@ class ocf_decal {
       owner   => ocfdecal,
       group   => ocfdecal,
       require => User['ocfdecal'];
-    '/etc/decal_mysql.conf':
-      source    => 'puppet:///private/mysql.conf',
-      owner     => ocfdecal,
-      group     => ocfstaff,
-      mode      => '0440',
-      show_diff => false,
-      require   => User['ocfdecal'];
+  }
+
+  ocf::privatefile { '/etc/decal_mysql.conf':
+    source  => 'puppet:///private/mysql.conf',
+    owner   => ocfdecal,
+    group   => ocfstaff,
+    mode    => '0440',
+    require => User['ocfdecal'];
   }
 
   vcsrepo { '/opt/share/decal-utils':

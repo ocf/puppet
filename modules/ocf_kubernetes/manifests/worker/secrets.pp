@@ -24,14 +24,6 @@ class ocf_kubernetes::worker::secrets {
       ensure => directory,
       mode   => '0700';
 
-    '/opt/share/kubernetes/secrets':
-      mode      => '0644',
-      source    => 'puppet:///private-docker/',
-      recurse   => true,
-      purge     => true,
-      force     => true,
-      show_diff => false;
-
     # Create a couple scratch directories for sourcegraph to use for temporary
     # data storage
     #
@@ -41,5 +33,13 @@ class ocf_kubernetes::worker::secrets {
     ['/opt/share/docker/sourcegraph', '/opt/share/docker/sourcegraph/redis']:
       ensure => directory,
       mode   => '0700';
+  }
+
+  ocf::privatefile { '/opt/share/kubernetes/secrets':
+    mode    => '0644',
+    source  => 'puppet:///private-docker/',
+    recurse => true,
+    purge   => true,
+    force   => true;
   }
 }

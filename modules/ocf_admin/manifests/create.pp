@@ -13,7 +13,9 @@ class ocf_admin::create {
       content   => template('ocf_admin/create.conf.erb'),
       mode      => '0440',
       show_diff => false;
+  }
 
+  ocf::privatefile {
     '/etc/ocf-create/create.keytab':
       mode   => '0400',
       source => 'puppet:///private/create.keytab';

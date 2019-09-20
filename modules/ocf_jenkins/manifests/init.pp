@@ -73,13 +73,6 @@ class ocf_jenkins {
       owner  => jenkins-deploy,
       group  => jenkins-deploy;
 
-    '/opt/jenkins/deploy/ocfdeploy.keytab':
-      source    => 'puppet:///private/ocfdeploy.keytab',
-      owner     => root,
-      group     => jenkins-deploy,
-      mode      => '0640',
-      show_diff => false;
-
     '/opt/jenkins/deploy/.pypirc':
       content   => template('ocf_jenkins/pypirc'),
       owner     => root,
@@ -100,13 +93,6 @@ class ocf_jenkins {
       mode      => '0640',
       show_diff => false;
 
-    '/opt/jenkins/deploy/ssh_cli':
-      source    => 'puppet:///private/ssh_cli',
-      owner     => jenkins-deploy,
-      group     => jenkins-deploy,
-      mode      => '0640',
-      show_diff => false;
-
     '/opt/jenkins/update-plugins':
       source => 'puppet:///modules/ocf_jenkins/update-plugins',
       mode   => '0750';
@@ -115,6 +101,20 @@ class ocf_jenkins {
       content => "jenkins ALL=(jenkins-deploy) NOPASSWD: ALL\n",
       owner   => root,
       group   => root;
+  }
+
+  ocf::privatefile {
+    '/opt/jenkins/deploy/ocfdeploy.keytab':
+      source => 'puppet:///private/ocfdeploy.keytab',
+      owner  => root,
+      group  => jenkins-deploy,
+      mode   => '0640';
+
+    '/opt/jenkins/deploy/ssh_cli':
+      source => 'puppet:///private/ssh_cli',
+      owner  => jenkins-deploy,
+      group  => jenkins-deploy,
+      mode   => '0640';
   }
 
   # We set up two separate jenkins users:

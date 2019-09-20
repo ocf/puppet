@@ -13,3 +13,6 @@
 
 # ignore Puppet resource types
 /.resource_types/
+
+# ignore octocatalog-diff cache
+/.octocatalog-diff-cache

@@ -20,6 +20,18 @@ class ocf_ocfweb::dev_config($group = 'ocfstaff') {
   # ocf_admin along with this manifest (for supernova)
   ensure_packages(['libcrack2-dev'])
 
+  # Install some packages for generating puppet diffs
+  # TODO: Move this somewhere else alongside the puppet certs added below
+  package {
+    'octocatalog-diff':;
+
+    # Newer puppetdb-termini versions (6.5.0-1stretch for instance) have an
+    # issue with CRLs when used with octocatalog-diff, so pin this to 6.4.0 for
+    # now
+    'puppetdb-termini':
+      ensure => '6.4.0-1stretch';
+  }
+
   file {
     '/etc/ocfweb':
       ensure    => directory;
@@ -29,12 +41,12 @@ class ocf_ocfweb::dev_config($group = 'ocfstaff') {
       group     => $group,
       mode      => '0640',
       show_diff => false;
+  }
 
-    '/etc/ocfweb/puppet-certs':
-      ensure    => 'directory',
-      source    => 'puppet:///private-docker/ocfweb/puppet-certs',
-      recurse   => true,
-      purge     => true,
-      show_diff => false;
+  ocf::privatefile { '/etc/ocfweb/puppet-certs':
+    ensure  => 'directory',
+    source  => 'puppet:///private-docker/ocfweb/puppet-certs',
+    recurse => true,
+    purge   => true;
   }
 }

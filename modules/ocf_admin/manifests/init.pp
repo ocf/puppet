@@ -27,13 +27,14 @@ class ocf_admin {
   }
 
   $ocfprinting_mysql_password = lookup('ocfprinting::mysql::password')
-  file {
+  ocf::privatefile {
     '/opt/passwords':
-      source    => 'puppet:///private/passwords',
-      group     => ocfroot,
-      mode      => '0640',
-      show_diff => false;
+      source => 'puppet:///private/passwords',
+      group  => ocfroot,
+      mode   => '0640';
+  }
 
+  file {
     '/etc/ocfprinting.json':
       content   => template('ocf_admin/ocfprinting.json.erb'),
       group     => ocfstaff,

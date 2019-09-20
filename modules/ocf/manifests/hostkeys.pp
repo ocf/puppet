@@ -1,5 +1,5 @@
 class ocf::hostkeys {
-  file {
+  ocf::privatefile {
     '/etc/ssh/ssh_host_dsa_key':
       mode   => '0600',
       source => 'puppet:///private/hostkeys/ssh_host_dsa_key';

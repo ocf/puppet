@@ -45,11 +45,12 @@ class ocf_kvm($group = 'root') {
 
     '/opt/share/kvm':
       ensure => directory;
+  }
 
+  ocf::privatefile {
     '/opt/share/kvm/makevm-ssh-key':
-      content   => file('/opt/puppet/shares/private/makevm-ssh-key'),
-      mode      => '0400',
-      owner     => 'root',
-      show_diff => false;
+      content_path => '/opt/puppet/shares/private/makevm-ssh-key',
+      mode         => '0400',
+      owner        => 'root';
   }
 }

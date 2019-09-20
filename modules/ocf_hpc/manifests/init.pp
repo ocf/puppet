@@ -42,7 +42,7 @@ class ocf_hpc {
   # SLURM uses MUNGE for authentication. Each host needs to have
   # the same munge.key, and have synced clocks.
   package { 'munge': } ->
-  file { '/etc/munge/munge.key':
+  ocf::privatefile { '/etc/munge/munge.key':
     source => 'puppet:///private/munge.key',
     mode   => '0400',
     owner  => 'munge',

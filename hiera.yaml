@@ -31,3 +31,6 @@ hierarchy:
 
   - name: "Kubernetes os"
     path: "kubernetes/os/%{::osfamily}.yaml"
+
+  - name: "Dummy secrets"
+    path: "dummy_secrets.yaml"

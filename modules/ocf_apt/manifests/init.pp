@@ -25,10 +25,6 @@ class ocf_apt {
     '/opt/apt/etc/distributions':
       source => 'puppet:///modules/ocf_apt/distributions';
 
-    '/opt/apt/etc/private.key':
-      source => 'puppet:///private/apt/private.key',
-      mode   => '0400';
-
     '/opt/apt/bin':
       ensure  => directory,
       source  => 'puppet:///modules/ocf_apt/bin/',
@@ -41,12 +37,17 @@ class ocf_apt {
       group   => root;
   }
 
+  ocf::privatefile { '/opt/apt/etc/private.key':
+    source => 'puppet:///private/apt/private.key',
+    mode   => '0400';
+  }
+
   exec {
     'import-apt-gpg':
       command     => 'rm -rf /opt/apt/.gnupg && gpg --import /opt/apt/etc/private.key',
       user        => ocfapt,
       refreshonly => true,
-      subscribe   => File['/opt/apt/etc/private.key'];
+      subscribe   => Ocf::Privatefile['/opt/apt/etc/private.key'];
 
     'export-gpg-pubkey':
       command => 'gpg --output /opt/apt/ftp/pubkey.gpg --export D72A0AF4',
