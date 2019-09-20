@@ -47,8 +47,6 @@ pipeline {
         // https://medium.com/rocket-travel-engineering/running-advanced-git-commands-in-a-declarative-multibranch-jenkinsfile-e82b075dbc53
         // for example
         sh 'git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master'
-        // TODO: Remove this branch once octocatalog-diff is switched to origin/master:
-        sh 'git config --add remote.origin.fetch +refs/heads/octocatalog-diff-test:refs/remotes/origin/octocatalog-diff-test'
         sh 'git fetch --no-tags'
         sh 'make all_diffs'
       }

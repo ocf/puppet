@@ -31,9 +31,7 @@ module OctocatalogDiff
       settings[:bootstrap_script] = 'bin/bootstrap'
       settings[:puppet_binary] = '/opt/puppetlabs/bin/puppet'
 
-      # TODO: Set this to origin/master once the octocatalog-diff changes are
-      # merged to master
-      settings[:from_env] = 'origin/octocatalog-diff-test'
+      settings[:from_env] = 'origin/master'
       # This is used to cache third-party/vendored modules so that they don't
       # have to be installed each time (saves about 2 minutes per run, at least
       # on a host with relatively slow I/O like a staff VM, this is much faster
