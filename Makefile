@@ -27,24 +27,36 @@ octocatalog-diff-uncached:
 		--bootstrap-then-exit \
 		--bootstrapped-from-dir=$(WORKSPACE)/.octocatalog-diff-cache
 
-# Run octocatalog-diff for a particular hostname
-# Add a --debug flag to get much more verbose output
+# Run octocatalog-diff for a particular hostname. This is meant to be run by
+# humans, which is why it accepts hostnames instead of the whole FQDN and why
+# all_diffs strips the FQDN down to the hostname again
+.PHONY: diff_%
 diff_%: $(WORKSPACE)/.octocatalog-diff-cache
+	# Add a --debug flag to get much more verbose output
+	#
+	# Ignore a few changes that otherwise cause extra noise:
+	#
+	# Ignore changes to puppetserver settings, since these are dependent on the
+	# path that octocatalog-diff sets and thus always differ
+	#
+	# Ignore changes to SSH keys, since these change when any machines are
+	# reprovisioned, etc. and change frequently
 	octocatalog-diff \
 		-n $*.ocf.berkeley.edu \
 		--bootstrapped-to-dir=$(WORKSPACE)/.octocatalog-diff-cache \
-		--enc-override environment=production,parameters::use_private_share=false \
+		--enc-override environment=production,parameters::dummy_secrets=true \
 		--ignore 'Ini_setting[puppet.conf/master/storeconfigs]' \
 		--ignore 'Ini_setting[puppet.conf/master/storeconfigs_backend]' \
 		--ignore 'Ini_setting[puppetdbserver_urls]' \
 		--ignore 'Ini_setting[soft_write_failure]' \
 		--ignore 'File[/tmp/*/routes.yaml]' \
+		--ignore 'Sshkey[*]' \
 		--display-detail-add
 
 # Run octocatalog-diff across all nodes that can be fetched from puppetdb
 # TODO: Make this faster by just selecting a single node from each class we
 # care about (not selecting all desktops/hozers for example)
-#all_diffs: $(WORKSPACE)/.octocatalog-diff-cache
+.PHONY: all_diffs
 all_diffs: octocatalog-diff-uncached
 	curl -s --tlsv1 \
 		--cacert /etc/ocfweb/puppet-certs/puppet-ca.pem \

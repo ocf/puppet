@@ -40,17 +40,7 @@ def main():
     else:
         environment = 'production'
 
-    # The 'use_private_share' value is used for octocatalog-diff, which sets an
-    # enc override for this value to false. This means that nothing that
-    # touches the private share will be managed, since octocatalog-diff doesn't
-    # have access to the private share (and shouldn't have access to prevent
-    # leaking actual secrets)
-    output = {
-        'parameters': {
-            'use_private_share': True,
-        },
-        'environment': environment,
-    }
+    output = {'parameters': {}, 'environment': environment}
 
     for key, values in host.items():
         # Remove the value from its list only if it is a singular value
