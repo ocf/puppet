@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pypi-data-pv
+spec:
+  capacity:
+    storage: 30Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    path: /opt/homes/services/pypi/data
+    server: filehost.ocf.berkeley.edu
+    readOnly: false
