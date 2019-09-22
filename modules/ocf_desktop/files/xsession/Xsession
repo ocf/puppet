@@ -19,6 +19,9 @@ fi
 # Add OCF File Storage gtk bookmark
 echo "file://$HOME/remote OCF File Storage" > $HOME/.gtk-bookmarks
 
+# Add Downloads gtk bookmark
+echo "file://$HOME/Downloads Downloads" >> $HOME/.config/gtk-3.0/bookmarks
+
 # Set a reasonable keyboard repeat rate
 xset r on
 xset r rate 200 30
