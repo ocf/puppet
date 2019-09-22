@@ -1,6 +1,6 @@
 // Use LANG environment variable to choose locale
 pref("intl.locale.requested", "");
-lockPref("browser.startup.homepage", "<%= @browser_homepage %>");
+pref("browser.startup.homepage", "<%= @browser_homepage %>", locked);
 pref("browser.cache.disk.capacity", 0);
 pref("browser.download.useDownloadDir", false);
 pref("browser.privatebrowsing.autostart", true);
