@@ -11,4 +11,3 @@ spec:
     path: /opt/homes/services/pypi/data
     server: filehost.ocf.berkeley.edu
     readOnly: false
-    
