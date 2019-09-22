@@ -18,6 +18,11 @@ mesg n
 # Set up bash-completion
 [ -r /etc/bash_completion ] && source /etc/bash_completion
 
+# reset _usergroup() to prevent autocomplete lag
+_usergroup() {
+    return
+}
+
 # No duplicate lines in shell history
 HISTCONTROL=ignoreboth
 HISTTIMEFORMAT="%F %T "

@@ -56,6 +56,11 @@ autoload -U compinit promptinit
 compinit
 promptinit
 
+# reset _users to null to prevent autocomplete lag
+unset _users
+_users () {}
+compdef _users
+
 if [[ $EUID -ne 0 ]]; then
 	PROMPT_COLOR=green
 	PROMPT_SYMBOL="$"
