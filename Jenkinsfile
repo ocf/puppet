@@ -48,7 +48,19 @@ pipeline {
         // for example
         sh 'git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master'
         sh 'git fetch --no-tags'
-        sh 'make all_diffs'
+
+        // Don't fail the whole build if octocatalog-diff fails, since it's new
+        // and needs some fixing before it's relied on
+        script {
+          try {
+            sh 'make all_diffs'
+          } catch (err) {
+            echo 'make all_diffs failed, but it is being ignored for now'
+            mail to: 'jvperrin@ocf.berkeley.edu',
+                 subject: "all_diffs failed on ${JOB_NAME}/#${BUILD_NUMBER}",
+                 body: BUILD_URL
+          }
+        }
       }
     }
 
