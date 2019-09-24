@@ -1,7 +1,7 @@
 classes:
     - ocf_ocfweb::dev_config
     - ocf::ssl::default
-    
+
 apt::sources:
   zerotier:
     key:
