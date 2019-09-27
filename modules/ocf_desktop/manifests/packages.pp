@@ -13,12 +13,13 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['arandr', 'atom', 'blender', 'claws-mail', 'eog', 'evince', 'filezilla',
-      'florence', 'freeplane', 'geany', 'gimp', 'gnome-calculator', 'gparted',
-      'hexchat', 'imagej', 'inkscape', 'lyx', 'musescore', 'mpv', 'mssh',
-      'mumble', 'numlockx', 'simple-scan', 'ssh-askpass-gnome', 'texlive',
-      'texlive-bibtex-extra', 'texlive-extra-utils', 'texlive-humanities',
-      'texlive-latex-extra', 'texlive-publishers', 'texlive-science', 'texmaker',
+    ['arandr', 'atom', 'blender', 'claws-mail', 'clementine', 'eog', 'evince',
+      'filezilla', 'florence', 'freeplane', 'geany', 'gimp',
+      'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
+      'musescore', 'mpv', 'mssh', 'mumble', 'numlockx', 'simple-scan',
+      'ssh-askpass-gnome', 'texlive', 'texlive-bibtex-extra',
+      'texlive-extra-utils', 'texlive-humanities', 'texlive-latex-extra',
+      'texlive-publishers', 'texlive-science', 'texmaker',
       'texstudio', 'vlc', 'xarchiver', 'xcape', 'xournal', 'xterm', 'zenmap']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'arc-theme',
