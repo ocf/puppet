@@ -1,12 +1,6 @@
 #!/bin/sh
 sudo -u ocfstats "/opt/stats/update-delay.sh" &
 
-# clear any lingering printjobs and
-# make sure printers are enabled
-sudo cancel -a
-sudo cupsenable single
-sudo cupsenable double
-
 # create temporary on-disk directory
 if [ -n "$USER" ]; then
 	tmpdir="/var/local/tmp/$USER"
