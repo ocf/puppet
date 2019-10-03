@@ -4,12 +4,14 @@ class ocf_desktop::defaults {
     source  => 'puppet:///modules/ocf_desktop/xsession/mimeapps.list';
   }
 
-  # temporary only, to get rid of files!
   file { '/usr/local/bin/pdf-open':
-    ensure => absent;
+      mode    => '0755',
+      source  => 'puppet:///modules/ocf_desktop/xsession/pdf-open',
+      require => Package['libimage-exiftool-perl'];
   }
 
   file { '/usr/share/applications/pdfopen.desktop':
-    ensure => absent;
+    source  => 'puppet:///modules/ocf_desktop/xsession/pdfopen.desktop',
+    require => File['/usr/local/bin/pdf-open'];
   }
 }

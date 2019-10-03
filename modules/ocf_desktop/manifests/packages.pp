@@ -23,6 +23,8 @@ class ocf_desktop::packages {
     ['desktop-base', 'anacron', 'accountsservice', 'arc-theme',
       'desktop-file-utils', 'gnome-icon-theme', 'paper-icon-theme', 'redshift',
       'xfce4-whiskermenu-plugin']:;
+    # desktop helpers
+    ['libimage-exiftool-perl']:;
     # display manager
     ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
     # FUSE
