@@ -1,6 +1,6 @@
 [Added Associations]
-application/pdf=evince.desktop
-image/pdf=evince.desktop
+application/pdf=pdfopen.desktop
+image/pdf=pdfopen.desktop
 
 image/gif=eog.desktop
 image/png=eog.desktop
