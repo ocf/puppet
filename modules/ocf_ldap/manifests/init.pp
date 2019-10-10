@@ -47,6 +47,12 @@ class ocf_ldap {
     require => Package['slapd', 'heimdal-clients'],
   }
 
+  ocf::systemd::override { 'kerberos-after-ldap':
+    unit    => 'heimdal-kdc.service',
+    content => '[Unit]\nAfter=slapd.service\n',
+    require => Package['heimdal-clients'],
+  }
+
   augeas { '/etc/default/slapd':
     context => '/files/etc/default/slapd',
     changes => [
