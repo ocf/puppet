@@ -11,6 +11,7 @@ dkessler/admin@OCF.BERKELEY.EDU         all,get-keys
 ethanhs/admin@OCF.BERKELEY.EDU          all,get-keys
 fydai/admin@OCF.BERKELEY.EDU            all,get-keys
 gleeb/admin@OCF.BERKELEY.EDU            all,get-keys
+jaw/admin@OCF.BERKELEY.EDU              all,get-keys
 jvperrin/admin@OCF.BERKELEY.EDU         all,get-keys
 keur/admin@OCF.BERKELEY.EDU             all,get-keys
 kpengboy/admin@OCF.BERKELEY.EDU         all,get-keys
@@ -37,6 +38,7 @@ dkessler/root@OCF.BERKELEY.EDU          change-password                         
 ethanhs/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 fydai/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
 gleeb/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
+jaw/root@OCF.BERKELEY.EDU               change-password                         *@OCF.BERKELEY.EDU
 jvperrin/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 keur/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
 kpengboy/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
