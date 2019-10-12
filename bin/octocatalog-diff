@@ -1,0 +1,112 @@
+#!/usr/bin/python3
+# Note that this does not use the /usr/bin/env python3 shebang because it wants
+# to use the system-installed requests and ocflib which are not in the puppet
+# python virtualenv
+import os
+import subprocess
+import sys
+from multiprocessing import Pool
+from pathlib import Path
+
+import requests
+
+
+CACHE_DIR_NAME = '.octocatalog-diff-cache'
+PUPPETDB_NODES_URL = 'https://puppetdb:8081/pdb/query/v4/nodes'
+# TODO: Change this to not piggyback off the ocfweb certs
+PUPPET_CERT_DIR = '/etc/ocfweb/puppet-certs'
+
+
+def setup_cache():
+    workspace = os.getenv('WORKSPACE') or os.path.join(str(Path.home()), '.cache')
+    cache_path = os.path.join(workspace, CACHE_DIR_NAME)
+
+    subprocess.check_call((
+        'octocatalog-diff',
+        '--bootstrap-then-exit',
+        '--bootstrapped-from-dir={}'.format(cache_path),
+    ))
+
+
+def get_hosts_from_puppetdb():
+    """Queries puppetdb for a list of hosts to test puppet runs for. Note that
+    the puppet runs do not happen on these hosts, but the catalogs are compiled
+    locally like they would be for these hosts (with the same facts, modules,
+    etc.)
+    """
+    r = requests.get(
+        PUPPETDB_NODES_URL,
+        cert=(
+            os.path.join(PUPPET_CERT_DIR, 'puppet-cert.pem'),
+            os.path.join(PUPPET_CERT_DIR, 'puppet-private.pem'),
+        ),
+        verify=os.path.join(PUPPET_CERT_DIR, 'puppet-ca.pem'),
+    )
+    r.raise_for_status()
+    return sorted([host['certname'] for host in r.json()])
+
+
+def diff(host):
+    """Run octocatalog-diff for a particular hostname"""
+    process = subprocess.run(
+        (
+            'octocatalog-diff',
+            # Add a --debug flag to get much more verbose output
+            '-n', host,
+            '--enc-override',
+            'environment=production,parameters::dummy_secrets=true',
+            '--display-detail-add',
+            # Ignore changes to puppetserver settings, since these are
+            # dependent on the path that octocatalog-diff sets and thus always
+            # differ
+            '--ignore', "'Ini_setting[puppet.conf/master/storeconfigs]'",
+            '--ignore', "'Ini_setting[puppet.conf/master/storeconfigs_backend]'",
+            '--ignore', "'Ini_setting[puppetdbserver_urls]'",
+            '--ignore', "'Ini_setting[soft_write_failure]'",
+            '--ignore', "'File[/tmp/*/routes.yaml]'",
+            # Ignore changes to SSH keys, since these change when any machines
+            # are reprovisioned, etc. and change frequently
+            '--ignore', "'Sshkey[*]'",
+        ),
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+    )
+
+    if process.returncode == 0:
+        # This is a clean run, puppet did not error and there was no diff
+        print('run for {}: clean'.format(host))
+        return 0
+    elif process.returncode == 2:
+        # This means the puppet run has found some diff from master, so we
+        # should keep this and report it back in the review
+        print(process.stdout.decode('utf-8').rstrip())
+        return 0
+    else:
+        # This means the puppet run has failed in some way (a return code of 1
+        # is pretty usualfor that), so the whole command should error out
+        print('run for {} errored:'.format(host))
+        print(process.stderr.decode('utf-8').rstrip())
+        return 1
+
+
+def all_diffs():
+    """Run octocatalog-diff across all nodes that can be fetched from puppetdb
+
+    TODO: Make this faster by just selecting a single node from each class we
+    care about (not selecting all desktops/hozers for example)
+    """
+    print('Setting up cache...')
+    setup_cache()
+    print('Getting hosts from puppetdb...')
+    hosts = get_hosts_from_puppetdb()
+    # Get number of cores to parallelize across and create a worker pool of that size
+    pool = Pool(os.cpu_count())
+
+    print('Running octocatalog-diff across all hosts...')
+    # Find any status codes that are non-zero (errors encountered in puppet runs)
+    returncode = max([ret for ret in pool.imap(diff, hosts)])
+    return returncode
+
+
+if __name__ == '__main__':
+    sys.exit(all_diffs())
