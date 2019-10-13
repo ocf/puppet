@@ -29,15 +29,6 @@ pipeline {
     }
 
     stage('octocatalog-diff') {
-      // Don't run this on the master branch yet, since it's really made for
-      // testing PRs and changes, it should always show no diffs on master.
-      // However, it might be useful on master in the future in some kind of
-      // mode to just show that all catalogs actually compile.
-      when {
-        not {
-          branch 'master'
-        }
-      }
       steps {
         // Fetch in the master branch so that octocatalog-diff can diff against
         // it. Jenkins by default only clones in branches that are needed and
@@ -49,16 +40,21 @@ pipeline {
         sh 'git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master'
         sh 'git fetch --no-tags'
 
-        // Don't fail the whole build if octocatalog-diff fails, since it's new
-        // and needs some fixing before it's relied on
         script {
-          try {
-            sh 'make all_diffs'
-          } catch (err) {
-            echo 'make all_diffs failed, but it is being ignored for now'
-            mail to: 'jvperrin@ocf.berkeley.edu',
-                 subject: "all_diffs failed on ${JOB_NAME}/#${BUILD_NUMBER}",
-                 body: BUILD_URL
+          // This should only run for pull requests, so that it is able to post
+          // change/failure comments on the review
+          if (env.CHANGE_ID) {
+            // Don't fail the whole build if octocatalog-diff fails, since it's new
+            // and needs some fixing before it's relied on
+            try {
+              //sh 'make all_diffs'
+              pullRequest.comment('Test comment from jenkins')
+            } catch (err) {
+              echo 'make all_diffs failed, but it is being ignored for now'
+              mail to: 'jvperrin@ocf.berkeley.edu',
+                   subject: "all_diffs failed on ${JOB_NAME}/#${BUILD_NUMBER}",
+                   body: BUILD_URL
+            }
           }
         }
       }
