@@ -64,6 +64,9 @@ def diff(host):
             '-n', host,
             '--enc-override',
             'environment=production,parameters::dummy_secrets=true',
+            # Unfortunately color codes are not handled well by github, so we
+            # turn those off here
+            '--no-color',
             '--display-detail-add',
             # Ignore changes to puppetserver settings, since these are
             # dependent on the path that octocatalog-diff sets and thus always
@@ -84,7 +87,7 @@ def diff(host):
     diff_or_error = process.stdout.decode('utf-8').rstrip()
     if process.returncode == 0:
         # This is a clean run, puppet did not error and there was no diff
-        return (0, '{}: no change'.format(host))
+        return (0, None)
     elif process.returncode == 2:
         # This means the puppet run has found some diff from master, so we
         # return this and report it back in the review but do not fail the run
@@ -121,7 +124,8 @@ def all_diffs():
     returncode = 0
     for output in run_output:
         returncode = max(returncode, output[0])
-        print(output[1])
+        if output[1]:
+            print(output[1])
 
     return returncode
 
