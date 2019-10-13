@@ -19,21 +19,46 @@ nomail: /var/mail/nomail/nomail
 
 # bureaucracy
 officers: officers@g.ocf.berkeley.edu
-alums: alums@g.ocf.berkeley.edu
-decal: decal@g.ocf.berkeley.edu
-opstaff: opstaff@g.ocf.berkeley.edu
+
+manager: officers
+managers: manager
 
 gm: officers
 general-manager: gm
+general-managers: gm
 owner-gm: officers
 
 sm: officers
 site-manager: sm
+site-managers: sm
 owner-sm: officers
 
 staff: staff-current
 wheel: staff-current
 owner-staff: root
+
+decal: decal@g.ocf.berkeley.edu
+
+# decal announcement lists
+decal-announce: decal-announce@g.ocf.berkeley.edu
+decal-beginner-announce: decal-beginner-announce@g.ocf.berkeley.edu
+decal-announce-beginner: decal-beginner-announce
+decal-basic-announce: decal-beginner-announce
+decal-advanced-announce: decal-advanced-announce@g.ocf.berkeley.edu
+decal-announce-advanced: decal-advanced-announce
+
+alums: alums@g.ocf.berkeley.edu
+alumnus: alums
+
+opstaff: opstaff@g.ocf.berkeley.edu
+
+extcomm: extcomm@g.ocf.berkeley.edu
+mirrors: extcomm
+sks: extcomm
+
+abuse: abuse@g.ocf.berkeley.edu
+
+joinstaff: joinstaff@g.ocf.berkeley.edu
 
 # request tracker
 bod: "|/usr/bin/rt-mailgate --queue 'bod' --action correspond --url https://rt.ocf.berkeley.edu"
