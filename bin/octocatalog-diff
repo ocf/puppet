@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python3 -u
 # Note that this does not use the /usr/bin/env python3 shebang because it wants
 # to use the system-installed requests and ocflib which are not in the puppet
 # python virtualenv
@@ -15,6 +15,15 @@ CACHE_DIR_NAME = '.octocatalog-diff-cache'
 PUPPETDB_NODES_URL = 'https://puppetdb:8081/pdb/query/v4/nodes'
 # TODO: Change this to not piggyback off the ocfweb certs
 PUPPET_CERT_DIR = '/etc/ocfweb/puppet-certs'
+
+GITHUB_COLLAPSE_MARKDOWN = '''
+<details>
+  <summary>{}</summary>
+
+```diff
+{}
+```
+</details>'''
 
 
 def setup_cache():
@@ -72,21 +81,19 @@ def diff(host):
         stdout=subprocess.PIPE,
     )
 
+    diff_or_error = process.stdout.decode('utf-8').rstrip()
     if process.returncode == 0:
         # This is a clean run, puppet did not error and there was no diff
-        print('run for {}: clean'.format(host))
-        return 0
+        return (0, '{}: no change'.format(host))
     elif process.returncode == 2:
         # This means the puppet run has found some diff from master, so we
-        # should keep this and report it back in the review
-        print(process.stdout.decode('utf-8').rstrip())
-        return 0
+        # return this and report it back in the review but do not fail the run
+        return (0, GITHUB_COLLAPSE_MARKDOWN.format('diff for {}'.format(host), diff_or_error))
     else:
         # This means the puppet run has failed in some way (a return code of 1
-        # is pretty usualfor that), so the whole command should error out
-        print('run for {} errored:'.format(host))
-        print(process.stderr.decode('utf-8').rstrip())
-        return 1
+        # is pretty usual for that), so we return an error code and the output
+        # to post in the review
+        return (1, GITHUB_COLLAPSE_MARKDOWN.format('**error** for {}'.format(host), diff_or_error))
 
 
 def all_diffs():
@@ -95,16 +102,27 @@ def all_diffs():
     TODO: Make this faster by just selecting a single node from each class we
     care about (not selecting all desktops/hozers for example)
     """
-    print('Setting up cache...')
+    print('Setting up cache...', file=sys.stderr)
     setup_cache()
-    print('Getting hosts from puppetdb...')
+
+    print('Getting hosts from puppetdb...', file=sys.stderr)
     hosts = get_hosts_from_puppetdb()
+
     # Get number of cores to parallelize across and create a worker pool of that size
     pool = Pool(os.cpu_count())
 
-    print('Running octocatalog-diff across all hosts...')
-    # Find any status codes that are non-zero (errors encountered in puppet runs)
-    returncode = max([ret for ret in pool.imap(diff, hosts)])
+    print('Running octocatalog-diff across all hosts...', file=sys.stderr)
+    run_output = pool.imap(diff, hosts)
+
+    # Print out information to be posted in a comment on the review
+    #
+    # Also find any status codes that are non-zero (errors encountered in
+    # puppet runs), and use that as the return code to report
+    returncode = 0
+    for output in run_output:
+        returncode = max(returncode, output[0])
+        print(output[1])
+
     return returncode
 
 

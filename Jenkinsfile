@@ -47,8 +47,8 @@ pipeline {
             // Don't fail the whole build if octocatalog-diff fails, since it's new
             // and needs some fixing before it's relied on
             try {
-              //sh 'make all_diffs'
-              pullRequest.comment('Test comment from jenkins')
+              def output = sh returnStdout: true, script: 'make all_diffs'
+              pullRequest.comment(output)
             } catch (err) {
               echo 'make all_diffs failed, but it is being ignored for now'
               mail to: 'jvperrin@ocf.berkeley.edu',
