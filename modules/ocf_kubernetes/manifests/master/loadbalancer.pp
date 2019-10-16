@@ -8,6 +8,7 @@ class ocf_kubernetes::master::loadbalancer {
 
   $kubernetes_services = [
     'auth',
+    'bjukebox',
     'grafana',
     'ircbot',
     'irclogs',
