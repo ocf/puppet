@@ -147,6 +147,9 @@ class ocf::packages {
     backport_on => ['stretch'],
   }
 
+  ocf::repackage { 'python3-ldap3':
+    backport_on => ['stretch'],
+  }
 
   # Packages to only install on Debian (not on Raspbian for example)
   if $::lsbdistid == 'Debian' {
