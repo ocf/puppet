@@ -72,7 +72,8 @@ kubernetes::worker_nodes:
     - pandemic
     - riptide
     - hozer-73
-    - hozer-74
+    - hozer-7
+    - bedbugs
 kubernetes::master_nodes:
     - coup
     - autocrat
