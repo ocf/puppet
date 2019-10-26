@@ -7,7 +7,7 @@ class ocf_www::site::vhosts {
         Package['python3-ocflib', 'python3-jinja2'],
         File['/opt/share/vhost-web.jinja'],
       ],
-      notify  => Exec['build-vhosts'];
+      notify  => Ocf::Exec_And_Cron['build-vhosts'];
 
     '/opt/share/vhost-web.jinja':
       source  => 'puppet:///modules/ocf_www/vhost-web.jinja';
@@ -17,16 +17,11 @@ class ocf_www::site::vhosts {
       require => Package['httpd'];
   }
 
-  cron { 'build-vhosts':
-    command => 'chronic /usr/local/bin/build-vhosts web',
-    special => hourly,
-    require => File['/usr/local/bin/build-vhosts'],
-  }
-
-  exec { 'build-vhosts':
-    command => '/usr/local/bin/build-vhosts web',
-    creates => '/etc/apache2/ocf-vhost.conf',
-    require => File['/usr/local/bin/build-vhosts'],
+  ocf::exec_and_cron { 'build-vhosts':
+    command      => 'chronic /usr/local/bin/build-vhosts web',
+    creates      => '/etc/apache2/ocf-vhost.conf',
+    require      => File['/usr/local/bin/build-vhosts'],
+    cron_options => {special => hourly},
   }
 
   file { '/etc/apache2/sites-enabled/99-include-vhosts.conf':
@@ -36,6 +31,6 @@ class ocf_www::site::vhosts {
       # (The first vhost declared is the fallback vhost.)
       Include /etc/apache2/ocf-vhost.conf
     ",
-    require => Exec['build-vhosts'],
+    require => Ocf::Exec_And_Cron['build-vhosts'],
   }
 }

@@ -7,13 +7,10 @@ class ocf_prometheus::server {
       source => 'puppet:///modules/ocf_prometheus/gen-prometheus-nodes',
       mode   => '0755';
   } ->
-  exec { 'gen-promethues-nodes-initial':
-    command => '/usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json',
-    creates => '/var/local/prometheus-nodes.json',
-  } ->
-  cron { 'gen-prometheus-nodes':
-    command => '/usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json',
-    minute  => '0',
+  ocf::exec_and_cron { 'gen-prometheus-nodes':
+    command      => '/usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json',
+    creates      => '/var/local/prometheus-nodes.json',
+    cron_options => { minute=>'0'},
   }
 
   file {
@@ -21,13 +18,10 @@ class ocf_prometheus::server {
       source => 'puppet:///modules/ocf_prometheus/gen-prometheus-printers',
       mode   => '0755';
   } ->
-  exec { 'gen-prometheus-printers-initial':
-    command => '/usr/local/bin/gen-prometheus-printers /var/local/prometheus-printers.json',
-    creates => '/var/local/prometheus-printers.json',
-  } ->
-  cron { 'gen-prometheus-printers':
-    command => '/usr/local/bin/gen-prometheus-printers /var/local/prometheus-printers.json',
-    minute  => '0',
+  ocf::exec_and_cron { 'gen-prometheus-printers':
+    command      => '/usr/local/bin/gen-prometheus-printers /var/local/prometheus-printers.json',
+    creates      => '/var/local/prometheus-printers.json',
+    cron_options => { minute=>'0'},
   }
 
   file {
