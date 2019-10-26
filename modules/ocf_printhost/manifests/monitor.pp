@@ -6,13 +6,10 @@ class ocf_printhost::monitor {
       source => 'puppet:///modules/ocf_printhost/monitor-cups',
       mode   => '0755';
   } ->
-  exec { 'monitor-cups-initial':
+  ocf::exec_and_cron { 'monitor-cups':
     command => '/usr/local/bin/monitor-cups /srv/prometheus/cups.prom',
     creates => '/srv/prometheus/cups.prom',
     require => File['/srv/prometheus'],
-  } ->
-  cron { 'monitor-cups':
-    command => '/usr/local/bin/monitor-cups /srv/prometheus/cups.prom',
     # Run every minute
   }
 }
