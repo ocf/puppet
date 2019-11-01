@@ -1,0 +1,15 @@
+# Alerts for node metrics
+# TODO: port Munin alerts to this
+groups:
+  - name: node
+    rules:
+    - alert: DiskUsageTooHigh
+      expr: sum without (device)((node_filesystem_avail_bytes{fstype!~"tmpfs|.*sshfs|vfat", host_type!="staffvm", instance!~"hozer-\\d+"} / node_filesystem_size_bytes) * 100) > 95
+      annotations:
+        summary: "Disk usage on {{ $labels.instance }} {{ $labels.mountpoint }} is at {{ $value }}%"
+
+    - alert: DiskWillFillIn5Hours
+      expr: predict_linear(node_filesystem_avail_bytes{fstype!~"tmpfs|.*sshfs|vfat", host_type!="staffvm", instance!~"hozer-\\d+"}[1h], 5 * 3600) < 0
+      for: 5m
+      annotations:
+        summary: "Disk usage on {{ $labels.instance }} {{ $labels.mountpoint }} is predicted to run out in 5 hours"
