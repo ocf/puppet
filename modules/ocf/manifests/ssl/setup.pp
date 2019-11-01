@@ -17,12 +17,6 @@ class ocf::ssl::setup {
       # and /etc/ssl/private directories (along with /etc/ssl if needed)
       require => Package['ssl-cert'];
 
-    # TODO: Remove the incommon intermediate once we are confident enough that
-    # using Let's Encrypt certs is working well and is sustainable
-    '/etc/ssl/certs/incommon-intermediate.crt':
-      source => 'puppet:///modules/ocf/ssl/incommon-intermediate.crt',
-      mode   => '0644';
-
     '/etc/ssl/certs/lets-encrypt.crt':
       source => 'puppet:///modules/ocf/ssl/lets-encrypt.crt',
       mode   => '0644';
