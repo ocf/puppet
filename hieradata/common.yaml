@@ -73,6 +73,7 @@ kubernetes::worker_nodes:
     - riptide
     - hozer-73
     - hozer-74
+    - bedbugs
 kubernetes::master_nodes:
     - coup
     - autocrat
