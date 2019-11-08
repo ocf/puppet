@@ -1,7 +1,7 @@
 class ocf_broker {
     include ocf::ssl::default
 
-    package { ['redis-server', 'hitch']: }
+    package { ['redis-server', 'haproxy']: }
 
     service { 'redis-server':
       require => Package['redis-server'],
@@ -31,35 +31,27 @@ class ocf_broker {
       notify    => Service['redis-server'];
     }
 
-    # We already have an OCF member with the username "hitch", so dpkg
-    # chooses "_hitch" as a fallback username.
-    user { '_hitch':
-      groups  => 'ssl-cert',
-      notify  => Service['hitch'],
-      require => Package['hitch'],
+    file { '/etc/haproxy/haproxy.cfg':
+      content => template('ocf_broker/haproxy.cfg.erb'),
+      notify  => Service['haproxy'],
+      require => Package['haproxy'],
     }
 
-    file { '/etc/hitch/hitch.conf':
-      content => template('ocf_broker/hitch.conf.erb'),
-      notify  => Service['hitch'],
-      require => Package['hitch'],
-    }
-
-    service { 'hitch':
-      require   => [Package['hitch'], Service['redis-server']],
+    service { 'haproxy':
+      require   => [Package['haproxy'], Service['redis-server']],
       subscribe => Class['ocf::ssl::default'],
     }
 
-    # firewall input rule, allow hitch (redis tls proxy)
+    # firewall input rule, allow redis
     firewall_multi {
-      '101 allow hitch (IPv4)':
+      '101 allow redis (IPv4)':
         chain     => 'PUPPET-INPUT',
         src_range => lookup('desktop_src_range_4'),
         proto     => 'tcp',
         dport     => 6378,
         action    => 'accept';
 
-      '101 allow hitch (IPv6)':
+      '101 allow redis (IPv6)':
         chain     => 'PUPPET-INPUT',
         src_range => lookup('desktop_src_range_6'),
         proto     => 'tcp',
