@@ -25,9 +25,9 @@ def main(argv=None):
 
     print('<img>{}</img>'.format(IMAGE_PATH))
 
-    PANEL_TEXT = '<txt> {} {} left today | {} {} left this semester </txt>'
-    print(PANEL_TEXT.format(daily_quota, 'side' if daily_quota == 1 else 'sides',
-                            semester_quota, 'side' if semester_quota == 1 else 'sides'
+    PANEL_TEXT = '<txt> {} {} left today | {} left this semester </txt>'
+    print(PANEL_TEXT.format(daily_quota, 'side of paper' if daily_quota == 1 else 'sides of paper',
+                            semester_quota
                             ))
 
 
