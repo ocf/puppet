@@ -50,7 +50,7 @@ def main():
     p = poll()
     p.register(sys.stdout.fileno(), POLLERR | POLLHUP)
 
-    s = subscribe(host, password, username)
+    s = subscribe(host, password, 'user-' + username)
     while True:
         message = s.get_message()
         if message and 'data' in message:

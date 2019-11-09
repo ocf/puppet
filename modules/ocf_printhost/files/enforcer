@@ -180,7 +180,7 @@ def prehook(c, r, job):
             msg = NOTIFY_PROBLEMATIC_FILE_SOURCE.format(
                 file_source=file_source,
             )
-            r.publish(job.user, msg)
+            r.publish('user-' + job.user, msg)
             sys.exit(255)
 
     if job.pages > quo.daily:
@@ -189,7 +189,7 @@ def prehook(c, r, job):
             pages=job.pages,
             quota=quo.daily,
         )
-        r.publish(job.user, msg)
+        r.publish('user-' + job.user, msg)
         sys.exit(255)
 
 
@@ -205,7 +205,7 @@ def posthook(c, r, job, success):
         quo = quota.get_quota(c, job.user)
         msg = NOTIFY_JOB_ERROR.format(document=job.doc_name)
         send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
-    r.publish(job.user, msg)
+    r.publish('user-' + job.user, msg)
 
 
 def main(argv):
