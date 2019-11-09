@@ -9,7 +9,7 @@ Details on interface Heimdal uses:
 http://www.h5l.org/manual/HEAD/info/heimdal/Password-changing.html
 
 Example usage:
-$ echo -n "principal: ckuehl@OCF.BERKELEY.EDU\nnew-password: hello" | ./check-pass-strength
+$ echo -e "principal: ckuehl@OCF.BERKELEY.EDU\nnew-password: hello" | ./check-pass-strength
 """
 import sys
 
