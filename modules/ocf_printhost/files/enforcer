@@ -197,10 +197,12 @@ def posthook(c, r, job, success):
     msg = ''
     if success:
         quota.add_job(c, job)
+        printer_name = job.printer.split('-')[0]
         msg = NOTIFY_JOB_ACCEPTED.format(
             document=job.doc_name,
-            printer=job.printer.split('-')[0],
+            printer=printer_name,
         )
+        r.publish('printer-' + printer_name, job.user)
     else:
         quo = quota.get_quota(c, job.user)
         msg = NOTIFY_JOB_ERROR.format(document=job.doc_name)
