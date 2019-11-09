@@ -1,0 +1,12 @@
+frontend = {
+	host = "*"
+	port = "6378"
+}
+# forward traffic to redis
+backend = "[127.0.0.1]:6379"
+workers = <%= @processors['count'] %>
+# This is the max keepalive supported by hitch
+keepalive = 32767
+user = "_hitch"
+
+pem-file = "/etc/ssl/private/<%= @fqdn %>.pem"
