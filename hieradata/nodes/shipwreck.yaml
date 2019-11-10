@@ -1,6 +1,5 @@
 classes:
   - ocf::packages::docker
-  - ocf::ssl::lets_encrypt::http
 
 apt::sources:
   zerotier:
