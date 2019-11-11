@@ -30,7 +30,7 @@ class ocf_kubernetes::worker::secrets {
     # This isn't great, but I think it's better than creating a whole new repo
     # for sourcegraph and this temporary directory only stores session
     # information and cloned repos anyway
-    ['/opt/share/docker/sourcegraph', '/opt/share/docker/sourcegraph/redis']:
+    ['/opt/share/kubernetes/sourcegraph', '/opt/share/kubernetes/sourcegraph/redis']:
       ensure => directory,
       mode   => '0700';
   }
