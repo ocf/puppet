@@ -28,7 +28,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/bod(/.*)?$ https://www.ocf.berkeley.edu/~staff/bod$1 [R]'},
       {rewrite_rule => '^/buy$ https://goo.gl/forms/PnlB5dJawGZcUS0S2 [R]'},
       {rewrite_rule => '^/buysheet$ https://docs.google.com/spreadsheets/d/16tMZGSrr3D6ao8V-cIyeE5PTEYf1XQEQ9rALGAjoWls/edit?usp=sharing [R]'},
-      {rewrite_rule => '^/callinkapi(.*)?$ https://orapps.berkeley.edu/StudentGroupServiceV2/service.asmx?op=CalLinkOrganizations$1 [R]'},
+      {rewrite_rule => '^/callinkapi(.*)?$ https://saappiis4.sait-west.berkeley.edu/StudentGroupServiceV2/service.asmx?op=CalLinkOrganizations$1 [R]'},
       {rewrite_rule => '^/contact$ https://www.ocf.berkeley.edu/docs/contact/ [R]'},
       {rewrite_rule => '^/d$ https://discourse.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/d/([0-9]+)$ https://discourse.ocf.berkeley.edu/t/$1 [R]'},
