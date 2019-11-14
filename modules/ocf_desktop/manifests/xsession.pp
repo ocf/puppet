@@ -227,6 +227,11 @@ class ocf_desktop::xsession {
       require => Package['xscreensaver'];
   }
 
+  # Compton Config
+  file { '/etc/xdg/compton.conf':
+      source => 'puppet:///modules/ocf_desktop/xsession/compton.conf';
+  }
+
   # Use GTK+ theme for Qt 4 apps
   file { '/etc/xdg/Trolltech.conf':
       source => 'puppet:///modules/ocf_desktop/xsession/Trolltech.conf';
