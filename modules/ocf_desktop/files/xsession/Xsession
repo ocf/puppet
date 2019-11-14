@@ -29,6 +29,9 @@ xset r rate 200 30
 # Disable mouse acceleration
 xset m 0 0
 
+# Run Compton
+compton &
+
 # Start OCF notification script
 /opt/share/puppet/notify &
 
