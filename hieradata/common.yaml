@@ -45,8 +45,8 @@ apache::default_vhost: false
 apache::server_tokens: Minor
 
 # Kubernetes config
-kubernetes::kubernetes_version: 1.14.1
-kubernetes::kubernetes_package_version: 1.14.1-00
+kubernetes::kubernetes_version: 1.15.6
+kubernetes::kubernetes_package_version: 1.15.6-00
 kubernetes::docker_version: 18.06.2~ce~3-0~debian # 18.06.02 is the highest supported version to work with kubernetes
 kubernetes::etcd_version: 3.3.10
 kubernetes::container_runtime: docker
