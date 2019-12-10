@@ -5,7 +5,7 @@ staff_only: true
 opstaff: false
 puppet_agent: true
 
-browser_homepage: https://www.ocf.berkeley.edu/about/lab/open-source
+browser_homepage: https://www.ocf.berkeley.edu/about/lab/survey
 
 #special devices
 devices_ipv4_only:
