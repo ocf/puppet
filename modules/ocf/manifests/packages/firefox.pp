@@ -4,7 +4,7 @@ class ocf::packages::firefox {
   package { 'firefox-esr':; }
 
   file {
-    # disable caching, history, blacklisting, and set homepage
+    # disable caching, history, blacklisting, set homepage, and other options.
     '/etc/firefox-esr/firefox-esr.js':
       content => template('ocf/firefox/prefs.js.erb'),
       require => Package['firefox-esr'];
