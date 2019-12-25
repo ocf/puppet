@@ -1,3 +1,3 @@
 #!/bin/sh -eu
 /usr/local/bin/rsync-no-vanished -rtlH --delete-after --delay-updates --safe-links \
-	rsync://manjaro.mirrors.uk2.net/manjaro/ /opt/mirrors/ftp/manjaro
+	rsync://mirrorservice.org/repo.manjaro.org/repos/ /opt/mirrors/ftp/manjaro
