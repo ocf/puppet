@@ -16,6 +16,7 @@ mesg n
 alias ls ls -F
 alias quota quota -Qs
 alias rm rm -I
+alias cooperctl kubectl
 
 set prompt = "%m[%c]"
 
