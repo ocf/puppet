@@ -36,6 +36,7 @@ alias quota "quota -Qs"
 alias rm "rm -I"
 alias leetfish "set -gx FISH swim"
 alias noobfish "set -gx FISH noob"
+alias cooperctl "kubectl"
 
 # Logout
 function on_exit --on-process %self

@@ -76,3 +76,4 @@ mesg n
 
 alias ls="ls --color"
 alias grep="grep --color"
+alias cooperctl="kubectl"

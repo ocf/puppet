@@ -38,6 +38,7 @@ shopt -s checkwinsize
 alias ls='ls -Fh'
 alias quota='/usr/bin/quota -Qs'
 alias rm='rm -I'
+alias cooperctl='kubectl'
 
 # Color terminal
 if [ "$TERM" != dumb ]; then
