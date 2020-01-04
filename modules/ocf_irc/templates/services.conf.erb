@@ -21,7 +21,7 @@ serverinfo {
     name = "services.irc.ocf.berkeley.edu"
     description = "OCF IRC Services"
 
-    pid = "/var/run/anope/anope.pid"
+    pid = "/run/anope/anope.pid"
     motd = "/etc/anope/services.motd"
 }
 
@@ -178,6 +178,10 @@ module {
         port = 3306
     }
 }
+
+# Add "SASL" authentication. Supported mechanisms are:
+# PLAIN, EXTERNAL.
+module { name = "m_sasl" }
 
 # Load the SHA256 module for NickServ password encryption
 module { name = "enc_sha256" }

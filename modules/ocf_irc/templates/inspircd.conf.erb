@@ -13,6 +13,7 @@
 <module name="m_sha256.so">
 <module name="m_sqloper.so">
 <module name="m_ssl_gnutls.so">
+<module name="m_cap.so">
 
 # Required/Recommended modules for anope
 <module name="m_alias.so">
@@ -23,6 +24,9 @@
 <module name="m_spanningtree.so">
 <module name="m_svshold.so">
 
+# Add SASL authentication (provided by Anope)
+<module name="m_sasl.so">
+<sasl target="services.irc.ocf.berkeley.edu">
 
 <server name="irc.ocf.berkeley.edu"
         description="Open Computing Facility IRC Server"
