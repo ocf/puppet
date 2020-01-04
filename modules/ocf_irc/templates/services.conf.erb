@@ -179,6 +179,10 @@ module {
     }
 }
 
+# Add "SASL" authentication. Supported mechanisms are:
+# PLAIN, EXTERNAL.
+module { name = "m_sasl" }
+
 # Load the SHA256 module for NickServ password encryption
 module { name = "enc_sha256" }
 
