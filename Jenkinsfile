@@ -44,16 +44,15 @@ pipeline {
           // This should only run for pull requests, so that it is able to post
           // change/failure comments on the review
           if (env.CHANGE_ID) {
-            // Don't fail the whole build if octocatalog-diff fails, since it's new
-            // and needs some fixing before it's relied on
-            try {
-              def output = sh returnStdout: true, script: 'make all_diffs'
-              pullRequest.comment(output)
-            } catch (err) {
-              echo 'make all_diffs failed, but it is being ignored for now'
-              mail to: 'jvperrin@ocf.berkeley.edu',
-                   subject: "all_diffs failed on ${JOB_NAME}/#${BUILD_NUMBER}",
-                   body: BUILD_URL
+            // Unfortunately both the output and the status code cannot be
+            // saved at the same time (thanks jenkins, see
+            // https://issues.jenkins-ci.org/browse/JENKINS-44930), so the
+            // output is saved to a file and then used soon after
+            def status = sh returnStatus: true, script: 'make all_diffs > all_diffs_output.log'
+            pullRequest.comment(readFile('all_diffs_output.log').trim())
+
+            if (status != 0) {
+              currentBuild.result = 'FAILURE'
             }
           }
         }
@@ -72,6 +71,24 @@ pipeline {
             kinit -t /opt/jenkins/deploy/ocfdeploy.keytab ocfdeploy
                 ssh ocfdeploy@puppet 'sudo /opt/puppetlabs/scripts/update-prod'
         '''
+      }
+    }
+
+    // This stage is positioned after the one to update prod so it does not
+    // block updates deploying until it's been tested further
+    stage('octocatalog-diff-master') {
+      when {
+        branch 'master'
+      }
+      steps {
+        script {
+          // This should always pass since it's comparing master against
+          // itself. If it does not pass, this indicates something wrong with
+          // the octocatalog-diff test setup (like a dummy secret that needs
+          // adding), some transient failure (inability to contact puppetdb for
+          // instance), or catalog compilation issues
+          sh 'make all_diffs'
+        }
       }
     }
   }
