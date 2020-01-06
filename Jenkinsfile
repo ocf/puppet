@@ -49,7 +49,16 @@ pipeline {
             // https://issues.jenkins-ci.org/browse/JENKINS-44930), so the
             // output is saved to a file and then used soon after
             def status = sh returnStatus: true, script: 'make all_diffs > all_diffs_output.log'
-            pullRequest.comment(readFile('all_diffs_output.log').trim())
+            // GitHub has a max comment length of 65536, so truncate and leave
+            // a warning about it at the top if necessary
+            def output = readFile('all_diffs_output.log').trim()
+            def charLimit = 65536
+            if (output.length() > charLimit) {
+              def warning = "**WARNING: Output has been truncated due to comment limit, see Jenkins for full output**\n"
+              pullRequest.comment(warning + output.take(charLimit - warning.length()))
+            } else {
+              pullRequest.comment(output)
+            }
 
             if (status != 0) {
               currentBuild.result = 'FAILURE'
