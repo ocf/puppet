@@ -1,4 +1,4 @@
-#!/usr/bin/python3 -u
+#!/usr/bin/python3
 # Note that this does not use the /usr/bin/env python3 shebang because it wants
 # to use the system-installed requests and ocflib which are not in the puppet
 # python virtualenv
@@ -133,16 +133,16 @@ def process_output(empty_diffs, diffs, errors, return_code, output):
         output_without_host = cmd_output.split('\n', 1)[1]
         diffs[output_without_host] = diffs.get(output_without_host, []) + [host]
     else:
-        empty_diffs.append('`{}`\n'.format(host))
+        empty_diffs.append(host)
 
     return empty_diffs, diffs, errors, return_code
 
 
-def report_output(title, count, items):
+def report_output(title, count, contents):
     print(
         GITHUB_COLLAPSE_CONTAINER.format(
             '{} ({})'.format(title, count),
-            '\n'.join(items),
+            contents,
         ),
     )
 
@@ -180,7 +180,7 @@ def all_diffs():
 
     # Report any hosts that had errors (catalog compilation failed)
     if errors:
-        report_output('Errored hosts', len(errors), errors)
+        report_output('Errored hosts', len(errors), '\n'.join(errors))
 
     # For any diffs, print them grouped by diff so it's not too verbose and
     # it's easier to see which hosts are affected
@@ -196,12 +196,16 @@ def all_diffs():
                 ),
             )
 
-        report_output('Changed hosts', num_hosts, text)
+        report_output('Changed hosts', num_hosts, '\n'.join(text))
 
     # Unaffected hosts just have their hostnames printed, but there's nothing
     # else to really show about them since nothing of note happened
     if empty_diffs:
-        report_output('Unaffected hosts', len(empty_diffs), empty_diffs)
+        report_output(
+            'Unaffected hosts',
+            len(empty_diffs),
+            '```\n{}\n```'.format('\n'.join(empty_diffs)),
+        )
 
     return return_code
 
