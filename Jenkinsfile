@@ -56,7 +56,7 @@ pipeline {
             def output = readFile('all_diffs_output.log').trim()
             def charLimit = 65536
             if (output.length() > charLimit) {
-              def url = createGist('octocatalog-diff-results.log', output)
+              def url = createGist('octocatalog-diff-results.md', output)
               pullRequest.comment('**WARNING: Test output is too long for a GitHub comment, posted to a gist instead**: ' + url)
             } else {
               pullRequest.comment(output)
