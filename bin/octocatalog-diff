@@ -120,7 +120,7 @@ def diff(host):
         # This means the puppet run has failed in some way (a return code of 1
         # is pretty usual for that), so we return an error code and the output
         # to post in the review
-        return (host, 1, GITHUB_COLLAPSE_CODE.format('**error** for {}'.format(host), 'text', stderr))
+        return (host, 1, GITHUB_COLLAPSE_CODE.format('error for {}'.format(host), 'text', stderr))
 
 
 def process_output(empty_diffs, diffs, errors, return_code, output):

@@ -50,10 +50,10 @@ pipeline {
             // saved at the same time (thanks jenkins, see
             // https://issues.jenkins-ci.org/browse/JENKINS-44930), so the
             // output is saved to a file and then used soon after
-            def status = sh returnStatus: true, script: 'make all_diffs > all_diffs_output.log'
+            def status = sh returnStatus: true, script: './bin/octocatalog-diff > all_diffs_output.md'
             // GitHub has a max comment length of 65536, so create a gist and
             // link to that if necessary
-            def output = readFile('all_diffs_output.log').trim()
+            def output = readFile('all_diffs_output.md').trim()
             def charLimit = 65536
             if (output.length() > charLimit) {
               def url = createGist('octocatalog-diff-results.md', output)
