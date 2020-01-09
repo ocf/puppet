@@ -1,5 +1,3 @@
-@Library('shared-ocf-pipeline@add-create-gist') _
-
 pipeline {
   agent {
     label 'slave'
@@ -51,16 +49,22 @@ pipeline {
             // https://issues.jenkins-ci.org/browse/JENKINS-44930), so the
             // output is saved to a file and then used soon after
             def status = sh returnStatus: true, script: './bin/octocatalog-diff > all_diffs_output.md'
+            def output = readFile('all_diffs_output.md').trim()
+
             // GitHub has a max comment length of 65536, so create a gist and
             // link to that if necessary
-            def output = readFile('all_diffs_output.md').trim()
-            def charLimit = 65536
-            if (output.length() > charLimit) {
-              def url = createGist('octocatalog-diff-results.md', output)
-              pullRequest.comment('**WARNING: Test output is too long for a GitHub comment, posted to a gist instead**: ' + url)
-            } else {
-              pullRequest.comment(output)
+            if (output.length() > 65536) {
+              // Get the first 3 lines from the output and still include them
+              // in the comment as a kind of summary
+              def summary = output.split('\n', 4)[0..2].join('\n')
+              def url = createGist('octocatalog-diff-results.md', output, env.BUILD_URL)
+              output = summary + '\n**WARNING: Output is too long for a comment, posted to a gist instead**: ' + url
             }
+
+            // Add a link to Jenkins in the comment so it's easy to get back to
+            // the full build and it's clear which build a comment goes with
+            pullRequestComment = output + "\n\n[Jenkins](${env.BUILD_URL})"
+            pullRequest.comment(pullRequestComment)
 
             if (status != 0) {
               currentBuild.result = 'FAILURE'

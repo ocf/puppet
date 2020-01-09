@@ -138,10 +138,10 @@ def process_output(empty_diffs, diffs, errors, return_code, output):
     return empty_diffs, diffs, errors, return_code
 
 
-def report_output(title, count, contents):
+def collapsible_report(title, contents):
     print(
         GITHUB_COLLAPSE_CONTAINER.format(
-            '{} ({})'.format(title, count),
+            title,
             contents,
         ),
     )
@@ -178,14 +178,20 @@ def all_diffs():
             empty_diffs, diffs, errors, return_code, output,
         )
 
+    # Gather and print the number of hosts in each category as a summary
+    num_changed = sum([len(hosts) for hosts in diffs.values()])
+    print('#### Errored hosts ({})'.format(len(errors)))
+    print('#### Changed hosts ({})'.format(num_changed))
+    print('#### Unaffected hosts ({})'.format(len(empty_diffs)))
+    print('<hr>')
+
     # Report any hosts that had errors (catalog compilation failed)
     if errors:
-        report_output('Errored hosts', len(errors), '\n'.join(errors))
+        collapsible_report('Errored hosts', '\n'.join(errors))
 
     # For any diffs, print them grouped by diff so it's not too verbose and
     # it's easier to see which hosts are affected
     if diffs:
-        num_hosts = sum([len(hosts) for hosts in diffs.values()])
         text = []
         for diff_text, hosts in diffs.items():
             text.append(
@@ -196,14 +202,13 @@ def all_diffs():
                 ),
             )
 
-        report_output('Changed hosts', num_hosts, '\n'.join(text))
+        collapsible_report('Changed hosts', '\n'.join(text))
 
     # Unaffected hosts just have their hostnames printed, but there's nothing
     # else to really show about them since nothing of note happened
     if empty_diffs:
-        report_output(
+        collapsible_report(
             'Unaffected hosts',
-            len(empty_diffs),
             '```\n{}\n```'.format('\n'.join(empty_diffs)),
         )
 

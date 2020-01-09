@@ -22,4 +22,4 @@ vendor: Puppetfile
 
 .PHONY: all_diffs
 all_diffs:
-	@./bin/octocatalog-diff
+	./bin/octocatalog-diff
