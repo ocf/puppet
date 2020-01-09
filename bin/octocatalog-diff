@@ -16,6 +16,26 @@ PUPPETDB_NODES_URL = 'https://puppetdb:8081/pdb/query/v4/nodes'
 # TODO: Change this to not piggyback off the ocfweb certs
 PUPPET_CERT_DIR = '/etc/ocfweb/puppet-certs'
 
+GITHUB_COLLAPSE_CODE = '''
+<details>
+  <summary>{}</summary>
+
+```{}
+{}
+```
+</details>'''
+
+GITHUB_COLLAPSE_CONTAINER = '''
+<details>
+  <summary>{}</summary>
+
+{}
+</details>'''
+
+
+def info(output):
+    print(output, file=sys.stderr)
+
 
 def setup_cache():
     workspace = os.getenv('WORKSPACE') or os.path.join(str(Path.home()), '.cache')
@@ -47,46 +67,84 @@ def get_hosts_from_puppetdb():
 
 
 def diff(host):
-    """Run octocatalog-diff for a particular hostname"""
+    """Run octocatalog-diff for a particular hostname, and return whether the
+    run succeeded or failed and any output"""
     process = subprocess.run(
-        (
-            'octocatalog-diff',
-            # Add a --debug flag to get much more verbose output
-            '-n', host,
-            '--enc-override',
-            'environment=production,parameters::dummy_secrets=true',
-            '--display-detail-add',
-            # Ignore changes to puppetserver settings, since these are
-            # dependent on the path that octocatalog-diff sets and thus always
-            # differ
-            '--ignore', "'Ini_setting[puppet.conf/master/storeconfigs]'",
-            '--ignore', "'Ini_setting[puppet.conf/master/storeconfigs_backend]'",
-            '--ignore', "'Ini_setting[puppetdbserver_urls]'",
-            '--ignore', "'Ini_setting[soft_write_failure]'",
-            '--ignore', "'File[/tmp/*/routes.yaml]'",
-            # Ignore changes to SSH keys, since these change when any machines
-            # are reprovisioned, etc. and change frequently
-            '--ignore', "'Sshkey[*]'",
+        ' '.join(
+            (
+                'octocatalog-diff',
+                # Add a --debug flag to get much more verbose output
+                '-n', host,
+                '--enc-override',
+                'environment=production,parameters::dummy_secrets=true',
+                # Unfortunately color codes are not handled well by github, so
+                # we turn those off here
+                '--no-color',
+                '--display-detail-add',
+                # Ignore changes to puppetserver settings, since these are
+                # dependent on the path that octocatalog-diff sets and thus
+                # always differ
+                "--ignore 'Ini_setting[puppet.conf/master/storeconfigs]'",
+                "--ignore 'Ini_setting[puppet.conf/master/storeconfigs_backend]'",
+                "--ignore 'Ini_setting[puppetdbserver_urls]'",
+                "--ignore 'Ini_setting[soft_write_failure]'",
+                "--ignore 'File[/tmp/*/routes.yaml]'",
+                # Ignore changes to SSH keys, since these change when any
+                # machines are reprovisioned, etc. and change frequently
+                "--ignore 'Sshkey[*]'",
+            ),
         ),
         stderr=subprocess.PIPE,
         stdout=subprocess.PIPE,
+        # We need shell=True here for the diffs to calculate correctly on the
+        # puppetmaster, otherwise the ignore settings above do not take effect.
+        # This should be safe enough as we aren't accepting user-defined input
+        shell=True,
     )
+
+    stdout = process.stdout.decode('utf-8').rstrip()
+    stderr = process.stderr.decode('utf-8').rstrip()
+    info('stdout for {}'.format(host))
+    info(stdout)
+    info('stderr for {}'.format(host))
+    info(stderr)
 
     if process.returncode == 0:
         # This is a clean run, puppet did not error and there was no diff
-        print('run for {}: clean'.format(host))
-        return 0
+        return (host, 0, None)
     elif process.returncode == 2:
         # This means the puppet run has found some diff from master, so we
-        # should keep this and report it back in the review
-        print(process.stdout.decode('utf-8').rstrip())
-        return 0
+        # return this and report it back in the review but do not fail the run
+        return (host, 0, stdout)
     else:
         # This means the puppet run has failed in some way (a return code of 1
-        # is pretty usualfor that), so the whole command should error out
-        print('run for {} errored:'.format(host))
-        print(process.stderr.decode('utf-8').rstrip())
-        return 1
+        # is pretty usual for that), so we return an error code and the output
+        # to post in the review
+        return (host, 1, GITHUB_COLLAPSE_CODE.format('error for {}'.format(host), 'text', stderr))
+
+
+def process_output(empty_diffs, diffs, errors, return_code, output):
+    host, status, cmd_output = output
+    return_code = max(return_code, status)
+
+    if status and cmd_output:
+        errors.append(cmd_output)
+    elif cmd_output:
+        output_without_host = cmd_output.split('\n', 1)[1]
+        diffs[output_without_host] = diffs.get(output_without_host, []) + [host]
+    else:
+        empty_diffs.append(host)
+
+    return empty_diffs, diffs, errors, return_code
+
+
+def collapsible_report(title, contents):
+    print(
+        GITHUB_COLLAPSE_CONTAINER.format(
+            title,
+            contents,
+        ),
+    )
 
 
 def all_diffs():
@@ -95,17 +153,66 @@ def all_diffs():
     TODO: Make this faster by just selecting a single node from each class we
     care about (not selecting all desktops/hozers for example)
     """
-    print('Setting up cache...')
+    info('Setting up cache...')
     setup_cache()
-    print('Getting hosts from puppetdb...')
+
+    info('Getting hosts from puppetdb...')
     hosts = get_hosts_from_puppetdb()
+
     # Get number of cores to parallelize across and create a worker pool of that size
     pool = Pool(os.cpu_count())
 
-    print('Running octocatalog-diff across all hosts...')
-    # Find any status codes that are non-zero (errors encountered in puppet runs)
-    returncode = max([ret for ret in pool.imap(diff, hosts)])
-    return returncode
+    info('Running octocatalog-diff across all hosts...')
+    run_output = pool.imap(diff, hosts)
+
+    # Print out information to be posted in a comment on the review
+    #
+    # Also find any status codes that are non-zero (errors encountered in
+    # puppet runs), and use that as the return code to report
+    empty_diffs = []
+    diffs = {}
+    errors = []
+    return_code = 0
+    for output in run_output:
+        empty_diffs, diffs, errors, return_code = process_output(
+            empty_diffs, diffs, errors, return_code, output,
+        )
+
+    # Gather and print the number of hosts in each category as a summary
+    num_changed = sum([len(hosts) for hosts in diffs.values()])
+    print('#### Errored hosts ({})'.format(len(errors)))
+    print('#### Changed hosts ({})'.format(num_changed))
+    print('#### Unaffected hosts ({})'.format(len(empty_diffs)))
+    print('<hr>')
+
+    # Report any hosts that had errors (catalog compilation failed)
+    if errors:
+        collapsible_report('Errored hosts', '\n'.join(errors))
+
+    # For any diffs, print them grouped by diff so it's not too verbose and
+    # it's easier to see which hosts are affected
+    if diffs:
+        text = []
+        for diff_text, hosts in diffs.items():
+            text.append(
+                GITHUB_COLLAPSE_CODE.format(
+                    'diff for {}'.format(', '.join(sorted(hosts))),
+                    'diff',
+                    diff_text,
+                ),
+            )
+
+        collapsible_report('Changed hosts', '\n'.join(text))
+
+    # Unaffected hosts just have their hostnames printed, but there's nothing
+    # else to really show about them since nothing of note happened
+    if empty_diffs:
+        collapsible_report(
+            'Unaffected hosts',
+            '```\n{}\n```'.format('\n'.join(empty_diffs)),
+        )
+
+    return return_code
 
 
 if __name__ == '__main__':
