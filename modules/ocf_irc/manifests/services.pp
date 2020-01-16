@@ -7,7 +7,7 @@ class ocf_irc::services {
   }
 
   $irc_creds = lookup('irc_creds')
-  $root_nicks = ['waf', 'nattofriends', 'ckuehl', 'jvperrin', 'mattmcal', 'abizer', 'dkessler']
+  $root_nicks = ['waf', 'nattofriends', 'ckuehl', 'jvperrin', 'mattmcal', 'abizer', 'dkessler', 'cooperc']
 
   file {
     default:
