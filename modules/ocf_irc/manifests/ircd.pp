@@ -56,4 +56,9 @@ class ocf_irc::ircd {
       mode      => '0640',
       show_diff => false;
   }
+
+  ocf::systemd::override { 'inspircd-group-restart':
+    unit   => 'inspircd.service',
+    source => 'puppet:///modules/ocf_irc/inspircd.service.d/override.conf';
+  }
 }
