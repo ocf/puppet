@@ -37,33 +37,37 @@ umask 077
 rm -rf "$ARCHIVE_DIRECTORY"
 mkdir "$ARCHIVE_DIRECTORY"
 
-compress_and_encrypt() {
-    dd if="$SNAPSHOT_PATH" bs=32M | pigz |
-        gpg --homedir "$gpgdir" \
-            --no-tty \
-            --quiet \
-            --encrypt \
-            --trust-model always \
-            --compress-algo none \
-            --recipient ckuehl@berkeley.edu \
-            --recipient willh@ocf.berkeley.edu \
-            --recipient jvperrin@ocf.berkeley.edu \
-            --recipient mattmcal@ocf.berkeley.edu \
-            --recipient kpengboy@ocf.berkeley.edu \
-            --recipient abizer@ocf.berkeley.edu \
-            --recipient benzhang4@gmail.com \
-            --recipient daniel@dkess.me \
-            --recipient cooperc@ocf.berkeley.edu
+compress() {
+    dd if="$SNAPSHOT_PATH" bs=32M | pigz
 }
 
-split_parts() {
-    split -d -a 4 -b 5G - \
-        "${ARCHIVE_DIRECTORY}/backup-$(date +%Y-%m-%d).img.gz.gpg.part"
+# this is the filter that `split` will use to encrypt each .part file after
+# splitting. $FILE is the .part filename, we append .gpg to that.
+encrypt_cmd="gpg --homedir $gpgdir \
+                 --no-tty \
+                 --quiet \
+                 --encrypt \
+                 --trust-model always \
+                 --compress-algo none \
+                 --recipient ckuehl@berkeley.edu \
+                 --recipient willh@ocf.berkeley.edu \
+                 --recipient jvperrin@ocf.berkeley.edu \
+                 --recipient mattmcal@ocf.berkeley.edu \
+                 --recipient kpengboy@ocf.berkeley.edu \
+                 --recipient abizer@ocf.berkeley.edu \
+                 --recipient benzhang4@gmail.com \
+                 --recipient daniel@dkess.me \
+                 --recipient cooperc@ocf.berkeley.edu \
+                 --output \$FILE.gpg -"
+
+split_parts_and_encrypt() {
+    split -d -a 4 -b 5G --filter "$encrypt_cmd" - \
+        "${ARCHIVE_DIRECTORY}/backup-$(date +%Y-%m-%d).img.gz.part"
 }
 
 # Only show pv output if the terminal is interactive (no cron email pv spam)
 if [ -t 0 ]; then
-    compress_and_encrypt | pv | split_parts
+    compress | pv | split_parts_and_encrypt
 else
-    compress_and_encrypt | split_parts
+    compress | split_parts_and_encrypt
 fi
