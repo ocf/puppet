@@ -71,8 +71,6 @@ kubernetes::nginx_version: '0.21.0'
 kubernetes::worker_nodes:
     - pandemic
     - riptide
-    - hozer-73
-    - hozer-74
     - bedbugs
 kubernetes::master_nodes:
     - coup
