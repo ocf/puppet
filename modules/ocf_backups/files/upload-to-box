@@ -108,7 +108,7 @@ def get_access_token(creds):
         return response['access_token']
 
 
-def upload_to_box(creds, quiet):
+def upload_to_box(creds, files, quiet):
     """Uploads the archive to box at the configured location"""
 
     # Specify each file and its destination on the command line
@@ -119,7 +119,7 @@ def upload_to_box(creds, quiet):
             os.path.join(ARCHIVE, filename),
             '{}/{}/'.format(BOX_FTP, FOLDER),
         )
-        for filename in os.listdir(ARCHIVE)
+        for filename in files
     )
 
     if quiet:
@@ -142,7 +142,7 @@ def upload_to_box(creds, quiet):
                 '-1',
                 '--disable-epsv',
                 '--ftp-skip-pasv-ip',
-                '--ftp-ssl',
+                '--ssl',
                 '--netrc-file', netrc_file.name,
                 '--ftp-create-dirs',
                 '--globoff',
@@ -161,6 +161,22 @@ def get_folder_id(access_token, folder_name):
     for entry in response['entries']:
         if entry['name'] == folder_name and entry['type'] == 'folder':
             return entry['id']
+
+
+def get_folder_items(access_token, folder_id):
+    """Get the items in a specific folder"""
+    url = 'https://api.box.com/2.0/folders/{}/items?limit=1000'.format(folder_id)
+    response = box_api_call(url, headers=['Authorization: Bearer ' + access_token])
+    names = set(entry['name'] for entry in response['entries'])
+
+    offset = 0
+    while response['total_count'] > offset + response['limit']:
+        offset += response['limit']
+        offset_url = '{}&offset={}'.format(url, offset)
+        response = box_api_call(offset_url, headers=['Authorization: Bearer ' + access_token])
+        names |= set(entry['name'] for entry in response['entries'])
+
+    return names
 
 
 def add_collaborators(access_token, folder_id, emails):
@@ -217,17 +233,32 @@ def main(args):
     with open('/opt/share/backups/box-creds.json') as f:
         creds = json.load(f)
 
+    # Make sure our refresh token is still active, and fail otherwise.
+    get_access_token(creds)
+
     # Used for statistics, shown at the end of the run.
     start_time = time.time()
     file_bytes = sum(os.path.getsize(ARCHIVE + '/' + f) for f in files)
     if not args.quiet:
         print('Uploading {}...'.format(humanize_bytes(file_bytes)))
 
-    upload_to_box(creds, args.quiet)
+    upload_to_box(creds, files, args.quiet)
 
-    # Get a shared link from Box.com's API and share it with certain emails
     access_token = get_access_token(creds)
     folder_id = get_folder_id(access_token, FOLDER)
+    uploaded_items = get_folder_items(access_token, folder_id)
+
+    # Make sure all the files actually got uploaded
+    while uploaded_items < set(files):
+        remaining_files = set(files) - uploaded_items
+        if not args.quiet:
+            print('Uploading remaing files {}...'.format(', '.join(remaining_files)))
+        upload_to_box(creds, remaining_files, args.quiet)
+        # our access token may have expired during upload
+        access_token = get_access_token(creds)
+        uploaded_items = get_folder_items(access_token, folder_id)
+
+    # Get a shared link from Box.com's API and share it with certain emails
     add_collaborators(access_token, folder_id, BOX_EMAILS)
     link = get_shared_link(access_token, folder_id)
 
