@@ -1,6 +1,7 @@
 class ocf_mail {
   include ocf::ssl::default
 
+  include ocf_mail::logging
   include ocf_mail::spam
   include ocf_mail::site_ocf
   include ocf_mail::site_vhost
