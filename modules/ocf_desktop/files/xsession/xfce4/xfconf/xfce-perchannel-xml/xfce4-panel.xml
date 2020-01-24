@@ -29,7 +29,7 @@
         <value type="int" value="18"/>
       </property>
       <property name="autohide" type="bool" value="false"/>
-      <property name="span-monitors" type="bool" value="true"/>
+      <property name="span-monitors" type="bool" value="false"/>
     </property>
     <property name="panel-1" type="empty">
       <property name="position" type="string" value="p=8;x=96;y=1177"/>
@@ -40,7 +40,7 @@
       <property name="plugin-ids" type="array">
         <value type="int" value="3"/>
       </property>
-      <property name="span-monitors" type="bool" value="true"/>
+      <property name="span-monitors" type="bool" value="false"/>
     </property>
   </property>
   <property name="plugins" type="empty">

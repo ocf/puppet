@@ -54,11 +54,26 @@ if __name__ == '__main__':
     else:
         sorted_monitors = list(sorted(monitors))
 
-    prev = None
-    for monitor in sorted_monitors:
-        if prev:
-            subprocess.check_call(['xrandr', '--output', monitor, '--right-of', prev])
-        prev = monitor
+    # special case for eruption: right monitor is rotated left 90 degrees
+    if len(monitors) == 3 and hostname == 'eruption':
+        # horizontal monitors are moved down a bit; move vertical up to compensate
+        resolution = (1440, 2560)
+        vert_offset = (resolution[1] - resolution[0]) / 2
+
+        subprocess.check_call(['xrandr', '--output', sorted_monitors[0],
+                               '--pos', '{}x{}'.format(0, 0)])
+
+        subprocess.check_call(['xrandr', '--output', sorted_monitors[1],
+                               '--pos', '{}x{}'.format(resolution[1], 0)])
+
+        subprocess.check_call(['xrandr', '--output', sorted_monitors[2],
+                               '--rotate', 'left', '--pos', '{}x{}'.format(resolution[1] * 2, -vert_offset)])
+    else:
+        prev = None
+        for monitor in sorted_monitors:
+            if prev:
+                subprocess.check_call(['xrandr', '--output', monitor, '--right-of', prev])
+            prev = monitor
 
     if daisy_chained:
         subprocess.check_call(['fix-daisy'])
