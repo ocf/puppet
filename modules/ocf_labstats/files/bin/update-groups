@@ -2,7 +2,7 @@
 
 import sys
 
-from ocflib.account.utils import list_staff
+from ocflib.account.utils import list_group
 from ocflib.lab.stats import get_connection
 
 
@@ -31,8 +31,8 @@ def main():
     with open('/opt/stats/ocfstats-password') as f:
         ocfstats_password = f.read().rstrip()
 
-    update_group(ocfstats_password, 'staff', list_staff())
-    update_group(ocfstats_password, 'opstaff', list_staff('opstaff'))
+    update_group(ocfstats_password, 'staff', list_group('ocfstaff'))
+    update_group(ocfstats_password, 'opstaff', list_group('opstaff'))
 
 if __name__ == '__main__':
     sys.exit(main())

@@ -6,7 +6,7 @@ import sys
 from collections import Counter
 from collections import defaultdict
 
-from ocflib.account.utils import is_staff
+from ocflib.account.utils import is_in_group
 
 
 # number of messages a single account can send per day without being flagged
@@ -71,7 +71,7 @@ def examine_mail(mail):
 
             if from_user:
                 if from_user != user and from_user not in USER_EXCEPTIONS:
-                    if not is_staff(user) or from_user != 'help':
+                    if not is_in_group(user, 'ocfstaff') or from_user != 'help':
                         yield ("From @ocf but user doesn't match",
                                'from {}, should be {} (uid {})'.format(from_user, user, uid))
             else:

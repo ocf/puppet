@@ -3,7 +3,7 @@ import pwd
 from datetime import datetime
 
 from gi.repository import Notify
-from ocflib.account.utils import is_staff
+from ocflib.account.utils import is_in_group
 from ocflib.lab.stats import staff_in_lab
 from ocflib.misc.whoami import current_user
 from ocflib.printing.quota import get_connection
@@ -18,7 +18,7 @@ def main():
     staff = {
         pwd.getpwnam(session.user).pw_gecos
         for session in staff_in_lab()
-        if not is_staff(session.user, 'opstaff')
+        if not is_in_group(session.user, 'opstaff')
     }
 
     # List staff in lab
