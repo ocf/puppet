@@ -10,6 +10,11 @@ Currently checks the Hosts OU for:
     * Host not in DNS or mismatched IP
     * Unrecognized puppetVar (often typos)
     * Reverse DNS for IP exists and matches hostname
+
+It also does some checks around users and kerberos principals:
+    * All users with a /root principal should also have a /admin principal
+    * All ocfroot members should be in ocfstaff too
+    * All ocfroot members should have a /root and /admin principal
 """
 import subprocess
 import sys
