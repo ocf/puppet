@@ -1,0 +1,185 @@
+#!/usr/bin/env python3
+"""Check the sanity of our LDAP database.
+
+Currently checks the Hosts OU for:
+    * Duplicate IP addresses
+    * Duplicate MAC addresses
+    * Missing IP address
+    * Existence of MAC address (should be present only on type=desktop)
+    * Invalid or missing type
+    * Host not in DNS or mismatched IP
+    * Unrecognized puppetVar (often typos)
+    * Reverse DNS for IP exists and matches hostname
+"""
+import subprocess
+import sys
+from ipaddress import ip_address
+from operator import itemgetter
+
+import dns
+from ocflib.infra.ldap import ldap_connection
+from ocflib.infra.ldap import OCF_LDAP_GROUP
+from ocflib.infra.ldap import OCF_LDAP_HOSTS
+from ocflib.misc.shell import bold
+from ocflib.misc.shell import red
+
+
+RECOGNIZED_TYPES = frozenset({
+    'desktop',
+    'dhcp',
+    'ipmi',
+    'printer',
+    'server',
+    'staffvm',
+    'switch',
+    'vip',
+    'wifi',
+})
+
+# inclusive
+STAFFVM_RANGE = (ip_address('169.229.226.200'), ip_address('169.229.226.252'))
+
+
+def lookup_dns(host, rtype='A'):
+    """Return string representation of first record, or None."""
+    try:
+        return str(dns.resolver.query(host, rtype)[0]) or None
+    except dns.resolver.NXDOMAIN:
+        return None
+
+
+def check_hosts(c, complain):
+    seen_macs = {}
+    seen_ips = {}
+
+    c.search(
+        OCF_LDAP_HOSTS,
+        '(cn=*)',
+        attributes=['cn', 'type', 'macAddress', 'ipHostNumber', 'puppetVar', 'puppetClass'],
+    )
+    for attrs in map(itemgetter('attributes'), c.response):
+        cn = attrs['cn'][0]
+        type_ = attrs['type']
+
+        if type_ not in RECOGNIZED_TYPES:
+            complain(cn, 'has unknown type ' + type_)
+
+        if attrs['macAddress']:
+            mac_addr = attrs['macAddress'][0].lower()
+
+            if type_ != 'desktop':
+                complain(cn, 'has a MAC address but not a desktop')
+
+            if mac_addr in seen_macs:
+                complain(cn, 'has same MAC address as ' + seen_macs[mac_addr])
+            else:
+                seen_macs[mac_addr] = cn
+        elif type_ == 'desktop':
+            complain(cn, 'has no MAC address but is a desktop')
+
+        ip = ip_address(attrs['ipHostNumber'][0])
+        in_staffvm_range = STAFFVM_RANGE[0] <= ip <= STAFFVM_RANGE[1]
+        if type_ == 'staffvm' and not in_staffvm_range and not cn.startswith('hozer-'):
+            complain(cn, 'is a staff VM, but not in staffvm IP range')
+        elif type_ != 'staffvm' and in_staffvm_range:
+            complain(cn, 'is in staffvm IP range, but not a staffvm')
+
+        ip = attrs['ipHostNumber'][0]
+        dns_ip = lookup_dns(cn + '.ocf.berkeley.edu')
+
+        if not dns_ip:
+            complain(cn, 'has no A record in DNS')
+        else:
+            if ip in seen_ips:
+                complain(cn, 'has same IP address as ' + seen_ips[ip])
+            else:
+                seen_ips[ip] = cn
+
+            if dns_ip != ip:
+                complain(cn, 'ldap ip {} doesn\'t match dns ip {}'.format(ip, dns_ip))
+
+        ptr = lookup_dns(dns.reversename.from_address(ip), rtype='PTR')
+
+        if ptr:
+            if ptr.lower() != cn + '.ocf.berkeley.edu.':
+                complain(cn, 'bad reverse DNS for {}: {}'.format(ip, ptr))
+        else:
+            complain(cn, 'missing reverse DNS for {}'.format(ip))
+
+        # TODO: remove these from schema
+        for puppet_var in attrs.get('puppetVar', []):
+            complain(cn, 'has puppetVar: {}'.format(puppet_var))
+
+        for puppet_class in attrs.get('puppetClass', []):
+            complain(cn, 'has puppetClass: {}'.format(puppet_class))
+
+
+def get_kadmin_users(filter_query):
+    """Using kadmin -l as root means that we don't have to get a kerberos
+    principal for this script and it can always check the local kerberos, which
+    is nice"""
+    process = subprocess.run(
+        ('kadmin', '-l', 'list', filter_query),
+        stdout=subprocess.PIPE,
+    )
+    principals = process.stdout.decode('utf-8').split('\n')
+
+    # Only return usernames, not the full principal name, since the suffix
+    # isn't useful
+    return set([principal.split('/')[0] for principal in principals])
+
+
+def get_users_in_group(c, group):
+    """This is useful over the (much simpler) list_group from ocflib since it
+    uses the local LDAP instead of the cached user groups, so it validates the
+    actual source of truth and can also work on dev-ldap"""
+    c.search(
+        OCF_LDAP_GROUP,
+        '(cn={})'.format(group),
+        attributes=['memberUid'],
+    )
+    return set(c.response[0]['attributes']['memberUid'])
+
+
+def check_users(c, complain):
+    ocfstaff = get_users_in_group(c, 'ocfstaff')
+    ocfroot = get_users_in_group(c, 'ocfroot')
+
+    admin_users = get_kadmin_users('*/admin')
+    root_users = get_kadmin_users('*/root')
+
+    for user in (admin_users - root_users):
+        if user not in ('create', 'kadmin'):
+            complain(user + '/admin', 'no corresponding {}/root principal'.format(user))
+
+    for user in (root_users - admin_users):
+        complain(user + '/root', 'no corresponding {}/admin principal'.format(user))
+
+    for user in ocfroot:
+        if user not in ocfstaff:
+            complain(user, 'in ocfroot but not ocfstaff')
+
+        if user not in root_users:
+            complain(user, 'in ocfroot but has no root principal')
+
+        if user not in admin_users:
+            complain(user, 'in ocfroot but has no admin principal')
+
+
+def main():
+    retval = 0
+
+    def complain(cn, error):
+        nonlocal retval
+        retval = 1
+        print(bold(red('[{}] '.format(cn))) + error)
+
+    with ldap_connection('localhost') as c:
+        check_hosts(c, complain)
+        check_users(c, complain)
+
+    return retval
+
+
+if __name__ == '__main__':
+    sys.exit(main())
