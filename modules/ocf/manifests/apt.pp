@@ -60,12 +60,10 @@ class ocf::apt($stage = 'first') {
       codename => "${::lsbdistcodename}-backports",
     }
 
-    if $::lsbdistcodename != 'buster' {
-      # TODO: Submit patch to puppetlabs-apt to enable having includes for
-      # apt::backports (so that we can include the source too)
-      class { 'apt::backports':
-        location => 'http://mirrors/debian/';
-      }
+    # TODO: Submit patch to puppetlabs-apt to enable having includes for
+    # apt::backports (so that we can include the source too)
+    class { 'apt::backports':
+      location => 'http://mirrors/debian/';
     }
 
   } elsif $::lsbdistid == 'Raspbian' {
@@ -88,20 +86,17 @@ class ocf::apt($stage = 'first') {
     }
   }
 
-  # TODO: Add the puppetlabs repo to buster when it is available
-  if $::lsbdistcodename == 'stretch' {
-    apt::source {
-      'puppetlabs':
-        location => 'http://mirrors/puppetlabs/apt/',
-        release  => $::lsbdistcodename,
-        repos    => 'puppet',
-    }
+  apt::source {
+    'puppetlabs':
+      location => 'http://mirrors/puppetlabs/apt/',
+      release  => $::lsbdistcodename,
+      repos    => 'puppet',
+  }
 
-    # Add the puppetlabs apt repo key
-    apt::key { 'puppet gpg key':
-      id     => '6F6B15509CF8E59E6E469F327F438280EF8D349F',
-      source => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/pubkey.gpg';
-    }
+  # Add the puppetlabs apt repo key
+  apt::key { 'puppet gpg key':
+    id     => '6F6B15509CF8E59E6E469F327F438280EF8D349F',
+    source => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/pubkey.gpg';
   }
 
   apt::key { 'ocf':
