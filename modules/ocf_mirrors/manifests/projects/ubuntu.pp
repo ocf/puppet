@@ -1,6 +1,6 @@
 class ocf_mirrors::projects::ubuntu {
   ocf_mirrors::ftpsync { 'ubuntu':
-    rsync_host  => 'mirror.enzu.com',
+    rsync_host  => 'us.archive.ubuntu.com',
     cron_minute => '50';
   }
 
