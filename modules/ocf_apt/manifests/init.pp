@@ -10,6 +10,12 @@ class ocf_apt {
 
   package { 'reprepro':; }
 
+  if $::host_env == 'prod' {
+    $pkg_key = 'D72A0AF4'
+  } else {
+    $pkg_key = 'D0BA5B90'
+  }
+
   file {
     default:
       owner => ocfapt,
@@ -23,7 +29,7 @@ class ocf_apt {
       source => 'puppet:///modules/ocf_apt/README.html';
 
     '/opt/apt/etc/distributions':
-      source => 'puppet:///modules/ocf_apt/distributions';
+      content => template('ocf_apt/distributions.erb');
 
     '/opt/apt/bin':
       ensure  => directory,
