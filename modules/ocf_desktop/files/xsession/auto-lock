@@ -6,20 +6,19 @@ import time
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Notify
-from ocflib.account.utils import is_staff
+from ocflib.account.utils import is_in_group
 from ocflib.misc.whoami import current_user
 
 # Time in seconds we wait for the user to move mouse/press keyboard
 WAIT_TIME = 180
 
 # Global variables. Just listing them out here.
-is_staffer = None
 pointer = None
 keyboard = None
 time_left = WAIT_TIME
 notification = None
 user = current_user()
-is_staffer = is_staff(user) or is_staff(user, group='opstaff')
+is_staffer = is_in_group(user, 'ocfstaff') or is_in_group(user, 'opstaff')
 
 
 def set_event_handler():

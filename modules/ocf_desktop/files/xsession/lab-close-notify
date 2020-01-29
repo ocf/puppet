@@ -4,7 +4,7 @@ import sched
 import time
 
 from gi.repository import Notify
-from ocflib.account.utils import is_staff
+from ocflib.account.utils import is_in_group
 from ocflib.lab.hours import read_hours_listing
 from ocflib.misc.whoami import current_user
 
@@ -26,7 +26,7 @@ def notify_user(seconds_left, staff):
 
 
 def main():
-    staff = is_staff(current_user())
+    staff = is_in_group(current_user(), 'ocfstaff')
     if staff:
         # 0 minutes, 15 minutes
         warning_durations = [0, 900]
