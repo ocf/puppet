@@ -113,11 +113,14 @@ class ocf_ldap {
     }
   }
 
+  file { '/usr/local/sbin/ldap-lint':
+    source => 'puppet:///modules/ocf_ldap/ldap-lint',
+    mode   => '0755',
+  } ->
   cron { 'ldap-lint':
-    command => '/opt/share/utils/sbin/ldap-lint',
+    command => '/usr/local/sbin/ldap-lint',
     user    => root,
     special => 'daily',
-    require => Vcsrepo['/opt/share/utils'];
   }
 
   ocf::munin::plugin { 'slapd-open-files':
