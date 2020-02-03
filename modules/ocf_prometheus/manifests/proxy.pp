@@ -8,6 +8,26 @@ class ocf_prometheus::proxy {
     'prod' => 'prometheus',
   }
 
+  package { 'libapache2-mod-authnz-pam':; }
+
+  apache::mod { 'authnz_pam':
+    require => Package['libapache2-mod-authnz-pam'];
+  }
+
+  file {
+    '/etc/prometheus/allowed-groups':
+      content => 'ocfstaff';
+    '/etc/pam.d/ocfprometheus':
+      source  => 'puppet:///modules/ocf_prometheus/proxy_pam',
+      require => File['/etc/prometheus/allowed-groups'];
+  }
+
+  ocf::privatefile { '/etc/prometheus/htpasswd':
+    source => 'puppet:///private/htpasswd',
+    owner  => 'www-data',
+    mode   => '400';
+  }
+
   apache::vhost {
     'prometheus':
       servername          => "${cname}.ocf.berkeley.edu",
@@ -25,7 +45,23 @@ class ocf_prometheus::proxy {
       rewrites            => [
         {rewrite_rule => '^/alertmanager(/.*)?$ http://127.0.0.1:9093/alertmanager$1 [P]'},
         {rewrite_rule => '^/(.*)$ http://127.0.0.1:9090/$1 [P]'},
+      ],
+      directories         => [{
+        provider            => proxy,
+        path                => '*',
+        auth_type           => 'Basic',
+        auth_name           => 'OCF Account',
+        auth_basic_provider => 'file PAM',
+        auth_user_file      => '/etc/prometheus/htpasswd',
+        auth_require        => 'valid-user',
+        custom_fragment     => 'AuthPAMService ocfprometheus',
+      }],
+      require             => [
+        Apache::Mod['authnz_pam'],
+        File['/etc/pam.d/ocfprometheus'],
+        Ocf::Privatefile['/etc/prometheus/htpasswd'],
       ];
+
 
     'prometheus-http-redirect':
       servername      => "${cname}.ocf.berkeley.edu",
