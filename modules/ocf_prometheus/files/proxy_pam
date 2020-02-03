@@ -1,0 +1,10 @@
+# Restrict access to prometheus.ocf.berkeley.edu to ocfstaff only, since it
+# includes configuration access to alertmanager, among other things.
+
+@include common-auth
+@include common-account
+@include common-password
+@include common-session
+
+# Must be in the ocfstaff group to access
+auth    required    pam_listfile.so onerr=fail item=group sense=allow file=/etc/prometheus/allowed-groups
