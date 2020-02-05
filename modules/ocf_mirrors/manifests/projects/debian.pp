@@ -5,7 +5,7 @@ class ocf_mirrors::projects::debian {
       cron_minute => '10';
 
     'debian-security':
-      rsync_host  => 'security.debian.org',
+      rsync_host  => 'rsync.security.debian.org',
       cron_minute => '20';
 
     'debian-cd':
