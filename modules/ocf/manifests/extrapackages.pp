@@ -68,6 +68,7 @@ class ocf::extrapackages {
     'ipython',
     'ipython3',
     'irssi',
+    'julia',
     'jupyter-console',
     'jupyter-core',
     'jupyter-notebook',
