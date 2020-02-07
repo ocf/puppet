@@ -1,0 +1,12 @@
+<pool type="rbd">
+  <name>vm</name>
+  <source>
+    <name>vm</name>
+    <% @ceph_mons.each do |ceph_mon| -%>
+    <host name='<%= ceph_mon %>.ocf.berkeley.edu' port='3300'/>
+    <% end -%>
+    <auth username='libvirt' type='ceph'>
+      <secret uuid='<%= @libvirt_secret_uuid %>'/>
+    </auth>
+  </source>
+</pool>
