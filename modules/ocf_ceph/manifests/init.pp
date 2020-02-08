@@ -4,9 +4,10 @@ class ocf_ceph {
   require ocf::packages::ceph
 
   $ceph_mons_list = lookup('ceph::mons')
-  $ceph_mons = $ceph_mons_list.join(',')
-  $ceph_mon_ips = $ceph_mons_list.map
+  $ceph_mons_ip_str = $ceph_mons_list.map
     |$node| { ldap_attr($node, 'ipHostNumber') }.join(',')
+  $ceph_mon_ips = $ceph_mons_list.map
+    |$node| { [$node, ldap_attr($node, 'ipHostNumber')] }
 
   $ip_addr = $::ipaddress
 

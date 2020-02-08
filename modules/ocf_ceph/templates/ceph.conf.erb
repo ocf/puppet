@@ -3,8 +3,7 @@
 fsid = a910ccd1-1116-4873-b3f9-c2cb7eed4e56
 
 # Initial ceph monitors
-mon_host = <%= @ceph_mons %>
-mon_addr = <%= @ceph_mon_ips %>
+mon_host = <%= @ceph_mon_ip_str %>
 
 # IP of current node, needed for monitor bootstraping
 public_addr = <%= @ip_addr %>
@@ -25,3 +24,9 @@ mon_allow_pool_delete = true
 # https://stackoverflow.com/q/40771273
 osd_pool_default_pg_num = 512
 osd_pool_default_pgp_num = 512
+
+<% @ceph_mon_ips.each do |(hostname, ip)| %>
+[mon.<%= hostname %>]
+host = <%= hostname %>
+mon addr = <%= ip %>:3300
+<% end %>
