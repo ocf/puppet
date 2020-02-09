@@ -3,7 +3,6 @@ class ocf_kvm($group = 'root') {
   include ocf::firewall::output_all
   include ocf::ipmi
   include ocf::tmpfs
-  include ocf_ceph::libvirt
 
   # install kvm, libvirt, lvm, bridge networking, IPMI
   package {
