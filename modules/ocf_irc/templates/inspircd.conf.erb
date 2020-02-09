@@ -110,12 +110,13 @@
 
 
 # Store oper credentials in mysql
-<database name="ocfirc"
-          user="ocfirc"
-          pass="<%= @irc_creds['mysql_password'] -%>"
-          host="mysql.ocf.berkeley.edu"
-          port="3306"
-          id="irc">
+#<database module="mysql"
+#          name="ocfirc"
+#          user="ocfirc"
+#          pass="<%= @irc_creds['mysql_password'] -%>"
+#          host="mysql.ocf.berkeley.edu"
+#          port="3306"
+#          id="irc">
 
 <sqloper dbid="irc" hash="sha256">
 
