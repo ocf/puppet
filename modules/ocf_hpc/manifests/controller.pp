@@ -1,6 +1,9 @@
 class ocf_hpc::controller {
   require ocf_hpc
 
+  include ocf::firewall::allow_ssh
+  include ocf_hpc::singularity
+
   $slurmdbd_mysql_password = lookup('hpc::controller::slurmdbd_mysql_password')
 
   package { 'slurmdbd': } -> file { '/etc/slurm-llnl/slurmdbd.conf':
