@@ -1,6 +1,11 @@
 class ocf_hpc::compute {
   require ocf_hpc
 
+  include ocf::ipmi
+  include ocf::firewall::allow_ssh
+
+  include ocf_hpc::singularity
+
   # install proprietary nvidia drivers and CUDA.
   ocf::repackage { ['nvidia-driver', 'nvidia-settings', 'nvidia-cuda-toolkit', 'nvidia-persistenced']:
       backport_on => stretch;

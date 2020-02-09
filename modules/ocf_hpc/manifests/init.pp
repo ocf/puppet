@@ -1,7 +1,4 @@
 class ocf_hpc {
-  include ocf::firewall::allow_ssh
-  include ocf::ipmi
-  include ocf_hpc::singularity
 
   package { 'slurm-wlm': }
 
