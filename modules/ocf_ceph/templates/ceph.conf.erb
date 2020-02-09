@@ -17,6 +17,9 @@ auth_supported = cephx
 # Write 3 replicas if possible
 osd_pool_default_size = 3
 
+# But be okay with writing one (bump when we have more nodes)
+osd_pool_min_size = 1
+
 # Allow pool deletion for debugging purposes
 mon_allow_pool_delete = true
 
@@ -25,6 +28,7 @@ mon_allow_pool_delete = true
 osd_pool_default_pg_num = 512
 osd_pool_default_pgp_num = 512
 
+# More initial ceph monitors
 <% @ceph_mon_ips.each do |(hostname, ip)| %>
 [mon.<%= hostname %>]
 host = <%= hostname %>

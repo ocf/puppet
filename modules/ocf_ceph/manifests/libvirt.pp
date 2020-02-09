@@ -8,6 +8,7 @@ class ocf_ceph::libvirt {
   $ceph_mons = lookup('ceph::mons')
 
   package { 'libvirt-daemon-driver-storage-rbd':; }
+  package { 'qemu-block-extra':; }
 
   file { '/etc/ceph/libvirt-secret.xml':
     source => 'puppet:///modules/ocf_ceph/libvirt-secret.xml',
@@ -41,6 +42,10 @@ class ocf_ceph::libvirt {
       command     => 'virsh pool-define /etc/ceph/libvirt-pool.xml',
       refreshonly => true,
       require     => Package['libvirt-daemon-driver-storage-rbd'],
+    } ~>
+    exec { 'start-and-enable-libvirt-pool':
+      command     => 'virsh pool-start vm; virsh pool-autostart vm',
+      refreshonly => true,
     }
   } else {
     exec { 'make-libvirt-secret':
