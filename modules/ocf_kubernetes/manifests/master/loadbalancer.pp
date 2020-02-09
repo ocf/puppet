@@ -10,6 +10,7 @@ class ocf_kubernetes::master::loadbalancer {
     'auth',
     'bjukebox',
     'grafana',
+    'inventory',
     'ircbot',
     'irclogs',
     'kanboard',
@@ -17,14 +18,13 @@ class ocf_kubernetes::master::loadbalancer {
     'kubeadmin',
     'labmap',
     'mastodon',
-    'pma',
     'metabase',
+    'pma',
+    'printlist',
     'rt',
-    'inventory',
     'sourcegraph',
     'static',
     'templates',
-    'printlist',
   ]
 
   # redirects happen post-canonicalization, so needs fqdn
