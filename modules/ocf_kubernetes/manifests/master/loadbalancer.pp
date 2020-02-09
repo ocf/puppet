@@ -24,6 +24,7 @@ class ocf_kubernetes::master::loadbalancer {
     'sourcegraph',
     'static',
     'templates',
+    'printlist',
   ]
 
   # redirects happen post-canonicalization, so needs fqdn
