@@ -41,6 +41,9 @@ options {
   dnssec-lookaside auto;
   dnssec-validation yes;
 
+  // Notify campus Infoblox gridmaster
+  also-notify { 169.229.2.168; };
+
   // Allow queries from anywhere and zone transfers from OCF/UCB
   allow-query { any; };
   allow-transfer { "ocf"; "ucb"; "localhost"; };
