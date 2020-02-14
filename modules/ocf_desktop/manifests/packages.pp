@@ -13,7 +13,7 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['arandr', 'atom', 'blender', 'dolphin-emu', 'claws-mail', 'clementine', 'eog', 'evince',
+    ['arandr', 'atom', 'blender', 'claws-mail', 'clementine', 'eog', 'evince',
       'filezilla', 'florence', 'freeplane', 'geany', 'gimp',
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
       'musescore', 'mpv', 'mssh', 'mumble', 'numlockx', 'simple-scan',
@@ -30,7 +30,7 @@ class ocf_desktop::packages {
     # FUSE
     ['fuse', 'exfat-fuse']:;
     # games
-    ['armagetronad', 'gl-117', 'gnome-games', 'redeclipse', 'wesnoth',
+    ['armagetronad', 'dolphin-emu', 'gl-117', 'gnome-games', 'redeclipse', 'wesnoth',
       'wesnoth-music']:;
     # graphics/plotting
     ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
