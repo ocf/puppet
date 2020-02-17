@@ -38,8 +38,8 @@
 
 <sslprofile name="clientssl"
        provider="gnutls"
-       certfile="/etc/ssl/private/dev-flood.ocf.berkeley.edu.bundle"
-       keyfile="/etc/ssl/private/dev-flood.ocf.berkeley.edu.key"
+       certfile="/etc/ssl/private/<%= @fqdn -%>.bundle"
+       keyfile="/etc/ssl/private/<%= @fqdn -%>.key"
        dhfile="/etc/ssl/dhparam.pem"
        priority="NORMAL:-MD5">
 
