@@ -130,6 +130,12 @@ class ocf_prometheus::server {
 
         static_configs  => [{targets =>['smtp:9154']}],
       },
+      {
+        job_name       => 'pushgateway',
+        honor_labels   => true,
+
+        static_configs => [{targets =>['localhost:9091']}],
+      }
     ]
   }
 }

@@ -44,6 +44,7 @@ class ocf_prometheus::proxy {
 
       rewrites            => [
         {rewrite_rule => '^/alertmanager(/.*)?$ http://127.0.0.1:9093/alertmanager$1 [P]'},
+        {rewrite_rule => '^/pushgateway(/.*)?$ http://127.0.0.1:9091$1 [P]'},
         {rewrite_rule => '^/(.*)$ http://127.0.0.1:9090/$1 [P]'},
       ],
       directories         => [{
