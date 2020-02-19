@@ -2,32 +2,65 @@
 """Generate a list of hosts to give to prometheus for stats generation"""
 import json
 import os
+import sys
 import tempfile
-from sys import argv
+from argparse import ArgumentParser
 
 from ocflib.infra.hosts import hosts_by_filter
 
-hosts = []
-for vals in hosts_by_filter('(|(type=server)(type=desktop)(type=staffvm))'):
-    cn, ip, host_type = vals['cn'][0], vals['ipHostNumber'][0], vals['type']
 
-    hosts.append({
-        'targets': [ip + ':9100'],
-        'labels': {'host_type': host_type, 'instance': cn},
-    })
+def get_hosts(types, port):
+    nodefilter = '(|{typefilters})'.format(
+        typefilters=''.join('(type={})'.format(nodetype) for nodetype in types)
+    )
+    hosts = []
+    for vals in hosts_by_filter(nodefilter):
+        cn, ip, host_type = vals['cn'][0], vals['ipHostNumber'][0], vals['type']
 
-if len(argv) < 2 or argv[1] == '-':
-    print(json.dumps(hosts, indent=4))
-else:
-    # atomic overwrite in case of errors
-    file_name = argv[1]
-    with tempfile.NamedTemporaryFile(mode='w', delete=False) as temp_file:
-        try:
-            json.dump(hosts, temp_file, indent=4)
-            os.chmod(temp_file.name, 0o644)
-            os.rename(temp_file.name, file_name)
-        finally:
+        if port is not None:
+            ip = ip + ':{}'.format(port)
+
+        hosts.append({
+            'targets': [ip],
+            'labels': {'host_type': host_type, 'instance': cn},
+        })
+    return hosts
+
+
+def write_json(hosts, file_name):
+    if file_name == '-':
+        print(json.dumps(hosts, indent=4))
+    else:
+        # atomic overwrite in case of errors
+        with tempfile.NamedTemporaryFile(mode='w', delete=False) as temp_file:
             try:
-                os.remove(temp_file.name)
-            except FileNotFoundError:
-                pass
+                json.dump(hosts, temp_file, indent=4)
+                os.chmod(temp_file.name, 0o644)
+                os.rename(temp_file.name, file_name)
+            finally:
+                try:
+                    os.remove(temp_file.name)
+                except FileNotFoundError:
+                    pass
+
+
+def main(argv):
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument('output',
+                        help='output file for prometheus node definition json, use - for stdout')
+    parser.add_argument('types', metavar='type', nargs='*',
+                        default=['server', 'desktop', 'staffvm'],
+                        help='node types to include')
+    parser.add_argument('--port', type=int,
+                        help='port number to scrape')
+    args = parser.parse_args()
+
+    hosts = get_hosts(args.types, args.port)
+
+    write_json(hosts, args.output)
+
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv))
