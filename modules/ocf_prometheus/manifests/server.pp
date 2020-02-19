@@ -45,13 +45,13 @@ class ocf_prometheus::server {
   class { '::prometheus::server':
     version              => '2.10.0',
     extra_options        => '--web.listen-address="127.0.0.1:9090"',
-    external_url         => 'https://prometheus.ocf.berkeley.edu',
+    external_url         => 'https://dev-prometheus.ocf.berkeley.edu',
     rule_files           => [ '/etc/prometheus/rules.d/*.yaml' ],
     alertmanagers_config => [{
       scheme         => 'https',
       path_prefix    => '/alertmanager',
       static_configs => [{
-        targets => ['prometheus.ocf.berkeley.edu'],
+        targets => ['dev-prometheus.ocf.berkeley.edu'],
       }],
     }],
     scrape_configs       => [
