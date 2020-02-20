@@ -10,6 +10,7 @@ class ocf_kubernetes::master::loadbalancer {
     'auth',
     'bjukebox',
     'grafana',
+    'fava',
     'inventory',
     'ircbot',
     'irclogs',
