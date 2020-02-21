@@ -30,7 +30,7 @@ class ocf_desktop::packages {
     # FUSE
     ['fuse', 'exfat-fuse']:;
     # games
-    ['armagetronad', 'dolphin-emu', 'gl-117', 'gnome-games', 'redeclipse', 'wesnoth',
+    ['armagetronad', 'gl-117', 'gnome-games', 'redeclipse', 'wesnoth',
       'wesnoth-music']:;
     # graphics/plotting
     ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
