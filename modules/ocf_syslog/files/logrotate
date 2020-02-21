@@ -1,7 +1,8 @@
 /var/log/remote/*/*/*.log {
     daily
     missingok
-    rotate 14
+    rotate 365
+    maxsize 1000000 # 1MB max file size
     compress
     delaycompress
 
