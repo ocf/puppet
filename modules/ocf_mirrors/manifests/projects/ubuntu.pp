@@ -9,17 +9,4 @@ class ocf_mirrors::projects::ubuntu {
     dist_to_check => 'devel',
     upstream_host => 'archive.ubuntu.com';
   }
-
-  file { '/opt/mirrors/project/ubuntu/sync-releases':
-    source => 'puppet:///modules/ocf_mirrors/project/ubuntu/sync-releases',
-    mode   => '0755',
-    owner  => mirrors,
-    group  => mirrors;
-  }
-
-  ocf_mirrors::timer { 'ubuntu-releases':
-    exec_start => '/opt/mirrors/project/ubuntu/sync-releases > /dev/null',
-    hour       => '0/7',
-    minute     => '18';
-  }
 }
