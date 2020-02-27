@@ -16,7 +16,7 @@ class ocf_prometheus::alertmanager {
   class { '::prometheus::alertmanager':
     version       => '0.15.2',
 
-    extra_options => "--cluster.advertise-address=${::ipaddress}:9094 --web.external-url=\"https://prometheus.ocf.berkeley.edu/alertmanager\"",
+    extra_options => "--cluster.advertise-address=${::ipaddress}:9094 --web.external-url=\"https://dev-prometheus.ocf.berkeley.edu/alertmanager\"",
 
     global        => {
       'smtp_smarthost'   => 'smtp.ocf.berkeley.edu:25',
@@ -26,20 +26,34 @@ class ocf_prometheus::alertmanager {
 
     route         => {
       group_by => ['alertname'],
-      receiver => 'ocf_lowprio',
+      receiver => 'default',
       routes   => [
         {
           # Repeat MirrorOutOfDate alerts every 24h, instead of the default 4h
           match           => {'alertname' => 'MirrorOutOfDate'},
           repeat_interval => '24h',
+    receiver              => 'ocf_lowprio',
         },
+  {
+    match           => {'alertname' => 'PaperEmpty'},
+    group_wait      => '0s',
+    repeat_interval => '10s',
+    receiver        => 'opstaff_irc_alerts',
+  },
       ],
     },
 
     receivers     => [
       {
+        name          => 'default',
+      },
+      {
         name          => 'ocf_lowprio',
         email_configs => [{ to => 'mon@ocf.berkeley.edu' }],
+      },
+      {
+        name      => 'opstaff_irc_alerts',
+  webhook_configs => [{ url => 'http://calamity.ocf.berkeley.edu:8014/alerts'  }],
       },
     ],
 

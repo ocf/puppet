@@ -64,3 +64,8 @@ groups:
       for: 2m
       annotations:
         summary: "Printer {{ $labels.instance }} is down"
+
+    - alert: PaperEmpty
+      expr: max by (instance) (printer_paper) <= 0.005
+      annotations:
+        summary: "Printer {{ $labels.instance }} is out of paper"
