@@ -3,7 +3,7 @@ class ocf_desktop::displaycontrol {
   file {
     '/etc/modules-load.d/i2c.conf':
       mode    => '0644',
-      content => 'i2c_dev\n',
+      content => 'i2c_dev',
   }
 
   exec { 'load-modules':
