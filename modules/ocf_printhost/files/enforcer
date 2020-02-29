@@ -49,7 +49,7 @@ class PrintJob(Enum):
     COMPLETED = 0
     PENDING = 1
     FILE_ERROR = 2
-    QUOTA_LIMIT = 3
+    QUOTA_EXCEEDED = 3
     JOB_ERROR = 4
 
 
@@ -190,7 +190,8 @@ def send_printer_mail(message, job, quo):
     send_mail_user(job.user, message.subject, body)
 
 
-def status_update(r, job, statusCode):
+def status_code(r, job, statusCode):
+    # Sends print job with information in JSON format to redis
     printer_name = job.printer.split('-')[0]
     r.publish('printer-' + printer_name, json.dumps({
         'status': statusCode.value,
@@ -201,7 +202,7 @@ def status_update(r, job, statusCode):
 
 def prehook(c, r, job):
     quo = quota.get_quota(c, job.user)
-    status_update(r, job, PrintJob.PENDING)
+    status_code(r, job, PrintJob.PENDING)
 
     # A stop gap until we figure out why some file types aren't printing correctly
     for file_source, problematic in PROBLEMATIC_FILE_SOURCE:
@@ -210,7 +211,7 @@ def prehook(c, r, job):
                 file_source=file_source,
             )
             r.publish('user-' + job.user, msg)
-            status_update(r, job, PrintJob.FILE_ERROR)
+            status_code(r, job, PrintJob.FILE_ERROR)
             sys.exit(255)
 
     if job.pages > quo.daily:
@@ -220,7 +221,7 @@ def prehook(c, r, job):
             quota=quo.daily,
         )
         r.publish('user-' + job.user, msg)
-        status_update(r, job, PrintJob.QUOTA_LIMIT)
+        status_code(r, job, PrintJob.QUOTA_EXCEEDED)
         sys.exit(255)
 
 
@@ -233,11 +234,11 @@ def posthook(c, r, job, success):
             document=job.doc_name,
             printer=printer_name,
         )
-        status_update(r, job, PrintJob.COMPLETED)
+        status_code(r, job, PrintJob.COMPLETED)
     else:
         quo = quota.get_quota(c, job.user)
         msg = NOTIFY_JOB_ERROR.format(document=job.doc_name)
-        status_update(r, job, PrintJob.JOB_ERROR)
+        status_code(r, job, PrintJob.JOB_ERROR)
         send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
     r.publish('user-' + job.user, msg)
 
