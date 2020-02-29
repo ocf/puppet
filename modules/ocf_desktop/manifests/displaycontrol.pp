@@ -1,16 +1,6 @@
 class ocf_desktop::displaycontrol {
 
-  file {
-    '/etc/modules-load.d/i2c.conf':
-      mode    => '0644',
-      content => 'i2c_dev',
-  }
-
-  exec { 'load-modules':
-    command     => '/lib/systemd/systemd-modules-load',
-    subscribe   => File['/etc/modules-load.d/i2c.conf'],
-    refreshonly => true,
-  }
+  kmod::load { 'i2c_dev': }
 
   package { [ 'i2c-tools', 'ddcutil' ]: }
 }
