@@ -8,9 +8,7 @@ class ocf::node_exporter {
   }
 
   if $::lsbdistid != 'Raspbian' {
-    class { 'prometheus::node_exporter':
-      collectors_enable => ['systemd'],
-      extra_options     => '--collector.systemd.unit-whitelist ".+\.(service|timer)"',
-    }
+    # Attributes for this class are defined in hieradata
+    include prometheus::node_exporter
   }
 }
