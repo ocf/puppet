@@ -30,8 +30,8 @@ class ocf_desktop::packages {
     # FUSE
     ['fuse', 'exfat-fuse']:;
     # games
-    ['armagetronad', 'gl-117', 'gnome-games', 'minetest', 'redeclipse', 'wesnoth',
-      'wesnoth-music',]:;
+    ['armagetronad', 'freeciv', 'gl-117', 'gnome-games', 'minetest', 'redeclipse',
+      'supertuxkart', 'wesnoth', 'wesnoth-music']:;
     # graphics/plotting
     ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
     # input method editors
