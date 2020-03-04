@@ -1,9 +1,6 @@
 class ocf::ssl::lets_encrypt::dns_common {
-  ocf::repackage { 'dehydrated':
-    backport_on => ['stretch'],
-  }
-  package { 'dehydrated-hook-ddns-tsig':
-    require => Package['dehydrated'],
+  package {
+    ['dehydrated', 'dehydrated-hook-ddns-tsig']:;
   }
 
   $letsencrypt_ddns_key = assert_type(Stdlib::Base64, lookup('letsencrypt::ddns::key'))
