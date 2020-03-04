@@ -116,8 +116,8 @@ class ocf_prometheus::server {
       },
       {
         job_name        => 'switch',
-        scrape_interval => '30s',
-        scrape_timeout  => '20s',
+        scrape_interval => '60s',
+        scrape_timeout  => '30s',
 
         file_sd_configs => [
           {
