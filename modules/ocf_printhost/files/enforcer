@@ -14,14 +14,12 @@ know when a job has been sent to the printer, been rejected due to the quota,
 finished printing, or failed to print.
 """
 import argparse
-import json
 import os
 import subprocess
 import sys
 from collections import namedtuple
 from configparser import ConfigParser
 from datetime import datetime
-from enum import Enum
 from syslog import syslog
 from textwrap import dedent
 from traceback import format_exc
@@ -36,21 +34,6 @@ from ocflib.misc.mail import send_problem_report
 CONF_FILE = '/opt/share/enforcer/enforcer.conf'
 
 Message = namedtuple('Message', ['subject', 'body'])
-
-# Print Job Statuses:
-# 0 - Completed
-# 1 - Pending
-# 2 - Error (problematic file)
-# 3 - Error (insufficient quota)
-# 4 - Error (job processing)
-
-
-class PrintJob(Enum):
-    COMPLETED = 0
-    PENDING = 1
-    FILE_ERROR = 2
-    QUOTA_EXCEEDED = 3
-    JOB_ERROR = 4
 
 
 USER_ERROR_INFO = dedent("""\
@@ -171,7 +154,6 @@ def create_job(env):
         printer=printer,
         doc_name=env['TEATITLE'],
         filesize=env['TEAJOBSIZE'],
-        id=env['TEAJOBID']
     )
 
 
@@ -185,24 +167,12 @@ def send_printer_mail(message, job, quo):
         semester_pages=quo.semesterly,
         daily_quota=quota.daily_quota(),
         semester_quota=quota.SEMESTERLY_QUOTA,
-        id=job.id
     )
     send_mail_user(job.user, message.subject, body)
 
 
-def status_code(r, job, statusCode):
-    # Sends print job with information in JSON format to redis
-    printer_name = job.printer.split('-')[0]
-    r.publish('printer-' + printer_name, json.dumps({
-        'status': statusCode.value,
-        'user': job.user,
-        'id': job.id,
-        'time': job.time.timestamp()}))
-
-
 def prehook(c, r, job):
     quo = quota.get_quota(c, job.user)
-    status_code(r, job, PrintJob.PENDING)
 
     # A stop gap until we figure out why some file types aren't printing correctly
     for file_source, problematic in PROBLEMATIC_FILE_SOURCE:
@@ -211,7 +181,6 @@ def prehook(c, r, job):
                 file_source=file_source,
             )
             r.publish('user-' + job.user, msg)
-            status_code(r, job, PrintJob.FILE_ERROR)
             sys.exit(255)
 
     if job.pages > quo.daily:
@@ -221,7 +190,6 @@ def prehook(c, r, job):
             quota=quo.daily,
         )
         r.publish('user-' + job.user, msg)
-        status_code(r, job, PrintJob.QUOTA_EXCEEDED)
         sys.exit(255)
 
 
@@ -234,11 +202,10 @@ def posthook(c, r, job, success):
             document=job.doc_name,
             printer=printer_name,
         )
-        status_code(r, job, PrintJob.COMPLETED)
+        r.publish('printer-' + printer_name, job.user)
     else:
         quo = quota.get_quota(c, job.user)
         msg = NOTIFY_JOB_ERROR.format(document=job.doc_name)
-        status_code(r, job, PrintJob.JOB_ERROR)
         send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
     r.publish('user-' + job.user, msg)
 
