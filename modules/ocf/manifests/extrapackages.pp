@@ -211,6 +211,7 @@ class ocf::extrapackages {
     'texlive-science',
     'tox',
     'twine',
+    'unison',
     'vagrant',
     'valgrind',
     'weechat',
