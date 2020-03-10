@@ -89,6 +89,7 @@ prometheus::node_exporter::extra_options: '--collector.textfile.directory /srv/p
 ceph::mons:
   - pandemic
   - bedbugs
+  - jaws
 
 # UUID of the ceph cluster
 # This is fixed per cluster, we shouldn't ever need to change this
