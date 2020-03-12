@@ -102,7 +102,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/rt/([a-z]+)$ https://rt.ocf.berkeley.edu/Search/Results.html?Query=Queue\\ =\\ \'$1\'\\ AND\\ Status\\ =\\ \'__Active__\' [R]'},
       {rewrite_rule => '^/sdocs(/.*)?$ https://www.ocf.berkeley.edu/docs/staff$1 [R]'},
       {rewrite_rule => '^/senate-resolution$ https://docs.google.com/document/d/1UwjX4BJIzeQ6XjGBHu2rA51XUjywTBtPTzJN2CMGU4o/edit [R]'},
-      {rewrite_rule => '^/senate-presentation$ https://docs.google.com/presentation/d/1BAOAVScdA-W7CgN_LPYVywwgroDaoWGQdRPMtjfbwuc/edit?usp=sharing [R]'},
+      {rewrite_rule => '^/senate-presentation$ https://docs.google.com/presentation/d/16EDXf0mhGKM_xQrfuG7giXMUbITQ1U-5U5yynL8mms4/edit [R]'},
       {rewrite_rule => '^/servers$ https://www.ocf.berkeley.edu/docs/staff/backend/servers/ [R]'},
       {rewrite_rule => '^/serverstats$ https://grafana.ocf.berkeley.edu/d/7n0r8PUWz/servers?orgId=1&refresh=10s [R]'},
       {rewrite_rule => '^/signin$ https://goo.gl/forms/j2NU4u3T1pMKIPpu1 [R]'},
