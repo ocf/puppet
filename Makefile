@@ -2,7 +2,7 @@ WORKSPACE ?= ${HOME}/.cache
 ENVIRONMENT := $(notdir $(realpath $(CURDIR)))
 
 .PHONY: all
-all: vendor install-hooks
+all: vendor .resource_types install-hooks
 
 .PHONY: venv
 venv: bin/venv-update Makefile
@@ -20,6 +20,9 @@ install-hooks: venv
 
 vendor: Puppetfile
 	r10k puppetfile install --verbose --color
+	@echo 'You may also want to run `make .resource_types`'
+
+.resource_types: vendor
 	puppet generate types --environment ${ENVIRONMENT} --force || (\
 		echo '\e[1;31mPlease run' && \
 		echo 'mkdir -p ~/.puppetlabs/etc/puppet/ && cp /etc/skel/.puppetlabs/etc/puppet/puppet.conf ~/.puppetlabs/etc/puppet/\e[0m' && \

@@ -22,3 +22,4 @@ git reset --hard origin/master
 
 # Install third-party modules
 make vendor
+make .resource_types
