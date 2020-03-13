@@ -60,7 +60,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/gdrive/officers$ https://drive.google.com/drive/folders/0APZdR8kE4NN1Uk9PVA [R]'},
       {rewrite_rule => '^/guest$ https://goo.gl/forms/ImNfnZkrRrakZcIr1 [R]'},
       {rewrite_rule => '^/help(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
-      {rewrite_rule => '^/hiring$ https://docs.google.com/forms/d/e/1FAIpQLSc0ORFabSh6DxNj4uW9fz9KDeuuAfJvGVCSRhFvXLDsYcUkQA/viewform [R]'},
+      {rewrite_rule => '^/hiring$ https://docs.google.com/forms/d/e/1FAIpQLSdYNN5oeGU6wDTbjkGOIzOlqsv75illO3tHCwgAQ_RgzLh8gQ/viewform [R]'},
       {rewrite_rule => '^/hosting$ https://www.ocf.berkeley.edu/docs/services/web/ [R]'},
       {rewrite_rule => '^/hours$ https://ocf.io/lab#hours [R,NE]'},
       {rewrite_rule => '^/hpc$ https://www.ocf.berkeley.edu/docs/services/hpc/ [R]'},
