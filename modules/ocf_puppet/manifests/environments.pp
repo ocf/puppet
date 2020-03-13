@@ -29,4 +29,19 @@ class ocf_puppet::environments {
       }
     }
   }
+
+  # Add some basic config for puppet run as non-root
+  # This allows staff to run `puppet generate types --environment <username>`
+  # to generate resource types for their own environment.
+  file {
+    [
+      '/etc/skel/.puppetlabs/',
+      '/etc/skel/.puppetlabs/etc/',
+      '/etc/skel/.puppetlabs/etc/puppet/',
+    ]:
+      ensure => directory;
+
+    '/etc/skel/.puppetlabs/etc/puppet/puppet.conf':
+      content => "codedir = /etc/puppetlabs/code\n";
+  }
 }
