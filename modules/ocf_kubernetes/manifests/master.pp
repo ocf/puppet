@@ -12,9 +12,12 @@
 #
 # Non sensitive generated configuration data is in common.yaml.
 class ocf_kubernetes::master {
-  include ocf::packages::docker_kubernetes
   include ocf::packages::kubernetes
   include ocf_kubernetes::master::loadbalancer
+
+  class { 'ocf::packages::docker':
+    kubernetes => true;
+  }
 
   $etcd_version = lookup('kubernetes::etcd_version')
   $etcd_archive = "etcd-v${etcd_version}-linux-amd64.tar.gz"

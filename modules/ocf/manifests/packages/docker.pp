@@ -11,20 +11,38 @@
 class ocf::packages::docker($admin_group = undef,
                             $autoclean = true,
                             $image_max_age = '24h',
-                            $prune_volumes = true) {
+                            $prune_volumes = true,
+                            $kubernetes = false) {
   class { 'ocf::packages::docker::apt':
     stage => first,
   }
 
-  package {
-    ['aufs-dkms', 'aufs-tools']:
-      ensure => purged;
-  }
+  if $kubernetes {
+    $docker_kube_version = lookup('kubernetes::docker_version')
 
-  # Don't install AUFS stuff
-  ocf::repackage {
-    'docker-ce':
-      recommends => false,
+    # Kubernetes is specific about which versions of docker it will
+    # work reliably with.
+    package {
+      'docker-ce':
+        ensure => $docker_kube_version;
+    } ->
+    apt::pin { 'docker-ce':
+      ensure   => present,
+      packages => ['docker-ce'],
+      priority => 1001,
+      version  => $docker_kube_version;
+    }
+  } else {
+    package {
+      ['aufs-dkms', 'aufs-tools']:
+        ensure => purged;
+    }
+
+    # Don't install AUFS stuff
+    ocf::repackage {
+      'docker-ce':
+        recommends => false,
+    }
   }
 
   exec { 'docker-socket-update':
