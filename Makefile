@@ -1,4 +1,5 @@
 WORKSPACE ?= ${HOME}/.cache
+ENVIRONMENT := $(notdir $(realpath $(CURDIR)))
 
 .PHONY: all
 all: vendor install-hooks
@@ -19,6 +20,10 @@ install-hooks: venv
 
 vendor: Puppetfile
 	r10k puppetfile install --verbose --color
+	puppet generate types --environment ${ENVIRONMENT} --force || (\
+		echo '\e[1;31mPlease run' && \
+		echo 'mkdir -p ~/.puppetlabs/etc/puppet/ && cp /etc/skel/.puppetlabs/etc/puppet/puppet.conf ~/.puppetlabs/etc/puppet/\e[0m' && \
+		false )
 
 .PHONY: all_diffs
 all_diffs:
