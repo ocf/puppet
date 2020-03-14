@@ -81,5 +81,5 @@ objectclass ( 1.3.6.1.4.1.41759.2.1.1
         DESC 'Attributes for OCF hosts'
         SUP ( ipHost $ ieee802Device $ puppetClient )
         AUXILIARY
-        MUST ( cn $ ipHostNumber $ type )
+        MUST ( cn $ type )
         MAY ( environment $ dnsCname $ dnsA ) )
