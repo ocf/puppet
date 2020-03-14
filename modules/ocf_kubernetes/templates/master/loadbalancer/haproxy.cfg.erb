@@ -28,7 +28,7 @@ frontend lb-http
   redirect scheme https code 301 if !{ ssl_fc }
 
 frontend lb-https
-  bind 0.0.0.0:443 ssl crt /etc/ssl/private/<%= @fqdn %>.pem
+  bind 0.0.0.0:443 ssl crt /etc/ssl/private/lb.ocf.berkeley.edu.pem
   mode http
 
   # redirect *.ocf.io to *.ocf.berkeley.edu
