@@ -1,0 +1,21 @@
+vrrp_instance VI_1 {
+    interface <%= @networking['primary'] %>
+    state MASTER
+    virtual_router_id <%= @vrid %>
+    priority 100
+
+    virtual_ipaddress {
+        <% @virtual_addresses_v4.each do |ip| %>
+            <%= ip %>/24
+        <% end %>
+    }
+
+    # IPv6 addresses have to be specified separately as they cannot be in the
+    # vrrp packet together (keepalived 1.2.20+) so they need to be in a
+    # virtual_ipaddress_excluded block instead.
+    virtual_ipaddress_excluded {
+        <% @virtual_addresses_v6.each do |ip| %>
+            <%= ip %>/64
+        <% end %>
+    }
+}
