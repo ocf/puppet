@@ -3,8 +3,6 @@ BASEDIR="/var/lib/lets-encrypt"
 HOOK="/usr/share/dehydrated-hook-ddns-tsig/dehydrated-hook-ddns-tsig.py"
 CHALLENGETYPE="dns-01"
 
-DEHYDRATED_USER="ocfletsencrypt"
-
 # if you update this, run
 # dehydrated --privkey /etc/ssl/lets-encrypt/le-account.key --account
 # with the new config in place to update LE's records
