@@ -82,6 +82,6 @@ class ocf_kubernetes::master::loadbalancer {
     require => Package['haproxy'],
   } ~>
   service { 'haproxy':
-    subscribe => Ocf::Ssl::Bundle[$::fqdn],
+    subscribe => Ocf::Ssl::Bundle['lb.ocf.berkeley.edu'],
   }
 }
