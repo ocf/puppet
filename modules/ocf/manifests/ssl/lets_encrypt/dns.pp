@@ -31,6 +31,10 @@ define ocf::ssl::lets_encrypt::dns(
     user        => $owner,
     require     => Package['dehydrated-hook-ddns-tsig'],
 
+    # This command really can take a while, especially on hosts with a ton of
+    # CNAMEs (like the kubernetes lb).
+    timeout     => 900,
+
     # Only run the dehydrated command to renew the cert if it is old enough, or
     # missing some domains. dehydrated does the former check itself, but this
     # should help with puppet error spam a bit (for instance if Let's Encrypt is
