@@ -1,6 +1,7 @@
 class ocf_desktop::packages {
   include ocf::extrapackages
   include ocf::packages::docker
+  include ocf::packages::fahclient
   include ocf::packages::fonts
 
   # Install packages specific to desktops
