@@ -104,9 +104,10 @@ class ocf::apt($stage = 'first') {
     source => 'https://apt.ocf.berkeley.edu/pubkey.gpg';
   }
 
+  # rt#4960: This cronjob was broken for several years and wasn't actually
+  # doing anything, so it's just been removed. Once this is gone off all hosts
+  # then this snippet can be removed too.
   file { '/etc/cron.daily/ocf-apt':
-    mode    => '0755',
-    source  => 'puppet:///modules/ocf/apt/ocf-apt',
-    require => Package['aptitude'];
+    ensure => 'absent',
   }
 }
