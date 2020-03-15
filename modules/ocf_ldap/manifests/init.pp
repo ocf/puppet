@@ -5,6 +5,7 @@ class ocf_ldap {
   # ldif files in /etc/ldap/slapd.d, slapd is the ldap server
   package { ['slapd', 'ocf-ldap-overlay', 'libarchive-zip-perl']:; }
   service { 'slapd':
+    enable    => true,
     subscribe => [
       File['/etc/ldap/schema/ocf.schema',
         '/etc/ldap/schema/puppet.schema',
