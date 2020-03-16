@@ -17,8 +17,9 @@ else
 fi
 
 # update from remote
-git fetch origin
+git fetch origin master
 git reset --hard origin/master
 
 # Install third-party modules
 make vendor
+make .resource_types
