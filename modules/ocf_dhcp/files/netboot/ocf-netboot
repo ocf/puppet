@@ -96,6 +96,9 @@ for dist in "${dists[@]}"; do
         # Add OCF install options, set as default if menu dist and arch
         # The first item overwrites the existing install menu option, as we do
         # not want it (would like to use our own instead)
+        #
+        # TODO: Figure out why domain is set wrong in /etc/resolv.conf during
+        # installation, hence the FQDN for dhcp.
         if [ "$dist" == "$menu_dist" ] && [ "$arch" == "$menu_arch" ]; then
             echo "label ocf-$label
                 menu label OCF Automated Install ($label)
