@@ -42,7 +42,7 @@ class ocf_tv {
       owner   => ocftv,
       group   => ocftv,
       require => User['ocftv'];
-    
+
     '/etc/mpd.conf':
       source => 'puppet:///modules/ocf_tv/mpd.conf';
 
