@@ -18,7 +18,7 @@ class ocf_tv {
       'ffmpeg',
       'feh',
       'i3',
-      'lightdm'
+      'lightdm',
       'mpc',
       'mpd',
       'python3-usb',
