@@ -46,6 +46,9 @@ class ocf_tv {
     '/etc/mpd.conf':
       source => 'puppet:///modules/ocf_tv/mpd.conf';
 
+    '/etc/lightdm/lightdm.conf':
+      source => 'puppet:///modules/ocf_tv/lightdm.conf';
+
     '/etc/X11/xorg.conf':
       source => 'puppet:///modules/ocf_tv/X11/xorg.conf';
 
