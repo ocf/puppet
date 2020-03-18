@@ -44,10 +44,12 @@ class ocf_tv {
       require => User['ocftv'];
 
     '/etc/mpd.conf':
-      source => 'puppet:///modules/ocf_tv/mpd.conf';
+      source  => 'puppet:///modules/ocf_tv/mpd.conf',
+      require => Package['mpd'];
 
     '/etc/lightdm/lightdm.conf':
-      source => 'puppet:///modules/ocf_tv/lightdm.conf';
+      source  => 'puppet:///modules/ocf_tv/lightdm.conf',
+      require => Package['lightdm'];
 
     '/etc/X11/xorg.conf':
       source => 'puppet:///modules/ocf_tv/X11/xorg.conf';
