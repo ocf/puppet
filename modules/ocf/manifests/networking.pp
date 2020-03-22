@@ -6,7 +6,7 @@ class ocf::networking(
     $netmask    = '255.255.255.0',
     $gateway    = '169.229.226.1',
 
-    $ipaddress6 = regsubst($::ipHostNumber, '^(\d+)\.(\d+)\.(\d+)\.(\d+)$', '2607:f140:8801::1:\4'),  # lint:ignore:variable_is_lowercase
+    $ipaddress6 = $::ip6HostNumber,  # lint:ignore:variable_is_lowercase
     $netmask6   = '64',
     $gateway6   = '2607:f140:8801::1',
 
