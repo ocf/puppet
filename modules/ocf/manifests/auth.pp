@@ -163,7 +163,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     $::dnsCname,
     $::fqdn,
     $::ipHostNumber,
-    $::ipaddress6,
+    $::ip6HostNumber,
   ), '')
 
   # Export SSH keys from every host if PuppetDB is running, and use them
