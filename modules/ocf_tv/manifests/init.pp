@@ -28,10 +28,14 @@ class ocf_tv {
     ]:;
   }
 
+  group { 'autologin':
+    system  => true;
+  }
+
   user { 'ocftv':
     comment => 'TV NUC',
     home    => '/opt/tv',
-    groups  => ['sys', 'audio'],
+    groups  => ['sys', 'audio', 'autologin'],
     shell   => '/bin/bash';
   }
 
