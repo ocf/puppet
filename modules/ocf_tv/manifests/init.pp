@@ -18,7 +18,9 @@ class ocf_tv {
       'ffmpeg',
       'feh',
       'i3',
-      'nodm',
+      'lightdm',
+      'mpc',
+      'mpd',
       'python3-usb',
       'vlc',
       'x11vnc',
@@ -26,10 +28,14 @@ class ocf_tv {
     ]:;
   }
 
+  group { 'autologin':
+    system  => true;
+  }
+
   user { 'ocftv':
     comment => 'TV NUC',
     home    => '/opt/tv',
-    groups  => ['sys', 'audio'],
+    groups  => ['sys', 'audio', 'autologin'],
     shell   => '/bin/bash';
   }
 
@@ -40,6 +46,14 @@ class ocf_tv {
       owner   => ocftv,
       group   => ocftv,
       require => User['ocftv'];
+
+    '/etc/mpd.conf':
+      source  => 'puppet:///modules/ocf_tv/mpd.conf',
+      require => Package['mpd'];
+
+    '/etc/lightdm/lightdm.conf':
+      source  => 'puppet:///modules/ocf_tv/lightdm.conf',
+      require => Package['lightdm'];
 
     '/etc/X11/xorg.conf':
       source => 'puppet:///modules/ocf_tv/X11/xorg.conf';
@@ -60,7 +74,7 @@ class ocf_tv {
   ocf::systemd::service { 'x11vnc':
     source  => 'puppet:///modules/ocf_tv/x11vnc.service',
     require => [
-      Package['x11vnc', 'nodm'],
+      Package['x11vnc', 'lightdm'],
       User['ocftv'],
     ],
   }

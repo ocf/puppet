@@ -1,7 +1,7 @@
 [Unit]
 Description=PulseAudio service
 Requires=network-online.target
-After=nodm.service
+After=lightdm.service
 
 [Service]
 User=ocftv
