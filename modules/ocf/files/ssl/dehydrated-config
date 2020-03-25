@@ -6,7 +6,7 @@ CHALLENGETYPE="dns-01"
 # if you update this, run
 # dehydrated --privkey /etc/ssl/lets-encrypt/le-account.key --account
 # with the new config in place to update LE's records
-CONTACT_EMAIL="sm@ocf.berkeley.edu"
+CONTACT_EMAIL="root@ocf.berkeley.edu"
 
 # Using the staging CA seems to need a different account key, so make sure to
 # use a different key from the one for the production CA
