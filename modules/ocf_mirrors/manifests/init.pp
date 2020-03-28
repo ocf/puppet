@@ -182,15 +182,23 @@ class ocf_mirrors {
     mode   => '0755',
   }
 
-  file { '/usr/local/sbin/collect-mirrors-stats':
-    source => 'puppet:///modules/ocf_mirrors/collect-mirrors-stats',
-    mode   => '0755',
+  file {
+    '/opt/ocfstats-password':
+      content   => lookup('ocfstats::mysql::password'),
+      mode      => '0600',
+      owner     => 'root',
+      group     => 'root',
+      show_diff => false;
+
+    '/usr/local/sbin/collect-mirrors-stats':
+      source => 'puppet:///modules/ocf_mirrors/collect-mirrors-stats',
+      mode   => '0755';
   } ->
   cron { 'mirrors-stats':
     command     => '/usr/local/sbin/collect-mirrors-stats --quiet --no-dry-run',
     minute      => 0,
     hour        => 0,
-    environment => ["OCFSTATS_PWD=${ocfstats_password}"];
+    environment => ['OCFSTATS_PWD__FILE=/opt/ocfstats-password'];
   }
 
   package { ['python3-prometheus-client']: }
