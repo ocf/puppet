@@ -15,7 +15,7 @@ from pathlib import Path
 from ocflib.lab.stats import get_connection
 from ocflib.lab.stats import humanize_bytes
 
-OCFSTATS_PWD = os.environ.get('OCFSTATS_PWD', None)
+OCFSTATS_PWD = open(os.environ.get('OCFSTATS_PWD__FILE')).read().strip()
 MIRRORS_DATA_PATH = Path('/opt/mirrors/ftp')
 APACHE_LOG_PATH = Path('/var/log/apache2')
 APACHE_LOG_FILES = [
