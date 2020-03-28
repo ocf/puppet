@@ -17,10 +17,11 @@ class ocf_labstats {
       *      => $file_defaults;
 
     '/opt/stats/ocfstats-password':
-      content => lookup('ocfstats::mysql::password'),
-      mode    => '0600',
-      require => File['/opt/stats'],
-      *       => $file_defaults;
+      content   => lookup('ocfstats::mysql::password'),
+      mode      => '0600',
+      require   => File['/opt/stats'],
+      show_diff => false,
+      *         => $file_defaults;
 
     '/opt/stats/bin':
       ensure  => directory,
