@@ -50,7 +50,6 @@ encrypt_cmd="gpg --homedir $gpgdir \
                  --trust-model always \
                  --compress-algo none \
                  --recipient ckuehl@berkeley.edu \
-                 --recipient willh@ocf.berkeley.edu \
                  --recipient jvperrin@ocf.berkeley.edu \
                  --recipient mattmcal@ocf.berkeley.edu \
                  --recipient kpengboy@ocf.berkeley.edu \
