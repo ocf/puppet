@@ -1,6 +1,7 @@
 classes:
    - ocf_kubernetes::worker
    - ocf_ceph::mon
+   - ocf_ceph::rgw
 
 ocf::networking::bridge: true
 ocf::networking::bond: true

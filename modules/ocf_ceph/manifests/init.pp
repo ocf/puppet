@@ -9,6 +9,8 @@ class ocf_ceph {
   $ceph_mon_ips = $ceph_mons_list.map
     |$node| { [$node, ldap_attr($node, 'ipHostNumber')] }
 
+  $ceph_rgws = lookup('ceph::rgws')
+
   $ip_addr = $::ipaddress
 
   file { '/etc/ceph/ceph.conf':

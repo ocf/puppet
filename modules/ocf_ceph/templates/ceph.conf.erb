@@ -34,3 +34,8 @@ osd_pool_default_pgp_num = 512
 host = <%= hostname %>
 mon addr = <%= ip %>:3300
 <% end %>
+
+<% @ceph_rgws.each do |(hostname, ip)| %>
+[client.<%= hostname %>]
+rgw_frontends = beast port=8080 ssl_port=8443 ssl_certificate=/etc/ssl/private/ceph.ocf.berkeley.edu.bundle ssl_private_key=/var/lib/lets-encrypt/certs/ceph.ocf.berkeley.edu/privkey.pem
+<% end %>
