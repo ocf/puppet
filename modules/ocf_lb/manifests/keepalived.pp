@@ -11,5 +11,8 @@ class ocf_lb::keepalived(
     content => template('ocf_lb/keepalived.conf.erb'),
     mode    => '0400',
   } ~>
-  service { 'keepalived': }
+  service { 'keepalived':
+    ensure => running,
+    enable => true,
+  }
 }
