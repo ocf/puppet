@@ -4,6 +4,7 @@ classes:
     - ocf_ceph::mon
     - ocf_ceph::osd
     - ocf_ceph::libvirt
+    - ocf_ceph::rgw
 
 ocf_ceph::osd::disks:
     - /dev/sda

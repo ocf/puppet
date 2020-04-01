@@ -94,6 +94,7 @@ ceph::mons:
 ceph::rgws:
   - jaws
   - bedbugs
+  - pandemic
 
 # UUID of the ceph cluster
 # This is fixed per cluster, we shouldn't ever need to change this
