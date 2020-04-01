@@ -15,18 +15,18 @@ auth_client_required = cephx
 auth_supported = cephx
 
 # Write 3 replicas if possible
-osd_pool_default_size = 3
+osd_pool_default_size = 2
 
 # But be okay with writing one (bump when we have more nodes)
-osd_pool_min_size = 1
+osd_pool_default_min_size = 1
 
 # Allow pool deletion for debugging purposes
 mon_allow_pool_delete = true
 
 # Caluculated with the following algorithm
 # https://stackoverflow.com/q/40771273
-osd_pool_default_pg_num = 512
-osd_pool_default_pgp_num = 512
+osd_pool_default_pg_num = 128
+osd_pool_default_pgp_num = 128
 
 # More initial ceph monitors
 <% @ceph_mon_ips.each do |(hostname, ip)| %>
