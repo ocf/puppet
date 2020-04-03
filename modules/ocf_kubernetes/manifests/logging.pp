@@ -9,7 +9,7 @@ class ocf_kubernetes::logging {
   }
 
   ocf_kubernetes::apply { 'init-logging':
-    target    => '/etc/ocf-kubernetes/manifests/logging',
-    subscribe => File['/etc/ocf-kubernetes/manifests/logging'],
+    target    => '/etc/ocf-kubernetes/manifests/logging.yaml',
+    subscribe => File['/etc/ocf-kubernetes/manifests/logging.yaml'],
   }
 }
