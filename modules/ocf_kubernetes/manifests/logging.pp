@@ -1,11 +1,9 @@
 class ocf_kubernetes::logging {
 
-  file { '/etc/ocf-kubernetes/manifests/logging':
-    ensure  => directory,
-    source  => 'puppet:///modules/ocf_kubernetes/logging',
-    mode    => '0644',
-    purge   => true,
-    recurse => true;
+  file { '/etc/ocf-kubernetes/manifests/logging.yaml':
+    ensure => present,
+    source => 'puppet:///modules/ocf_kubernetes/logging.yaml',
+    mode   => '0644';
   }
 
   ocf_kubernetes::apply { 'init-logging':
