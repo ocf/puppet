@@ -14,6 +14,7 @@
 class ocf_kubernetes::master {
   include ocf::packages::kubernetes
   include ocf_kubernetes::master::loadbalancer
+  include ocf_kubernetes::logging
 
   class { 'ocf::packages::docker':
     kubernetes => true;
