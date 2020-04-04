@@ -106,17 +106,6 @@ metadata:
     app: fluentd
 data:
   fluent.conf: |
-    # <source>
-    #   @type tail
-    #   path /var/log/*.log
-    #   pos_file /var/log/fluentd/tmp/access.log.pos
-    #   tag foo.*
-
-    #   <parse>
-    #     @type json
-    #   </parse>
-    # </source>
-
     <source>
       @type tail
       @id in_tail_container_logs
@@ -163,7 +152,6 @@ data:
       <store>
         @type loki
         url "http://loki.app-loki.svc.cluster.local:3100"
-        # extra_labels {"env":"dev"}
         <label>
           app
           job
@@ -174,8 +162,4 @@ data:
         flush_at_shutdown true
         buffer_chunk_limit 1m
       </store>
-
-      # <store>
-      #   @type stdout
-      # </store>
     </match>
