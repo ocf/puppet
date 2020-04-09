@@ -8,5 +8,5 @@ keepfiles : no
 <% else %>
 keepfiles : yes
 <% end %>
-prehook_enforcer : /usr/local/bin/enforcer prehook
-posthook_enforcer : /usr/local/bin/enforcer posthook
+prehook_enforcer : sudo -u ocfenforcer /usr/local/bin/enforcer prehook
+posthook_enforcer : sudo -u ocfenforcer /usr/local/bin/enforcer posthook

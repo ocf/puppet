@@ -1,4 +1,8 @@
 class ocf_printhost::enforcer {
+  user { 'ocfenforcer':
+    ensure => present,
+  }
+
   package { ['cups-tea4cups', 'mariadb-client']: }
 
   $mysql_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], lookup('ocfprinting::mysql::password'))
