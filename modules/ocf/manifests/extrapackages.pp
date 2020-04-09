@@ -36,6 +36,7 @@ class ocf::extrapackages {
     'bison',
     'bogofilter',
     'build-essential',
+    'calibre',
     'cabal-install',
     'cgdb',
     'chicken-bin',
