@@ -58,7 +58,16 @@ class ocf_printhost::cups {
         content => epp('ocf_printhost/cups/ppd/m806.ppd.epp', { 'double' => true });
     }
   }
-
+  file { '/var/spool/cups/':
+    ensure => 'directory',
+    owner  => 'ocfenforcer',
+    mode   => '0700';
+  }
+  file { '/usr/lib/cups/backend/tea4cups':
+    ensure => 'file',
+    owner  => 'ocfenforcer',
+    mode   => '0700';
+  }
   mount { '/var/spool/cups':
     device  => 'tmpfs',
     fstype  => 'tmpfs',
