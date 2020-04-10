@@ -23,6 +23,7 @@ class ocf_printhost::enforcer {
 
     '/opt/share/enforcer':
       ensure => directory,
+      owner  => 'ocfenforcer',
       mode   => '0500';
 
     '/opt/share/enforcer/enforcer.conf':
@@ -30,6 +31,8 @@ class ocf_printhost::enforcer {
         'ocf_printhost/enforcer/enforcer.conf.erb',
         'ocf/broker/broker.conf.erb',
       ),
+      owner     => 'ocfenforcer',
+      mode      => '0500',
       show_diff => false;
   }
 
