@@ -4,6 +4,20 @@ class ocf_ldap {
   # Install libarchive-zip-perl for crc32 command for calculating hashes of
   # ldif files in /etc/ldap/slapd.d, slapd is the ldap server
   package { ['slapd', 'ocf-ldap-overlay', 'libarchive-zip-perl']:; }
+  if $::host_env == 'dev' {
+    package {
+      [
+        # ocf-ldap-overlay build dependencies
+        'build-essential',
+        'clang-format',
+        'clang-tidy',
+        'libldap2-dev',
+        'libtool-bin',
+        'shellcheck'
+      ]:;
+    }
+  }
+
   service { 'slapd':
     enable    => true,
     subscribe => [
