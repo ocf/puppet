@@ -2,6 +2,12 @@ class ocf_prometheus::server {
   include ocf::firewall::allow_web
   include ocf::ssl::default
 
+  if $::host_env == 'dev' {
+    $hostname = 'dev-prometheus'
+  } else {
+    $hostname = 'prometheus'
+  }
+
   file {
     '/usr/local/bin/gen-prometheus-nodes':
       source => 'puppet:///modules/ocf_prometheus/gen-prometheus-nodes',
@@ -45,13 +51,13 @@ class ocf_prometheus::server {
   class { '::prometheus::server':
     version              => '2.10.0',
     extra_options        => '--web.listen-address="127.0.0.1:9090"',
-    external_url         => 'https://dev-prometheus.ocf.berkeley.edu',
+    external_url         => "https://${hostname}.ocf.berkeley.edu",
     rule_files           => [ '/etc/prometheus/rules.d/*.yaml' ],
     alertmanagers_config => [{
       scheme         => 'https',
       path_prefix    => '/alertmanager',
       static_configs => [{
-        targets => ['dev-prometheus.ocf.berkeley.edu'],
+        targets => ["${hostname}.ocf.berkeley.edu"],
       }],
     }],
     scrape_configs       => [
