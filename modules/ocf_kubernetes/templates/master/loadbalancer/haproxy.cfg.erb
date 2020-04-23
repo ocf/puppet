@@ -32,7 +32,6 @@ frontend lb-http
   # https redirect
   http-request redirect scheme https code 301 if !{ ssl_fc }
 
-
 frontend lb-https
   bind 0.0.0.0:443 ssl crt /etc/ssl/private/lb.ocf.berkeley.edu.pem
   bind :::443 ssl crt /etc/ssl/private/lb.ocf.berkeley.edu.pem
@@ -42,17 +41,16 @@ frontend lb-https
   http-request redirect prefix https://%[hdr(host),regsub(ocf\.io(:443)?$,ocf.berkeley.edu,i)] code 301 if { hdr(host) -m reg -i \.ocf\.io(:443)?$ }
 
   # redirect aliases, eg. sg.ocf.berkeley.edu -> sourcegraph.ocf.berkeley.edu
-  <%- @kubernetes_aliases.each do |service_name, alias| -%>
-  http-request redirect prefix https://<%= service_name %> code 301 if { hdr(host) -i <%= alias %> <%= alias %>:443 }
+  <%- @kubernetes_aliases.each do |service_name, alias_name| -%>
+  http-request redirect prefix https://<%= service_name %> code 301 if { hdr(host) -i <%= alias_name %> <%= alias_name %>:443 }
   <%- end -%>
 
   # send dev-kubernetes traffic into the cluster
-  use_backend upstream if { hdr_end(host) -i .dev-kubernetes.ocf.berkeley.edu .dev-kubernetes.ocf.berkeley.edu:443 }
+  use_backend kubernetes if { hdr_end(host) -i .dev-kubernetes.ocf.berkeley.edu .dev-kubernetes.ocf.berkeley.edu:443 }
 
   <%- @kubernetes_services.each do |service_name| -%>
-  use_backend upstream if { hdr(host) -i <%= service_name %>.ocf.berkeley.edu <%= service_name %>.ocf.berkeley.edu:443 }
+  use_backend kubernetes if { hdr(host) -i <%= service_name %>.ocf.berkeley.edu <%= service_name %>.ocf.berkeley.edu:443 }
   <%- end -%>
-
 
 # Some services don't need SSL termination
 # Either because it has already been done (ocfweb, irc)
@@ -63,11 +61,10 @@ frontend lb-internal-http
   mode http
 
   # send dev-kubernetes traffic into the cluster
-  use_backend upstream if { hdr_end(host) -i .dev-kubernetes.ocf.berkeley.edu .dev-kubernetes.ocf.berkeley.edu:4080 }
-  <%- end -%>
+  use_backend kubernetes if { hdr_end(host) -i .dev-kubernetes.ocf.berkeley.edu .dev-kubernetes.ocf.berkeley.edu:4080 }
 
   <%- @kubernetes_internal_services.each do |proxy_name| -%>
-  use_backend upstream if { hdr(host) -i <%= proxy_name %>.ocf.berkeley.edu <%= proxy_name %>.ocf.berkeley.edu:4080 }
+  use_backend kubernetes if { hdr(host) -i <%= proxy_name %>.ocf.berkeley.edu <%= proxy_name %>.ocf.berkeley.edu:4080 }
   <%- end -%>
 
 backend kubernetes
@@ -77,8 +74,8 @@ backend kubernetes
   http-request add-header X-Forwarded-Port %[dst_port]
   mode http
   option forwardfor
-  option httpchk OPTIONS / HTTP/1.0
-  http-check expect rstatus (2|3)[0-9][0-9]
+  option httpchk GET /healthz
+  http-check expect status 200
   <%- @kubernetes_workers.each do |hostname, ip| -%>
-  server <%= hostname %> <%= ip %>:31234 check 
+  server <%= hostname %> <%= ip %>:31234 check
   <%- end -%>
