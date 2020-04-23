@@ -11,15 +11,15 @@ class ocf_mirrors::projects::alpine {
 
   ocf_mirrors::monitoring { 'alpine':
     type          => 'unix_timestamp',
-    upstream_host => 'mirrors.alpinelinux.org',
-    ts_path       => 'TIME',
+    upstream_host => 'dl-cdn.alpinelinux.org',
+    ts_path       => 'last-updated',
   }
 
   ocf_mirrors::timer {
     'alpine':
       exec_start => '/opt/mirrors/project/alpine/sync-archive',
-      hour       => '0/3',
-      minute     => '22',
+      hour       => '*',
+      minute     => '42',
       require    => File['/opt/mirrors/project/alpine'];
   }
 }
