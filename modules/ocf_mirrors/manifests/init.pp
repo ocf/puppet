@@ -7,30 +7,31 @@ class ocf_mirrors {
   include ocf_mirrors::firewall_input
 
   # projects
-  include ocf_mirrors::projects::apache
-  include ocf_mirrors::projects::alpine
-  include ocf_mirrors::projects::archlinux
-  include ocf_mirrors::projects::archlinuxcn
-  include ocf_mirrors::projects::centos
-  include ocf_mirrors::projects::centos_altarch
-  include ocf_mirrors::projects::centos_debuginfo
-  include ocf_mirrors::projects::debian
-  include ocf_mirrors::projects::emacs_lisp_archive
-  include ocf_mirrors::projects::finnix
-  include ocf_mirrors::projects::freebsd
-  include ocf_mirrors::projects::gnu
-  include ocf_mirrors::projects::kali
-  include ocf_mirrors::projects::kde
-  include ocf_mirrors::projects::kde_applicationdata
-  include ocf_mirrors::projects::manjaro
-  include ocf_mirrors::projects::openbsd
-  include ocf_mirrors::projects::parrot
-  include ocf_mirrors::projects::puppetlabs
-  include ocf_mirrors::projects::qt
-  include ocf_mirrors::projects::raspbian
-  include ocf_mirrors::projects::tails
-  include ocf_mirrors::projects::trisquel
-  include ocf_mirrors::projects::ubuntu
+  #include ocf_mirrors::projects::apache
+  #include ocf_mirrors::projects::alpine
+  #include ocf_mirrors::projects::archlinux
+  #include ocf_mirrors::projects::archlinuxcn
+  #include ocf_mirrors::projects::centos
+  #include ocf_mirrors::projects::centos_altarch
+  #include ocf_mirrors::projects::centos_debuginfo
+  #include ocf_mirrors::projects::debian
+  include ocf_mirrors::projects::devuan
+  #include ocf_mirrors::projects::emacs_lisp_archive
+  #include ocf_mirrors::projects::finnix
+  #include ocf_mirrors::projects::freebsd
+  #include ocf_mirrors::projects::gnu
+  #include ocf_mirrors::projects::kali
+  #include ocf_mirrors::projects::kde
+  #include ocf_mirrors::projects::kde_applicationdata
+  #include ocf_mirrors::projects::manjaro
+  #include ocf_mirrors::projects::openbsd
+  #include ocf_mirrors::projects::parrot
+  #include ocf_mirrors::projects::puppetlabs
+  #include ocf_mirrors::projects::qt
+  #include ocf_mirrors::projects::raspbian
+  #include ocf_mirrors::projects::tails
+  #include ocf_mirrors::projects::trisquel
+  #include ocf_mirrors::projects::ubuntu
 
   user { 'mirrors':
     comment  => 'OCF Mirroring',
