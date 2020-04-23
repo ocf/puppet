@@ -19,6 +19,7 @@ mod 'puppet-prometheus',                   '6.2.0'
 mod 'puppetlabs-apache',                   '3.1.0'
 mod 'puppetlabs-apt',                      '6.3.0'
 mod 'puppetlabs-concat',                   '4.2.1'
+# Make sure to update alexharvey/firewall_multi version
 mod 'puppetlabs-firewall',                 '2.3.0'
 mod 'puppetlabs-hocon',                    '1.0.0'
 mod 'puppetlabs-inifile',                  '2.2.2' # Dependency of puppetlabs-puppetdb
