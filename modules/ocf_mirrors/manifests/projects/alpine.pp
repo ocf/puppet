@@ -17,8 +17,9 @@ class ocf_mirrors::projects::alpine {
 
   ocf_mirrors::timer {
     'alpine':
-      exec_start => 'opt/mirrors/project/alpine/sync-archive',
+      exec_start => '/opt/mirrors/project/alpine/sync-archive',
       hour       => '0/3',
-      minute     => '22';
+      minute     => '22',
+      require    => File['/opt/mirrors/project/alpine'];
   }
 }
