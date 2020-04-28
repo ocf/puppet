@@ -8,6 +8,7 @@ class ocf_kubernetes::master::loadbalancer {
 
   $kubernetes_services = [
     'auth',
+    'chat',
     'cruisecontrol',
     'grafana',
     'fava',
@@ -24,7 +25,6 @@ class ocf_kubernetes::master::loadbalancer {
     'metabase',
     'pma',
     'printlist',
-    'riot',
     'rt',
     'sourcegraph',
     'static',
