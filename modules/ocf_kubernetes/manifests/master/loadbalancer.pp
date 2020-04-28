@@ -24,6 +24,7 @@ class ocf_kubernetes::master::loadbalancer {
     'metabase',
     'pma',
     'printlist',
+    'riot',
     'rt',
     'sourcegraph',
     'static',
