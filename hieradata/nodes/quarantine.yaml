@@ -1,4 +1,1 @@
-# Enable outside operator users to login
-ocf::auth::ulogin: [["%{lookup('owner')}", 'ALL']]
-
 owner: njha
