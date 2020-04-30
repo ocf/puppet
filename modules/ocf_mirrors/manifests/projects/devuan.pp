@@ -9,11 +9,7 @@ class ocf_mirrors::projects::devuan {
       recurse => true;
   }
 
-  ocf_mirrors::monitoring { 'devuan':
-    type          => 'unix_timestep',
-    upstream_host => 'https://www.devuan.org/#download',
-    ts_path       => 'TIME';
-  }
+# Looks like devuan doesn't have a timestamp file, so omitted ocf_mirrors::monitoring
 
   ocf_mirrors::timer { 'devuan':
     exec_start => '/opt/mirrors/project/devuan/sync-archive',

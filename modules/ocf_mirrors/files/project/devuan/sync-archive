@@ -1,2 +1,3 @@
 #!/bin/sh -eu
-/usr/local/bin/rsync-no-vanished --delete -raX files.devuan.org::devuan /opt/mirrors/ftp/devuan
+/usr/local/bin/rsync-no-vanished --delete -raX \
+	files.devuan.org::devuan /opt/mirrors/ftp/devuan
