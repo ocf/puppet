@@ -50,7 +50,7 @@ class ocf_www::site::www {
     proxy_preserve_host => true,
 
     aliases             => [
-      { 
+      {
         alias => '/.well-known/matrix/server',
         path  => '/var/www/html/.well-known/matrix/server',
       },
