@@ -26,6 +26,13 @@ class ocf_www::site::www {
   include ocf_www::mod::php
   include ocf_www::mod::suexec
 
+  file {
+    ['/var/www/html/.well-known', '/var/www/html/.well-known/matrix']:
+      ensure => 'directory';
+    '/var/www/html/.well-known/matrix/server':
+      source => 'puppet:///modules/ocf_www/matrix-server';
+  }
+
   # TODO: dev-death should add a robots.txt disallowing everything
   apache::vhost { 'www':
     servername          => 'www.ocf.berkeley.edu',
@@ -42,6 +49,13 @@ class ocf_www::site::www {
     request_headers     => ['set X-Forwarded-Proto https'],
     proxy_preserve_host => true,
 
+    aliases             => [
+      {
+        alias => '/.well-known/matrix/server',
+        path  => '/var/www/html/.well-known/matrix/server',
+      },
+    ],
+
     rewrites            => [
       {
         comment      => 'redirect .well-known/host-meta to mastodon',
@@ -56,6 +70,8 @@ class ocf_www::site::www {
           '%{REQUEST_URI} !^/icons/',
           # ...hide ocfweb metrics
           '%{REQUEST_URI} !^/metrics',
+          # ...and not if it's the matrix well-known file
+          '%{REQUEST_URI} !^/\.well-known/matrix',
         ],
         rewrite_rule => '^/(.*)$ http://lb.ocf.berkeley.edu:4080/$1 [P]',
       }
