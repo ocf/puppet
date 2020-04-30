@@ -1,2 +1,3 @@
+ocf::auth::usudo: ['jessicadong', 'joyceguo']
 classes:
     - ocf_irc
