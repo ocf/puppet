@@ -23,11 +23,8 @@ frontend lb-http
   bind :::80
   mode http
 
-  # redirect *.ocf.io to *.ocf.berkeley.edu
-  http-request redirect prefix https://%[hdr(host),regsub(ocf\.io(:80)?$,ocf.berkeley.edu,i)] code 301 if { hdr(host) -m reg -i \.ocf\.io(:80)?$ }
-
   # redirect * to *.ocf.berkeley.edu
-  http-request redirect prefix https://%[hdr(host)].ocf.berkeley.edu code 301 unless { hdr(host) -m reg -i \.ocf\.berkeley\.edu(:80)?$ }
+  http-request redirect prefix https://%[hdr(host)].ocf.berkeley.edu unless { hdr_end(host) -i ocf.berkeley.edu ocf.io }
 
   # https redirect
   http-request redirect scheme https code 301 if !{ ssl_fc }
@@ -38,7 +35,7 @@ frontend lb-https
   mode http
 
   # redirect *.ocf.io to *.ocf.berkeley.edu
-  http-request redirect prefix https://%[hdr(host),regsub(ocf\.io(:443)?$,ocf.berkeley.edu,i)] code 301 if { hdr(host) -m reg -i \.ocf\.io(:443)?$ }
+  http-request redirect prefix https://%[hdr(host),regsub(ocf.io$,ocf.berkeley.edu)] if { hdr_end(host) -i ocf.io }
 
   # redirect aliases, eg. sg.ocf.berkeley.edu -> sourcegraph.ocf.berkeley.edu
   <%- @kubernetes_aliases.each do |service_name, alias_name| -%>
