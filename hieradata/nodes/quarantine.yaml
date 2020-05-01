@@ -1,5 +1,1 @@
-# Enable outside operator users to login
-ocf::auth::ulogin: [["%{lookup('owner')}", 'ALL']]
-
-# Temp owner to kmo
-owner: kmo
+owner: njha

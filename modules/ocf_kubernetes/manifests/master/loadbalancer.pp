@@ -8,6 +8,7 @@ class ocf_kubernetes::master::loadbalancer {
 
   $kubernetes_services = [
     'auth',
+    'chat',
     'cruisecontrol',
     'grafana',
     'fava',

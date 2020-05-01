@@ -5,6 +5,7 @@
 # is also quite good.
 
 # Extra modules
+<module name="m_cgiirc.so">
 <module name="m_cloaking.so">
 <module name="m_conn_umodes.so">
 <module name="m_md5.so">
@@ -117,6 +118,12 @@
 #          host="mysql.ocf.berkeley.edu"
 #          port="3306"
 #          id="irc">
+
+<cgiirc opernotice="yes">
+
+<cgihost type="webirc"
+         mask="169.229.226.0/24"
+         password="<%= @irc_creds['cgiirc_password'] -%>">
 
 <sqloper dbid="irc" hash="sha256">
 

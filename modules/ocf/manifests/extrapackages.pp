@@ -190,6 +190,7 @@ class ocf::extrapackages {
     'r10k',
     'rails',
     'rbenv',
+    'ripgrep',
     'ruby-build',
     'ruby-dev',
     'ruby-fcgi',
