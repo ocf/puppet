@@ -22,15 +22,7 @@ class ocf_ocfweb::dev_config($group = 'ocfstaff') {
 
   # Install some packages for generating puppet diffs
   # TODO: Move this somewhere else alongside the puppet certs added below
-  package {
-    'octocatalog-diff':;
-
-    # Newer puppetdb-termini versions (6.5.0-1stretch for instance) have an
-    # issue with CRLs when used with octocatalog-diff, so pin this to 6.4.0 for
-    # now
-    'puppetdb-termini':
-      ensure => '6.4.0-1stretch';
-  }
+  package { ['octocatalog-diff', 'puppetdb-termini']:; }
 
   file {
     '/etc/ocfweb':
