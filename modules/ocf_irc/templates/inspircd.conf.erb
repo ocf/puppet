@@ -12,7 +12,7 @@
 <module name="mysql">
 <module name="override">
 <module name="sha256">
-<module name="sqloper">
+#<module name="sqloper">
 <module name="ssl_gnutls">
 <module name="cap">
 
@@ -109,15 +109,15 @@
 
 
 # Store oper credentials in mysql
-<database module="mysql"
-          name="ocfirc"
-          user="ocfirc"
-          pass="<%= @irc_creds['mysql_password'] -%>"
-          host="mysql.ocf.berkeley.edu"
-          port="3306"
-          id="irc">
+#<database module="mysql"
+#          name="ocfirc"
+#          user="ocfirc"
+#          pass="<%= @irc_creds['mysql_password'] -%>"
+#          host="mysql.ocf.berkeley.edu"
+#          port="3306"
+#          id="irc">
 
-<sqloper dbid="irc">
+#<sqloper dbid="irc">
 
 <cgiirc opernotice="yes">
 
