@@ -13,7 +13,7 @@ class ocf_mirrors::projects::devuan {
 
   ocf_mirrors::timer { 'devuan':
     exec_start => '/opt/mirrors/project/devuan/sync-archive',
-    hour       => '*',
+    hour       => '0/6',
     minute     => '57',
     require    => File['/opt/mirrors/project/devuan'];
   }
