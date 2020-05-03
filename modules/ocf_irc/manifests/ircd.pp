@@ -1,10 +1,12 @@
 class ocf_irc::ircd {
-  package { 'inspircd':; }
+  ocf::repackage { 'inspircd':
+      backport_on =>  ['buster'],
+  }
 
   service { 'inspircd':
     restart   => 'service inspircd reload',
     enable    => true,
-    require   => Package['inspircd'],
+    require   => Ocf::Repackage['inspircd'],
     subscribe => Ocf::Ssl::Bundle[$::fqdn],
   } ->
   cron { 'reload-irc-cert':
@@ -23,13 +25,13 @@ class ocf_irc::ircd {
     file { '/etc/apparmor.d/disable/usr.sbin.inspircd':
       ensure  => 'link',
       target  => '/etc/apparmor.d/usr.sbin.inspircd',
-      require => Package['inspircd'],
+      require => Ocf::Repackage['inspircd'],
     }
   }
 
   file {
     default:
-      require => Package['inspircd'],
+      require => Ocf::Repackage['inspircd'],
       notify  => Service['inspircd'],
       owner   => irc,
       group   => irc;

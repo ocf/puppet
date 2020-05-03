@@ -5,28 +5,28 @@
 # is also quite good.
 
 # Extra modules
-<module name="m_cgiirc.so">
-<module name="m_cloaking.so">
-<module name="m_conn_umodes.so">
-<module name="m_md5.so">
-<module name="m_mysql.so">
-<module name="m_override.so">
-<module name="m_sha256.so">
-<module name="m_sqloper.so">
-<module name="m_ssl_gnutls.so">
-<module name="m_cap.so">
+<module name="cgiirc">
+<module name="cloaking">
+<module name="conn_umodes">
+<module name="md5">
+<module name="mysql">
+<module name="override">
+<module name="sha256">
+#<module name="sqloper">
+<module name="ssl_gnutls">
+<module name="cap">
 
 # Required/Recommended modules for anope
-<module name="m_alias.so">
-<module name="m_chghost.so">
-<module name="m_customprefix.so">
-<module name="m_hidechans.so">
-<module name="m_services_account.so">
-<module name="m_spanningtree.so">
-<module name="m_svshold.so">
+<module name="alias">
+<module name="chghost">
+<module name="customprefix">
+<module name="hidechans">
+<module name="services_account">
+<module name="spanningtree">
+<module name="svshold">
 
 # Add SASL authentication (provided by Anope)
-<module name="m_sasl.so">
+<module name="sasl">
 <sasl target="services.irc.ocf.berkeley.edu">
 
 <server name="irc.ocf.berkeley.edu"
@@ -37,12 +37,15 @@
        nick="ocf"
        email="help@ocf.berkeley.edu">
 
-<gnutls certfile="/etc/ssl/private/<%= @fqdn -%>.bundle"
-        keyfile="/etc/ssl/private/<%= @fqdn -%>.key"
-        priority="NORMAL:-MD5">
+<sslprofile name="clientssl"
+       provider="gnutls"
+       certfile="/etc/ssl/private/<%= @fqdn -%>.bundle"
+       keyfile="/etc/ssl/private/<%= @fqdn -%>.key"
+       dhfile="/etc/ssl/dhparam.pem"
+       priority="NORMAL:-MD5">
 
 # Allow public connections on 6697 (TLS only)
-<bind address="" port="6697" type="clients" ssl="gnutls">
+<bind address="*" port="6697" ssl="clientssl" type="clients">
 # Port 25580 is localhost-only for anope services to connect
 <bind address="127.0.0.1" port="25580" type="servers">
 # Port 6667 is localhost-only for automation scripts
@@ -58,27 +61,22 @@
 
 <uline server="services.irc.ocf.berkeley.edu" silent="yes">
 
-
-# Passwords needed to kill/restart the IRCd while connected to it
-<power diepass="<%= @irc_creds['die_password'] -%>"
-       restartpass="<%= @irc_creds['restart_password'] -%>"
-       pause="5">
-
-
 # Users connecting from inside the OCF subnet have less restrictions and have
 # their host cloaked (+x mode)
-<connect allow="169.229.226.0/24"
+<connect name="Secure"
+         parent="Main">
+
+<connect name="OCF subnet v4" allow="169.229.226.0/24"
          timeout="60" flood="20" localmax="1000" globalmax="1000"
          limit="1000" modes="+x" commandrate="5000"
          threshold="100" maxchans="200">
 
-<connect allow="2607:f140:8801::/48"
+<connect name="OCF subnet v6" allow="2607:f140:8801::/48"
          timeout="60" flood="20" localmax="1000" globalmax="1000"
          limit="1000" modes="+x" commandrate="5000"
          threshold="100" maxchans="200">
 
-<connect allow="*"
-         timeout="60" flood="20" threshold="20"
+<connect name="Main" allow="*" timeout="60" flood="20" threshold="20"
          pingfreq="120" sendq="262144" recvq="8192"
          useident="no" localmax="5" globalmax="5">
 
@@ -119,14 +117,13 @@
 #          port="3306"
 #          id="irc">
 
+#<sqloper dbid="irc">
+
 <cgiirc opernotice="yes">
 
 <cgihost type="webirc"
-         mask="169.229.226.0/24"
-         password="<%= @irc_creds['cgiirc_password'] -%>">
-
-<sqloper dbid="irc" hash="sha256">
-
+         password="<%= @irc_creds['cgiirc_password'] -%>"
+         mask="169.229.226.0/24">
 
 <files motd="/etc/inspircd/inspircd.motd"
        rules="/etc/inspircd/inspircd.rules">
@@ -141,7 +138,7 @@
 # Allow both regular users and opers to join up to 200 channels
 <channels users="200" opers="200">
 
-<pid file="/var/run/inspircd.pid">
+<pid file="/run/inspircd/inspircd.pid">
 
 <options prefixquit="Quit: "
          syntaxhints="yes">
