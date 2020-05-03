@@ -8,12 +8,14 @@ class ocf_mirrors {
 
   # projects
   include ocf_mirrors::projects::apache
+  include ocf_mirrors::projects::alpine
   include ocf_mirrors::projects::archlinux
   include ocf_mirrors::projects::archlinuxcn
   include ocf_mirrors::projects::centos
   include ocf_mirrors::projects::centos_altarch
   include ocf_mirrors::projects::centos_debuginfo
   include ocf_mirrors::projects::debian
+  include ocf_mirrors::projects::devuan
   include ocf_mirrors::projects::emacs_lisp_archive
   include ocf_mirrors::projects::finnix
   include ocf_mirrors::projects::freebsd

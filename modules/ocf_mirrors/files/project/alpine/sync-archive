@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -auzH --delete --delete-after --delay-updates --safe-links \
+	rsync://rsync.alpinelinux.org/alpine/ /opt/mirrors/ftp/alpine
