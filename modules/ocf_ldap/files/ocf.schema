@@ -76,10 +76,26 @@ attributetype ( 1.3.6.1.4.1.41759.2.2.3
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
+# based on ipHostNumber, 1.3.6.1.1.1.1.19
+attributetype ( 1.3.6.1.4.1.41759.2.2.4
+        NAME 'ip6HostNumber'
+        DESC 'IPv6 address, as represented by RFC1884 section 2.2.2'
+        EQUALITY caseIgnoreIA5Match
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{128} )
+
+# based on ipHost, 1.3.6.1.1.1.2.6
+objectclass ( 1.3.6.1.4.1.41759.2.1.2
+        NAME 'ip6Host'
+        DESC 'Host optionally supporting IPv6'
+        SUP top
+        AUXILIARY
+        MUST ( cn )
+        MAY ( ip6HostNumber $ manager $ description $ l ) )
+
 objectclass ( 1.3.6.1.4.1.41759.2.1.1
         NAME 'ocfDevice'
         DESC 'Attributes for OCF hosts'
-        SUP ( ipHost $ ieee802Device $ puppetClient )
+        SUP ( ipHost $ ip6Host $ ieee802Device $ puppetClient )
         AUXILIARY
-        MUST ( cn $ ipHostNumber $ type )
+        MUST ( cn $ type )
         MAY ( environment $ dnsCname $ dnsA ) )

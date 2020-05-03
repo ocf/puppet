@@ -8,6 +8,7 @@ class ocf::node_exporter {
   }
 
   if $::lsbdistid != 'Raspbian' {
+    # Attributes for this class are defined in hieradata
     include prometheus::node_exporter
   }
 }

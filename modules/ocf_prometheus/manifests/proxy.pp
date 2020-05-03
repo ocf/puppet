@@ -54,7 +54,7 @@ class ocf_prometheus::proxy {
         auth_name           => 'OCF Account',
         auth_basic_provider => 'file PAM',
         auth_user_file      => '/etc/prometheus/htpasswd',
-        auth_require        => 'valid-user',
+        require             => {requires => ['valid-user', 'local'], enforce => 'Any'},
         custom_fragment     => 'AuthPAMService ocfprometheus',
       }],
       require             => [

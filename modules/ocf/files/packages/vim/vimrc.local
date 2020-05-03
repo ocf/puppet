@@ -4,6 +4,7 @@ let g:skip_defaults_vim = 1
 " A small amount of OCF config
 colorscheme ron
 set number
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 " The rest is taken from vim-sensible:
 " https://github.com/tpope/vim-sensible

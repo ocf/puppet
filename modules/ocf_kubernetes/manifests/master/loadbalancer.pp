@@ -8,16 +8,20 @@ class ocf_kubernetes::master::loadbalancer {
 
   $kubernetes_services = [
     'auth',
-    'bjukebox',
+    'chat',
+    'cruisecontrol',
     'grafana',
+    'fava',
     'inventory',
     'ircbot',
     'irclogs',
+    'jukebox',
     'kanboard',
     'kube',
     'kubeadmin',
     'labmap',
     'mastodon',
+    'matrix',
     'metabase',
     'pma',
     'printlist',
@@ -66,31 +70,10 @@ class ocf_kubernetes::master::loadbalancer {
   # nginx requests and send them into the cluster.
   #
   # TODO: If we expose TCP services, we may need to add more.
-  #
-  # IPv6 addresses have to be specified separately as they cannot be in the vrrp
-  # packet together (keepalived 1.2.20+) so they need to be in a
-  # virtual_ipaddress_excluded block instead.
-  $virtual_addresses = [
-    # Primary load balancer IP (v4)
-    '169.229.226.79',
-  ]
-  $virtual_addresses_v6 = [
-    # Primary load balancer IP (v6)
-    '2607:f140:8801::1:79',
-  ]
-  $keepalived_secret = lookup('kubernetes::keepalived::secret')
-
-  package { 'keepalived':; } ->
-  file { '/etc/keepalived/keepalived.conf':
-    content => template('ocf_kubernetes/master/loadbalancer/keepalived.conf.erb'),
-    mode    => '0400',
-  } ~>
-  service { 'keepalived': }
-
-  $vip = 'lb'
-
-  class { 'ocf_kubernetes::master::loadbalancer::ssl':
-    vip => $vip,
+  class { 'ocf_lb':
+    vip_names                => ['lb'],
+    keepalived_secret_lookup => 'kubernetes::keepalived::secret',
+    vrid                     => 51,
   }
 
   package { 'haproxy': }
@@ -99,5 +82,7 @@ class ocf_kubernetes::master::loadbalancer {
     content => template('ocf_kubernetes/master/loadbalancer/haproxy.cfg.erb'),
     require => Package['haproxy'],
   } ~>
-  service { 'haproxy': }
+  service { 'haproxy':
+    subscribe => Ocf::Ssl::Bundle['lb.ocf.berkeley.edu'],
+  }
 }

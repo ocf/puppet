@@ -10,6 +10,9 @@ Currently checks the Hosts OU for:
     * Host not in DNS or mismatched IP
     * Unrecognized puppetVar (often typos)
     * Reverse DNS for IP exists and matches hostname
+    * IP is not an OCF address
+    * IPv6 does not match IPv4
+    * Does not have an IPv6 address
 
 It also does some checks around users and kerberos principals:
     * All users with a /root principal should also have a /admin principal
@@ -22,9 +25,14 @@ from ipaddress import ip_address
 from operator import itemgetter
 
 import dns
+from ocflib.infra.hosts import HOST_TYPES_WITH_IPV6
 from ocflib.infra.ldap import ldap_connection
 from ocflib.infra.ldap import OCF_LDAP_GROUP
 from ocflib.infra.ldap import OCF_LDAP_HOSTS
+from ocflib.infra.net import ipv4_to_ipv6
+from ocflib.infra.net import ipv6_to_ipv4
+from ocflib.infra.net import is_ocf_ip
+from ocflib.infra.net import OCF_SUBNET_V6_COMPAT
 from ocflib.misc.shell import bold
 from ocflib.misc.shell import red
 
@@ -60,7 +68,7 @@ def check_hosts(c, complain):
     c.search(
         OCF_LDAP_HOSTS,
         '(cn=*)',
-        attributes=['cn', 'type', 'macAddress', 'ipHostNumber', 'puppetVar', 'puppetClass'],
+        attributes=['cn', 'type', 'macAddress', 'ipHostNumber', 'ip6HostNumber', 'puppetVar', 'puppetClass'],
     )
     for attrs in map(itemgetter('attributes'), c.response):
         cn = attrs['cn'][0]
@@ -88,6 +96,16 @@ def check_hosts(c, complain):
             complain(cn, 'is a staff VM, but not in staffvm IP range')
         elif type_ != 'staffvm' and in_staffvm_range:
             complain(cn, 'is in staffvm IP range, but not a staffvm')
+        if not is_ocf_ip(ip):
+            complain(cn, 'has the IP address {}, which is not an OCF IP'.format(ip))
+        ip6s = [ip_address(ip6) for ip6 in attrs['ip6HostNumber']]
+        for ip6 in ip6s:
+            if not is_ocf_ip(ip6):
+                complain(cn, 'has the IP address {}, which is not an OCF IP'.format(ip6))
+            if ip6 in OCF_SUBNET_V6_COMPAT and ipv6_to_ipv4(ip6) != ip:
+                complain(cn, 'has the IPv6 address {}, which does not match its IPv4 address'.format(ip6))
+        if (len(ip6s) > 0 or type_ in HOST_TYPES_WITH_IPV6) and ipv4_to_ipv6(ip) not in ip6s:
+            complain(cn, 'does not have an ip6HostNumber attribute matching its ipHostNumber')
 
         ip = attrs['ipHostNumber'][0]
         dns_ip = lookup_dns(cn + '.ocf.berkeley.edu')

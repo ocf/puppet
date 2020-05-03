@@ -35,7 +35,10 @@ class ocf_desktop::suspend {
     'pm-utils':;
   }
 
+  # Temporarily disable suspend to run Folding @ Home
+  # https://github.com/ocf/puppet/pull/914
   cron { 'ocf-suspend':
+    ensure  => 'absent',
     command => '/usr/local/sbin/ocf-suspend -q',
     minute  => '*/15',
     require => File['/usr/local/sbin/ocf-suspend'],

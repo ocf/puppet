@@ -6,22 +6,27 @@ class ocf_prometheus::server {
     '/usr/local/bin/gen-prometheus-nodes':
       source => 'puppet:///modules/ocf_prometheus/gen-prometheus-nodes',
       mode   => '0755';
-  } ->
-  ocf::exec_and_cron { 'gen-prometheus-nodes':
-    command      => '/usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json',
-    creates      => '/var/local/prometheus-nodes.json',
-    cron_options => { minute=>'0'},
   }
 
-  file {
-    '/usr/local/bin/gen-prometheus-printers':
-      source => 'puppet:///modules/ocf_prometheus/gen-prometheus-printers',
-      mode   => '0755';
-  } ->
+  ocf::exec_and_cron { 'gen-prometheus-nodes':
+    command      => '/usr/local/bin/gen-prometheus-nodes /var/local/prometheus-nodes.json --port 9100',
+    creates      => '/var/local/prometheus-nodes.json',
+    cron_options => { minute=>'0'},
+    require      => File['/usr/local/bin/gen-prometheus-nodes'],
+  }
+
   ocf::exec_and_cron { 'gen-prometheus-printers':
-    command      => '/usr/local/bin/gen-prometheus-printers /var/local/prometheus-printers.json',
+    command      => '/usr/local/bin/gen-prometheus-nodes /var/local/prometheus-printers.json printer',
     creates      => '/var/local/prometheus-printers.json',
     cron_options => { minute=>'0'},
+    require      => File['/usr/local/bin/gen-prometheus-nodes'],
+  }
+
+  ocf::exec_and_cron { 'gen-prometheus-switches':
+    command      => '/usr/local/bin/gen-prometheus-nodes /var/local/prometheus-switches.json switch',
+    creates      => '/var/local/prometheus-switches.json',
+    cron_options => { minute=>'0'},
+    require      => File['/usr/local/bin/gen-prometheus-nodes'],
   }
 
   file {
@@ -97,6 +102,35 @@ class ocf_prometheus::server {
 
         # Relabel trick to make sure we scrape from the exporter and not from
         # the printers themselves, see
+        # https://github.com/prometheus/snmp_exporter#prometheus-configuration
+        relabel_configs => [
+          {
+            source_labels => [ '__address__' ],
+            target_label  => '__param_target',
+          },
+          {
+            target_label => '__address__',
+            replacement  => 'snmp-exporter.ocf.berkeley.edu:4080',
+          },
+        ]
+      },
+      {
+        job_name        => 'switch',
+        scrape_interval => '60s',
+        scrape_timeout  => '30s',
+
+        file_sd_configs => [
+          {
+            files            => [ '/var/local/prometheus-switches.json' ],
+            refresh_interval => '1h',
+          },
+        ],
+
+        metrics_path    => '/snmp',
+        params          => { 'module' => [ 'switch' ]},
+
+        # Relabel trick to make sure we scrape from the exporter and not from
+        # the switches themselves, see
         # https://github.com/prometheus/snmp_exporter#prometheus-configuration
         relabel_configs => [
           {

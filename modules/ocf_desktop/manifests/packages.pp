@@ -1,6 +1,7 @@
 class ocf_desktop::packages {
   include ocf::extrapackages
   include ocf::packages::docker
+  include ocf::packages::fahclient
   include ocf::packages::fonts
 
   # Install packages specific to desktops
@@ -30,8 +31,8 @@ class ocf_desktop::packages {
     # FUSE
     ['fuse', 'exfat-fuse']:;
     # games
-    ['armagetronad', 'gl-117', 'gnome-games', 'redeclipse', 'wesnoth',
-      'wesnoth-music']:;
+    ['armagetronad', 'freeciv', 'gl-117', 'gnome-games', 'minetest', 'redeclipse',
+      'supertuxkart', 'wesnoth', 'wesnoth-music']:;
     # graphics/plotting
     ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
     # input method editors
@@ -41,7 +42,7 @@ class ocf_desktop::packages {
     # notifications
     ['libnotify-bin', 'notification-daemon']:;
     # security tools
-    ['scdaemon']:;
+    ['scdaemon', 'yubikey-manager']:;
     # utilities
     ['wakeonlan']:;
     # Xorg

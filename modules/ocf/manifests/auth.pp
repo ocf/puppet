@@ -163,7 +163,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
     $::dnsCname,
     $::fqdn,
     $::ipHostNumber,
-    $::ipaddress6,
+    $::ip6HostNumber,
   ), '')
 
   # Export SSH keys from every host if PuppetDB is running, and use them
@@ -184,6 +184,13 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   # sudo user/group access controls
   package { 'sudo': }
   file {
+    '/etc/otp':
+      mode      => '0400',
+      source    => 'puppet:///otp-secrets/',
+      recurse   => true,
+      purge     => true,
+      force     => true,
+      show_diff => false;
     '/etc/pam.d/sudo':
       source  => 'puppet:///modules/ocf/auth/pam/sudo',
       require => Package['sudo'];

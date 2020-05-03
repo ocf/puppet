@@ -6,7 +6,9 @@ moduledir 'vendor'
 # too, since r10k does not manage dependencies and you will be confused as to
 # why they are not working properly.
 
-mod 'alexharvey/firewall_multi',           '1.10.0'
+# firewall_multi version should match with puppetlabs-firewall version
+# https://github.com/alexharv074/puppet-firewall_multi#version-compatibility
+mod 'alexharvey/firewall_multi',           '1.17.0'
 mod 'camptocamp-kmod',                     '2.3.1' # Dependency of puppetlabs-kubernetes
 mod 'camptocamp-systemd',                  '2.1.0' # Dependency of puppet-prometheus
 mod 'herculesteam-augeasproviders_core',   '2.5.0' # Dependency of puppetlabs-kubernetes
@@ -17,7 +19,8 @@ mod 'puppet-prometheus',                   '6.2.0'
 mod 'puppetlabs-apache',                   '3.1.0'
 mod 'puppetlabs-apt',                      '6.3.0'
 mod 'puppetlabs-concat',                   '4.2.1'
-mod 'puppetlabs-firewall',                 '1.12.0'
+# Make sure to update alexharvey/firewall_multi version
+mod 'puppetlabs-firewall',                 '2.3.0'
 mod 'puppetlabs-hocon',                    '1.0.0'
 mod 'puppetlabs-inifile',                  '2.2.2' # Dependency of puppetlabs-puppetdb
 mod 'puppetlabs-kubernetes',               '5.0.0'
