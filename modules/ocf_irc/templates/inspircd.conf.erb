@@ -5,6 +5,7 @@
 # is also quite good.
 
 # Extra modules
+<module name="cgiirc">
 <module name="cloaking">
 <module name="conn_umodes">
 <module name="md5">
@@ -118,6 +119,11 @@
 
 <sqloper dbid="irc">
 
+<cgiirc opernotice="yes">
+
+<cgihost type="webirc"
+         password="<%= @irc_creds['cgiirc_password'] -%>"
+         mask="169.229.226.0/24">
 
 <files motd="/etc/inspircd/inspircd.motd"
        rules="/etc/inspircd/inspircd.rules">
