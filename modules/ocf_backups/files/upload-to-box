@@ -20,6 +20,7 @@ BOX_EMAILS = [
     'ckuehl@berkeley.edu',
     'cooperc@berkeley.edu',
     'dkessler@berkeley.edu',
+    'j.wat@berkeley.edu',
     'kpeng3.4@berkeley.edu',
 ]
 # This still use FTPS (over TLS) since we run curl with the -1 option
