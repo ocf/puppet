@@ -7,6 +7,29 @@ class ocf_www::logging {
     require => Package['nfs-kernel-server'],
   }
 
+  # log outbound requests
+  firewall_multi {
+    '101 log outbound request on death (v4)':
+        provider    => 'iptables',
+        chain       => 'PUPPET-OUTPUT',
+        outiface    => '! lo',
+        jump        => 'LOG',
+        destination => '! 169.229.226.0/24',
+        log_prefix  => '[iptables] ',
+        log_level   => 7,
+        log_uid     => true;
+
+    '101 log outbound request on death (v6)':
+        provider    => 'ip6tables',
+        chain       => 'PUPPET-OUTPUT',
+        outiface    => '! lo',
+        jump        => 'LOG',
+        destination => '! 2607:f140:8801::/48',
+        log_prefix  => '[iptables] ',
+        log_level   => 7,
+        log_uid     => true;
+  }
+
   file {
     '/etc/exports':
       source  => 'puppet:///modules/ocf_www/exports',
@@ -17,6 +40,12 @@ class ocf_www::logging {
     '/var/log/apache2':
       mode    => '0755',
       require => Package['httpd'];
+
+    # Redirect iptables logs to different file
+    '/etc/rsyslog.d/iptables-log.conf':
+      source  => 'puppet:///modules/ocf_www/iptables-log.conf',
+      require => Package['rsyslog'],
+      notify  => Service['rsyslog'],
   }
 
   # logrotate config
