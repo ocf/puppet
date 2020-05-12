@@ -1,20 +1,18 @@
 class ocf_mirrors::projects::devuan {
   file {
-    '/opt/mirrors/project/devuan':
+    '/opt/mirrors/project/devuan-cd':
       ensure  => directory,
-      source  => 'puppet:///modules/ocf_mirrors/project/devuan',
+      source  => 'puppet:///modules/ocf_mirrors/project/devuan-cd',
       owner   => mirrors,
       group   => mirrors,
       mode    => '0755',
       recurse => true;
   }
 
-# Looks like devuan doesn't have a timestamp file, so omitted ocf_mirrors::monitoring
-
-  ocf_mirrors::timer { 'devuan':
-    exec_start => '/opt/mirrors/project/devuan/sync-archive',
+  ocf_mirrors::timer { 'devuan-cd':
+    exec_start => '/opt/mirrors/project/devuan-cd/sync-archive',
     hour       => '0/6',
     minute     => '57',
-    require    => File['/opt/mirrors/project/devuan'];
+    require    => File['/opt/mirrors/project/devuan-cd'];
   }
 }
