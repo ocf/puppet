@@ -15,7 +15,7 @@ class ocf_www::logging {
         outiface    => '! lo',
         jump        => 'LOG',
         destination => '! 169.229.226.0/24',
-        log_prefix  => '[iptables] ',
+        log_prefix  => '[iptables-outbound] ',
         log_level   => 7,
         log_uid     => true;
 
@@ -25,7 +25,7 @@ class ocf_www::logging {
         outiface    => '! lo',
         jump        => 'LOG',
         destination => '! 2607:f140:8801::/48',
-        log_prefix  => '[iptables] ',
+        log_prefix  => '[iptables-outbound] ',
         log_level   => 7,
         log_uid     => true;
   }
