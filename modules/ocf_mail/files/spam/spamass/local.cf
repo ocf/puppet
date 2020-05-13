@@ -48,10 +48,10 @@ score URIBL_SBL (2.0)
 
 ## whitelist
 # campus IST
-whitelist_from_rcvd abuse@berkeley.edu berkeley.edu
-whitelist_from_rcvd hostmaster@nic.berkeley.edu berkeley.edu
-whitelist_from_rcvd policy@berkeley.edu berkeley.edu
-whitelist_from_rcvd security@berkeley.edu berkeley.edu.
+whitelist_from_rcvd abuse@berkeley.edu berkeley.edu.?
+whitelist_from_rcvd hostmaster@nic.berkeley.edu berkeley.edu.?
+whitelist_from_rcvd policy@berkeley.edu berkeley.edu.?
+whitelist_from_rcvd security@berkeley.edu berkeley.edu.?
 
 # complaint feedback loop
 whitelist_from_rcvd scomp@aol.net aol.com
