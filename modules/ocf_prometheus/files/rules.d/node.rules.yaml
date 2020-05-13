@@ -4,7 +4,7 @@ groups:
   - name: node
     rules:
     - alert: DiskUsageTooHigh
-      expr: sum without (device)((node_filesystem_avail_bytes{fstype!~"tmpfs|.*sshfs|vfat", host_type!="staffvm", instance!~"hozer-\\d+"} / node_filesystem_size_bytes) * 100) > 95
+      expr: sum without (device)(100 - (node_filesystem_avail_bytes{fstype!~"tmpfs|.*sshfs|vfat", host_type!="staffvm", instance!~"hozer-\\d+"} / node_filesystem_size_bytes) * 100) > 95
       annotations:
         summary: "Disk usage on {{ $labels.instance }} {{ $labels.mountpoint }} is at {{ $value }}%"
 
