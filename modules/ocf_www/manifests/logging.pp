@@ -7,27 +7,23 @@ class ocf_www::logging {
     require => Package['nfs-kernel-server'],
   }
 
+  $ocf_ipv4_mask = lookup('ocf_ipv4_mask')
+  $ocf_ipv6_mask = lookup('ocf_ipv6_mask')
   # log outbound requests
   firewall_multi {
+    default:
+        chain      => 'PUPPET-OUTPUT',
+        outiface   => '! lo',
+        jump       => 'LOG',
+        log_prefix => '[iptables-outbound] ',
+        log_level  => 7,
+        log_uid    => true;
     '101 log outbound request on death (v4)':
         provider    => 'iptables',
-        chain       => 'PUPPET-OUTPUT',
-        outiface    => '! lo',
-        jump        => 'LOG',
-        destination => '! 169.229.226.0/24',
-        log_prefix  => '[iptables-outbound] ',
-        log_level   => 7,
-        log_uid     => true;
-
+        destination => "! ${ocf_ipv4_mask}";
     '101 log outbound request on death (v6)':
         provider    => 'ip6tables',
-        chain       => 'PUPPET-OUTPUT',
-        outiface    => '! lo',
-        jump        => 'LOG',
-        destination => '! 2607:f140:8801::/48',
-        log_prefix  => '[iptables-outbound] ',
-        log_level   => 7,
-        log_uid     => true;
+        destination => "! ${ocf_ipv6_mask}";
   }
 
   file {
@@ -59,6 +55,10 @@ class ocf_www::logging {
     ],
     require => Package['logrotate', 'httpd'],
     notify  => Exec['apache2-logrotate-once'],
+  }
+  file { '/etc/logrotate.d/iptables':
+    source  => 'puppet:///modules/ocf_www/iptables-logrotate',
+    require => Package['logrotate', 'rsyslog'],
   }
 
   # If we change the logrotate permissions, we should force a rotate once so
