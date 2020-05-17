@@ -1,8 +1,8 @@
 # Logrotate configuration for logging iptables
-/var/log/iptables-outbound.log {
-	weekly
+/var/log/iptables.log {
+	daily
 	missingok
-	rotate 5
+	rotate 30
 	compress
 	compresscmd gzip
 }

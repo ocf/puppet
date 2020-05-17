@@ -14,6 +14,7 @@ class ocf_www::logging {
     default:
         chain      => 'PUPPET-OUTPUT',
         outiface   => '! lo',
+        state      => ['NEW'],
         jump       => 'LOG',
         log_prefix => '[iptables-outbound] ',
         log_level  => 7,
