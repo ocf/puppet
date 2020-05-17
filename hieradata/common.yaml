@@ -29,8 +29,6 @@ internal_zone_exceptions:
     - dev-death
 
 # IPv4 and IPv6 src ranges for types of servers
-ocf_ipv4_mask: 169.229.226.0/24
-ocf_ipv6_mask: 2607:f140:8801::/48
 internal_zone_range_4: 169.229.226.3-169.229.226.90
 desktop_src_range_4: 169.229.226.100-169.229.226.139
 staffvm_src_range_4: 169.229.226.200-169.229.226.252
