@@ -95,6 +95,7 @@ class ocf::packages {
       'jq',
       'lsof',
       'man-db',
+      'molly-guard',
       'moreutils',
       'mtr',
       'ncdu',
