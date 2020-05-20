@@ -15,6 +15,7 @@ To test changes to this script, try a command like:
     echo hi | mail-munin-alert --mail-to <user>@ocf.berkeley.edu tsunami.ocf.berkeley.edu some-plugin some-metric 1
 """
 import argparse
+from ldap3.utils.conv import escape_filter_chars
 from sys import argv
 from sys import stdin
 from syslog import syslog
@@ -42,7 +43,9 @@ IGNORED_VALUES = {
 
 
 def send_alert(host, plugin, mail_to=MAIL_TO):
-    ldap_entry, = hosts.hosts_by_filter('(cn={})'.format(host.split('.')[0]))
+    ldap_entry, = hosts.hosts_by_filter(
+        '(cn={})'.format(escape_filter_chars(host.split('.')[0]))
+    )
 
     if ldap_entry['type'] == 'staffvm':
         # We don't alert on staff VMs because staff are hozers and it's just spam.
