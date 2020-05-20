@@ -4,5 +4,5 @@
 	missingok
 	rotate 30
 	compress
-	compresscmd gzip
+	compresscmd /bin/gzip
 }
