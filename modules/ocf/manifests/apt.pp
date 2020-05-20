@@ -112,5 +112,4 @@ class ocf::apt($stage = 'first') {
     '/etc/apt/apt.conf.d/02periodic':
       source  => 'puppet:///modules/ocf/apt/02periodic';
   }
-
 }
