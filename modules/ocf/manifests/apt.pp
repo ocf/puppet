@@ -1,5 +1,5 @@
 class ocf::apt($stage = 'first') {
-  package { ['aptitude', 'imvirt', 'apt-transport-https', 'lsb-release', 'ethtool']:; }
+  package { ['aptitude', 'imvirt', 'apt-transport-https', 'lsb-release', 'ethtool', 'unattended-upgrades']:; }
 
   class { '::apt':
     purge => {
@@ -104,10 +104,13 @@ class ocf::apt($stage = 'first') {
     source => 'https://apt.ocf.berkeley.edu/pubkey.gpg';
   }
 
-  # rt#4960: This cronjob was broken for several years and wasn't actually
-  # doing anything, so it's just been removed. Once this is gone off all hosts
-  # then this snippet can be removed too.
-  file { '/etc/cron.daily/ocf-apt':
-    ensure => 'absent',
+  # Configure automatic security upgrades
+  file {
+    '/etc/apt/apt.conf.d/50unattended-upgrades':
+      source  => 'puppet:///modules/ocf/apt/50unattended-upgrades';
+
+    '/etc/apt/apt.conf.d/02periodic':
+      source  => 'puppet:///modules/ocf/apt/02periodic';
   }
+
 }
