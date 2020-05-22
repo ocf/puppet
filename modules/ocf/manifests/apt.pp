@@ -1,5 +1,5 @@
 class ocf::apt($stage = 'first') {
-  package { ['aptitude', 'imvirt', 'apt-transport-https', 'lsb-release', 'ethtool']:; }
+  package { ['aptitude', 'imvirt', 'apt-transport-https', 'lsb-release', 'ethtool', 'unattended-upgrades']:; }
 
   class { '::apt':
     purge => {
@@ -104,4 +104,12 @@ class ocf::apt($stage = 'first') {
     source => 'https://apt.ocf.berkeley.edu/pubkey.gpg';
   }
 
+  # Configure automatic security upgrades
+  file {
+    '/etc/apt/apt.conf.d/50unattended-upgrades':
+      source  => 'puppet:///modules/ocf/apt/50unattended-upgrades';
+
+    '/etc/apt/apt.conf.d/02periodic':
+      source  => 'puppet:///modules/ocf/apt/02periodic';
+  }
 }
