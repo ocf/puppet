@@ -3,3 +3,4 @@ Unattended-Upgrade::Origins-Pattern {
 };
 
 Unattended-Upgrade::Mail "root";
+Unattended-Upgrade::MailOnlyOnError "true";
