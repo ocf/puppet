@@ -24,7 +24,7 @@ class ocf_kubernetes::master::loadbalancer {
     'mastodon',
     'matrix',
     'metabase',
-    'ocfstatic',
+    'new',
     'pma',
     'printlist',
     'rt',
