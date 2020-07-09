@@ -11,5 +11,5 @@ Environment="<%= env %>=<%= val %>"
 <% end -%>
 ExecStart=<%= @exec_start %>
 RuntimeMaxSec=10
-Restart=always
+Restart=on-failure
 RestartSec=5
