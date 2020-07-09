@@ -1,7 +1,5 @@
 [Unit]
 Description=Healthcheck service for <%= @title %>
-StartLimitInterval=70
-StartLimitBurst=5
 
 [Service]
 User=<%= @exec_user %>
@@ -11,5 +9,3 @@ Environment="<%= env %>=<%= val %>"
 <% end -%>
 ExecStart=<%= @exec_start %>
 RuntimeMaxSec=10
-Restart=always
-RestartSec=5
