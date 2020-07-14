@@ -1,5 +1,5 @@
 class ocf::packages::chrome {
-  include ocf::userns
+  include ocf::browser_sandbox
 
   $browser_homepage = lookup('browser_homepage')
 

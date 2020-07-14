@@ -1,4 +1,6 @@
 class ocf::packages::firefox {
+  include ocf::browser_sandbox
+
   $browser_homepage = lookup('browser_homepage')
 
   package { 'firefox-esr':; }
