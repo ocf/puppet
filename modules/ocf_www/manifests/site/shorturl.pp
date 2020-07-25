@@ -35,6 +35,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/decal(/.*)?$ https://decal.ocf.berkeley.edu$1 [R]'},
       {rewrite_rule => '^/decalform$ https://docs.google.com/forms/d/e/1FAIpQLSdM-fxPBzNtPA3RgzcxYLmZAo-pGCCS9fkLYdDZiNCbKjickw/viewform [R]'},
       {rewrite_rule => '^/desktopstats$ https://grafana.ocf.berkeley.edu/d/-VCUTE8Zk/desktops?orgId=1&refresh=10s [R]'},
+      {rewrite_rule => '^/discord$ https://discord.gg/mwhu5eh [R]'},
       {rewrite_rule => '^/docs(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
       {rewrite_rule => '^/donate$ https://give.berkeley.edu/egiving/index.cfm?fund=FU1450000&org=Open+Computing+Facility&amt=&fundlist=FU1450000 [R]'},
       {rewrite_rule => '^/email-update$ https://status.ocf.berkeley.edu/2014/06/email-discontinuation-update-forward.html [R]'},
