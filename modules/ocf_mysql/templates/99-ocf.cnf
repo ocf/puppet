@@ -29,10 +29,3 @@ innodb_buffer_pool_instances = 4
 # http://dev.mysql.com/doc/refman/5.6/en/innodb-parameters.html#sysvar_innodb_log_buffer_size
 innodb_log_buffer_size = 256M
 innodb_log_file_size = 1G
-
-# https://mariadb.com/kb/en/mariadb/xtradbinnodb-server-system-variables/#innodb_large_prefix
-# Enable new InnoDB file format features, namely large prefixes
-# These are defaults in MariaDB 10.2. but have to be enabled in 10.1 (i.e. stretch)
-innodb_file_format = 'Barracuda'
-innodb_file_format_check = 1
-innodb_large_prefix = 1
