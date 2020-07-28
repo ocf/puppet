@@ -13,10 +13,10 @@ class ocf::netlog {
         log_prefix => '[iptables-outbound] ',
         log_level  => 7,
         log_uid    => true;
-    '101 log outbound request on death (v4)':
+    "101 log outbound request on ${::hostname} (v4)":
         provider    => 'iptables',
         destination => "! ${ocf_ipv4_mask}";
-    '101 log outbound request on death (v6)':
+    "101 log outbound request on ${::hostname} (v6)":
         provider    => 'ip6tables',
         destination => "! ${ocf_ipv6_mask}";
   }
