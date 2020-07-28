@@ -1,9 +1,10 @@
 # A class that can be used to log outbound network requests
 class ocf::netlog {
+  package { ['logrotate']:; }
+
   $ocf_ipv4_mask = lookup('ocf_ipv4_mask')
   $ocf_ipv6_mask = lookup('ocf_ipv6_mask')
 
-  package { ['logrotate']:; }
   firewall_multi {
     default:
         chain      => 'PUPPET-OUTPUT',
@@ -26,12 +27,11 @@ class ocf::netlog {
     '/etc/rsyslog.d/iptables-log.conf':
       source  => 'puppet:///modules/ocf/netlog/iptables-log.conf',
       require => Package['rsyslog'],
-      notify  => Service['rsyslog'],
-  }
+      notify  => Service['rsyslog'];
 
-  file { '/etc/logrotate.d/iptables':
-    source  => 'puppet:///modules/ocf/netlog/iptables-logrotate',
-    require => Package['logrotate', 'rsyslog'],
+    '/etc/logrotate.d/iptables':
+      source  => 'puppet:///modules/ocf/netlog/iptables-logrotate',
+      require => Package['logrotate', 'rsyslog'],
   }
 
 }
