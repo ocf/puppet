@@ -31,7 +31,7 @@ class ocf_postgres {
         action => 'accept',
       };
   }
-  
+
   service { 'postgresql':
     ensure  => 'running',
     enable  => true,
