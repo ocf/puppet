@@ -31,10 +31,6 @@ class ocf_www::logging {
     require => Package['logrotate', 'httpd'],
     notify  => Exec['apache2-logrotate-once'],
   }
-  file { '/etc/logrotate.d/iptables':
-    source  => 'puppet:///modules/ocf_www/iptables-logrotate',
-    require => Package['logrotate', 'rsyslog'],
-  }
 
   # If we change the logrotate permissions, we should force a rotate once so
   # that the latest logs are readable.
