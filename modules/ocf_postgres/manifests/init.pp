@@ -32,12 +32,6 @@ class ocf_postgres {
       };
   }
 
-  service { 'postgresql':
-    ensure  => 'running',
-    enable  => true,
-    require => Class['postgresql::server'],
-  }
-
   Class['Ocf::Ssl::Default'] ~> Class['Postgresql::Server']
   Class['Ocf::Ssl::Default'] ~> Service['postgresql']
 
