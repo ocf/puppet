@@ -33,6 +33,7 @@ class ocf_postgres {
   }
 
   Class['Ocf::Ssl::Default'] ~> Class['Postgresql::Server']
+  Class['Ocf::Ssl::Default'] ~> Service['postgresql']
 
   file {
     # copies proper .pgpass file for ocfbackups to authenticate on backup
