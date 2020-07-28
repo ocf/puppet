@@ -1,6 +1,7 @@
 # Set up Apache log permissions and NFS exports so that users can see web logs
 # from the login server.
 class ocf_www::logging {
+  include ocf::netlog
   # NFS host and log permissions
   package { 'nfs-kernel-server':; }
   service { 'nfs-kernel-server':
@@ -20,7 +21,6 @@ class ocf_www::logging {
   }
 
   # logrotate config
-  package { 'logrotate':; }
   augeas { 'apache-logrotate':
     lens    => 'Logrotate.lns',
     incl    => '/etc/logrotate.d/apache2',
@@ -49,5 +49,4 @@ class ocf_www::logging {
   }
 
   include ocf::firewall::nfs
-  include ocf::netlog
 }

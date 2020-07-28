@@ -3,8 +3,7 @@ class ocf::netlog {
   $ocf_ipv4_mask = lookup('ocf_ipv4_mask')
   $ocf_ipv6_mask = lookup('ocf_ipv6_mask')
 
-  package { ['logrotate', 'rsyslog']:; }
-
+  package { ['logrotate']:; }
   firewall_multi {
     default:
         chain      => 'PUPPET-OUTPUT',
