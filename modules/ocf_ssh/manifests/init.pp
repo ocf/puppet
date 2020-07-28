@@ -3,6 +3,7 @@ class ocf_ssh {
   include ocf::extrapackages
   include ocf::hostkeys
   include ocf::limits
+  include ocf::netlog
   include ocf::firewall::allow_mosh
   include ocf::packages::cups
   include ocf::ssl::default
