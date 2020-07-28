@@ -113,9 +113,7 @@ pipeline {
       emailNotification()
     }
     always {
-      {
         ircNotification()
-      }
     }
   }
 }
