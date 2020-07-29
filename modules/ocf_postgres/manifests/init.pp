@@ -33,6 +33,8 @@ class ocf_postgres {
   }
 
   Class['Ocf::Ssl::Default'] ~> Class['Postgresql::Server']
+  # TODO: Delete the line below after upgrading to buster
+  # https://paquier.xyz/postgresql-2/postgres-10-ssl-reload/
   Class['Ocf::Ssl::Default'] ~> Service['postgresql']
 
   file {
