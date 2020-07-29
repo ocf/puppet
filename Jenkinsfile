@@ -56,16 +56,14 @@ pipeline {
             if (output.length() > 65536) {
               // Get the first 3 lines from the output and still include them
               // in the comment as a kind of summary
-              def summary = output.split('
-', 4)[0..2].join('
-')
+              def summary = output.split('\n', 4)[0..2].join('\n')
               def url = createGist('octocatalog-diff-results.md', output, env.BUILD_URL)
-              output = summary + '**WARNING: Output is too long for a comment, posted to a gist instead**: ' + url
+              output = summary + '\n**WARNING: Output is too long for a comment, posted to a gist instead**: ' + url
             }
 
             // Add a link to Jenkins in the comment so it's easy to get back to
             // the full build and it's clear which build a comment goes with
-            pullRequestComment = output + "[Jenkins](${env.BUILD_URL})"
+            pullRequestComment = output + "\n\n[Jenkins](${env.BUILD_URL})"
             pullRequest.comment(pullRequestComment)
 
             if (status != 0) {
