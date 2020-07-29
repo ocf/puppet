@@ -60,15 +60,12 @@ pipeline {
 ', 4)[0..2].join('
 ')
               def url = createGist('octocatalog-diff-results.md', output, env.BUILD_URL)
-              output = summary + '
-**WARNING: Output is too long for a comment, posted to a gist instead**: ' + url
+              output = summary + '**WARNING: Output is too long for a comment, posted to a gist instead**: ' + url
             }
 
             // Add a link to Jenkins in the comment so it's easy to get back to
             // the full build and it's clear which build a comment goes with
-            pullRequestComment = output + "
-
-[Jenkins](${env.BUILD_URL})"
+            pullRequestComment = output + "[Jenkins](${env.BUILD_URL})"
             pullRequest.comment(pullRequestComment)
 
             if (status != 0) {
