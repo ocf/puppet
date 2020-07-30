@@ -27,6 +27,7 @@ class ocf_kubernetes::master::loadbalancer {
     'new',
     'pma',
     'printlist',
+    'prometheus-kube',
     'rt',
     'sourcegraph',
     'static',
