@@ -112,14 +112,22 @@ class ocf_ldap {
         require => [Package['ldap-git-backup'],
                     Ocf::Privatefile['/root/.ssh/id_rsa']];
 
+      # This is to stop backups from sending emails every time a new IP is used
+      # See rt#4724 for more information
+      '/usr/local/sbin/generate_gh_known_hosts':
+        source => 'puppet:///modules/ocf_ldap/generate_gh_known_hosts',
+        mode   => '0755';
+
       '/root/.ssh':
         ensure => directory,
         mode   => '0700';
+    }
 
-      # This is to stop backups from sending emails every time a new IP is used
-      # See rt#4724 for more information
-      '/root/.ssh/known_hosts':
-        source => 'puppet:///modules/ocf_ldap/github_known_hosts';
+    ocf::exec_and_cron { 'generate_gh_known_hosts':
+      command      => '/usr/local/sbin/generate_gh_known_hosts > /root/.ssh/known_hosts',
+      creates      => '/root/.ssh/known_hosts',
+      cron_options => {special => daily},
+      require      => File['/root/.ssh'],
     }
 
     ocf::privatefile { '/root/.ssh/id_rsa':
