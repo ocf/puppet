@@ -2,9 +2,9 @@
 
 if [ -n "$USER" ]; then
   # Send user processes SIGTERM, then SIGKILL
-  pkill -u $USER
+  pkill -u "$USER"
   sleep 1
-  pkill -9 -u $USER
+  pkill -9 -u "$USER"
 fi
 
 sudo -u ocfstats /opt/stats/update-delay.sh cleanup &

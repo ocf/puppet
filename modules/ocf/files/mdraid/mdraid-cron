@@ -11,7 +11,7 @@ tmp=$(mktemp -p /var/lib mdraid.XXXXXXXXXX)
     echo '====== Array information: ======'
     mdadm --detail --scan |
             awk '{print $2}' |
-            while read device; do
+            while read -r device; do
         echo "=== Details for device '$device' ==="
 
         # Normalize the output a bit; some of these values change constantly,

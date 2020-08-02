@@ -64,29 +64,29 @@ for dist in "${dists[@]}"; do
 
         # Download and extract netboot image
         echo "Downloading netboot.tar.gz for $dist ($arch)..."
-        cd $tftpdir
+        cd "$tftpdir"
         wget -q -O netboot.tar.gz "$netboot"
-        mkdir -p $da_dir
-        tar -zxf netboot.tar.gz -C $da_dir
+        mkdir -p "$da_dir"
+        tar -zxf netboot.tar.gz -C "$da_dir"
 
         # Add non-free firmware to initrd if set
         if [ -n "$fw" ]; then
             echo "Downloading non-free firmware..."
-            cd $fwdir
+            cd "$fwdir"
             mkdir -p firmware
             wget -q "$fw"
-            cd $fwdir/firmware
+            cd "$fwdir/firmware"
             tar -zxf ../firmware.tar.gz
-            cd $fwdir
+            cd "$fwdir"
 
             echo "Adding non-free firmware to initrd..."
             pax -x sv4cpio -s'%firmware%/firmware%' -w firmware | gzip -c > firmware.cpio.gz
 
-            cd $tftpdir/$da_dir/debian-installer/$arch
+            cd "$tftpdir/$da_dir/debian-installer/$arch"
             [ -f initrd.gz.orig ] || cp -p initrd.gz initrd.gz.orig
-            cat initrd.gz.orig $fwdir/firmware.cpio.gz > initrd.gz
+            cat initrd.gz.orig "$fwdir/firmware.cpio.gz" > initrd.gz
 
-            rm -rf $fwdir
+            rm -rf "$fwdir"
         fi
 
         echo "Adding OCF preseed file into installer menu..."
@@ -101,12 +101,12 @@ for dist in "${dists[@]}"; do
                 menu label OCF Automated Install ($label)
                 menu default
                 kernel debian-installer/$arch/linux
-                append auto=true priority=critical locale=en_US keymap=us vga=788 initrd=debian-installer/$arch/initrd.gz url=tftp://dhcp/preseed/$dist -- quiet" > $txt_cfg
+                append auto=true priority=critical locale=en_US keymap=us vga=788 initrd=debian-installer/$arch/initrd.gz url=tftp://dhcp/preseed/$dist -- quiet" > "$txt_cfg"
         else
             echo "label ocf-$label
                 menu label OCF Automated Install ($label)
                 kernel $da_dir/debian-installer/$arch/linux
-                append auto=true priority=critical locale=en_US keymap=us vga=788 initrd=$da_dir/debian-installer/$arch/initrd.gz url=tftp://dhcp/preseed/$dist -- quiet" >> $txt_cfg
+                append auto=true priority=critical locale=en_US keymap=us vga=788 initrd=$da_dir/debian-installer/$arch/initrd.gz url=tftp://dhcp/preseed/$dist -- quiet" >> "$txt_cfg"
         fi
     done
 done
@@ -127,7 +127,7 @@ echo "label dban
     menu label Darik's Boot and Nuke
     kernel dban/DBAN.BZI
     append load_ramdisk=1 root=/dev/ram0 nuke=\"dwipe --autonuke --method zero\"" \
->> $txt_cfg
+>> "$txt_cfg"
 
 
 # Download Memtest86+, add to menu
@@ -141,7 +141,7 @@ gunzip -c memtest/memtest.bin.gz > memtest/memtest
 echo "label memtest
     menu label Memtest86+
     kernel memtest/memtest" \
->> $txt_cfg
+>> "$txt_cfg"
 
 
 # Extract and add Finnix to menu
@@ -153,12 +153,12 @@ echo "label finnix
     menu label Finnix (requires 768 MB RAM)
     kernel finnix/boot/x86/linux64
     append initrd=finnix/boot/x86/initrd_net.xz vga=791 nomodeset" \
->> $txt_cfg
+>> "$txt_cfg"
 
 
 # Clean up
 echo "Cleaning up..."
-rm $tftpdir/netboot.tar.gz
+rm "$tftpdir/netboot.tar.gz"
 rm dban.iso
 rm memtest/memtest.bin.gz
 
