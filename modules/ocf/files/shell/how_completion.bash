@@ -1,3 +1,5 @@
+#!/bin/bash
+
 _how () {
     COMPREPLY=()
 

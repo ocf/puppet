@@ -20,10 +20,10 @@ IGNOREOUT='^(file has vanished: |rsync warning: some files vanished before they 
 
 set -o pipefail
 
-(rsync "${@}" 3>&2 2>&1 1>&3 | (egrep -v "$IGNOREOUT" || true)) 3>&2 2>&1 1>&3
+(rsync "${@}" 3>&2 2>&1 1>&3 | (grep -vE "$IGNOREOUT" || true)) 3>&2 2>&1 1>&3
 ret=$?
 
-if [[ $ret == $IGNOREEXIT ]]; then
+if [[ "$ret" == "$IGNOREEXIT" ]]; then
     ret=0
 fi
 

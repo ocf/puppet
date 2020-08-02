@@ -9,6 +9,7 @@ icon=/opt/share/xsession/images/ocf-color-256.png
 [[ -p "$pipe" ]] && rm -f "$pipe"
 mkfifo "$pipe"
 
+# shellcheck disable=SC2024
 sudo -u ocfbroker /opt/share/puppet/print-notify-handler > "$pipe" &
 
 # listener
@@ -17,7 +18,7 @@ while true; do
     if [[ ! -p "$pipe" ]]; then
         break
     fi
-    if read -u 3 msg < "$pipe"; then
+    if read -r -u 3 msg < "$pipe"; then
 	    notify-send -i "$icon" "Print Job Status" "$msg"
     fi
 done

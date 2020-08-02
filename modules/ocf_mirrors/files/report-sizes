@@ -4,8 +4,7 @@
 set -euo pipefail
 
 {
-    cd /opt/mirrors/ftp
-    find -mindepth 1 -maxdepth 1 -type d |
+    find /opt/mirrors/ftp -mindepth 1 -maxdepth 1 -type d |
         sort |
         cut -d/ -f2 |
         grep -vE '^\.' |

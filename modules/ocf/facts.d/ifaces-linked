@@ -5,13 +5,12 @@ set -euo pipefail
 # that looks like a ethernet-like interface
 
 active_ifaces=()
-ifaces=$(ls /sys/class/net/ | grep ^en)
 
 # Only do this check if ethtool is actually installed
 if [ -f /sbin/ethtool ]; then
-    for iface in $ifaces; do
-        if /sbin/ethtool $iface | grep -q "Link detected: yes"; then
-            active_ifaces+=($iface)
+    for iface in /sys/class/net/en*; do
+        if /sbin/ethtool "$iface" | grep -q "Link detected: yes"; then
+            active_ifaces+=("$iface")
         fi
     done
 fi
@@ -19,8 +18,8 @@ fi
 # If no interface has been found that looks suitable, fall back to a sensible
 # default (the first ethernet-like interface on the system)
 
-if [ "${#active_ifaces[@]}" -ne 0 ]; then
-    echo "ifaces_linked=${active_ifaces[@]}"
+if [ "${#active_ifaces[*]}" -ne 0 ]; then
+    echo "ifaces_linked=${active_ifaces[*]}"
 else
     echo "ifaces_linked=${active_ifaces[0]}"
 fi
