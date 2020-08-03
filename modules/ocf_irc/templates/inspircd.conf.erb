@@ -106,9 +106,6 @@
       vhost="ocf.gods"
       override="KICK MODEOP MODEDEOP MODEVOICE MODEDEVOICE MODEHALFOP MODEDEHALFOP OTHERMODE">
 
-<type name="ReloadCert" classes="Shutdown">
-
-
 # Store oper credentials in mysql
 #<database module="mysql"
 #          name="ocfirc"
@@ -128,13 +125,6 @@
 
 <files motd="/etc/inspircd/inspircd.motd"
        rules="/etc/inspircd/inspircd.rules">
-
-
-# Automated user for reloading certs
-<oper name="ocf-cert-reload"
-      password="<%= @irc_creds['cert_reload_password'] -%>"
-      host="*@localhost *@<%= @fqdn -%>"
-      type="ReloadCert">
 
 # Allow both regular users and opers to join up to 200 channels
 <channels users="200" opers="200">
