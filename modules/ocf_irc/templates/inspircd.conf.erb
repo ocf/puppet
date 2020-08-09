@@ -126,6 +126,12 @@
 <files motd="/etc/inspircd/inspircd.motd"
        rules="/etc/inspircd/inspircd.rules">
 
+# OCF Admin user
+<oper name="ocf-admin"
+       password="<%= @irc_creds['admin_password'] -%>"
+       host="*@localhost *@127.0.0.1 *@<%= @fqdn -%>"
+       type="NetAdmin">
+
 # Allow both regular users and opers to join up to 200 channels
 <channels users="200" opers="200">
 
