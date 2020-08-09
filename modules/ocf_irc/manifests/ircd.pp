@@ -10,11 +10,11 @@ class ocf_irc::ircd {
     subscribe => Ocf::Ssl::Bundle[$::fqdn],
   } ->
   cron { 'reload-irc-cert':
-    command => 'chronic /usr/local/bin/reload-ssl.sh',
+    command => 'chronic systemctl kill inspircd.service --signal=SIGUSR1',
     hour    => 0,
     minute  => 0,
     weekday => 0,
-    user    => 'irc',
+    user    => 'root',
   }
 
   $irc_creds = lookup('irc_creds')
