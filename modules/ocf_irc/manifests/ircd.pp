@@ -48,10 +48,6 @@ class ocf_irc::ircd {
 
     '/etc/inspircd/inspircd.motd':
       source  => 'puppet:///modules/ocf_irc/ircd.motd';
-
-    '/usr/local/bin/reload-ssl.sh':
-      source => 'puppet:///modules/ocf_irc/reload-ssl.sh',
-      mode   => '0755';
   }
 
   ocf::systemd::override { 'inspircd-group-restart':
