@@ -25,6 +25,7 @@ class ocf_kubernetes::master::loadbalancer {
     'matrix',
     'metabase',
     'new',
+    'notes',
     'pma',
     'printlist',
     'prometheus-kube',
