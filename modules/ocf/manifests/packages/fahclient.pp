@@ -17,8 +17,8 @@ class ocf::packages::fahclient {
 
   service {
     'FAHClient':
-      enable  => false,
       ensure  => 'stopped',
+      enable  => false,
       require => Package['fahclient'];
   }
 }
