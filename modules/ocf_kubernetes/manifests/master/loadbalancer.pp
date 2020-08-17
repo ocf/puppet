@@ -8,7 +8,7 @@ class ocf_kubernetes::master::loadbalancer {
 
   $kubernetes_services = [
     'auth',
-    'badgr',
+    'badges',
     'badgr-api',
     'chat',
     'cruisecontrol',
