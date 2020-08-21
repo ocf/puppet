@@ -34,6 +34,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/d/([0-9]+)$ https://discourse.ocf.berkeley.edu/t/$1 [R]'},
       {rewrite_rule => '^/decal(/.*)?$ https://decal.ocf.berkeley.edu$1 [R]'},
       {rewrite_rule => '^/decalform$ https://docs.google.com/forms/d/e/1FAIpQLSdM-fxPBzNtPA3RgzcxYLmZAo-pGCCS9fkLYdDZiNCbKjickw/viewform [R]'},
+      {rewrite_rule => '^/decalzoom$ https://berkeley.zoom.us/j/94285257750?pwd=OGx1TUlKWmNrQnNwdkxwRTlSL2VTUT09 [R]'},
       {rewrite_rule => '^/desktopstats$ https://grafana.ocf.berkeley.edu/d/-VCUTE8Zk/desktops?orgId=1&refresh=10s [R]'},
       {rewrite_rule => '^/discord$ https://discord.gg/mwhu5eh [R]'},
       {rewrite_rule => '^/docs(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
