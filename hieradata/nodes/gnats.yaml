@@ -1,5 +1,0 @@
-classes:
-    - ocf::packages::docker
-    - ocf::ssl::default
-
-owner: kpengboy
