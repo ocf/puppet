@@ -10,11 +10,11 @@ class ocf_irc::ircd {
     subscribe => Ocf::Ssl::Bundle[$::fqdn],
   } ->
   cron { 'reload-irc-cert':
-    command => 'chronic /usr/local/bin/reload-ssl.sh /etc/inspircd/reload_pass',
+    command => 'chronic systemctl kill inspircd.service --signal=SIGUSR1',
     hour    => 0,
     minute  => 0,
     weekday => 0,
-    user    => 'irc',
+    user    => 'root',
   }
 
   $irc_creds = lookup('irc_creds')
@@ -48,15 +48,6 @@ class ocf_irc::ircd {
 
     '/etc/inspircd/inspircd.motd':
       source  => 'puppet:///modules/ocf_irc/ircd.motd';
-
-    '/usr/local/bin/reload-ssl.sh':
-      source => 'puppet:///modules/ocf_irc/reload-ssl.sh',
-      mode   => '0755';
-
-    '/etc/inspircd/reload_pass':
-      content   => $irc_creds['cert_reload_password'],
-      mode      => '0640',
-      show_diff => false;
   }
 
   ocf::systemd::override { 'inspircd-group-restart':
