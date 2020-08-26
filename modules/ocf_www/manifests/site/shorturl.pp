@@ -56,6 +56,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/get(ing)?involved$ https://www.ocf.berkeley.edu/docs/staff/getinvolved/ [R]'},
       {rewrite_rule => '^/gcal/ocf$ https://calendar.google.com/calendar/embed?src=ocf.berkeley.edu_bcl2puplt6t9e9e9njme6jqca8@group.calendar.google.com&ctz=America/Los_Angeles [R]'},
       {rewrite_rule => '^/gcal/officers$ https://calendar.google.com/calendar/embed?src=ocf.berkeley.edu_3e56a1lm5gnd91vf1r7fafi7u4@group.calendar.google.com&ctz=America/Los_Angeles [R]'},
+      {rewrite_rule => '^/gettoknow$ https://forms.gle/i3M1XXsFmwwy633h9 [R]'},
       {rewrite_rule => '^/gmail$ https://mail.google.com/a/ocf.berkeley.edu [R]'},
       {rewrite_rule => '^/gdrive$ https://drive.google.com/a/ocf.berkeley.edu [R]'},
       {rewrite_rule => '^/gdrive/staff$ https://drive.google.com/drive/folders/0AKXh7iBur_mbUk9PVA [R]'},
