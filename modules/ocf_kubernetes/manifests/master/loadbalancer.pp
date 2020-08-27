@@ -23,6 +23,7 @@ class ocf_kubernetes::master::loadbalancer {
     'kube',
     'kubeadmin',
     'labmap',
+    'lambda',
     'mastodon',
     'matrix',
     'metabase',
