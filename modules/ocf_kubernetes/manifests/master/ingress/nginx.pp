@@ -3,7 +3,7 @@ class ocf_kubernetes::master::ingress::nginx {
   $kubernetes_worker_nodes = lookup('kubernetes::worker_nodes')
   $kubernetes_workers_ipv4 = $kubernetes_worker_nodes.map |$worker| { ldap_attr($worker, 'ipHostNumber') }
   $nginx_version = lookup('kubernetes::nginx_version')
-  $ingress_nginx_url = "https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-${nginx_version}/deploy/mandatory.yaml"
+  $ingress_nginx_url = "https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v${nginx_version}/deploy/static/provider/baremetal/deploy.yaml"
 
   file {
     default:

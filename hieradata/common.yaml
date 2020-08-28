@@ -47,10 +47,10 @@ apache::default_vhost: false
 apache::server_tokens: Minor
 
 # Kubernetes config
-kubernetes::kubernetes_version: 1.15.6
-kubernetes::kubernetes_package_version: 1.15.6-00
-kubernetes::docker_version: 18.06.2~ce~3-0~debian # 18.06.02 is the highest supported version to work with kubernetes
-kubernetes::etcd_version: 3.3.10
+kubernetes::kubernetes_version: 1.16.14
+kubernetes::kubernetes_package_version: 1.16.14-00
+kubernetes::docker_version: 18.06.3~ce~3-0~debian # make sure to verify this with the kubernetes release notes
+kubernetes::etcd_version: 3.3.15
 kubernetes::container_runtime: docker
 # This is the file used to bootstrap flannel, which facilitates cluster networking.
 # It is one of the first things deployed by the master via kubectl create.
@@ -69,7 +69,7 @@ kubernetes::kube_api_advertise_address: "%{::ipaddress}"
 kubernetes::api_server_count: 3
 kubernetes::install_dashboard: false
 kubernetes::controller_address: 169.229.226.75:6443
-kubernetes::nginx_version: '0.21.0'
+kubernetes::nginx_version: '0.34.1'
 kubernetes::worker_nodes:
     - pandemic
     - riptide
