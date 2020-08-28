@@ -69,7 +69,7 @@ kubernetes::kube_api_advertise_address: "%{::ipaddress}"
 kubernetes::api_server_count: 3
 kubernetes::install_dashboard: false
 kubernetes::controller_address: 169.229.226.75:6443
-kubernetes::nginx_version: '0.21.0'
+kubernetes::nginx_version: '0.34.1'
 kubernetes::worker_nodes:
     - pandemic
     - riptide
