@@ -4,7 +4,7 @@ class ocf::packages::helm {
   # repository we will have to download the binary manually.
   $install_path        = '/usr/bin'
   $package_name        = 'helm'
-  $package_ensure      = '3.0.3'
+  $package_ensure      = '3.3.0'
   $repository_url      = 'https://get.helm.sh'
   $archive_name        = "${package_name}-v${package_ensure}-linux-amd64.tar.gz"
   $package_source      = "${repository_url}/${archive_name}"
