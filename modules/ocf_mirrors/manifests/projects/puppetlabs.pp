@@ -2,7 +2,6 @@ class ocf_mirrors::projects::puppetlabs {
   ocf_mirrors::ftpsync { 'puppetlabs':
     rsync_host  => 'rsync.puppet.com',
     rsync_path  => 'packages/apt',
-    rsync_extra => '--exclude=work*',
     cron_minute => '55',
   }
 
