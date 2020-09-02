@@ -71,21 +71,6 @@ class ocf_kubernetes::master {
       subscribe => File['/etc/ocf-kubernetes/manifests/rbac.yaml'];
   }
 
-  # Kubernetes webui configuration
-  # The webui needs to live in the kube-system namespace so it cannot be
-  # declared in the kube-webui repository
-
-  file {
-    '/etc/ocf-kubernetes/manifests/webui.yaml':
-      source => 'puppet:///modules/ocf_kubernetes/webui.yaml',
-  }
-
-  ocf_kubernetes::apply {
-    'webui':
-      target    => '/etc/ocf-kubernetes/manifests/webui.yaml',
-      subscribe => File['/etc/ocf-kubernetes/manifests/webui.yaml'],
-  }
-
   # These are needed because puppetlabs-kubernetes sets the permissions to 600
   # but the certsign script, running under kubernetes-ca, needs to access them
 
