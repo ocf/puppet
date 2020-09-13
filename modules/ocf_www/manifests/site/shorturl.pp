@@ -85,6 +85,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/mailrequest$ https://www.ocf.berkeley.edu/account/vhost/mail/ [R]'},
       {rewrite_rule => '^/mastodon$ https://mastodon.ocf.berkeley.edu [R]'},
       {rewrite_rule => '^/matrix$ https://chat.ocf.berkeley.edu [R]'},
+      {rewrite_rule => '^/meet$ https://meet.google.com/cqz-kjwj-hbx [R]'},
       {rewrite_rule => '^/minutes(/.*)?$ https://www.ocf.berkeley.edu/~staff/bod$1 [R]'},
       {rewrite_rule => '^/mirrorstats$ https://grafana.ocf.berkeley.edu/d/Jo_bRsyiz/mirrors?orgId=1 [R]'},
       {rewrite_rule => '^/mlk$ https://www.ocf.berkeley.edu/mlk [R]'},
