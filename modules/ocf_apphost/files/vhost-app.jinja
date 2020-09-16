@@ -25,6 +25,16 @@ server {
         {% endif %}
     }
 
+    {% for ws_location in vhost.websocket_locations %}
+    location /{{ws_location}} {
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "Upgrade";
+            proxy_set_header Host $host;
+            proxy_pass http://unix:{{vhost.socket}};
+    }
+    {% endfor %}
+
     access_log /var/log/nginx/vhost_access.log vhost;
 
     {% if vhost.ssl %}
