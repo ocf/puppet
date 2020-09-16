@@ -2,6 +2,7 @@
 import argparse
 import grp
 import os.path
+import re
 import shutil
 import subprocess
 import sys
@@ -76,6 +77,7 @@ class VirtualHost(namedtuple('VirtualHost', (
         'ssl',
         'bind_type',
         'bind_dest',
+        'additional_rules',
 ))):
     """A logical representation of a virtual host directive in one of
     the webserver configs.
@@ -91,6 +93,11 @@ class VirtualHost(namedtuple('VirtualHost', (
     bind_type can be any of 'socket', 'docroot', or 'redirect'.
     bind_dest is then respectively the user socket name, the website
     root directory relative to public_html, or URL to redirect to.
+
+    additional_rules should be a dictionary of
+    additional rules that you'll have to add logic to handle in this
+    class. Currently the only supported one is 'ws', which is meant
+    to add an additional WebSockets path for socket-based app vhosts.
     """
     @property
     def contact_email(self):
@@ -133,6 +140,13 @@ class VirtualHost(namedtuple('VirtualHost', (
         assert self.is_redirect
         return self.bind_dest
 
+    @property
+    def websocket_locations(self):
+        if self.bind_type == 'socket' and 'ws' in self.additional_rules:
+            return self.additional_rules['ws']
+        else:
+            return []
+
     def dev_alias(self, dev_config=False):
         return '{}.{}.ocf.berkeley.edu'.format(
             self.fqdn.replace('.', '-'),
@@ -147,7 +161,7 @@ def report(*args, **kwargs):
 
 
 def build_config(src_vhosts, template, dev_config=False):
-    vhosts = set()
+    vhosts = list()
 
     for domain, vhost in src_vhosts.items():
         user = vhost['username']
@@ -161,6 +175,13 @@ def build_config(src_vhosts, template, dev_config=False):
             bind_type = 'docroot'
         bind_dest = vhost[bind_type]
 
+        # Match and process supported flags
+        additional_rules = {}
+        for flag in vhost['flags']:
+            ws_match = re.match(r'ws\=(.+)', flag)
+            if ws_match:
+                additional_rules.setdefault('ws', []).append(ws_match.group(1))
+
         # primary vhost
         primary = VirtualHost(
             fqdn=domain,
@@ -169,33 +190,36 @@ def build_config(src_vhosts, template, dev_config=False):
             ssl=ssl,
             bind_type=bind_type,
             bind_dest=bind_dest,
+            additional_rules=additional_rules,
         )
         # Only add the full vhost if SSL is valid (redirects, like HTTP ->
         # HTTPS are added regardless)
         #
         # We used to support non-HTTPS vhosts, but no longer do (rt#5347)
         if ssl.is_valid:
-            vhosts.add(primary)
+            vhosts.append(primary)
 
         # for app vhosts, define a dev vhost as well
         if bind_type == 'socket':
             dev_alias = primary.dev_alias(dev_config)
-            vhosts.add(VirtualHost(
+            vhosts.append(VirtualHost(
                 fqdn=dev_alias,
                 user=user,
                 comment='{} (dev alias of {})'.format(dev_alias, domain),
                 ssl=SystemSSL(getfqdn()),
                 bind_type='socket',
                 bind_dest=vhost['socket'],
+                additional_rules=additional_rules,
             ))
 
-            vhosts.add(VirtualHost(
+            vhosts.append(VirtualHost(
                 fqdn=dev_alias,
                 user=user,
                 comment='{} (dev alias of {}, redirect to HTTPS)'.format(dev_alias, domain),
                 ssl=None,
                 bind_type='redirect',
                 bind_dest='https://' + dev_alias,
+                additional_rules={},
             ))
 
         # Redirect from http://{domain} to https://{domain} for all vhosts
@@ -211,13 +235,14 @@ def build_config(src_vhosts, template, dev_config=False):
                 redirects.add((alias, ssl))
 
         for fqdn, ssl in redirects:
-            vhosts.add(VirtualHost(
+            vhosts.append(VirtualHost(
                 fqdn=fqdn,
                 user=user,
                 comment='{} (redirect to {})'.format(fqdn, primary.fqdn),
                 ssl=ssl,
                 bind_type='redirect',
                 bind_dest=primary.canonical_url,
+                additional_rules={},
             ))
 
     return '\n\n'.join(
