@@ -1,4 +1,6 @@
 class ocf::firewall::chains {
+  require ocf::firewall::use_legacy
+
   # We put all puppet input/output firewall rules in dedicated chains managed
   # by puppet. This way, puppet will automatically purge rules which get
   # deleted from the manifest.
