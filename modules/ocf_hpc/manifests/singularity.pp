@@ -1,7 +1,7 @@
 class ocf_hpc::singularity {
 
   ocf::repackage { 'singularity-container':
-    backport_on => ['stretch'],
+    backport_on => ['buster'],
   }
 
   file { '/etc/singularity/singularity.conf':
