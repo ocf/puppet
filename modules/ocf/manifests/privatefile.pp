@@ -24,6 +24,7 @@ define ocf::privatefile(
   Boolean $force = false,
   Boolean $purge = false,
   Boolean $recurse = false,
+  Boolean $immutable = false,
   Enum['file', 'directory'] $ensure = 'file',
 ) {
   if $source and $content_path {
@@ -58,5 +59,19 @@ define ocf::privatefile(
     backup    => false,
     show_diff => false,
     *         => $file_opts,
+  }
+
+  if $immutable {
+    exec { 'chattr -immutable':
+      before      => File[$title],
+      command     => 'chattr -i $title',
+      refreshonly => true,
+    }
+
+    exec { 'chattr +immutable':
+      subscribe   => File[$title],
+      command     => 'chattr +i $title',
+      refreshonly => true,
+    }
   }
 }

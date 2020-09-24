@@ -29,9 +29,10 @@ class ocf_admin {
   $ocfprinting_mysql_password = lookup('ocfprinting::mysql::password')
   ocf::privatefile {
     '/opt/passwords':
-      source => 'puppet:///private/passwords',
-      group  => ocfroot,
-      mode   => '0640';
+      source    => 'puppet:///private/passwords',
+      group     => ocfroot,
+      mode      => '0640',
+      immutable => true;
   }
 
   file {
