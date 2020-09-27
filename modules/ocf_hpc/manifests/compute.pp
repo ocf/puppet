@@ -5,7 +5,7 @@ class ocf_hpc::compute {
   include ocf::firewall::allow_ssh
 
   include ocf_hpc::singularity
-  
+
   # install extra hpc packages
   package { ['libosmesa6-dev', 'xvfb']:; }
 
