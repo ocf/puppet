@@ -91,6 +91,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/mlk$ https://www.ocf.berkeley.edu/mlk [R]'},
       {rewrite_rule => '^/(mon|munin)$ https://munin.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/mysql$ https://www.ocf.berkeley.edu/docs/services/mysql/ [R]'},
+      {rewrite_rule => '^/notes$ https://notes.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/officers$ https://www.ocf.berkeley.edu/docs/about/officers/ [R]'},
       {rewrite_rule => '^/opstaff-schedule$ https://docs.google.com/spreadsheets/d/185MB6nxajC1SsTXWW3lsgSXESomYdW_6pbUiEEFjisU/edit?usp=sharing [R]'},
       {rewrite_rule => '^/os$ https://docs.google.com/spreadsheets/d/1V4qYWOjQiafE_Xr-4X4nCUI1Sux5yJQNqHgzLV8j76I/edit [R]'},
