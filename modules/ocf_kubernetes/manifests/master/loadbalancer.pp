@@ -12,6 +12,7 @@ class ocf_kubernetes::master::loadbalancer {
     'badgr-api',
     'chat',
     'cruisecontrol',
+    'discord',
     'fava',
     'grafana',
     'help',
