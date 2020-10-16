@@ -217,6 +217,7 @@ class ocf::extrapackages {
     'unison',
     'vagrant',
     'valgrind',
+    'virtualenv',
     'weechat',
     'xvnc4viewer',
     'zlib1g-dev',
