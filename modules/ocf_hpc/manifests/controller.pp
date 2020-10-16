@@ -1,6 +1,7 @@
 class ocf_hpc::controller {
   require ocf_hpc
 
+  include ocf::extrapackages
   include ocf::firewall::allow_ssh
   include ocf_hpc::singularity
 
