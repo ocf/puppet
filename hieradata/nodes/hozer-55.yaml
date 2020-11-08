@@ -1,3 +1,3 @@
 owner: berkeleytime
-classes:
-    - ocf_staffvm
+ocf::auth::usudo:
+    - berkeleytime
