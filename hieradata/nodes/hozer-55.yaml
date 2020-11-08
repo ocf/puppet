@@ -1,2 +1,1 @@
-ocf::auth::usudo:
-  - berkeleytime
+owner: berkeleytime
