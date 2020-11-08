@@ -1,1 +1,3 @@
 owner: berkeleytime
+classes:
+    - ocf_staffvm
