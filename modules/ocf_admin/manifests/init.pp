@@ -9,6 +9,7 @@ class ocf_admin {
 
   include ocf_admin::apt_dater
   include ocf_admin::create
+  include ocf_admin::easyfilters
 
   class { 'ocf::nfs':
     cron => true,
