@@ -7,7 +7,7 @@ class ocf::packages::powershell::apt {
   if $::lsbdistcodename == 'buster' {
     apt::source { 'powershell':
       architecture => 'amd64',
-      location     => '[arch=amd64,arm64,armhf] https://packages.microsoft.com/debian/10/prod',
+      location     => 'https://packages.microsoft.com/debian/10/prod',
       release      => 'buster',
       repos        => 'main',
       require      => Apt::Key['powershell repo key'],
@@ -15,7 +15,7 @@ class ocf::packages::powershell::apt {
   } else {
     apt::source { 'powershell':
       architecture => 'amd64',
-      location     => '[arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-stretch-prod',
+      location     => 'https://packages.microsoft.com/repos/microsoft-debian-stretch-prod',
       release      => 'stretch',
       repos        => 'main',
       require      => Apt::Key['powershell repo key'],
