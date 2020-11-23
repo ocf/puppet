@@ -11,7 +11,6 @@ class ocf::packages {
   include ocf::packages::git
   include ocf::packages::grub
   include ocf::packages::helm
-  include ocf::packages::powershell
   include ocf::packages::ldapvi
   include ocf::packages::ntp
   include ocf::packages::postfix
