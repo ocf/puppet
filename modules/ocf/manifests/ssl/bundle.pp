@@ -11,11 +11,12 @@ define ocf::ssl::bundle(
     group   => $group,
   }
 
-  $intermediate_source = 'puppet:///modules/ocf/ssl/lets-encrypt.crt'
   $cert_path = "/var/lib/lets-encrypt/certs/${title}/cert.pem"
   $key_path = "/var/lib/lets-encrypt/certs/${title}/privkey.pem"
-  $cert_source = "file://${cert_path}"
+  $chain_path = "/var/lib/lets-encrypt/certs/${title}/chain.pem"
+  $fullchain_path = "/var/lib/lets-encrypt/certs/${title}/fullchain.pem"
   $key_source = "file://${key_path}"
+  $bundle_source = "file://${fullchain_path}"
 
   file {
     default:
@@ -40,12 +41,17 @@ define ocf::ssl::bundle(
       mode   => '0644';
 
     "/etc/ssl/private/${title}.intermediate":
-      source => $intermediate_source,
+      ensure => symlink,
+      links  => manage,
+      target => $chain_path,
+      mode   => '0644';
+
+    "/etc/ssl/private/${title}.bundle":
+      ensure => symlink,
+      links  => manage,
+      target => $fullchain_path,
       mode   => '0644';
   }
-
-  # ssl bundle (cert + intermediates)
-  $bundle = "/etc/ssl/private/${title}.bundle"
 
   # pem certificate (private key + cert + intermediates)
   $pem = "/etc/ssl/private/${title}.pem"
@@ -62,39 +68,19 @@ define ocf::ssl::bundle(
         File["/etc/ssl/private/${title}.intermediate"],
       ];
 
-    $bundle:
-      mode  => '0644';
-
     $pem:
       mode  => '0640';
   }
 
   concat::fragment {
-    # bundle
-    "${title}-bundle-cert":
-      target => $bundle,
-      source => $cert_source,
-      order  => '0';
-
-    "${title}-bundle-intermediate":
-      target => $bundle,
-      source => $intermediate_source,
+    "${title}-pem-bundle":
+      target => $pem,
+      source => $bundle_source,
       order  => '1';
 
-    # pem
     "${title}-pem-key":
       target => $pem,
       source => $key_source,
       order  => '0';
-
-    "${title}-pem-cert":
-      target => $pem,
-      source => $cert_source,
-      order  => '1';
-
-    "${title}-pem-intermediate":
-      target => $pem,
-      source => $intermediate_source,
-      order  => '2';
   }
 }
