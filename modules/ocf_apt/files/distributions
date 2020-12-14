@@ -23,3 +23,14 @@ Codename: buster-backports
 Architectures: amd64 i386 source
 Components: main
 SignWith: D72A0AF4
+
+# The year is 20XX, 32-bit machines no longer exist.
+Codename: bullseye
+Architectures: amd64 source
+Components: main
+SignWith: D72A0AF4
+
+Codename: bullseye-backports
+Architectures: amd64 source
+Components: main
+SignWith: D72A0AF4
