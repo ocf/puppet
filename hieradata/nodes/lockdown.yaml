@@ -1,0 +1,2 @@
+ocf::networking::bridge: true
+ocf::networking::bond: true
