@@ -23,7 +23,7 @@
 # configure the four containers.
 
 class ocf_kube::controller {
-  $is_prod = $::hostname in lookup('kube:controller_nodes')
+  $is_prod = $::hostname in lookup('kube::controller_nodes')
   $is_dev = $::hostname in lookup('kube_dev::controller_nodes')
 
   if $is_prod and $is_dev {
@@ -37,15 +37,36 @@ class ocf_kube::controller {
   # Namespace for hiera variables
   $kube_prefix = if $is_dev { 'kube_dev' } else { 'kube' }
 
-  # (host, IP) pairs for etcd configuration
-  $etcd_initial_cluster = lookup("${kube_prefix}::controller_nodes").map |$node| {
-    [$node, ldap_attr($node, 'ipHostNumber')]
-  }
-
   # Versions!
   $kube_version = lookup("${kube_prefix}::kubernetes_version")
   $kube_package_version = lookup("${kube_prefix}::kubernetes_version")
   $etcd_version = lookup("${kube_prefix}::etcd_version")
+
+  # If we are the first controller on the hiera list, we start a new etcd cluster.
+  # Otherwise, we tell it to join the existing cluster.
+  # We configure the initial cluster as the set of members appearing before us in the
+  # hiera list.
+
+  # initial cluster members
+  $initial_cluster_hosts = lookup("${kube_prefix}::controller_nodes").reduce([]) |$acc, $node| {
+    (($acc != []) and $acc[-1] == $::hostname) ? {
+      # If we are on the list, stop adding nodes
+      true  => $acc,
+      # Otherwise, add the next node, and recurse
+      false => $acc.concat($node),
+    }
+  }
+
+  # (host, IP) pairs of initial cluster
+  $initial_cluster = $initial_cluster_hosts.map |$node| {
+    [$node, ldap_attr($node, 'ipHostNumber')]
+  }
+
+  $initial_cluster_state = if $initial_cluster.length == 1 {
+    'new'
+  } else {
+    'existing'
+  }
 
   # We find containerd located in the docker debian repository
   class { 'ocf::packages::docker::apt':

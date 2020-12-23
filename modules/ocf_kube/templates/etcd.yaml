@@ -14,7 +14,8 @@ spec:
     - --name=<%= @hostname %>
     - --data-dir=/var/lib/etcd
     # initial cluster
-    - --initial-cluster=<%= @etcd_initial_cluster.map{ |(node, ip)| "#{node}=https://#{ip}:2380" }.join(',') %>
+    - --initial-cluster=<%= @initial_cluster.map{ |(node, ip)| "#{node}=https://#{ip}:2380" }.join(',') %>
+    - --initial-cluster-state=<%= @initial_cluster_state %>
     # port configuration
     - --advertise-client-urls=https://<%= @ipaddress %>:2379
     - --initial-advertise-peer-urls=https://<%= @ipaddress %>:2380
