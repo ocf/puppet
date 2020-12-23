@@ -1,5 +1,6 @@
 classes:
     - ocf_kvm
+    - ocf_kube::controller
 
 ocf::networking::bridge: true
 ocf::networking::bond: true
