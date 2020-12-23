@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    component: etcd
+    tier: control-plane
+  name: etcd
+  namespace: kube-system
+spec:
+  containers:
+  - command:
+    - etcd
+    - --name=<%= @hostname %>
+    - --data-dir=/var/lib/etcd
+    # initial cluster
+    - --initial-cluster=<%= @etcd_initial_cluster.map{ |(node, ip)| "#{node}=https://#{ip}:2380" }.join(',') %>
+    # port configuration
+    - --advertise-client-urls=https://<%= @ipaddress %>:2379
+    - --initial-advertise-peer-urls=https://<%= @ipaddress %>:2380
+    - --listen-peer-urls=https://<%= @ipaddress %>:2380
+    - --listen-metrics-urls=http://127.0.0.1:2381
+    - --listen-client-urls=https://127.0.0.1:2379,https://<%= @ipaddress %>:2379
+    # tls stuff
+    - --client-cert-auth=true
+    - --peer-client-cert-auth=true
+    - --cert-file=/etc/kubernetes/pki/etcd/server.crt
+    - --key-file=/etc/kubernetes/pki/etcd/server.key
+    - --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+    - --peer-cert-file=/etc/kubernetes/pki/etcd/client.crt
+    - --peer-key-file=/etc/kubernetes/pki/etcd/client.key
+    - --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+    image: k8s.gcr.io/etcd:<%= @etcd_version %>
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 8
+      httpGet:
+        host: 127.0.0.1
+        path: /health
+        port: 2381
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 15
+    name: etcd
+    resources: {}
+    startupProbe:
+      failureThreshold: 24
+      httpGet:
+        host: 127.0.0.1
+        path: /health
+        port: 2381
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 15
+    volumeMounts:
+    - mountPath: /var/lib/etcd
+      name: etcd-data
+    - mountPath: /etc/kubernetes/pki/etcd
+      name: etcd-certs
+  hostNetwork: true
+  priorityClassName: system-node-critical
+  volumes:
+  - hostPath:
+      path: /etc/kubernetes/pki/etcd
+      type: DirectoryOrCreate
+    name: etcd-certs
+  - hostPath:
+      path: /var/lib/etcd
+      type: DirectoryOrCreate
+    name: etcd-data
