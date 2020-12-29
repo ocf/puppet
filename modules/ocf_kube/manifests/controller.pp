@@ -39,7 +39,7 @@ class ocf_kube::controller {
 
   # Versions!
   $kube_version = lookup("${kube_prefix}::kubernetes_version")
-  $kube_package_version = lookup("${kube_prefix}::kubernetes_version")
+  $kube_package_version = lookup("${kube_prefix}::kubernetes_package_version")
   $etcd_version = lookup("${kube_prefix}::etcd_version")
 
   # If we are the first controller on the hiera list, we start a new etcd cluster.
