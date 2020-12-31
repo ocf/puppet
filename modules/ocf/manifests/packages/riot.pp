@@ -3,5 +3,5 @@ class ocf::packages::riot {
     stage => first,
   }
 
-  package { 'riot-web':; }
+  package { 'riot-desktop':; }
 }
