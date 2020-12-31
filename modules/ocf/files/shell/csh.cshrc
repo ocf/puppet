@@ -1,3 +1,5 @@
+#!/bin/csh
+
 # Quit if no prompt
 if(! $?prompt) exit
 

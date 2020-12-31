@@ -14,7 +14,7 @@ ft="${ft,,}"
 
 if [ "$ft" == "pdf" ]; then
     len=$(pdftk "$1" dump_data | awk '/NumberOfPages/{print $2}')
-    [ -z "$len" -o "$len" -gt 75 ] && { echo 'Too long, trying evince...'; exec evince "$1"; }
+    [ -z "$len" ] || [ "$len" -gt 75 ] && { echo 'Too long, trying evince...'; exec evince "$1"; }
 fi
 
 filename=$(basename "$1")
@@ -26,7 +26,7 @@ trap 'rm -rf "$tmpdir"' EXIT
 (
     # Because Zenity ...
     function clean_up {
-        [ -n "$(jobs -pr)" ] && kill $(jobs -pr)
+        [ -n "$(jobs -pr)" ] && kill "$(jobs -pr)"
     }
 
     trap clean_up EXIT

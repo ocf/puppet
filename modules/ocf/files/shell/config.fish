@@ -1,3 +1,5 @@
+#!/usr/bin/fish
+
 # Quit if not interactive
 if not status --is-interactive
     exit

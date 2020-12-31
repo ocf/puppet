@@ -3,13 +3,6 @@ repos:
     rev: v2.1.0
     hooks:
     -   id: puppet-validate
-        # TODO: Remove this version pinning. The problem here seems to be that
-        # the Debian-packaged versions of the semantic_puppet gem
-        # (ruby-semantic-puppet package) cause some kind of error with locale
-        # loading for puppet validation. A bug probably needs to be opened with
-        # the Debian package maintainers or with semantic_puppet depending on
-        # who is actually causing the error.
-        additional_dependencies: ['puppet:<5']
     -   id: erb-validate
     -   id: puppet-lint
         args:
@@ -24,7 +17,7 @@ repos:
     -   id: r10k-validate
     -   id: ruby-validate
 -   repo: https://github.com/pre-commit/pre-commit-hooks.git
-    rev: v2.2.1
+    rev: v3.2.0
     hooks:
     -   id: check-added-large-files
     -   id: check-docstring-first
@@ -44,16 +37,16 @@ repos:
     -   id: trailing-whitespace
         exclude: \.preseed$
 -   repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: v1.4.4
+    rev: v1.5.4
     hooks:
     -   id: autopep8
 -   repo: https://gitlab.com/pycqa/flake8
-    rev: 3.7.7
+    rev: 3.8.3
     hooks:
     - id: flake8
       language_version: python3.5
 -   repo: https://github.com/asottile/reorder_python_imports.git
-    rev: v1.4.0
+    rev: v2.3.5
     hooks:
     -   id: reorder-python-imports
 -   repo: local
@@ -64,3 +57,8 @@ repos:
         entry: ^\s*[A-Z][A-Za-z0-9:]+\s*{
         types: [puppet]
         exclude: ^manifests/
+-   repo: https://github.com/detailyang/pre-commit-shell.git
+    rev: v1.0.6
+    hooks:
+    -   id: shell-lint
+        exclude: ^(.deactivate.sh)$

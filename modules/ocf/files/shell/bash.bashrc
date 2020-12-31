@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Quit if no prompt
 [ -z "$PS1" ] && return
 
