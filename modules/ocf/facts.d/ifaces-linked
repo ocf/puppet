@@ -9,7 +9,7 @@ active_ifaces=()
 # Only do this check if ethtool is actually installed
 if [ -f /sbin/ethtool ]; then
     for iface in /sys/class/net/en*; do
-        iface_name="$(basename $iface)"
+        iface_name=$(basename "$iface")
         if /sbin/ethtool "$iface_name" | grep -q "Link detected: yes"; then
             active_ifaces+=("$iface_name")
         fi
