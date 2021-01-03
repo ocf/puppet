@@ -28,4 +28,4 @@ fi
   --stats --delete-after \
   ${RSYNCSOURCE} ${BASEDIR} || fatal "Failed to rsync from ${RSYNCSOURCE}."
 
-date -u > ${BASEDIR}/.trace/$(hostname -f)
+date -u > "${BASEDIR}/.trace/$(hostname -f)"

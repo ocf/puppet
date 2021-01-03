@@ -1,2 +1,4 @@
+#!/bin/csh
+
 klist >& /dev/null
 if ($? == 0) kdestroy
