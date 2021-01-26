@@ -105,6 +105,10 @@ todo: "|/usr/bin/rt-mailgate --queue 'todo' --action correspond --url https://rt
 todo-comment: "|/usr/bin/rt-mailgate --queue 'todo' --action comment --url https://rt.ocf.berkeley.edu"
 owner-todo: root
 
+welcome: "|/usr/bin/rt-mailgate --queue 'welcome' --action correspond --url https://rt.ocf.berkeley.edu"
+welcome-comment: "|/usr/bin/rt-mailgate --queue 'welcome' --action comment --url https://rt.ocf.berkeley.edu"
+owner-todo: root
+
 # accounts only used for sending
 atool: /dev/null
 create: /dev/null
