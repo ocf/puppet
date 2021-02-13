@@ -16,6 +16,7 @@
 <module name="ssl_gnutls">
 <module name="cap">
 <module name="sslrehashsignal">
+<module name="dnsbl">
 
 # Required/Recommended modules for anope
 <module name="alias">
@@ -44,6 +45,15 @@
        keyfile="/etc/ssl/private/<%= @fqdn -%>.key"
        dhfile="/etc/ssl/dhparam.pem"
        priority="NORMAL:-MD5">
+        
+# Disallow Tor exit nodes
+<dnsbl name="torexit.dan.me.uk"
+       domain="torexit.dan.me.uk"
+       type="record"
+       records="100"
+       action="ZLINE"
+       duration="7d"
+       reason="Tor exit nodes are not allowed on this network.">
 
 # Allow public connections on 6697 (TLS only)
 <bind address="*" port="6697" ssl="clientssl" type="clients">
