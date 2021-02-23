@@ -56,7 +56,6 @@ encrypt_cmd="gpg --homedir $gpgdir \
                  --recipient abizer@ocf.berkeley.edu \
                  --recipient benzhang4@gmail.com \
                  --recipient daniel@dkess.me \
-                 --recipient cooperc@ocf.berkeley.edu \
                  --recipient kmo@ocf.berkeley.edu \
                  --output \$FILE.gpg -"
 
