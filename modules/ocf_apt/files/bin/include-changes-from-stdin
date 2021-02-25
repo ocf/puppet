@@ -21,10 +21,11 @@ unzip -d "$tmpdir" "$tmpfile"
 # re-run a Jenkins job)
 # Use globbing (and also assume that there's exactly one file which matches the
 # glob)
-# shellcheck disable=SC2013
+# shellcheck disable=SC2013,SC2086
 for pkg in $(sed 's/^Binary: //; t; d' "$tmpdir"/archive/$changes); do
 	/opt/apt/bin/reprepro remove "$dist" "$pkg"
 done
 
+# shellcheck disable=SC2086
 /opt/apt/bin/reprepro --ignore=wrongdistribution include "$dist" \
     "$tmpdir"/archive/$changes
