@@ -22,9 +22,9 @@ unzip -d "$tmpdir" "$tmpfile"
 # Use globbing (and also assume that there's exactly one file which matches the
 # glob)
 # shellcheck disable=SC2013
-for pkg in $(sed 's/^Binary: //; t; d' "${tmpdir}/archive/$changes"); do
+for pkg in $(sed 's/^Binary: //; t; d' "$tmpdir"/archive/$changes); do
 	/opt/apt/bin/reprepro remove "$dist" "$pkg"
 done
 
 /opt/apt/bin/reprepro --ignore=wrongdistribution include "$dist" \
-    "${tmpdir}/archive/$changes"
+    "$tmpdir"/archive/$changes
