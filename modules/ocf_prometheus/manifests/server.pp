@@ -47,7 +47,7 @@ class ocf_prometheus::server {
       purge   => true,
   } ~> Service[prometheus]
 
-  class { '::prometheus::server':
+  class { 'prometheus::server':
     version              => '2.10.0',
     extra_options        => '--web.listen-address="127.0.0.1:9090"',
     external_url         => 'https://prometheus.ocf.berkeley.edu',
