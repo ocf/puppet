@@ -15,6 +15,7 @@ class ocf::packages::restic {
         path            => "/tmp/${archive_name}",
         source          => $download_url,
         extract         => true,
+        extract_path    => $install_path,
         extract_command => "bzcat %s > ${install_path}/${package_name}",
         creates         => "${install_path}/${package_name}",
         cleanup         => true,
