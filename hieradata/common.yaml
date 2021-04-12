@@ -80,7 +80,7 @@ kubernetes::master_nodes:
     - deadlock
 
 # Prometheus config
-prometheus::node_exporter::version: 1.1.2
+prometheus::node_exporter::version: 0.17.0
 prometheus::node_exporter::collectors_enable:
     - systemd
 prometheus::node_exporter::extra_options: '--collector.textfile.directory /srv/prometheus --collector.systemd.unit-whitelist ".+\.(service|timer)"'
