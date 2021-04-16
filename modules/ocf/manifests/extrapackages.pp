@@ -223,7 +223,7 @@ class ocf::extrapackages {
     'znc',
     ]:;
   }
-  
+
   ocf::repackage { 'git-lfs':
     backport_on =>  ['buster', 'stretch'],
   }
