@@ -13,7 +13,7 @@ class ocf_ssh::webssh {
     ],
   }
   ~> service { 'shellinabox':; }
-  
+
   cron {'refresh shellinabox':
     command => 'systemctl restart shellinabox',
     user    => 'root',
