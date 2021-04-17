@@ -224,6 +224,10 @@ class ocf::extrapackages {
     ]:;
   }
 
+  ocf::repackage { 'git-lfs':
+    backport_on =>  ['buster', 'stretch'],
+  }
+
   if $::lsbdistcodename == 'stretch' {
     package {
       [
