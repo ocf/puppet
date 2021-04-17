@@ -143,7 +143,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/zoom$ https://berkeley.zoom.us/j/92953066816 [R]'},
 
       # Otherwise, send a temporary redirect to the appropriate userdir
-      {rewrite_rule => '^/~?([a-z]{3,16}(?:/.*)?)$ https://www.ocf.berkeley.edu/~$1 [R]'},
+      {rewrite_rule => '^/~?([a-z0-9]{3,16}(?:/.*)?)$ https://www.ocf.berkeley.edu/~$1 [R]'},
     ],
 
     headers       => ['always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"'],
