@@ -9,9 +9,9 @@ class ocf_hpc::compute {
   # install extra hpc packages
   package { [
     'libosmesa6-dev',
+    'nvtop',
     'pkg-config',
-    'xvfb',
-    'nvtop'
+    'xvfb'
   ]:; }
 
   # install proprietary nvidia drivers and CUDA.
