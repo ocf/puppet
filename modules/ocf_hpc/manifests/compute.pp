@@ -9,6 +9,7 @@ class ocf_hpc::compute {
   # install extra hpc packages
   package { [
     'libosmesa6-dev',
+    'nvtop',
     'pkg-config',
     'xvfb'
   ]:; }
