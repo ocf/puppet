@@ -72,6 +72,7 @@ class ocf::extrapackages {
     'julia',
     'jupyter-console',
     'jupyter-core',
+    'jupyterhub'
     'jupyter-notebook',
     'keychain',
     'kubernetes-deploy',
@@ -109,6 +110,7 @@ class ocf::extrapackages {
     'neofetch',
     'nodeenv',
     'nodejs',
+    'npm',
     'octave',
     'pandoc',
     'pdfchain',
