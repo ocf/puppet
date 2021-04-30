@@ -20,6 +20,7 @@ minos/admin@OCF.BERKELEY.EDU            all,get-keys
 njha/admin@OCF.BERKELEY.EDU             all,get-keys
 ronitnath/admin@OCF.BERKELEY.EDU        all,get-keys
 shasan/admin@OCF.BERKELEY.EDU           all,get-keys
+snarain/admin@OCF.BERKELEY.EDU          all,get-keys
 wporr/admin@OCF.BERKELEY.EDU            all,get-keys
 yichizh/admin@OCF.BERKELEY.EDU          all,get-keys
 jkuki/admin@OCF.BERKELEY.EDU            all,get-keys
@@ -46,6 +47,7 @@ minos/root@OCF.BERKELEY.EDU             change-password                         
 njha/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
 ronitnath/root@OCF.BERKELEY.EDU         change-password                         *@OCF.BERKELEY.EDU
 shasan/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
+snarain/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 wporr/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
 yichizh/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 jkuki/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
