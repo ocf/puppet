@@ -2,7 +2,6 @@ class ocf_mirrors {
   require ocf::ssl::default
   require ocf::packages::rsync
 
-  include ocf_mirrors::ftp
   include ocf_mirrors::rsync
   include ocf_mirrors::firewall_input
 
