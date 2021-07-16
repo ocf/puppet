@@ -80,5 +80,5 @@ kubernetes::master_nodes:
     - deadlock
 
 # Prometheus config
-prometheus::node_exporter::version: 0.17.0
+prometheus::node_exporter::version: 1.2.0
 prometheus::node_exporter::extra_options: '--collector.textfile.directory /srv/prometheus'
