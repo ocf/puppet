@@ -3,11 +3,11 @@ classes:
     - ocf::ssl::default
 
 apt::sources:
-  zerotier:
+  tailscale:
     key:
-      id: 74A5E9C458E1A431F1DA57A71657198823E52A61
-      server: pool.sks-keyservers.net
-    location: https://download.zerotier.com/debian/stretch
+      id: 2596A99EAAB33821893C0A79458CA832957F5868
+      source: https://pkgs.tailscale.com/stable/debian/stretch.gpg
+    location: https://pkgs.tailscale.com/stable/debian
     repos: main
     release: stretch
   syncthing:
