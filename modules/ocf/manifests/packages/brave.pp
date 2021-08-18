@@ -3,7 +3,7 @@ class ocf::packages::brave {
   package { 'brave':
     ensure => purged
   }
-  
+
   # Remove the new version of brave
   package { 'brave-browser':
     ensure => purged
