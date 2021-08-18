@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=Brave
-StartupNotify=true
-Terminal=false
-Exec=/usr/bin/brave-browser %U
-Type=Application
-Icon=brave-browser
