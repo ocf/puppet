@@ -63,13 +63,13 @@
 # Users connecting from inside the OCF subnet have less restrictions and have
 # their host cloaked (+x mode)
 <connect allow="169.229.226.0/24"
-         timeout="60" flood="20" localmax="1000" globalmax="1000"
-         limit="1000" modes="+x" commandrate="5000"
+         timeout="60" flood="20" localmax="5000" globalmax="5000"
+         limit="5000" modes="+x" commandrate="5000"
          threshold="100" maxchans="200">
 
 <connect allow="2607:f140:8801::/48"
-         timeout="60" flood="20" localmax="1000" globalmax="1000"
-         limit="1000" modes="+x" commandrate="5000"
+         timeout="60" flood="20" localmax="5000" globalmax="5000"
+         limit="5000" modes="+x" commandrate="5000"
          threshold="100" maxchans="200">
 
 <connect allow="*"
