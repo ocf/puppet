@@ -1,4 +1,5 @@
 class ocf_www::site::shorturl {
+
   $canonical_url = $::host_env ? {
     'dev'  => 'https://dev-ocf-io.ocf.berkeley.edu/',
     'prod' => 'https://ocf.io/',
