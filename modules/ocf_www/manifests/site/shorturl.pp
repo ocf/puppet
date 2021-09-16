@@ -126,6 +126,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/staff-hours$ https://www.ocf.berkeley.edu/staff-hours [R]'},
       {rewrite_rule => '^/staff_hours$ https://ocf.io/staff-hours [R]'},
       {rewrite_rule => '^/staff-hours-signup$ https://github.com/ocf/etc/blob/master/configs/staff_hours.yaml [R]'},
+      {rewrite_rule => '^/staff_hours_signup$ https://github.com/ocf/etc/blob/master/configs/staff_hours.yaml [R]'},
       {rewrite_rule => '^/starter-?tasks$ https://www.ocf.berkeley.edu/docs/staff/startertasks/ [R]'},
       {rewrite_rule => '^/stats(/.*)?$ https://www.ocf.berkeley.edu/stats$1 [R]'},
       {rewrite_rule => '^/status$ https://status.ocf.berkeley.edu/ [R]'},
