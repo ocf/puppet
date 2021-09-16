@@ -71,7 +71,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/hpc$ https://www.ocf.berkeley.edu/docs/services/hpc/ [R]'},
       {rewrite_rule => '^/hpcstats$ https://grafana.ocf.berkeley.edu/d/N7Sb3nwik/hpc-slurm-dashboard?orgId=1&refresh=30s [R]'},
       {rewrite_rule => '^/https$ https://status.ocf.berkeley.edu/2014/10/moving-wwwocfberkeleyedu-to-https-only.html [R]'},
-      {rewrite_rule => '^/infra$ https://docs.google.com/presentation/d/1CcwdR3x8CPaBPcHI4yzQ35hvmkZZ4FGagnpDfQAvg-o/edit [R]'},
+      {rewrite_rule => '^/infra$ https://docs.google.com/presentation/d/1RGyytdpdJycxhgCriwB575fCRVJLtErEdkrJrquRXD8/edit?usp=sharing [R]'},
       {rewrite_rule => '^/internals?$ https://docs.google.com/presentation/d/1rfjCWpM0_IiHzKcxld5q4AYaoSQXeRVaj_R1YAOPl8A/edit [R]'},
       {rewrite_rule => '^/irc$ https://www.ocf.berkeley.edu/docs/contact/irc/ [R]'},
       {rewrite_rule => '^/job$ https://docs.google.com/document/d/1oS3ma415LbtuyeEuuoucWKYLcWOJaWmzhv2nIs5f718/edit [R]'},
