@@ -130,6 +130,7 @@ class ocf::packages {
       'python3.7-dev',
       'python3.7-venv',
       'quota',
+      'ranger'
       'reptyr',
       'screen',
       'systemd-sysv',
