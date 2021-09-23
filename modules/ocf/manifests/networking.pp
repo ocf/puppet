@@ -97,6 +97,8 @@ class ocf::networking(
       value => 'fq';
     'net.ipv4.tcp_congestion_control':
       value => 'bbr';
+    'fs.inotify.max_user_watches':
+      value => '524288';
 
   }
 
