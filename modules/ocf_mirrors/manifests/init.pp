@@ -119,7 +119,8 @@ class ocf_mirrors {
       {
         path          => '/opt/mirrors/ftp',
         options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
-        index_options => ['NameWidth=*', '+SuppressDescription']
+        index_options => ['NameWidth=*', '+SuppressDescription'],
+        allow_override => ['All']
       },
       $apache_project_directory_options,
     ],
@@ -151,7 +152,8 @@ class ocf_mirrors {
       {
         path          => '/opt/mirrors/ftp',
         options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
-        index_options => ['NameWidth=*', '+SuppressDescription']
+        index_options => ['NameWidth=*', '+SuppressDescription'],
+        allow_override => ['All']
       },
       $apache_project_directory_options,
     ],
