@@ -12,7 +12,7 @@ class ocf::apt($stage = 'first') {
   $repos = 'main contrib non-free'
 
   if $::lsbdistid == 'Debian' {
-      if $::operatingsystemmajrelease < 11 {
+      if $::operatingsystemmajrelease != "11" {
         apt::source {
         'debian':
             location => 'http://mirrors/debian/',
