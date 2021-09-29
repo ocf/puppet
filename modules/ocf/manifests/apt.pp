@@ -88,7 +88,7 @@ else {
 
         'debian-security':
             location => 'http://mirrors/debian-security/',
-            release  => "${::lsbdistcodename}-security/updates",
+            release  => "${::lsbdistcodename}-security",
             repos    => $repos,
             include  => {
             src => true
