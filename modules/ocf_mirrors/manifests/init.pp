@@ -117,10 +117,14 @@ class ocf_mirrors {
 
     directories       => [
       {
-        path           => '/opt/mirrors/ftp',
-        options        => ['+Indexes', '+SymlinksIfOwnerMatch'],
-        index_options  => ['NameWidth=*', '+SuppressDescription'],
-        allow_override => ['FileInfo', 'Indexes', 'Limit']
+        path            => '/opt/mirrors/ftp',
+        options         => ['+Indexes', '+SymlinksIfOwnerMatch'],
+        index_options   => ['NameWidth=*', '+SuppressDescription'],
+        custom_fragment => "
+          RewriteEngine On
+          RewriteCond "%{HTTP_USER_AGENT}" "MSIE 7\.0|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0"
+          RewriteRule ^ - [F]
+        "
       },
       $apache_project_directory_options,
     ],
@@ -150,10 +154,14 @@ class ocf_mirrors {
 
     directories       => [
       {
-        path           => '/opt/mirrors/ftp',
-        options        => ['+Indexes', '+SymlinksIfOwnerMatch'],
-        index_options  => ['NameWidth=*', '+SuppressDescription'],
-        allow_override => ['FileInfo', 'Indexes', 'Limit']
+        path            => '/opt/mirrors/ftp',
+        options         => ['+Indexes', '+SymlinksIfOwnerMatch'],
+        index_options   => ['NameWidth=*', '+SuppressDescription'],
+        custom_fragment => "
+          RewriteEngine On
+          RewriteCond "%{HTTP_USER_AGENT}" "MSIE 7\.0|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0"
+          RewriteRule ^ - [F]
+        "
       },
       $apache_project_directory_options,
     ],
