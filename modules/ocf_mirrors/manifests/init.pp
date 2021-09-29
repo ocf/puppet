@@ -80,6 +80,7 @@ class ocf_mirrors {
   }
   include apache::mod::headers
   include apache::mod::status
+  include apache::mod::rewrite
 
   # Restart apache if any cert changes occur
   Class['ocf::ssl::default'] ~> Class['Apache::Service']
