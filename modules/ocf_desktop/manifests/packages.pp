@@ -19,7 +19,7 @@ class ocf_desktop::packages {
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
       'musescore', 'mpv', 'mssh', 'mumble', 'numlockx', 'simple-scan',
       'ssh-askpass-gnome', 'texmaker',
-      'texstudio', 'vlc', 'xarchiver', 'xcape', 'xournal', 'xterm', 'zenmap']:;
+      'texstudio', 'vlc', 'xarchiver', 'xcape', 'xournal', 'xterm']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'arc-theme',
       'desktop-file-utils', 'gnome-icon-theme', 'paper-icon-theme', 'redshift',
@@ -59,7 +59,19 @@ class ocf_desktop::packages {
 
         # The minecraft launcher requires java 8 of some kind (openjdk-8-jre
         # for instance), and buster only comes with openjdk 11
+        # UPDATE: Minecraft 1.17 now requires OpenJDK 16, so...
         'minecraft-launcher',
+        
+        # Zenmap depends on Python 2 and is therefore no longer in bullseye
+        'zenmap',
+      ]:;
+    }
+  }
+  if $::lsbdistcodename == 'buster' {
+    package {
+      [
+        # Zenmap depends on Python 2 and is therefore no longer in bullseye
+        'zenmap',
       ]:;
     }
   }
