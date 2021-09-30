@@ -85,6 +85,14 @@ class ocf_desktop::packages {
       ]:;
     }
   }
+  if $::lsbdistcodename == 'bullseye' {
+    package {
+      [
+        # OpenJDK 17 (LTS) is in bullseye
+        'openjdk-17-jre-headless',
+      ]:;
+    }
+  }
 
   # Remove some packages
   package {
