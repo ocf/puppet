@@ -15,11 +15,11 @@ class ocf_desktop::packages {
   package {
     # applications
     ['arandr', 'atom', 'blender', 'claws-mail', 'clementine', 'eog', 'evince',
-      'filezilla', 'florence', 'freeplane', 'geany', 'gimp',
+      'filezilla', 'freeplane', 'geany', 'gimp',
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
-      'musescore', 'mpv', 'mssh', 'mumble', 'numlockx', 'simple-scan',
-      'ssh-askpass-gnome', 'texmaker',
-      'texstudio', 'vlc', 'xarchiver', 'xcape', 'xournal', 'xterm', 'zenmap']:;
+      'musescore', 'mpv', 'mssh', 'mumble', 'numlockx',
+      'simple-scan', 'ssh-askpass-gnome', 'texmaker',
+      'texstudio', 'vlc', 'xarchiver', 'xcape', 'xournal', 'xterm']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'arc-theme',
       'desktop-file-utils', 'gnome-icon-theme', 'paper-icon-theme', 'redshift',
@@ -59,7 +59,40 @@ class ocf_desktop::packages {
 
         # The minecraft launcher requires java 8 of some kind (openjdk-8-jre
         # for instance), and buster only comes with openjdk 11
+        # UPDATE: Minecraft 1.17 now requires OpenJDK 16, so...
         'minecraft-launcher',
+
+        # Zenmap depends on Python 2 and is therefore no longer in bullseye
+        'zenmap',
+
+        # Florence was removed from bullseye due to deprecated dependency
+        # We should find an alternative
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=947521
+        'florence',
+      ]:;
+    }
+  }
+  if $::lsbdistcodename == 'buster' {
+    package {
+      [
+        # Zenmap depends on Python 2 and is therefore no longer in bullseye
+        'zenmap',
+
+        # Florence was removed from bullseye due to deprecated dependency
+        # We should find an alternative
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=947521
+        'florence',
+      ]:;
+    }
+  }
+  if $::lsbdistcodename == 'bullseye' {
+    package {
+      [
+        # OpenJDK 17 (LTS) is in bullseye
+        'openjdk-17-jre-headless',
+
+        # Matchbox is what we use on our RPi
+        'matchbox-keyboard',
       ]:;
     }
   }
