@@ -61,9 +61,14 @@ class ocf_desktop::packages {
         # for instance), and buster only comes with openjdk 11
         # UPDATE: Minecraft 1.17 now requires OpenJDK 16, so...
         'minecraft-launcher',
-        
+
         # Zenmap depends on Python 2 and is therefore no longer in bullseye
         'zenmap',
+
+        # Florence was removed from bullseye due to deprecated dependency
+        # We should find an alternative
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=947521
+        'florence',
       ]:;
     }
   }
@@ -72,6 +77,11 @@ class ocf_desktop::packages {
       [
         # Zenmap depends on Python 2 and is therefore no longer in bullseye
         'zenmap',
+
+        # Florence was removed from bullseye due to deprecated dependency
+        # We should find an alternative
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=947521
+        'florence',
       ]:;
     }
   }
