@@ -14,7 +14,7 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['arandr', 'atom', 'blender', 'claws-mail', 'clementine', 'eog', 'evince',
+    ['arandr', 'atom', 'claws-mail', 'clementine', 'eog', 'evince',
       'filezilla', 'freeplane', 'geany', 'gimp',
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
       'musescore', 'mpv', 'mssh', 'mumble', 'numlockx',
@@ -69,6 +69,8 @@ class ocf_desktop::packages {
         # We should find an alternative
         # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=947521
         'florence',
+
+        'blender',
       ]:;
     }
   }
@@ -82,6 +84,8 @@ class ocf_desktop::packages {
         # We should find an alternative
         # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=947521
         'florence',
+
+        'blender',
       ]:;
     }
   }
@@ -93,6 +97,8 @@ class ocf_desktop::packages {
 
         # Matchbox is what we use on our RPi
         'matchbox-keyboard',
+
+        # Blender seems to have broken dependencies on bullseye (multiarch-support?)
       ]:;
     }
   }
