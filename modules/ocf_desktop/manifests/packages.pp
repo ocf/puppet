@@ -15,7 +15,7 @@ class ocf_desktop::packages {
   package {
     # applications
     ['arandr', 'atom', 'blender', 'claws-mail', 'clementine', 'eog', 'evince',
-      'filezilla', 'florence', 'freeplane', 'geany', 'gimp',
+      'filezilla', 'freeplane', 'geany', 'gimp',
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
       'musescore', 'mpv', 'mssh', 'mumble', 'numlockx', 'simple-scan',
       'ssh-askpass-gnome', 'texmaker',
