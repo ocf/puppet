@@ -17,7 +17,7 @@ class ocf_desktop::packages {
     ['arandr', 'atom', 'blender', 'claws-mail', 'clementine', 'eog', 'evince',
       'filezilla', 'freeplane', 'geany', 'gimp',
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
-      'matchbox-keyboard', 'musescore', 'mpv', 'mssh', 'mumble', 'numlockx',
+      'musescore', 'mpv', 'mssh', 'mumble', 'numlockx',
       'simple-scan', 'ssh-askpass-gnome', 'texmaker',
       'texstudio', 'vlc', 'xarchiver', 'xcape', 'xournal', 'xterm']:;
     # desktop
@@ -90,6 +90,9 @@ class ocf_desktop::packages {
       [
         # OpenJDK 17 (LTS) is in bullseye
         'openjdk-17-jre-headless',
+
+        # Matchbox is what we use on our RPi
+        'matchbox-keyboard',
       ]:;
     }
   }
