@@ -41,7 +41,6 @@ jinja_env = jinja2.Environment(
 class SSL(namedtuple('SSL', ('fqdn',))):
     """Tells where to find SSL files for a given domain."""
     key = '/etc/ssl/lets-encrypt/le-vhost.key'
-    chain = '/etc/ssl/certs/lets-encrypt.crt'
 
     @property
     def is_valid(self):
@@ -339,6 +338,9 @@ def process_app_vhosts():
         os.chmod(socket_dir, 0o755)
 
         # Regenerate SSL bundle if older than cert
+        # TODO: avoid needing to make a copy, since currently the "bundle" is
+        # identical to the source certificate. We still need a way to track when
+        # to reload though...
         for ssl in chain((SSL(domain),), map(SSL, vhost['aliases'])):
             if ssl.is_valid and (
                 not os.path.exists(ssl.bundle) or
@@ -347,10 +349,10 @@ def process_app_vhosts():
                 report('Generating SSL bundle for ' + ssl.fqdn)
                 changed = True
                 with open(ssl.bundle, 'w') as f, \
-                        open(ssl.cert) as f1, \
-                        open(ssl.chain) as f2:
+                        open(ssl.cert) as f1:
                     shutil.copyfileobj(f1, f)
-                    shutil.copyfileobj(f2, f)
+                    # The certificate returned from ACME already includes the
+                    # full chain, so just copy for now
 
     return changed
 

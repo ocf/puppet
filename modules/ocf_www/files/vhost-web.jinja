@@ -8,7 +8,6 @@
         SSLEngine on
         SSLCertificateFile {{vhost.ssl.cert}}
         SSLCertificateKeyFile {{vhost.ssl.key}}
-        SSLCertificateChainFile {{vhost.ssl.chain}}
     {% endif %}
 
     {% if vhost.is_redirect %}

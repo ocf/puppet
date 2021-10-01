@@ -17,10 +17,6 @@ class ocf::ssl::setup {
       # and /etc/ssl/private directories (along with /etc/ssl if needed)
       require => Package['ssl-cert'];
 
-    '/etc/ssl/certs/lets-encrypt.crt':
-      source => 'puppet:///modules/ocf/ssl/lets-encrypt.crt',
-      mode   => '0644';
-
     # 2048-bit dhparams for use by servers;
     # these are public numbers and can safely be shared across services
     '/etc/ssl/dhparam.pem':
