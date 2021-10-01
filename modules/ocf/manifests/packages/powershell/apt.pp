@@ -4,19 +4,19 @@ class ocf::packages::powershell::apt {
     id     => 'BC528686B50D79E339D3721CEB3E94ADBE1229CF',
     source => 'https://packages.microsoft.com/keys/microsoft.asc';
   }
-  if $::lsbdistcodename == 'buster' {
+  if $::lsbdistcodename == 'stretch' {
     apt::source { 'powershell':
-      architecture => 'amd64',
-      location     => 'https://packages.microsoft.com/debian/10/prod',
-      release      => 'buster',
-      repos        => 'main',
-      require      => Apt::Key['powershell repo key'],
+        architecture => 'amd64',
+        location     => 'https://packages.microsoft.com/repos/microsoft-debian-stretch-prod',
+        release      => 'stretch',
+        repos        => 'main',
+        require      => Apt::Key['powershell repo key'],
     }
   } else {
     apt::source { 'powershell':
       architecture => 'amd64',
-      location     => 'https://packages.microsoft.com/repos/microsoft-debian-stretch-prod',
-      release      => 'stretch',
+      location     => "https://packages.microsoft.com/debian/$::operatingsystemmajrelease/prod",
+      release      => "$::lsbdistcodename",
       repos        => 'main',
       require      => Apt::Key['powershell repo key'],
     }
