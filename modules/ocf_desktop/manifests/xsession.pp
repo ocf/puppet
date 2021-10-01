@@ -129,14 +129,6 @@ class ocf_desktop::xsession {
   }
 
   # use ocf logo on login screen
-  file {
-    ['/usr/share/icons/Adwaita', '/usr/share/icons/Adwaita/256x256', '/usr/share/icons/Adwaita/256x256/status']:
-      ensure => directory;
-    '/usr/share/icons/Adwaita/256x256/status/avatar-default.png':
-      ensure  => link,
-      target  => '/opt/share/xsession/images/ocf-color-256.png',
-      require => File['/opt/share/xsession/images'];
-  }
   if $::lsbdistcodename == 'bullseye' {
     file {
       ['/usr/share/icons/Adwaita', '/usr/share/icons/Adwaita/512x512', '/usr/share/icons/Adwaita/512x512/status']:
@@ -146,7 +138,17 @@ class ocf_desktop::xsession {
         target  => '/opt/share/xsession/images/ocf-color-512.png',
         require => File['/opt/share/xsession/images'];
     }
-  }
+  } else {
+    file {
+      ['/usr/share/icons/Adwaita', '/usr/share/icons/Adwaita/256x256', '/usr/share/icons/Adwaita/256x256/status']:
+        ensure => directory;
+      '/usr/share/icons/Adwaita/256x256/status/avatar-default.png':
+        ensure  => link,
+        target  => '/opt/share/xsession/images/ocf-color-256.png',
+        require => File['/opt/share/xsession/images'];
+    }
+}
+
 
   # polkit configuration
   file {
