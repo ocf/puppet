@@ -93,6 +93,9 @@ class ocf_desktop::packages {
 
         # Matchbox is what we use on our RPi
         'matchbox-keyboard',
+
+        # x4vncviewer is no longer present
+        'tigervnc-viewer',
       ]:;
     }
   }
