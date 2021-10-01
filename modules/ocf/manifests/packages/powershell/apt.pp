@@ -16,7 +16,7 @@ class ocf::packages::powershell::apt {
     apt::source { 'powershell':
       architecture => 'amd64',
       location     => "https://packages.microsoft.com/debian/{$::operatingsystemmajrelease}/prod",
-      release      => {$::lsbdistcodename},
+      release      => "{$::lsbdistcodename}",
       repos        => 'main',
       require      => Apt::Key['powershell repo key'],
     }
