@@ -18,6 +18,7 @@ class ocf::extrapackages {
   include ocf::packages::mysql
   include ocf::packages::mysql_server
   include ocf::packages::nmap
+  include ocf::packages::matplotlib
 
   # other packages
   package {
