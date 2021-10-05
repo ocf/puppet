@@ -85,7 +85,11 @@ def main(argv=None):
     else:
         # Enable wake-on-LAN and go to sleep.
         report('going to sleep')
-        subprocess.check_call(('/sbin/ethtool', '-s', 'eth0', 'wol', 'g'), stdout=DEVNULL, stderr=DEVNULL)
+        if int(subprocess.getoutput("lsb_release -r").split()[1]) > 9:
+            subprocess.check_call(('/sbin/ethtool', '-s', 'eno1', 'wol', 'g'), stdout=DEVNULL, stderr=DEVNULL)
+        else:
+            subprocess.check_call(('/sbin/ethtool', '-s', 'eth0', 'wol', 'g'), stdout=DEVNULL, stderr=DEVNULL)
+            
         if subprocess.call(('/usr/sbin/pm-suspend'), stdout=DEVNULL, stderr=DEVNULL) != 0:
             report('failed to suspend')
 
