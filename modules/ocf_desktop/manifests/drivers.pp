@@ -18,7 +18,8 @@ class ocf_desktop::drivers {
       context => '/files/etc/default/grub',
       changes => [
         # Add nomodeset to grub command-line options (quiet is the default)
-        'set GRUB_CMDLINE_LINUX_DEFAULT \'"quiet nomodeset"\'',
+        # disable predictable interface naming (#1156)
+        'set GRUB_CMDLINE_LINUX_DEFAULT \'"quiet nomodeset net.ifnames=0"\'',
       ],
       notify  => Exec['update-grub'],
     }
