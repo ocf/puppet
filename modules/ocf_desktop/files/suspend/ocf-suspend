@@ -10,6 +10,7 @@ import argparse
 import os
 import subprocess
 import sys
+from math import floor
 from subprocess import DEVNULL
 from syslog import syslog
 
@@ -85,7 +86,7 @@ def main(argv=None):
     else:
         # Enable wake-on-LAN and go to sleep.
         report('going to sleep')
-        if int(subprocess.getoutput("lsb_release -r").split()[1]) > 9:
+        if floor(float(subprocess.getoutput('lsb_release -r').split()[1])) > 9:
             subprocess.check_call(('/sbin/ethtool', '-s', 'eno1', 'wol', 'g'), stdout=DEVNULL, stderr=DEVNULL)
         else:
             subprocess.check_call(('/sbin/ethtool', '-s', 'eth0', 'wol', 'g'), stdout=DEVNULL, stderr=DEVNULL)
