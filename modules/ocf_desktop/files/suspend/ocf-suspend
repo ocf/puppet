@@ -90,7 +90,7 @@ def main(argv=None):
             subprocess.check_call(('/sbin/ethtool', '-s', 'eno1', 'wol', 'g'), stdout=DEVNULL, stderr=DEVNULL)
         else:
             subprocess.check_call(('/sbin/ethtool', '-s', 'eth0', 'wol', 'g'), stdout=DEVNULL, stderr=DEVNULL)
-            
+
         if subprocess.call(('/usr/sbin/pm-suspend'), stdout=DEVNULL, stderr=DEVNULL) != 0:
             report('failed to suspend')
 
