@@ -10,7 +10,6 @@ import argparse
 import os
 import subprocess
 import sys
-from math import floor
 from subprocess import DEVNULL
 from syslog import syslog
 
@@ -86,10 +85,8 @@ def main(argv=None):
     else:
         # Enable wake-on-LAN and go to sleep.
         report('going to sleep')
-        if floor(float(subprocess.getoutput('lsb_release -r').split()[1])) > 9:
-            subprocess.check_call(('/sbin/ethtool', '-s', 'eno1', 'wol', 'g'), stdout=DEVNULL, stderr=DEVNULL)
-        else:
-            subprocess.check_call(('/sbin/ethtool', '-s', 'eth0', 'wol', 'g'), stdout=DEVNULL, stderr=DEVNULL)
+        interface = subprocess.getoutput("ip route get 8.8.8.8 | awk '{printf $5}'")
+        subprocess.check_call(('/sbin/ethtool', '-s', interface, 'wol', 'g'), stdout=DEVNULL, stderr=DEVNULL)
 
         if subprocess.call(('/usr/sbin/pm-suspend'), stdout=DEVNULL, stderr=DEVNULL) != 0:
             report('failed to suspend')
