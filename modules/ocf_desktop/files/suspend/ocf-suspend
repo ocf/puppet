@@ -85,7 +85,7 @@ def main(argv=None):
     else:
         # Enable wake-on-LAN and go to sleep.
         report('going to sleep')
-        interface = subprocess.getoutput("ip route get 8.8.8.8 | awk '{printf $5}'")
+        interface = subprocess.getoutput('facter networking.primary')
         subprocess.check_call(('/sbin/ethtool', '-s', interface, 'wol', 'g'), stdout=DEVNULL, stderr=DEVNULL)
 
         if subprocess.call(('/usr/sbin/pm-suspend'), stdout=DEVNULL, stderr=DEVNULL) != 0:
