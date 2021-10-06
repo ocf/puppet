@@ -94,6 +94,7 @@ class ocf::packages {
       'iftop',
       'iotop',
       'iperf',
+      'iperf3',
       'jq',
       'lsof',
       'man-db',
