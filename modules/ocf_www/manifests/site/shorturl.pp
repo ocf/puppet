@@ -36,7 +36,6 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/d$ https://discourse.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/d/([0-9]+)$ https://discourse.ocf.berkeley.edu/t/$1 [R]'},
       {rewrite_rule => '^/decal(/.*)?$ https://decal.ocf.berkeley.edu$1 [R]'},
-      {rewrite_rule => '^/decalform$ https://forms.gle/mzmDoMnzQspuCkNM8https://docs.google.com/forms/d/e/1FAIpQLSdE6qRi1S3WyrzdhoEqHrn0qqgCft6cqZUrLjP9ak2R7Vv91g/viewformhttps://docs.google.com/forms/d/e/1FAIpQLSdE6qRi1S3WyrzdhoEqHrn0qqgCft6cqZUrLjP9ak2R7Vv91g/viewformhttps://docs.google.com/forms/d/e/1FAIpQLSdE6qRi1S3WyrzdhoEqHrn0qqgCft6cqZUrLjP9ak2R7Vv91g/viewform [R]'},
       {rewrite_rule => '^/decalzoom$ https://berkeley.zoom.us/j/94285257750?pwd=OGx1TUlKWmNrQnNwdkxwRTlSL2VTUT09 [R]'},
       {rewrite_rule => '^/desktopstats$ https://grafana.ocf.berkeley.edu/d/-VCUTE8Zk/desktops?orgId=1&refresh=10s [R]'},
       {rewrite_rule => '^/discord$ https://discord.gg/mwhu5eh [R]'},
