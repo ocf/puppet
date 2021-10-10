@@ -13,7 +13,6 @@ class ocf_prometheus::proxy {
   apache::mod { 'authnz_pam':
     require => Package['libapache2-mod-authnz-pam'];
   }
-
   file {
     '/etc/prometheus/allowed-groups':
       content => 'ocfstaff';
@@ -78,5 +77,9 @@ class ocf_prometheus::proxy {
 
       redirect_status => 301,
       redirect_dest   => "https://${cname}.ocf.berkeley.edu/";
+  }
+  exec { 'fix-prometheus-perms':
+    command => 'chmod 0755 /etc/prometheus',
+    path    => '/bin:/sbin:/usr/bin:/usr/sbin',
   }
 }
