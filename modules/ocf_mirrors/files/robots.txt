@@ -1,0 +1,39 @@
+# robots.txt for mirrors.ocf.berkeley.edu
+
+User-agent: *
+
+Disallow: /alpine
+Disallow: /apache
+Disallow: /archlinux
+Disallow: /archlinuxcn
+Disallow: /centos
+Disallow: /centos-altarch
+Disallow: /centos-debuginfo
+Disallow: /debian
+Disallow: /debian-cd
+Disallow: /debian-security
+Disallow: /devuan
+Disallow: /devuan-cd
+Disallow: /elpa
+Disallow: /finnix-releases
+Disallow: /freebsd
+Disallow: /gnu
+Disallow: /kali
+Disallow: /kali-images
+Disallow: /kde
+Disallow: /kde-applicationdata
+Disallow: /manjaro
+Disallow: /melpa
+Disallow: /openbsd
+Disallow: /parrot
+Disallow: /puppetlabs
+Disallow: /qt
+Disallow: /raspbian
+Disallow: /rasppi
+Disallow: /tails
+Disallow: /tanglu
+Disallow: /tanglu-releases
+Disallow: /trisquel
+Disallow: /trisquel-images
+Disallow: /ubuntu
+Disallow: /ubuntu-releases
