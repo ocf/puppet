@@ -52,6 +52,8 @@ class ocf_prometheus::server {
     extra_options        => '--web.listen-address="127.0.0.1:9090"',
     external_url         => 'https://prometheus.ocf.berkeley.edu',
     rule_files           => [ '/etc/prometheus/rules.d/*.yaml' ],
+    group                => 'prometheus',
+    config_mode          => '0755', # fix
     alertmanagers_config => [{
       scheme         => 'https',
       path_prefix    => '/alertmanager',
