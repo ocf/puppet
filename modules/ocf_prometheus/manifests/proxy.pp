@@ -19,10 +19,6 @@ class ocf_prometheus::proxy {
     '/etc/pam.d/ocfprometheus':
       source  => 'puppet:///modules/ocf_prometheus/proxy_pam',
       require => File['/etc/prometheus/allowed-groups'];
-    '/etc/prometheus':
-      ensure => directory,
-      owner  => 'prometheus',
-      mode   => '0755';
   }
 
   ocf::privatefile { '/etc/prometheus/htpasswd':
