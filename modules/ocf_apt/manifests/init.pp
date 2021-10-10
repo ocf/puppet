@@ -1,6 +1,7 @@
 class ocf_apt {
   include ocf::firewall::allow_web
   include ocf::ssl::default
+  include apache::mod::http2
 
   user { 'ocfapt':
     comment => 'OCF Apt',
@@ -87,7 +88,9 @@ class ocf_apt {
     servername        => 'apt.ocf.berkeley.edu',
     port              => 443,
     docroot           => '/opt/apt/ftp',
-
+    custom_fragment => '
+          Protocols h2 http/1.1
+        ',
     directories       => [{
       path          => '/opt/apt/ftp',
       options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
