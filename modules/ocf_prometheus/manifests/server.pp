@@ -151,6 +151,13 @@ class ocf_prometheus::server {
         static_configs  => [{targets => ['www:9117']}],
       },
       {
+        job_name        => 'fallingrocks_apache',
+        scrape_interval => '30s',
+        scrape_timeout  => '30s',
+
+        static_configs  => [{targets => ['fallingrocks:9117']}],
+      },
+      {
         job_name        => 'slurm',
         scrape_interval => '30s',
         scrape_timeout  => '30s',
