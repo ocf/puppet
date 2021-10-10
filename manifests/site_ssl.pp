@@ -24,7 +24,6 @@ Apache::Vhost {
   }
   ssl_cipher   => $ssl_ciphersuite,
   ssl_protocol => $ssl_protocols,
-  
 }
 
 Nginx::Resource::Server {
