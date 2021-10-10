@@ -88,8 +88,9 @@ class ocf_apt {
     servername        => 'apt.ocf.berkeley.edu',
     port              => 443,
     docroot           => '/opt/apt/ftp',
-    custom_fragment => '
+    custom_fragment   => '
           Protocols h2 http/1.1
+          HeaderName README.html\nReadmeName FOOTER.html
         ',
     directories       => [{
       path          => '/opt/apt/ftp',
@@ -98,8 +99,6 @@ class ocf_apt {
     }],
 
     access_log_format => 'io_count',
-    custom_fragment   => "HeaderName README.html\nReadmeName FOOTER.html",
-
     ssl               => true,
     ssl_key           => "/etc/ssl/private/${::fqdn}.key",
     ssl_cert          => "/etc/ssl/private/${::fqdn}.crt",
