@@ -81,7 +81,6 @@ class ocf_mirrors {
   include apache::mod::headers
   include apache::mod::status
   include apache::mod::rewrite
-  include apache::mod::http2
 
   # Restart apache if any cert changes occur
   Class['ocf::ssl::default'] ~> Class['Apache::Service']
@@ -153,6 +152,7 @@ class ocf_mirrors {
     servername        => 'mirrors.ocf.berkeley.edu',
     port              => 443,
     docroot           => '/opt/mirrors/ftp',
+
     directories       => [
       {
         path            => '/opt/mirrors/ftp',
@@ -169,7 +169,6 @@ class ocf_mirrors {
 
     access_log_format => 'io_count',
     custom_fragment   => "
-      Protocols h2 http/1.1
       HeaderName README.html
       ReadmeName FOOTER.html
     ",
