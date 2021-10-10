@@ -81,7 +81,7 @@ class ocf_apt {
     }],
 
     access_log_format => 'io_count',
-    custom_fragment   => "HeaderName README.html\nReadmeName FOOTER.html",
+    custom_fragment   => "Protocols h2c http/1.1\nHeaderName README.html\nReadmeName FOOTER.html",
   }
 
   apache::vhost { 'apt.ocf.berkeley.edu-ssl':
@@ -96,7 +96,7 @@ class ocf_apt {
     }],
 
     access_log_format => 'io_count',
-    custom_fragment   => "Protocols h2 h2c http/1.1\nHeaderName README.html\nReadmeName FOOTER.html",
+    custom_fragment   => "Protocols h2 http/1.1\nHeaderName README.html\nReadmeName FOOTER.html",
 
     ssl               => true,
     ssl_key           => "/etc/ssl/private/${::fqdn}.key",
