@@ -41,7 +41,7 @@ class ocf_mirrors {
   # which runs as user "prometheus"
   user {
     'prometheus':
-      comment => 'prometheus user for running exporters',
+      comment  => 'prometheus user for running exporters',
 
       # Set to have no password, only allow key-based login
       password => '*',
