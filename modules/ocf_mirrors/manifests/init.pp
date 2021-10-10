@@ -32,7 +32,20 @@ class ocf_mirrors {
   include ocf_mirrors::projects::tails
   include ocf_mirrors::projects::trisquel
   include ocf_mirrors::projects::ubuntu
+  package {
+      [
+        'prometheus-apache-exporter',
+      ]:;
+    }
+  # Prometheus user needed for the prometheus-apache-exporter daemon,
+  # which runs as user "prometheus"
+  user {
+    'prometheus':
+      comment => 'prometheus user for running exporters',
 
+      # Set to have no password, only allow key-based login
+      password => '*',
+  }
   user { 'mirrors':
     comment  => 'OCF Mirroring',
     home     => '/opt/mirrors',
