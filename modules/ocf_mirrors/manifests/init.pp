@@ -143,7 +143,7 @@ class ocf_mirrors {
 
     # we have to specify docroot even though we always redirect
     docroot         => '/var/www',
-    custom_fragment   => "Protocols h2c http/1.1",
+    custom_fragment => 'Protocols h2c http/1.1',
     redirect_source => '/',
     redirect_dest   => 'http://mirrors.ocf.berkeley.edu/',
     redirect_status => '301',
