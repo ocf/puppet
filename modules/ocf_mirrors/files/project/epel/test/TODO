@@ -1,0 +1,14 @@
+Need tests for:
+
+File list outdated version
+File list corrupted
+
+File list filtering
+  Implemented for mirror; needs to be implemented for hardlinker.
+
+Aborted rsync run cleanup.
+  No good way to kill rsync in the middle of a transfer.  Maybe fake this?
+  Maybe chmod 000 some directory in the tree without updating the file list?
+
+Some checks on the format of file list generation across multiple python
+versions.

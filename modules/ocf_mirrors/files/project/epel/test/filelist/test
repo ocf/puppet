@@ -1,0 +1,277 @@
+#!/bin/zsh
+# Exercise create-filelist
+cf=${0:h}/../../create-filelist
+qfhardlink=${0:h}/../../quick-fedora-hardlink
+
+test_help () {
+    $cf -h &> $so
+    assertTrue 'Help text not good' "file_contains $so Generate"
+    assertTrue 'Help text not good' "file_contains $so --checksum"
+}
+
+test_timelist_generation () {
+    $cf -d $td -t $tl
+
+    # Sadly the quoting rules are just weird
+    assertTrue 'File list entry for file0 incorrect' "file_contains $tl \"\d+TABfTAB26TABfile0\""
+    assertTrue 'File list entry for dir1 incorrect' "file_contains $tl \"\d+TABdTAB\d+TABdir1\""
+    assertTrue 'File list entry for dir2/file3 incorrect' "file_contains $tl \"\d+TABfTAB\d+TABdir2/file3\""
+
+    # Because -s wasn't specified and how the file is laid out, the file list
+    # file should be in the file list.  This depends completely on where the
+    # test suite puts $tl and what it calls it.
+    assertTrue 'File list entry should contain the file list itself' "file_contains $tl ${tl:t}"
+}
+
+test_skip () {
+    # Check the skip behavior for both -t and -f
+    touch $td/dir2/${tl:t}
+    touch $td/dir3/${fl:t}
+    $cf -d $td -t $tl -f $fl -s
+
+    assertFalse 'create_filelist -s must skip the file lists in the top directory' "file_contains $tl \"\d+TAB${tl:t}\""
+    assertFalse 'create_filelist -s must skip the file lists in the top directory' "file_contains $tl \"\d+TAB${fl:t}\""
+    assertTrue 'create_filelist -s must skip the file lists in the top directory' "file_contains $tl dir2/${tl:t}"
+    assertTrue 'create_filelist -s must skip the file lists in the top directory' "file_contains $tl dir3/${fl:t}"
+
+    assertFalse 'create_filelist -s must skip the file lists in the top directory' "file_contains $fl ^./${tl:t}"
+    assertFalse 'create_filelist -s must skip the file lists in the top directory' "file_contains $fl ^./${fl:t}"
+    assertTrue 'create_filelist -s must skip the file lists in the top directory' "file_contains $fl /dir2/${tl:t}"
+    assertTrue 'create_filelist -s must skip the file lists in the top directory' "file_contains $fl /dir3/${fl:t}"
+}
+
+test_skip_files () {
+    # Check the behavior where we specify which files to skip
+    $cf -d $td -t $tl -f $fl -S file1 -S dir2
+
+    assertFalse 'create_filelist -S must skip specified files' "file_contains $tl \"\d+TABfile1\""
+    assertFalse 'create_filelist -S must skip specified files' "file_contains $tl \"\d+TABdir2\""
+    assertTrue 'create_filelist -S must skip file only in toplevel' "file_contains $tl \"\d+TABdir1/file1\""
+
+    assertFalse 'create_filelist -S must skip specified files' "file_contains $fl ^./file1"
+    assertFalse 'create_filelist -S must skip specified files' "file_contains $fl ^./dir2"
+    assertTrue 'create_filelist -S must skip file only in toplevel' "file_contains $fl /dir1/file1"
+
+}
+
+test_skip_rsynctmp () {
+    # Make sure that rsync .~tmp~ files are skipped
+
+    for i in $td/dir*; do
+        mkdir $i/.~tmp~
+        touch $i/.~tmp~/foo
+    done
+
+    $cf -d $td -t $tl
+
+    assertFalse 'create_filelist must always skip rsync temporaries' "file_contains $tl \"\.~tmp~\""
+    assertFalse 'create_filelist must skip files inside of rsync tempdirs' "file_contains $tl foo"
+}
+
+test_skip_nfs () {
+    # Make sure that files beginning with ".nfs" are skipped
+
+    for i in $td $td/dir*; do
+        touch $i/.nfs$RANDOM$RANDOM$RANDOM
+        touch $i/foo-1.2.3.nfs-$RANDOM.foo
+    done
+
+    $cf -d $td -t $tl
+
+    assertFalse 'create_filelist must skip .nfs files (1)' "file_contains $tl \"\t\.nfs\""
+    assertFalse 'create_filelist must skip .nfs files (2)' "file_contains $tl \"/\.nfs\""
+    assertTrue 'create_filelist should not skip filenames merely containing ".nfs"' "file_contains $tl foo"
+}
+
+test_file_size_update () {
+    # Check that an updated file gets an updated size
+    $cf -d $td -t $tl
+    local size1=$(awk -F '\t' '/\tfile0/ {print $3}' $tl)
+    echo foo >> $td/file0
+    $cf -d $td -t $tl
+    local size2=$(awk -F '\t' '/\tfile0/ {print $3}' $tl)
+
+    assertNotEquals 'create_filelist must detect updated file size' $size1 $size2
+}
+
+test_file_time_update () {
+    # Check that an updated file gets an updated time
+    $cf -d $td -t $tl
+    local time1=$(awk -F '\t' '/\tfile0/ {print $1}' $tl)
+    sleep 1
+    touch $td/file0
+    $cf -d $td -t $tl
+    local time2=$(awk -F '\t' '/\tfile0/ {print $1}' $tl)
+
+    assertNotEquals 'create_filelist must detect updated file mtime' $time1 $time2
+}
+
+test_dir_time_update () {
+    # Check that an updated file gets an updated time
+    $cf -d $td -t $tl
+    local time1=$(awk -F '\t' '/\tdir1$/ {print $1}' $tl)
+    sleep 1
+    touch $td/dir1
+    $cf -d $td -t $tl
+    local time2=$(awk -F '\t' '/\tdir1$/ {print $1}' $tl)
+
+    assertNotEquals 'create_filelist must detect updated dir mtime' $time1 $time2
+}
+
+test_file_linking () {
+    # Check that making a hardlink updates the original files time
+    $cf -d $td -t $tl
+    local time1=$(awk -F '\t' '/\tfile0$/ {print $1}' $tl)
+    sleep 1
+    ln $td/file0 $td/linked-file0
+    $cf -d $td -t $tl
+    local time2=$(awk -F '\t' '/\tfile0$/ {print $1}' $tl)
+
+    assertNotEquals 'create_filelist must detect updated dir mtime' $time1 $time2
+}
+
+test_mass_hardlink () {
+    # Test what hardlinking does to a tree
+    # This ends up exercising the hardlinker as well.  Every little bit of
+    # testing helps....
+
+    $cf -d $td -t $tl
+    local time01=$(awk -F '\t' '/\tdir1\/file1$/ {print $1}' $tl)
+    local time02=$(awk -F '\t' '/\tdir2\/file2$/ {print $1}' $tl)
+
+    mkdir $td/z
+    cp -r $td/dir1 $td/dir2 $td/z
+    $cf -d $td -t $tl
+
+    local time11=$(awk -F '\t' '/\tdir1\/file1$/ {print $1}' $tl)
+    local time12=$(awk -F '\t' '/\tdir2\/file2$/ {print $1}' $tl)
+    local time13=$(awk -F '\t' '/\tz\/dir1\/file1$/ {print $1}' $tl)
+    local time14=$(awk -F '\t' '/\tz\/dir2\/file2$/ {print $1}' $tl)
+
+    assertEquals 'Copying should not change mtime' $time01 $time11
+    assertEquals 'Copying should not change mtime' $time02 $time12
+
+    sleep 1
+
+    cat > $SHUNIT_TMPDIR/hardlink.conf <<END
+DESTD=$tdup
+FILELIST=fullfiletimelist
+END
+
+    #$qfhardlink --debug -v --no-ctime -c $SHUNIT_TMPDIR/hardlink.conf
+    $qfhardlink --no-ctime -c $SHUNIT_TMPDIR/hardlink.conf &> /dev/null
+    #hardlink -vv $tdup
+
+    $cf -d $td -t $tl
+    local time21=$(awk -F '\t' '/\tdir1\/file1$/ {print $1}' $tl)
+    local time22=$(awk -F '\t' '/\tdir2\/file2$/ {print $1}' $tl)
+    local time23=$(awk -F '\t' '/\tz\/dir1\/file1$/ {print $1}' $tl)
+    local time24=$(awk -F '\t' '/\tz\/dir2\/file2$/ {print $1}' $tl)
+
+    assertNotEquals 'Hardlinking should change mtime' $time11 $time21
+    assertNotEquals 'Hardlinking should change mtime' $time12 $time22
+    assertNotEquals 'Hardlinking should change mtime' $time13 $time23
+    assertNotEquals 'Hardlinking should change mtime' $time14 $time24
+}
+
+test_checksum () {
+    # Test -c option.  Make some repomd.xml files with known contents.
+    local i
+    for i in $(find $td -name file0); do
+        cp $i ${i:h}/repomd.xml
+    done
+
+    $cf -d $td -t $tl -c
+    awk -F '\t' '/^\[Checksums/ {s=1;next} /^$/ {s=0;next} {if (s) print $0}' $tl > $sd/csum
+    local csum1=$(awk -F '\t' '/\trepomd.xml$/ {print $1}' $sd/csum)
+    local csum2=$(awk -F '\t' '/\tdir2\/repomd.xml$/ {print $1}' $sd/csum)
+
+    assertEquals 'repomd.xml should be checksummed correctly' $FIXED_CSUM "$csum1"
+    assertEquals 'repomd.xml should be checksummed correctly' $FIXED_CSUM "$csum2"
+}
+
+test_checksum_files () {
+    # Make sure the -C option works
+    cp $td/dir2/file0 $td/dir2/foo
+    $cf -d $td -t $tl -C file0 -C foo
+
+    awk -F '\t' '/^\[Checksums/ {s=1;next} /^$/ {s=0;next} {if (s) print $0}' $tl > $sd/csum
+    local csum1=$(awk -F '\t' '/\tfile0$/ {print $1}' $sd/csum)
+    local csum2=$(awk -F '\t' '/\tdir2\/foo$/ {print $1}' $sd/csum)
+
+    assertEquals 'Files should be checksummed correctly' $FIXED_CSUM "$csum1"
+    assertEquals 'Files should be checksummed correctly' $FIXED_CSUM "$csum2"
+}
+
+test_unreadable_content () {
+    # Make some unreadable files and make sure they're ignored
+    chmod 700 $td/dir2
+    chmod 700 $td/file2
+    chmod 700 $td/dir1/file3
+
+    $cf -d $td -t $tl
+
+    # Any occurrence of dir2 is bad
+    assertFalse 'Unreadable dirs must be ignored' "file_contains $tl \"TABdir2\""
+    assertFalse 'Unreadable files must be ignored' "file_contains $tl \"TABfile2\""
+    assertFalse 'Unreadable files must be ignored' "file_contains $tl \"TABdir1/file3\""
+    assertTrue  'Readable files must still be included' "file_contains $tl \"TABdir1/file2\""
+}
+
+test_protected_content () {
+    # Make some mode 750 dirs and make sure they're marked properly
+    chmod 770 $td/dir2
+    chmod 700 $td/dir2/file2
+    chmod 770 $td/dir2/file3
+    chmod 750 $td/file2
+    chmod 770 $td/dir1/file3
+    $cf -d $td -t $tl
+
+    assertTrue 'Restricted dirs must be marked with "-"' \
+        "file_contains $tl \"^\d+TABd-TAB\d+TABdir2$\""
+    assertTrue 'Content under restricted dirs must be marked with "*"' \
+        "file_contains $tl \"^\d+TABf\*TAB\d+TABdir2/file1$\""
+    assertTrue 'Restricted content under restructed dirs must have "-" and not "*"', \
+        "file_contains $tl \"^\d+TABf-TAB\d+TABdir2/file3\""
+    assertFalse 'Unreadable content under restricted dirs must be skipped' \
+        "file_contains $tl \"^\d+TABf-TAB\d+TABdir2/file2\""
+    assertTrue 'Unrestricted content must not be marked' "file_contains $tl \"^\d+TABfTAB\d+TABfile0$\""
+}
+
+test_dangling_symlink () {
+    # Make sure we properly handle dangling symlinks
+    ln -s $td/foo $td/foo2
+    assertTrue 'File list creation did not succeed' "$cf -d $td -t $tl >$so 2>$se"
+    assertTrue 'Should complain about dangling symlink' "file_contains $se \"Could not stat\""
+    assertFalse 'File list should not contain mention of dangling symlink' \
+        "file_contains $tl foo"
+}
+
+setUp () {
+    mkdir -p $tdup
+    create_dir_structure $td 3
+    mkdir $sd
+}
+
+tearDown () {
+    rm -rf $tdup $sd
+    if [[ -n "$TEST_VERBOSE" ]]; then
+        if [[ -s $so ]]; then
+            echo "Assertion standard output:"
+            cat $so
+        fi
+        if [[ -s $se ]]; then
+            echo "Assertion standard error:"
+            cat $se
+        fi
+    fi
+    rm -f $so $se
+}
+
+# load local functions
+source ${0:h}/../test-setup.zsh
+
+# load shunit2
+SHUNIT_PARENT=$0
+setopt shwordsplit
+. $(find-shunit)

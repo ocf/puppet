@@ -1,0 +1,6 @@
+# Stuff common to the beginning of all of these tests
+
+testdir=${0:A:h}
+qfh=${0:A:h}/../../quick-fedora-hardlink
+cf=${0:A:h}/../../create-filelist
+qfm=${0:A:h}/../../quick-fedora-mirror

@@ -1,0 +1,10 @@
+Tests for the hardlinker.
+
+Still to be done:
+
+* Proper output for various options (verbose, quiet).
+
+* Proper output when files are linked or can't be linked.
+
+* Proper handling of restricted content with and without -t.
+

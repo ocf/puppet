@@ -1,0 +1,137 @@
+#!/bin/zsh
+# Test directory timestamp updating
+#
+# Try to exercise the q-f-m feature for doing extra work to update directory
+# timestamps.
+
+export CONFD=${0:h:a}
+source $CONFD/common-start
+
+test_dirtimes_1 () {
+    # Copy, then touch a file and copy again (regular config) Should still
+    # update the timestamp correctly.
+
+    assertTrue 'Initial copy did not succeed.' \
+        "$qfm --no-paranoia -c $testdir/simple.conf &> $so"
+
+    sleep_next_second
+
+    find $td1 -name file1 -exec touch {} \;
+    $cf -d $td1 -f $td1/fullfilelist -t $td1/fullfiletimelist-module-a
+
+    assertTrue 'Second copy did not succeed.' \
+        "$qfm --no-paranoia -c $testdir/simple.conf &> $so"
+
+    assertTrue 'Directories should be identical.' "dirs_identical $td1 $destdir/module-a"
+}
+
+test_dirtimes_2 () {
+    # Copy, then touch a directory and copy again (regular config)
+    # Rsync will copy this correctly as well; we add changed directories to the file list
+
+    assertTrue 'Initial copy did not succeed.' \
+        "$qfm --no-paranoia -c $testdir/simple.conf &> $so"
+
+    sleep_next_second
+
+    find $td1 -name dir1 -exec touch {} \;
+    $cf -d $td1 -f $td1/fullfilelist -t $td1/fullfiletimelist-module-a
+
+    assertTrue 'Second copy did not succeed.' \
+        "$qfm --no-paranoia -c $testdir/simple.conf &> $so"
+
+    assertTrue 'Directories should be identical.' "dirs_identical $td1 $destdir/module-a"
+}
+
+test_dirtimes_3 () {
+    # Copy, then delete a file and copy again (regular config)
+    # We expect that the directory timestanp will be wrong.
+
+    assertTrue 'Initial copy did not succeed.' \
+        "$qfm --no-paranoia -c $testdir/simple.conf &> $so"
+
+    sleep_next_second
+
+    find $td1 -name file1 -delete
+    $cf -d $td1 -f $td1/fullfilelist -t $td1/fullfiletimelist-module-a
+
+    assertTrue 'Second copy did not succeed.' \
+        "$qfm --no-paranoia -c $testdir/simple.conf &> $so"
+
+    assertFalse 'Third rsync pass should not be made' "file_contains $so \"Updating timestamps on\""
+    assertFalse 'Directory timestamps should differ.' "dirs_identical $td1 $destdir/module-a"
+}
+
+test_dirtimes_4 () {
+    # Same as #3 above but with KEEPDIRTIMES config.
+    # Should make three rsync passes (file list, transfer, timestamp update)
+    # Dir timestamp should now be correct.
+
+    assertTrue 'Initial copy did not succeed.' \
+        "$qfm --no-paranoia -c $testdir/simple.conf &> $so"
+
+    sleep_next_second
+
+    find $td1 -name file1 -delete
+    $cf -d $td1 -f $td1/fullfilelist -t $td1/fullfiletimelist-module-a
+
+    # This seems to be needed because rsync may decide not to update a
+    # timestamp under some conditions.  I think it relies on some combination
+    # of the remote timestamp, the local on-disk timestamp, and the transfer
+    # time. If these are all within a second then it doesn't seem to update
+    # things.
+    sleep_next_second
+
+    assertTrue 'Second copy did not succeed.' \
+        "$qfm --no-paranoia -c $testdir/dirtimes.conf &> $so"
+
+    assertTrue 'Third rsync pass was not made (1)' "file_contains $so \"Updating timestamps on 127 dirs\""
+    assertTrue 'Third rsync pass was not made (2)' "file_contains $so \"do_rsync.*master-updatetimestamps\""
+    assertTrue 'All timestamps should be identical.' "dirs_identical $td1 $destdir/module-a"
+}
+
+test_dirtimes_5 () {
+    # Same as #4, but only delete one file.
+
+    assertTrue 'Initial copy did not succeed.' \
+        "$qfm --no-paranoia -c $testdir/simple.conf &> $so"
+
+    sleep_next_second
+
+    rm $td1/dir1/dir1/dir1/dir1/dir1/dir1/file1
+    $cf -d $td1 -f $td1/fullfilelist -t $td1/fullfiletimelist-module-a
+
+    # This seems to be needed because rsync may decide not to update a
+    # timestamp under some conditions.  I think it relies on some combination
+    # of the remote timestamp, the local on-disk timestamp, and the transfer
+    # time. If these are all within a second then it doesn't seem to update
+    # things.
+    sleep_next_second
+
+    assertTrue 'Second copy did not succeed.' \
+        "$qfm --no-paranoia -c $testdir/dirtimes.conf &> $so"
+
+    assertTrue 'Third rsync pass was not made (1)' "file_contains $so \"Updating timestamps on 7 dirs\""
+    assertTrue 'Third rsync pass was not made (2)' "file_contains $so \"do_rsync.*master-updatetimestamps\""
+    assertTrue 'All timestamps should be identical.' "dirs_identical $td1 $destdir/module-a"
+}
+
+test_dirtimes_6 () {
+    # Test the --dir-times option
+
+    assertTrue 'Initial copy did not succeed.' \
+        "$qfm --no-paranoia -c $testdir/simple.conf &> $so"
+
+    # A second copy, asking for a directory time update
+    assertTrue 'Second copy did not succeed.' \
+        "$qfm --dir-times --no-paranoia -c $testdir/simple.conf &> $so"
+
+    assertTrue 'Full timestamp update pass was not made.' "file_contains $so \"Updating timestamps on 127 dirs\""
+}
+
+source ${0:h}/common-end
+
+# load shunit2
+SHUNIT_PARENT=$0
+setopt shwordsplit
+. $(find-shunit)

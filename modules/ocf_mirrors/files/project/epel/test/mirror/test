@@ -1,0 +1,221 @@
+#!/bin/zsh
+# Exercise quick-fedora-mirror itself
+#
+# This is necessarily the most complicated module, and will end up exercising
+# the other utilities as well.
+
+source ${0:h}/common-start
+
+test_syntax () {
+    assertTrue 'Syntax problem' "zsh -n $qfm"
+}
+
+# No help output yet, so no point in a function to check that it works
+
+test_simple () {
+    # Just a simple copy
+    assertTrue 'A simple copy did not succeed' "$qfm -c $testdir/simple.conf &> $so" # 2> $se"
+    assertFalse 'Errors present in log (1)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    rm -rf $srcdir/master/module-[bc]
+    assertTrue 'The content was not copied correctly' "dirs_contents_identical $srcdir/master $destdir"
+}
+
+test_multiple_modules () {
+    assertTrue 'Multi-module copy did not succeed' \
+        "$qfm -c $testdir/multi.conf &> $so"
+    assertFalse 'Errors present in log (2)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+    assertTrue 'The content was not copied correctly' "dirs_contents_identical $srcdir/master $destdir"
+}
+
+test_restricted_1 () {
+    # Run with protected content and PREBITFLIP not set; protected things shouldn't be copied
+    chmod 770 $td3/dir3
+    chmod 770 $td3/dir4/dir4
+    chmod 770 $td3/dir5/dir5/file0
+    $cf -d $td3 -f $td3/fullfilelist -t $td3/fullfiletimelist-module-c
+
+    assertTrue 'A simple copy did not succeed' "$qfm -c $testdir/norestrict.conf &> $so" # 2> $se"
+    assertFalse 'Errors present in log (3)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+    for i in dir1 dir1/file0 dir2/dir1 dir2/dir3/file0; do
+        assertTrue "Unrestricted content $i should have been copied" \
+            "[[ -e $destdir/module-c/$i ]]"
+    done
+    for i in dir3 dir3/file0 dir3/dir1 dir3/dir1/file0 dir4/dir4 dir4/dir4/file0 dir5/dir5/file0; do
+        assertFalse "Restricted content $i should not have been copied" \
+            "[[ -e $destdir/module-c/$i ]]"
+    done
+}
+
+test_restricted_2 () {
+    # Run with protected content and PREBITFLIP set; everything should be copied
+    chmod 770 $td3/dir3
+    chmod 770 $td3/dir4/dir4
+    chmod 770 $td3/dir5/dir5/file0
+    $cf -d $td3 -f $td3/fullfilelist -t $td3/fullfiletimelist-module-c
+
+    assertTrue 'A simple copy did not succeed' "$qfm -c $testdir/restrict.conf &> $so" # 2> $se"
+    assertFalse 'Errors present in log (4)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    #ls -R $destdir
+    for i in dir1 dir1/file0 dir2/dir1 dir2/dir3/file0; do
+        assertTrue "Unrestricted content $i should have been copied" \
+            "[[ -e $destdir/module-c/$i ]]"
+    done
+     for i in dir3 dir3/file0 dir3/dir1 dir3/dir1/file0 dir4/dir4 dir4/dir4/file0 dir5/dir5/file0; do
+        assertTrue "Restricted content $i must been copied" \
+            "[[ -e $destdir/module-c/$i ]]"
+    done
+}
+
+test_update () {
+    # Test transfer of changes after an update
+    assertTrue 'A simple copy did not succeed' "$qfm -c $testdir/simple.conf &> $so"
+    assertFalse 'Errors present in log (5)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    # Change some content
+    for i in $(find $srcdir -name file0); do
+        echo update >> $i
+    done
+
+    sleep_next_second
+
+    # Just update some times
+    for i in $(find $srcdir -name file1); do
+        touch $i
+    done
+    $cf -d $td1 -f $td1/fullfilelist -t $td1/fullfiletimelist-module-a
+
+    assertTrue 'A simple update did not succeed' "$qfm -c $testdir/simple.conf &> $so"
+    assertFalse 'Errors present in log (6)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    assertTrue 'The content was not copied correctly' \
+        "dirs_contents_identical $srcdir/master/module-a $destdir/module-a"
+
+}
+
+test_hardlinks_1 () {
+    # Make sure initially hardlinked content is copied as hardlinks.
+    pushd $srcdir/master
+    assertTrue 'Hardlinking failed' \
+        "$qfh -v --debug --no-ctime -c $testdir/hardlink.conf &> $so"
+    popd
+
+    assertTrue 'The initial copy did not succeed' \
+        "$qfm -c $testdir/simple.conf &> $so"
+    assertFalse 'Errors present in log (7)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    # All of the file0s should have been hardlinked
+    for i in $(find $destdir -name file0); do
+        assertTrue "Link was not copied ($i)" \
+            "files_hardlinked $destdir/module-a/file0 $i"
+
+    done
+}
+
+test_hardlinks_2 () {
+    # Copy, then hardlink, update the file lists and copy again.
+    assertTrue 'The initial copy did not succeed' \
+        "$qfm -c $testdir/simple.conf &> $so"
+
+    for i in $(find $destdir -name file0 | grep -v module-a/file0); do
+        assertFalse "Should not be linked ($i)" \
+            "files_hardlinked $destdir/module-a/file0 $i"
+    done
+
+    pushd $srcdir/master
+    assertTrue 'Hardlinking failed' \
+        "$qfh -v --no-ctime -c $testdir/hardlink.conf &> $so"
+    popd
+    assertTrue 'create-filelist failed' \
+        "$cf -d $td1 -f $td1/fullfilelist -t $td1/fullfiletimelist-module-a"
+
+    assertTrue 'The update did not succeed' \
+        "$qfm -c $testdir/simple.conf &> $so"
+    assertFalse 'Errors present in log (8)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    # All of the file0s should now be hardlinked
+    for i in $(find $destdir -name file0); do
+        assertTrue "Link was not copied ($i)" \
+            "files_hardlinked $destdir/module-a/file0 $i"
+    done
+}
+
+test_extrafiles_1 () {
+    # Need to make sure that fillfiletimelist and imagelist-foo are transferred
+    # properly even though they aren't in the file list.
+    assertTrue 'The initial copy did not succeed' \
+        "$qfm -c $testdir/simple.conf &> $so"
+    assertTrue 'imagelist was not copied' "[[ -f $destdir/module-a/imagelist-module-a ]]"
+}
+
+test_extrafiles_2 () {
+    # Try with no extra files configured
+    assertTrue 'The initial copy did not succeed' \
+        "$qfm -c $testdir/noextrafiles.conf &> $so"
+    assertFalse 'extra file should not be copied (1)' "[[ -f $destdir/module-a/fullfilelist ]]"
+    assertFalse 'extra file should not be copied (2)' "[[ -f $destdir/module-a/imagelist-module-a ]]"
+}
+
+test_extrafiles_3 () {
+    # Add our own file and see if it's copied
+    EF=(extrafile1 extrafile2-module-a)
+    for i in $EF; do touch $td1/$i; done
+    assertTrue 'create-filelist failed' \
+        "$cf -d $td1 -f $td1/fullfilelist -t $td1/fullfiletimelist-module-a"
+    assertTrue 'The initial copy did not succeed' \
+        "$qfm -c $testdir/extrafiles.conf &> $so"
+    for i in EF; do
+        assertFalse 'extra file was not copied ($i)' "[[ -f $destdir/module-a/$i ]]"
+    done
+}
+
+test_filter_1 () {
+    # Just a simple copy
+    assertTrue 'A simple copy did not succeed' "$qfm -c $testdir/filter.conf &> $so" # 2> $se"
+    assertFalse 'Errors present in log (1)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+    rm -rf $srcdir/master/module-[bc]
+
+    # filter.conf has FILTEREXP='/(file1|file3|dir2/dir2)'
+    # So delete all file1, file3 and any path matching dir2/dir2 before comparing
+    find $srcdir/master -name file1 -delete
+    find $srcdir/master -name file3 -delete
+    find $srcdir/master -depth -path '*dir2/dir2' -exec rm -rf {} \;
+    assertTrue 'The content was not copied correctly' "dirs_contents_identical $srcdir/master $destdir"
+}
+
+test_filter_2 () {
+    # Test a copy/update/copy with filters.  We want to see if the file list
+    # generation somehow misses a filter call.
+
+    assertTrue 'A simple copy did not succeed' "$qfm -c $testdir/filter.conf &> $so" # 2> $se"
+    assertFalse 'Errors present in log (1)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+    rm -rf $srcdir/master/module-[bc]
+
+    sleep_next_second
+
+    # Touch some source files and fix the file list.
+    find $td1 -name file1 -exec touch {} \;
+    find $td1 -name file2 -exec touch {} \;
+    $cf -d $td1 -f $td1/fullfilelist -t $td1/fullfiletimelist-module-a
+
+    # Now re-mirror
+    assertTrue 'A simple copy did not succeed' "$qfm --no-paranoia -c $testdir/filter.conf &> $so"
+    assertFalse 'Errors present in log (1)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    # Delete all of the stuff from the source directory that we were supposed
+    # to have filtered, so that we can make a clean comparison.
+    find $srcdir/master -name file1 -delete
+    find $srcdir/master -name file3 -delete
+    find $srcdir/master -depth -path '*dir2/dir2' -exec rm -rf {} \;
+
+    assertTrue 'The content was not copied correctly' \
+        "dirs_contents_identical $srcdir/master/module-a $destdir/module-a"
+}
+
+source ${0:h}/common-end
+
+# load shunit2
+SHUNIT_PARENT=$0
+setopt shwordsplit
+. $(find-shunit)

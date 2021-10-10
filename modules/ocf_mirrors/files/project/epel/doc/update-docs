@@ -1,0 +1,11 @@
+#!/bin/zsh
+cd ${0:A:h}
+if [[ ! -d doc-repo/.git ]]; then
+    exit "No git checkout in doc-repo directory."
+fi
+
+cd doc-repo
+git pull || exit 1
+cp ../*rst . || exit 1
+git commit -a -m "Update docs from main repo" || exit 1
+git push

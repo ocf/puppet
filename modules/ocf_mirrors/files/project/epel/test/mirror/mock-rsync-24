@@ -1,0 +1,4 @@
+#!/bin/zsh
+# Look for "filelist-transferlist" in args
+(( ${argv[(I)*filelist-transferlist]} == 0 )) && exit 24
+rsync $*

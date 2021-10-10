@@ -1,0 +1,71 @@
+#!/bin/zsh
+# Exercise the quick-fedora-mirror checkin
+# This can't really exercise the checkin properly because it can't talk to the
+# remote server, but we can dump the encoded payload, make sure it's decodable
+# and then make sure it contains the necessary information.
+
+testdir=${0:A:h}
+qfh=${0:A:h}/../../quick-fedora-hardlink
+cf=${0:A:h}/../../create-filelist
+qfm=${0:A:h}/../../quick-fedora-mirror
+
+test_checkin () {
+    # Just a simple copy
+    dc=$mdir/decoded-checkin
+    assertTrue 'A simple copy did not succeed' "$qfm -c $testdir/checkin.conf --dump-mm-checkin $mdir/checkin &> $so" # 2> $se"
+    assertFalse 'Errors present in log (1)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+    assertTrue 'The content was not copied correctly' "dirs_contents_identical $srcdir/master $destdir"
+    grep '^.value..string.' $mdir/checkin-a \
+        | sed -e 's/<value><string>//' -e 's,</string></value>,,' \
+        | tr -- '-_' '+/' \
+        | base64 -d \
+        | bzcat > $dc
+    assertTrue 'The payload could not be unpacked' "$?"
+    assertTrue 'Site name missing' "file_contains $dc \"name....Test Suite Site\""
+    assertTrue 'Password missing' "file_contains $dc \"password....secret\""
+    assertTrue 'Checkin host missing' "file_contains $dc \"test.checkin.host\""
+    assertTrue 'Module name missing' "file_contains $dc \"test-suite-a...{\""
+    for i in $(find $td/ -type d); do
+        d=${i/$td\//}
+        assertTrue "Dir missing $d" "file_contains $dc \"\s\s\s\s.$d.:\s{}\""
+    done
+}
+
+setUp () {
+    td="$master/module-a"
+    fl=$td/fullfiletimelist-module-a
+
+    mkdir -p $mdir/tmp $srcdir $master $td $destdir
+
+    create_dir_structure $td 2 7
+    mkdir -p $td/module-a/z/z
+    $cf -d $td -s -f $td/fullfilelist -t $td/fullfiletimelist-module-a
+    touch $td/imagelist-module-a
+
+    mkdir $sd
+    touch $mdir/qfm.log
+    export TESTD=$mdir
+}
+
+tearDown () {
+    rm -rf $tdup $sd
+    if [[ -n "$TEST_VERBOSE" ]]; then
+        if [[ -s $so ]]; then
+            echo "Assertion standard output:"
+            cat $so
+        fi
+        if [[ -s $se ]]; then
+            echo "Assertion standard error:"
+            cat $se
+        fi
+    fi
+    rm -rf $so $se $mdir
+}
+
+# load local functions
+source ${0:h}/../test-setup.zsh
+
+# load shunit2
+SHUNIT_PARENT=$0
+setopt shwordsplit
+. $(find-shunit)

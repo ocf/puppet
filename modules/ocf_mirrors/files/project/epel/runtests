@@ -1,0 +1,20 @@
+#!/bin/zsh
+failed=0
+for i in test/*; do
+    [[ ! -d $i ]] && continue
+    echo "=========="
+    echo "Running ${i:t} tests"
+    echo "----------"
+    for j in $i/test*; do
+        [[ ! -x $j ]] && continue
+        $j
+        [[ $? -ne 0 ]] && failed=1
+        echo
+    done
+done
+if (( failed == 0 )); then
+    echo "All tests passed!"
+else
+    echo "*** Test failures present."
+fi
+exit $failed

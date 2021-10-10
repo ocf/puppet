@@ -1,0 +1,7 @@
+This directory holds a simple test suite.  It makes use of shunit2, but that's
+not included.  Fedora packages it, and it will be found if that package is
+installed.  You can also download it to this directory.  Get it from
+https://raw.githubusercontent.com/kward/shunit2/master/source/2.1/src/shunit2
+Finally, you can install it wherever you like and provide the path in $SHUNIT.
+
+Should probably add some simple instructions on creating tests....

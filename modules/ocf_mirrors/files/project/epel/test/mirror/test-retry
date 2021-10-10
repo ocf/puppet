@@ -1,0 +1,41 @@
+#!/bin/zsh
+# Do some basic testing of the retry functionality.
+#
+# It's hard to test rsync failures without mocking rsync.
+#
+# Can test one thing with newdark: Delete a file before the transfer and dee that we deal with the 23 result code properly.
+#
+# For other things, we can replace rsync with a script that exits with the
+# right value.  But it might need to support enough of rsync to output the
+# version info when needed, because qfm wants that info.
+
+export CONFD=${0:h:a}
+source $CONFD/common-start
+
+test_retry_1 () {
+    # Test the "link_stat: no such file or directory" failure mode by deleting
+    # a file before the transfer.
+
+    find $td1 -name file1 -delete
+
+    assertFalse 'Copy should not succeed.' \
+        "$qfm --no-paranoia -c $testdir/retry.conf &> $so"
+
+    assertTrue 'Outdated file list not detected' "file_contains $mdir/qfm.log \"Looks like the file list is outdated\""
+}
+
+test_retry_2 () {
+
+    assertFalse 'Copy should not succeed.' \
+        "$qfm --no-paranoia -c $testdir/retry-mock-24.conf &> $so"
+
+    assertTrue 'rsync return 24 not detected' "file_contains $so \"rsync says source files vanished\""
+}
+
+
+source ${0:h}/common-end
+
+# load shunit2
+SHUNIT_PARENT=$0
+setopt shwordsplit
+. $(find-shunit)

@@ -1,0 +1,310 @@
+#!/bin/zsh
+# Exercise the hardlinker.  This will also by necessity call the file list
+# generator.
+
+testdir=${0:A:h}
+qfh=${0:A:h}/../../quick-fedora-hardlink
+cf=${0:A:h}/../../create-filelist
+
+make_simple () {
+    mkdir $td/a $td/b
+    echo foo > $td/a/f
+    sleep 1
+    echo foo > $td/b/f
+    $cf -d $td -t $tl
+}
+
+make_lots_of_tuples () {
+    # We need enough structure to guarantee that a progress line shows up
+    # Each directory has one file that can be linked to the previous directory and one that can't.
+    local last="xx"
+    local i
+
+    rm -rf $td
+    for i in {000..200}; do
+        mkdir -p $td/dir$i
+        echo foo >> $td/dir$i/$i
+        echo foo >> $td/dir$i/$last
+        echo $i >> $td/dir$i/x$last
+        last=$i
+    done
+    $cf -d $td -t $tl
+
+    # And delete some of those files to test what happens when the file list
+    # isn't correct.
+    rm -rf $td/dir*9
+}
+
+test_help () {
+    $qfh -h &> $so
+    assertTrue 'Help text not good' "file_contains $so \"quickly hardlink\""
+    assertTrue 'Help text not good' "file_contains $so --no-ctime"
+}
+
+test_simple () {
+    # Test the simplest hardlinking scenario
+
+    make_simple
+    pushd $tdup
+
+    assertFalse 'Files linked initially???' \
+        "files_hardlinked $td/a/f $td/b/f"
+
+    $qfh -v --debug -c $testdir/hl.conf &> /dev/null
+    assertFalse 'Files with differing ctimes should not be linked' \
+        "files_hardlinked $td/a/f $td/b/f"
+
+    $qfh -v --debug --no-ctime -c $testdir/hl.conf &> /dev/null
+    assertTrue  '--no-ctime flag should cause identical files to be link regardless of ctime' \
+        "files_hardlinked $td/a/f $td/b/f"
+    popd
+}
+
+test_verbosity () {
+    # Test -v, --debug, -q and -s
+    out=$od/out
+    err=$od/err
+    pushd $tdup
+
+    # No options at all
+    make_lots_of_tuples
+    $qfh --no-ctime -c $testdir/hl.conf >$out 2>$err
+    assertTrue 'Header not present (no options)' \
+        "file_contains $out \"Processing file lists in\""
+    assertTrue 'Tuple count not present (no options)' \
+        "file_contains $out \"Found \d+ tuples of potentially hardlinkable\""
+    assertTrue 'Progress info missing (no options)' \
+        "file_contains $out \"\d+ tuples.*links:.*saved.*left\""
+    assertFalse 'Debug info present (no options)' \
+        "file_contains $out \"Found tuples:\""
+    assertFalse 'Comparison log should not be present (no options)' \
+        "file_contains $out \"Compare sub/.*, sub/.*\""
+    assertTrue 'Missing file complaints should be present (no options)' \
+        "file_contains $err \"Could not find .*  File list out of date\""
+    assertTrue 'Summary info missing (1) (no options)' \
+        "file_contains $out \"Files linked: \d+\""
+    assertTrue 'Summary info missing (2) (no options)' \
+        "file_contains $out \"Space saved: +\d+\""
+    assertTrue 'Summary info missing (3) (no options)' \
+        "file_contains $out \"Linking took: \d+\""
+
+    # Just --debug
+    make_lots_of_tuples
+    $qfh --debug --no-ctime -c $testdir/hl.conf >$out 2>$err
+    assertTrue 'Header not present (--debug)' \
+        "file_contains $out \"Processing file lists in\""
+    assertTrue 'Tuple count not present (--debug)' \
+        "file_contains $out \"Found \d+ tuples of potentially hardlinkable\""
+    assertTrue 'Progress info missing (--debug)' \
+        "file_contains $out \"\d+ tuples.*links:.*saved.*left\""
+    assertTrue 'Debug info missing (--debug)' \
+        "file_contains $out \"Found tuples:\""
+    assertTrue 'Comparison log missing (--debug)' \
+        "file_contains $out \"Compare sub/.*, sub/.*\""
+    assertTrue 'Missing file complaints should be present (--debug)' \
+        "file_contains $err \"Could not find .*  File list out of date\""
+    assertTrue 'Summary info missing (1) (--debug)' \
+        "file_contains $out \"Files linked: \d+\""
+    assertTrue 'Summary info missing (2) (--debug)' \
+        "file_contains $out \"Space saved: +\d+\""
+    assertTrue 'Summary info missing (3) (--debug)' \
+        "file_contains $out \"Linking took: \d+\""
+
+
+    # Just -v
+    make_lots_of_tuples
+    $qfh -v --no-ctime -c $testdir/hl.conf >$out 2>$err
+    assertTrue 'Header not present (-v)' \
+        "file_contains $out \"Processing file lists in\""
+    assertTrue 'Tuple count not present (-v)' \
+        "file_contains $out \"Found \d+ tuples of potentially hardlinkable\""
+    assertTrue 'Progress info missing (-v)' \
+        "file_contains $out \"\d+ tuples.*links:.*saved.*left\""
+    assertFalse 'Debug info should not be present (-v)' \
+        "file_contains $out \"Found tuples:\""
+    assertFalse 'Comparison log should not be present (-v)' \
+        "file_contains $out \"Compare sub/.*, sub/.*\""
+    assertTrue 'Missing file complaints not present (-v)' \
+        "file_contains $err \"Could not find .*  File list out of date\""
+    assertTrue 'Summary info missing (1) (-v)' \
+        "file_contains $out \"Files linked: \d+\""
+    assertTrue 'Summary info missing (2) (-v)' \
+        "file_contains $out \"Space saved: +\d+\""
+    assertTrue 'Summary info missing (3) (-v)' \
+        "file_contains $out \"Linking took: \d+\""
+
+
+    # Just -q
+    make_lots_of_tuples
+    $qfh -q --no-ctime -c $testdir/hl.conf >$out 2>$err
+    assertFalse 'Header should not be present (-q)' \
+        "file_contains $out \"Processing file lists in\""
+    assertFalse 'Tuple count should not be present (-q)' \
+        "file_contains $out \"Found \d+ tuples of potentially hardlinkable\""
+    assertFalse 'Progress info should not be present (-q)' \
+        "file_contains $out \"\d+ tuples.*links:.*saved.*left\""
+    assertFalse 'Debug info should not be present (-q)' \
+        "file_contains $out \"Found tuples:\""
+    assertFalse 'Comparison log should not be present (-q)' \
+        "file_contains $out \"Compare sub/.*, sub/.*\""
+    assertTrue 'Missing file complaints not present (-q)' \
+        "file_contains $err \"Could not find .*  File list out of date\""
+    assertTrue 'Summary info missing (1) (-q)' \
+        "file_contains $out \"Files linked: \d+\""
+    assertTrue 'Summary info missing (2) (-q)' \
+        "file_contains $out \"Space saved: +\d+\""
+    assertTrue 'Summary info missing (3) (-q)' \
+        "file_contains $out \"Linking took: \d+\""
+
+
+    # Just -s
+    make_lots_of_tuples
+    $qfh -s --no-ctime -c $testdir/hl.conf >$out 2>$err
+    cat $out > /tmp/y
+    cat $err > /tmp/z
+    assertFalse 'Header should not be present (-s)' \
+        "file_contains $out \"Processing file lists in\""
+    assertFalse 'Tuple count should not be present (-s)' \
+        "file_contains $out \"Found \d+ tuples of potentially hardlinkable\""
+    assertFalse 'Progress info should not be present (-s)' \
+        "file_contains $out \"\d+ tuples.*links:.*saved.*left\""
+    assertFalse 'Debug info should not be present (-s)' \
+        "file_contains $out \"Found tuples:\""
+    assertFalse 'Comparison log should not be present (-s)' \
+        "file_contains $out \"Compare sub/.*, sub/.*\""
+    assertFalse 'Missing file complaints should not be present (-s)' \
+        "file_contains $err \"Could not find .*  File list out of date\""
+    assertFalse 'Summary info should not be present (1) (-s)' \
+        "file_contains $out \"Files linked: \d+\""
+    assertFalse 'Summary info should not be present (2) (-s)' \
+        "file_contains $out \"Space saved: +\d+\""
+    assertFalse 'Summary info should not be present (3) (-s)' \
+        "file_contains $out \"Linking took: \d+\""
+
+    # Not much point in testing all of the combinations
+    popd
+}
+
+test_nested_1 () {
+    # Test deep nesting and multiple linkable files
+    # Things are created in differing orders just to make sure that doesn't
+    # matter
+    for i in {d..a}; do
+        mkdir $td/$i
+        for j in {a..d}; do
+            mkdir $td/$i/$j
+            for k in b d c a; do
+                echo foo >> $td/$i/$j/$k
+            done
+        done
+    done
+    $cf -d $td -t $tl
+
+    # All files with the same name should be linkable
+    # Using --no-ctime so we don't have to care about times
+    pushd $tdup
+    $qfh -v --debug --no-ctime -c $testdir/hl.conf &> /dev/null
+    popd
+
+    for i in {a..d}; do
+        for j in {a..d}; do
+            for k in {a..d}; do
+                assertTrue "Should be linked: a/a/$k and $i/$j/$k" "files_hardlinked $td/a/a/$k $td/$i/$j/$k"
+            done
+        done
+    done
+}
+
+test_nested_2 () {
+    # Test deep nesting with identical sizes but differing contents
+    # Should still result in the same links as before
+
+    for i in {a..d}; do
+        mkdir $td/$i
+        for j in {d..a}; do
+            mkdir $td/$i/$j
+            echo "zzzz" > $td/$i/$j/d
+            echo "zzzz" > $td/$i/$j/b
+            echo "aaaa" > $td/$i/$j/a
+            echo "aaaa" > $td/$i/$j/c
+        done
+    done
+    $cf -d $td -t $tl
+
+    pushd $tdup
+    $qfh -v --debug --no-ctime -c $testdir/hl.conf &> /dev/null
+    popd
+
+    for i in {a..d}; do
+        for j in {a..d}; do
+            for k in {a..d}; do
+                assertTrue "Should be linked: a/a/$k and $i/$j/$k" "files_hardlinked $td/a/a/$k $td/$i/$j/$k"
+            done
+        done
+    done
+}
+
+test_nested_3 () {
+    # Deep nesting, identical sizes, differing contents
+    # ?/a/? shoudl link to ?/c/? and ?/b/? should link to ?/d/?
+
+    for i in {a..d}; do
+        mkdir $td/$i
+        for j in {d..a}; do
+            mkdir $td/$i/$j
+            for k in a c d b; do
+                if [[ $j == 'a' || $j == 'c' ]]; then
+                    echo "zzzz" > $td/$i/$j/$k
+                else
+                    echo "aaaa" > $td/$i/$j/$k
+                fi
+            done
+        done
+    done
+    $cf -d $td -t $tl
+
+    pushd $tdup
+    $qfh -v --debug --no-ctime -c $testdir/hl.conf &> /dev/null
+    popd
+
+    for i in {a..d}; do
+        for j in {a..d}; do
+            for k in {a..d}; do
+                if [[ $j == 'a' || $j == 'c' ]]; then
+                    assertTrue "Should be linked: a/a/$k and $i/$j/$k" "files_hardlinked $td/a/a/$k $td/$i/$j/$k"
+                else
+                    assertTrue "Should be linked: a/b/$k and $i/$j/$k" "files_hardlinked $td/a/b/$k $td/$i/$j/$k"
+                fi
+            done
+        done
+    done
+
+}
+
+setUp () {
+    mkdir -p $td
+    mkdir $sd
+}
+
+tearDown () {
+    rm -rf $tdup $sd
+    if [[ -n "$TEST_VERBOSE" ]]; then
+        if [[ -s $so ]]; then
+            echo "Assertion standard output:"
+            cat $so
+        fi
+        if [[ -s $se ]]; then
+            echo "Assertion standard error:"
+            cat $se
+        fi
+    fi
+    rm -f $so $se
+}
+
+# load local functions
+source ${0:h}/../test-setup.zsh
+
+# load shunit2
+SHUNIT_PARENT=$0
+setopt shwordsplit
+. $(find-shunit)

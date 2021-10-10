@@ -1,0 +1,170 @@
+#!/bin/bash
+
+# Note: this is only an example of how you'd call create-filelist.  Edit to fit
+# your requirements.  Note that you must supply a valid path for the lockfile,
+# and it must be outside of your repository unless you want that lockfile to
+# show up in your file lists.
+
+# Takes a list of module names.  Generates file lists for all of them and them
+# moves them into place at once.  If you are creating hardlinks between rsync
+# modules, it is required that you update the file lists of both mirrors at the
+# same time.  Otherwise the clients may make separate copies of the files.
+
+# The directory where all of the modules live
+# Or pass it with -t
+TOPD=/srv/mirror/pub
+
+# The modules to process.  Or pass them on the command line.
+MODS=()
+
+# Path to the create-filelist program.
+# Or specify it with -p.
+CREATE=/usr/local/bin/create-filelist
+
+# These strings will be eval'ed later with $mod replaced by its value in
+# context.
+FILELIST=fullfilelist
+TIMELIST='fullfiletimelist-$mod'
+IMAGELIST='imagelist-$mod'
+
+usage () {
+    echo
+    echo "Usage: $0 [-l lockfile] [-p creator path] [-t top directory] module [module ...]"
+    echo
+    echo "    -l: Path to the lock file"
+    echo "    -p: Path to the create-filelist program"
+    echo "    -t: Path to directory containing modules"
+    echo
+    echo "At least one module to process must be provided."
+    echo "All paths must be absolute."
+}
+
+while [[ $# > 0 ]]; do
+    opt=$1
+    case $opt in
+        -l)
+            LOCKFILE=$(realpath $2)
+            shift
+            ;;
+        -p)
+            CREATE=$(realpath $2)
+            shift
+            ;;
+        -t)
+            TOPD=$(realpath $2)
+            shift
+            ;;
+        -*)
+            (>&2 echo "Unknown option $opt."; usage)
+            exit 1
+            ;;
+        *)  # Remaining args are modules
+            MODS+=($opt)
+            ;;
+    esac
+    shift
+done
+
+if [[ -z $LOCKFILE ]]; then
+    (>&2 echo "Must specify LOCKFILE, either by editing the source or via the -l option."; usage)
+    exit 2
+fi
+if [[ ! -d $(dirname $LOCKFILE) ]]; then
+    (>&2 echo "Given directory $(dirname $LOCKFILE) does not exist."; usage)
+    exit 2
+fi
+if [[ ! -f $CREATE ]]; then
+    (>&2 echo "Specified executable $CREATE does not exist."; usage)
+    exit 2
+fi
+
+if [[ ! -d $TOPD ]]; then
+    (>&2 echo "Provided directory $TOPD does not exist."; usage)
+    exit 2
+fi
+
+if [[ ${#MODS[@]} -eq 0 ]]; then
+    (>&2 echo "No modules specified"; usage)
+    exit 2
+fi
+
+tmpd=$(mktemp -d -t create-filelist.XXXXXXXXXX)
+if [[ $? -ne 0 ]]; then
+    (>&2 echo "Creating temporary directory failed?")
+    exit 1
+fi
+trap "rm -rf $tmpd" EXIT
+cd $tmpd
+
+(
+    # We want to wait forever until we can do what we're asked
+    flock -x 9
+
+    # If you don't want to wait forever, try one of the following:
+    # flock -n 9 || exit 1      - Gives up immediately
+    # flock -w 120 9 || exit 1  - Waits 120 seconds and then gives up
+    # Don't change the '9', unless you change the last line of this script.
+
+    for mod in ${MODS[@]}; do
+        currentfl=$TOPD/$mod/${FILELIST/'$mod'/$mod}
+        currenttl=$TOPD/$mod/${TIMELIST/'$mod'/$mod}
+        currentil=$TOPD/$mod/${IMAGELIST/'$mod'/$mod}
+        flname=$(basename $currentfl)
+        tlname=$(basename $currenttl)
+        ilname=$(basename $currentil)
+
+        $CREATE -c -s -d $TOPD/$mod -f $flname -t $tlname -i $ilname
+
+        if [[ $? -ne 0 ]]; then
+            (>&2 echo "File list generator failed?")
+            exit 1
+        fi
+
+        # If a file list exsts and doesn't differ from what we just generated,
+        # delete the latter.
+        if [[ -f $currentfl ]] && diff -q $currentfl $flname > /dev/null; then
+            rm -f $flname
+        fi
+        if [[ -f $currenttl ]] && diff -q $currenttl $tlname > /dev/null; then
+            rm -f $tlname
+        fi
+        if [[ -f $currentil ]] && diff -q $currentil $ilname > /dev/null; then
+            rm -f $ilname
+        fi
+    done
+
+    # Now we have the new file lists but in a temporary directory which
+    # probably isn't on the same filesystem.  Copy them to temporary files in
+    # the right place.
+    for mod in ${MODS[@]}; do
+        currentfl=$TOPD/$mod/${FILELIST/'$mod'/$mod}
+        currenttl=$TOPD/$mod/${TIMELIST/'$mod'/$mod}
+        currentil=$TOPD/$mod/${IMAGELIST/'$mod'/$mod}
+        flname=$(basename $currentfl)
+        fldir=$(dirname $currentfl)
+        tlname=$(basename $currenttl)
+        tldir=$(dirname $currenttl)
+        ilname=$(basename $currentil)
+        ildir=$(dirname $currentil)
+
+        if [[ -f $flname ]]; then
+            tmpf=$(mktemp -p $fldir $flname.XXXXXXXXXX)
+            cp -p $flname $tmpf
+            chmod 644 $tmpf
+            mv $tmpf $currentfl
+        fi
+        if [[ -f $tlname ]]; then
+            tmpf=$(mktemp -p $tldir $tlname.XXXXXXXXXX)
+            cp -p $tlname $tmpf
+            chmod 644 $tmpf
+            mv $tmpf $currenttl
+        fi
+        if [[ -f $ilname ]]; then
+            tmpf=$(mktemp -p $ildir $ilname.XXXXXXXXXX)
+            cp -p $ilname $tmpf
+            chmod 644 $tmpf
+            mv $tmpf $currentil
+        fi
+    done
+
+) 9>$LOCKFILE

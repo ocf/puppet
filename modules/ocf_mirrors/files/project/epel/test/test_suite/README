@@ -1,0 +1,2 @@
+It wouldn't be fun if the test suite didn't test itself.  Something needs to
+test our local helper functions, after all.

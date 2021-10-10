@@ -1,0 +1,208 @@
+#!/usr/bin/python3
+
+# A simple script to generate a file list in a format easily consumable by a
+# shell script.
+
+# Originally written by Jason Tibbitts <tibbs@math.uh.edu> in 2016.
+# Donated to the public domain.  If you require a statement of license, please
+# consider this work to be licensed as "CC0 Universal", any version you choose.
+
+import argparse
+import hashlib
+import os
+import stat
+import sys
+
+# Get scandir from whatever module provides it today
+try:
+    from os import scandir
+except ImportError:
+    from scandir import scandir
+
+# productmd is optional, needed only for the imagelist feature
+try:
+    from productmd.images import SUPPORTED_IMAGE_FORMATS
+except ImportError:
+    SUPPORTED_IMAGE_FORMATS = []
+
+
+class SEntry(object):
+    """A simpler DirEntry-like object."""
+
+    def __init__(self, direntry, restricted=False):
+        self.direntry = direntry
+        self.restricted = restricted
+        self.path = direntry.path
+        self.name = direntry.name
+
+        info = direntry.stat(follow_symlinks=False)
+        # Make sure we have an int here.  Whether the stat calls give us ints
+        # or floats depends on the python version, and the extra precision
+        # isn't really helpful.
+        self.modtime = int(max(info.st_mtime, info.st_ctime))
+        self.readable_group = info.st_mode & stat.S_IRGRP
+        self.readable_world = info.st_mode & stat.S_IROTH
+        self.size = info.st_size
+
+        ftype = 'f'
+        perm = ''
+        if direntry.is_symlink():
+            ftype = 'l'
+        elif direntry.is_dir():
+            ftype = 'd'
+
+        if self.restricted:
+            perm = '*'
+
+        # Note that we want an unreadable state to override the restricted state
+        if not self.readable_world:
+            perm = '-'
+
+        self.ftype = ftype + perm
+
+
+def sha1(fname):
+    """Return the SHA1 checksum of a file in hex."""
+    fh = open(fname, 'rb')
+    sha1 = hashlib.sha1()
+    block = fh.read(2 ** 16)
+    while len(block) > 0:
+        sha1.update(block)
+        block = fh.read(2 ** 16)
+
+    return sha1.hexdigest()
+
+
+def recursedir(path='.', skip=[], alwaysskip=['.~tmp~'], in_restricted=False):
+    """Like scandir, but recursively.
+
+    Will skip everything in the skip array, but only at the top level
+    directory.
+
+    Returns SEntry objects.  If in_restricted is true, all returned entries will
+    be marked as restricted even if their permissions are not restricted.
+    """
+    for dentry in scandir(path):
+        if dentry.name in skip:
+            continue
+        if dentry.name in alwaysskip:
+            continue
+        if dentry.name.startswith('.nfs'):
+            continue
+
+        # Skip things which are not at least group readable
+        # Symlinks are followed here so that clients won't see dangling
+        # symlinks to content they can't transfer.  It's the default, but to
+        # avoid confusion it's been made explicit.
+        try:
+            s = dentry.stat(follow_symlinks=True)
+        except os.error:
+            print('Could not stat {0}.  Dangling symlink?'.format(dentry.name), file=sys.stderr)
+            continue
+
+        if not (s.st_mode & stat.S_IRGRP):
+            # print('{} is not group readable; skipping.'.format(dentry.path))
+            continue
+
+        se = SEntry(dentry, in_restricted)
+        if dentry.is_dir(follow_symlinks=False):
+            this_restricted = in_restricted
+            if not se.readable_world:
+                # print('{} is not world readable; marking as restricted.'.format(se.path), file=sys.stderr)
+                this_restricted = True
+
+            # Don't pass skip here, because we only skip in the top level
+            for re in recursedir(se.path, alwaysskip=alwaysskip, in_restricted=this_restricted):
+                yield re
+        yield se
+
+
+def parseopts():
+    null = open(os.devnull, 'w')
+    p = argparse.ArgumentParser(
+        description='Generate a list of files and times, suitable for consumption by quick-fedora-mirror, '
+                    'and (optionally) a much smaller list of only files that match one of the productmd '
+                    ' supported image types, for use by fedfind.')
+    p.add_argument('-c', '--checksum', action='store_true',
+                   help='Include checksums of all repomd.xml files in the file list.')
+    p.add_argument('-C', '--checksum-file', action='append', dest='checksum_files',
+                   help='Include checksums of all instances of the specified file.')
+    p.add_argument('-s', '--skip', action='store_true',
+                   help='Skip the file lists in the top directory')
+    p.add_argument('-S', '--skip-file', action='append', dest='skip_files',
+                   help='Skip the specified file in the top directory.')
+
+    p.add_argument('-d', '--dir', help='Directory to scan (default: .).')
+
+    p.add_argument('-t', '--timelist', type=argparse.FileType('w'), default=sys.stdout,
+                   help='Filename of the file list with times (default: stdout).')
+    p.add_argument('-f', '--filelist', type=argparse.FileType('w'), default=null,
+                   help='Filename of the file list without times (default: no plain file list is generated).')
+    p.add_argument('-i', '--imagelist', type=argparse.FileType('w'), default=null,
+                   help='Filename of the image file list for fedfind (default: not generated). Requires '
+                   'the productmd library.')
+
+    opts = p.parse_args()
+
+    if not opts.dir:
+        opts.dir = '.'
+
+    opts.checksum_files = opts.checksum_files or []
+    if opts.checksum:
+        opts.checksum_files += ['repomd.xml']
+
+    opts.skip_files = opts.skip_files or []
+    if opts.skip:
+        if not opts.timelist.name == '<stdout>':
+            opts.skip_files += [os.path.basename(opts.timelist.name)]
+        if not opts.filelist.name == '<stdout>':
+            opts.skip_files += [os.path.basename(opts.filelist.name)]
+        if not opts.imagelist.name == '<stdout>':
+            opts.skip_files += [os.path.basename(opts.imagelist.name)]
+
+    return opts
+
+
+def main():
+    opts = parseopts()
+    if opts.imagelist.name != os.devnull and not SUPPORTED_IMAGE_FORMATS:
+        sys.exit("--imagelist requires the productmd library!")
+    checksums = {}
+
+    os.chdir(opts.dir)
+
+    print('[Version]', file=opts.timelist)
+    # XXX Technically this should be version 3.  But old clients will simply
+    # ignore the extended file types for restricted directories, and so we can
+    # add this now and let things simmer for a while before bumping the format
+    # and hard-breaking old clients.
+    print('2', file=opts.timelist)
+    print(file=opts.timelist)
+    print('[Files]', file=opts.timelist)
+
+    for entry in recursedir(skip=opts.skip_files):
+        print(entry.path, file=opts.filelist)
+
+        # write to filtered list if appropriate
+        imgs = ['.{0}'.format(form) for form in SUPPORTED_IMAGE_FORMATS]
+        if any(entry.path.endswith(img) for img in imgs):
+            print(entry.path, file=opts.imagelist)
+        if entry.name in opts.checksum_files:
+            checksums[entry.path[2:]] = True
+
+        print('{0}\t{1}\t{2}\t{3}'.format(entry.modtime, entry.ftype,
+                                          entry.size, entry.path[2:]),
+              file=opts.timelist)
+
+    print('\n[Checksums SHA1]', file=opts.timelist)
+
+    # It's OK if the checksum section is empty, but we should include it anyway
+    # as the client expects it.
+    for f in sorted(checksums):
+        print('{0}\t{1}'.format(sha1(f), f), file=opts.timelist)
+
+    print('\n[End]', file=opts.timelist)
+
+
+if __name__ == '__main__':
+        main()

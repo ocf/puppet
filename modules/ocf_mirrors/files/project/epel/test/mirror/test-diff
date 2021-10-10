@@ -1,0 +1,131 @@
+#!/bin/zsh
+# Test the file list diffing functionality
+
+source ${0:h}/common-start
+
+test_diff_1 () {
+    # Make sure we don't miss updates if we pull after files were changed on
+    # the master but before the file lists were updated on the master.
+
+    assertTrue 'A simple copy did not succeed' "$qfm --no-paranoia -c $testdir/simple.conf &> $so"
+    assertFalse 'Errors present in log (1)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    sleep_next_second
+
+    # Touch some source files and fix the file list
+    find $td1 -name file1 -exec touch {} \;
+    $cf -d $td1 -f $td1/fullfilelist -t $td1/fullfiletimelist-module-a
+
+    sleep_next_second
+
+    # Now fake the last mirror time so that it looks like we last updated after the files had changed.
+    echo LASTTIME=$(date +%s) > $TESTD/lastmirrortime
+
+    # Now re-mirror.  Without the diff-based checks, this shouldn't mirror
+    # anything.
+    assertTrue 'A simple copy did not succeed' "$qfm --no-paranoia -c $testdir/simple.conf &> $so"
+    assertFalse 'Errors present in log (1)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    assertTrue 'The content was not copied correctly' \
+        "dirs_contents_identical $srcdir/master/module-a $destdir/module-a"
+}
+
+test_diff_2 () {
+    # Make sure we don't miss updates if we pull after permissions were changed
+    # on the master but before the file lists were updated on the master.
+
+    # Restrict some perms and generate the file list
+    chmod 770 $td3/dir3
+    chmod 770 $td3/dir4/dir4
+    chmod 770 $td3/dir5/dir5/file0
+    $cf -d $td3 -f $td3/fullfilelist -t $td3/fullfiletimelist-module-c
+
+    assertTrue 'A simple copy did not succeed' "$qfm --no-paranoia -c $testdir/norestrict.conf &> $so"
+    assertFalse 'Errors present in log (3)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    sleep_next_second
+
+    # Change those permissions back
+    chmod 775 $td3/dir3
+    chmod 775 $td3/dir4/dir4
+    chmod 775 $td3/dir5/dir5/file0
+    $cf -d $td3 -f $td3/fullfilelist -t $td3/fullfiletimelist-module-c
+
+    sleep_next_second
+
+    # Now fake the last mirror time so that it looks like we last updated after the files had changed.
+    echo LASTTIME=$(date +%s) > $TESTD/lastmirrortime
+
+    # Now re-mirror.  Without the diff-based checks, this shouldn't mirror
+    # anything.
+    assertTrue 'A simple copy did not succeed' "$qfm --no-paranoia -c $testdir/norestrict.conf &> $so"
+    assertFalse 'Errors present in log (1)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    assertTrue 'The content was not copied correctly' \
+        "dirs_contents_identical $srcdir/master/module-c $destdir/module-c"
+}
+
+test_diff_3 () {
+    # Test for retransfers when the file list has been locally modified.
+    # Without file list diffing, this does nothing except force a rescan.  With
+    # it (and depending on the change made to the local file list), it will
+    # force an rsync check of some files.  Technically there is no reason to do
+    # this, but it serves as an additional check.
+    local t=$(date +%s)
+
+    assertTrue 'A simple copy did not succeed' "$qfm --no-paranoia -c $testdir/simple.conf &> $so"
+    assertFalse 'Errors present in log (1)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    # Delete and change some local file list entries
+    sed -i -e '/file0$/d' -e 's/\(.*\)\t\(.*\)\t\(.*\)\t\(.*file2\)$/2222222222\t\2\t\3\t\4/' \
+        $destdir/module-a/fullfiletimelist-module-a
+
+    # And touch the corresponding files in the master.
+    find $td1 -name file0 -exec touch {} \;
+    find $td1 -name file2 -exec touch {} \;
+
+    # Now re-mirror without updating the file list.  Without the diff-based
+    # checks, this shouldn't mirror anything.
+    assertTrue 'A simple copy did not succeed' "$qfm --no-paranoia -c $testdir/simple.conf &> $so"
+    assertFalse 'Errors present in log (1)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    # And without the diff checks, this will fail because those files weren't updated.
+    assertTrue 'The content was not copied correctly' \
+        "dirs_contents_identical $srcdir/master/module-a $destdir/module-a"
+}
+
+test_diff_4 () {
+    # Test with changes in protected content to ensure that we don't
+    # accidentally transfer too much.
+
+    # Restrict some content
+    chmod 770 $td3/dir3
+    chmod 770 $td3/dir4/dir4
+    chmod 770 $td3/dir5/dir5/file0
+    $cf -d $td3 -f $td3/fullfilelist -t $td3/fullfiletimelist-module-c
+
+    assertTrue 'A simple copy did not succeed' "$qfm -c $testdir/norestrict.conf &> $so" # 2> $se"
+    assertFalse 'Errors present in log (3)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    sleep_next_second
+
+    # Touch some files and regenerate
+    find $td3 -name file0 -exec touch {} \;
+    find $td3 -name file2 -exec touch {} \;
+    $cf -d $td3 -f $td3/fullfilelist -t $td3/fullfiletimelist-module-c
+
+    assertTrue 'A simple copy did not succeed' "$qfm -c $testdir/norestrict.conf &> $so" # 2> $se"
+    assertFalse 'Errors present in log (3)' "file_contains $mdir/qfm.log \"E[rR][rR]\""
+
+    for i in dir3 dir3/file0 dir3/dir1 dir3/dir1/file0 dir4/dir4 dir4/dir4/file0 dir5/dir5/file0; do
+        assertFalse "Restricted content $i should not have been copied" \
+            "[[ -e $destdir/module-c/$i ]]"
+    done
+}
+
+source ${0:h}/common-end
+
+# load shunit2
+SHUNIT_PARENT=$0
+setopt shwordsplit
+. $(find-shunit)

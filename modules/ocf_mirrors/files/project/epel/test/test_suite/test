@@ -1,0 +1,132 @@
+#!/bin/zsh
+
+test_dirs_similar_1 () {
+    mkdir -p $td/a/1/2/3/4
+    mkdir -p $td/b/1/2/3/4
+
+    echo foo >> $td/a/1/2/xyzzy
+    echo foo >> $td/b/1/2/xyzzy
+
+    assertTrue 'Dirs should be similar' "dirs_similar $td/a $td/b"
+}
+
+test_dirs_similar_2 () {
+    mkdir $td/a $td/b
+    touch $td/a/z
+
+    assertFalse 'Dirs should differ' "dirs_similar $td/a $td/b"
+}
+
+test_dirs_contents_identical_1 () {
+    create_dir_structure $td/a
+    cp -rp $td/a $td/b
+
+    assertTrue 'Dirs should have identical content' "dirs_contents_identical $td/a $td/b"
+}
+
+test_dirs_contents_identical_2 () {
+    create_dir_structure $td/a
+    cp -rp $td/a $td/b
+
+    sleep_next_second
+
+    touch $td/b/dir2/file2
+    assertFalse '2nd dir should have a newer file' "dirs_contents_identical $td/a $td/b"
+}
+
+test_dirs_contents_identical_3 () {
+    create_dir_structure $td/a
+    cp -rp $td/a $td/b
+
+    sleep_next_second
+
+    touch $td/a/dir2/file2
+    assertFalse '1st dir should have a newer file' "dirs_contents_identical $td/a $td/b"
+}
+
+test_dirs_contents_identical_4 () {
+    create_dir_structure $td/a
+    cp -rp $td/a $td/b
+    sleep_next_second
+    touch $td/b/dir2
+
+    assertTrue 'A directory timestamp difference should be OK'  "dirs_contents_identical $td/a $td/b"
+}
+
+test_dirs_contents_identical_5 () {
+    create_dir_structure $td/a
+    cp -rp $td/a $td/b
+    sleep_next_second
+    echo a >> $td/b/dir2/file2
+    assertFalse 'Dirs should differ by file time and size' "dirs_contents_identical $td/a $td/b"
+}
+
+test_files_hardlinked_1 () {
+    date > $td/a
+    cp $td/a $td/b
+
+    assertFalse 'Files should not be hardlinked' "files_hardlinked $td/a $td/b"
+}
+
+test_files_hardlinked_2 () {
+    date > $td/a
+    cp -l $td/a $td/b
+
+    assertTrue 'Files should be hardlinked' "files_hardlinked $td/a $td/b"
+}
+
+test_files_hardlinked_3 () {
+    date > $td/a
+    ln -s $td/a $td/b
+
+    assertFalse 'Files just symlinked' "files_hardlinked $td/a $td/b"
+}
+
+test_files_hardlinked_4 () {
+    date > $td/a
+    ln $td/a $td/b
+
+    assertTrue 'Files should be hardlinked' "files_hardlinked $td/a $td/b"
+}
+
+test_files_contents_identical_1 () {
+    date > $td/a
+    cp $td/a $td/b
+
+    assertTrue 'File contents should be identical' "files_contents_identical $td/a $td/b"
+}
+
+test_files_contents_identical_2 () {
+    echo "foofoo1" > $td/a
+    echo "foofoo2" > $td/b
+
+    assertFalse 'File contents should differ' "files_contents_identical $td/a $td/b"
+}
+
+setUp () {
+    mkdir -p $td
+}
+
+tearDown () {
+    rm -rf $td
+    if [[ -n "$TEST_VERBOSE" ]]; then
+        if [[ -s $so ]]; then
+            echo "Test standard output:"
+            cat $so
+        fi
+        if [[ -s $se ]]; then
+            echo "Test standard error:"
+            cat $se
+        fi
+    fi
+    rm -f $so
+    rm -f $se
+}
+
+# load local functions
+source ${0:h}/../test-setup.zsh
+
+# load shunit2
+SHUNIT_PARENT=$0
+setopt shwordsplit
+. $(find-shunit)

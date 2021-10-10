@@ -1,0 +1,447 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+from __future__ import print_function, division
+
+# quick-fedora-hardlink uses the the fullfiletimelist files present in the
+# Fedora repository, as well as some specific properties of the structure of
+# the Fedora repository, to "quickly" hardlink identical files in that
+# repository.
+
+# In the Fedora repository, all files which are hardlinked also have exactly
+# the same names.  We also know that all files should have the same
+# permissions, and so we don't need to check them.
+#
+# The specific property it uses is the fact that all hardlinked files will have
+# the same name.
+
+# Generally, quick-fedora-mirror will maintain hardlinks as they are present on
+# the master mirror.  However, there are situations where it won't:
+# * If a module is added without backdating.
+# * If files need to be retransferred for any reason.
+# * If the file lists on the master aren't generated for each crosslinked
+#   module together when linking occurs.
+
+import argparse
+import os
+import re
+import sys
+import tempfile
+import time
+
+
+class g:
+    filetypes = ['f']
+
+
+def options_parse():
+    p = argparse.ArgumentParser(
+        description='Using the file lists, quickly hardlink'
+        'identical files in the mirrored repositories.')
+
+    p.add_argument('-c', '--config', help='Path to the configuration file.')
+    p.add_argument('--debug', action='store_true',
+                   help='Enable debugging.')
+    p.add_argument('-n', '--dry-run', action='store_true',
+                   help='Just print what would be done without linking anything.')
+    p.add_argument('--no-ctime', action='store_true',
+                   help='Do not skip files which have different ctimes in the file lists.')
+    p.add_argument('-q', '--quiet', action='store_true',
+                   help='Print nothing to standard output except the end-of-run summary.')
+    p.add_argument('-s', '--silent', action='store_true',
+                   help='Print nothing at all to standard output.')
+    p.add_argument('-v', '--verbose', action='store_true',
+                   help='Print the source and dest of each hardlink created.')
+    p.add_argument('-t', '--tier1', action='store_true',
+                   help='For tier 1 mirrors, also consider pre-bitflip content.')
+
+    opts = p.parse_args()
+
+    # Check that config file is readable.
+    if opts.config and not os.access(opts.config, os.R_OK):
+        print('Cannot open provided config file {}'.format(opts.config), file=sys.stderr)
+        sys.exit(1)
+
+    if not opts.config:
+        for i in ('/etc/quick-fedora/mirror.conf',
+                  os.path.expanduser('~/.config/quick-fedora-mirror.conf'),
+                  '{}/quick-fedora-mirror.conf'.format(os.path.dirname(__file__)),
+                  './quick-fedora-mirror.conf'):
+            if os.access(i, os.R_OK):
+                opts.config = i
+                break
+        else:
+            print('Could not find a readable configuration file.', file=sys.stderr)
+            sys.exit(1)
+
+    opts.filelist = 'fullfiletimelist-$mdir'
+
+    opts.check_ctime = True
+    if opts.no_ctime:
+        opts.check_ctime = False
+
+    if opts.tier1:
+        g.filetypes = ['f', 'f-', 'f*']
+
+    g.opts = opts
+    return opts
+
+
+def uprint(string, nl=False, fh=sys.stdout):
+    """Unbuffered print without advancing the cursor.
+
+    Writes to fh (default is stdout), prefixing with \r and clearing the rest of
+    the line.  Pass nl=True if you want to advance the line.
+    """
+    fh.write('\r' + string + '\x1b[0K')
+    if nl:
+        fh.write('\n')
+    fh.flush()
+
+
+def config_read(opts):
+    """Read the configuration file.
+
+    We really only want DESTD, FILELIST and FILTEREXP
+    The values are stored in the existing options array.
+    """
+    with open(opts.config) as cf:
+        for line in cf:
+            m = re.search('^\s*DESTD=(\S+)', line)
+            if m:
+                opts.destd = m.group(1)
+
+            m = re.search('^\s*FILELIST=(\S+)', line)
+            if m:
+                opts.filelist = m.group(1)
+
+            m = re.search('^\s*FILTEREXP=(\S+)', line)
+            if m:
+                opts.filterexp = re.compile(m.group(1).strip('\'"'))
+            else:
+                opts.filterexp = None
+
+
+def config_check(opts):
+    if not opts.destd:
+        print('Cannot find value for DESTD.  Exiting.', file=sys.stderr)
+        sys.exit(1)
+    d = opts.destd
+    if not os.path.isdir(d):
+        print('{} is not a directory.  Exiting.'.format(d), file=sys.stderr)
+        sys.exit(1)
+    if not os.access(d, os.R_OK | os.X_OK):
+        print('{} is not accessible.  Exiting.'.format(d), file=sys.stderr)
+        sys.exit(1)
+
+
+def skip_to_files(f):
+    for line in f:
+        if re.search('^\[Files', line):
+            return True
+
+    return False
+
+
+def process_one_filelist(filelist, module, candidates, check_ctime=True, filterexp=None):
+    with open(filelist) as f:
+        skip_to_files(f)
+
+        for line in f:
+            line = line.strip()
+            if not len(line):
+                break
+            fields = line.split('\t')
+            if fields[1] not in g.filetypes:
+                continue
+            if filterexp and filterexp.search(line):
+                continue
+
+            ctime = fields[0]
+            size = fields[2]
+            pathname = fields[3]
+            filename = os.path.basename(pathname)
+
+            if check_ctime:
+                key = filename + size + ctime
+            else:
+                key = filename + size
+
+            # Not using os.path.join because it's slow
+            p = module + '/' + pathname
+            if key in candidates:
+                candidates[key].append(p)
+            else:
+                candidates[key] = [p]
+
+
+def trim_candidates(candidates):
+    remove = [k for k in candidates if len(candidates[k]) == 1]
+    for k in remove:
+        del candidates[k]
+
+
+def generate_candidates(filelist='fullfiletimelist-$mdir', check_ctime=True, filterexp=None):
+    """Process filelists in the current directory.
+
+    Looks for all filelists in the current directory and processes them all.
+    """
+    candidates = {}
+
+    for module in os.listdir('.'):
+        if not os.path.isdir(module) or not os.access(module, os.R_OK | os.X_OK):
+            continue
+
+        fl = os.path.join(module, filelist.replace('$mdir', module))
+        if not os.path.isfile(fl):
+            continue
+
+        if not g.opts.quiet and not g.opts.silent:
+            print('  {}'.format(fl))
+
+        process_one_filelist(fl, module, candidates, check_ctime=check_ctime, filterexp=filterexp)
+
+    return candidates
+
+
+def files_differ(f1, f2):
+    """Lifted from the inner comparison of filecmp.py.
+
+    The rest of filecmp.py isn't useful, and results in too many stat calls for
+    our purposes.
+    """
+    bufsize = 8 * 1024
+    if g.opts.debug:
+        uprint('Compare {}, {}'.format(f1, f2), True)
+    with open(f1, 'rb') as fp1, open(f2, 'rb') as fp2:
+        while True:
+            b1 = fp1.read(bufsize)
+            b2 = fp2.read(bufsize)
+            if b1 != b2:
+                return True
+            if not b1:
+                return False
+
+
+def do_hardlink(target, link):
+    """Take two existing files and ensure that they are hardlinked.
+
+    Note that this will happen regardless of whether or not the files are
+    identical, so 'link' will be destroyed if it is not identical to 'target'.
+    Do any needed comparisons first.
+    """
+    linkdir = os.path.dirname(link)
+    (tfh, tmp) = tempfile.mkstemp(dir=linkdir)
+    os.close(tfh)
+
+    # Move the candidate file out of the way.
+    try:
+        os.rename(link, tmp)
+    except os.error:
+        print('Could not rename {} to {}.  Aborting.\033[K'.format(link, tmp), file=sys.stderr)
+        os.remove(tmp)
+        sys.exit(1)
+
+    try:
+        os.link(target, link)
+    except os.error as e:
+        print('Could not link from {} to {}: {}.\033[K\nTrying to undo the rename.'.format(link, target, e),
+            file=sys.stderr)
+        try:
+            os.rename(tmp, link)
+        except os.error as e:
+            print('Cound not rename {} to {}: {}.  You will need to fix things up manually.\033[K'.format(
+                tmp, link, e), file=sys.stderr)
+            sys.exit(1)
+
+        print('Undid the rename.\033[K', file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        os.remove(tmp)
+    except os.error as e:
+        print('Cound not remove tempfile {}: {}.\033[K'.format(tmp, e), file=sys.stderr)
+        sys.exit(1)
+
+
+def process_one_tuple(l, skip=False):
+    """Process a candidate tuple.
+
+    This involves testing each file in the tuple against each other file.  The
+    first element of the list is popped and compared against all other elements
+    in the list.  That continues until all elements have been compared.
+    """
+    linked = 0
+    alreadylinked = 0
+    saved = 0
+    can_skip = []
+    while len(l) >= 2:
+        target = l.pop(0)
+
+        # If we've already successfully linked this candidate to something else
+        # in the tuple, we don't need to check it because we will have already
+        # checked the thing it is linked to.
+        if target in can_skip:
+            if g.opts.debug:
+                uprint('Skipping target {}\n'.format(target))
+            continue
+
+        try:
+            tstat = os.stat(target)
+        except os.error:
+            if not g.opts.silent:
+                uprint('Could not find {}.  File list out of date?\n'.format(target), fh=sys.stderr)
+            continue
+
+        for candidate in l:
+            # We've already compared what this candidate is equivalent to
+            if candidate in can_skip:
+                if g.opts.debug:
+                    uprint('Skipping candidate {}\n'.format(candidate))
+                continue
+
+            try:
+                cstat = os.stat(candidate)
+            except os.error:
+                if not g.opts.silent:
+                    uprint('Could not find {}.  File list out of date?\n'.format(candidate), fh=sys.stderr)
+                continue
+
+            # Compare inode
+            if tstat.st_ino == cstat.st_ino:
+                # debug that they're already linked
+                if g.opts.debug:
+                    uprint('Already linked: {} and {}\n'.format(target, candidate))
+                alreadylinked += 1
+                can_skip.append(candidate)
+                continue
+
+            # Compare contents
+            if files_differ(target, candidate):
+                if g.opts.verbose:
+                    uprint('Not linkable: {} and {}'.format(target, candidate), True)
+                continue
+
+            if skip:
+                if g.opts.verbose:
+                    uprint('Would hardlink {} and {}\n'.format(target, candidate))
+                linked += 1
+                saved += tstat.st_size
+                continue
+
+            do_hardlink(target, candidate)
+            can_skip.append(candidate)
+            linked += 1
+            saved += tstat.st_size
+
+            if g.opts.verbose:
+                uprint('Link {}\n and {}\n'.format(target, candidate))
+
+    return (linked, alreadylinked, saved)
+
+
+def process_candidates(candidates, skip=False):
+    total = len(candidates)
+    count = 1
+    alreadylinkedtotal = 0
+    linkedtotal = 0
+    savedtotal = 0
+    lasttime = time.time()
+    lastspeed = 0
+    averagespeed = 25  # Reasonable value to start with
+    goodsmooth = 0.1
+    badsmooth = 0.5
+    updateinterval = 1000
+    left = ''
+
+    for _, candidate in candidates.iteritems():
+        if count % updateinterval == 0:
+            now = time.time()
+            lastspeed = updateinterval / (now - lasttime)
+            lasttime = now
+
+            # Bias towards the recent estimate if we're going too slow
+            error = lastspeed / averagespeed
+            smooth = goodsmooth
+            if error < 0.33:
+                smooth = badsmooth
+
+            # A simple weighted average
+            averagespeed = smooth * lastspeed + (1 - smooth) * averagespeed
+
+            timeleftestimate = ((total - count) / averagespeed)  # In seconds
+            if count < 10 * updateinterval:
+                left = '???'
+            else:
+                if timeleftestimate < 60:
+                    left = '{:.1f}s'.format(timeleftestimate)
+                elif timeleftestimate < (60 ** 2):
+                    left = '{:.1f}m'.format(timeleftestimate / 60)
+                else:
+                    left = '{:.1f}h'.format(timeleftestimate / (60 ** 2))
+
+                # Some really detailed debugging output
+                # left += ' L{:.1f}/s A{:.1f}/s E{:.3f} S{} {}'.format(
+                #     lastspeed, averagespeed, error, smooth, (total - count))
+
+        (linked, alreadylinked, saved) = process_one_tuple(candidate, skip=skip)
+        linkedtotal += linked
+        alreadylinkedtotal += alreadylinked
+        savedtotal += saved
+
+        if (count % 25 == 0 or linked != 0) and not g.opts.quiet and not g.opts.silent:
+            # Total (pct) - existing links - new links - saved - time estimate
+            uprint('{:7} tuples ({:2.2%})'
+                   ' - links: ({} exist, {} new)'
+                   ' - {:.2f}GB saved - ~{} left'
+                   .format(count,
+                           (count / total),
+                           alreadylinkedtotal,
+                           linkedtotal,
+                           (savedtotal / 1024 ** 3),
+                           left)
+                   )
+
+        count += 1
+
+    return (linkedtotal, savedtotal)
+
+
+def main():
+    opts = options_parse()
+    config_read(opts)
+    config_check(opts)
+    os.chdir(opts.destd)
+    timestart = time.time()
+    if not opts.quiet and not opts.silent:
+        print('Processing file lists in {}:'.format(opts.destd))
+    c = generate_candidates(filelist=opts.filelist, check_ctime=opts.check_ctime, filterexp=opts.filterexp)
+    trim_candidates(c)
+    if opts.debug:
+        print("Found tuples:")
+        for k in c:
+            print("  {}: {}".format(k, c[k]))
+
+    if not opts.quiet and not opts.silent:
+        print()
+        print('Found {} tuples of potentially hardlinkable files in {:.1f} minutes.'
+              .format(len(c), (time.time() - timestart) / 60))
+        print()
+    timestart = time.time()
+    (linked, saved) = process_candidates(c, skip=opts.dry_run)
+    elapsed = (time.time() - timestart) / 60
+
+    # Some space after the progress output
+    if not opts.quiet and not opts.silent:
+        print('\n')
+
+    if not opts.silent:
+        print('Files linked: {}'.format(linked))
+        print('Space saved:  {:.2f}GB'.format(saved / 1024 ** 3))
+        if elapsed < 60:
+            print('Linking took: {:.1f} minutes'.format(elapsed))
+        else:
+            print('Linking took: {:.1f} hours'.format(elapsed / 60))
+
+
+if __name__ == '__main__':
+    main()

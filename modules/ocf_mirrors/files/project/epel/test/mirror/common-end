@@ -1,0 +1,47 @@
+# Stuff common to the end of all of these tests
+
+setUp () {
+    # Make three different modules, each with different levels of nesting.
+    td1="$master/module-a"
+    fl1=$td1/fullfiletimelist-module-a
+    td2="$master/module-b"
+    fl2=$td2/fullfiletimelist-module-b
+    td3="$master/module-c"
+    fl3=$td3/fullfiletimelist-module-c
+
+    mkdir -p $mdir/tmp $srcdir $master $td1 $td2 $td3 $destdir
+
+    create_dir_structure $td1 2 7
+    $cf -d $td1 -s -f $td1/fullfilelist -t $td1/fullfiletimelist-module-a #-i $td1/imagelist-module-a
+    touch $td1/imagelist-module-a
+
+    create_dir_structure $td2 3 4
+    $cf -d $td2 -s -f $td2/fullfilelist -t $td2/fullfiletimelist-module-b #-i $td1/imagelist-module-b
+    touch $td2/imagelist-module-b
+
+    create_dir_structure $td3 5 3
+    $cf -d $td3 -s -f $td3/fullfilelist -t $td3/fullfiletimelist-module-c #-i $td1/imagelist-module-c
+    touch $td3/imagelist-module-c
+
+    mkdir $sd
+    touch $mdir/qfm.log
+    export TESTD=$mdir
+}
+
+tearDown () {
+    rm -rf $tdup $sd
+    if [[ -n "$TEST_VERBOSE" ]]; then
+        if [[ -s $so ]]; then
+            echo "Assertion standard output:"
+            cat $so
+        fi
+        if [[ -s $se ]]; then
+            echo "Assertion standard error:"
+            cat $se
+        fi
+    fi
+    rm -rf $so $se $mdir
+}
+
+# load local functions
+source ${0:h}/../test-setup.zsh

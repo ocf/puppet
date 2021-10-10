@@ -1,0 +1,74 @@
+#!/bin/zsh
+# Do some basic testing for various output levels.
+
+source ${0:h}/common-start
+
+test_output_0 () {
+    # Test VERBOSE=0 (no output besides errors)
+
+    assertTrue 'The copy should succeed.' \
+        "$qfm -d 0 --no-paranoia -c $testdir/simple.conf > $so 2> $se"
+
+    assertTrue 'Output file has content' "[[ ! -s $so ]]"
+    assertFalse 'Start line should be missing' "file_contains $so \"Mirror starting\""
+
+}
+
+test_output_1 () {
+    # Test VERBOSE=1 functionality
+
+    assertTrue 'The copy should succeed.' \
+        "$qfm -d 1 --no-paranoia -c $testdir/simple.conf > $so 2> $se"
+
+    assertTrue 'Start line missing' "file_contains $so \"Mirror starting\""
+    assertTrue 'End line missing' "file_contains $so \"Mirror finished\""
+    assertTrue 'rsync stats incorrect' "file_contains $so \"Downloaded files: 511\""
+}
+
+test_output_2 () {
+    # Test VERBOSE=2 (with file list download info)
+
+    assertTrue 'The copy should succeed.' \
+        "$qfm -d 2 --no-paranoia -c $testdir/simple.conf > $so 2> $se"
+
+    assertTrue 'File list info missing' "file_contains $so \"Total on server:.*508 files\""
+    assertTrue 'Start line missing' "file_contains $so \"Mirror starting\""
+    assertTrue 'End line missing' "file_contains $so \"Mirror finished\""
+    assertTrue 'rsync stats incorrect' "file_contains $so \"Downloaded files: 511\""
+}
+
+test_output_3 () {
+    # Test VERBOSE=3 (with log output also to stdout)
+
+    assertTrue 'The copy should succeed.' \
+        "$qfm -d 3 --no-paranoia -c $testdir/simple.conf > $so 2> $se"
+
+    assertTrue 'File list info missing' "file_contains $so \"Total on server:.*508 files\""
+    assertTrue 'Start line missing' "file_contains $so \"Mirror starting\""
+    assertTrue 'End line missing' "file_contains $so \"Mirror finished\""
+    assertTrue 'rsync stats incorrect' "file_contains $so \"Downloaded files: 511\""
+    assertTrue 'Output is missing log statements' "file_contains $so \"Log: Run start\""
+    assertTrue 'Output is missing rsync calls' "file_contains $so \"Calling .*rsync\""
+}
+
+test_output_4 () {
+    # Test VERBOSE=4
+
+    assertTrue 'The copy should succeed.' \
+        "$qfm -d 4 --no-paranoia -c $testdir/simple.conf > $so 2> $se"
+
+    assertTrue 'File list info missing' "file_contains $so \"Total on server:.*508 files\""
+    assertTrue 'Start line missing' "file_contains $so \"Mirror starting\""
+    assertTrue 'End line missing' "file_contains $so \"Mirror finished\""
+    assertTrue 'rsync stats incorrect' "file_contains $so \"Downloaded files: 511\""
+    assertTrue 'Output is missing log statements' "file_contains $so \"Log: Run start\""
+    assertTrue 'Output is missing rsync calls' "file_contains $so \"Calling .*rsync\""
+    assertTrue 'Output is missing lvl 4 debugging' "file_contains $so \">>>> Directories\""
+}
+
+source ${0:h}/common-end
+
+# load shunit2
+SHUNIT_PARENT=$0
+setopt shwordsplit
+. $(find-shunit)
