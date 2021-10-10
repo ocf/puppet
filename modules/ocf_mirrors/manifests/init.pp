@@ -5,7 +5,6 @@ class ocf_mirrors {
   include ocf_mirrors::ftp
   include ocf_mirrors::rsync
   include ocf_mirrors::firewall_input
-  apache::mod { 'http2': }
 
   # projects
   include ocf_mirrors::projects::apache
