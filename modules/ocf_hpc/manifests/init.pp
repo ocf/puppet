@@ -1,6 +1,6 @@
 class ocf_hpc {
 
-  include ocf_hpc::miniconda
+  include ocf_hpc::conda
 
   package { 'slurm-wlm': }
 
