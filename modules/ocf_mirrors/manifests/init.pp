@@ -132,6 +132,7 @@ class ocf_mirrors {
 
     access_log_format => 'io_count',
     custom_fragment   => "
+      Protocols h2c http/1.1
       HeaderName README.html
       ReadmeName FOOTER.html
     ",
@@ -142,7 +143,7 @@ class ocf_mirrors {
 
     # we have to specify docroot even though we always redirect
     docroot         => '/var/www',
-
+    custom_fragment   => "Protocols h2c http/1.1",
     redirect_source => '/',
     redirect_dest   => 'http://mirrors.ocf.berkeley.edu/',
     redirect_status => '301',
@@ -169,7 +170,7 @@ class ocf_mirrors {
 
     access_log_format => 'io_count',
     custom_fragment   => "
-      Protocols h2 h2c http/1.1
+      Protocols h2 http/1.1
       HeaderName README.html
       ReadmeName FOOTER.html
     ",
