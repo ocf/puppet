@@ -31,7 +31,7 @@ class ocf_desktop::packages {
     # FUSE
     ['fuse', 'exfat-fuse']:;
     # games
-    ['armagetronad', 'freeciv', 'gl-117', 'gnome-games', 'minetest', 'redeclipse',
+    ['armagetronad', 'freeciv', 'gl-117', 'gnome-games', 'minecraft-launcher', 'minetest', 'redeclipse',
       'supertuxkart', 'wesnoth', 'wesnoth-music']:;
     # graphics/plotting
     ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
@@ -56,11 +56,6 @@ class ocf_desktop::packages {
         # get anything out of it in terms of performance improvements at this
         # point anyway.
         'preload',
-
-        # The minecraft launcher requires java 8 of some kind (openjdk-8-jre
-        # for instance), and buster only comes with openjdk 11
-        # UPDATE: Minecraft 1.17 now requires OpenJDK 16, so...
-        'minecraft-launcher',
 
         # Zenmap depends on Python 2 and is therefore no longer in bullseye
         'zenmap',
