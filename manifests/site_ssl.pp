@@ -17,7 +17,7 @@ if $::lsbdistcodename == 'bullseye' {
 # default for Apache and Nginx vhosts
 Apache::Vhost {
   if $::lsbdistcodename == 'bullseye' {
-    include apache::mod::http2
+    include apache::mod::http2,
     custom_fragment => '
           Protocols h2 http/1.1
         ',
