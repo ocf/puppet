@@ -1,6 +1,7 @@
 class ocf_apt {
   include ocf::firewall::allow_web
   include ocf::ssl::default
+  apache::mod { 'http2': }
 
   user { 'ocfapt':
     comment => 'OCF Apt',
@@ -95,7 +96,7 @@ class ocf_apt {
     }],
 
     access_log_format => 'io_count',
-    custom_fragment   => "HeaderName README.html\nReadmeName FOOTER.html",
+    custom_fragment   => "Protocols h2 h2c http/1.1\nHeaderName README.html\nReadmeName FOOTER.html",
 
     ssl               => true,
     ssl_key           => "/etc/ssl/private/${::fqdn}.key",
