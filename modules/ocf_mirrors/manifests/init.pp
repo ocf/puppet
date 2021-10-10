@@ -57,6 +57,11 @@ class ocf_mirrors {
       owner  => mirrors,
       group  => mirrors;
 
+    '/opt/mirrors/ftp/robots.txt':
+      source => 'puppet:///modules/ocf_mirrors/robots.txt',
+      owner  => mirrors,
+      group  => mirrors;
+
     '/var/log/rsync':
       ensure => directory;
   }
