@@ -5,7 +5,8 @@ class ocf_mirrors {
   include ocf_mirrors::ftp
   include ocf_mirrors::rsync
   include ocf_mirrors::firewall_input
-
+  apache::mod { 'http2': }
+  
   # projects
   include ocf_mirrors::projects::apache
   include ocf_mirrors::projects::alpine
@@ -169,6 +170,7 @@ class ocf_mirrors {
 
     access_log_format => 'io_count',
     custom_fragment   => "
+      Protocols h2 h2c http/1.1
       HeaderName README.html
       ReadmeName FOOTER.html
     ",
