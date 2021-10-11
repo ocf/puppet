@@ -154,6 +154,7 @@ class ocf::packages {
         'python3.7-venv',
         ]:;
       }
+  }
   # Packages to only install on Debian (not on Raspbian for example)
   if $::lsbdistid == 'Debian' {
     package {
