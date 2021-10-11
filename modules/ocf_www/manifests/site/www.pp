@@ -112,6 +112,7 @@ class ocf_www::site::www {
     ],
 
     custom_fragment     => '
+      Protocols h2 http/1.1
       UserDir /services/http/users/
       UserDir disabled root
     ',
