@@ -38,6 +38,7 @@ define ocf::nginx_proxy(
         ssl_cert         => $ssl_cert,
         ssl_key          => $ssl_key,
         ssl_dhparam      => $ssl_dhparam,
+        http2            => true,
 
         add_header       => merge({
           # HSTS header
