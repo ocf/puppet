@@ -9,7 +9,7 @@
         SSLCertificateFile {{vhost.ssl.cert}}
         SSLCertificateKeyFile {{vhost.ssl.key}}
         SSLCertificateChainFile {{vhost.ssl.chain}}
-	Protocols h2 http/1.1
+        Protocols h2 http/1.1
     {% endif %}
 
     {% if vhost.is_redirect %}
