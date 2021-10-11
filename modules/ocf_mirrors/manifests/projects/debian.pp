@@ -11,7 +11,7 @@ class ocf_mirrors::projects::debian {
 
     'debian-cd':
       rsync_host  => 'cdimage.debian.org',
-      rsync_path  => 'debian-cdimage',
+      rsync_path  => 'debian-cd',
       rsync_extra => '--block-size=8192',
       cron_minute => '30';
   }
