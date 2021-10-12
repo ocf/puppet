@@ -153,7 +153,7 @@ def main(args):
     # format the date to do fast string matching rather than strptime on every line
     log_date = args.date.strftime('%d/%b/%Y')
     rsync_log_date = args.date.strftime('%Y/%m/%d')
-    
+
     # pull the data itself from apache
     for log_filename in apache_log_files:
         projects = process_apache_log(projects, log_filename, log_date)
