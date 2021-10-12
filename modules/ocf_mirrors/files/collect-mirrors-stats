@@ -93,7 +93,7 @@ def process_apache_log(projects, fn, log_date):
     return projects
 
 
-def process_rsync_log(filename):
+def process_rsync_log(filename, rsync_log_date):
     """Parse Tx/Rx information out of an rsyncd log file.
 
     This function is project-agnostic.
@@ -153,13 +153,14 @@ def main(args):
     # format the date to do fast string matching rather than strptime on every line
     log_date = args.date.strftime('%d/%b/%Y')
     rsync_log_date = args.date.strftime('%Y/%m/%d')
+    
     # pull the data itself from apache
     for log_filename in apache_log_files:
         projects = process_apache_log(projects, log_filename, log_date)
 
     # ...and rsync
     for log_filename in rsync_log_files:
-        tx, rx = process_rsync_log(log_filename)
+        tx, rx = process_rsync_log(log_filename, rsync_log_date)
         # log files are named <project>.log
         projects[log_filename.stem]['up'] += rx
         projects[log_filename.stem]['down'] += tx
