@@ -108,8 +108,9 @@ def process_rsync_log(filename):
         for line in f.readlines():
             stats = RSYNC_LOG_REGEX.match(line)
             if stats is not None:
-                tx += int(stats.group('sentbytes'))
-                rx += int(stats.group('rcvdbytes'))
+                if stats.group('date')[0:10] == rsync_log_date:
+                    tx += int(stats.group('sentbytes'))
+                    rx += int(stats.group('rcvdbytes'))
 
     return tx, rx
 
@@ -151,6 +152,7 @@ def main(args):
 
     # format the date to do fast string matching rather than strptime on every line
     log_date = args.date.strftime('%d/%b/%Y')
+    rsync_log_date = args.date.strftime('%Y/%m/%d')
     # pull the data itself from apache
     for log_filename in apache_log_files:
         projects = process_apache_log(projects, log_filename, log_date)
