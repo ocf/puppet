@@ -22,6 +22,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/about$ https://www.ocf.berkeley.edu/docs/about/ [R]'},
       {rewrite_rule => '^/absa$ https://drive.google.com/drive/folders/0B7n5VUVfGPUoV0xPREIwY0hzc0E?usp=sharing [R]'},
       {rewrite_rule => '^/account$ https://www.ocf.berkeley.edu/docs/services/account/ [R]'},
+      {rewrite_rule => '^/accessibility$ https://docs.google.com/document/d/15_ZFfYG6yv0YNmPPKfbaCK4kPQpRnkCTfx7L9t3LiLE/edit#heading=h.y7iaxq6cdj4b [R]'},
       {rewrite_rule => '^/apphost$ https://www.ocf.berkeley.edu/docs/services/webapps/ [R]'},
       {rewrite_rule => '^/announce$ https://groups.google.com/a/lists.berkeley.edu/forum/#!forum/ocf/join [NE,R]'},
       {rewrite_rule => '^/apply$ https://forms.gle/Q2Zqo2XTDSUzpLEZ6 [R]'},
