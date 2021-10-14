@@ -14,7 +14,7 @@ class ocf_www::site::shorturl {
     ssl_key       => "/etc/ssl/private/${::fqdn}.key",
     ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
     ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
-
+https://docs.google.com/spreadsheets/d/17vjngK4aMUDdLtRGaGNap3fmTwxbP3D3QJKrwZz7uk4/edit#gid=0
     rewrites      => [
       # Short URLs
       # Remember to add these to the list of RESERVED_USERNAMES in ocflib/account/validators.py
@@ -33,6 +33,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/cockroachdb$ https://cockroachlabs.zoom.us/j/95104416835 [R]'},
       {rewrite_rule => '^/cockroachdb-rsvp$ https://docs.google.com/forms/d/e/1FAIpQLSduHSz5Q66gWH7a2vfBM3rpDqbabrGtxWCuaQNR_C4Q8_J6Cw/viewform?usp=sf_link [R]'},
       {rewrite_rule => '^/contact$ https://www.ocf.berkeley.edu/docs/contact/ [R]'},
+      {rewrite_rule => '^/committee$ https://docs.google.com/spreadsheets/d/17vjngK4aMUDdLtRGaGNap3fmTwxbP3D3QJKrwZz7uk4/edit#gid=0 [R]'},
       {rewrite_rule => '^/d$ https://discourse.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/d/([0-9]+)$ https://discourse.ocf.berkeley.edu/t/$1 [R]'},
       {rewrite_rule => '^/decal(/.*)?$ https://decal.ocf.berkeley.edu$1 [R]'},
