@@ -1,11 +1,11 @@
 # ftpsync is a Fedora tool for mirroring Fedora archives:
 # https://pagure.io/quick-fedora-mirror
 
-define ocf_mirrors::q-f-m(
+define ocf_mirrors::qfm(
     $remote_host = 'rsync://dl.fedoraproject.org',
-    $cron_minute,
     $cron_hour = '*',
-    $rsync_module = "fedora-$title",
+    $cron_minute,
+    $rsync_module = "fedora-{$title}",
     $master_module = 'fedora-buffet',
     $mirror_path = '/opt/mirrors/ftp/fedora',
     $project_path = "/opt/mirrors/project/${title}",
@@ -33,9 +33,9 @@ define ocf_mirrors::q-f-m(
   }
 
   ocf_mirrors::timer { "fedora-${title}":
-    exec_start   => "${project_path}/quick-fedora-mirror",
-    hour         => $cron_hour,
-    minute       => $cron_minute,
-    require      => File["${project_path}/log", "${project_path}/quick-fedora-mirror.conf"],
+    exec_start => "${project_path}/quick-fedora-mirror",
+    hour       => $cron_hour,
+    minute     => $cron_minute,
+    require    => File["${project_path}/log", "${project_path}/quick-fedora-mirror.conf"],
   }
 }
