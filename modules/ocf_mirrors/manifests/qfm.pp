@@ -32,7 +32,7 @@ define ocf_mirrors::qfm(
   }
 
   ocf_mirrors::timer { "fedora-${title}":
-    exec_start => "${project_path}/quick-fedora-mirror",
+    exec_start => "${project_path}/quick-fedora-mirror -c ${project_path}/quick-fedora-mirror.conf",
     hour       => $cron_hour,
     minute     => $cron_minute,
     require    => File["${project_path}/log", "${project_path}/quick-fedora-mirror.conf"],
