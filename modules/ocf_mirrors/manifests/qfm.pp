@@ -4,12 +4,12 @@
 define ocf_mirrors::qfm(
     $remote_host = 'rsync://dl.fedoraproject.org',
     $cron_hour = '*',
-    $cron_minute,
-    $rsync_module = "fedora-{$title}",
+    $rsync_module = "fedora-${title}",
     $master_module = 'fedora-buffet',
     $mirror_path = '/opt/mirrors/ftp/fedora',
     $project_path = "/opt/mirrors/project/${title}",
-    $project_timefile = "/opt/mirrors/project/${title}/last_mirror_time"
+    $project_timefile = "/opt/mirrors/project/${title}/last_mirror_time",
+    $cron_minute
   ) {
 
   file {
