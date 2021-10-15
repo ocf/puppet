@@ -12,6 +12,11 @@ define ocf_mirrors::qfm(
     $project_timefile = "/opt/mirrors/project/${title}/last_mirror_time"
   ) {
 
+  exec { "get-qfm-${title}":
+    command => "sh -c 'git clone https://pagure.io/quick-fedora-mirror.git ${project_path}'",
+    user    => 'mirrors';
+  }
+
   file {
     default:
       owner => mirrors,
@@ -24,12 +29,6 @@ define ocf_mirrors::qfm(
     "${project_path}/quick-fedora-mirror.conf":
       content => template('ocf_mirrors/quick-fedora-mirror.conf.erb'),
       mode    => '0644';
-  }
-
-  exec { "get-qfm-${title}":
-    command => "sh -c 'git clone https://pagure.io/quick-fedora-mirror.git ${project_path}'",
-    user    => 'mirrors',
-    require => File[$project_path];
   }
 
   ocf_mirrors::timer { "fedora-${title}":
