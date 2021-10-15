@@ -1,7 +1,3 @@
-## Mirrorname. This is used for things like the trace file and should always
-## be the full hostname of the mirror.
-MIRRORNAME=<%= @mirror_name %>
-
 # Configuration file for quick-fedora-mirror
 # This file is sourced by the shell and must be in valid sh syntax.
 
@@ -34,7 +30,7 @@ MASTERMODULE=<%= @master_module %>
 # MIRRORBUFFET=
 
 # An array containing the modules to be mirrored
-MODULES=(<%= @module %>)
+MODULES=("<%= @module %>")
 
 # The name of the file holding the file list on the mirror host Note: the
 # string '$mdir' will be replaced with the name of the current module directory
