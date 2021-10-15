@@ -1,6 +1,6 @@
 ## Mirrorname. This is used for things like the trace file and should always
 ## be the full hostname of the mirror.
-MIRRORNAME="<%= @mirror_name %>"
+MIRRORNAME=<%= @mirror_name %>
 
 # Configuration file for quick-fedora-mirror
 # This file is sourced by the shell and must be in valid sh syntax.
@@ -8,21 +8,21 @@ MIRRORNAME="<%= @mirror_name %>"
 #### Required settings
 # Required: The the directory holding your copy of all of the modules you
 # mirror.  Does not include any module name
-DESTD="<%= @mirror_path %>"
+DESTD=<%= @mirror_path %>
 
 # Required: The file in which to store the last mirror time.
 # Note: this really should not be in the repository itself.
-TIMEFILE="<%= @project_timefile %>"
+TIMEFILE=<%= @project_timefile %>
 
 # Other settings
 # The remote host to rsync from, not including a module name
-REMOTE="<%= @remote_host %>"
+REMOTE=<%= @remote_host %>
 
 # The master module, which holds the other modules
 # Note that the mirror you pull from MUST have this master module.  You cannot
 # use quick-fedora-mirror to pull from a host which does not have a master
 # module containing the other modules.
-MASTERMODULE="<%= @master_module %>"
+MASTERMODULE=<%= @master_module %>
 
 # Tier 1 Fedora mirrors should uncomment the following to get the proper
 # pre-bitflip content.
@@ -34,7 +34,7 @@ MASTERMODULE="<%= @master_module %>"
 # MIRRORBUFFET=
 
 # An array containing the modules to be mirrored
-MODULES=("<%= @module %>")
+MODULES=(<%= @module %>)
 
 # The name of the file holding the file list on the mirror host Note: the
 # string '$mdir' will be replaced with the name of the current module directory
@@ -164,7 +164,7 @@ LOGJOURNAL=1
 # s - Basic transfer statistics
 # S - Detailed transfer statistics
 # t - directory time updates (not impl)
-LOGITEMS="@"
+LOGITEMS=@
 
 # When q-f-m fails to run becuse it is already running, it checks the time
 # since the last successful run.  If that is larger than this value, it logs a
