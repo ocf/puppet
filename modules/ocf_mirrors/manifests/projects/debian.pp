@@ -2,8 +2,8 @@ class ocf_mirrors::projects::debian {
   ocf_mirrors::ftpsync {
     'debian':
       rsync_host  => 'mirrors.wikimedia.org',
-      cron_hour   => '2/8',
-      cron_minute => '10';
+      cron_hour   => '2/3',
+      cron_minute => '30';
 
     'debian-security':
       rsync_host  => 'rsync.security.debian.org',
