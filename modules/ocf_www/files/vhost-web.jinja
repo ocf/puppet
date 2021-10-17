@@ -6,9 +6,8 @@
     {% if vhost.ssl %}
         # SSL
         SSLEngine on
-        SSLCertificateFile {{vhost.ssl.cert}}
+        SSLCertificateFile {{vhost.ssl.bundle}}
         SSLCertificateKeyFile {{vhost.ssl.key}}
-        SSLCertificateChainFile {{vhost.ssl.chain}}
     {% endif %}
 
     {% if vhost.is_redirect %}
