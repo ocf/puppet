@@ -28,8 +28,6 @@ class ocf_desktop::packages {
     ['libimage-exiftool-perl']:;
     # display manager
     ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
-    # FUSE
-    ['fuse', 'exfat-fuse']:;
     # games
     ['armagetronad', 'freeciv', 'gl-117', 'gnome-games', 'minecraft-launcher', 'minetest', 'redeclipse',
       'supertuxkart', 'wesnoth', 'wesnoth-music']:;
@@ -60,6 +58,10 @@ class ocf_desktop::packages {
         # Zenmap depends on Python 2 and is therefore no longer in bullseye
         'zenmap',
 
+        # FUSE and exfat
+        'fuse',
+        'exfat-fuse',
+
         # Florence was removed from bullseye due to deprecated dependency
         # We should find an alternative
         # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=947521
@@ -72,6 +74,10 @@ class ocf_desktop::packages {
       [
         # Zenmap depends on Python 2 and is therefore no longer in bullseye
         'zenmap',
+
+        # FUSE and exfat
+        'fuse',
+        'exfat-fuse',
 
         # Florence was removed from bullseye due to deprecated dependency
         # We should find an alternative
@@ -91,6 +97,9 @@ class ocf_desktop::packages {
 
         # x4vncviewer is no longer present
         'tigervnc-viewer',
+
+        # sshfs depends on fuse3 on bullseye
+        'fuse3',
       ]:;
     }
   }
