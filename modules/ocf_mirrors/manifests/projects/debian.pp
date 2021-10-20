@@ -10,8 +10,8 @@ class ocf_mirrors::projects::debian {
       cron_minute => '20';
 
     'debian-cd':
-      rsync_host  => 'ftp.osuosl.org',
-      rsync_path  => 'debian-cdimage',
+      rsync_host  => 'cdimage.debian.org',
+      rsync_path  => 'debian-cd',
       rsync_extra => '--block-size=8192',
       cron_minute => '30';
   }
