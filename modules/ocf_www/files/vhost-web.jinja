@@ -6,9 +6,8 @@
     {% if vhost.ssl %}
         # SSL
         SSLEngine on
-        SSLCertificateFile {{vhost.ssl.cert}}
+        SSLCertificateFile {{vhost.ssl.bundle}}
         SSLCertificateKeyFile {{vhost.ssl.key}}
-        SSLCertificateChainFile {{vhost.ssl.chain}}
         Protocols h2 http/1.1
     {% endif %}
 
