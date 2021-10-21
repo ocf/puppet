@@ -28,10 +28,8 @@ class ocf_desktop::packages {
     ['libimage-exiftool-perl']:;
     # display manager
     ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
-    # FUSE
-    ['fuse', 'exfat-fuse']:;
     # games
-    ['armagetronad', 'freeciv', 'gl-117', 'gnome-games', 'minetest', 'redeclipse',
+    ['armagetronad', 'freeciv', 'gl-117', 'gnome-games', 'minecraft-launcher', 'minetest', 'redeclipse',
       'supertuxkart', 'wesnoth', 'wesnoth-music']:;
     # graphics/plotting
     ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
@@ -57,13 +55,12 @@ class ocf_desktop::packages {
         # point anyway.
         'preload',
 
-        # The minecraft launcher requires java 8 of some kind (openjdk-8-jre
-        # for instance), and buster only comes with openjdk 11
-        # UPDATE: Minecraft 1.17 now requires OpenJDK 16, so...
-        'minecraft-launcher',
-
         # Zenmap depends on Python 2 and is therefore no longer in bullseye
         'zenmap',
+
+        # FUSE and exfat
+        'fuse',
+        'exfat-fuse',
 
         # Florence was removed from bullseye due to deprecated dependency
         # We should find an alternative
@@ -77,6 +74,10 @@ class ocf_desktop::packages {
       [
         # Zenmap depends on Python 2 and is therefore no longer in bullseye
         'zenmap',
+
+        # FUSE and exfat
+        'fuse',
+        'exfat-fuse',
 
         # Florence was removed from bullseye due to deprecated dependency
         # We should find an alternative
@@ -96,6 +97,9 @@ class ocf_desktop::packages {
 
         # x4vncviewer is no longer present
         'tigervnc-viewer',
+
+        # sshfs depends on fuse3 on bullseye
+        'fuse3',
       ]:;
     }
   }

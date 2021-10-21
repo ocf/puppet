@@ -24,7 +24,6 @@ APACHE_SITE_CONFIG = '/etc/apache2/ocf-vhost.conf'
 NGINX_SITE_CONFIG = '/etc/nginx/sites-enabled/virtual'
 
 LETS_ENCRYPT_SSL = Path('/services/http/ssl')
-SSL_BUNDLE = Path('/etc/ssl/apphost')
 SYSTEM_SSL = Path('/etc/ssl/private')
 
 APP_DIR = Path('/srv/apps')
@@ -41,19 +40,14 @@ jinja_env = jinja2.Environment(
 class SSL(namedtuple('SSL', ('fqdn',))):
     """Tells where to find SSL files for a given domain."""
     key = '/etc/ssl/lets-encrypt/le-vhost.key'
-    chain = '/etc/ssl/certs/lets-encrypt.crt'
 
     @property
     def is_valid(self):
-        return os.path.exists(self.cert)
-
-    @property
-    def cert(self):
-        return str(LETS_ENCRYPT_SSL / (self.fqdn + '.crt'))
+        return os.path.exists(self.bundle)
 
     @property
     def bundle(self):
-        return str(SSL_BUNDLE / (self.fqdn + '.bundle'))
+        return str(LETS_ENCRYPT_SSL / (self.fqdn + '.crt'))
 
 
 class SystemSSL(namedtuple('SystemSSL', ('fqdn',))):
@@ -338,19 +332,16 @@ def process_app_vhosts():
         shutil.chown(socket_dir, user, 'ocf')
         os.chmod(socket_dir, 0o755)
 
-        # Regenerate SSL bundle if older than cert
+        # Reload nginx if a bundle has been renewed since the last reload
+        last_reload_file = '/tmp/last-nginx-reload'
         for ssl in chain((SSL(domain),), map(SSL, vhost['aliases'])):
             if ssl.is_valid and (
-                not os.path.exists(ssl.bundle) or
-                os.path.getmtime(ssl.bundle) < os.path.getmtime(ssl.cert)
+                not os.path.exists(last_reload_file) or
+                os.path.getmtime(last_reload_file) < os.path.getmtime(ssl.bundle)
             ):
-                report('Generating SSL bundle for ' + ssl.fqdn)
+                report('Touching reload file to reload bundle for ' + ssl.fqdn)
                 changed = True
-                with open(ssl.bundle, 'w') as f, \
-                        open(ssl.cert) as f1, \
-                        open(ssl.chain) as f2:
-                    shutil.copyfileobj(f1, f)
-                    shutil.copyfileobj(f2, f)
+                Path(last_reload_file).touch()
 
     return changed
 
