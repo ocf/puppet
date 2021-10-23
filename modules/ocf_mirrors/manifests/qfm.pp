@@ -1,4 +1,4 @@
-# ftpsync is a Fedora tool for mirroring Fedora archives:
+# qfm (quick-fedora-mirror) is a Fedora tool for mirroring Fedora archives:
 # https://pagure.io/quick-fedora-mirror
 
 define ocf_mirrors::qfm(
