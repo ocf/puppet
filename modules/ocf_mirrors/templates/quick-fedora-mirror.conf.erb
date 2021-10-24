@@ -1,0 +1,192 @@
+# Configuration file for quick-fedora-mirror
+# This file is sourced by the shell and must be in valid sh syntax.
+
+#### Required settings
+# Required: The the directory holding your copy of all of the modules you
+# mirror.  Does not include any module name
+DESTD=<%= @mirror_path %>
+
+# Required: The file in which to store the last mirror time.
+# Note: this really should not be in the repository itself.
+TIMEFILE=<%= @project_timefile %>
+
+# Other settings
+# The remote host to rsync from, not including a module name
+REMOTE=<%= @remote_host %>
+
+# The master module, which holds the other modules
+# Note that the mirror you pull from MUST have this master module.  You cannot
+# use quick-fedora-mirror to pull from a host which does not have a master
+# module containing the other modules.
+MASTERMODULE=<%= @master_module %>
+
+# Tier 1 Fedora mirrors should uncomment the following to get the proper
+# pre-bitflip content.
+# MASTERMODULE=fedora-buffet0
+# PREBITFLIP=1
+
+# Define if the entire repository (all modules under fedora-buffet) should be
+# mirrored.  If set, MODULES (below) is ignored
+# MIRRORBUFFET=
+
+# An array containing the modules to be mirrored
+MODULES=(<%= @rsync_module %>)
+
+# The name of the file holding the file list on the mirror host Note: the
+# string '$mdir' will be replaced with the name of the current module directory
+# in context, and so the '$' must be escaped or the string quoted.
+# FILELIST='fullfiletimelist-$mdir'
+
+# An array of extra file lists to be transferred.  They won't be processed, but
+# will implicitly be included in every transfer because file lists can't be
+# included in the file lists.  '$mdir' is substituted as above.
+# Note that if you change this, you will want to do a run with -a to pick up
+# those extra files even in unchanged modules.
+# EXTRAFILES=(fullfilelist imagelist-\$mdir)
+
+# Mapping of MODULES to directory names, as an associative array
+# MODULEMAPPING=(fedora-alt alt  fedora-archive archive
+#                fedora-enchilada fedora  fedora-epel epel)
+
+# curl binary (only if MirrorManager checkins are enabled; see below).
+# CURL=/usr/bin/curl
+
+# rsync binary
+RSYNC=/usr/bin/rsync
+
+# Rsync timeout value, in seconds
+# Will be passed to rsync via --timeout.
+RSYNCTIMEOUT=100
+
+# Array of default options to pass to rsync
+# Will be modified automatically according to VERBOSITY level; no need to set
+# -q, -v or --info here.
+#
+# You can add excludes here, but the script will always detect those files as
+# missing and will add them back to the file list.  This may generate
+# complaints from rsync, but should not cause any problems, though it is almost
+# certainly better to use the provided FILTEREXP to do exclusion instead.
+#
+# Note that some of these options may be required for proper operation of the
+# script.  You really should be careful if you change things here, as the
+# default value is carefully crafted and rsync can react in unexpected ways to
+# seeminly compatible sets of arguments.
+RSYNCOPTS=(-aSH -f 'R .~tmp~' --stats --preallocate --delay-updates --out-format='@ %i  %n%L')
+
+# By default quick-fedora-mirror will try to detect and recover from an aborted
+# rsync run by moving any already downloaded files into place before
+# processing,  Define NORSYNCRECOVERY (to anything) to prevent this.
+# NORSYNCRECOVERY=
+
+# Define KEEPDIRTIMES (to anything) to make a third rsync call which restores
+# the timestamps of any directories which were modified after file removal.
+# This won't ensure that timestamps are always up to date, but its good enough
+# if you don't modify your repository locally.  Maintaining directory
+# timestamps isn't important for mirroring in any case.
+# KEEPDIRTIMES=
+
+# DEFINE CHECKIN_SITE and CHECKIN_PASSWORD to perform a mirrormanager checkin
+# at the completion of the run if rsync succeeded without error.  These values
+# should match the master site name and site password you have configured in
+# mirrormanager.
+# CHECKIN_HOST will default to the output of the hostname command; you must set
+# it manually if that does not match the hostname you have configured in
+# mirrormanager.
+# The "curl", "bzip2" and "base64" commands must be installed in order to
+# perform mirrormanager checkins.
+# CHECKIN_SITE=
+# CHECKIN_PASSWORD=
+# CHECKIN_HOST=
+
+# If you have configured multiple mirrormanager hostnames to virtually
+# spread the modules/categories you mirror between them, then you can configure
+# per-module checkin hosts with variables liks the following.
+# If a specific CHECKIN_HOST_* setting is not configured, then CHECKIN_HOST
+# above will be used.
+# Note that the module name is used, not the mirrormanager category, and that
+# '-' in the module name is replaced by '_' to make a legal variable name.
+# Most sites will hnot need this; it is only necessary when you mirror too many
+# modules for mirrormanager to handle in a single checkin or crawl.
+# CHECKIN_HOST_fedora_archive=
+# CHECKIN_HOST_fedora_alt=
+
+# Verbosity levels - info sent to stdout; usually this gets mailed to root when
+# being run by cron
+# 0 - quiet
+# 1 - quiet if no changes, otherwise basic transfer info
+# 2 - no -q to rsync
+# 3 - very slightly more verbosity
+# 4 - One -v to rsync
+# 5 - Another -v to rsync
+# 6 - Output of all settings
+# 7 - Add --progress to rsync
+# 8 - Shell script trace
+VERBOSE=6
+
+# Define (to anything) to enable logging to the systemd journal (via
+# systemd-cat).  the identifier "quick-fedora-mirror" is used, so logs can be
+# retrieved with: journalctl -t quick-fedora-mirror
+LOGJOURNAL=1
+
+# Define to a full path to enable logging to that file.
+# The provided file must already exist and be writable.
+# Is only considered if LOGJOURNAL above is not defined.
+# LOGFILE=
+
+# Logging fields - Each character selects a piece of information to log.
+# @ - Absolutely everything.
+# a - aborted run recovery
+# A - each recovered file from an aborted run
+# c - rsync calls
+# C - rsync call completions
+# d - File/directory deletion start/end
+# D - all file/directory deletes
+# e - minor errors
+# E - serious errors
+# F - all transferred files (not impl)
+# g - file list generation start/end
+# k - lock contention
+# l - per-module local file list generation (recursive find) start/end
+# L - file list generation counts
+# m - mirrormanager checkin
+# M - mirrormanager checkin detail
+# n - lack of updates in a run
+# N - lack of updates in a module
+# o - remote file list download start/end
+# p - module processing start/end
+# p - per-module module processing start/end
+# r - run start
+# R - run end
+# s - Basic transfer statistics
+# S - Detailed transfer statistics
+# t - directory time updates (not impl)
+LOGITEMS=@
+
+# When q-f-m fails to run becuse it is already running, it checks the time
+# since the last successful run.  If that is larger than this value, it logs a
+# serious error.  Thid helps to detect a hung run or issues with slow
+# transfers.
+# WARNDELAY=$((60 * 60 * 24)) # One day
+
+# When q-f-m encounters an error calling rsync, it may (depending on the error)
+# sleep and retry.  It will always sleep with exponential backup.  Set
+# MAXRETRIES to limit the number of times it retries.
+# MAXRETRIES=10
+
+# mktemp will be called after this file is sourced to make a temporary
+# directory.  This directory can contain a large amount of data, and that data
+# is specified by the server.  If your /tmp is small and you are concerned
+# about the server potentially sending extra-huge files and filling things up,
+# you can set TMPDIR here.
+# TMPDIR=
+
+# A regular expression used to filter the file lists. It must be quoted (or
+# very carefully escaped). Entries matching this expression will not be synced
+# and are expected not to be present locally. They will also be ignored by
+# quick-fedora-hardlink. Cannot contain commas. Run against the file list that
+# includes sizes (by quick-fedora-mirror) and the fullfiletimelist (by
+# quick-fedora-hardlink), so don't use expressions that would match those
+# metadata (which are digit strings and single characters). Example is a heavy
+# filter which gives you an x86_64-only mirror with source packages, debuginfo
+# packages, Alpha and Beta releases, and most image files excluded.
+# FILTEREXP='(/i386|/armhfp|/source|/SRPMS|/debug/|\.iso|\.img|\.qcow2|\.raw\.xz|\.box|/releases/test)'
