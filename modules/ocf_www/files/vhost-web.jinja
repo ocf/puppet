@@ -8,6 +8,7 @@
         SSLEngine on
         SSLCertificateFile {{vhost.ssl.bundle}}
         SSLCertificateKeyFile {{vhost.ssl.key}}
+        Protocols h2 http/1.1
     {% endif %}
 
     {% if vhost.is_redirect %}
