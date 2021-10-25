@@ -1,4 +1,4 @@
-class ocf_mirrors::projects::videolan-ftp {
+class ocf_mirrors::projects::videolan_ftp {
   file {
     '/opt/mirrors/project/videolan-ftp':
       ensure  => directory,
