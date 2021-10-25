@@ -10,7 +10,7 @@ class ocf_mirrors::projects::videolan_ftp {
   }
 
   ocf_mirrors::timer {
-    'alpine':
+    'videolan-ftp':
       exec_start => '/opt/mirrors/project/videolan-ftp/sync-archive',
       hour       => '*',
       minute     => '24',
