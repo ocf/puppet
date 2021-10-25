@@ -33,6 +33,8 @@ class ocf_mirrors {
   include ocf_mirrors::projects::tails
   include ocf_mirrors::projects::trisquel
   include ocf_mirrors::projects::ubuntu
+  include ocf_mirrors::projects::videolan-ftp
+
   package {
       [
         'prometheus-apache-exporter',
