@@ -40,6 +40,6 @@ define ocf_mirrors::kali_ftpsync(
     environments => { 'BASEDIR' => $project_path },
     hour         => $cron_hour,
     minute       => $cron_minute,
-    require      => File["${project_path}/bin", "${project_path}/etc/ftpsync.conf"],
+    require      => File["${project_path}/etc/ftpsync.conf"],
   }
 }
