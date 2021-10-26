@@ -1,5 +1,5 @@
 class ocf_mirrors::projects::kali {
-  ocf_mirrors::ftpsync {
+  ocf_mirrors::kali_ftpsync {
     'kali':
       rsync_host  => 'archive.kali.org',
       cron_minute => '15',
