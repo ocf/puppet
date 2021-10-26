@@ -35,7 +35,7 @@ define ocf_mirrors::kali_ftpsync(
   exec { "get-ftpsync-${title}":
     command => "sh -c 'tmp=$(mktemp) && wget -O \$tmp -q https://archive.kali.org/ftpsync.tar.gz && tar xvfz \$tmp -C ${project_path}'",
     user    => 'mirrors',
-    creates => ${project_path},
+    creates => $project_path,
     require => File[$project_path];
   }
 
