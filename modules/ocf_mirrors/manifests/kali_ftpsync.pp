@@ -19,14 +19,6 @@ define ocf_mirrors::kali_ftpsync(
       owner => mirrors,
       group => mirrors;
 
-    [$project_path, "${project_path}/log", "${project_path}/etc"]:
-      ensure => directory,
-      mode   => '0755';
-
-    "${project_path}/bin":
-      ensure => directory,
-      mode   => '0755';
-
     "${project_path}/etc/ftpsync.conf":
       content => template('ocf_mirrors/ftpsync.conf.erb'),
       mode    => '0644';
@@ -35,7 +27,7 @@ define ocf_mirrors::kali_ftpsync(
   exec { "get-ftpsync-${title}":
     command => "sh -c 'tmp=$(mktemp) && wget -O \$tmp -q https://archive.kali.org/ftpsync.tar.gz && tar xvfz \$tmp -C ${project_path}'",
     user    => 'mirrors',
-    creates => $project_path,
+    creates => ["${project_path}/etc", "${project_path}/log", "${project_path}/bin"],
     require => File[$project_path];
   }
 
