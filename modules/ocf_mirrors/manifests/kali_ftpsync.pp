@@ -19,6 +19,10 @@ define ocf_mirrors::kali_ftpsync(
       owner => mirrors,
       group => mirrors;
 
+    $project_path:
+      ensure => directory,
+      mode   => '0755';
+
     "${project_path}/etc/ftpsync.conf":
       content => template('ocf_mirrors/ftpsync.conf.erb'),
       mode    => '0644';
