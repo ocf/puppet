@@ -12,7 +12,7 @@ fi
 pid=$(pidof slapd)
 
 if [ "$pid" -gt 0 ]; then
-    echo "open_files.value $(ls -l /proc/$pid/fd/ | wc -l)"
+    echo "open_files.value $(find "/proc/$pid/fd/" | wc -l)"
 else
     exit 1
 fi

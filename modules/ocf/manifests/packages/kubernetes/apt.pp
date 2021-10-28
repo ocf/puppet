@@ -1,6 +1,6 @@
 class ocf::packages::kubernetes::apt {
   apt::key { 'kubernetes':
-    id      => '54A647F9048D5688D7DA2ABE6A030B21BA07F4FB',
+    id      => '7F92E05B31093BEF5A3C2D38FEEA9169307EA071',
     source  => 'https://packages.cloud.google.com/apt/doc/apt-key.gpg',
     require => Package['apt-transport-https'],
   }

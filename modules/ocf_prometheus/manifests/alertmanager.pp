@@ -13,7 +13,7 @@ class ocf_prometheus::alertmanager {
       require => User['alertmanager'],
   }
 
-  class { '::prometheus::alertmanager':
+  class { 'prometheus::alertmanager':
     version       => '0.15.2',
 
     extra_options => "--cluster.advertise-address=${::ipaddress}:9094 --web.external-url=\"https://prometheus.ocf.berkeley.edu/alertmanager\"",

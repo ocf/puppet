@@ -14,8 +14,8 @@ mod 'camptocamp-systemd',                  '2.1.0' # Dependency of puppet-promet
 mod 'herculesteam-augeasproviders_core',   '2.5.0' # Dependency of puppetlabs-kubernetes
 mod 'herculesteam-augeasproviders_sysctl', '2.3.1' # Dependency of puppetlabs-kubernetes
 mod 'puppet-nginx',                        '0.16.0'
-mod 'puppet-archive',                      '3.2.0' # Dependency of puppet-prometheus
-mod 'puppet-prometheus',                   '6.2.0'
+mod 'puppet-archive',                      '6.0.1' # Dependency of puppet-prometheus
+mod 'puppet-prometheus',                   '12.2.0'
 mod 'puppetlabs-apache',                   '3.1.0'
 mod 'puppetlabs-apt',                      '6.3.0'
 mod 'puppetlabs-concat',                   '4.2.1'

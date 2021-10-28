@@ -107,7 +107,5 @@ kube_dev::controller_nodes:
     - hozer-74
 
 # Prometheus config
-prometheus::node_exporter::version: 0.17.0
-prometheus::node_exporter::collectors_enable:
-    - systemd
-prometheus::node_exporter::extra_options: '--collector.textfile.directory /srv/prometheus --collector.systemd.unit-whitelist ".+\.(service|timer)"'
+prometheus::node_exporter::version: 1.2.2
+prometheus::node_exporter::extra_options: '--collector.textfile.directory /srv/prometheus'

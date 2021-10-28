@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 # /etc/zsh/zshrc: system-wide .zshrc file for zsh(1).
 #
 # This file is sourced only for interactive shells. It

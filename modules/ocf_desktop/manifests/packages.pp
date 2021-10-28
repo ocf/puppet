@@ -15,11 +15,11 @@ class ocf_desktop::packages {
   package {
     # applications
     ['arandr', 'atom', 'blender', 'claws-mail', 'clementine', 'eog', 'evince',
-      'filezilla', 'florence', 'freeplane', 'geany', 'gimp',
+      'filezilla', 'freeplane', 'geany', 'gimp',
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
-      'musescore', 'mpv', 'mssh', 'mumble', 'numlockx', 'simple-scan',
-      'ssh-askpass-gnome', 'texmaker',
-      'texstudio', 'vlc', 'xarchiver', 'xcape', 'xournal', 'xterm', 'zenmap']:;
+      'musescore', 'mpv', 'mssh', 'mumble', 'numlockx',
+      'simple-scan', 'ssh-askpass-gnome', 'texmaker',
+      'texstudio', 'vlc', 'xarchiver', 'xcape', 'xournal', 'xterm']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'arc-theme',
       'desktop-file-utils', 'gnome-icon-theme', 'paper-icon-theme', 'redshift',
@@ -28,10 +28,8 @@ class ocf_desktop::packages {
     ['libimage-exiftool-perl']:;
     # display manager
     ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
-    # FUSE
-    ['fuse', 'exfat-fuse']:;
     # games
-    ['armagetronad', 'freeciv', 'gl-117', 'gnome-games', 'minetest', 'redeclipse',
+    ['armagetronad', 'freeciv', 'gl-117', 'gnome-games', 'minecraft-launcher', 'minetest', 'redeclipse',
       'supertuxkart', 'wesnoth', 'wesnoth-music']:;
     # graphics/plotting
     ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
@@ -57,9 +55,51 @@ class ocf_desktop::packages {
         # point anyway.
         'preload',
 
-        # The minecraft launcher requires java 8 of some kind (openjdk-8-jre
-        # for instance), and buster only comes with openjdk 11
-        'minecraft-launcher',
+        # Zenmap depends on Python 2 and is therefore no longer in bullseye
+        'zenmap',
+
+        # FUSE and exfat
+        'fuse',
+        'exfat-fuse',
+
+        # Florence was removed from bullseye due to deprecated dependency
+        # We should find an alternative
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=947521
+        'florence',
+      ]:;
+    }
+  }
+  if $::lsbdistcodename == 'buster' {
+    package {
+      [
+        # Zenmap depends on Python 2 and is therefore no longer in bullseye
+        'zenmap',
+
+        # FUSE and exfat
+        'fuse',
+        'exfat-fuse',
+
+        # Florence was removed from bullseye due to deprecated dependency
+        # We should find an alternative
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=947521
+        'florence',
+      ]:;
+    }
+  }
+  if $::lsbdistcodename == 'bullseye' {
+    package {
+      [
+        # OpenJDK 17 (LTS) is in bullseye
+        'openjdk-17-jre-headless',
+
+        # Matchbox is what we use on our RPi
+        'matchbox-keyboard',
+
+        # x4vncviewer is no longer present
+        'tigervnc-viewer',
+
+        # sshfs depends on fuse3 on bullseye
+        'fuse3',
       ]:;
     }
   }
@@ -88,7 +128,7 @@ class ocf_desktop::packages {
       recommends => false;
     'gedit':
       recommends => false;
-    ['libreoffice-calc', 'libreoffice-draw', 'libreoffice-gnome', 'libreoffice-gtk3', 'libreoffice-impress', 'libreoffice-pdfimport', 'libreoffice-writer', 'ure']:
+    ['libreoffice-calc', 'libreoffice-draw', 'libreoffice-gnome', 'libreoffice-gtk3', 'libreoffice-impress', 'libreoffice-writer', 'ure']:
       recommends  => false,
       backport_on => stretch;
     'thunar':

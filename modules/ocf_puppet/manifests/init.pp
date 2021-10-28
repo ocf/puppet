@@ -13,10 +13,14 @@ class ocf_puppet {
     # Keychain is useful for managing SSH and GPG agents
     'keychain':;
 
+    # Provides google-authenticator utility for generating google authenticator
+    # OTP secrets
+    'libpam-google-authenticator':;
+
+    # Used for puppet repo pre-commit checks
+    'shellcheck':;
+
     # Staff need to use virtualenv to run tests.
     'virtualenv':;
-
-    # Provides google-authenticator utility for generating google authenticator OTP secrets
-    'libpam-google-authenticator':;
   }
 }

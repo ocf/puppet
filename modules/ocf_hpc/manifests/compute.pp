@@ -7,7 +7,12 @@ class ocf_hpc::compute {
   include ocf_hpc::singularity
 
   # install extra hpc packages
-  package { ['libosmesa6-dev', 'xvfb']:; }
+  package { [
+    'libosmesa6-dev',
+    'nvtop',
+    'pkg-config',
+    'xvfb'
+  ]:; }
 
   # install proprietary nvidia drivers and CUDA.
   ocf::repackage { ['nvidia-driver', 'nvidia-settings', 'nvidia-cuda-toolkit', 'nvidia-persistenced']:

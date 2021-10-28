@@ -47,11 +47,13 @@ class ocf_prometheus::server {
       purge   => true,
   } ~> Service[prometheus]
 
-  class { '::prometheus::server':
+  class { 'prometheus::server':
     version              => '2.10.0',
     extra_options        => '--web.listen-address="127.0.0.1:9090"',
     external_url         => 'https://prometheus.ocf.berkeley.edu',
     rule_files           => [ '/etc/prometheus/rules.d/*.yaml' ],
+    group                => 'prometheus',
+    config_mode          => '0755', # fix
     alertmanagers_config => [{
       scheme         => 'https',
       path_prefix    => '/alertmanager',
@@ -149,6 +151,13 @@ class ocf_prometheus::server {
         scrape_timeout  => '10s',
 
         static_configs  => [{targets => ['www:9117']}],
+      },
+      {
+        job_name        => 'fallingrocks_apache',
+        scrape_interval => '30s',
+        scrape_timeout  => '30s',
+
+        static_configs  => [{targets => ['fallingrocks:9117']}],
       },
       {
         job_name        => 'slurm',

@@ -85,6 +85,10 @@ lending: "|/usr/bin/rt-mailgate --queue 'lending' --action correspond --url http
 lending-comment: "|/usr/bin/rt-mailgate --queue 'lending' --action comment --url https://rt.ocf.berkeley.edu"
 owner-lending: root
 
+merch: "|/usr/bin/rt-mailgate --queue 'merch' --action correspond --url https://rt.ocf.berkeley.edu"
+merch-comment: "|/usr/bin/rt-mailgate --queue 'merch' --action comment --url https://rt.ocf.berkeley.edu"
+owner-merch: root
+
 operations: "|/usr/bin/rt-mailgate --queue 'operations' --action correspond --url https://rt.ocf.berkeley.edu"
 operations-comment: "|/usr/bin/rt-mailgate --queue 'operations' --action comment --url https://rt.ocf.berkeley.edu"
 owner-operations: root
@@ -104,6 +108,10 @@ owner-techtalks: root
 todo: "|/usr/bin/rt-mailgate --queue 'todo' --action correspond --url https://rt.ocf.berkeley.edu"
 todo-comment: "|/usr/bin/rt-mailgate --queue 'todo' --action comment --url https://rt.ocf.berkeley.edu"
 owner-todo: root
+
+welcome: "|/usr/bin/rt-mailgate --queue 'welcome' --action correspond --url https://rt.ocf.berkeley.edu"
+welcome-comment: "|/usr/bin/rt-mailgate --queue 'welcome' --action comment --url https://rt.ocf.berkeley.edu"
+owner-welcome: root
 
 # accounts only used for sending
 atool: /dev/null

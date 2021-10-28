@@ -1,3 +1,5 @@
+#!/bin/bash
+
 klist &> /dev/null
 if [ $? = 0 ]; then
   kdestroy
