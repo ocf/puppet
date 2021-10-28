@@ -15,7 +15,7 @@ class ocf_www::site::shorturl {
     ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
     ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
 
-rewrites      => [
+    rewrites      => [
       # Short URLs
       # Remember to add these to the list of RESERVED_USERNAMES in ocflib/account/validators.py
       {rewrite_rule => '^/?$ https://www.ocf.berkeley.edu/ [R=301]'},
