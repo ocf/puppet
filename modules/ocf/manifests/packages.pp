@@ -94,6 +94,7 @@ class ocf::packages {
       'iftop',
       'iotop',
       'iperf',
+      'iperf3',
       'jq',
       'lsof',
       'man-db',
@@ -108,15 +109,6 @@ class ocf::packages {
       'powertop',
       'pv',
       'pwgen',
-      'python',
-      'python-colorama',
-      'python-dateutil',
-      'python-dev',
-      'python-dnspython',
-      'python-ldap',
-      'python-paramiko',
-      'python-pip',
-      'python-requests',
       'python3',
       'python3-dateutil',
       'python3-dev',
@@ -126,10 +118,8 @@ class ocf::packages {
       'python3-requests',
       'python3-tabulate',
       'python3-venv',
-      'python3.7',
-      'python3.7-dev',
-      'python3.7-venv',
       'quota',
+      'ranger',
       'reptyr',
       'screen',
       'systemd-sysv',
@@ -154,7 +144,17 @@ class ocf::packages {
   ocf::repackage { 'python3-ldap3':
     backport_on => ['stretch'],
   }
-
+  # only install the python3.7 packages on stretch
+  # python3 is python3.7 on buster and python3.9 on bullseye
+  if $::lsbdistcodename == 'stretch' {
+    package {
+        [
+        'python3.7',
+        'python3.7-dev',
+        'python3.7-venv',
+        ]:;
+      }
+  }
   # Packages to only install on Debian (not on Raspbian for example)
   if $::lsbdistid == 'Debian' {
     package {

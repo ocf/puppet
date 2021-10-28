@@ -1,5 +1,5 @@
 class ocf::packages::matplotlib {
-  $packages = ['python-matplotlib', 'python3-matplotlib']
+  $packages = ['python3-matplotlib']
 
   package { $packages:; }
 

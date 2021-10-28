@@ -17,6 +17,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::debian
   include ocf_mirrors::projects::devuan
   include ocf_mirrors::projects::emacs_lisp_archive
+  include ocf_mirrors::projects::fedora
   include ocf_mirrors::projects::finnix
   include ocf_mirrors::projects::freebsd
   include ocf_mirrors::projects::gnu
@@ -32,7 +33,20 @@ class ocf_mirrors {
   include ocf_mirrors::projects::tails
   include ocf_mirrors::projects::trisquel
   include ocf_mirrors::projects::ubuntu
+  package {
+      [
+        'prometheus-apache-exporter',
+      ]:;
+    }
+  # Prometheus user needed for the prometheus-apache-exporter daemon,
+  # which runs as user "prometheus"
+  user {
+    'prometheus':
+      comment  => 'prometheus user for running exporters',
 
+      # Set to have no password, only allow key-based login
+      password => '*',
+  }
   user { 'mirrors':
     comment  => 'OCF Mirroring',
     home     => '/opt/mirrors',
@@ -54,6 +68,11 @@ class ocf_mirrors {
 
     '/opt/mirrors/ftp/README.html':
       source => 'puppet:///modules/ocf_mirrors/README.html',
+      owner  => mirrors,
+      group  => mirrors;
+
+    '/opt/mirrors/ftp/robots.txt':
+      source => 'puppet:///modules/ocf_mirrors/robots.txt',
       owner  => mirrors,
       group  => mirrors;
 
@@ -80,6 +99,7 @@ class ocf_mirrors {
   }
   include apache::mod::headers
   include apache::mod::status
+  include apache::mod::rewrite
 
   # Restart apache if any cert changes occur
   Class['ocf::ssl::default'] ~> Class['Apache::Service']
@@ -117,15 +137,21 @@ class ocf_mirrors {
 
     directories       => [
       {
-        path          => '/opt/mirrors/ftp',
-        options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
-        index_options => ['NameWidth=*', '+SuppressDescription']
+        path            => '/opt/mirrors/ftp',
+        options         => ['+Indexes', '+SymlinksIfOwnerMatch'],
+        custom_fragment => '
+          RewriteEngine On
+          RewriteCond "%{HTTP_USER_AGENT}" "MSIE 7\.0|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0"
+          RewriteRule ^ - [F]
+        ',
+        index_options   => ['NameWidth=*', '+SuppressDescription']
       },
       $apache_project_directory_options,
     ],
 
     access_log_format => 'io_count',
     custom_fragment   => "
+      Protocols h2c http/1.1
       HeaderName README.html
       ReadmeName FOOTER.html
     ",
@@ -136,7 +162,7 @@ class ocf_mirrors {
 
     # we have to specify docroot even though we always redirect
     docroot         => '/var/www',
-
+    custom_fragment => 'Protocols h2c http/1.1',
     redirect_source => '/',
     redirect_dest   => 'http://mirrors.ocf.berkeley.edu/',
     redirect_status => '301',
@@ -149,15 +175,21 @@ class ocf_mirrors {
 
     directories       => [
       {
-        path          => '/opt/mirrors/ftp',
-        options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
-        index_options => ['NameWidth=*', '+SuppressDescription']
+        path            => '/opt/mirrors/ftp',
+        options         => ['+Indexes', '+SymlinksIfOwnerMatch'],
+        custom_fragment => '
+          RewriteEngine On
+          RewriteCond "%{HTTP_USER_AGENT}" "MSIE 7\.0|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0"
+          RewriteRule ^ - [F]
+        ',
+        index_options   => ['NameWidth=*', '+SuppressDescription']
       },
       $apache_project_directory_options,
     ],
 
     access_log_format => 'io_count',
     custom_fragment   => "
+      Protocols h2 http/1.1
       HeaderName README.html
       ReadmeName FOOTER.html
     ",

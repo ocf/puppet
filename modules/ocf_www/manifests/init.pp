@@ -18,6 +18,9 @@ class ocf_www {
   include ocf::tmpfs
   include ocf::ssl::default
 
+  # enables the http2 module
+  apache::mod { 'http2': }
+
   class { 'ocf::nfs':
     cron => false,
     web  => false,

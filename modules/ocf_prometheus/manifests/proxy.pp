@@ -13,7 +13,6 @@ class ocf_prometheus::proxy {
   apache::mod { 'authnz_pam':
     require => Package['libapache2-mod-authnz-pam'];
   }
-
   file {
     '/etc/prometheus/allowed-groups':
       content => 'ocfstaff';

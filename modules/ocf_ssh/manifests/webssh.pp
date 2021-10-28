@@ -14,6 +14,12 @@ class ocf_ssh::webssh {
   }
   ~> service { 'shellinabox':; }
 
+  cron {'refresh shellinabox':
+    command => 'systemctl restart shellinabox',
+    user    => 'root',
+    weekday => 'Wednesday',
+  }
+
   case $::hostname {
     tsunami: { $webssh_fqdn = 'ssh.ocf.berkeley.edu' }
     default: { $webssh_fqdn = 'dev-ssh.ocf.berkeley.edu' }

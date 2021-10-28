@@ -15,10 +15,10 @@ class ocf::extrapackages {
   include ocf::packages::chrome
   include ocf::packages::emacs
   include ocf::packages::kubectl
-  include ocf::packages::matplotlib
   include ocf::packages::mysql
   include ocf::packages::mysql_server
   include ocf::packages::nmap
+  include ocf::packages::matplotlib
 
   # other packages
   package {
@@ -46,7 +46,6 @@ class ocf::extrapackages {
     'debhelper',
     'default-jdk',
     'default-libmysqlclient-dev',
-    'dh-systemd',
     'dh-virtualenv',
     'elinks',
     'elpa-markdown-mode',
@@ -66,7 +65,6 @@ class ocf::extrapackages {
     'ikiwiki',
     'inotify-tools',
     'intltool',
-    'ipython',
     'ipython3',
     'irssi',
     'julia',
@@ -107,6 +105,7 @@ class ocf::extrapackages {
     'mutt',
     'nasm',
     'neofetch',
+    'neovim',
     'nodeenv',
     'nodejs',
     'octave',
@@ -128,37 +127,6 @@ class ocf::extrapackages {
     'postgresql-client',
     'pssh',
     'puppet-lint',
-    'python-cracklib',
-    'python-crypto',
-    'python-django',
-    'python-egenix-mxdatetime',
-    'python-flake8',
-    'python-flask',
-    'python-flup',
-    'python-jaxml',
-    'python-lxml',
-    'python-minimal',
-    'python-mock',
-    'python-mysqldb',
-    'python-nose',
-    'python-notebook',
-    'python-numpy',
-    'python-pandas',
-    'python-progressbar',
-    'python-pysnmp4',
-    'python-pysqlite2',
-    'python-pytest',
-    'python-pytest-cov',
-    'python-reportlab',
-    'python-scapy',
-    'python-scipy',
-    'python-sklearn',
-    'python-sqlalchemy',
-    'python-stdeb',
-    'python-sympy',
-    'python-twisted',
-    'python-virtualenv',
-    'python-yaml',
     'python3-flake8',
     'python3-flask',
     'python3-jinja2',
@@ -222,6 +190,10 @@ class ocf::extrapackages {
     'zlib1g-dev',
     'znc',
     ]:;
+  }
+
+  ocf::repackage { 'git-lfs':
+    backport_on =>  ['buster', 'stretch'],
   }
 
   if $::lsbdistcodename == 'stretch' {
