@@ -10,7 +10,7 @@ class ocf_mirrors::projects::raspi {
   }
 
   ocf_mirrors::timer {
-    'alpine':
+    'raspi':
       exec_start => '/opt/mirrors/project/raspi/sync-archive',
       hour       => '*',
       minute     => '08',
