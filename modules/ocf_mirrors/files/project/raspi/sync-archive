@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished --archive --verbose --delete --delete-delay --delay-updates \
+	apt-repo.raspberrypi.org::archive /opt/mirrors/ftp/raspi
