@@ -14,6 +14,7 @@ define ocf_mirrors::qfm(
 
   exec { "get-qfm-${title}":
     command => "sh -c 'git clone https://pagure.io/quick-fedora-mirror.git ${project_path}'",
+    onlyif  => "test ! -f ${project_path}",
     user    => 'mirrors';
   }
 
