@@ -90,7 +90,7 @@ class ocf_desktop::packages {
     package {
       [
         # OpenJDK 17 (LTS) is in bullseye
-        'openjdk-17-jre-headless',
+        'openjdk-17-jdk',
 
         # Matchbox is what we use on our RPi
         'matchbox-keyboard',
