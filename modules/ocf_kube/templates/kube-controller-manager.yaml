@@ -27,7 +27,7 @@ spec:
     - --service-account-private-key-file=/etc/kubernetes/pki/sa.key
     - --use-service-account-credentials=true
     - --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt
-    image: k8s.gcr.io/kube-controller-manager:v1.19.4
+    image: k8s.gcr.io/kube-controller-manager:v<%= @kube_version %>
     imagePullPolicy: IfNotPresent
     livenessProbe:
       failureThreshold: 8

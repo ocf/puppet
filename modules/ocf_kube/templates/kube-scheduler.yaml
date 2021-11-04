@@ -18,7 +18,7 @@ spec:
     - --authentication-kubeconfig=/etc/kubernetes/scheduler.conf
     - --authorization-kubeconfig=/etc/kubernetes/scheduler.conf
     - --kubeconfig=/etc/kubernetes/scheduler.conf
-    image: k8s.gcr.io/kube-scheduler:v1.19.4
+    image: k8s.gcr.io/kube-scheduler:v<%= @kube_version %>
     imagePullPolicy: IfNotPresent
     livenessProbe:
       failureThreshold: 8

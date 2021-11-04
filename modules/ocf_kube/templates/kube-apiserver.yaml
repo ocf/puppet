@@ -45,7 +45,7 @@ spec:
     - --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt
     - --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key
     - --service-account-key-file=/etc/kubernetes/pki/sa.pub
-    image: k8s.gcr.io/kube-apiserver:v1.19.4
+    image: k8s.gcr.io/kube-apiserver:v<%= @kube_version %>
     imagePullPolicy: IfNotPresent
     livenessProbe:
       failureThreshold: 8
