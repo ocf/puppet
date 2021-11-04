@@ -87,7 +87,7 @@ kube::kubernetes_version: 1.22.0
 # get from https://packages.cloud.google.com/apt/dists/kubernetes-xenial/main/binary-amd64/Packages
 kube::kubernetes_package_version: 1.22.2-00
 # get from https://github.com/kubernetes/k8s.io/
-kube::etcd_version: 3.5.1-0
+kube::etcd_version: 3.5.1
 # run gen-kube-crt in ocf/utils after editing
 kube::controller_nodes:
     - jaws

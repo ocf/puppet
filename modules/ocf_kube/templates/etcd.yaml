@@ -31,7 +31,7 @@ spec:
     - --peer-cert-file=/etc/kubernetes/pki/etcd/client.crt
     - --peer-key-file=/etc/kubernetes/pki/etcd/client.key
     - --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
-    image: k8s.gcr.io/etcd:<%= @etcd_version %>
+    image: gcr.io/etcd-development/etcd:<%= @etcd_version %>
     imagePullPolicy: IfNotPresent
     livenessProbe:
       failureThreshold: 8
