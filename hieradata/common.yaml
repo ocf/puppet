@@ -71,7 +71,6 @@ kubernetes::install_dashboard: false
 kubernetes::controller_address: 169.229.226.75:6443
 kubernetes::nginx_version: '0.34.1'
 kubernetes::worker_nodes:
-    - pandemic
     - riptide
     - bedbugs
 kubernetes::master_nodes:
@@ -80,10 +79,10 @@ kubernetes::master_nodes:
     - deadlock
 
 # Kubectl version
-kubectl_package_version: 1.22.0-00
+kubectl_package_version: 1.22.2-00
 
 # Kubernetes config (the new setup)
-kube::kubernetes_version: 1.22.0
+kube::kubernetes_version: 1.22.2
 # get from https://packages.cloud.google.com/apt/dists/kubernetes-xenial/main/binary-amd64/Packages
 kube::kubernetes_package_version: 1.22.2-00
 # get from https://github.com/kubernetes/k8s.io/
@@ -95,9 +94,9 @@ kube::controller_nodes:
     - pandemic
 
 # Kubernetes config (the new setup) for the dev cluster
-kube_dev::kubernetes_version: 1.22.0
+kube_dev::kubernetes_version: 1.22.2
 # get from https://packages.cloud.google.com/apt/dists/kubernetes-xenial/main/binary-amd64/Packages
-kube_dev::kubernetes_package_version: 1.22.0-00
+kube_dev::kubernetes_package_version: 1.22.2-00
 # get from https://github.com/kubernetes/k8s.io/
 kube_dev::etcd_version: 3.5.1-0
 # run gen-kube-crt in ocf/utils after editing
