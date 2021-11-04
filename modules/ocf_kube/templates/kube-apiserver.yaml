@@ -14,7 +14,6 @@ spec:
     # port configuration
     - --advertise-address=<%= @ipaddress %>
     - --secure-port=6443
-    - --insecure-port=0
     # allow privileged containers
     - --allow-privileged=true
     # enabled authorizations
@@ -44,7 +43,9 @@ spec:
     - --tls-private-key-file=/etc/kubernetes/pki/apiserver.key
     - --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt
     - --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key
+    - --service-account-issuer=https://kubernetes.default.svc.cluster.local
     - --service-account-key-file=/etc/kubernetes/pki/sa.pub
+    - --service-account-signing-key-file=/etc/kubernetes/pki/sa.key
     image: k8s.gcr.io/kube-apiserver:v<%= @kube_version %>
     imagePullPolicy: IfNotPresent
     livenessProbe:
