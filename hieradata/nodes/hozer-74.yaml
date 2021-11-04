@@ -1,2 +1,2 @@
 classes:
-    - ocf_kubernetes::worker
+    - ocf_kube::controller

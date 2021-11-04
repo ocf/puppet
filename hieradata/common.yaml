@@ -79,6 +79,33 @@ kubernetes::master_nodes:
     - autocrat
     - deadlock
 
+# Kubectl version
+kubectl_package_version: 1.22.0-00
+
+# Kubernetes config (the new setup)
+kube::kubernetes_version: 1.22.0
+# get from https://packages.cloud.google.com/apt/dists/kubernetes-xenial/main/binary-amd64/Packages
+kube::kubernetes_package_version: 1.22.2-00
+# get from https://github.com/kubernetes/k8s.io/
+kube::etcd_version: 3.5.1-0
+# run gen-kube-crt in ocf/utils after editing
+kube::controller_nodes:
+    - jaws
+    - lockdown
+    - pandemic
+
+# Kubernetes config (the new setup) for the dev cluster
+kube_dev::kubernetes_version: 1.22.0
+# get from https://packages.cloud.google.com/apt/dists/kubernetes-xenial/main/binary-amd64/Packages
+kube_dev::kubernetes_package_version: 1.22.0-00
+# get from https://github.com/kubernetes/k8s.io/
+kube_dev::etcd_version: 3.5.1-0
+# run gen-kube-crt in ocf/utils after editing
+kube_dev::controller_nodes:
+    - hozer-72
+    - hozer-73
+    - hozer-74
+
 # Prometheus config
 prometheus::node_exporter::version: 1.2.2
 prometheus::node_exporter::extra_options: '--collector.textfile.directory /srv/prometheus'
