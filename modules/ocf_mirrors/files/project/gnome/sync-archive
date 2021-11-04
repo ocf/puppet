@@ -1,0 +1,5 @@
+#!/bin/sh -eu
+
+/usr/local/bin/rsync-no-vanished -vrlpt --delete-after --delay-updates \
+	--password-file=/opt/mirrors/project/gnome/sync_password \
+	mirror@master.gnome.org::gnomeftp /opt/mirrors/ftp/gnome

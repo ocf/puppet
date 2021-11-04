@@ -20,6 +20,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::fedora
   include ocf_mirrors::projects::finnix
   include ocf_mirrors::projects::freebsd
+  include ocf_mirrors::projects::gnome
   include ocf_mirrors::projects::gnu
   include ocf_mirrors::projects::kali
   include ocf_mirrors::projects::kde
