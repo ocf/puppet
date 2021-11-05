@@ -143,7 +143,7 @@ class ocf_mirrors {
         options         => ['+Indexes', '+SymlinksIfOwnerMatch'],
         custom_fragment => '
           RewriteEngine On
-          RewriteCond "%{HTTP_USER_AGENT}" "MSIE 7\.0|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0"
+          RewriteCond "%{HTTP_USER_AGENT}" "MSIE 7\.0; Windows NT 6\.1|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0"
           RewriteRule ^ - [F]
         ',
         index_options   => ['NameWidth=*', '+SuppressDescription']
@@ -181,7 +181,7 @@ class ocf_mirrors {
         options         => ['+Indexes', '+SymlinksIfOwnerMatch'],
         custom_fragment => '
           RewriteEngine On
-          RewriteCond "%{HTTP_USER_AGENT}" "MSIE 7\.0|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0"
+          RewriteCond "%{HTTP_USER_AGENT}" "MSIE 7\.0; Windows NT 6\.1|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0"
           RewriteRule ^ - [F]
         ',
         index_options   => ['NameWidth=*', '+SuppressDescription']
