@@ -60,6 +60,7 @@ class ocf_mirrors {
     '::nginx':
       manage_repo             => false,
       include_modules_enabled => true,
+      use_default_location    => false,
       http_raw_append         => @(END);
       gzip on;
       sendfile_max_chunk 20m;
@@ -93,10 +94,10 @@ class ocf_mirrors {
       ensure => directory;
   }
   nginx::resource::server { 'mirrors.ocf.berkeley.edu':
+    www_root            => '/opt/mirrors/ftp',
     listen_port         => 80,
     ssl_port            => 443,
     listen_options      => 'default_server',
-    www_root            => '/opt/mirrors/ftp',
     ssl                 => true,
     http2               => on,
     ssl_cert            => "/etc/ssl/private/${::fqdn}.bundle",
