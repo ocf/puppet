@@ -73,7 +73,7 @@ class ocf_apt {
         User['ocfapt'],
       ];
   }
-  nginx::resource::server { 'apt.ocf.berkeley.edu':
+  nginx::resource::server { ['apt.ocf.berkeley.edu', 'apt']:
     listen_port      => 80,
     ssl_port         => 443,
     www_root         => '/opt/apt/ftp',
@@ -91,7 +91,7 @@ class ocf_apt {
   }
   nginx::resource::location { '=  /':
     ensure     => present,
-    server     => 'apt.ocf.berkeley.edu',
+    server     => ['apt.ocf.berkeley.edu', 'apt'],
     www_root   => '/opt/apt/ftp',
     ssl        => true,
     raw_append => @(END),
