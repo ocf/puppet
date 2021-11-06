@@ -68,39 +68,17 @@ class ocf_apt {
         User['ocfapt'],
       ];
   }
-
-  apache::vhost { 'apt.ocf.berkeley.edu':
-    serveraliases     => ['apt'],
-    port              => 80,
-    docroot           => '/opt/apt/ftp',
-
-    directories       => [{
-      path          => '/opt/apt/ftp',
-      options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
-      index_options => ['NameWidth=*', '+SuppressDescription']
-    }],
-
-    access_log_format => 'io_count',
-    custom_fragment   => "Protocols h2c http/1.1\nHeaderName README.html\nReadmeName FOOTER.html",
-  }
-
-  apache::vhost { 'apt.ocf.berkeley.edu-ssl':
-    servername        => 'apt.ocf.berkeley.edu',
-    port              => 443,
-    docroot           => '/opt/apt/ftp',
-
-    directories       => [{
-      path          => '/opt/apt/ftp',
-      options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
-      index_options => ['NameWidth=*', '+SuppressDescription']
-    }],
-
-    access_log_format => 'io_count',
-    custom_fragment   => "Protocols h2 http/1.1\nHeaderName README.html\nReadmeName FOOTER.html",
-
-    ssl               => true,
-    ssl_key           => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert          => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain         => "/etc/ssl/private/${::fqdn}.intermediate",
+  nginx::resource::server { 'apt.ocf.berkeley.edu':
+    ensure           => present,
+    listen_port      => 80,
+    ssl_port         => 443,
+    www_root         => '/opt/apt/ftp',
+    autoindex        => on,
+    ssl              => true,
+    http2            => on,
+    ssl_cert         => "/etc/ssl/private/${::fqdn}.bundle",
+    ssl_key          => "/etc/ssl/private/${::fqdn}.key",
+    ipv6_enable      => true,
+    ipv6_listen_port => 80,
   }
 }
