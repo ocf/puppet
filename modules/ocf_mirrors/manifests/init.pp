@@ -124,7 +124,23 @@ class ocf_mirrors {
       'rewrite' => '^ http://mirrors.ocf.berkeley.edu permanent'
     }
   }
-
+  nginx::resource::server { '_':
+    listen_ip           => "127.0.0.1",
+    listen_port         => 8080,
+    ipv6_listen_options => 'default_server',
+    listen_options      => 'default_server',
+    ipv6_enable         => true,
+    ipv6_listen_ip      => "::1"
+    ipv6_listen_port    => 8080,
+    www_root            => '/var/www',
+  }
+  nginx::resource::location { '= /stub_status':
+      ensure     => present,
+      server     => '_',
+      raw_append => @(END),
+        stub_status;
+        END
+    }
 
   file { '/opt/mirrors/bin/report-sizes':
     source => 'puppet:///modules/ocf_mirrors/report-sizes',
