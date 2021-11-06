@@ -41,6 +41,10 @@ class ocf_mirrors {
     # Set to have no password, only allow key-based login
     password => '*',
   }
+  package {
+    'nginx-full':,
+    'libnginx-mod-http-fancyindex':;
+  }
   class {
     '::nginx':
       manage_repo => false;
