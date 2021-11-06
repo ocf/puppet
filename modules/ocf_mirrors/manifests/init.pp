@@ -65,7 +65,7 @@ class ocf_mirrors {
       log_format main '$remote_addr - $remote_user [$time_local] '
                 '"$request" $status $body_bytes_sent "$http_referer" '
                 '"$http_user_agent" rt=$request_time $request_length $bytes_sent';
-      
+
       END
   }
   $ocfstats_password = lookup('ocfstats::mysql::password')
@@ -107,7 +107,7 @@ class ocf_mirrors {
     raw_append          => @(END),
       fancyindex on;
       fancyindex_exact_size off;
-      if ($http_user_agent ~ "(MSIE 7\.0; Windows NT (6\.1|6\.2)|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0)") {  
+      if ($http_user_agent ~ "(MSIE 7\.0; Windows NT (6\.1|6\.2)|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0)") {
         return 403;
       }
       END
@@ -139,12 +139,12 @@ class ocf_mirrors {
     }
   }
   nginx::resource::server { '_':
-    listen_ip           => "127.0.0.1",
+    listen_ip           => '127.0.0.1',
     listen_port         => 8080,
     ipv6_listen_options => 'default_server',
     listen_options      => 'default_server',
     ipv6_enable         => true,
-    ipv6_listen_ip      => "::1",
+    ipv6_listen_ip      => '::1',
     ipv6_listen_port    => 8080,
     www_root            => '/var/www',
   }
