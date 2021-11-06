@@ -108,6 +108,7 @@ class ocf_mirrors {
     use_default_location => false,
     raw_append           => @(END),
       fancyindex on;
+      fancyindex_name_length 100;
       fancyindex_exact_size off;
       if ($http_user_agent ~ "(MSIE 7\.0; Windows NT (6\.1|6\.2)|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0)") {
         return 403;
@@ -118,7 +119,6 @@ class ocf_mirrors {
     ensure     => present,
     server     => 'mirrors.ocf.berkeley.edu',
     ssl        => true,
-    www_root   => '/opt/mirrors/ftp',
     raw_append => @(END),
       fancyindex_header README.html;
       END
