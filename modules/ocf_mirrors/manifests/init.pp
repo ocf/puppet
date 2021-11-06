@@ -1,7 +1,6 @@
 class ocf_mirrors {
   require ocf::ssl::default
   require ocf::packages::rsync
-
   include ocf_mirrors::ftp
   include ocf_mirrors::rsync
   include ocf_mirrors::firewall_input
@@ -45,7 +44,7 @@ class ocf_mirrors {
   }
 
   $ocfstats_password = lookup('ocfstats::mysql::password')
- 
+
   file {
     ['/opt/mirrors', '/opt/mirrors/ftp', '/opt/mirrors/project', '/opt/mirrors/bin']:
       ensure  => directory,
@@ -67,30 +66,30 @@ class ocf_mirrors {
     '/var/log/rsync':
       ensure => directory;
   }
-  nginx::resource::server { "mirrors.ocf.berkeley.edu":
-    ensure                => present,
-    listen_port           => 443,
-    listen_options        => 'default_server',
-    www_root              => '/opt/mirrors/ftp',
-    autoindex             => on,
-    ssl                   => true,
-    http2                 => on,
-    ssl_cert              => "/etc/ssl/private/${::fqdn}.bundle",
-    ssl_key               => "/etc/ssl/private/${::fqdn}.key",
-    ipv6_enable           => true,
-    ipv6_listen_port      => 443,
+  nginx::resource::server { 'mirrors.ocf.berkeley.edu':
+    ensure           => present,
+    listen_port      => 443,
+    listen_options   => 'default_server',
+    www_root         => '/opt/mirrors/ftp',
+    autoindex        => on,
+    ssl              => true,
+    http2            => on,
+    ssl_cert         => "/etc/ssl/private/${::fqdn}.bundle",
+    ssl_key          => "/etc/ssl/private/${::fqdn}.key",
+    ipv6_enable      => true,
+    ipv6_listen_port => 443,
   }
-  nginx::resource::server { "mirrors.ocf.berkeley.edu":
-    ensure                => present,
-    listen_port           => 80,
-    listen_options        => 'default_server',
-    www_root              => '/opt/mirrors/ftp',
-    autoindex             => on,
-    http2                 => on,
-    ipv6_enable           => true,
-    ipv6_listen_port      => 80,
+  nginx::resource::server { 'mirrors.ocf.berkeley.edu':
+    ensure           => present,
+    listen_port      => 80,
+    listen_options   => 'default_server',
+    www_root         => '/opt/mirrors/ftp',
+    autoindex        => on,
+    http2            => on,
+    ipv6_enable      => true,
+    ipv6_listen_port => 80,
   }
-  nginx::resource::server { "mirrors.berkeley.edu":
+  nginx::resource::server { 'mirrors.berkeley.edu':
     ensure              => present,
     listen_port         => 80,
     ipv6_enable         => true,
