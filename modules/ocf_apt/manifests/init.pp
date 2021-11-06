@@ -1,8 +1,6 @@
 class ocf_apt {
   include ocf::firewall::allow_web
   include ocf::ssl::default
-  apache::mod { 'http2': }
-
   user { 'ocfapt':
     comment => 'OCF Apt',
     home    => '/opt/apt',
