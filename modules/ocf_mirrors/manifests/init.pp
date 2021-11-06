@@ -33,6 +33,20 @@ class ocf_mirrors {
   include ocf_mirrors::projects::tails
   include ocf_mirrors::projects::trisquel
   include ocf_mirrors::projects::ubuntu
+  package {
+      [
+        'prometheus-nginx-exporter',
+      ]:;
+    }
+  # Prometheus user needed for the prometheus-apache-exporter daemon,
+  # which runs as user "prometheus"
+  user {
+    'prometheus':
+      comment  => 'prometheus user for running exporters',
+
+      # Set to have no password, only allow key-based login
+      password => '*',
+  }
   user { 'mirrors':
     comment  => 'OCF Mirroring',
     home     => '/opt/mirrors',
@@ -130,7 +144,7 @@ class ocf_mirrors {
     ipv6_listen_options => 'default_server',
     listen_options      => 'default_server',
     ipv6_enable         => true,
-    ipv6_listen_ip      => "::1"
+    ipv6_listen_ip      => "::1",
     ipv6_listen_port    => 8080,
     www_root            => '/var/www',
   }
