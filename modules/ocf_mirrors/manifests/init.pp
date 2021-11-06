@@ -64,7 +64,7 @@ class ocf_mirrors {
       sendfile_max_chunk 20m;
       log_format main '$remote_addr - $remote_user [$time_local] '
                 '"$request" $status $body_bytes_sent "$http_referer" '
-                '"$http_user_agent" $request_length $bytes_sent';
+                '"$http_user_agent" rt=$request_time $request_length $bytes_sent';
       
       END
   }
