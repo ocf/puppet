@@ -78,18 +78,19 @@ class ocf_mirrors {
       ensure => directory;
   }
   nginx::resource::server { 'mirrors.ocf.berkeley.edu':
-    listen_port      => 80,
-    ssl_port         => 443,
-    listen_options   => 'default_server',
-    www_root         => '/opt/mirrors/ftp',
-    ssl              => true,
-    http2            => on,
-    ssl_cert         => "/etc/ssl/private/${::fqdn}.bundle",
-    ssl_key          => "/etc/ssl/private/${::fqdn}.key",
-    ipv6_enable      => true,
-    ipv6_listen_port => 80,
-    format_log       => 'main',
-    raw_append       => @(END),
+    listen_port         => 80,
+    ssl_port            => 443,
+    listen_options      => 'default_server',
+    www_root            => '/opt/mirrors/ftp',
+    ssl                 => true,
+    http2               => on,
+    ssl_cert            => "/etc/ssl/private/${::fqdn}.bundle",
+    ssl_key             => "/etc/ssl/private/${::fqdn}.key",
+    ipv6_enable         => true,
+    ipv6_listen_port    => 80,
+    ipv6_listen_options => 'default_server',
+    format_log          => 'main',
+    raw_append          => @(END),
       fancyindex on;
       fancyindex_exact_size off;
       if ($http_user_agent ~ "(MSIE 7\.0; Windows NT (6\.1|6\.2)|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0)") {  
