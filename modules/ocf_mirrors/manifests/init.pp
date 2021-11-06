@@ -43,6 +43,7 @@ class ocf_mirrors {
   }
   class {
     '::nginx':
+      manage_repo => false;
   }
   $ocfstats_password = lookup('ocfstats::mysql::password')
 
