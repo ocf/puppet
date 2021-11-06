@@ -68,7 +68,8 @@ class ocf_mirrors {
   }
   nginx::resource::server { 'mirrors.ocf.berkeley.edu':
     ensure           => present,
-    listen_port      => 443,
+    listen_port      => 80,
+    ssl_port         => 443,
     listen_options   => 'default_server',
     www_root         => '/opt/mirrors/ftp',
     autoindex        => on,
@@ -76,16 +77,6 @@ class ocf_mirrors {
     http2            => on,
     ssl_cert         => "/etc/ssl/private/${::fqdn}.bundle",
     ssl_key          => "/etc/ssl/private/${::fqdn}.key",
-    ipv6_enable      => true,
-    ipv6_listen_port => 443,
-  }
-  nginx::resource::server { 'mirrors.ocf.berkeley.edu':
-    ensure           => present,
-    listen_port      => 80,
-    listen_options   => 'default_server',
-    www_root         => '/opt/mirrors/ftp',
-    autoindex        => on,
-    http2            => on,
     ipv6_enable      => true,
     ipv6_listen_port => 80,
   }
