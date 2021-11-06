@@ -66,16 +66,4 @@ class ocf_apt {
         User['ocfapt'],
       ];
   }
-  nginx::resource::server { 'apt.ocf.berkeley.edu':
-    listen_port      => 80,
-    ssl_port         => 443,
-    www_root         => '/opt/apt/ftp',
-    autoindex        => on,
-    ssl              => true,
-    http2            => on,
-    ssl_cert         => "/etc/ssl/private/${::fqdn}.bundle",
-    ssl_key          => "/etc/ssl/private/${::fqdn}.key",
-    ipv6_enable      => true,
-    ipv6_listen_port => 80,
-  }
 }
