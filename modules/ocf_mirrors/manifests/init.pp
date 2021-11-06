@@ -1,5 +1,4 @@
 class ocf_mirrors {
-  require nginx
   require ocf::ssl::default
   require ocf::packages::rsync
   include ocf_mirrors::ftp
@@ -42,7 +41,9 @@ class ocf_mirrors {
     # Set to have no password, only allow key-based login
     password => '*',
   }
-
+  class {
+    '::nginx':
+  }
   $ocfstats_password = lookup('ocfstats::mysql::password')
 
   file {
