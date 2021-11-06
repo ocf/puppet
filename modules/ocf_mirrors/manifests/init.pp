@@ -42,8 +42,10 @@ class ocf_mirrors {
     password => '*',
   }
   package {
-    'nginx-full':,
-    'libnginx-mod-http-fancyindex':;
+    [
+      'nginx-full',
+      'libnginx-mod-http-fancyindex',
+    ]:;
   }
   class {
     '::nginx':

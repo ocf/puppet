@@ -9,8 +9,8 @@ class ocf_apt {
   }
 
   package {
-    'nginx-full':,
-    'libnginx-mod-http-fancyindex':,
+    'nginx-full':;
+    'libnginx-mod-http-fancyindex':;
     'reprepro':;
   }
 
