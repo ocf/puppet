@@ -65,6 +65,7 @@ class ocf_mirrors {
     '/var/log/rsync':
       ensure => directory;
   }
+  include nginx::config
   nginx::resource::server { 'mirrors.ocf.berkeley.edu':
     listen_port      => 80,
     ssl_port         => 443,
