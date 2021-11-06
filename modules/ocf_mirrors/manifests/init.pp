@@ -60,7 +60,6 @@ class ocf_mirrors {
     '::nginx':
       manage_repo             => false,
       include_modules_enabled => true,
-      use_default_location    => false,
       http_raw_append         => @(END);
       gzip on;
       sendfile_max_chunk 20m;
@@ -94,19 +93,20 @@ class ocf_mirrors {
       ensure => directory;
   }
   nginx::resource::server { 'mirrors.ocf.berkeley.edu':
-    www_root            => '/opt/mirrors/ftp',
-    listen_port         => 80,
-    ssl_port            => 443,
-    listen_options      => 'default_server',
-    ssl                 => true,
-    http2               => on,
-    ssl_cert            => "/etc/ssl/private/${::fqdn}.bundle",
-    ssl_key             => "/etc/ssl/private/${::fqdn}.key",
-    ipv6_enable         => true,
-    ipv6_listen_port    => 80,
-    ipv6_listen_options => 'default_server',
-    format_log          => 'main',
-    raw_append          => @(END),
+    www_root             => '/opt/mirrors/ftp',
+    listen_port          => 80,
+    ssl_port             => 443,
+    listen_options       => 'default_server',
+    ssl                  => true,
+    http2                => on,
+    ssl_cert             => "/etc/ssl/private/${::fqdn}.bundle",
+    ssl_key              => "/etc/ssl/private/${::fqdn}.key",
+    ipv6_enable          => true,
+    ipv6_listen_port     => 80,
+    ipv6_listen_options  => 'default_server',
+    format_log           => 'main',
+    use_default_location => false,
+    raw_append           => @(END),
       fancyindex on;
       fancyindex_exact_size off;
       if ($http_user_agent ~ "(MSIE 7\.0; Windows NT (6\.1|6\.2)|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0)") {
