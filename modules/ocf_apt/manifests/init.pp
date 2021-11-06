@@ -67,7 +67,6 @@ class ocf_apt {
       ];
   }
   nginx::resource::server { 'apt.ocf.berkeley.edu':
-    ensure           => present,
     listen_port      => 80,
     ssl_port         => 443,
     www_root         => '/opt/apt/ftp',

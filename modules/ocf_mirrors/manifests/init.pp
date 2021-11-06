@@ -66,7 +66,6 @@ class ocf_mirrors {
       ensure => directory;
   }
   nginx::resource::server { 'mirrors.ocf.berkeley.edu':
-    ensure           => present,
     listen_port      => 80,
     ssl_port         => 443,
     listen_options   => 'default_server',
@@ -80,7 +79,6 @@ class ocf_mirrors {
     ipv6_listen_port => 80,
   }
   nginx::resource::server { 'mirrors.berkeley.edu':
-    ensure              => present,
     listen_port         => 80,
     ipv6_enable         => true,
     ipv6_listen_port    => 80,
