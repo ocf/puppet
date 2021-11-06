@@ -61,6 +61,7 @@ class ocf_mirrors {
       manage_repo             => false,
       include_modules_enabled => true,
       http_raw_append         => @(END);
+      gzip on;
       sendfile_max_chunk 20m;
       log_format main '$remote_addr - $remote_user [$time_local] '
                 '"$request" $status $body_bytes_sent "$http_referer" '
@@ -119,6 +120,14 @@ class ocf_mirrors {
     www_root   => '/opt/mirrors/ftp',
     raw_append => @(END),
       fancyindex_header README.html;
+      END
+  }
+  nginx::resource::location { '~ ^/tails':
+    server      => 'mirrors.ocf.berkeley.edu',
+    ssl         => true,
+    index_files => undef,
+    raw_append  => @(END),
+      etag off;
       END
   }
   nginx::resource::location { '~ /\.(?!well-known).*':
