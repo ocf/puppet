@@ -44,7 +44,15 @@ class ocf_mirrors {
 
   class {
     '::nginx':
-      manage_repo => false;
+      manage_repo             => false,
+      include_modules_enabled => true,
+      http_raw_append         => @(END);
+      sendfile_max_chunk 20m;
+      log_format main '$remote_addr - $remote_user [$time_local] '
+                '"$request" $status $body_bytes_sent "$http_referer" '
+                '"$http_user_agent" $request_length $bytes_sent';
+      
+      END
   }
   $ocfstats_password = lookup('ocfstats::mysql::password')
 
@@ -74,13 +82,37 @@ class ocf_mirrors {
     ssl_port         => 443,
     listen_options   => 'default_server',
     www_root         => '/opt/mirrors/ftp',
-    autoindex        => on,
     ssl              => true,
     http2            => on,
     ssl_cert         => "/etc/ssl/private/${::fqdn}.bundle",
     ssl_key          => "/etc/ssl/private/${::fqdn}.key",
     ipv6_enable      => true,
     ipv6_listen_port => 80,
+    format_log       => 'main',
+    raw_append       => @(END),
+      fancyindex on;
+      fancyindex_exact_size off;
+      if ($http_user_agent ~ "(MSIE 7\.0; Windows NT (6\.1|6\.2)|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0)") {  
+        return 403;
+      }
+      END
+  }
+  nginx::resource::location { '= /':
+    ensure     => present,
+    server     => 'mirrors.ocf.berkeley.edu',
+    ssl        => true,
+    www_root   => '/opt/mirrors/ftp',
+    raw_append => @(END),
+      fancyindex_header README.html;
+      END
+  }
+  nginx::resource::location { '~ /\.(?!well-known).*':
+    ensure     => present,
+    server     => 'mirrors.ocf.berkeley.edu',
+    ssl        => true,
+    raw_append => @(END),
+      deny all;
+      END
   }
   nginx::resource::server { 'mirrors.berkeley.edu':
     listen_port         => 80,

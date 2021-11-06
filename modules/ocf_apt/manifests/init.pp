@@ -9,9 +9,11 @@ class ocf_apt {
   }
 
   package {
-    'nginx-full':;
-    'libnginx-mod-http-fancyindex':;
-    'reprepro':;
+    [
+      'nginx-full',
+      'libnginx-mod-http-fancyindex',
+      'reprepro',
+    ]:;
   }
 
   file {
@@ -75,12 +77,33 @@ class ocf_apt {
     listen_port      => 80,
     ssl_port         => 443,
     www_root         => '/opt/apt/ftp',
-    autoindex        => on,
     ssl              => true,
     http2            => on,
     ssl_cert         => "/etc/ssl/private/${::fqdn}.bundle",
     ssl_key          => "/etc/ssl/private/${::fqdn}.key",
     ipv6_enable      => true,
     ipv6_listen_port => 80,
+    format_log       => 'main',
+    raw_append       => @(END),
+      fancyindex on;
+      fancyindex_exact_size off;
+      END
+  }
+  nginx::resource::location { '=  /':
+    ensure     => present,
+    server     => 'apt.ocf.berkeley.edu',
+    www_root   => '/opt/apt/ftp',
+    ssl        => true,
+    raw_append => @(END),
+      fancyindex_header README.html;
+      END
+  }
+  nginx::resource::location { '~  /\.(?!well-known).*':
+    ensure     => present,
+    server     => 'apt.ocf.berkeley.edu',
+    ssl        => true,
+    raw_append => @(END),
+      deny all;
+      END
   }
 }
