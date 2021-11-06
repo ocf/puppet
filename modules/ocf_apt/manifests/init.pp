@@ -1,7 +1,6 @@
 class ocf_apt {
   include ocf::firewall::allow_web
   include ocf::ssl::default
-  apache::mod { 'http2': }
 
   user { 'ocfapt':
     comment => 'OCF Apt',
@@ -9,7 +8,13 @@ class ocf_apt {
     shell   => '/bin/false',
   }
 
-  package { 'reprepro':; }
+  package {
+    [
+      'nginx-full',
+      'libnginx-mod-http-fancyindex',
+      'reprepro',
+    ]:;
+  }
 
   file {
     default:
@@ -68,39 +73,37 @@ class ocf_apt {
         User['ocfapt'],
       ];
   }
-
-  apache::vhost { 'apt.ocf.berkeley.edu':
-    serveraliases     => ['apt'],
-    port              => 80,
-    docroot           => '/opt/apt/ftp',
-
-    directories       => [{
-      path          => '/opt/apt/ftp',
-      options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
-      index_options => ['NameWidth=*', '+SuppressDescription']
-    }],
-
-    access_log_format => 'io_count',
-    custom_fragment   => "Protocols h2c http/1.1\nHeaderName README.html\nReadmeName FOOTER.html",
+  nginx::resource::server { 'apt.ocf.berkeley.edu':
+    listen_port      => 80,
+    ssl_port         => 443,
+    www_root         => '/opt/apt/ftp',
+    ssl              => true,
+    http2            => on,
+    ssl_cert         => "/etc/ssl/private/${::fqdn}.bundle",
+    ssl_key          => "/etc/ssl/private/${::fqdn}.key",
+    ipv6_enable      => true,
+    ipv6_listen_port => 80,
+    format_log       => 'main',
+    raw_append       => @(END),
+      fancyindex on;
+      fancyindex_exact_size off;
+      END
   }
-
-  apache::vhost { 'apt.ocf.berkeley.edu-ssl':
-    servername        => 'apt.ocf.berkeley.edu',
-    port              => 443,
-    docroot           => '/opt/apt/ftp',
-
-    directories       => [{
-      path          => '/opt/apt/ftp',
-      options       => ['+Indexes', '+SymlinksIfOwnerMatch'],
-      index_options => ['NameWidth=*', '+SuppressDescription']
-    }],
-
-    access_log_format => 'io_count',
-    custom_fragment   => "Protocols h2 http/1.1\nHeaderName README.html\nReadmeName FOOTER.html",
-
-    ssl               => true,
-    ssl_key           => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert          => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain         => "/etc/ssl/private/${::fqdn}.intermediate",
+  nginx::resource::location { '=  /':
+    ensure     => present,
+    server     => 'apt.ocf.berkeley.edu',
+    www_root   => '/opt/apt/ftp',
+    ssl        => true,
+    raw_append => @(END),
+      fancyindex_header README.html;
+      END
+  }
+  nginx::resource::location { '~  /\.(?!well-known).*':
+    ensure     => present,
+    server     => 'apt.ocf.berkeley.edu',
+    ssl        => true,
+    raw_append => @(END),
+      deny all;
+      END
   }
 }
