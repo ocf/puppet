@@ -4,13 +4,8 @@
 set -euo pipefail
 
 {
-    find /opt/mirrors/ftp -mindepth 1 -maxdepth 1 -type d |
-        sort |
-        cut -d/ -f2 |
-        grep -vE '^\.' |
-        (xargs nice ionice du -hs || true) \
-        2> >(grep -v '^du: cannot access' >&2)
-
+    /sbin/zfs list | /usr/bin/awk '{printf("%-30s %-10s\n", $1, $2);}'
+    echo
     echo -n 'Last updated: '
     date
 } | sponge /opt/mirrors/ftp/sizes
