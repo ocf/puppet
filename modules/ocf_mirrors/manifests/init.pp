@@ -116,7 +116,7 @@ class ocf_mirrors {
       fancyindex_name_length 100;
       fancyindex_exact_size off;
       fancyindex_footer /FOOTER.html;
-      if ($http_user_agent ~ "(MSIE 7\.0; Windows NT (6\.1|6\.2)|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0)") {
+      if ($http_user_agent ~ "(MSIE 7\.0; Windows NT (6\.1|6\.2)|Chrome\/34\.0|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0)") {
         return 403;
       }
       END
