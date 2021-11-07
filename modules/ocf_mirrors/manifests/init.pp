@@ -84,6 +84,11 @@ class ocf_mirrors {
       owner  => mirrors,
       group  => mirrors;
 
+    '/opt/mirrors/ftp/FOOTER.html':
+      source => 'puppet:///modules/ocf_mirrors/FOOTER.html',
+      owner  => mirrors,
+      group  => mirrors;
+
     '/opt/mirrors/ftp/robots.txt':
       source => 'puppet:///modules/ocf_mirrors/robots.txt',
       owner  => mirrors,
@@ -110,6 +115,7 @@ class ocf_mirrors {
       fancyindex on;
       fancyindex_name_length 100;
       fancyindex_exact_size off;
+      fancyindex_footer /FOOTER.html;
       if ($http_user_agent ~ "(MSIE 7\.0; Windows NT (6\.1|6\.2)|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0)") {
         return 403;
       }
@@ -120,7 +126,7 @@ class ocf_mirrors {
     server     => 'mirrors.ocf.berkeley.edu',
     ssl        => true,
     raw_append => @(END),
-      fancyindex_header README.html;
+      fancyindex_header /README.html;
       END
   }
   nginx::resource::location { '~ ^/tails':
