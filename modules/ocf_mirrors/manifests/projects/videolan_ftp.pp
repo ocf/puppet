@@ -10,6 +10,7 @@ class ocf_mirrors::projects::videolan_ftp {
   }
 
   ocf_mirrors::monitoring { 'videolan_ftp':
+    ensure        => 'present',
     type          => 'unix_timestamp',
     upstream_host => 'ftp.videolan.org',
     ts_path       => 'trace';
