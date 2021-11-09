@@ -4,4 +4,11 @@ class ocf_mirrors::projects::ubuntu_ports {
     cron_hour   => '0/6',
     cron_minute => '55';
   }
+
+  ocf_mirrors::monitoring { 'ubuntu-ports':
+    type          => 'debian',
+    dist_to_check => 'devel',
+    upstream_host => 'ports.ubuntu.com',
+    upstream_path => '';
+  }
 }
