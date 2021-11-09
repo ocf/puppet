@@ -9,6 +9,12 @@ class ocf_mirrors::projects::videolan_ftp {
       recurse => true;
   }
 
+  ocf_mirrors::monitoring { 'videolan_ftp':
+    type          => 'unix_timestamp',
+    upstream_host => 'ftp.videolan.org',
+    ts_path       => 'trace';
+  }
+
   ocf_mirrors::timer {
     'videolan-ftp':
       exec_start => '/opt/mirrors/project/videolan-ftp/sync-archive',
