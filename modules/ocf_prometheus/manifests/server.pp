@@ -142,6 +142,13 @@ class ocf_prometheus::server {
         static_configs  => [{targets => ['www:9117']}],
       },
       {
+        job_name        => 'co2_hurricane',
+        scrape_interval => '10s',
+        scrape_timeout  => '10s',
+
+        static_configs  => [{targets => ['hurricane:9999']}],
+      },
+      {
         job_name        => 'fallingrocks_apache',
         scrape_interval => '30s',
         scrape_timeout  => '30s',
