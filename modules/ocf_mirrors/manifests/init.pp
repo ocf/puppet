@@ -34,6 +34,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::trisquel
   include ocf_mirrors::projects::ubuntu
   include ocf_mirrors::projects::ubuntu_ports
+  include ocf_mirrors::projects::videolan_ftp
 
   package {
       [
