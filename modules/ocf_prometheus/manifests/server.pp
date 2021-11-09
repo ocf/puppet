@@ -63,17 +63,6 @@ class ocf_prometheus::server {
     }],
     scrape_configs       => [
       {
-        job_name        => 'prometheus',
-        scrape_interval => '10s',
-        scrape_timeout  => '10s',
-        static_configs  => [
-          {
-            targets => [ 'localhost:9090' ],
-            labels  => { 'alias' => 'Prometheus' },
-          },
-        ],
-      },
-      {
         job_name        => 'node',
         scrape_interval => '10s',
         scrape_timeout  => '5s',
@@ -158,6 +147,13 @@ class ocf_prometheus::server {
         scrape_timeout  => '30s',
 
         static_configs  => [{targets => ['fallingrocks:9117']}],
+      },
+      {
+        job_name        => 'fallingrocks_nginx',
+        scrape_interval => '10s',
+        scrape_timeout  => '10s',
+
+        static_configs  => [{targets => ['fallingrocks:9113']}],
       },
       {
         job_name        => 'slurm',

@@ -5,7 +5,9 @@ class ocf {
   include ocf::etc
   include ocf::firewall
   include ocf::groups
-  include ocf::hidepid
+  if ($::hostname != 'fallingrocks') {
+    include ocf::hidepid
+  }
   include ocf::kerberos
   include ocf::ldap
   include ocf::locale

@@ -17,10 +17,10 @@ from ocflib.lab.stats import humanize_bytes
 
 OCFSTATS_PWD = open(os.environ.get('OCFSTATS_PWD__FILE')).read().strip()
 MIRRORS_DATA_PATH = Path('/opt/mirrors/ftp')
-APACHE_LOG_PATH = Path('/var/log/apache2')
+APACHE_LOG_PATH = Path('/var/log/nginx')
 APACHE_LOG_FILES = [
-    Path('mirrors.ocf.berkeley.edu_access.log'),
-    Path('mirrors.ocf.berkeley.edu-ssl_access_ssl.log')
+    Path('mirrors.ocf.berkeley.edu.access.log'),
+    Path('ssl-mirrors.ocf.berkeley.edu.access.log')
 ]
 RSYNC_LOG_PATH = Path('/var/log/rsync')
 RSYNC_LOG_REGEX = re.compile(
