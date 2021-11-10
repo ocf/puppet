@@ -1,0 +1,5 @@
+#!/bin/sh -eu
+# adopted from https://wiki.videolan.org/Mirrors/
+/usr/local/bin/rsync-no-vanished --recursive --times --links --hard-links --perms \
+    --stats --delete-after --timeout=300 \
+    rsync://rsync.videolan.org/videolan-ftp /opt/mirrors/ftp/videolan-ftp
