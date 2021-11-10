@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Parses Apache and rsync mirrors log files to collect traffic information.
+Parses Nginx and rsync mirrors log files to collect traffic information.
 
 Data is stored in MySQL and displayed in ocfweb.
 """
@@ -17,8 +17,8 @@ from ocflib.lab.stats import humanize_bytes
 
 OCFSTATS_PWD = open(os.environ.get('OCFSTATS_PWD__FILE')).read().strip()
 MIRRORS_DATA_PATH = Path('/opt/mirrors/ftp')
-APACHE_LOG_PATH = Path('/var/log/nginx')
-APACHE_LOG_FILES = [
+NGINX_LOG_PATH = Path('/var/log/nginx')
+NGINX_LOG_FILES = [
     Path('mirrors.ocf.berkeley.edu.access.log'),
     Path('ssl-mirrors.ocf.berkeley.edu.access.log')
 ]
@@ -39,8 +39,8 @@ def log_to_mysql(projects, log_date, quiet=False):
             )
 
 
-def process_apache_log(projects, fn, log_date):
-    """Extract transfer data for a given day for all projects from an Apache log file.
+def process_nginx_log(projects, fn, log_date):
+    """Extract transfer data for a given day for all projects from an Nginx log file.
 
     We iteratively populate projects from all the log files in
     consideration (4 by default) to avoid reading the entire file
@@ -52,7 +52,7 @@ def process_apache_log(projects, fn, log_date):
     "GET /kali/pool/main/b/boost1.67/libboost-serialization1.67.0_1.67.0-13_amd64.deb HTTP/1.1" 200 319360 \
     "-" "Debian APT-HTTP/1.3 (1.8.0~beta1)" 697 324120
 
-    log_date is a date str formated as %d/%b/%Y to match the apache format
+    log_date is a date str formated as %d/%b/%Y to match the nginx format
     """
 
     with fn.open('r') as f:
@@ -63,7 +63,7 @@ def process_apache_log(projects, fn, log_date):
             if len(log_line) < 14:
                 continue
 
-            # apache log date format looks like [11/Jul/2017:00:05:16 -0700]
+            # nginx log date format looks like [11/Jul/2017:00:05:16 -0700]
             # line.split()[3][1:12] = 11/Jul/2017
             # we need to dump dates that don't match because
             # logrotate rotates the logs at 6am
@@ -124,18 +124,18 @@ def main(args):
 
     sources.append('other')  # catchall
 
-    # then, figure out which Apache logs we're pulling stats from
-    if args.apache:
-        apache_log_files = args.apache
+    # then, figure out which Nginx logs we're pulling stats from
+    if args.nginx:
+        nginx_log_files = args.nginx
     else:
-        apache_log_files = []
-        for log_name in APACHE_LOG_FILES:
+        nginx_log_files = []
+        for log_name in NGINX_LOG_FILES:
             # logrotate rotates the log at 6am, but this script
             # runs at midnight. So to capture 24h of data, we need
             # to parse the rotated log as well. (the .1 file)
-            log = APACHE_LOG_PATH / log_name
-            apache_log_files.append(log)
-            apache_log_files.append(log.with_suffix('.log.1'))
+            log = NGINX_LOG_PATH / log_name
+            nginx_log_files.append(log)
+            nginx_log_files.append(log.with_suffix('.log.1'))
 
     # and the same for rsync
     if args.rsync:
@@ -154,9 +154,9 @@ def main(args):
     log_date = args.date.strftime('%d/%b/%Y')
     rsync_log_date = args.date.strftime('%Y/%m/%d')
 
-    # pull the data itself from apache
-    for log_filename in apache_log_files:
-        projects = process_apache_log(projects, log_filename, log_date)
+    # pull the data itself from nginx
+    for log_filename in nginx_log_files:
+        projects = process_nginx_log(projects, log_filename, log_date)
 
     # ...and rsync
     for log_filename in rsync_log_files:
@@ -186,8 +186,8 @@ if __name__ == '__main__':
                         help='do not print stats after collecting them')
     parser.add_argument('-n', '--no-dry-run', action='store_true',
                         help='disable dry-run mode, i.e. write statistics to the database')
-    parser.add_argument('--apache', nargs='*',
-                        help='Apache log file(s) to process')
+    parser.add_argument('--nginx', nargs='*',
+                        help='Nginx log file(s) to process')
     parser.add_argument('--rsync', nargs='*',
                         help='rsync log files(s) to process')
     parser.add_argument('date', nargs='?', default=date.today() - timedelta(1),
