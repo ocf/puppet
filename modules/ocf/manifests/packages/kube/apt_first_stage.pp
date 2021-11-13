@@ -24,23 +24,22 @@ class ocf::packages::kube::apt_first_stage {
     source => "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${::operatingsystemmajrelease}/Release.key";
   }
 
-  $is_dev = $::hostname in lookup('kube_dev::controller_nodes')
-  $kube_prefix = if $is_dev { 'kube_dev' } else { 'kube' }
-  $kube_version = lookup("${kube_prefix}::kubernetes_version")
-  $split_version = split($kube_version, '.')
-  $crio_version = "${split_version[0]}.${split_version[1]}"
+  // TODO: Generate this from kubernetes version...
+  $crio_version = "1.22"
 
   # for packages: cri-o cri-o-runc
   apt::source { 'crio':
       architecture => 'amd64',
       location     => "http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/${crio_version}/Debian_${::operatingsystemmajrelease}/",
       repos        => '/',
+      release      => '/',
       require      => Apt::Key['crio repo key'],
   }
   apt::source { 'libcontainers':
       architecture => 'amd64',
       location     => "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${::operatingsystemmajrelease}/",
       repos        => '/',
+      release      => '/',
       require      => Apt::Key['crio repo key'],
   }
 }
