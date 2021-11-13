@@ -28,7 +28,7 @@ class ocf::packages::kube::apt_first_stage {
   $kube_prefix = if $is_dev { 'kube_dev' } else { 'kube' }
   $kube_version = lookup("${kube_prefix}::kubernetes_version")
   $split_version = split($kube_version, '.')
-  $crio_version = $split_version[0] + '.' + $split_version[1]
+  $crio_version = "${split_version[0]}.${split_version[1]}"
 
   # for packages: cri-o cri-o-runc
   apt::source { 'crio':
