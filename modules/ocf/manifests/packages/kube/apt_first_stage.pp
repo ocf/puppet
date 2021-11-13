@@ -21,7 +21,7 @@ class ocf::packages::kube::apt_first_stage {
   apt::key { 'crio repo key':
     id     => '2472D6D0D2F66AF87ABA8DA34D64390375060AA4',
     # the key is the same for both
-    source => 'https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${::operatingsystemmajrelease}/Release.key';
+    source => "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${::operatingsystemmajrelease}/Release.key";
   }
 
   $is_dev = $::hostname in lookup('kube_dev::controller_nodes')
@@ -39,7 +39,7 @@ class ocf::packages::kube::apt_first_stage {
   }
   apt::source { 'libcontainers':
       architecture => 'amd64',
-      location     => 'https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${::operatingsystemmajrelease}/',
+      location     => "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${::operatingsystemmajrelease}/",
       repos        => '/',
       require      => Apt::Key['crio repo key'],
   }
