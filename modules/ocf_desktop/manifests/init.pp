@@ -40,6 +40,13 @@ class ocf_desktop {
 
   # Allow HTTP and HTTPS
   include ocf::firewall::allow_web
+  user { 'social_acct':
+      comment  => 'local account for social',
+      home     => '/home/s/so/social_acct',
+      shell    => '/bin/bash',
+      groups   => ['lightdm', 'ocf'],
+      password => Sensitive(lookup('ocf::social_password')),
+  }
 
   # Allow Steam login and Steam content
   ocf::firewall::firewall46 {
