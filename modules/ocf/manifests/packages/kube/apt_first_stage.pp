@@ -24,8 +24,8 @@ class ocf::packages::kube::apt_first_stage {
     source => "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${::operatingsystemmajrelease}/Release.key";
   }
 
-  // TODO: Generate this from kubernetes version...
-  $crio_version = "1.22"
+  # TODO: Generate this from kubernetes version...
+  $crio_version = '1.22'
 
   # for packages: cri-o cri-o-runc
   apt::source { 'crio':
