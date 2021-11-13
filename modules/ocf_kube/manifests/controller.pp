@@ -1,4 +1,4 @@
-# Each kubernetes controller installs and runs kubelet and containerd.
+# Each kubernetes controller installs and runs kubelet and CRI-O.
 # Kubelet is kubernetes' service that has to run on every node. It is in charge
 # of figuring out what containers it has to run, and running them. It can do this
 # in two ways: the API server tells it to run something, or we can configure it
@@ -16,10 +16,10 @@
 # After kubelet starts and runs the containers, we should have a working
 # kubernetes cluster.
 
-# We use containerd over docker because docker is de-facto getting deprecated
+# We use CRI-O over docker because docker is de-facto getting deprecated
 # in kubernetes 1.20: https://github.com/kubernetes/kubernetes/pull/94624
 
-# This purpose of this puppet class is to install kubelet and containerd, and
+# This purpose of this puppet class is to install kubelet and CRI-O, and
 # configure the four containers.
 
 class ocf_kube::controller {
@@ -69,14 +69,11 @@ class ocf_kube::controller {
   }
 
   # We find containerd located in the docker debian repository
-  class { 'ocf::packages::docker::apt':
-    stage => first,
+  package { ['cri-o', 'cri-o-runc']: }
+  -> file { '/etc/crio/crio.conf':
+    source  => 'puppet:///modules/ocf_kube/crio.conf',
   }
-  package { 'containerd.io': }
-  -> file { '/etc/containerd/config.toml':
-    source  => 'puppet:///modules/ocf_kube/containerd.toml',
-  }
-  ~> service { 'containerd': }
+  ~> service { 'crio': }
 
   # Ensure /var/lib/etcd has mode 700
   file { '/var/lib/etcd':
