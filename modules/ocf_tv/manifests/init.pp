@@ -24,6 +24,8 @@ class ocf_tv {
       'python3-usb',
       'vlc',
       'x11vnc',
+      'xclip',
+      'xdotool',
       'xinit',
     ]:;
   }
