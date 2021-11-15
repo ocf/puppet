@@ -32,14 +32,14 @@ class ocf::packages::kube::apt_first_stage {
       architecture => 'amd64',
       location     => "http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/${crio_version}/Debian_${::operatingsystemmajrelease}/",
       repos        => '/',
-      release      => '/',
+      release      => '',
       require      => Apt::Key['crio repo key'],
   }
   apt::source { 'libcontainers':
       architecture => 'amd64',
       location     => "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${::operatingsystemmajrelease}/",
       repos        => '/',
-      release      => '/',
+      release      => '',
       require      => Apt::Key['crio repo key'],
   }
 }
