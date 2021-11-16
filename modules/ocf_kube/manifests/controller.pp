@@ -118,12 +118,12 @@ class ocf_kube::controller {
 
   # remove deb-provided kubelet conf
   file {'/etc/systemd/system/kubelet.service.d':
-    ensure => directory,
+    ensure  => directory,
     recurse => true,
     purge   => true,
     owner   => 'root',
     group   => 'root',
-    mode   => '0755';
+    mode    => '0755';
   }
 
   file {
