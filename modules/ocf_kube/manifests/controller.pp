@@ -116,6 +116,15 @@ class ocf_kube::controller {
       content => template('ocf_kube/admin.conf');
   }
 
+  # remove deb-provided kubelet conf
+  file {'/etc/systemd/system/kubelet.service.d':
+    ensure => directory,
+    recurse => true,
+    purge   => true,
+    owner   => 'root',
+    group   => 'root',
+    mode   => '0755'
+  }
 
   file {
     '/etc/kubernetes/kubelet.yaml':
