@@ -1,2 +1,1 @@
-classes:
-    - ocf_kube::controller
+owner: njha
