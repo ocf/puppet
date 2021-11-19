@@ -75,6 +75,9 @@ class ocf_kube::controller {
   }
   ~> service { 'crio': }
 
+  # install cri-tools for crictl
+  package { 'cri-tools': }
+
   # Ensure /var/lib/etcd has mode 700
   file { '/var/lib/etcd':
     ensure => directory,
