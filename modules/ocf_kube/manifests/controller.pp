@@ -152,7 +152,8 @@ class ocf_kube::controller {
   file {
     '/etc/kubernetes/pki':
       ensure => directory,
-      mode   => '0700';
+      mode   => '0710',
+      group  => 'ocfroot';
 
     '/etc/kubernetes/pki/etcd':
       ensure => directory,
@@ -169,78 +170,104 @@ class ocf_kube::controller {
   ocf::privatefile {
     # apiserver server key
     '/etc/kubernetes/pki/apiserver.crt':
+      mode         => '0600',
       content_path => "${certs_dir}/apiserver.crt";
     '/etc/kubernetes/pki/apiserver.key':
+      mode         => '0600',
       content_path => "${certs_dir}/apiserver.key";
 
     # kubelet server key
     '/etc/kubernetes/pki/kubelet-server.crt':
+      mode         => '0600',
       content_path => "${certs_dir}/${::hostname}-kubelet-server.crt";
     '/etc/kubernetes/pki/kubelet-server.key':
+      mode         => '0600',
       content_path => "${certs_dir}/${::hostname}-kubelet-server.key";
 
     # kubelet -> apiserver client key
     '/etc/kubernetes/pki/apiserver-kubelet-client.crt':
+      mode         => '0600',
       content_path => "${certs_dir}/apiserver-kubelet-client.crt";
     '/etc/kubernetes/pki/apiserver-kubelet-client.key':
+      mode         => '0600',
       content_path => "${certs_dir}/apiserver-kubelet-client.key";
 
     # kubernetes ca
     '/etc/kubernetes/pki/ca.crt':
+      mode         => '0600',
       content_path => "${certs_dir}/kube-ca.crt";
     # don't copy the private key
 
     # controller-manager -> apiserver client key
     '/etc/kubernetes/pki/admin.crt':
+      mode         => '0640',
+      group        =>  'ocfroot',
       content_path => "${certs_dir}/admin.crt";
     '/etc/kubernetes/pki/admin.key':
+      mode         => '0640',
+      group        =>  'ocfroot',
       content_path => "${certs_dir}/admin.key";
 
     # controller-manager -> apiserver client key
     '/etc/kubernetes/pki/controller-manager.crt':
+      mode         => '0600',
       content_path => "${certs_dir}/controller-manager.crt";
     '/etc/kubernetes/pki/controller-manager.key':
+      mode         => '0600',
       content_path => "${certs_dir}/controller-manager.key";
 
     # scheduler -> apiserver client key
     '/etc/kubernetes/pki/scheduler.crt':
+      mode         => '0600',
       content_path => "${certs_dir}/scheduler.crt";
     '/etc/kubernetes/pki/scheduler.key':
+      mode         => '0600',
       content_path => "${certs_dir}/scheduler.key";
 
     # service account keypair
     '/etc/kubernetes/pki/sa.pub':
+      mode         => '0600',
       content_path => "${certs_dir}/service.pub";
     '/etc/kubernetes/pki/sa.key':
+      mode         => '0600',
       content_path => "${certs_dir}/service.key";
 
     # etcd ca
     '/etc/kubernetes/pki/etcd/ca.crt':
+      mode         => '0600',
       content_path => "${certs_dir}/etcd-ca.crt";
     # don't copy the private key
 
     # apiserver/etcd -> etcd client key
     '/etc/kubernetes/pki/etcd/client.crt':
+      mode         => '0600',
       content_path => "${certs_dir}/${::hostname}-etcd-client.crt";
     '/etc/kubernetes/pki/etcd/client.key':
+      mode         => '0600',
       content_path => "${certs_dir}/${::hostname}-etcd-client.key";
 
     # etcd server key
     '/etc/kubernetes/pki/etcd/server.crt':
+      mode         => '0600',
       content_path => "${certs_dir}/${::hostname}-etcd-server.crt";
     '/etc/kubernetes/pki/etcd/server.key':
+      mode         => '0600',
       content_path => "${certs_dir}/${::hostname}-etcd-server.key";
 
     # front-proxy ca
     '/etc/kubernetes/pki/front-proxy-ca.crt':
+      mode         => '0600',
       content_path => "${certs_dir}/front-proxy-ca.crt";
     '/etc/kubernetes/pki/front-proxy-ca.key':
+      mode         => '0600',
       content_path => "${certs_dir}/front-proxy-ca.key";
 
     # front-proxy client
     '/etc/kubernetes/pki/front-proxy-client.crt':
+      mode         => '0600',
       content_path => "${certs_dir}/front-proxy-client.crt";
     '/etc/kubernetes/pki/front-proxy-client.key':
+      mode         => '0600',
       content_path => "${certs_dir}/front-proxy-client.key";
   }
 
