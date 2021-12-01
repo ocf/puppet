@@ -8,18 +8,18 @@ Defaults umask_override
 Defaults !tty_tickets
 
 # Hard code sudo access for root and system users
-root ALL=(ALL) ALL
+root ALL=(ALL:ALL) ALL
 apt-dater ALL=NOPASSWD: /usr/bin/apt-get, /usr/bin/aptitude, /sbin/reboot, /usr/bin/dpkg
 ocfbackups ALL=NOPASSWD: /usr/bin/rsync, /usr/bin/nice, /usr/bin/ionice, /usr/local/bin/rsync-no-vanished
 ocfdeploy ALL=NOPASSWD: /usr/local/sbin/puppet-trigger
 
 # User specification
-%ocfroot ALL=(ALL) <%= @nopasswd ? 'NOPASSWD:' : '' %> ALL
+%ocfroot ALL=(ALL:ALL) <%= @nopasswd ? 'NOPASSWD:' : '' %> ALL
 <% @gsudo.each do |group| -%>
-%<%= group %> ALL=(ALL) NOPASSWD: ALL
+%<%= group %> ALL=(ALL:ALL) NOPASSWD: ALL
 <% end -%>
 <% @usudo.each do |user| -%>
-<%= user %> ALL=(ALL) NOPASSWD: ALL
+<%= user %> ALL=(ALL:ALL) NOPASSWD: ALL
 <% end -%>
 
 # This needs to be positioned lower in this file to not be overridden by
@@ -27,7 +27,7 @@ ocfdeploy ALL=NOPASSWD: /usr/local/sbin/puppet-trigger
 #includedir /etc/sudoers.d
 
 # Allow ocfstaff to run a few commands without password for easier scripting.
-%ocfstaff ALL=(ALL) NOPASSWD: /usr/bin/virsh list, /usr/bin/virsh list --all
+%ocfstaff ALL=(ALL:ALL) NOPASSWD: /usr/bin/virsh list, /usr/bin/virsh list --all
 
 # Same with ocfroot
-%ocfroot ALL=(ALL) NOPASSWD: /usr/local/sbin/puppet-trigger, /sbin/shutdown, /usr/bin/apt update, /usr/bin/apt-get update
+%ocfroot ALL=(ALL:ALL) NOPASSWD: /usr/local/sbin/puppet-trigger, /sbin/shutdown, /usr/bin/apt update, /usr/bin/apt-get update
