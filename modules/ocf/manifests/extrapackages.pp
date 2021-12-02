@@ -72,7 +72,7 @@ class ocf::extrapackages {
     'julia',
     'jupyter-console',
     'jupyter-core',
-    'jupyterhub'
+    'jupyterhub',
     'jupyter-notebook',
     'keychain',
     'kubernetes-deploy',
