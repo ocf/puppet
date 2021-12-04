@@ -194,18 +194,19 @@ class ocf_kube::controller {
 
     # kubernetes ca
     '/etc/kubernetes/pki/ca.crt':
-      mode         => '0600',
+      mode         => '0640',
+      group        => 'ocfroot',
       content_path => "${certs_dir}/kube-ca.crt";
     # don't copy the private key
 
     # controller-manager -> apiserver client key
     '/etc/kubernetes/pki/admin.crt':
       mode         => '0640',
-      group        =>  'ocfroot',
+      group        => 'ocfroot',
       content_path => "${certs_dir}/admin.crt";
     '/etc/kubernetes/pki/admin.key':
       mode         => '0640',
-      group        =>  'ocfroot',
+      group        => 'ocfroot',
       content_path => "${certs_dir}/admin.key";
 
     # controller-manager -> apiserver client key
