@@ -1,5 +1,7 @@
 class ocf_hpc {
 
+  include ocf_hpc::conda
+
   package { 'slurm-wlm': }
 
   if str2bool($::puppetdb_running) {
