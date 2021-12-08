@@ -32,8 +32,7 @@ class ocf_admin {
       source    => 'puppet:///private/passwords',
       group     => ocfroot,
       mode      => '0640',
-      immutable => true,
-      require   => Exec['chattr -immutable'];
+      immutable => true;
   }
 
   file {
