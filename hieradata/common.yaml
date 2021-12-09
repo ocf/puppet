@@ -9,14 +9,20 @@ browser_homepage: https://www.ocf.berkeley.edu/about/lab/open-source
 
 #special devices
 devices_ipv4_only:
+    - bedbugs-mgmt
     - corruption-mgmt
+    - dataloss-mgmt
+    - fallingrocks-mgmt
     - hal-mgmt
     - jaws-mgmt
+    - lockdown-mgmt
     - logjam
     - pagefault
     - pandemic-mgmt
     - papercut
     - riptide-mgmt
+    - scurvy-mgmt
+    - y2k-mgmt
 
 devices_ipv46:
     - radiation
