@@ -15,7 +15,6 @@ devices_ipv4_only:
     - fallingrocks-mgmt
     - hal-mgmt
     - jaws-mgmt
-    - lockdown-mgmt
     - logjam
     - pagefault
     - pandemic-mgmt
