@@ -12,7 +12,7 @@ hierarchy:
     path: "private.yaml"
 
   - name: "Nodes"
-    path: "nodes/%{::hostname}.yaml"
+    path: "nodes/%{::trusted.hostname}.yaml"
 
   - name: "Type"
     path: "type/%{::type}.yaml"
@@ -21,16 +21,16 @@ hierarchy:
     path: "is_virtual/%{::is_virtual}.yaml"
 
   - name: "OS version"
-    path: "os/%{::lsbdistcodename}.yaml"
+    path: "os/%{::os.distro.codename}.yaml"
 
   - name: "Common defaults"
     path: "common.yaml"
 
   - name: "Kubernetes hosts"
-    path: "kubernetes/hosts/%{::hostname}.yaml"
+    path: "kubernetes/hosts/%{::trusted.hostname}.yaml"
 
   - name: "Kubernetes os"
-    path: "kubernetes/os/%{::osfamily}.yaml"
+    path: "kubernetes/os/%{::os.family}.yaml"
 
   - name: "Dummy secrets"
     path: "dummy_secrets.yaml"

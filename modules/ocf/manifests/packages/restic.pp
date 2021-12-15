@@ -1,6 +1,6 @@
 class ocf::packages::restic {
 
-  if $::lsbdistcodename == 'buster' {
+  if $::os['distro']['codename'] == 'buster' {
     package { 'restic':
       ensure => 'purged',
     }

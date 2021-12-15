@@ -47,7 +47,7 @@ class ocf_desktop::packages {
     ['xclip', 'xdotool', 'xsel', 'xserver-xorg', 'xscreensaver', 'freerdp2-x11']:;
   }
 
-  if $::lsbdistcodename == 'stretch' {
+  if $::os['distro']['codename'] == 'stretch' {
     package {
       [
         # preload hasn't been updated since 2009, and I'm not sure we really
@@ -69,7 +69,7 @@ class ocf_desktop::packages {
       ]:;
     }
   }
-  if $::lsbdistcodename == 'buster' {
+  if $::os['distro']['codename'] == 'buster' {
     package {
       [
         # Zenmap depends on Python 2 and is therefore no longer in bullseye
@@ -86,7 +86,7 @@ class ocf_desktop::packages {
       ]:;
     }
   }
-  if $::lsbdistcodename == 'bullseye' {
+  if $::os['distro']['codename'] == 'bullseye' {
     package {
       [
         # OpenJDK 17 (LTS) is in bullseye

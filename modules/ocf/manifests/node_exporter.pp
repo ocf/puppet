@@ -7,7 +7,7 @@ class ocf::node_exporter {
     content => template('ocf/environment.prom.erb'),
   }
 
-  if $::lsbdistid != 'Raspbian' {
+  if $::os['distro']['id'] != 'Raspbian' {
     # Attributes for this class are defined in hieradata
     include prometheus::node_exporter
   }

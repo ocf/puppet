@@ -11,12 +11,12 @@ class ocf::apt($stage = 'first') {
 
   $repos = 'main contrib non-free'
 
-  if $::lsbdistid == 'Debian' {
+  if $::os['distro']['id'] == 'Debian' {
       if $::operatingsystemmajrelease != '11' {
         apt::source {
         'debian':
             location => 'http://mirrors/debian/',
-            release  => $::lsbdistcodename,
+            release  => $::os['distro']['codename'],
             repos    => $repos,
             include  => {
             src => true
@@ -24,7 +24,7 @@ class ocf::apt($stage = 'first') {
 
         'debian-updates':
             location => 'http://mirrors/debian/',
-            release  => "${::lsbdistcodename}-updates",
+            release  => "${::os['distro']['codename']}-updates",
             repos    => $repos,
             include  => {
             src => true
@@ -32,7 +32,7 @@ class ocf::apt($stage = 'first') {
 
         'debian-security':
             location => 'http://mirrors/debian-security/',
-            release  => "${::lsbdistcodename}/updates",
+            release  => "${::os['distro']['codename']}/updates",
             repos    => $repos,
             include  => {
             src => true
@@ -40,7 +40,7 @@ class ocf::apt($stage = 'first') {
 
         'ocf':
             location => 'http://apt/',
-            release  => $::lsbdistcodename,
+            release  => $::os['distro']['codename'],
             repos    => 'main',
             include  => {
             src => true
@@ -48,7 +48,7 @@ class ocf::apt($stage = 'first') {
 
         'ocf-backports':
             location => 'http://apt/',
-            release  => "${::lsbdistcodename}-backports",
+            release  => "${::os['distro']['codename']}-backports",
             repos    => 'main',
             include  => {
             src => true
@@ -58,7 +58,7 @@ class ocf::apt($stage = 'first') {
         # Pin anything coming from *-backports to be lower than normal priority
         apt::pin { 'ocf-backports':
         priority => 200,
-        codename => "${::lsbdistcodename}-backports",
+        codename => "${::os['distro']['codename']}-backports",
         }
 
         # TODO: Submit patch to puppetlabs-apt to enable having includes for
@@ -72,7 +72,7 @@ else {
     apt::source {
         'debian':
             location => 'http://mirrors/debian/',
-            release  => $::lsbdistcodename,
+            release  => $::os['distro']['codename'],
             repos    => $repos,
             include  => {
             src => true
@@ -80,7 +80,7 @@ else {
 
         'debian-updates':
             location => 'http://mirrors/debian/',
-            release  => "${::lsbdistcodename}-updates",
+            release  => "${::os['distro']['codename']}-updates",
             repos    => $repos,
             include  => {
             src => true
@@ -88,7 +88,7 @@ else {
 
         'debian-security':
             location => 'http://mirrors/debian-security/',
-            release  => "${::lsbdistcodename}-security",
+            release  => "${::os['distro']['codename']}-security",
             repos    => $repos,
             include  => {
             src => true
@@ -114,7 +114,7 @@ else {
         # Pin anything coming from *-backports to be lower than normal priority
         apt::pin { 'ocf-backports':
         priority => 200,
-        codename => "${::lsbdistcodename}-backports",
+        codename => "${::os['distro']['codename']}-backports",
         }
 
         # TODO: Submit patch to puppetlabs-apt to enable having includes for
@@ -124,11 +124,11 @@ else {
         }
 }
 
-  } elsif $::lsbdistid == 'Raspbian' {
+  } elsif $::os['distro']['id'] == 'Raspbian' {
     apt::source {
       'raspbian':
         location => 'http://mirrors/raspbian/raspbian/',
-        release  => $::lsbdistcodename,
+        release  => $::os['distro']['codename'],
         repos    => 'main contrib non-free rpi',
         include  => {
           src => true
@@ -136,7 +136,7 @@ else {
 
       'archive-rpi':
         location => 'http://archive.raspberrypi.org/debian/',
-        release  => $::lsbdistcodename,
+        release  => $::os['distro']['codename'],
         repos    => 'main ui',
         include  => {
           src => true
@@ -147,7 +147,7 @@ else {
   apt::source {
     'puppetlabs':
       location => 'http://mirrors/puppetlabs/apt/',
-      release  => $::lsbdistcodename,
+      release  => $::os['distro']['codename'],
       repos    => 'puppet',
   }
 

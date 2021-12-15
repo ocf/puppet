@@ -25,7 +25,7 @@ class ocf::packages {
   # kept short, since apt-dater should be used to update almost all packages.
   #
   # TODO: Fix with the Raspberry Pi?
-  if $::lsbdistid == 'Debian' {
+  if $::os['distro']['id'] == 'Debian' {
     package {
       # Ensure ocflib is the latest version to quickly push out changes in lab
       # hours, etc. We control releases on this, so this should be safe.
@@ -146,7 +146,7 @@ class ocf::packages {
   }
   # only install the python3.7 packages on stretch
   # python3 is python3.7 on buster and python3.9 on bullseye
-  if $::lsbdistcodename == 'stretch' {
+  if $::os['distro']['codename'] == 'stretch' {
     package {
         [
         'python3.7',
@@ -156,7 +156,7 @@ class ocf::packages {
       }
   }
   # Packages to only install on Debian (not on Raspbian for example)
-  if $::lsbdistid == 'Debian' {
+  if $::os['distro']['id'] == 'Debian' {
     package {
       [
         'aactivator',

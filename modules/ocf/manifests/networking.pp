@@ -51,7 +51,7 @@ class ocf::networking(
     $logical_primary_interface = $first_active_iface
   }
 
-  if $::lsbdistid == 'Raspbian' {
+  if $::os['distro']['id'] == 'Raspbian' {
     # The raspberry pi has wifi, so we use that for networking
     $logical_primary_interface = 'wlan0'
   }
