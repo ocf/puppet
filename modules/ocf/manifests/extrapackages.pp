@@ -186,7 +186,6 @@ class ocf::extrapackages {
     'vagrant',
     'valgrind',
     'weechat',
-    'xvnc4viewer',
     'zlib1g-dev',
     'znc',
     ]:;
