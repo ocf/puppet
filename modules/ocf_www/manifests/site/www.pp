@@ -31,6 +31,8 @@ class ocf_www::site::www {
       ensure => 'directory';
     '/var/www/html/.well-known/matrix/server':
       source => 'puppet:///modules/ocf_www/matrix-server';
+    '/var/www/html/.well-known/matrix/client':
+      source => 'puppet:///modules/ocf_www/matrix-client';
   }
 
   # TODO: dev-death should add a robots.txt disallowing everything
@@ -53,6 +55,10 @@ class ocf_www::site::www {
       {
         alias => '/.well-known/matrix/server',
         path  => '/var/www/html/.well-known/matrix/server',
+      },
+      {
+        alias => '/.well-known/matrix/client',
+        path  => '/var/www/html/.well-known/matrix/client',
       },
     ],
 
