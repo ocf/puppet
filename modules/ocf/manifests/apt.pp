@@ -12,7 +12,62 @@ class ocf::apt($stage = 'first') {
   $repos = 'main contrib non-free'
 
   if $::lsbdistid == 'Debian' {
-      if $::operatingsystemmajrelease != '11' {
+      if $::operatingsystemmajrelease == '12' {
+        apt::source {
+        'debian':
+            location => 'http://mirrors/debian/',
+            release  => $::lsbdistcodename,
+            repos    => $repos,
+            include  => {
+            src => true
+            };
+
+        'debian-updates':
+            location => 'http://mirrors/debian/',
+            release  => "${::lsbdistcodename}-updates",
+            repos    => $repos,
+            include  => {
+            src => true
+            };
+
+        'debian-security':
+            location => 'http://mirrors/debian-security/',
+            release  => "${::lsbdistcodename}-security",
+            repos    => $repos,
+            include  => {
+            src => true
+            };
+
+        'ocf':
+            location => 'http://apt/',
+            release  => 'buster',
+            repos    => 'main',
+            include  => {
+            src => true
+            };
+
+        'ocf-backports':
+            location => 'http://apt/',
+            release  => 'buster-backports',
+            repos    => 'main',
+            include  => {
+            src => true
+            };
+        }
+
+        # Pin anything coming from *-backports to be lower than normal priority
+        apt::pin { 'ocf-backports':
+        priority => 200,
+        codename => "${::lsbdistcodename}-backports",
+        }
+
+        # TODO: Submit patch to puppetlabs-apt to enable having includes for
+        # apt::backports (so that we can include the source too)
+        class { 'apt::backports':
+        location => 'http://mirrors/debian/';
+        }
+    }
+    else if $::operatingsystemmajrelease != '11' {
         apt::source {
         'debian':
             location => 'http://mirrors/debian/',
