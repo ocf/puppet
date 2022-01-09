@@ -67,7 +67,7 @@ class ocf::apt($stage = 'first') {
         location => 'http://mirrors/debian/';
         }
     }
-    else if $::operatingsystemmajrelease != '11' {
+    elsif $::operatingsystemmajrelease != '11' {
         apt::source {
         'debian':
             location => 'http://mirrors/debian/',
