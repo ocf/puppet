@@ -12,7 +12,7 @@ class ocf::apt($stage = 'first') {
   $repos = 'main contrib non-free'
 
   if $::lsbdistid == 'Debian' {
-      if $::operatingsystemmajrelease == '12' {
+      if $::operatingsystemmajrelease == 'bookworm/sid' {
         apt::source {
         'debian':
             location => 'http://mirrors/debian/',
