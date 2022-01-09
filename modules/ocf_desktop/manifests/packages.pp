@@ -103,6 +103,23 @@ class ocf_desktop::packages {
       ]:;
     }
   }
+  if $::lsbdistcodename == 'bookworm' {
+    package {
+      [
+        # OpenJDK 17 (LTS) is in bullseye
+        'openjdk-17-jdk',
+
+        # Matchbox is what we use on our RPi
+        'matchbox-keyboard',
+
+        # x4vncviewer is no longer present
+        'tigervnc-viewer',
+
+        # sshfs depends on fuse3 on bullseye
+        'fuse3',
+      ]:;
+    }
+  }
 
   # Remove some packages
   package {
