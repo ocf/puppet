@@ -202,7 +202,7 @@ else {
   apt::source {
     'puppetlabs':
       location => 'http://mirrors/puppetlabs/apt/',
-      release  => $::lsbdistcodename,
+      release  => 'bullseye',
       repos    => 'puppet',
   }
 
