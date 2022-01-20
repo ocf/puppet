@@ -187,7 +187,7 @@ class ocf_prometheus::server {
         scrape_interval => '180s',
         scrape_timeout  => '20s',
         static_configs  => [{targets =>['169.229.226.137']}],
-        
+
         metrics_path    => '/snmp',
         params          => { 'module' => [ 'apcpdu' ]},
 
