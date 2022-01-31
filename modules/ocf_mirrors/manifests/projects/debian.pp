@@ -24,8 +24,8 @@ class ocf_mirrors::projects::debian {
 
     'debian-security':
       type          => 'debian',
-      dist_to_check => 'stable/updates',
+      dist_to_check => 'stable-security',
       upstream_host => 'security.debian.org',
-      upstream_path => '';
+      upstream_path => 'debian-security';
   }
 }
