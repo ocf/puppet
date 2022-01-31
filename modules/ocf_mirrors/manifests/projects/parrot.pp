@@ -12,7 +12,7 @@ class ocf_mirrors::projects::parrot {
   ocf_mirrors::monitoring { 'parrot':
     type          => 'datetime',
     upstream_host => 'archive.parrotsec.org',
-    ts_path       => 'last-sync.txt',
+    ts_path       => 'last-update.txt',
   }
 
   ocf_mirrors::timer {
