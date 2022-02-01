@@ -40,7 +40,7 @@ class ocf_mirrors {
       [
         'linux-image-amd64',
         'zfsutils-linux',
-      ]: 
+      ]:
             install_options => ['-t', 'bullseye-backports'],;
     }
 
