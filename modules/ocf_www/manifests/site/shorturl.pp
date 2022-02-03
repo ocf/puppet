@@ -103,6 +103,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/notes$ https://notes.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/now$ https://www.ocf.berkeley.edu/tv$1 [R]'},
       {rewrite_rule => '^/officers$ https://www.ocf.berkeley.edu/docs/about/officers/ [R]'},
+      {rewrite_rule => '^/onboarding$ https://forms.gle/KKgp6fLhGkrfTKea8 [R]'},
       {rewrite_rule => '^/opstaff-schedule$ https://docs.google.com/spreadsheets/d/18EBPiC0HtW_ij_3MH5y3FyFVaG4ElnYHxJduQQ3IZM8/edit?usp=sharing [R]'},
       {rewrite_rule => '^/os$ https://docs.google.com/spreadsheets/d/1V4qYWOjQiafE_Xr-4X4nCUI1Sux5yJQNqHgzLV8j76I/edit [R]'},
       {rewrite_rule => '^/password$ https://www.ocf.berkeley.edu/account/password [R]'},
