@@ -12,7 +12,7 @@ class ocf_mirrors::projects::blender {
   ocf_mirrors::timer {
     'blender':
       exec_start => '/opt/mirrors/project/blender/sync-archive',
-      hour       => '*',
+      hour       => '5',
       minute     => '35',
       require    => File['/opt/mirrors/project/blender'];
   }
