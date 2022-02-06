@@ -12,8 +12,8 @@ class ocf_mirrors::projects::gentoo_distfiles {
   ocf_mirrors::timer {
     'gentoo-distfiles':
       exec_start => '/opt/mirrors/project/gentoo-distfiles/sync-archive',
-      hour       => '3/6',
-      minute     => '56',
+      hour       => '0/4',
+      minute     => '16',
       require    => File['/opt/mirrors/project/gentoo-distfiles'];
   }
 }

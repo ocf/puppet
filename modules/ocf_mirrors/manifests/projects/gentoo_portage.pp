@@ -12,8 +12,8 @@ class ocf_mirrors::projects::gentoo_portage {
   ocf_mirrors::timer {
     'gentoo-portage':
       exec_start => '/opt/mirrors/project/gentoo-portage/sync-archive',
-      hour       => '3/6',
-      minute     => '56',
+      hour       => '*',
+      minute     => '6/30',
       require    => File['/opt/mirrors/project/gentoo-portage'];
   }
 }
