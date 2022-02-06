@@ -11,4 +11,17 @@ class ocf_mirrors::projects::ubuntu_ports {
     upstream_host => 'ports.ubuntu.com',
     upstream_path => '';
   }
+
+  file { '/opt/mirrors/project/ubuntu-ports/sync-releases':
+    source => 'puppet:///modules/ocf_mirrors/project/ubuntu-ports/sync-releases',
+    mode   => '0755',
+    owner  => mirrors,
+    group  => mirrors;
+  }
+
+  ocf_mirrors::timer { 'ubuntu-ports-releases':
+    exec_start => '/opt/mirrors/project/ubuntu-ports/sync-releases > /dev/null',
+    hour       => '0/7',
+    minute     => '29';
+  }
 }
