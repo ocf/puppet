@@ -8,8 +8,8 @@ OPTS="--quiet --recursive --links --perms --times -D --delete --timeout=300 --ch
 SRC="rsync://masterdistfiles.gentoo.org/gentoo" # OSUOSL
 DST="/opt/mirrors/ftp/gentoo-distfiles/"
 
-echo "Started update at" "`date`" >> $0.log 2>&1
+echo "Started update at" "$(date)" >> "$0".log 2>&1
 logger -t rsync "re-rsyncing the gentoo-distfiles tree"
-"${RSYNC}" "${OPTS}" "${SRC}" "${DST}" >> $0.log 2>&1
+"${RSYNC}" "${OPTS}" "${SRC}" "${DST}" >> "$0".log 2>&1
 
-echo "End: " "`date`" >> $0.log 2>&1
+echo "End: " "$(date)" >> "$0".log 2>&1
