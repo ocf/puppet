@@ -1,7 +1,7 @@
 #!/bin/bash
 # adopted from https://wiki.gentoo.org/wiki/Project:Infrastructure/Mirrors/Rsync
 
-OPTS=(--quiet --recursive --links --perms --times -D --delete --timeout=300 --checksum)
+OPTS=(--quiet --recursive --links --perms --times -D --delete "--timeout=300" --checksum)
 
 #Uncomment the following line only if you have been granted access to masterportage.gentoo.org
 #SRC="rsync://masterportage.gentoo.org/gentoo-portage"
