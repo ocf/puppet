@@ -10,7 +10,7 @@ class ocf_mirrors::projects::rocky {
 
   ocf_mirrors::timer {
     'rocky':
-      exec_start => '/opt/mirrors/project/rocky/sync-archive > /dev/null 2>&1',
+      exec_start => '/opt/mirrors/project/rocky/sync-archive',
       hour       => '1/4',
       minute     => '33';
   }

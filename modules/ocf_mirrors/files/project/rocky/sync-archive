@@ -59,8 +59,8 @@ mirrormodule="rocky"
 dst="/opt/mirrors/ftp/${mirrormodule}"
 
 filelistfile="fullfiletimelist-rocky"
-lockfile="$0.lockfile"
-logfile="$0.log"
+lockfile="/opt/mirrors/project/rocky/$0.lockfile"
+logfile="/opt/mirrors/project/rocky/$0.log"
 
 # Check if the filelistfile has changed on upstream mirror
 # and exit cleanly if it is still the same
@@ -88,6 +88,6 @@ printf '%s\\n' "$$" > "$lockfile"
 printf "Started update at %(%c)T\\n" -1 >> "$logfile" 2>&1
 logger -t rsync "Updating ${mirrormodule}"
 rsync_run "${opts[@]}" "${src}/" "${dst}/" >> "$logfile" 2>&1
-logger -t rsync "Finished updating ${mirrormodule}"  
+logger -t rsync "Finished updating ${mirrormodule}"
 printf "End: %(%c)T\\n" -1 >> "$logfile" 2>&1
 rm -f "$lockfile"
