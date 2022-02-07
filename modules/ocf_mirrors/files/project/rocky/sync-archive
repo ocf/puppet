@@ -1,0 +1,2 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -aqzH --delete rsync://msync.rockylinux.org/rocky/mirror/pub/rocky/ /opt/mirrors/ftp/rocky
