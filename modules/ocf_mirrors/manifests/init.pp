@@ -32,6 +32,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::qt
   include ocf_mirrors::projects::raspbian
   include ocf_mirrors::projects::raspi
+  include ocf_mirrors::projects::rocky
   include ocf_mirrors::projects::tails
   include ocf_mirrors::projects::trisquel
   include ocf_mirrors::projects::ubuntu
