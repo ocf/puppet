@@ -12,6 +12,7 @@ class ocf_mirrors::projects::centos_stream {
     'centos-stream':
       type          => 'unix_timestamp',
       upstream_host => 'mirror.stream.centos.org',
+      upstream_path => '/',
       ts_path       => 'TIME';
   }
 
