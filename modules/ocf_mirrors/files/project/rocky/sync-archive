@@ -2,10 +2,10 @@
 #
 # mirrorsync - Synchronize a Rocky mirror
 # By: Dennis Koerner <koerner@netzwerge.de>
-# 
+#
 # The latest version of this script can be found at:
 # https://github.com/rocky-linux/rocky-tools
-# 
+#
 # Please read https://docs.rockylinux.org/en/rocky/8/guides/add_mirror_manager
 # for further information on setting up a Rocky mirror.
 #
