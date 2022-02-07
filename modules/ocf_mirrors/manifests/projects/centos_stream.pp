@@ -9,16 +9,18 @@ class ocf_mirrors::projects::centos_stream {
   }
 
   ocf_mirrors::monitoring {
-    'centos_stream':
+    'centos-stream':
       type          => 'unix_timestamp',
       upstream_host => 'mirror.stream.centos.org',
+      upstream_path => '/',
       ts_path       => 'TIME';
   }
 
   ocf_mirrors::timer {
     'centos-stream':
       exec_start => '/opt/mirrors/project/centos-stream/sync-archive',
-      hour       => '0/3',
-      minute     => '44';
+      hour       => '1/3',
+      minute     => '33';
   }
 }
+
