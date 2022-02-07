@@ -1,0 +1,6 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -hav \
+       --delete --delete-after --no-o --no-g --safe-links \
+       --timeout=60 --contimeout=30 \
+       rsync://mirrors.kernel.org/slackware/ \
+       /opt/mirrors/ftp/slackware
