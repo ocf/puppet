@@ -12,7 +12,9 @@ class ocf_mirrors {
   include ocf_mirrors::projects::blender
   include ocf_mirrors::projects::centos
   include ocf_mirrors::projects::centos_altarch
+  include ocf_mirrors::projects::centos_stream
   include ocf_mirrors::projects::debian
+  include ocf_mirrors::projects::debian_nonfree
   include ocf_mirrors::projects::devuan
   include ocf_mirrors::projects::emacs_lisp_archive
   include ocf_mirrors::projects::fedora
@@ -30,9 +32,11 @@ class ocf_mirrors {
   include ocf_mirrors::projects::parrot
   include ocf_mirrors::projects::puppetlabs
   include ocf_mirrors::projects::qt
+  include ocf_mirrors::projects::qubes
   include ocf_mirrors::projects::raspbian
   include ocf_mirrors::projects::raspi
   include ocf_mirrors::projects::rocky
+  include ocf_mirrors::projects::slackware
   include ocf_mirrors::projects::tails
   include ocf_mirrors::projects::trisquel
   include ocf_mirrors::projects::ubuntu

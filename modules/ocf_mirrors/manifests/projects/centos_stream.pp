@@ -23,4 +23,3 @@ class ocf_mirrors::projects::centos_stream {
       minute     => '33';
   }
 }
-
