@@ -171,7 +171,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   if str2bool($::puppetdb_running) {
     @@sshkey { $::hostname:
       host_aliases => $ssh_aliases,
-      key          => $::sshecdsakey,
+      key          => $::ssh['ecdsa']['key'],
       type         => ecdsa-sha2-nistp256,
     }
     Sshkey <<| |>>

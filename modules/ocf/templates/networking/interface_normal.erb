@@ -9,7 +9,7 @@ iface <%= @logical_primary_interface %> inet6 static
   netmask <%= @netmask6 %>
   gateway <%= @gateway6 %>
 
-<%- if @lsbdistid == 'Raspbian' -%>
+<%- if @os['distro']['id'] == 'Raspbian' -%>
 pre-up wpa_supplicant -B -Dnl80211 -i<%= @logical_primary_interface %> -c /etc/wpa_supplicant/wpa_supplicant.conf -f /var/log/wpa_supplicant.log
 post-down killall wpa_supplicant
 <%- end -%>
