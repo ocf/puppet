@@ -10,7 +10,7 @@ define ocf_mirrors::qfm(
     $mirror_path = '/opt/mirrors/ftp/fedora',
     $project_path = "/opt/mirrors/project/${title}",
     $project_timefile = "/opt/mirrors/project/${title}/last_mirror_time",
-    $tmp_dir = "/ssd_run/tmp"
+    $tmp_dir = '/ssd_run/tmp'
   ) {
 
   exec { "get-qfm-${title}":
