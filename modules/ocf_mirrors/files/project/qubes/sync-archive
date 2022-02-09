@@ -1,3 +1,3 @@
 #!/bin/sh -eu
 /usr/local/bin/rsync-no-vanished -azH --delete --delete-after --delay-updates --safe-links \
-        rsync://plug-mirror.rcac.purdue.edu/qubes /opt/mirrors/ftp/qubes
+        rsync.qubes-os.org::qubes-mirror /opt/mirrors/ftp/qubes
