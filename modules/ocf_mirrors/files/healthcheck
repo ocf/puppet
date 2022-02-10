@@ -19,6 +19,7 @@ import requests
 from prometheus_client import CollectorRegistry
 from prometheus_client import Gauge
 from prometheus_client import write_to_textfile
+import xml.etree.ElementTree as ET
 
 Mirror = namedtuple('Mirror', ['url', 'updated_at'])
 
@@ -34,6 +35,8 @@ def update_func(healthcheck):
         return get_updated_datetime
     elif healthcheck == 'recursive_ls':
         return get_updated_recursive_ls
+    elif healthcheck == 'rpm':
+        return get_updated_rpm
     else:
         raise ValueError('Unsupported type: {}'.format(healthcheck))
 
@@ -98,7 +101,18 @@ def get_updated_manjaro(mirror_url):
     updated_line, = [line for line in req.text.splitlines() if line.startswith('date=')]
     return dateutil.parser.parse(updated_line.split('=', 1)[1])
 
-
+def get_updated_rpm(mirror_url):
+    """Find the time the repo was last updated.
+    Text in question should be of the form of a unix timestamp.
+    >>> get_updated_rpm(mirror_url)
+    datetime.datetime(2018, 1, 25, 21, 52, 18, tzinfo=tzutc())
+    """
+    req = requests.get(mirror_url)
+    req.raise_for_status()
+    root = ET.fromstring(req.text)
+    timestamp = int(root[0].text)
+    return datetime.utcfromtimestamp(timestamp)
+    
 def write_prometheus(project, local, upstream):
     registry = CollectorRegistry()
     updated_upstream = Gauge(
