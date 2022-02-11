@@ -29,6 +29,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::kde_applicationdata
   include ocf_mirrors::projects::manjaro
   include ocf_mirrors::projects::openbsd
+  include ocf_mirrors::projects::opensuse
   include ocf_mirrors::projects::parrot
   include ocf_mirrors::projects::puppetlabs
   include ocf_mirrors::projects::qt
