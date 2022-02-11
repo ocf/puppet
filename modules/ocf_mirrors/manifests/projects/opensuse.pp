@@ -12,7 +12,7 @@ class ocf_mirrors::projects::opensuse {
   ocf_mirrors::timer {
     'opensuse':
       exec_start => '/opt/mirrors/project/opensuse/sync-archive',
-      hour       => '*/6',
+      hour       => '1/6',
       minute     => '27',
       require    => File['/opt/mirrors/project/opensuse'];
   }
