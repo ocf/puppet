@@ -62,13 +62,6 @@ class ocf_www::site::www {
       },
     ],
 
-    directories         => [
-    {
-      path       => '/.well-known/matrix/server',
-      provider   => 'location',
-      header     => 'set Access-Control-Allow-Origin \"*\"',
-    },
-
     rewrites            => [
       {
         comment      => 'redirect .well-known/host-meta to mastodon',
@@ -91,6 +84,11 @@ class ocf_www::site::www {
     ],
 
     directories         => [
+      {
+        path           => '/.well-known/matrix/server',
+        provider       => 'location',
+        header         => 'set Access-Control-Allow-Origin \"*\"',
+      },
       {
         path           => '/services/http/users',
         provider       => 'directories',
