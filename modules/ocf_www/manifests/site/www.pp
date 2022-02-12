@@ -189,13 +189,6 @@ class ocf_www::site::www {
               Header set Access-Control-Allow-Origin "*"
           ',
         },
-        {
-          path            => '/.well-known/matrix/client',
-          provider        => 'location',
-          custom_fragment => '
-              Header set Access-Control-Allow-Origin "*"
-          ',
-        },
       ],
       port                 => 443,
       docroot              => '/var/www/html',
