@@ -38,7 +38,7 @@ class ocf_www::site::www {
   # TODO: dev-death should add a robots.txt disallowing everything
   apache::vhost { 'www':
     servername          => 'www.ocf.berkeley.edu',
-    serveraliases       => ['dev-www.ocf.berkeley.edu', 'ocf.berkeley.edu'],
+    serveraliases       => ['dev-www.ocf.berkeley.edu'],
     port                => 443,
     docroot             => '/services/http/users',
 
@@ -179,6 +179,22 @@ class ocf_www::site::www {
         'dev-ocf.berkeley.edu',
         'secure.ocf.berkeley.edu',
         $::fqdn,
+      ],
+      directories          => [
+        {
+          path            => '/.well-known/matrix/server',
+          provider        => 'location',
+          custom_fragment => '
+              Header set Access-Control-Allow-Origin "*"
+          ',
+        },
+        {
+          path            => '/.well-known/matrix/client',
+          provider        => 'location',
+          custom_fragment => '
+              Header set Access-Control-Allow-Origin "*"
+          ',
+        },
       ],
       port                 => 443,
       docroot              => '/var/www/html',
