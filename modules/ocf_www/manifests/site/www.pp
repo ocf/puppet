@@ -85,9 +85,9 @@ class ocf_www::site::www {
 
     directories         => [
       {
-        path           => '/.well-known/matrix/server',
-        provider       => 'location',
-        header         => 'set Access-Control-Allow-Origin \"*\"',
+        path     => '/.well-known/matrix/server',
+        provider => 'location',
+        header   => 'set Access-Control-Allow-Origin \"*\"',
       },
       {
         path           => '/services/http/users',
