@@ -61,11 +61,13 @@ class ocf_www::site::www {
         path  => '/var/www/html/.well-known/matrix/client',
       },
     ],
-    custom_fragment     => '
-    <Location ~ "/\.well-known/matrix/(server|client)">
-      Header set Access-Control-Allow-Origin "*"
-    </Location>
-    ',    
+
+    directories         => [
+    {
+      path       => '/.well-known/matrix/server',
+      provider   => 'location',
+      header     => 'set Access-Control-Allow-Origin \"*\"',
+    },
 
     rewrites            => [
       {
