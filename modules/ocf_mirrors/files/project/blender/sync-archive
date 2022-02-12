@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -azH --delete --delete-after --delay-updates --safe-links \
+        rsync://mirror.clarkson.edu/blender/ /opt/mirrors/ftp/blender

@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -azH --delete --delete-after --delay-updates --safe-links \
+        rsync.qubes-os.org::qubes-mirror /opt/mirrors/ftp/qubes

@@ -9,15 +9,20 @@ class ocf_mirrors {
   include ocf_mirrors::projects::alpine
   include ocf_mirrors::projects::archlinux
   include ocf_mirrors::projects::archlinuxcn
+  include ocf_mirrors::projects::artix_linux
+  include ocf_mirrors::projects::blender
   include ocf_mirrors::projects::centos
   include ocf_mirrors::projects::centos_altarch
-  include ocf_mirrors::projects::centos_debuginfo
+  include ocf_mirrors::projects::centos_stream
   include ocf_mirrors::projects::debian
+  include ocf_mirrors::projects::debian_nonfree
   include ocf_mirrors::projects::devuan
   include ocf_mirrors::projects::emacs_lisp_archive
   include ocf_mirrors::projects::fedora
   include ocf_mirrors::projects::finnix
   include ocf_mirrors::projects::freebsd
+  include ocf_mirrors::projects::gentoo_distfiles
+  include ocf_mirrors::projects::gentoo_portage
   include ocf_mirrors::projects::gnome
   include ocf_mirrors::projects::gnu
   include ocf_mirrors::projects::kali
@@ -25,11 +30,15 @@ class ocf_mirrors {
   include ocf_mirrors::projects::kde_applicationdata
   include ocf_mirrors::projects::manjaro
   include ocf_mirrors::projects::openbsd
+  include ocf_mirrors::projects::opensuse
   include ocf_mirrors::projects::parrot
   include ocf_mirrors::projects::puppetlabs
   include ocf_mirrors::projects::qt
+  include ocf_mirrors::projects::qubes
   include ocf_mirrors::projects::raspbian
   include ocf_mirrors::projects::raspi
+  include ocf_mirrors::projects::rocky
+  include ocf_mirrors::projects::slackware
   include ocf_mirrors::projects::tails
   include ocf_mirrors::projects::trisquel
   include ocf_mirrors::projects::ubuntu

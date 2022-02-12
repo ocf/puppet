@@ -1,0 +1,5 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -avuzH --delete --delete-after --delay-updates --safe-links \
+        --exclude images-including-firmware/archive/ --exclude images-including-firmware/daily-builds/ \
+        --exclude cd-including-firmware/archive/ --exclude cd-including-firmware/daily-builds/  \
+                rsync://cdimage.debian.org/cdimage-unofficial/non-free/ /opt/mirrors/ftp/debian-nonfree

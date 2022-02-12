@@ -1,0 +1,2 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -aqzH --delete rsync.stream.centos.org::CentOS-Stream-All /opt/mirrors/ftp/centos-stream

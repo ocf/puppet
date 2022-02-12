@@ -9,12 +9,13 @@ define ocf_mirrors::qfm(
     $master_module = 'fedora-buffet',
     $mirror_path = '/opt/mirrors/ftp/fedora',
     $project_path = "/opt/mirrors/project/${title}",
-    $project_timefile = "/opt/mirrors/project/${title}/last_mirror_time"
+    $project_timefile = "/opt/mirrors/project/${title}/last_mirror_time",
+    $tmp_dir = '/ssd_run/tmp'
   ) {
 
   exec { "get-qfm-${title}":
     command => "sh -c 'git clone https://pagure.io/quick-fedora-mirror.git ${project_path}'",
-    onlyif  => "test ! -f ${project_path}",
+    onlyif  => "test -f ${project_path}",
     user    => 'mirrors';
   }
 
