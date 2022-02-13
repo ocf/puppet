@@ -183,6 +183,7 @@ class ocf::extrapackages {
     'tox',
     'twine',
     'unison',
+    'units',
     'vagrant',
     'valgrind',
     'weechat',
