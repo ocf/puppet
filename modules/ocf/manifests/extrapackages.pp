@@ -215,6 +215,11 @@ class ocf::extrapackages {
     # package for this), and with virtual packages puppet will try to install
     # them every run, leading to unnecessary noise
     package { 'php7.3-dba':; }
+  } elsif $::lsbdistcodename == 'bullseye' {
+    # This isn't available as php-dba unfortunately (that's just a virtual
+    # package for this), and with virtual packages puppet will try to install
+    # them every run, leading to unnecessary noise
+    package { 'php7.4-dba':; }
   }
 
   # install wp-cli
