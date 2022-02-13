@@ -2,8 +2,9 @@ class ocf_www::mod::php {
   package { ['php-cgi', 'php-apcu']:; }
 
   $php_version = $::lsbdistcodename ? {
-    'stretch' => '7.0',
-    'buster'  => '7.3',
+    'stretch'  => '7.0',
+    'buster'   => '7.3',
+    'bullseye' => '7.4',
   }
 
   file { "/etc/php/${php_version}/cgi/conf.d/99-ocf.ini":
