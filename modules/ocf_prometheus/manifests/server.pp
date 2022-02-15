@@ -77,6 +77,13 @@ class ocf_prometheus::server {
         ],
       },
       {
+        job_name        => 'influx',
+        scrape_interval => '10s',
+        scrape_timeout  => '5s',
+
+        static_configs  => [{targets => ['mirrors:9122']}],
+      },
+      {
         job_name        => 'printer',
         scrape_interval => '30s',
         scrape_timeout  => '20s',
