@@ -35,6 +35,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/cockroachdb$ https://cockroachlabs.zoom.us/j/95104416835 [R]'},
       {rewrite_rule => '^/cockroachdb-rsvp$ https://docs.google.com/forms/d/e/1FAIpQLSduHSz5Q66gWH7a2vfBM3rpDqbabrGtxWCuaQNR_C4Q8_J6Cw/viewform?usp=sf_link [R]'},
       {rewrite_rule => '^/contact$ https://www.ocf.berkeley.edu/docs/contact/ [R]'},
+      {rewrite_rule => '^/coffeechats$ https://docs.google.com/spreadsheets/d/1_xACT5YKjBi1W-mZjKo6YdkfTQinzcPG5iOXrWgs72E/edit#gid=1763949284/ [R]'},
       {rewrite_rule => '^/committee$ https://docs.google.com/spreadsheets/d/17vjngK4aMUDdLtRGaGNap3fmTwxbP3D3QJKrwZz7uk4/edit#gid=0 [R]'},
       {rewrite_rule => '^/d$ https://discourse.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/d/([0-9]+)$ https://discourse.ocf.berkeley.edu/t/$1 [R]'},
