@@ -32,6 +32,7 @@ class ocf::extrapackages {
     'autoconf',
     'autojump',
     'automake',
+    'bat',
     'biber',
     'bind9utils',
     'bison',
