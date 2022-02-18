@@ -131,6 +131,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/slack$ https://www.ocf.berkeley.edu/docs/contact/slack/ [R]'},
       {rewrite_rule => '^/social$ https://forms.gle/XcGuBWs3XpVcENZQ9 [R]'},
       {rewrite_rule => '^/social-?rules$ https://www.recurse.com/social-rules [R]'},
+      {rewrite_rule => '^/sp22-?mt2$ https://ocf.io/sp22-mt3 [R]'},
       {rewrite_rule => '^/sp22-?mt3$ https://docs.google.com/presentation/d/12itQ4l3We-cGltobBtqYXFlC4m-SbNrZrBQ_FlylWHQ/edit?usp=sharing [R]'},
       {rewrite_rule => '^/ssh$ https://www.ocf.berkeley.edu/docs/services/shell/ [R]'},
       {rewrite_rule => '^/staff$ https://www.ocf.berkeley.edu/about/staff [R]'},
