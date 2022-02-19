@@ -11,7 +11,7 @@ class ocf::networking(
     $gateway6   = '2607:f140:8801::1',
 
     $domain      = 'ocf.berkeley.edu',
-    $nameservers = ['2607:f140:8801::1:22', '169.229.226.22', '8.8.8.8'],
+    $nameservers = ['169.229.226.59'],
 ) {
 
   if size($nameservers) > 3 {
