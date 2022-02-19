@@ -38,7 +38,7 @@ class ocf_csgo {
       command     => '/opt/csgo/bin/update-csgo',
       user        => ocfcsgo,
       refreshonly => true,
-      require     => [File['/opt/csgo/bin/update-csgo'], Package['lib32gcc1']];
+      require     => [File['/opt/csgo/bin/update-csgo']];
   }
 
   ocf::munin::plugin { 'csgo':
