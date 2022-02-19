@@ -26,10 +26,6 @@ class ocf_csgo {
       source => 'puppet:///modules/ocf_csgo/etc/csgo-update.cmd';
   }
 
-  package {
-    'lib32gcc1':;
-  }
-
   exec {
     'download-steamcmd':
       command => 'curl http://media.steampowered.com/installer/steamcmd_linux.tar.gz | tar xzf - -C /opt/csgo/bin',
