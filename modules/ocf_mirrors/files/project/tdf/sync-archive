@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished --no-motd -rlptH --safe-links -hi --delete \
+	rsync://rsync.documentfoundation.org/tdf-pub/ /opt/mirrors/ftp/tdf
