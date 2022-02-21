@@ -12,6 +12,7 @@ class ocf_mirrors::projects::tdf {
   ocf_mirrors::monitoring { 'tdf':
     type          => 'unix_timestamp',
     upstream_host => 'download.documentfoundation.org',
+    upstream_path => '/',
     ts_path       => 'TIMESTAMP',
   }
 
