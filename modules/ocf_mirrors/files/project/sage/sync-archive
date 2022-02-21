@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -av --delete-after \
+	mirrors.mit.edu::sage /opt/mirrors/ftp/sage

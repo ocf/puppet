@@ -32,12 +32,14 @@ class ocf_mirrors {
   include ocf_mirrors::projects::openbsd
   include ocf_mirrors::projects::opensuse
   include ocf_mirrors::projects::parrot
+  include ocf_mirrors::projects::parabola
   include ocf_mirrors::projects::puppetlabs
   include ocf_mirrors::projects::qt
   include ocf_mirrors::projects::qubes
   include ocf_mirrors::projects::raspbian
   include ocf_mirrors::projects::raspi
   include ocf_mirrors::projects::rocky
+  include ocf_mirrors::projects::sage
   include ocf_mirrors::projects::slackware
   include ocf_mirrors::projects::tails
   include ocf_mirrors::projects::tdf
