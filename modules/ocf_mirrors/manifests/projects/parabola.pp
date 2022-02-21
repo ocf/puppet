@@ -12,6 +12,7 @@ class ocf_mirrors::projects::parabola {
   ocf_mirrors::monitoring { 'parabola':
     type          => 'unix_timestamp',
     upstream_host => 'repo.parabola.nu',
+    upstream_path => '/',
     ts_path       => 'lastsync',
   }
 
