@@ -37,4 +37,7 @@
     <property name="CursorThemeSize" type="int" value="0"/>
     <property name="IMModule" type="string" value=""/>
   </property>
+  <property name="Gdk" type="empty">
+    <property name="WindowScalingFactor" type="int" value="2"/>
+  </property>
 </channel>
