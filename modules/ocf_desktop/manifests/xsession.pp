@@ -43,7 +43,6 @@ class ocf_desktop::xsession {
       ensure  => directory,
       source  => 'puppet:///modules/ocf_desktop/xsession/xsessions',
       recurse => true,
-      purge   => true,
       force   => true,
       backup  => false;
     '/opt/share/xsession':
