@@ -103,8 +103,8 @@ class ocf::firewall::post {
       proto     => 'all',
       action    => 'accept',
       before    => undef;
-      
-     '998 allow from internal zone (fallingrocks, IPv4)':
+
+    '998 allow from internal zone (fallingrocks, IPv4)':
       chain  => 'PUPPET-INPUT',
       source => '169.229.200.70',
       proto  => 'all',
