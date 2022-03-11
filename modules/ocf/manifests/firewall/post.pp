@@ -99,10 +99,17 @@ class ocf::firewall::post {
   firewall_multi {
     '998 allow from internal zone (IPv4)':
       chain     => 'PUPPET-INPUT',
-      src_range => [$internal_zone_range_4, '169.229.200.70'],
+      src_range => $internal_zone_range_4,
       proto     => 'all',
       action    => 'accept',
       before    => undef;
+      
+     '998 allow from internal zone (fallingrocks, IPv4)':
+      chain  => 'PUPPET-INPUT',
+      source => '169.229.200.70',
+      proto  => 'all',
+      action => 'accept',
+      before => undef;
 
     '998 allow from internal zone (IPv6)':
       provider  => 'ip6tables',
