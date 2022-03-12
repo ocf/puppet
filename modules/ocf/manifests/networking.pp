@@ -29,7 +29,7 @@ class ocf::networking(
   if $bond {
     package { 'ifenslave': }
   }
- 
+
   package { 'resolvconf':
     ensure => purged,
   }
