@@ -1,6 +1,8 @@
 class ocf::networking(
     $bridge     = false,
     $bond       = false,
+    $is_vlan    = false,
+    $vlan       = undef,
 
     $ipaddress  = $::ipHostNumber,  # lint:ignore:variable_is_lowercase
     $netmask    = '255.255.255.0',
@@ -27,7 +29,7 @@ class ocf::networking(
   if $bond {
     package { 'ifenslave': }
   }
-
+ 
   package { 'resolvconf':
     ensure => purged,
   }
@@ -46,7 +48,11 @@ class ocf::networking(
       $bridged_iface = $first_active_iface
     }
   } elsif $bond {
-    $logical_primary_interface = 'bond0'
+    if $is_vlan {
+      $logical_primary_interface = 'bond0.' + $vlan
+    } else {
+      $logical_primary_interface = 'bond0'
+    }
   } else {
     $logical_primary_interface = $first_active_iface
   }
@@ -63,8 +69,14 @@ class ocf::networking(
   }
 
   if $bond {
-    file { '/etc/network/interfaces.d/bond0':
-      content => template('ocf/networking/interface_bond.erb');
+    if $is_vlan {
+      file { '/etc/network/interfaces.d/bond0':
+        content => template('ocf/networking/interface_bond_vlan.erb');
+      }
+    } else {
+      file { '/etc/network/interfaces.d/bond0':
+        content => template('ocf/networking/interface_bond.erb');
+      }
     }
   }
 
