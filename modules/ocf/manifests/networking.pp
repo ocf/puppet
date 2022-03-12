@@ -49,7 +49,7 @@ class ocf::networking(
     }
   } elsif $bond {
     if $is_vlan {
-      $logical_primary_interface = 'bond0.' + $vlan
+      $logical_primary_interface = "bond0.${vlan}"
     } else {
       $logical_primary_interface = 'bond0'
     }
