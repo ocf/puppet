@@ -188,6 +188,29 @@ class ocf_prometheus::server {
         honor_labels   => true,
 
         static_configs => [{targets =>['localhost:9091']}],
+      },
+      {
+        job_name        => 'apcpdu',
+        scrape_interval => '180s',
+        scrape_timeout  => '20s',
+        static_configs  => [{targets =>['169.229.226.137']}],
+
+        metrics_path    => '/snmp',
+        params          => { 'module' => [ 'apcpdu' ]},
+
+        # Relabel trick to make sure we scrape from the exporter and not from
+        # the switches themselves, see
+        # https://github.com/prometheus/snmp_exporter#prometheus-configuration
+        relabel_configs => [
+          {
+            source_labels => [ '__address__' ],
+            target_label  => '__param_target',
+          },
+          {
+            target_label => '__address__',
+            replacement  => '169.229.226.202:9116',
+          },
+        ]
       }
     ]
   }
