@@ -1,4 +1,8 @@
 ocf::networking::bond: true
+ocf::networking::is_vlan: true
+ocf::networking::vlan: '875'
+ocf::networking::netmask: '255.255.255.240'
+ocf::networking::gateway: '169.229.200.65'
 
 classes:
     - ocf_apt
