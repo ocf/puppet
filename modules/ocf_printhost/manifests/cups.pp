@@ -14,6 +14,9 @@ class ocf_printhost::cups {
     '/etc/cups/cupsd.conf':
       content => template('ocf_printhost/cups/cupsd.conf.erb');
 
+    '/etc/apparmor.d/local/usr.sbin.cupsd":
+      content => 'puppet:///modules/ocf_printhost/usr.sbin.cupsd';
+
     '/etc/cups/cups-files.conf':
       source => 'puppet:///modules/ocf_printhost/cups-files.conf';
 
