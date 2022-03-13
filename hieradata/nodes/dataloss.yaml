@@ -9,3 +9,5 @@ ocf::packages::ntp::peers:
   - riptide.ocf.berkeley.edu
 
 ocf_filehost::storage_device: '/dev/md/nfs'
+
+ocf::networking::bond: true
