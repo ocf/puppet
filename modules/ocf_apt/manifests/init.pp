@@ -10,7 +10,6 @@ class ocf_apt {
 
   package {
     [
-      'nginx',
       'reprepro',
     ]:;
   }
