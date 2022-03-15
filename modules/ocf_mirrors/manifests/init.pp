@@ -136,9 +136,9 @@ class ocf_mirrors {
       END
   }
   nginx::resource::location { '= /':
-    ensure     => present,
-    server     => 'mirrors.ocf.berkeley.edu',
-    ssl        => true,
+    ensure => present,
+    server => 'mirrors.ocf.berkeley.edu',
+    ssl    => true,
   }
   nginx::resource::location { '~ ^/tails':
     server      => 'mirrors.ocf.berkeley.edu',

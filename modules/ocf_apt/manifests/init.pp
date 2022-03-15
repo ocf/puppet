@@ -86,10 +86,10 @@ class ocf_apt {
     autoindex        => 'on',
   }
   nginx::resource::location { '=  /':
-    ensure     => present,
-    server     => ['apt.ocf.berkeley.edu', 'apt'],
-    www_root   => '/opt/apt/ftp',
-    ssl        => true,
+    ensure   => present,
+    server   => ['apt.ocf.berkeley.edu', 'apt'],
+    www_root => '/opt/apt/ftp',
+    ssl      => true,
   }
   nginx::resource::location { '~  /\.(?!well-known).*':
     ensure     => present,
