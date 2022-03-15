@@ -19,3 +19,16 @@ Action=org.freedesktop.udisks2.filesystem-mount;org.freedesktop.udisks2.eject-me
 ResultAny=no
 ResultInactive=no
 ResultActive=yes
+
+[Allow PowerDevil]
+Identity=unix-group:ocf
+Action=org.kde.powerdevil.backlighthelper.brightness;org.kde.powerdevil.backlighthelper.brightnessmax;org.kde.powerdevil.backlighthelper.setbrightness;org.kde.powerdevil.backlighthelper.syspath;org.kde.powerdevil.chargethresholdhelper.getthreshold;org.kde.powerdevil.chargethresholdhelper.setthreshold;org.kde.powerdevil.discretegpuhelper.hasdualgpu
+ResultAny=no
+ResultInactive=no
+ResultActive=yes
+
+[Deny Plasma SMART]
+Identity=unix-group:ocf
+Action=org.kde.kded.smart.smartctl
+ResultAny=no
+ResultActive=no

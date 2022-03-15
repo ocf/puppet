@@ -2,7 +2,7 @@ class ocf_desktop::xsession {
   $staff_only = lookup('staff_only')
 
   require ocf_desktop::packages
-  include ocf_desktop::xfce
+  include ocf_desktop::kde
 
   # Xsession configuration
   file {
@@ -167,6 +167,10 @@ class ocf_desktop::xsession {
       ensure  => directory,
       source  => 'puppet:///modules/ocf_desktop/skel/config',
       recurse => true;
+    '/etc/skel/.local':
+      ensure  => directory,
+      source  => 'puppet:///modules/ocf_desktop/skel/local',
+      recurse => true;
     '/etc/skel/Desktop':
       ensure  => directory,
       source  => 'puppet:///modules/ocf_desktop/skel/Desktop',
@@ -241,5 +245,14 @@ class ocf_desktop::xsession {
   # Use GTK+ theme for Qt 4 apps
   file { '/etc/xdg/Trolltech.conf':
       source => 'puppet:///modules/ocf_desktop/xsession/Trolltech.conf';
+  }
+
+  file {
+    ['/usr/local/share/plasma', '/usr/local/share/plasma/plasmoids']:
+      ensure => directory;
+    '/usr/local/share/plasma/plasmoids/com.github.zren.commandoutput':
+      ensure  => directory,
+      source  => 'puppet:///modules/ocf_desktop/kde-applets/plasma-applet-commandoutput/package',
+      recurse => true;
   }
 }
