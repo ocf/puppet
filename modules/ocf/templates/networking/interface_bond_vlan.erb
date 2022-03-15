@@ -11,3 +11,8 @@ iface <%= @logical_primary_interface %> inet static
   address <%= @ipaddress %>
   netmask <%= @netmask %>
   gateway <%= @gateway %>
+
+iface <%= @logical_primary_interface %> inet6 static
+  address <%= @ipaddress6 %>
+  netmask <%= @netmask6 %>
+  gateway <%= @gateway6 %>
