@@ -13,6 +13,7 @@ iface <%= @logical_primary_interface %> inet static
   gateway <%= @gateway %>
 
 iface <%= @logical_primary_interface %> inet6 static
+  vlan-raw-device bond0
   address <%= @ipaddress6 %>
   netmask <%= @netmask6 %>
   gateway <%= @gateway6 %>
