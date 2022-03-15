@@ -1,0 +1,5 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -aPvh --delete --delete-after --delay-updates \
+	--safe-links --password-file=/opt/mirrors/project/gimp/sync_password \
+	ocf-berkeley-edu@download.gimp.org::gimp /opt/mirrors/ftp/gimp
+
