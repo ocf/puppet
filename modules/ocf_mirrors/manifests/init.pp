@@ -35,6 +35,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::manjaro
   include ocf_mirrors::projects::openbsd
   include ocf_mirrors::projects::opensuse
+  include ocf_mirrors::projects::openwrt
   include ocf_mirrors::projects::parrot
   include ocf_mirrors::projects::parabola
   include ocf_mirrors::projects::puppetlabs
