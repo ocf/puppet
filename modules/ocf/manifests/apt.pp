@@ -15,7 +15,7 @@ class ocf::apt($stage = 'first') {
       if $::operatingsystemmajrelease != '11' {
         apt::source {
         'debian':
-            location => 'http://mirrors/debian/',
+            location => 'https://mirrors.ocf.berkeley.edu/debian/',
             release  => $::lsbdistcodename,
             repos    => $repos,
             include  => {
@@ -23,7 +23,7 @@ class ocf::apt($stage = 'first') {
             };
 
         'debian-updates':
-            location => 'http://mirrors/debian/',
+            location => 'https://mirrors.ocf.berkeley.edu/debian/',
             release  => "${::lsbdistcodename}-updates",
             repos    => $repos,
             include  => {
@@ -31,7 +31,7 @@ class ocf::apt($stage = 'first') {
             };
 
         'debian-security':
-            location => 'http://mirrors/debian-security/',
+            location => 'https://mirrors.ocf.berkeley.edu/debian-security/',
             release  => "${::lsbdistcodename}/updates",
             repos    => $repos,
             include  => {
@@ -39,7 +39,7 @@ class ocf::apt($stage = 'first') {
             };
 
         'ocf':
-            location => 'http://apt/',
+            location => 'https://apt.ocf.berkeley.edu/',
             release  => $::lsbdistcodename,
             repos    => 'main',
             include  => {
@@ -47,7 +47,7 @@ class ocf::apt($stage = 'first') {
             };
 
         'ocf-backports':
-            location => 'http://apt/',
+            location => 'https://apt.ocf.berkeley.edu/',
             release  => "${::lsbdistcodename}-backports",
             repos    => 'main',
             include  => {
@@ -64,14 +64,14 @@ class ocf::apt($stage = 'first') {
         # TODO: Submit patch to puppetlabs-apt to enable having includes for
         # apt::backports (so that we can include the source too)
         class { 'apt::backports':
-        location => 'http://mirrors/debian/';
+        location => 'https://mirrors.ocf.berkeley.edu/debian/';
         }
 
     }
 else {
     apt::source {
         'debian':
-            location => 'http://mirrors/debian/',
+            location => 'https://mirrors.ocf.berkeley.edu/debian/',
             release  => $::lsbdistcodename,
             repos    => $repos,
             include  => {
@@ -79,7 +79,7 @@ else {
             };
 
         'debian-updates':
-            location => 'http://mirrors/debian/',
+            location => 'https://mirrors.ocf.berkeley.edu/debian/',
             release  => "${::lsbdistcodename}-updates",
             repos    => $repos,
             include  => {
@@ -87,7 +87,7 @@ else {
             };
 
         'debian-security':
-            location => 'http://mirrors/debian-security/',
+            location => 'https://mirrors.ocf.berkeley.edu/debian-security/',
             release  => "${::lsbdistcodename}-security",
             repos    => $repos,
             include  => {
@@ -95,7 +95,7 @@ else {
             };
 
         'ocf':
-            location => 'http://apt/',
+            location => 'https://apt.ocf.berkeley.edu/',
             release  => 'buster',
             repos    => 'main',
             include  => {
@@ -103,7 +103,7 @@ else {
             };
 
         'ocf-backports':
-            location => 'http://apt/',
+            location => 'https://apt.ocf.berkeley.edu/',
             release  => 'buster-backports',
             repos    => 'main',
             include  => {
@@ -120,14 +120,14 @@ else {
         # TODO: Submit patch to puppetlabs-apt to enable having includes for
         # apt::backports (so that we can include the source too)
         class { 'apt::backports':
-        location => 'http://mirrors/debian/';
+        location => 'https://mirrors.ocf.berkeley.edu/debian/';
         }
 }
 
   } elsif $::lsbdistid == 'Raspbian' {
     apt::source {
       'raspbian':
-        location => 'http://mirrors/raspbian/raspbian/',
+        location => 'https://mirrors.ocf.berkeley.edu/raspbian/raspbian/',
         release  => $::lsbdistcodename,
         repos    => 'main contrib non-free rpi',
         include  => {
@@ -135,7 +135,7 @@ else {
         };
 
       'archive-rpi':
-        location => 'http://archive.raspberrypi.org/debian/',
+        location => 'https://archive.raspberrypi.org/debian/',
         release  => $::lsbdistcodename,
         repos    => 'main ui',
         include  => {
@@ -146,7 +146,7 @@ else {
 
   apt::source {
     'puppetlabs':
-      location => 'http://mirrors/puppetlabs/apt/',
+      location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
       release  => $::lsbdistcodename,
       repos    => 'puppet',
   }
