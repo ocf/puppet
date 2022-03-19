@@ -247,6 +247,12 @@ class ocf_desktop::xsession {
       source => 'puppet:///modules/ocf_desktop/xsession/Trolltech.conf';
   }
 
+  # KDE Logout
+  file {
+    '/usr/share/applications/logout.desktop':
+      source  => 'puppet:///modules/ocf_desktop/xsession/logout.desktop',
+  }
+
   file {
     ['/usr/local/share/plasma', '/usr/local/share/plasma/plasmoids']:
       ensure => directory;
