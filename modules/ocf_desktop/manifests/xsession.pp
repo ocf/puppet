@@ -45,6 +45,8 @@ class ocf_desktop::xsession {
       recurse => true,
       force   => true,
       backup  => false;
+    '/usr/share/xsessions/lightdm-xsession.desktop':
+      ensure => absent;
     '/opt/share/xsession':
       ensure  => directory;
     '/opt/share/xsession/images':
