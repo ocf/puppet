@@ -96,6 +96,7 @@ class ocf::packages {
       'iperf',
       'iperf3',
       'jq',
+      'kitty-terminfo',
       'lsof',
       'man-db',
       'molly-guard',
