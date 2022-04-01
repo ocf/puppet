@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <channel name="xfce4-panel" version="1.0">
-  <property name="panels" type="uint" value="2">
+  <property name="panels" type="uint" value="1">
     <property name="panel-0" type="empty">
-      <property name="position" type="string" value="p=6;x=96;y=12"/>
+      <property name="position" type="string" value="p=8;x=96;y=1177"/>
       <property name="size" type="uint" value="32"/>
       <property name="length" type="uint" value="100"/>
       <property name="length-adjust" type="bool" value="false"/>
@@ -19,6 +19,7 @@
         <value type="int" value="14"/>
         <value type="int" value="15"/>
         <value type="int" value="21"/>
+        <value type="int" value="3"/>
         <value type="int" value="5"/>
         <value type="int" value="6"/>
         <value type="int" value="1"/>
@@ -29,17 +30,6 @@
         <value type="int" value="18"/>
       </property>
       <property name="autohide" type="bool" value="false"/>
-      <property name="span-monitors" type="bool" value="false"/>
-    </property>
-    <property name="panel-1" type="empty">
-      <property name="position" type="string" value="p=8;x=96;y=1177"/>
-      <property name="size" type="uint" value="30"/>
-      <property name="length-adjust" type="bool" value="false"/>
-      <property name="length" type="uint" value="100"/>
-      <property name="position-locked" type="bool" value="true"/>
-      <property name="plugin-ids" type="array">
-        <value type="int" value="3"/>
-      </property>
       <property name="span-monitors" type="bool" value="false"/>
     </property>
   </property>

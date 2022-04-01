@@ -3,6 +3,7 @@ class ocf_desktop::packages {
   include ocf::packages::docker
   include ocf::packages::fahclient
   include ocf::packages::fonts
+  include ocf::packages::chicago
 
   # Install packages specific to desktops
   #
