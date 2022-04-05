@@ -96,7 +96,6 @@ class ocf::packages {
       'iperf',
       'iperf3',
       'jq',
-      'kitty-terminfo',
       'lsof',
       'man-db',
       'molly-guard',
@@ -132,6 +131,12 @@ class ocf::packages {
       'unzip',
       'whois',
     ]:;
+  }
+
+  if $::os[distro][codename] != 'stretch' {
+    package {
+      'kitty-terminfo':;
+    }
   }
 
   ocf::repackage { 'python3-attr':
