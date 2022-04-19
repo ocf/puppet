@@ -9,6 +9,9 @@ class ocf_desktop::kde {
       ensure => purged;
     'plasma-disks':;
     ['plasma-discover', 'packagekit', 'appstream']:;
+    # avoid XFCE notifyd taking over KDE's notification daemon;
+    # delete once XFCE is fully purged
+    'xfce4-notifyd':;
   }
 
   # Use KDE apps
