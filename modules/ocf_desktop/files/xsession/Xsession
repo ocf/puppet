@@ -23,6 +23,11 @@ echo "file://$HOME/Downloads Downloads" >> $HOME/.config/gtk-3.0/bookmarks
 xset r on
 xset r rate 200 30
 
+# IBUS
+export GTK_IM_MODULE=ibus
+export QT_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+
 # Disable mouse acceleration
 xset m 0 0
 

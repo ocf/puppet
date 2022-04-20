@@ -1,0 +1,16 @@
+[Desktop entry]
+Name=IBus
+GenericName=Input Method
+Comment=Start Input Method
+Exec=ibus-daemon -rxR
+Icon=languages
+Terminal=false
+Type=Application
+Categories=System;Utility;
+StartupNotify=false
+NoDisplay=true
+X-GNOME-Autostart-Phase=Applications
+X-GNOME-AutoRestart=false
+X-GNOME-Autostart-Notify=false
+X-KDE-autostart-after=panel
+X-KDE-StartupNotify=false

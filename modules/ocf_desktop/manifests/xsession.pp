@@ -249,6 +249,13 @@ class ocf_desktop::xsession {
       source => 'puppet:///modules/ocf_desktop/xsession/Trolltech.conf';
   }
 
+  # IBus
+  file {
+    '/etc/xdg/autostart/ibus.desktop':
+      source  => 'puppet:///modules/ocf_desktop/xsession/ibus.desktop',
+      require => Package['ibus'];
+  }
+
   # KDE Logout
   file {
     '/usr/share/applications/logout.desktop':

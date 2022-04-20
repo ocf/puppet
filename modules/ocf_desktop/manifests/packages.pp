@@ -34,7 +34,7 @@ class ocf_desktop::packages {
     # graphics/plotting
     ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
     # input method editors
-    ['fcitx', 'fcitx-libpinyin', 'fcitx-rime', 'fcitx-hangul', 'fcitx-mozc']:;
+    ['ibus', 'ibus-libpinyin', 'ibus-rime', 'ibus-hangul', 'ibus-mozc' ]:;
     # nonfree packages
     ['firmware-linux']:;
     # notifications
