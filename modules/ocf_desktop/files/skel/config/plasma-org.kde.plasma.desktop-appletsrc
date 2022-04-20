@@ -16,14 +16,42 @@ location=0
 plugin=org.kde.plasma.folder
 wallpaperplugin=org.kde.image
 
-[Containments][1][ConfigDialog]
-DialogHeight=960
-DialogWidth=1280
-
 [Containments][1][Configuration]
 PreloadWeight=42
 
 [Containments][1][Wallpaper][org.kde.image][General]
+Image=file:///opt/share/xsession/images/background.png
+
+[Containments][18]
+ItemGeometriesHorizontal=
+activityId=11dd73e5-f134-40c8-8963-071a64c4fad2
+formfactor=0
+immutability=1
+lastScreen=1
+location=0
+plugin=org.kde.plasma.folder
+wallpaperplugin=org.kde.image
+
+[Containments][18][Configuration]
+PreloadWeight=42
+
+[Containments][18][Wallpaper][org.kde.image][General]
+Image=file:///opt/share/xsession/images/background.png
+
+[Containments][19]
+ItemGeometriesHorizontal=
+activityId=11dd73e5-f134-40c8-8963-071a64c4fad2
+formfactor=0
+immutability=1
+lastScreen=2
+location=0
+plugin=org.kde.plasma.folder
+wallpaperplugin=org.kde.image
+
+[Containments][19][Configuration]
+PreloadWeight=42
+
+[Containments][19][Wallpaper][org.kde.image][General]
 Image=file:///opt/share/xsession/images/background.png
 
 [Containments][2]
@@ -52,10 +80,6 @@ PreloadWeight=42
 [Containments][2][Applets][16]
 immutability=1
 plugin=com.github.zren.commandoutput
-
-[Containments][2][Applets][16][Configuration][ConfigDialog]
-DialogHeight=840
-DialogWidth=1120
 
 [Containments][2][Applets][16][Configuration][General]
 command=paper-genmon

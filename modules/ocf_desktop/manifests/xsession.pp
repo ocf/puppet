@@ -1,8 +1,17 @@
-class ocf_desktop::xsession {
+class ocf_desktop::xsession(
+  Enum['1.0', '1.25', '1.5', '1.75', '2.0', '2.25', '2.5'] $scale = '1.0'
+) {
   $staff_only = lookup('staff_only')
 
   require ocf_desktop::packages
   include ocf_desktop::kde
+
+  # Scaling variables
+  $scale_float = Float($scale)
+  $dpi = round($scale_float * 96)
+  # FIXME: cursor size must be a switch! (not all sizes exist)
+  $cursor_size = round($scale_float * 24)
+  $panel_height = round($scale_float * 48)
 
   # Xsession configuration
   file {
@@ -83,7 +92,7 @@ class ocf_desktop::xsession {
     '/etc/lightdm/lightdm.conf':
       source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm.conf';
     '/etc/lightdm/lightdm-gtk-greeter.conf':
-      source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm-gtk-greeter.conf';
+      content => template('ocf_desktop/xsession/lightdm-gtk-greeter.conf.erb');
     '/etc/X11/default-display-manager':
       content => "/usr/sbin/lightdm\n";
     '/etc/lightdm/session-setup':
@@ -178,6 +187,18 @@ class ocf_desktop::xsession {
       source  => 'puppet:///modules/ocf_desktop/skel/Desktop',
       mode    => '0755',
       recurse => true;
+  }
+
+  # Templated config files (scale-dependent)
+  file {
+    '/etc/skel/.config/kdeglobals':
+      content   => template('ocf_desktop/skel/config/kdeglobals.erb');
+    '/etc/skel/.config/kcmfonts':
+      content   => template('ocf_desktop/skel/config/kcmfonts.erb');
+    '/etc/skel/.config/kcminputrc':
+      content   => template('ocf_desktop/skel/config/kcminputrc.erb');
+    '/etc/skel/.config/plasmashellrc':
+      content   => template('ocf_desktop/skel/config/plasmashellrc.erb');
   }
 
   # Fix desktop icon text color
