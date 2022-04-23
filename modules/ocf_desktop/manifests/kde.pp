@@ -1,6 +1,9 @@
 class ocf_desktop::kde {
   package {
-    ['kde-plasma-desktop', 'kwin-x11', 'okular']:
+    ['kde-plasma-desktop', 'kwin-x11', 'okular']:;
+
+    # Utilities
+    ['kcolorchooser']:;
   }
 
   # Remove some packages
