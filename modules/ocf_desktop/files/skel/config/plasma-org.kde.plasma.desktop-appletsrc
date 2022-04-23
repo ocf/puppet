@@ -76,6 +76,7 @@ plugin=com.github.zren.commandoutput
 
 [Containments][2][Applets][16][Configuration][General]
 command=paper-genmon
+fontSize=22
 interval=20000
 
 [Containments][2][Applets][17]
@@ -86,6 +87,19 @@ plugin=org.kde.plasma.icon
 localPath=/etc/skel/Desktop/logout.desktop
 url=desktop:/logout.desktop
 
+[Containments][2][Applets][27]
+immutability=1
+plugin=com.github.zren.commandoutput
+
+[Containments][2][Applets][27][Configuration]
+PreloadWeight=42
+
+[Containments][2][Applets][27][Configuration][General]
+clickCommand=qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.activateLauncherMenu
+command=echo "menu"
+fontSize=22
+interval=600000
+
 [Containments][2][Applets][3]
 immutability=1
 plugin=org.kde.plasma.kickoff
@@ -95,6 +109,7 @@ PreloadWeight=100
 
 [Containments][2][Applets][3][Configuration][General]
 favoritesPortedToKAstats=true
+icon=/opt/share/xsession/images/penguin-swing.svg
 menuItems=bookmark:t,application:t,computer:t,oftenUsed:f,used:f,leave:f
 
 [Containments][2][Applets][3][Configuration][Shortcuts]
@@ -102,6 +117,32 @@ global=Alt+F1
 
 [Containments][2][Applets][3][Shortcuts]
 global=Alt+F1
+
+[Containments][2][Applets][30]
+immutability=1
+plugin=com.github.zren.commandoutput
+
+[Containments][2][Applets][30][Configuration][General]
+clickCommand=qdbus org.kde.ksmserver /KSMServer logout 1 0 -1
+command=echo "log out"
+fontSize=22
+interval=26000
+
+[Containments][2][Applets][31]
+immutability=1
+plugin=org.kde.plasma.panelspacer
+
+[Containments][2][Applets][31][Configuration][General]
+expanding=false
+length=15
+
+[Containments][2][Applets][32]
+immutability=1
+plugin=org.kde.plasma.panelspacer
+
+[Containments][2][Applets][32][Configuration][General]
+expanding=false
+length=15
 
 [Containments][2][Applets][4]
 immutability=1
@@ -132,7 +173,7 @@ SystrayContainmentId=7
 PreloadWeight=42
 
 [Containments][2][General]
-AppletOrder=3;4;5;16;6;13;17
+AppletOrder=3;27;31;4;5;16;6;13;32;30;17
 
 [Containments][7]
 activityId=
