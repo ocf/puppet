@@ -70,13 +70,6 @@ plugin=org.kde.plasma.digitalclock
 [Containments][2][Applets][13][Configuration]
 PreloadWeight=42
 
-[Containments][2][Applets][14]
-immutability=1
-plugin=org.kde.plasma.showdesktop
-
-[Containments][2][Applets][14][Configuration]
-PreloadWeight=42
-
 [Containments][2][Applets][16]
 immutability=1
 plugin=com.github.zren.commandoutput
@@ -102,6 +95,7 @@ PreloadWeight=100
 
 [Containments][2][Applets][3][Configuration][General]
 favoritesPortedToKAstats=true
+menuItems=bookmark:t,application:t,computer:t,oftenUsed:f,used:f,leave:f
 
 [Containments][2][Applets][3][Configuration][Shortcuts]
 global=Alt+F1
@@ -138,7 +132,7 @@ SystrayContainmentId=7
 PreloadWeight=42
 
 [Containments][2][General]
-AppletOrder=3;4;5;16;6;13;14;17
+AppletOrder=3;4;5;16;6;13;17
 
 [Containments][7]
 activityId=
