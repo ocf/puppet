@@ -157,7 +157,7 @@ class ocf_desktop::xsession(
         target  => '/opt/share/xsession/images/ocf-color-256.png',
         require => File['/opt/share/xsession/images'];
     }
-}
+  }
 
 
   # polkit configuration
