@@ -1,5 +1,5 @@
 class ocf_desktop::xsession(
-  Enum['1.0', '1.25', '1.5', '1.75', '2.0', '2.25', '2.5'] $scale = '1.0'
+  Float[1.0, 3.0] $scale = 1.0
 ) {
   $staff_only = lookup('staff_only')
 
@@ -7,11 +7,16 @@ class ocf_desktop::xsession(
   include ocf_desktop::kde
 
   # Scaling variables
-  $scale_float = Float($scale)
-  $dpi = round($scale_float * 96)
-  # FIXME: cursor size must be a switch! (not all sizes exist)
-  $cursor_size = round($scale_float * 24)
-  $panel_height = round($scale_float * 48)
+  $dpi = round($scale * 96)
+  # These sizes are specific to the cursor theme (currently, Breeze)
+  if $scale < 1.5 {
+    $cursor_size = 24
+  } elsif $scale < 2 {
+    $cursor_size = 36
+  } else {
+    $cursor_size = 48
+  }
+  $panel_height = round($scale * 48)
 
   # Xsession configuration
   file {
