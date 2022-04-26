@@ -76,7 +76,6 @@ plugin=com.github.zren.commandoutput
 
 [Containments][2][Applets][16][Configuration][General]
 command=paper-genmon
-fontSize=22
 interval=20000
 
 [Containments][2][Applets][17]
@@ -126,7 +125,7 @@ plugin=com.github.zren.commandoutput
 clickCommand=qdbus org.kde.ksmserver /KSMServer logout 1 0 -1
 command=echo "log out"
 fontSize=22
-interval=26000
+interval=600000
 
 [Containments][2][Applets][31]
 immutability=1
