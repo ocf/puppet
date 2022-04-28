@@ -140,6 +140,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/sp22-?mt7$ https://docs.google.com/presentation/d/1qXn8_mL0F6w59kdHYK4TThZ2_UovysW24OmdD2yjTNo/edit?usp=sharing [R]'},
       {rewrite_rule => '^/sp22-?mt8$ https://docs.google.com/presentation/d/18pqxU5O0HYVMqdYLmUU4yaCjZw1iH8Zcr7ICse7L1XI/edit?usp=sharing [R]'},
       {rewrite_rule => '^/sp22-?mt9$ https://docs.google.com/presentation/d/1i9fcSF1_7Z4bHy-PqpuK-VFDVVJZ8-Ha29pjI8LEhj4/edit?usp=sharing [R]'},
+      {rewrite_rule => '^/sp22-?mt11$ https://docs.google.com/presentation/d/1ZtqObh5t_-KkYJLf3TqaUmxOpNONqv3SypW-pYcXOZA/edit?usp=sharing [R]'},
       {rewrite_rule => '^/ssh$ https://www.ocf.berkeley.edu/docs/services/shell/ [R]'},
       {rewrite_rule => '^/staff$ https://www.ocf.berkeley.edu/about/staff [R]'},
       {rewrite_rule => '^/staffhours$ https://ocf.io/staff-hours [R]'},
