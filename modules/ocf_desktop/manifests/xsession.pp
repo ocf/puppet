@@ -5,6 +5,7 @@ class ocf_desktop::xsession(
 
   require ocf_desktop::packages
   include ocf_desktop::kde
+  include ocf_desktop::lockkill
 
   # Scaling variables
   $dpi = round($scale * 96)
