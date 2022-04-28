@@ -1,6 +1,8 @@
 class ocf_desktop::kde {
   package {
-    ['kde-plasma-desktop', 'kwin-x11', 'okular', 'gwenview']:;
+    ['kde-plasma-desktop', 'kwin-x11']:;
+    ['okular', 'gwenview']:;
+    ['kde-spectacle']:;
 
     # Utilities
     ['kcolorchooser']:;
