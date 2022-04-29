@@ -113,8 +113,8 @@ class Killer:
 
             kill_eligible = not s_active or locked_hint
             if kill_eligible:
-                tallys = self.tallys[sid] = self.tallys.get(sid, 0) + 1 
-                threshold = immune_kill_after if uname in immune_users else kill_after # noqa: E501
+                tallys = self.tallys[sid] = self.tallys.get(sid, 0) + 1
+                threshold = immune_kill_after if uname in immune_users else kill_after
                 if tallys == threshold:
                     subprocess.check_call([loginctl, 'terminate-session', sid])
                 elif tallys > threshold:
