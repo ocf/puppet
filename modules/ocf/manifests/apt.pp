@@ -96,7 +96,7 @@ else {
 
         'ocf':
             location => 'https://apt.ocf.berkeley.edu/',
-            release  => 'buster',
+            release  => $::lsbdistcodename,
             repos    => 'main',
             include  => {
             src => true
@@ -104,7 +104,7 @@ else {
 
         'ocf-backports':
             location => 'https://apt.ocf.berkeley.edu/',
-            release  => 'buster-backports',
+            release  => "${::lsbdistcodename}-backports",
             repos    => 'main',
             include  => {
             src => true
