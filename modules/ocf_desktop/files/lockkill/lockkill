@@ -91,7 +91,7 @@ class Killer:
             )
         )
 
-        # keep track of the sessions we actually got data from 
+        # keep track of the sessions we actually got data from
         # in case a session terminated between listing
         # sesssions and querying them
         found_sessions: Set[str] = set()
