@@ -1,3 +1,4 @@
 #!/bin/sh -eu
-/usr/local/bin/rsync-no-vanished -avHP rsync-packages.linuxmint.com::packages \
-	/opt/mirrors/ftp/linuxmint-packages
+/usr/local/bin/rsync-no-vanished -avHP --delete-after \
+	rsync-packages.linuxmint.com::packages \
+ 	/opt/mirrors/ftp/linuxmint-packages
