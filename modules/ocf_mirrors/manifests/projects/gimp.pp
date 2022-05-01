@@ -9,6 +9,15 @@ class ocf_mirrors::projects::gimp {
       recurse => true;
   }
 
+  file {
+    '/opt/mirrors/project/gimp/sync_password':
+        content   => lookup('mirrors::gimp_sync_password'),
+        show_diff => false,
+        owner     => mirrors,
+        group     => mirrors,
+        mode      => '0400';
+  }
+
   ocf_mirrors::timer {
     'gimp':
       exec_start => '/opt/mirrors/project/gimp/sync-archive',
