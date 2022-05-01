@@ -9,6 +9,14 @@ class ocf_mirrors::projects::linuxmint_packages {
       recurse => true;
   }
 
+  ocf_mirrors::monitoring {
+    'linuxmint-packages':
+      type          => 'debian',
+      dist_to_check => 'una',
+      upstream_host => 'packages.linuxmint.com';
+      upstream_path => '/';
+  }
+
   ocf_mirrors::timer {
     'linuxmint-packages':
       exec_start => '/opt/mirrors/project/linuxmint-packages/sync-archive',
