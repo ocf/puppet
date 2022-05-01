@@ -33,6 +33,8 @@ class ocf_mirrors {
   include ocf_mirrors::projects::linux_mint
   include ocf_mirrors::projects::linuxmint_packages
   include ocf_mirrors::projects::manjaro
+  include ocf_mirrors::projects::mx_linux
+  include ocf_mirrors::projects::mx_packages
   include ocf_mirrors::projects::openbsd
   include ocf_mirrors::projects::opensuse
   include ocf_mirrors::projects::openwrt
