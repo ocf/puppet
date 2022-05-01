@@ -131,7 +131,12 @@ class ocf_mirrors {
     ipv6_listen_options  => 'default_server',
     format_log           => 'main',
     use_default_location => false,
-    autoindex            => 'on',
+    raw_append           => @(END),
+      fancyindex on;
+      fancyindex_name_length 100;
+      fancyindex_exact_size off;
+      fancyindex_footer /FOOTER.html;
+      END
   }
   nginx::resource::location { '= /':
     ensure => present,
