@@ -44,6 +44,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::raspbian
   include ocf_mirrors::projects::raspi
   include ocf_mirrors::projects::rocky
+  include ocf_mirrors::projects::rpmfusion
   include ocf_mirrors::projects::sage
   include ocf_mirrors::projects::slackware
   include ocf_mirrors::projects::tails
@@ -131,11 +132,6 @@ class ocf_mirrors {
     format_log           => 'main',
     use_default_location => false,
     autoindex            => 'on',
-    raw_append           => @(END),
-      if ($http_user_agent ~ "(MSIE 7\.0; Windows NT (6\.1|6\.2)|Chrome\/34\.0|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0)") {
-        return 403;
-      }
-      END
   }
   nginx::resource::location { '= /':
     ensure => present,
@@ -148,14 +144,6 @@ class ocf_mirrors {
     index_files => undef,
     raw_append  => @(END),
       etag off;
-      END
-  }
-  nginx::resource::location { '~ /\.(?!well-known).*':
-    ensure     => present,
-    server     => 'mirrors.ocf.berkeley.edu',
-    ssl        => true,
-    raw_append => @(END),
-      deny all;
       END
   }
   nginx::resource::server { 'mirrors.berkeley.edu':
