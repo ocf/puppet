@@ -10,7 +10,12 @@ class ocf::packages::mysql_server(
   }
 
   if $manage_service {
-    service { 'mysql':
+    if Integer($::os[release][major]) < 11 {
+      $servicename = 'mysql'
+    } else {
+      $servicename = 'mariadb'
+    }
+    service { $servicename:
       ensure  => stopped,
       enable  => false,
       require => Package['mariadb-server'],
