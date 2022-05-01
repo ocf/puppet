@@ -135,6 +135,7 @@ class ocf_mirrors {
       fancyindex on;
       fancyindex_name_length 100;
       fancyindex_exact_size off;
+      fancyindex_header /README.html;
       fancyindex_footer /FOOTER.html;
       END
   }
