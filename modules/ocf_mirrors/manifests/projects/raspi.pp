@@ -9,7 +9,7 @@ class ocf_mirrors::projects::raspi {
       recurse => true;
   }
 
- ocf_mirrors::monitoring { 'raspi':
+  ocf_mirrors::monitoring { 'raspi':
     type          => 'debian',
     dist_to_check => 'bullseye',
     local_path    => '/raspi/debian',
