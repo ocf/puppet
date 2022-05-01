@@ -1,2 +1,2 @@
 #!/bin/sh -eu
-rsync -avHP rsync://downloads.openwrt.org/downloads/ /opt/mirrors/ftp/openwrt
+rsync -avHP --delete rsync://downloads.openwrt.org/downloads/ /opt/mirrors/ftp/openwrt
