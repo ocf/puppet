@@ -135,9 +135,6 @@ class ocf_mirrors {
       fancyindex on;
       fancyindex_name_length 100;
       fancyindex_exact_size off;
-      fancyindex_show_path off;
-      fancyindex_ignore "robots.txt";
-      fancyindex_ignore "/test";
       fancyindex_footer /test/FOOTER.html;
       END
   }
@@ -147,6 +144,10 @@ class ocf_mirrors {
     ssl        => true,
     raw_append => @(END),
       fancyindex_header /test/README.html;
+      fancyindex_exact_size off;
+      fancyindex_show_path off;
+      fancyindex_ignore "robots.txt";
+      fancyindex_ignore "test";
       END
   }
   nginx::resource::location { '~ ^/tails':
