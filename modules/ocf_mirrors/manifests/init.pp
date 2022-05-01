@@ -99,12 +99,12 @@ class ocf_mirrors {
       group   => mirrors,
       require => User['mirrors'];
 
-    '/opt/mirrors/ftp/README.html':
+    '/opt/mirrors/ftp/test/README.html':
       source => 'puppet:///modules/ocf_mirrors/README.html',
       owner  => mirrors,
       group  => mirrors;
 
-    '/opt/mirrors/ftp/FOOTER.html':
+    '/opt/mirrors/ftp/test/FOOTER.html':
       source => 'puppet:///modules/ocf_mirrors/FOOTER.html',
       owner  => mirrors,
       group  => mirrors;
