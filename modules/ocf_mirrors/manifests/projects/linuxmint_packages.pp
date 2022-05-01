@@ -13,7 +13,7 @@ class ocf_mirrors::projects::linuxmint_packages {
     'linuxmint-packages':
       type          => 'debian',
       dist_to_check => 'una',
-      upstream_host => 'packages.linuxmint.com';
+      upstream_host => 'packages.linuxmint.com',
       upstream_path => '/';
   }
 
