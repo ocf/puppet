@@ -9,6 +9,14 @@ class ocf_mirrors::projects::raspi {
       recurse => true;
   }
 
+ ocf_mirrors::monitoring { 'raspi':
+    type          => 'debian',
+    dist_to_check => 'bullseye',
+    local_path    => '/raspi/debian',
+    upstream_host => 'archive.raspberrypi.org',
+    upstream_path => '/debian';
+  }
+
   ocf_mirrors::timer {
     'raspi':
       exec_start => '/opt/mirrors/project/raspi/sync-archive',
