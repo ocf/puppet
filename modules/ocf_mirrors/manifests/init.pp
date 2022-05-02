@@ -6,6 +6,7 @@ class ocf_mirrors {
   include ocf_mirrors::firewall_input
   # projects
   include ocf_mirrors::projects::apache
+  include ocf_mirrors::projects::almalinux
   include ocf_mirrors::projects::alpine
   include ocf_mirrors::projects::archlinux
   include ocf_mirrors::projects::archlinuxcn
@@ -14,6 +15,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::centos
   include ocf_mirrors::projects::centos_altarch
   include ocf_mirrors::projects::centos_stream
+  include ocf_mirrors::projects::cran
   include ocf_mirrors::projects::debian
   include ocf_mirrors::projects::debian_nonfree
   include ocf_mirrors::projects::devuan

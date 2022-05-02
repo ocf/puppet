@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -rptlzv --delete cran.r-project.org::CRAN \
+	/opt/mirrors/ftp/cran
