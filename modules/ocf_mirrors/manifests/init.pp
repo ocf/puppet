@@ -137,20 +137,16 @@ class ocf_mirrors {
       fancyindex on;
       fancyindex_name_length 100;
       fancyindex_exact_size off;
-      fancyindex_footer /test/FOOTER.html;
+      fancyindex_header /theme/header.html;
+      fancyindex_footer /theme/footer.html;
+      fancyindex_exact_size off;
+      fancyindex_show_path off;
       END
   }
   nginx::resource::location { '= /':
     ensure     => present,
     server     => 'mirrors.ocf.berkeley.edu',
     ssl        => true,
-    raw_append => @(END),
-      fancyindex_header /test/README.html;
-      fancyindex_exact_size off;
-      fancyindex_show_path off;
-      fancyindex_ignore "robots.txt";
-      fancyindex_ignore "test";
-      END
   }
   nginx::resource::location { '~ ^/tails':
     server      => 'mirrors.ocf.berkeley.edu',
