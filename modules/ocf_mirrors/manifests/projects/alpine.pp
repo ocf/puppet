@@ -1,25 +1,19 @@
-class ocf_mirrors::projects::alpine {
+class ocf_mirrors::projects::osdn {
   file {
-    '/opt/mirrors/project/alpine':
+    '/opt/mirrors/project/osdn':
       ensure  => directory,
-      source  => 'puppet:///modules/ocf_mirrors/project/alpine',
+      source  => 'puppet:///modules/ocf_mirrors/project/osdn',
       owner   => mirrors,
       group   => mirrors,
       mode    => '0755',
       recurse => true;
   }
 
-  ocf_mirrors::monitoring { 'alpine':
-    type          => 'unix_timestamp',
-    upstream_host => 'dl-cdn.alpinelinux.org',
-    ts_path       => 'last-updated',
-  }
-
   ocf_mirrors::timer {
-    'alpine':
-      exec_start => '/opt/mirrors/project/alpine/sync-archive',
+    'osdn':
+      exec_start => '/opt/mirrors/project/osdn/sync-archive',
       hour       => '*',
-      minute     => '42',
-      require    => File['/opt/mirrors/project/alpine'];
+      minute     => '32',
+      require    => File['/opt/mirrors/project/osdn'];
   }
 }
