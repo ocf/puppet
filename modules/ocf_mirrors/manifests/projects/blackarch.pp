@@ -19,7 +19,7 @@ class ocf_mirrors::projects::blackarch {
   ocf_mirrors::timer {
     'blackarch':
       exec_start => '/opt/mirrors/project/blackarch/sync-archive',
-      hour       => '0/2'
+      hour       => '0/2',
       minute     => '12';
   }
 }
