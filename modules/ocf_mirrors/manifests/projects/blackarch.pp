@@ -12,7 +12,7 @@ class ocf_mirrors::projects::blackarch {
   ocf_mirrors::monitoring { 'blackarch':
     type          => 'unix_timestamp',
     upstream_host => 'blackarch.org',
-    upstream_path => '';
+    upstream_path => '',
     ts_path       => 'lastupdate',
   }
 

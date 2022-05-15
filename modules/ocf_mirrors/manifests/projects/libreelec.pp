@@ -12,7 +12,7 @@ class ocf_mirrors::projects::libreelec {
   ocf_mirrors::timer {
     'libreelec':
       exec_start => '/opt/mirrors/project/libreelec/sync-archive',
-      hour       => '0/6'
+      hour       => '0/6',
       minute     => '17';
   }
 }
