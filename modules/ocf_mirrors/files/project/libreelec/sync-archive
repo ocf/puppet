@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -auvzH --delete --delete-after --delay-updates --safe-links \
+	rsync://releases.libreelec.tv/releases/ /opt/mirrors/ftp/libreelec
