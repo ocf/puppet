@@ -160,6 +160,16 @@ class ocf_mirrors {
       etag off;
       END
   }
+  nginx::resource::location { '~ \.iso':
+    server      => 'mirrors.ocf.berkeley.edu',
+    ssl         => true,
+    index_files => undef,
+    raw_append  => @(END),
+      if ($http_user_agent = "curl\/7\.29\.0") {
+        return 403;
+      }
+      END
+  }
   nginx::resource::server { 'mirrors.berkeley.edu':
     listen_port         => 80,
     ipv6_enable         => true,
