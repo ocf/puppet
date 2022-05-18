@@ -160,12 +160,12 @@ class ocf_mirrors {
       etag off;
       END
   }
-  nginx::resource::location { '~ \.iso':
+  nginx::resource::location { '~ \.iso$':
     server      => 'mirrors.ocf.berkeley.edu',
     ssl         => true,
     index_files => undef,
     raw_append  => @(END),
-      if ($http_user_agent = "curl\/7\.29\.0") {
+      if ($http_user_agent = "curl/7.29.0") {
         return 403;
       }
       END
