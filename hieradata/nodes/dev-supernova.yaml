@@ -1,0 +1,8 @@
+# Creating a dev supernova server
+# Copied from supernova.yaml
+
+# keep docker images around for 1 month
+ocf::packages::docker::image_max_age: '672h'
+
+classes:
+    - ocf_admin

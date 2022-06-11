@@ -11,10 +11,10 @@ class ocf_puppetdb {
     # PostgreSQL upstream repos.
     manage_package_repo => false,
 
-    # Although 9.6 is the default currently, we want to pin this so that later
+    # Although 13 is the default currently, we want to pin this so that later
     # version bumps do not change this and we can keep installing whichever
     # version is available in Debian repos
-    postgres_version    => '9.6',
+    postgres_version    => '13',
   }
 
   class { 'puppetdb::server':

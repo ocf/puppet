@@ -3,6 +3,7 @@ class ocf_desktop::packages {
   include ocf::packages::docker
   include ocf::packages::fahclient
   include ocf::packages::fonts
+  include ocf::packages::atom
 
   # Install packages specific to desktops
   #
@@ -14,7 +15,7 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['arandr', 'atom', 'blender', 'claws-mail', 'clementine', 'eog', 'evince',
+    ['arandr', 'blender', 'claws-mail', 'clementine', 'eog', 'evince',
       'filezilla', 'freeplane', 'geany', 'gimp',
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
       'musescore3', 'mpv', 'mssh', 'mumble', 'numlockx',
