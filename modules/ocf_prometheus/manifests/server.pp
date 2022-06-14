@@ -190,12 +190,12 @@ class ocf_prometheus::server {
         static_configs => [{targets =>['localhost:9091']}],
       },
       {
-        job_name       => 'synapse',
+        job_name        => 'synapse',
         scrape_interval => '15s',
 
         metrics_path    => '/_synapse/metrics',
 
-        static_configs => [{targets =>['matrix.ocf.berkeley.edu']}],
+        static_configs  => [{targets =>['matrix.ocf.berkeley.edu']}],
       }
     ]
   }
