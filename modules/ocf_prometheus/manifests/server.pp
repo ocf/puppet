@@ -194,6 +194,7 @@ class ocf_prometheus::server {
         scrape_interval => '15s',
 
         metrics_path    => '/_synapse/metrics',
+        scheme          => 'https',
 
         static_configs  => [{targets =>['matrix.ocf.berkeley.edu']}],
       }
