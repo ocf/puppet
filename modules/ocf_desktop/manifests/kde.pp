@@ -1,7 +1,7 @@
 class ocf_desktop::kde {
   package {
     ['kde-plasma-desktop', 'kwin-x11']:;
-    ['okular', 'gwenview']:;
+    ['okular', 'gwenview', 'konsole']:;
     ['kde-spectacle']:;
 
     # Utilities
@@ -21,6 +21,7 @@ class ocf_desktop::kde {
 
   # Use KDE apps
   alternatives { 'x-terminal-emulator':
-    path => '/usr/bin/konsole';
+    path    => '/usr/bin/konsole',
+    require => Package['konsole'];
   }
 }
