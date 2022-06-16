@@ -8,7 +8,8 @@ from typing import Iterable
 from typing import List
 from typing import Set
 
-immune_groups = ['ocfstaff', 'opstaff']
+immune_groups: List[str] = ['ocfstaff', 'opstaff']
+immune_users: List[str] = []
 
 interval = 60  # seconds
 kill_after = 4  # periods
@@ -63,7 +64,7 @@ class Killer:
         self.tallys = dict()
 
     def tick(self):
-        immune_users = get_users_in_groups(immune_groups)
+        all_immune_users = get_users_in_groups(immune_groups) | set(immune_users)
 
         sessions = parse_output(
             subprocess.check_output(
@@ -100,11 +101,16 @@ class Killer:
             try:
                 sid = info['Id']
                 uname = info['Name']
+            except:
+                logger.exception(f'error parsing session: {info}')
+                continue
+            try:
                 s_active = parse_bool(info['Active'])
                 s_class = info['Class']
                 locked_hint = parse_bool(info['LockedHint'])
             except ValueError:
                 logger.exception(f'error parsing session {sid} ({uname})')
+                continue
 
             found_sessions.add(sid)
 
@@ -114,7 +120,7 @@ class Killer:
             kill_eligible = not s_active or locked_hint
             if kill_eligible:
                 tallys = self.tallys[sid] = self.tallys.get(sid, 0) + 1
-                threshold = immune_kill_after if uname in immune_users else kill_after
+                threshold = immune_kill_after if uname in all_immune_users else kill_after
                 if tallys == threshold:
                     subprocess.check_call([loginctl, 'terminate-session', sid])
                 elif tallys > threshold:
