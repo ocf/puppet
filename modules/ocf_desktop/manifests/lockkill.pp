@@ -11,7 +11,9 @@ class ocf_desktop::lockkill {
       mode    => '0755',
       require =>  File['/opt/share/puppet'];
     '/etc/polkit-1/localauthority/90-mandatory.d/99-lockkill.pkla':
-      source => 'puppet:///modules/ocf_desktop/lockkill/policy.pkla';
+      # Workaround for bug causing polkit rules to be ignored - the
+      # contents of this file have been merged into 99-ocf.pkla
+      ensure => absent;
   }
 
   ocf::systemd::service { 'lockkill':

@@ -170,7 +170,13 @@ class ocf_desktop::xsession(
   file {
     # restrict polkit actions
     '/etc/polkit-1/localauthority/90-mandatory.d/99-ocf.pkla':
-      source => 'puppet:///modules/ocf_desktop/xsession/polkit/99-ocf.pkla',
+      #source => 'puppet:///modules/ocf_desktop/xsession/polkit/99-ocf.pkla',
+      # Workaround for bug causing polkit rules to be ignored - merge all
+      # rules into one file so that they are not ignored
+      content => join([
+        file('ocf_desktop/xsession/polkit/99-ocf.pkla'),
+        file('ocf_desktop/lockkill/policy.pkla'),
+      ], "\n"),
     ;
     # use ocfroot group for polkit admin auth
     '/etc/polkit-1/localauthority.conf.d/99-ocf.conf':
