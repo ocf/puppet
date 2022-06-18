@@ -101,7 +101,7 @@ class Killer:
             try:
                 sid = info['Id']
                 uname = info['Name']
-            except:
+            except KeyError:
                 logger.exception(f'error parsing session: {info}')
                 continue
             try:
