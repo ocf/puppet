@@ -42,6 +42,12 @@ xset m 0 0
 
 # Fix multiple monitors
 /usr/local/bin/fix-displays &
+# FIXME(etw): do this a better way
+# Write the KDE config file for display bindings now in a blocking fashion
+# before KDE starts.
+# This writes the group ScreenConnectors, with each connected display in sorted
+# order starting from 0
+xrandr | awk '$2 == "connected" { print $1 }' | sort | awk '{ system("kwriteconfig5 --file ~/.config/plasmashellrc --group ScreenConnectors --key " (NR - 1) " " $1) }'
 
 # Configure PulseAudio properly
 sleep 8 && /usr/local/bin/fix-audio &
