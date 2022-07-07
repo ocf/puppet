@@ -113,4 +113,12 @@ class ocf_mail::spam {
     hour        => '05',
     minute      => '00';
   }
+
+  exec { 'fix-policyd-weight':
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=933972 (how is this not fixed???)
+    command => 'sed -i -e \'/use IO::Socket::INET;/ause IO::Socket::INET6;\' /usr/sbin/policyd-weight',
+    unless  => 'grep -Fq \'use IO::Socket::INET6;\' /usr/sbin/policyd-weight',
+    require => Package['policyd-weight'],
+    notify  => Service['policyd-weight'];
+  }
 }
