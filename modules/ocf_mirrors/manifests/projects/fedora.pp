@@ -16,7 +16,7 @@ class ocf_mirrors::projects::fedora {
 
   ocf_mirrors::qfm {
     'enchilada':
-      remote_host => 'rsync://mirrors.rit.edu',
+      remote_host => 'rsync://dl.fedoraproject.org',
       cron_hour   => '2/4',
       cron_minute => '20';
   }
