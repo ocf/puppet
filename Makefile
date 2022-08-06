@@ -8,7 +8,7 @@ all: vendor .resource_types install-hooks
 venv: bin/venv-update Makefile
 	bin/venv-update \
 		venv= $@ -ppython3 \
-		install= pre-commit\>=1.0.0 importlib-metadata\<2.0.0
+		install= pre-commit\>=1.0.0 importlib-metadata\<2.0.0 virtualenv==20.15.1
 
 .PHONY: test
 test: venv install-hooks
