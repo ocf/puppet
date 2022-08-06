@@ -78,8 +78,8 @@ class ocf::apt($stage = 'first') {
         }
 
     }
-     else if $::operatingsystemmajrelease == '10' {
-        apt::source {
+elsif $::operatingsystemmajrelease == '10' {
+       apt::source {
         'debian':
             location => 'https://mirrors.ocf.berkeley.edu/debian/',
             release  => $::lsbdistcodename,
