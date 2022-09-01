@@ -32,7 +32,6 @@ class ocf::extrapackages {
     'autoconf',
     'autojump',
     'automake',
-    'bat',
     'biber',
     'bind9utils',
     'bison',
@@ -191,6 +190,14 @@ class ocf::extrapackages {
     'zlib1g-dev',
     'znc',
     ]:;
+  }
+
+  if Integer($::os['distro']['release']['major']) >= 11 {
+    package {
+      [
+        'bat',
+      ]:;
+    }
   }
 
   ocf::repackage { 'git-lfs':
