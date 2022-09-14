@@ -132,7 +132,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/sh$ https://ocf.io/staff-hours [R]'},
       {rewrite_rule => '^/shs$ https://github.com/ocf/etc/blob/master/configs/staff_hours.yaml [R]'},
       {rewrite_rule => '^/slack$ https://www.ocf.berkeley.edu/docs/contact/slack/ [R]'},
-      {rewrite_rule => '^/social$ https://forms.gle/XcGuBWs3XpVcENZQ9 [R]'},
+      {rewrite_rule => '^/social$ https://docs.google.com/forms/d/e/1FAIpQLSdLUhDYQug53NXdPEeJkLzB9JNUMUWJmXMoRSv18PkhEh4h4Q/viewform [R]'},
       {rewrite_rule => '^/social-?rules$ https://www.recurse.com/social-rules [R]'},
       {rewrite_rule => '^/sp22-?mt2$ https://ocf.io/sp22-mt3 [R]'},
       {rewrite_rule => '^/sp22-?mt3$ https://docs.google.com/presentation/d/12itQ4l3We-cGltobBtqYXFlC4m-SbNrZrBQ_FlylWHQ/edit?usp=sharing [R]'},
