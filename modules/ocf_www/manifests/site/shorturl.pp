@@ -49,6 +49,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/donate$ https://give.berkeley.edu/egiving/index.cfm?fund=FU1450000&org=Open+Computing+Facility&amt=&fundlist=FU1450000 [R]'},
       {rewrite_rule => '^/email-update$ https://status.ocf.berkeley.edu/2014/06/email-discontinuation-update-forward.html [R]'},
       {rewrite_rule => '^/eligibility$ https://www.ocf.berkeley.edu/docs/membership/eligibility/ [R]'},
+      {rewrite_rule => '^/fa22-?mt2$ https://docs.google.com/presentation/d/1X4zZYtCJ5t86s1FJu1XGg2RI08-kauJw11y02_UESNg/edit?usp=sharing [R]'},
       {rewrite_rule => '^/families$ https://docs.google.com/presentation/d/1y49eQj-SPIsMtIio2KFx86SF6tKcv1yB16pO6AS2uk4/edit [R]'},
       {rewrite_rule => '^/faq$ https://www.ocf.berkeley.edu/docs/faq/ [R]'},
       {rewrite_rule => '^/gh/([^/]*)(/(?!blob/)(?!tree/)(?!info/)(?!issue)(?!pull)(?!search).+)$ https://ocf.io/gh/$1/blob/master$2 [R]'},
