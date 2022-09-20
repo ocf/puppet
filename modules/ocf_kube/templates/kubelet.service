@@ -7,7 +7,7 @@ After=network-online.target
 [Service]
 ExecStart=/usr/bin/kubelet --config /etc/kubernetes/kubelet.yaml \
                            --container-runtime=remote \
-                           --container-runtime-endpoint=unix:///var/run/crio/crio.sock \
+                           --container-runtime-endpoint=unix:///run/crio/crio.sock \
                            --register-node=true \
                            --kubeconfig=/etc/kubernetes/kubelet.conf
 Restart=always

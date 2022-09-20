@@ -32,7 +32,6 @@ class ocf::extrapackages {
     'autoconf',
     'autojump',
     'automake',
-    'bat',
     'biber',
     'bind9utils',
     'bison',
@@ -41,6 +40,7 @@ class ocf::extrapackages {
     'cabal-install',
     'cgdb',
     'chicken-bin',
+    'chktex',
     'chrpath',
     'cmake',
     'cowsay',
@@ -74,6 +74,7 @@ class ocf::extrapackages {
     'jupyter-notebook',
     'keychain',
     'kubernetes-deploy',
+    'latexmk',
     'libcrack2-dev',
     'libdbi-perl',
     'libexpect-perl',
@@ -191,6 +192,14 @@ class ocf::extrapackages {
     'zlib1g-dev',
     'znc',
     ]:;
+  }
+
+  if Integer($::os['distro']['release']['major']) >= 11 {
+    package {
+      [
+        'bat',
+      ]:;
+    }
   }
 
   ocf::repackage { 'git-lfs':
