@@ -35,7 +35,7 @@ class ocf_desktop::packages {
     # graphics/plotting
     ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
     # input method editors
-    ['fcitx', 'fcitx-libpinyin', 'fcitx-rime', 'fcitx-hangul', 'fcitx-mozc']:;
+    ['ibus', 'ibus-libpinyin', 'ibus-rime', 'ibus-hangul', 'ibus-mozc' ]:;
     # nonfree packages
     ['firmware-linux']:;
     # notifications
@@ -153,5 +153,12 @@ class ocf_desktop::packages {
     # tilix is only available in backports
     'tilix':
       backport_on => 'stretch';
+  }
+
+  exec {
+    'disable chrome password store':
+      command => "perl -pi -e 's/(\/usr\/bin\/google-chrome[a-zA-Z-]*)( |$)(?!--password-store=basic)/\1 --password-store=basic\2/' /usr/share/applications/google-chrome*",
+      unless  => "grep -E '/usr/bin/google-chrome[a-zA-Z-]* --password-store=basic' /usr/share/applications/google-chrome*",
+      require => Package['google-chrome-stable'];
   }
 }

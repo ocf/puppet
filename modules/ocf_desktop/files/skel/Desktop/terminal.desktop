@@ -2,4 +2,4 @@
 Type=Application
 Name=Terminal
 Exec=x-terminal-emulator
-Icon=terminal
+Icon=utilities-terminal

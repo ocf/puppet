@@ -51,7 +51,7 @@ repos:
     rev: 3.8.3
     hooks:
     - id: flake8
-      language_version: python3.5
+      language_version: python3.7
 -   repo: https://github.com/asottile/reorder_python_imports.git
     # We need to be using python3.6 by default before this can be upgraded to 2.x+
     rev: v1.9.0

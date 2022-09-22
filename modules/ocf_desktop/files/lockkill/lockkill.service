@@ -1,0 +1,17 @@
+[Unit]
+Description=Daemon to kill locked sessions
+Requires=systemd-logind.service
+After=systemd-logind.service
+
+[Service]
+ExecStart=/opt/share/puppet/lockkill
+Restart=always
+User=ocflockkill
+Group=nogroup
+
+ProtectSystem=strict
+ProtectHome=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

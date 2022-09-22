@@ -16,6 +16,7 @@ mod 'herculesteam-augeasproviders_sysctl', '2.3.1' # Dependency of puppetlabs-ku
 mod 'puppet-nginx',                        '3.3.0'
 mod 'puppet-archive',                      '6.0.1' # Dependency of puppet-prometheus
 mod 'puppet-prometheus',                   '12.2.0'
+mod 'puppet-alternatives',                 '4.0.0'
 mod 'puppetlabs-apache',                   '3.1.0'
 mod 'puppetlabs-apt',                      '6.3.0'
 mod 'puppetlabs-concat',                   '4.2.1'

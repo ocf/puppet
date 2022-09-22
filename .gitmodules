@@ -1,0 +1,3 @@
+[submodule "modules/ocf_desktop/files/kde-applets/plasma-applet-commandoutput"]
+	path = modules/ocf_desktop/files/kde-applets/plasma-applet-commandoutput
+	url = https://github.com/Zren/plasma-applet-commandoutput.git
