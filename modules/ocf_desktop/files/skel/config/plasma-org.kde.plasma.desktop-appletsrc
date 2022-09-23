@@ -36,7 +36,7 @@ wallpaperplugin=org.kde.image
 PreloadWeight=42
 
 [Containments][18][Wallpaper][org.kde.image][General]
-Image=file:///opt/share/xsession/images/background.png
+Image=file:///opt/share/xsession/images/background-secondary.png
 
 [Containments][19]
 ItemGeometriesHorizontal=
@@ -52,7 +52,7 @@ wallpaperplugin=org.kde.image
 PreloadWeight=42
 
 [Containments][19][Wallpaper][org.kde.image][General]
-Image=file:///opt/share/xsession/images/background.png
+Image=file:///opt/share/xsession/images/background-secondary.png
 
 [Containments][2]
 activityId=
