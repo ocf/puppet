@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 import os
 import subprocess
+import sys
 from pathlib import Path
 from typing import Dict
 from typing import Optional
+
+
+def eprint(*args, **kwargs):
+    print(*args, **kwargs, file=sys.stderr)
 
 # Based on github/octocatalog-diff:examples/scritp-overrides/git-extract-submodules/git-extract.sh
 # (b2834b58bfd0c2f22797daccff53bcdf8cda915b)
@@ -57,14 +62,14 @@ if __name__ == '__main__':
     target_dir = Path(EXTRACT_TARGET).resolve()
     target_sha = get_commit_hash(EXTRACT_BRANCH)
     worktree_status = get_worktree_status()
-    print(f'target_dir: {target_dir}')
-    print(f'target_sha: {target_sha}')
-    print(f'worktree_status : {worktree_status}')
+    eprint(f'target_dir: {target_dir}')
+    eprint(f'target_sha: {target_sha}')
+    eprint(f'worktree_status : {worktree_status}')
     needs_update = False  # do submodules need updating?
     if target_dir not in worktree_status:
         # worktree doesn't exist
         needs_update = True
-        print('adding worktree')
+        eprint('adding worktree')
         subprocess.run(
             ['git', 'worktree', 'add', str(target_dir), target_sha],
             check=True,
@@ -72,14 +77,14 @@ if __name__ == '__main__':
     elif worktree_status[target_dir]['HEAD'] != target_sha:
         # worktree exists, but is the wrong commit
         needs_update = True
-        print('updating worktree (checkout)')
+        eprint('updating worktree (checkout)')
         subprocess.run(
             ['git', 'checkout', target_sha],
             check=True,
             cwd=target_dir
         )
     if needs_update:
-        print('updating submodules')
+        eprint('updating submodules')
         subprocess.run(
             ['git', 'submodule', 'sync', '--recursive'],
             check=True,
