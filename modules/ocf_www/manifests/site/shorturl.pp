@@ -27,7 +27,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/announce$ https://groups.google.com/a/lists.berkeley.edu/forum/#!forum/ocf/join [NE,R]'},
       {rewrite_rule => '^/apply$ https://forms.gle/NJKkJt9JRQBvpxhF9 [R]'},
       {rewrite_rule => '^/apparel$ https://docs.google.com/forms/d/e/1FAIpQLSdJJeyRjkJhGVcH9frHtE6dtXHbgfD-fy9J5d2wRkzqSl5nPw/viewform [R]'},
-      {rewrite_rule => '^/banquet$ https://docs.google.com/forms/d/e/1FAIpQLSfAVTI1Q5MJRgG5tk0pVqkBFkft4-9mVeTatq-mH7u6VX-S5w/viewform?usp=sf_link [R]'},
+      {rewrite_rule => '^/banquet$ https://forms.gle/z2d8H8K4VoJEq1hw5 [R]'},
       {rewrite_rule => '^/bjb$ https://jukebox.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/bod(/.*)?$ https://www.ocf.berkeley.edu/~staff/bod$1 [R]'},
       {rewrite_rule => '^/buy$ https://goo.gl/forms/PnlB5dJawGZcUS0S2 [R]'},
