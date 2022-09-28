@@ -38,6 +38,9 @@ module OctocatalogDiff
       # on reaper for instance)
       settings[:master_cache_branch] = settings[:from_env]
 
+      # Use script overrides to checkout submodules correctly
+      settings[:override_script_path] = 'octocatalog-diff/scripts'
+
       settings[:validate_references] = %w(before notify require subscribe)
       settings[:header] = :default
 
