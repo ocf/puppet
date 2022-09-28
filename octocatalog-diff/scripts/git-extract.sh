@@ -17,4 +17,5 @@ if [ -z "$OCD_GIT_EXTRACT_TARGET" ]; then
 fi
 
 set -euf -o pipefail
-git clone --single-branch -b "$OCD_GIT_EXTRACT_BRANCH" . "$OCD_GIT_EXTRACT_TARGET" --recurse-submodules
+git worktree add -f "$OCD_GIT_EXTRACT_TARGET" "$OCD_GIT_EXTRACT_BRANCH" --detach
+( cd "$OCD_GIT_EXTRACT_TARGET" && git submodule sync --recursive && git submodule update --init --recursive )
