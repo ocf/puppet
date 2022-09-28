@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copied from github/octocatalog-diff:examples/scritp-overrides/git-extract-submodules/git-extract.sh
+# Based on github/octocatalog-diff:examples/scritp-overrides/git-extract-submodules/git-extract.sh
 # (b2834b58bfd0c2f22797daccff53bcdf8cda915b)
 
 # This script is called from lib/octocatalog-diff/catalog-util/git.rb and is used to
@@ -17,6 +17,6 @@ if [ -z "$OCD_GIT_EXTRACT_TARGET" ]; then
 fi
 
 set -euf -o pipefail
-git worktree remove -f "$OCD_GIT_EXTRACT_TARGET"
+git worktree remove -f "$OCD_GIT_EXTRACT_TARGET" || true
 git worktree add "$OCD_GIT_EXTRACT_TARGET" "$OCD_GIT_EXTRACT_BRANCH" --detach
 ( cd "$OCD_GIT_EXTRACT_TARGET" && git submodule sync --recursive && git submodule update --init --recursive )
