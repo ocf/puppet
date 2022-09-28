@@ -17,5 +17,6 @@ if [ -z "$OCD_GIT_EXTRACT_TARGET" ]; then
 fi
 
 set -euf -o pipefail
-git worktree add -f "$OCD_GIT_EXTRACT_TARGET" "$OCD_GIT_EXTRACT_BRANCH" --detach
+git worktree remove -f "$OCD_GIT_EXTRACT_TARGET"
+git worktree add "$OCD_GIT_EXTRACT_TARGET" "$OCD_GIT_EXTRACT_BRANCH" --detach
 ( cd "$OCD_GIT_EXTRACT_TARGET" && git submodule sync --recursive && git submodule update --init --recursive )
