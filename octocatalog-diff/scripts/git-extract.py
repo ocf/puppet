@@ -7,14 +7,15 @@ from typing import Dict
 from typing import Optional
 
 
-def eprint(*args, **kwargs):
-    print(*args, **kwargs, file=sys.stderr)
-
 # Based on github/octocatalog-diff:examples/script-overrides/git-extract-submodules/git-extract.sh
 # (b2834b58bfd0c2f22797daccff53bcdf8cda915b)
 
 # This script is called from lib/octocatalog-diff/catalog-util/git.rb and is used to
 # archive and extract a certain branch of a git repository into a target directory.
+
+
+def eprint(*args, **kwargs):
+    print(*args, **kwargs, file=sys.stderr)
 
 
 def get_worktree_status(cwd: Optional[Path] = None) -> Dict[Path, Dict[str, str]]:
@@ -62,9 +63,6 @@ if __name__ == '__main__':
     target_dir = Path(EXTRACT_TARGET).resolve()
     target_sha = get_commit_hash(EXTRACT_BRANCH)
     worktree_status = get_worktree_status()
-    eprint(f'target_dir: {target_dir}')
-    eprint(f'target_sha: {target_sha}')
-    eprint(f'worktree_status : {worktree_status}')
     needs_update = False  # do submodules need updating?
     if target_dir not in worktree_status:
         # worktree doesn't exist
