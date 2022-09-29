@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -62,12 +63,20 @@ if __name__ == '__main__':
 
     target_dir = Path(EXTRACT_TARGET).resolve()
     target_sha = get_commit_hash(EXTRACT_BRANCH)
+
+    subprocess.run(
+        ('git', 'worktree', 'prune'),
+        check=True,
+    )
+
     worktree_status = get_worktree_status()
     needs_update = False  # do submodules need updating?
     if target_dir not in worktree_status:
         # worktree doesn't exist
         needs_update = True
         eprint('adding worktree')
+        if target_dir.exists():
+            shutil.rmtree(target_dir)
         subprocess.run(
             ('git', 'worktree', 'add', str(target_dir), target_sha),
             check=True,
