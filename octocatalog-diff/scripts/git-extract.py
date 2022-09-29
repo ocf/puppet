@@ -10,7 +10,7 @@ from typing import Optional
 def eprint(*args, **kwargs):
     print(*args, **kwargs, file=sys.stderr)
 
-# Based on github/octocatalog-diff:examples/scritp-overrides/git-extract-submodules/git-extract.sh
+# Based on github/octocatalog-diff:examples/script-overrides/git-extract-submodules/git-extract.sh
 # (b2834b58bfd0c2f22797daccff53bcdf8cda915b)
 
 # This script is called from lib/octocatalog-diff/catalog-util/git.rb and is used to
@@ -19,7 +19,7 @@ def eprint(*args, **kwargs):
 
 def get_worktree_status(cwd: Optional[Path] = None) -> Dict[Path, Dict[str, str]]:
     process = subprocess.run(
-        ['git', 'worktree', 'list', '--porcelain'],
+        ('git', 'worktree', 'list', '--porcelain'),
         check=True,
         stdout=subprocess.PIPE,
         cwd=cwd,
@@ -48,7 +48,7 @@ def get_worktree_status(cwd: Optional[Path] = None) -> Dict[Path, Dict[str, str]
 
 def get_commit_hash(ref: str, repo: Optional[Path] = None) -> str:
     return subprocess.run(
-        ['git', 'rev-parse', ref],
+        ('git', 'rev-parse', ref),
         check=True,
         stdout=subprocess.PIPE,
         cwd=repo,
@@ -71,7 +71,7 @@ if __name__ == '__main__':
         needs_update = True
         eprint('adding worktree')
         subprocess.run(
-            ['git', 'worktree', 'add', str(target_dir), target_sha],
+            ('git', 'worktree', 'add', str(target_dir), target_sha),
             check=True,
         )
     elif worktree_status[target_dir]['HEAD'] != target_sha:
@@ -79,19 +79,19 @@ if __name__ == '__main__':
         needs_update = True
         eprint('updating worktree (checkout)')
         subprocess.run(
-            ['git', 'checkout', target_sha],
+            ('git', 'checkout', target_sha),
             check=True,
             cwd=target_dir
         )
     if needs_update:
         eprint('updating submodules')
         subprocess.run(
-            ['git', 'submodule', 'sync', '--recursive'],
+            ('git', 'submodule', 'sync', '--recursive'),
             check=True,
             cwd=target_dir,
         )
         subprocess.run(
-            ['git', 'submodule', 'update', '--init', '--recursive'],
+            ('git', 'submodule', 'update', '--init', '--recursive'),
             check=True,
             cwd=target_dir,
         )
