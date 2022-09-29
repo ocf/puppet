@@ -35,6 +35,7 @@ GITHUB_COLLAPSE_CONTAINER = '''
 
 def info(output):
     print(output, file=sys.stderr)
+    sys.stderr.flush()
 
 
 def setup_cache():
