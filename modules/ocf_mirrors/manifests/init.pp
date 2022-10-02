@@ -45,6 +45,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::osdn
   include ocf_mirrors::projects::parrot
   include ocf_mirrors::projects::parabola
+  include ocf_mirrors::projects::pikvm
   include ocf_mirrors::projects::puppetlabs
   include ocf_mirrors::projects::qt
   include ocf_mirrors::projects::qubes
