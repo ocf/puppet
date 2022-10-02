@@ -11,7 +11,7 @@ class ocf_mirrors::projects::pikvm {
   ocf_mirrors::timer {
     'pikvm':
       exec_start => '/opt/mirrors/project/pikvm/sync-archive',
-      minute     => '30';
       hour       => '0/12',
+      minute     => '30';
   }
 }
