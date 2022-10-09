@@ -43,6 +43,7 @@ def setup_cache():
 
     subprocess.check_call((
         'octocatalog-diff',
+        '--debug',
         '--bootstrap-then-exit',
         '--bootstrapped-from-dir={}'.format(cache_path),
     ))
