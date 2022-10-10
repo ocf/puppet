@@ -57,6 +57,7 @@ encrypt_cmd="gpg --homedir $gpgdir \
                  --recipient benzhang4@gmail.com \
                  --recipient daniel@dkess.me \
                  --recipient kmo@ocf.berkeley.edu \
+                 --recipient jonathan@bbs4.us \
                  --output \$FILE.gpg -"
 
 split_parts_and_encrypt() {
