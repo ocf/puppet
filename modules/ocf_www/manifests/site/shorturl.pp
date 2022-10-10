@@ -73,6 +73,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/gdrive/staff$ https://drive.google.com/drive/folders/0AKXh7iBur_mbUk9PVA [R]'},
       {rewrite_rule => '^/gdrive/officers$ https://drive.google.com/drive/folders/0APZdR8kE4NN1Uk9PVA [R]'},
       {rewrite_rule => '^/guest$ https://goo.gl/forms/ImNfnZkrRrakZcIr1 [R]'},
+      {rewrite_rule => '^/halloween$ https://forms.gle/44kTL8Eo9Tr3GsH66 [R=301]'},
       {rewrite_rule => '^/help(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
       {rewrite_rule => '^/hiring$ https://docs.google.com/forms/d/e/1FAIpQLSeuJmYPV75oRWfVKEsIPYpPod2FqRwSqSj2i2-nRnY0NDCG8A/viewform [R]'},
       {rewrite_rule => '^/hiringinterest$ https://docs.google.com/forms/d/e/1FAIpQLSfuu2EN28bPksyA8h_BjRsHQvnzE8gk7gC5ySEAp50GExhUgg/viewform [R]'},
