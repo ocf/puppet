@@ -106,7 +106,6 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/minutes(/.*)?$ https://www.ocf.berkeley.edu/~staff/bod$1 [R]'},
       {rewrite_rule => '^/mirrorstats$ https://grafana.ocf.berkeley.edu/d/Jo_bRsyiz/mirrors?orgId=1 [R]'},
       {rewrite_rule => '^/mlk$ https://www.ocf.berkeley.edu/mlk [R]'},
-      {rewrite_rule => '^/(mon|munin)$ https://munin.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/mysql$ https://www.ocf.berkeley.edu/docs/services/mysql/ [R]'},
       {rewrite_rule => '^/newstaff$ https://forms.gle/guESY2ykNkshNxsf8 [R]'},
       {rewrite_rule => '^/notes$ https://notes.ocf.berkeley.edu/ [R]'},

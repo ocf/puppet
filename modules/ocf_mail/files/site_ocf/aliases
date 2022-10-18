@@ -12,7 +12,6 @@ ocfstats: root
 jenkins: root
 rancid: root
 rancid-ocf: root
-munin: root
 
 # archive of outgoing mail for nomail'd users
 nomail: /var/mail/nomail/nomail
