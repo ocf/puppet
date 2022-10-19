@@ -37,7 +37,7 @@ class ocf_backups::rsnapshot {
 
     # ZFS
     'rsnapshot-daily':
-      command => "${rsnapshot}",
+      command => $rsnapshot,
       hour    => '2';
 
     # check rsnapshot backups to ensure they're actually happening
