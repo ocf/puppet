@@ -20,13 +20,16 @@ class ocf_desktop::packages {
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
       'musescore3', 'mpv', 'mssh', 'mumble', 'numlockx',
       'simple-scan', 'ssh-askpass-gnome', 'texmaker',
-      'texstudio', 'vlc', 'xarchiver', 'xcape', 'xournal', 'xterm']:;
+      'texstudio', 'tigervnc-viewer', 'vlc', 'xarchiver', 'xcape', 'xournal',
+      'xterm']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'arc-theme',
       'desktop-file-utils', 'gnome-icon-theme', 'paper-icon-theme', 'redshift',
       'xfce4-whiskermenu-plugin']:;
     # desktop helpers
     ['libimage-exiftool-perl']:;
+    # development:
+    ['openjdk-17-jdk']:;
     # display manager
     ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
     # games
@@ -46,63 +49,10 @@ class ocf_desktop::packages {
     ['wakeonlan']:;
     # Xorg
     ['xclip', 'xdotool', 'xsel', 'xserver-xorg', 'xscreensaver', 'freerdp2-x11']:;
-  }
-
-  if $::lsbdistcodename == 'stretch' {
-    package {
-      [
-        # preload hasn't been updated since 2009, and I'm not sure we really
-        # get anything out of it in terms of performance improvements at this
-        # point anyway.
-        'preload',
-
-        # Zenmap depends on Python 2 and is therefore no longer in bullseye
-        'zenmap',
-
-        # FUSE and exfat
-        'fuse',
-        'exfat-fuse',
-
-        # Florence was removed from bullseye due to deprecated dependency
-        # We should find an alternative
-        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=947521
-        'florence',
-      ]:;
-    }
-  }
-  if $::lsbdistcodename == 'buster' {
-    package {
-      [
-        # Zenmap depends on Python 2 and is therefore no longer in bullseye
-        'zenmap',
-
-        # FUSE and exfat
-        'fuse',
-        'exfat-fuse',
-
-        # Florence was removed from bullseye due to deprecated dependency
-        # We should find an alternative
-        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=947521
-        'florence',
-      ]:;
-    }
-  }
-  if $::lsbdistcodename == 'bullseye' {
-    package {
-      [
-        # OpenJDK 17 (LTS) is in bullseye
-        'openjdk-17-jdk',
-
-        # Matchbox is what we use on our RPi
-        'matchbox-keyboard',
-
-        # x4vncviewer is no longer present
-        'tigervnc-viewer',
-
-        # sshfs depends on fuse3 on bullseye
-        'fuse3',
-      ]:;
-    }
+    # Matchbox is what we use on our RPi
+    ['matchbox-keyboard']:;
+    # sshfs depends on fuse3 on bullseye
+    ['fuse3']:;
   }
 
   # Remove some packages
