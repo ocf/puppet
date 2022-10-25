@@ -13,7 +13,6 @@ class ocf {
   include ocf::locale
   include ocf::logging
   include ocf::motd
-  include ocf::munin::node
   include ocf::networking
   include ocf::node_exporter
   include ocf::packages

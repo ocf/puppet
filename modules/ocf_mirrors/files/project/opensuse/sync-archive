@@ -1,3 +1,3 @@
 #!/bin/sh -eu
-/usr/local/bin/rsync-no-vanished -rlptyH --delay-updates --delete-delay -v \
-	rsync://mirror.datto.com/opensuse /opt/mirrors/ftp/opensuse
+/usr/local/bin/rsync-no-vanished -rlptyH --delay-updates --delete-delay --exclude debug/ -v \
+	 rsync://stage.opensuse.org/opensuse-full-really-everything/opensuse/ /opt/mirrors/ftp/opensuse

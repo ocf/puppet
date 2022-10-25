@@ -5,7 +5,6 @@ ocf::packages::ntp::master: true
 ocf::packages::ntp::peers:
   - hal.ocf.berkeley.edu
   - pandemic.ocf.berkeley.edu
-  - jaws.ocf.berkeley.edu
   - riptide.ocf.berkeley.edu
 
 ocf_filehost::storage_device: '/dev/md/nfs'

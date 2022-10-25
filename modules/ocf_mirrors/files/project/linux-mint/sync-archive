@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -avHP --delete-after pub.linuxmint.com::pub \
+	/opt/mirrors/ftp/linux-mint

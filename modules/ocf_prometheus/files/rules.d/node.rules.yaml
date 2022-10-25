@@ -1,5 +1,4 @@
 # Alerts for node metrics
-# TODO: port Munin alerts to this
 groups:
   - name: node
     rules:

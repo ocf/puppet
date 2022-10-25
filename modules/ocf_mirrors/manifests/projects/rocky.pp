@@ -8,6 +8,13 @@ class ocf_mirrors::projects::rocky {
     recurse => true,
   }
 
+  ocf_mirrors::monitoring { 'rocky':
+    type          => 'http_last_modified',
+    upstream_host => 'download.rockylinux.org',
+    ts_path       => 'fullfiletimelist-rocky',
+    upstream_path => '/pub/rocky',
+  }
+
   ocf_mirrors::timer {
     'rocky':
       exec_start => '/opt/mirrors/project/rocky/sync-archive',

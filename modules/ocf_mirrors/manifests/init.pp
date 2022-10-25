@@ -6,14 +6,17 @@ class ocf_mirrors {
   include ocf_mirrors::firewall_input
   # projects
   include ocf_mirrors::projects::apache
+  include ocf_mirrors::projects::almalinux
   include ocf_mirrors::projects::alpine
   include ocf_mirrors::projects::archlinux
   include ocf_mirrors::projects::archlinuxcn
   include ocf_mirrors::projects::artix_linux
+  include ocf_mirrors::projects::blackarch
   include ocf_mirrors::projects::blender
   include ocf_mirrors::projects::centos
   include ocf_mirrors::projects::centos_altarch
   include ocf_mirrors::projects::centos_stream
+  include ocf_mirrors::projects::cran
   include ocf_mirrors::projects::debian
   include ocf_mirrors::projects::debian_nonfree
   include ocf_mirrors::projects::devuan
@@ -23,22 +26,33 @@ class ocf_mirrors {
   include ocf_mirrors::projects::freebsd
   include ocf_mirrors::projects::gentoo_distfiles
   include ocf_mirrors::projects::gentoo_portage
+  include ocf_mirrors::projects::gimp
   include ocf_mirrors::projects::gnome
   include ocf_mirrors::projects::gnu
+  include ocf_mirrors::projects::ipfire
   include ocf_mirrors::projects::kali
   include ocf_mirrors::projects::kde
   include ocf_mirrors::projects::kde_applicationdata
+  include ocf_mirrors::projects::libreelec
+  include ocf_mirrors::projects::linux_mint
+  include ocf_mirrors::projects::linuxmint_packages
   include ocf_mirrors::projects::manjaro
+  include ocf_mirrors::projects::mx_linux
+  include ocf_mirrors::projects::mx_packages
   include ocf_mirrors::projects::openbsd
   include ocf_mirrors::projects::opensuse
+  include ocf_mirrors::projects::openwrt
+  include ocf_mirrors::projects::osdn
   include ocf_mirrors::projects::parrot
   include ocf_mirrors::projects::parabola
+  include ocf_mirrors::projects::pikvm
   include ocf_mirrors::projects::puppetlabs
   include ocf_mirrors::projects::qt
   include ocf_mirrors::projects::qubes
   include ocf_mirrors::projects::raspbian
   include ocf_mirrors::projects::raspi
   include ocf_mirrors::projects::rocky
+  include ocf_mirrors::projects::rpmfusion
   include ocf_mirrors::projects::sage
   include ocf_mirrors::projects::slackware
   include ocf_mirrors::projects::tails
@@ -75,9 +89,8 @@ class ocf_mirrors {
     '::nginx':
       manage_repo             => false,
       include_modules_enabled => true,
-      sendfile                => 'off',
       http_raw_append         => @(END);
-      gzip on;
+      sendfile_max_chunk 20m;
       log_format main '$remote_addr - $remote_user [$time_local] '
                 '"$request" $status $body_bytes_sent "$http_referer" '
                 '"$http_user_agent" rt=$request_time $request_length $bytes_sent';
@@ -94,12 +107,12 @@ class ocf_mirrors {
       group   => mirrors,
       require => User['mirrors'];
 
-    '/opt/mirrors/ftp/README.html':
+    '/opt/mirrors/ftp/test/README.html':
       source => 'puppet:///modules/ocf_mirrors/README.html',
       owner  => mirrors,
       group  => mirrors;
 
-    '/opt/mirrors/ftp/FOOTER.html':
+    '/opt/mirrors/ftp/test/FOOTER.html':
       source => 'puppet:///modules/ocf_mirrors/FOOTER.html',
       owner  => mirrors,
       group  => mirrors;
@@ -129,20 +142,16 @@ class ocf_mirrors {
     raw_append           => @(END),
       fancyindex on;
       fancyindex_name_length 100;
+      fancyindex_header /theme/header.html;
+      fancyindex_footer /theme/footer.html;
       fancyindex_exact_size off;
-      fancyindex_footer /FOOTER.html;
-      if ($http_user_agent ~ "(MSIE 7\.0; Windows NT (6\.1|6\.2)|Chrome\/34\.0|Chrome\/49\.0|Chrome\/67\.0|Edg\/85\.0\.537\.0)") {
-        return 403;
-      }
+      fancyindex_show_path off;
       END
   }
   nginx::resource::location { '= /':
-    ensure     => present,
-    server     => 'mirrors.ocf.berkeley.edu',
-    ssl        => true,
-    raw_append => @(END),
-      fancyindex_header /README.html;
-      END
+    ensure => present,
+    server => 'mirrors.ocf.berkeley.edu',
+    ssl    => true,
   }
   nginx::resource::location { '~ ^/tails':
     server      => 'mirrors.ocf.berkeley.edu',
@@ -152,12 +161,14 @@ class ocf_mirrors {
       etag off;
       END
   }
-  nginx::resource::location { '~ /\.(?!well-known).*':
-    ensure     => present,
-    server     => 'mirrors.ocf.berkeley.edu',
-    ssl        => true,
-    raw_append => @(END),
-      deny all;
+  nginx::resource::location { '~ \.iso$':
+    server      => 'mirrors.ocf.berkeley.edu',
+    ssl         => true,
+    index_files => undef,
+    raw_append  => @(END),
+      if ($http_user_agent = "curl/7.29.0") {
+        return 403;
+      }
       END
   }
   nginx::resource::server { 'mirrors.berkeley.edu':
@@ -165,6 +176,7 @@ class ocf_mirrors {
     ipv6_enable         => true,
     ipv6_listen_port    => 80,
     www_root            => '/var/www',
+    autoindex           => 'on',
     location_cfg_append => {
       'rewrite' => '^ http://mirrors.ocf.berkeley.edu permanent'
     }

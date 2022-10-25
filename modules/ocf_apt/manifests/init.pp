@@ -10,8 +10,6 @@ class ocf_apt {
 
   package {
     [
-      'nginx-full',
-      'libnginx-mod-http-fancyindex',
       'reprepro',
     ]:;
   }
@@ -84,19 +82,13 @@ class ocf_apt {
     ipv6_enable      => true,
     ipv6_listen_port => 80,
     format_log       => 'main',
-    raw_append       => @(END),
-      fancyindex on;
-      fancyindex_exact_size off;
-      END
+    autoindex        => 'on',
   }
   nginx::resource::location { '=  /':
-    ensure     => present,
-    server     => ['apt.ocf.berkeley.edu', 'apt'],
-    www_root   => '/opt/apt/ftp',
-    ssl        => true,
-    raw_append => @(END),
-      fancyindex_header README.html;
-      END
+    ensure   => present,
+    server   => ['apt.ocf.berkeley.edu', 'apt'],
+    www_root => '/opt/apt/ftp',
+    ssl      => true,
   }
   nginx::resource::location { '~  /\.(?!well-known).*':
     ensure     => present,
