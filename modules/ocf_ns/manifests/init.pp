@@ -32,10 +32,6 @@ class ocf_ns {
     notify   => Service['bind9'];
   }
 
-  ocf::munin::plugin { 'ping-report':
-    source => 'puppet:///modules/ocf_ns/ping-report',
-  }
-
   ocf::firewall::firewall46 {
     '101 allow domain':
       opts => {
