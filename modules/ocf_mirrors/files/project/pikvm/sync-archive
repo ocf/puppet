@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -auzHv --delete --delete-after --delay-updates --safe-links \
+	rsync://files.pikvm.org/repos/ /opt/mirrors/ftp/pikvm

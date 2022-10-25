@@ -34,6 +34,8 @@ def update_func(healthcheck):
         return get_updated_datetime
     elif healthcheck == 'recursive_ls':
         return get_updated_recursive_ls
+    elif healthcheck == 'http_last_modified':
+        return get_updated_http_last_modified
     else:
         raise ValueError('Unsupported type: {}'.format(healthcheck))
 
@@ -46,7 +48,7 @@ def get_updated_datetime(mirror_url):
     """
     req = requests.get(mirror_url)
     req.raise_for_status()
-    return dateutil.parser.parse(req.text.splitlines()[0])
+    return dateutil.parser.parse(req.text.splitlines()[0], fuzzy=True)
 
 
 def get_updated_unix_timestamp(mirror_url):
@@ -73,6 +75,17 @@ def get_updated_recursive_ls(mirror_url):
     dates = [' '.join(line.split()[5:7]) for line in req.text.splitlines()
              if len(line.split()) == 8]
     return dateutil.parser.parse(max(dates))
+
+
+def get_updated_http_last_modified(mirror_url):
+    """Find the time the host was last synced.
+    The header content should be of the form "Sat, 30 Apr 2022 19:16:24 GMT".
+    >>> get_updated_http_last_modified(mirror_url)
+    datetime.datetime(2022, 4, 30, 19, 16, 24, tzinfo=tzutc())
+    """
+    req = requests.head(mirror_url)
+    req.raise_for_status()
+    return dateutil.parser.parse(req.headers['last-modified'])
 
 
 def get_updated_debian(mirror_url):

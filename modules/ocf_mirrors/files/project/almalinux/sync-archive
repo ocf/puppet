@@ -1,0 +1,4 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -avSH -f 'R .~tmp~' --delete-delay --delay-updates \
+	rsync://rsync.repo.almalinux.org/almalinux/ \
+	/opt/mirrors/ftp/almalinux

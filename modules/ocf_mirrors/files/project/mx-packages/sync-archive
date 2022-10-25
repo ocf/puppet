@@ -1,0 +1,4 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -rtv --delete --delete-after --delay-updates \
+	--safe-links --password-file=/opt/mirrors/project/mx-packages/sync_password \
+	rsuser@iso.mxrepo.com::workspace /opt/mirrors/ftp/mx-packages

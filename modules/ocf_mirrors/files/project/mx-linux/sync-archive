@@ -1,0 +1,4 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -rtv --delete --delete-after --delay-updates \
+	--safe-links --password-file=/opt/mirrors/project/mx-linux/sync_password \
+	downstreamtestuser@rsync-mxlinux.org::MX-Linux/ /opt/mirrors/ftp/mx-linux

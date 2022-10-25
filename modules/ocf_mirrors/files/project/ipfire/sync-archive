@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -avHz --delete --delay-updates \
+	rsync.ipfire.org::current /opt/mirrors/ftp/ipfire/
