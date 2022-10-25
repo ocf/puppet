@@ -1,0 +1,58 @@
+<!DOCTYPE gui>
+<gui name="okular_shell" translationDomain="kxmlgui5" version="9">
+ <MenuBar>
+  <Menu name="file" noMerge="1">
+   <text translationDomain="kxmlgui5">&amp;File</text>
+   <Action name="file_open"/>
+   <Action name="file_open_recent"/>
+   <DefineGroup name="file_open" append="open_merge"/>
+   <Action name="undo-close-tab" append="open_merge"/>
+   <Separator weakSeparator="1"/>
+   <DefineGroup name="file_save" append="save_merge"/>
+   <Separator weakSeparator="1"/>
+   <Action name="file_print"/>
+   <DefineGroup name="file_print" append="print_merge"/>
+   <Separator weakSeparator="1"/>
+   <Action name="file_close"/>
+   <Separator weakSeparator="1"/>
+   <Action name="file_quit"/>
+  </Menu>
+  <Menu name="view" noMerge="1">
+   <text translationDomain="kxmlgui5">&amp;View</text>
+   <Action name="fullscreen"/>
+  </Menu>
+  <Merge/>
+  <Menu name="settings" noMerge="1">
+   <text translationDomain="kxmlgui5">&amp;Settings</text>
+   <Action name="options_show_menubar"/>
+   <Merge name="StandardToolBarMenuHandler"/>
+   <Merge name="KMDIViewActions"/>
+   <DefineGroup name="show_merge" append="show_merge"/>
+   <Separator weakSeparator="1"/>
+   <Action name="switch_application_language"/>
+   <Action name="options_configure_keybinding"/>
+   <Action name="options_configure_toolbars"/>
+   <DefineGroup name="configure_merge" append="configure_merge"/>
+  </Menu>
+  <Separator weakSeparator="1"/>
+  <Menu name="help" noMerge="1">
+   <text translationDomain="kxmlgui5">&amp;Help</text>
+   <Action name="help_contents"/>
+   <Action name="help_whats_this"/>
+   <Separator weakSeparator="1"/>
+   <Action name="help_report_bug"/>
+   <Separator weakSeparator="1"/>
+   <Action name="help_donate"/>
+   <Separator weakSeparator="1"/>
+   <DefineGroup name="about_merge" append="about_merge"/>
+   <Action name="help_about_app"/>
+   <Action name="help_about_kde"/>
+  </Menu>
+ </MenuBar>
+ <ToolBar name="mainToolBar" noMerge="1">
+  <text translationDomain="okular">Main Toolbar</text>
+  <!--Action name="file_open_recent" /-->
+  <!--Action name="file_print" /-->
+  <Action name="file_print"/>
+ </ToolBar>
+</gui>

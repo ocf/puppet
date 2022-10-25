@@ -8,6 +8,5 @@ ocf::networking::bond: true
 ocf::packages::ntp::master: true
 ocf::packages::ntp::peers:
     - hal.ocf.berkeley.edu
-    - jaws.ocf.berkeley.edu
     - riptide.ocf.berkeley.edu
     - dataloss.ocf.berkeley.edu

@@ -2,7 +2,9 @@ classes:
     - ocf_desktop
 
 ocf::auth::glogin: [[ocf, LOCAL]]
-ocf::auth::ulogin: [[lightdm, LOCAL]]
+ocf::auth::ulogin: [[lightdm, LOCAL], [sddm, LOCAL]]
+
+ocf_desktop::xsession::scale: 1.0
 
 # Allow ocfroot to use docker without sudo
 ocf::packages::docker::admin_group: ocfroot

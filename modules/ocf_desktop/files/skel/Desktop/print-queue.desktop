@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Application
 Name=Print Queue
-Exec=x-www-browser http://printhost/jobs/
-Icon=xfce-printer
+Exec=google-chrome --start-maximized --password-store=basic http://printhost/jobs/
+Icon=printer-network-symbolic

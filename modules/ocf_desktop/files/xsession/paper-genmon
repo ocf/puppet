@@ -23,9 +23,7 @@ def main(argv=None):
             daily_quota = quota.daily
             semester_quota = quota.semesterly
 
-    print('<img>{}</img>'.format(IMAGE_PATH))
-
-    PANEL_TEXT = '<txt> {} {} left today | {} left this semester </txt>'
+    PANEL_TEXT = '{} {} left today | {} left this semester'
     print(PANEL_TEXT.format(daily_quota, 'side of paper' if daily_quota == 1 else 'sides of paper',
                             semester_quota
                             ))

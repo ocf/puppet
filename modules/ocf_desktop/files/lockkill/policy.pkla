@@ -1,0 +1,6 @@
+# Allow actions required by lockkill service
+
+[lockkill user]
+Identity=unix-user:ocflockkill
+Action=org.freedesktop.login1.manage;org.freedesktop.login1.lock-sessions
+ResultAny=yes

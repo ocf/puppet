@@ -103,9 +103,9 @@ def display_cancelled_notification():
 def timebomb_explode():
     """Runs the lock command or logout command."""
     if is_staffer:
-        cmd = ['xflock4']
+        cmd = ['loginctl', 'lock-session']
     else:
-        cmd = ['xfce4-session-logout', '--logout']
+        cmd = ['loginctl', 'terminate-session', os.environ.get('XDG_SESSION_ID')]
 
     try:
         os.execvp(cmd[0], cmd)

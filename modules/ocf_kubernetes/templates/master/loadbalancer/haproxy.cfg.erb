@@ -45,6 +45,9 @@ frontend lb-https
   # send dev-kubernetes traffic into the cluster
   use_backend kubernetes if { hdr_end(host) -i .dev-kubernetes.ocf.berkeley.edu .dev-kubernetes.ocf.berkeley.edu:443 }
 
+  # send *.code traffic into the cluster
+  use_backend kubernetes if { hdr_end(host) -i .code.ocf.berkeley.edu .code.ocf.berkeley.edu:443 }
+
   <%- @kubernetes_services.each do |service_name| -%>
   use_backend kubernetes if { hdr(host) -i <%= service_name %>.ocf.berkeley.edu <%= service_name %>.ocf.berkeley.edu:443 }
   <%- end -%>

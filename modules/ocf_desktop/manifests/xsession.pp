@@ -1,8 +1,23 @@
-class ocf_desktop::xsession {
+class ocf_desktop::xsession(
+  Float[1.0, 3.0] $scale = 1.0
+) {
   $staff_only = lookup('staff_only')
 
   require ocf_desktop::packages
-  include ocf_desktop::xfce
+  include ocf_desktop::kde
+  include ocf_desktop::lockkill
+
+  # Scaling variables
+  $dpi = round($scale * 96)
+  # These sizes are specific to the cursor theme (currently, Breeze)
+  if $scale < 1.5 {
+    $cursor_size = 24
+  } elsif $scale < 2 {
+    $cursor_size = 36
+  } else {
+    $cursor_size = 48
+  }
+  $panel_height = round($scale * 48)
 
   # Xsession configuration
   file {
@@ -45,6 +60,8 @@ class ocf_desktop::xsession {
       recurse => true,
       force   => true,
       backup  => false;
+    '/usr/share/xsessions/lightdm-xsession.desktop':
+      ensure => absent;
     '/opt/share/xsession':
       ensure  => directory;
     '/opt/share/xsession/images':
@@ -81,7 +98,7 @@ class ocf_desktop::xsession {
     '/etc/lightdm/lightdm.conf':
       source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm.conf';
     '/etc/lightdm/lightdm-gtk-greeter.conf':
-      source  => 'puppet:///modules/ocf_desktop/xsession/lightdm/lightdm-gtk-greeter.conf';
+      content => template('ocf_desktop/xsession/lightdm-gtk-greeter.conf.erb');
     '/etc/X11/default-display-manager':
       content => "/usr/sbin/lightdm\n";
     '/etc/lightdm/session-setup':
@@ -146,14 +163,20 @@ class ocf_desktop::xsession {
         target  => '/opt/share/xsession/images/ocf-color-256.png',
         require => File['/opt/share/xsession/images'];
     }
-}
+  }
 
 
   # polkit configuration
   file {
     # restrict polkit actions
     '/etc/polkit-1/localauthority/90-mandatory.d/99-ocf.pkla':
-      source => 'puppet:///modules/ocf_desktop/xsession/polkit/99-ocf.pkla',
+      #source => 'puppet:///modules/ocf_desktop/xsession/polkit/99-ocf.pkla',
+      # Workaround for bug causing polkit rules to be ignored - merge all
+      # rules into one file so that they are not ignored
+      content => join([
+        file('ocf_desktop/xsession/polkit/99-ocf.pkla'),
+        file('ocf_desktop/lockkill/policy.pkla'),
+      ], "\n"),
     ;
     # use ocfroot group for polkit admin auth
     '/etc/polkit-1/localauthority.conf.d/99-ocf.conf':
@@ -167,11 +190,27 @@ class ocf_desktop::xsession {
       ensure  => directory,
       source  => 'puppet:///modules/ocf_desktop/skel/config',
       recurse => true;
+    '/etc/skel/.local':
+      ensure  => directory,
+      source  => 'puppet:///modules/ocf_desktop/skel/local',
+      recurse => true;
     '/etc/skel/Desktop':
       ensure  => directory,
       source  => 'puppet:///modules/ocf_desktop/skel/Desktop',
       mode    => '0755',
       recurse => true;
+  }
+
+  # Templated config files (scale-dependent)
+  file {
+    '/etc/skel/.config/kdeglobals':
+      content   => template('ocf_desktop/skel/config/kdeglobals.erb');
+    '/etc/skel/.config/kcmfonts':
+      content   => template('ocf_desktop/skel/config/kcmfonts.erb');
+    '/etc/skel/.config/kcminputrc':
+      content   => template('ocf_desktop/skel/config/kcminputrc.erb');
+    '/etc/skel/.config/plasmashellrc':
+      content   => template('ocf_desktop/skel/config/plasmashellrc.erb');
   }
 
   # Fix desktop icon text color
@@ -241,5 +280,27 @@ class ocf_desktop::xsession {
   # Use GTK+ theme for Qt 4 apps
   file { '/etc/xdg/Trolltech.conf':
       source => 'puppet:///modules/ocf_desktop/xsession/Trolltech.conf';
+  }
+
+  # IBus
+  file {
+    '/etc/xdg/autostart/ibus.desktop':
+      source  => 'puppet:///modules/ocf_desktop/xsession/ibus.desktop',
+      require => Package['ibus'];
+  }
+
+  # KDE Logout
+  file {
+    '/usr/share/applications/logout.desktop':
+      source  => 'puppet:///modules/ocf_desktop/xsession/logout.desktop',
+  }
+
+  file {
+    ['/usr/local/share/plasma', '/usr/local/share/plasma/plasmoids']:
+      ensure => directory;
+    '/usr/local/share/plasma/plasmoids/com.github.zren.commandoutput':
+      ensure  => directory,
+      source  => 'puppet:///modules/ocf_desktop/kde-applets/plasma-applet-commandoutput/package',
+      recurse => true;
   }
 }

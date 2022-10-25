@@ -152,11 +152,6 @@ class ocf_ldap {
     special => 'daily',
   }
 
-  ocf::munin::plugin { 'slapd-open-files':
-    source => 'puppet:///modules/ocf_ldap/munin/slapd-open-files',
-    user   => root,
-  }
-
   # firewall input rule, allow ldaps, port number 636
   ocf::firewall::firewall46 {
     '101 allow ldaps':
