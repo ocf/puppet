@@ -39,4 +39,5 @@ class ocf_backups::rsnapshot {
     'rsnapshot-daily':
       command => $rsnapshot,
       hour    => '23';
+  }
 }
