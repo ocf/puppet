@@ -24,4 +24,11 @@ class ocf_desktop::kde {
     path    => '/usr/bin/konsole',
     require => Package['konsole'];
   }
+
+  # Waddles
+  file {'/usr/share/plasma/look-and-feel/org.kde.breeze.desktop/contents/splash/images/plasma.svgz':
+    ensure  => link,
+    target  => '/opt/share/xsession/images/waddles.svgz',
+    require => Files['/opt/share/xsession/images'];
+  }
 }
