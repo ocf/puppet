@@ -38,11 +38,5 @@ class ocf_backups::rsnapshot {
     # ZFS
     'rsnapshot-daily':
       command => $rsnapshot,
-      hour    => '2';
-
-    # check rsnapshot backups to ensure they're actually happening
-    'check-rsnapshot-backups':
-      command => '/opt/share/backups/check-rsnapshot-backups',
-      hour    => '10';
-  }
+      hour    => '23';
 }
