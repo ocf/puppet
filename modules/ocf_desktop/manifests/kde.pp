@@ -24,5 +24,4 @@ class ocf_desktop::kde {
     path    => '/usr/bin/konsole',
     require => Package['konsole'];
   }
-
 }
