@@ -93,7 +93,7 @@ class ocf_desktop::xsession(
   }
 
   # Waddles
-  file {' /usr/share/plasma/look-and-feel/org.kde.breeze.desktop/contents/splash/images/plasma.svgz':
+  file { '/usr/share/plasma/look-and-feel/org.kde.breeze.desktop/contents/splash/images/plasma.svgz':
     ensure  => link,
     target  => '/opt/share/xsession/images/waddles.svgz',
     require => File['/opt/share/xsession/images'];
