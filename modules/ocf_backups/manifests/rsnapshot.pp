@@ -38,6 +38,7 @@ class ocf_backups::rsnapshot {
     # ZFS
     'rsnapshot-daily':
       command => $rsnapshot,
-      hour    => '23';
+      hour    => '22',
+      minute  => '20';
   }
 }
