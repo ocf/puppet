@@ -86,6 +86,8 @@ class ocf_desktop::packages {
       recommends => false;
     ['virt-manager', 'virt-viewer']:
       recommends => false;
+    'kicad':
+      backport_on => bullseye;
   }
 
   ocf::repackage {
