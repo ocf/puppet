@@ -84,10 +84,4 @@ class ocf_desktop::packages {
   }
 
 
-  exec {
-    'disable chrome password store':
-      command => "perl -pi -e 's/(\/usr\/bin\/google-chrome[a-zA-Z-]*)( |$)(?!--password-store=basic)/\1 --password-store=basic\2/' /usr/share/applications/google-chrome*",
-      unless  => "grep -E '/usr/bin/google-chrome[a-zA-Z-]* --password-store=basic' /usr/share/applications/google-chrome*",
-      require => Package['google-chrome-stable'];
-  }
 }

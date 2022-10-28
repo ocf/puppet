@@ -12,7 +12,6 @@
 # without concerns of redeclaring ocf::packages with different parameters.
 class ocf::extrapackages {
   # special snowflake packages that require some config
-  include ocf::packages::chrome
 #  include ocf::packages::emacs
   include ocf::packages::kubectl
   include ocf::packages::mysql
