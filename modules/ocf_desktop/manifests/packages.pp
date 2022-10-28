@@ -1,7 +1,5 @@
 class ocf_desktop::packages {
   include ocf::extrapackages
-  include ocf::packages::docker
-  include ocf::packages::fahclient
   include ocf::packages::fonts
   include ocf::packages::atom
 
@@ -15,7 +13,7 @@ class ocf_desktop::packages {
   # server (such as gimp)
   package {
     # applications
-    ['arandr', 'blender', 'claws-mail', 'clementine', 'eog', 'evince',
+    ['arandr', 'clementine', 'eog', 'evince',
       'filezilla', 'freeplane', 'geany', 'gimp',
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
       'musescore3', 'mpv', 'mssh', 'mumble', 'numlockx',
@@ -31,10 +29,10 @@ class ocf_desktop::packages {
     # development:
     ['openjdk-17-jdk']:;
     # display manager
-    ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
+    ['lightdm', 'lightdm-gtk-greeter']:;
     # games
     # graphics/plotting
-    ['r-cran-rgl', 'jupyter-qtconsole', 'rstudio']:;
+    ['r-cran-rgl', 'jupyter-qtconsole']:;
     # input method editors
     ['ibus', 'ibus-libpinyin', 'ibus-rime', 'ibus-hangul', 'ibus-mozc' ]:;
     # nonfree packages
