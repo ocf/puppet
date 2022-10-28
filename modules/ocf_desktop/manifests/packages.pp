@@ -1,7 +1,6 @@
 class ocf_desktop::packages {
   include ocf::extrapackages
   include ocf::packages::fonts
-  include ocf::packages::atom
 
   # Install packages specific to desktops
   #

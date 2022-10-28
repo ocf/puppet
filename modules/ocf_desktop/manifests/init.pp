@@ -1,10 +1,8 @@
 class ocf_desktop {
   include ocf::acct
   include ocf::packages::cups
-  include ocf::packages::element
   include ocf::packages::firefox
   include ocf::packages::pulse
-  include ocf::packages::vscode
   include ocf_desktop::crondeny
   include ocf_desktop::defaults
   include ocf_desktop::drivers
