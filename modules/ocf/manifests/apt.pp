@@ -161,7 +161,7 @@ class ocf::apt($stage = 'first') {
 
       'ocf':
           location => 'https://apt.ocf.berkeley.edu/',
-          release  => $::lsbdistcodename,
+          release  => 'bullseye',
           repos    => 'main',
           include  => {
           src => true
