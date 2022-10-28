@@ -3,7 +3,7 @@
 # it. The actual MySQL server turns off manage_service.
 class ocf::packages::mysql_server(
     $responsefile = undef,
-    $manage_service = true,
+    $manage_service = false,
 ) {
   package { 'mariadb-server':
     responsefile => $responsefile,
