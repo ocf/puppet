@@ -162,12 +162,4 @@ class ocf::packages {
       }
   }
   # Packages to only install on Debian (not on Raspbian for example)
-  if $::lsbdistid == 'Debian' {
-    package {
-      [
-        'aactivator',
-        'fluffy',
-      ]:;
-    }
-  }
 }
