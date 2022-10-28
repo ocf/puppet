@@ -34,6 +34,7 @@ class ocf::extrapackages {
     'automake',
     'biber',
     'bind9utils',
+    'bat',
     'bison',
     'bogofilter',
     'build-essential',
@@ -194,13 +195,6 @@ class ocf::extrapackages {
     ]:;
   }
 
-  if Integer($::os['distro']['release']['major']) >= 11 {
-    package {
-      [
-        'bat',
-      ]:;
-    }
-  }
 
   ocf::repackage { 'git-lfs':
     backport_on =>  ['buster', 'stretch'],
