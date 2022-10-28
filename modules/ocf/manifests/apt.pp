@@ -169,7 +169,7 @@ class ocf::apt($stage = 'first') {
 
       'ocf-backports':
           location => 'https://apt.ocf.berkeley.edu/',
-          release  => "${::lsbdistcodename}-backports",
+          release  => 'bullseye-backports',
           repos    => 'main',
           include  => {
           src => true
