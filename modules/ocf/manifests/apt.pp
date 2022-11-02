@@ -44,7 +44,7 @@ class ocf::apt($stage = 'first') {
           };
 
       'extended-lts':
-          location => 'http://deb.freexian.com/extended-lts',
+          location => 'https://mirrors.ocf.berkeley.edu/freexian/',
           release  => $::lsbdistcodename,
           repos    => $repos;
 

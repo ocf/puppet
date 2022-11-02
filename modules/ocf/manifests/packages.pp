@@ -154,12 +154,15 @@ class ocf::packages {
   }
   # only install the python3.7 packages on stretch
   # python3 is python3.7 on buster and python3.9 on bullseye
+
+  # install elts kernel on stretch
   if $::lsbdistcodename == 'stretch' {
     package {
         [
         'python3.7',
         'python3.7-dev',
         'python3.7-venv',
+        'linux-image-5.10-amd64',
         ]:;
       }
   }
