@@ -12,9 +12,7 @@ devices_ipv4_only:
     - bedbugs-mgmt
     - corruption-mgmt
     - dataloss-mgmt
-    - fallingrocks-mgmt
     - hal-mgmt
-    - jaws-mgmt
     - logjam
     - pagefault
     - pandemic-mgmt
