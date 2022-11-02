@@ -24,6 +24,7 @@ devices_ipv4_only:
 devices_ipv46:
     - radiation
 
+
 internal_zone_exceptions:
     - tsunami
     - vampires
