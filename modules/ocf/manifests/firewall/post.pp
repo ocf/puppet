@@ -79,6 +79,15 @@ class ocf::firewall::post {
     before => undef,
   }
 
+  $special_range_4 = lookup('special_range_4')
+  firewall_multi { '999 reject output (special devices range)':
+    chain     => 'PUPPET-OUTPUT',
+    proto     => 'all',
+    action    => 'reject',
+    dst_range => $special_range_4,
+    before    => undef,
+  }
+
   # reject from hosts in internal zone range but not actually internal
   if $ocf::firewall::reject_unrecognized_input {
     $reject_all = lookup('internal_zone_exceptions')
