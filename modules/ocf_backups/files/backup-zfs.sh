@@ -16,8 +16,4 @@ NEW_SNAPSHOT=$(cat $CURRENT_SNAPSHOT_FILE)
 echo "$CURRENT_SNAPSHOT"
 echo "$NEW_SNAPSHOT"
 
-if [ -t 0 ]; then
-        zfs send -cRwI backup/encrypted/rsnapshot@"$CURRENT_SNAPSHOT" backup/encrypted/rsnapshot@"$NEW_SNAPSHOT" | pv | ssh "$OFFSITE_HOST" "zfs recv -d data1/ocfbackup"
-else
-        zfs send -cRwI backup/encrypted/rsnapshot@"$CURRENT_SNAPSHOT" backup/encrypted/rsnapshot@"$NEW_SNAPSHOT" | ssh "$OFFSITE_HOST" "zfs recv -d data1/ocfbackup"
-fi
+syncoid -r --no-sync-snap --sendoptions "L w c" backup/encrypted/rsnapshot "$OFFSITE_HOST":data1/ocfbackup/encrypted/rsnapshot
