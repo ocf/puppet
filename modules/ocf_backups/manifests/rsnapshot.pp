@@ -28,7 +28,7 @@ class ocf_backups::rsnapshot {
 
   # TODO: update times listed here after move to remote backups
 
-  $rsnapshot = '/usr/local/sbin/backup-zfs.sh'
+  $rsnapshot = '/usr/local/sbin/backup-zfs.sh | tee -a /var/log/zfs-backup.log'
 
   cron {
     default:
@@ -38,7 +38,7 @@ class ocf_backups::rsnapshot {
     # ZFS
     'rsnapshot-daily':
       command => $rsnapshot,
-      hour    => '22',
-      minute  => '20';
+      hour    => '03',
+      minute  => '00';
   }
 }
