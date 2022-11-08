@@ -64,13 +64,13 @@ define ocf::privatefile(
   if $immutable {
     exec { 'chattr -immutable':
       before      => File[$title],
-      command     => "chattr -i $title",
+      command     => "chattr -i ${title}",
       refreshonly => true,
     }
 
     exec { 'chattr +immutable':
       subscribe   => File[$title],
-      command     => "chattr +i $title",
+      command     => "chattr +i ${title}",
       refreshonly => true,
     }
   }
