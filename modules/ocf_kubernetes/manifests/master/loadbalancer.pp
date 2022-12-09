@@ -39,7 +39,7 @@ class ocf_kubernetes::master::loadbalancer {
     'sourcegraph',
     'static',
     'templates',
-    'vaultwarden'
+    'vaultwarden',
   ]
 
   # redirects happen post-canonicalization, so needs fqdn
