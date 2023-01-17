@@ -99,6 +99,9 @@ class ocf_mirrors {
   }
   $ocfstats_password = lookup('ocfstats::mysql::password')
 
+  # Restart nginx if any cert changes occur
+  Class['ocf::ssl::default'] ~> Class['Nginx::Service']
+
   file {
     ['/opt/mirrors', '/opt/mirrors/ftp', '/opt/mirrors/project', '/opt/mirrors/bin']:
       ensure  => directory,
