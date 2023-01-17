@@ -97,7 +97,6 @@ class ocf_mirrors {
 
       END
   }
-  $ocfstats_password = lookup('ocfstats::mysql::password')
 
   # Restart nginx if any cert changes occur
   Class['ocf::ssl::default'] ~> Class['Nginx::Service']
@@ -218,9 +217,10 @@ class ocf_mirrors {
     mode   => '0755',
   }
 
+  $ocfstats_password = lookup('ocfstats::mysql::password')
   file {
     '/opt/ocfstats-password':
-      content   => lookup('ocfstats::mysql::password'),
+      content   => $ocfstats_password,
       mode      => '0600',
       owner     => 'root',
       group     => 'root',
