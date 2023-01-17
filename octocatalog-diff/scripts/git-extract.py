@@ -76,6 +76,7 @@ if __name__ == '__main__':
         needs_update = True
         eprint('adding worktree')
         if target_dir.exists():
+            # the worktree was in a broken state, so reset it
             shutil.rmtree(target_dir)
         subprocess.run(
             ('git', 'worktree', 'add', str(target_dir), target_sha),
