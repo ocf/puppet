@@ -120,6 +120,13 @@ class ocf::firewall::post {
       action => 'accept',
       before => undef;
 
+    '998 allow from internal zone (corruption, IPv4)':
+      chain  => 'PUPPET-INPUT',
+      source => '169.229.200.71',
+      proto  => 'all',
+      action => 'accept',
+      before => undef;
+
     '998 allow from internal zone (IPv6)':
       provider  => 'ip6tables',
       chain     => 'PUPPET-INPUT',
