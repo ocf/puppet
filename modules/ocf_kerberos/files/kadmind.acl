@@ -22,6 +22,7 @@ longlian/admin@OCF.BERKELEY.EDU         all,get-keys
 mcint/admin@OCF.BERKELEY.EDU            all,get-keys
 mdcha/admin@OCF.BERKELEY.EDU            all,get-keys
 minos/admin@OCF.BERKELEY.EDU            all,get-keys
+ncograin/admin@OCF.BERKELEY.EDU         all,get-keys
 njha/admin@OCF.BERKELEY.EDU             all,get-keys
 rjz/admin@OCF.BERKELEY.EDU              all,get-keys
 rmxu/admin@OCF.BERKELEY.EDU             all,get-keys
@@ -54,6 +55,7 @@ longlian/root@OCF.BERKELEY.EDU          change-password                         
 mcint/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
 mdcha/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
 minos/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
+ncograin/admin@OCF.BERKELEY.EDU         change-password                         *@OCF.BERKELEY.EDU
 njha/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
 rjz/root@OCF.BERKELEY.EDU               change-password                         *@OCF.BERKELEY.EDU
 rmxu/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
