@@ -165,6 +165,7 @@ class ocf::apt($stage = 'first') {
       'ocf':
           location => 'https://apt.ocf.berkeley.edu/',
           release  => $facts['os']['distro']['codename'],
+          release  => 'bullseye',
           repos    => 'main',
           include  => {
           src => true
@@ -173,6 +174,7 @@ class ocf::apt($stage = 'first') {
       'ocf-backports':
           location => 'https://apt.ocf.berkeley.edu/',
           release  => "${facts['os']['distro']['codename']}-backports",
+          release  => 'bullseye-backports',
           repos    => 'main',
           include  => {
           src => true
@@ -183,6 +185,12 @@ class ocf::apt($stage = 'first') {
       apt::pin { 'ocf-backports':
       priority => 200,
       codename => "${facts['os']['distro']['codename']}-backports",
+      }
+
+      # Pin anything coming from puppetlabs-apt to be higher than normal priority
+      apt::pin { 'puppetlabs-apt':
+      priority => 900,
+      codename => 'bullseye',
       }
 
       # TODO: Submit patch to puppetlabs-apt to enable having includes for

@@ -19,7 +19,7 @@ class ocf_hpc {
       false => $slurm_controller_query[0]['facts']['hostname'],
       true  => '',
     }
-    file { '/etc/slurm-llnl/slurm.conf':
+    file { '/etc/slurm/slurm.conf':
       content => template(
         'ocf_hpc/slurm.conf.erb',
         'ocf_hpc/nodes-partitions.erb'
@@ -31,7 +31,7 @@ class ocf_hpc {
     }
   }
   # Currently all nodes contain the cgroup.conf files
-  file { '/etc/slurm-llnl/cgroup.conf':
+  file { '/etc/slurm/cgroup.conf':
     content => template('ocf_hpc/cgroup.conf.erb'),
     mode    => '0644',
     owner   => 'slurm',
