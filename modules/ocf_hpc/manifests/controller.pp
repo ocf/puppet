@@ -7,7 +7,7 @@ class ocf_hpc::controller {
 
   $slurmdbd_mysql_password = lookup('hpc::controller::slurmdbd_mysql_password')
 
-  package { 'slurmdbd': } -> file { '/etc/slurm-llnl/slurmdbd.conf':
+  package { 'slurmdbd': } -> file { '/etc/slurm/slurmdbd.conf':
     content   => template('ocf_hpc/slurmdbd.conf.erb'),
     mode      => '0600',
     owner     => 'slurm',
@@ -24,8 +24,8 @@ class ocf_hpc::controller {
     enable     => true,
     hasrestart => true,
     subscribe  => [
-      File['/etc/slurm-llnl/slurm.conf'],
-      File['/etc/slurm-llnl/cgroup.conf']
+      File['/etc/slurm/slurm.conf'],
+      File['/etc/slurm/cgroup.conf']
     ],
   }
 
