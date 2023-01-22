@@ -194,7 +194,7 @@ class ocf::extrapackages {
     ]:;
   }
 
-  if $::lsbdistcodename == 'bookworm/sid' {
+  if $::lsbdistcodename == 'bookworm' {
     package {
       [
         'bat',
