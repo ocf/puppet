@@ -1,6 +1,6 @@
 classes:
     - ocf_hpc::compute
-
+    - ocf_kvm
 
 ocf::networking::bond: true
 ocf::networking::is_vlan: true
