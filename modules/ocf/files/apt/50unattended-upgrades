@@ -1,5 +1,8 @@
 Unattended-Upgrade::Origins-Pattern {
         "origin=Debian,codename=${distro_codename},label=Debian-Security";
+        "origin=Google LLC";
+        "origin=vscode stable";
+        "origin=riot.im";
 };
 
 Unattended-Upgrade::Mail "root";
