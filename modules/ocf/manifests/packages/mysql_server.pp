@@ -10,7 +10,7 @@ class ocf::packages::mysql_server(
   }
 
   if $manage_service {
-    if $::os[release][major] !~ /\d+/ and Integer($::os[release][major]) < 11 {
+    if $::os[release][major] =~ /\d+/ and Integer($::os[release][major]) < 11 {
       $servicename = 'mysql'
     } else {
       $servicename = 'mariadb'
