@@ -51,6 +51,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/eligibility$ https://www.ocf.berkeley.edu/docs/membership/eligibility/ [R]'},
       {rewrite_rule => '^/families$ https://docs.google.com/presentation/d/1y49eQj-SPIsMtIio2KFx86SF6tKcv1yB16pO6AS2uk4/edit [R]'},
       {rewrite_rule => '^/faq$ https://www.ocf.berkeley.edu/docs/faq/ [R]'},
+      {rewrite_rule => '^/feedback$  https://docs.google.com/forms/d/e/1FAIpQLSdU24F5Il0oFTSmlpkGyNtwbT2MfDfR07ScsVPTz1NkeVGLAA/viewform [R]'},
       {rewrite_rule => '^/gh/([^/]*)(/(?!blob/)(?!tree/)(?!info/)(?!issue)(?!pull)(?!search).+)$ https://ocf.io/gh/$1/blob/master$2 [R]'},
       {rewrite_rule => '^/gh/i(/.*)?$ https://github.com/ocf/ircbot$1 [R]'},
       {rewrite_rule => '^/gh/l(/.*)?$ https://github.com/ocf/ocflib$1 [R]'},
