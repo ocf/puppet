@@ -1,1 +1,4 @@
+classes:
+    - ocf::ssl::default
+
 owner: kian
