@@ -112,5 +112,5 @@ kube_dev::controller_nodes:
     - hozer-74
 
 # Prometheus config
-prometheus::node_exporter::version: 1.4.0
+prometheus::node_exporter::version: 1.5.0
 prometheus::node_exporter::extra_options: '--collector.textfile.directory /srv/prometheus'
