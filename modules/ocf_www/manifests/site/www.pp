@@ -85,13 +85,6 @@ class ocf_www::site::www {
 
     directories         => [
       {
-        path            => '/.well-known/matrix/server',
-        provider        => 'location',
-        custom_fragment => '
-            Header set Access-Control-Allow-Origin "*"
-        ',
-      },
-      {
         path            => '/.well-known/matrix/client',
         provider        => 'location',
         custom_fragment => '
@@ -169,7 +162,8 @@ class ocf_www::site::www {
       port                 => 80,
       docroot              => '/var/www/html',
       redirectmatch_status => 301,
-      redirectmatch_regexp => '^(.*)',
+      # ugly exceptions
+      redirectmatch_regexp => '^((?!\/\.well-known\/matrix\/(client|server)).*)',
       redirectmatch_dest   => $canonical_url;
 
     # redirect weird HTTPS -> canonical HTTPS
@@ -179,6 +173,15 @@ class ocf_www::site::www {
         'dev-ocf.berkeley.edu',
         'secure.ocf.berkeley.edu',
         $::fqdn,
+      ],
+      directories          => [
+        {
+          path            => '/.well-known/matrix/client',
+          provider        => 'location',
+          custom_fragment => '
+              Header set Access-Control-Allow-Origin "*"
+          ',
+        },
       ],
       port                 => 443,
       docroot              => '/var/www/html',
