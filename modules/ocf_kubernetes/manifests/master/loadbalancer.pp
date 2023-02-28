@@ -37,6 +37,7 @@ class ocf_kubernetes::master::loadbalancer {
     'prometheus-kube',
     'rt',
     'sourcegraph',
+    'slidingsync.matrix',
     'static',
     'templates',
     'vaultwarden',
