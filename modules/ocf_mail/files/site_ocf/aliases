@@ -100,6 +100,10 @@ security: "|/usr/bin/rt-mailgate --queue 'security' --action correspond --url ht
 security-comment: "|/usr/bin/rt-mailgate --queue 'security' --action comment --url https://rt.ocf.berkeley.edu"
 owner-security: root
 
+subdomains: "|/usr/bin/rt-mailgate --queue 'subdomains' --action correspond --url https://rt.ocf.berkeley.edu"
+subdomains-comment: "|/usr/bin/rt-mailgate --queue 'subdomains' --action comment --url https://rt.ocf.berkeley.edu"
+owner-subdomains: root
+
 techtalks: "|/usr/bin/rt-mailgate --queue 'techtalks' --action correspond --url https://rt.ocf.berkeley.edu"
 techtalks-comment: "|/usr/bin/rt-mailgate --queue 'techtalks' --action comment --url https://rt.ocf.berkeley.edu"
 owner-techtalks: root
