@@ -145,6 +145,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/starter-?tasks$ https://www.ocf.berkeley.edu/docs/staff/startertasks/ [R]'},
       {rewrite_rule => '^/stats(/.*)?$ https://www.ocf.berkeley.edu/stats$1 [R]'},
       {rewrite_rule => '^/status$ https://status.ocf.berkeley.edu/ [R]'},
+      {rewrite_rule => '^/subdomains$ https://www.ocf.berkeley.edu/announcements/2023-03-01/subdomains [R]'},
       {rewrite_rule => '^/swag$ https://ocf.io/s/swag [R]'},
       {rewrite_rule => '^/templates?$ https://templates.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/buster$ https://www.ocf.berkeley.edu/docs/staff/backend/buster/ [R]'},
