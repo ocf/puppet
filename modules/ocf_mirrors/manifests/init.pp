@@ -64,6 +64,14 @@ class ocf_mirrors {
 
   package {
       [
+        'linux-image-amd64',
+        'zfsutils-linux',
+      ]:
+            install_options => ['-t', 'bullseye-backports'],;
+    }
+
+  package {
+      [
         'prometheus-nginx-exporter',
       ]:;
     }
