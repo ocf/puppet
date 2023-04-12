@@ -7,7 +7,7 @@
         "base_url": "https://vector.im"
     },
     "m.authentication": {
-        "issuer": "https://auth.ocf.berkeley.edu/realms/ocf"
+        "issuer": "https://auth.ocf.berkeley.edu/auth/realms/ocf"
     },
     "org.matrix.msc3575.proxy": {
         "url": "https://slidingsync.matrix.ocf.berkeley.edu"
