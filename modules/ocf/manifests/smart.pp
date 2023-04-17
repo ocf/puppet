@@ -10,7 +10,7 @@ class ocf::smart {
     }
     cron {
       'smartmon':
-        command => '/usr/local/sbin/smartmon.sh > /srv/prometheus/smartmon.prom',
+        command => '/usr/local/sbin/smartmon.sh | sponge /srv/prometheus/smartmon.prom',
         minute  => '*/5',
         require => [Package['smartmontools'], File['/usr/local/sbin/smartmon.sh']];
     }
