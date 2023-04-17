@@ -19,6 +19,7 @@ class ocf {
   include ocf::puppet
   include ocf::rootpw
   include ocf::serial_getty
+  include ocf::smart
   include ocf::systemd
   include ocf::utils
   include ocf::walldeny
