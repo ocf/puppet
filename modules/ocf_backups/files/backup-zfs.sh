@@ -16,4 +16,4 @@ NEW_SNAPSHOT=$(cat $CURRENT_SNAPSHOT_FILE)
 echo "$CURRENT_SNAPSHOT"
 echo "$NEW_SNAPSHOT"
 
-syncoid -r --no-sync-snap --sendoptions "L w c" backup/encrypted/rsnapshot "$OFFSITE_HOST":data1/ocfbackup/encrypted/rsnapshot
+syncoid -r --no-stream --sendoptions "L w c" backup/encrypted/rsnapshot "$OFFSITE_HOST":data1/ocfbackup/encrypted/rsnapshot
