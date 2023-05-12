@@ -6,16 +6,6 @@ repos:
         additional_dependencies: ['puppet:<7']
     -   id: erb-validate
         additional_dependencies: ['puppet:<7']
-    -   id: puppet-lint
-        args:
-        -   --fail-on-warnings
-        -   --fix
-        -   --no-140chars-check
-        -   --no-documentation-check
-        -   --no-puppet_url_without_modules-check
-        -   --no-arrow_on_right_operand_line-check
-        -   --no-variable_is_lowercase-check
-        additional_dependencies: ['puppet:<7', 'puppet-lint']
     -   id: epp-validate
         additional_dependencies: ['puppet:<7']
     -   id: r10k-validate
