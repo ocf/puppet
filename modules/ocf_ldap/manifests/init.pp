@@ -4,7 +4,7 @@ class ocf_ldap {
   # Install libarchive-zip-perl for crc32 command for calculating hashes of
   # ldif files in /etc/ldap/slapd.d, slapd is the ldap server
   package { ['slapd', 'ocf-ldap-overlay', 'libarchive-zip-perl']:; }
-  if $::host_env == 'dev' {
+  if $facts['host_env'] == 'dev' {
     package {
       [
         # ocf-ldap-overlay build dependencies
@@ -109,7 +109,7 @@ class ocf_ldap {
   }
 
   # Pushing to GitHub is disabled for dev-* hosts to prevent duplicate backups
-  if $::host_env == 'prod' {
+  if $facts['host_env'] == 'prod' {
     # GitHub deploy hook and key
     file {
       '/var/backups/ldap/.git/hooks/post-commit':

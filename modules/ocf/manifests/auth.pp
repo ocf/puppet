@@ -54,7 +54,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   }
 
   # nameservice configuration
-  if $::skip_ldap {
+  if $facts['skip_ldap'] {
     # use local copy only (never consult LDAP during lookups);
     # this is useful for servers which expect to not have connectivity to ldap
     #
@@ -79,7 +79,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   }
 
   # PAM user authentication
-  unless $::skip_kerberos {
+  unless $facts['skip_kerberos'] {
     # install Kerberos PAM module
     package { 'libpam-krb5': }
   }
@@ -157,21 +157,21 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
 
   # Get all DNS names, FQDNs, and IPs for a host to include in SSH keys
   $ssh_aliases = delete(concat(
-    suffix(delete(any2array($::dnsA), ''), ".${::domain}"),
-    $::dnsA,
-    suffix(delete(any2array($::dnsCname), ''), ".${::domain}"),
-    $::dnsCname,
-    $::fqdn,
-    $::ipHostNumber,
-    $::ip6HostNumber,
+    suffix(delete(any2array($facts['dnsA']), ''), ".${facts['facts['networking']['domain']']}"),
+    $facts['dnsA'],
+    suffix(delete(any2array($facts['dnsCname']), ''), ".${facts['facts['networking']['domain']']}"),
+    $facts['dnsCname'],
+    $facts['facts['networking']['fqdn']'],
+    $facts['ipHostNumber'],
+    $facts['ip6HostNumber'],
   ), '')
 
   # Export SSH keys from every host if PuppetDB is running, and use them
   # to populate the global list in /etc/ssh/ssh_known_hosts.
-  if str2bool($::puppetdb_running) {
-    @@sshkey { $::hostname:
+  if str2bool($facts['puppetdb_running']) {
+    @@sshkey { $facts['facts['networking']['hostname']']:
       host_aliases => $ssh_aliases,
-      key          => $::sshecdsakey,
+      key          => $facts['facts['ssh']['ecdsa']['key']'],
       type         => ecdsa-sha2-nistp256,
     }
     Sshkey <<| |>>

@@ -7,7 +7,7 @@ class ocf_irc::ircd {
     restart   => 'service inspircd reload',
     enable    => true,
     require   => Ocf::Repackage['inspircd'],
-    subscribe => Ocf::Ssl::Bundle[$::fqdn],
+    subscribe => Ocf::Ssl::Bundle[$facts['facts['networking']['fqdn']']],
   } ->
   cron { 'reload-irc-cert':
     command => 'chronic systemctl kill inspircd.service --signal=SIGUSR1',
@@ -19,7 +19,7 @@ class ocf_irc::ircd {
 
   $irc_creds = lookup('irc_creds')
 
-  if $::lsbdistcodename == 'buster' {
+  if $facts['facts['os']['distro']['codename']'] == 'buster' {
     # Disable the AppArmor profile for inspircd, since it prevents us from
     # accessing the necessary TLS certs
     file { '/etc/apparmor.d/disable/usr.sbin.inspircd':

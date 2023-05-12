@@ -52,7 +52,7 @@ class ocf_puppet::puppetserver {
     match_request_path   => '/puppet-ca/v1/(?:certificate|certificate_status)',
     match_request_type   => 'regex',
     match_request_method => ['get', 'post', 'put', 'delete'],
-    allow                => $::fqdn,
+    allow                => $facts['facts['networking']['fqdn']'],
     sort_order           => 998,
     path                 => '/etc/puppetlabs/puppetserver/conf.d/auth.conf',
     require              => Package['puppetserver'],

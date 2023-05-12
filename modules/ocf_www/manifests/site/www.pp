@@ -43,9 +43,9 @@ class ocf_www::site::www {
     docroot             => '/services/http/users',
 
     ssl                 => true,
-    ssl_key             => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert            => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain           => "/etc/ssl/private/${::fqdn}.intermediate",
+    ssl_key             => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key",
+    ssl_cert            => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.crt",
+    ssl_chain           => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.intermediate",
 
     headers             => ['always set Strict-Transport-Security max-age=31536000'],
     request_headers     => ['set X-Forwarded-Proto https'],
@@ -132,7 +132,7 @@ class ocf_www::site::www {
   }
 
   # canonical redirects
-  $canonical_url = $::host_env ? {
+  $canonical_url = $facts['host_env'] ? {
     'dev'  => 'https://dev-www.ocf.berkeley.edu$1',
     'prod' => 'https://www.ocf.berkeley.edu$1',
   }
@@ -156,8 +156,8 @@ class ocf_www::site::www {
         'death.berkeley.edu',
         'linux.berkeley.edu',
 
-        $::hostname,
-        $::fqdn,
+        $facts['facts['networking']['hostname']'],
+        $facts['facts['networking']['fqdn']'],
       ],
       port                 => 80,
       docroot              => '/var/www/html',
@@ -172,7 +172,7 @@ class ocf_www::site::www {
       serveraliases        => [
         'dev-ocf.berkeley.edu',
         'secure.ocf.berkeley.edu',
-        $::fqdn,
+        $facts['facts['networking']['fqdn']'],
       ],
       directories          => [
         {
@@ -191,8 +191,8 @@ class ocf_www::site::www {
       redirectmatch_dest   => $canonical_url,
 
       ssl                  => true,
-      ssl_key              => "/etc/ssl/private/${::fqdn}.key",
-      ssl_cert             => "/etc/ssl/private/${::fqdn}.crt",
-      ssl_chain            => "/etc/ssl/private/${::fqdn}.intermediate";
+      ssl_key              => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key",
+      ssl_cert             => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.crt",
+      ssl_chain            => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.intermediate";
   }
 }

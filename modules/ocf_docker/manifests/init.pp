@@ -38,8 +38,8 @@ class ocf_docker {
       listen_port       => 443,
 
       ssl               => true,
-      ssl_cert          => "/etc/ssl/private/${::fqdn}.bundle",
-      ssl_key           => "/etc/ssl/private/${::fqdn}.key",
+      ssl_cert          => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.bundle",
+      ssl_key           => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key",
       ssl_dhparam       => '/etc/ssl/dhparam.pem',
 
       add_header        => {
@@ -61,7 +61,7 @@ class ocf_docker {
       };
 
     'docker-ro':
-      server_name         => ['docker.ocf.berkeley.edu', 'docker', $::hostname, $::fqdn],
+      server_name         => ['docker.ocf.berkeley.edu', 'docker', $facts['facts['networking']['hostname']'], $facts['facts['networking']['fqdn']']],
 
       location_cfg_append => {
         # The `auth_required` is not needed, it's a hack so that the Puppet

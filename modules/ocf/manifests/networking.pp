@@ -4,11 +4,11 @@ class ocf::networking(
     $is_vlan    = false,
     $vlan       = undef,
 
-    $ipaddress  = $::ipHostNumber,  # lint:ignore:variable_is_lowercase
+    $ipaddress  = $facts['ipHostNumber'],  # lint:ignore:variable_is_lowercase
     $netmask    = '255.255.255.0',
     $gateway    = '169.229.226.1',
 
-    $ipaddress6 = $::ip6HostNumber,  # lint:ignore:variable_is_lowercase
+    $ipaddress6 = $facts['ip6HostNumber'],  # lint:ignore:variable_is_lowercase
     $netmask6   = '64',
     $gateway6   = '2607:f140:8801::1',
 
@@ -20,9 +20,9 @@ class ocf::networking(
     fail("Can't have more than 3 nameservers")
   }
 
-  $fqdn = $::clientcert
-  $hostname = regsubst($::clientcert, '^([\w-]+)\..*$', '\1')
-  $linked_ifaces_array = split($::ifaces_linked, ' ')
+  $fqdn = $facts['clientcert']
+  $hostname = regsubst($facts['clientcert'], '^([\w-]+)\..*$', '\1')
+  $linked_ifaces_array = split($facts['ifaces_linked'], ' ')
   $first_active_iface = $linked_ifaces_array[0]
 
   # packages
@@ -57,7 +57,7 @@ class ocf::networking(
     $logical_primary_interface = $first_active_iface
   }
 
-  if $::lsbdistid == 'Raspbian' {
+  if $facts['facts['os']['distro']['id']'] == 'Raspbian' {
     # The raspberry pi has wifi, so we use that for networking
     $logical_primary_interface = 'wlan0'
   }

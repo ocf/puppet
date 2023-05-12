@@ -1,5 +1,5 @@
 class ocf::kerberos {
-  if $::skip_kerberos {
+  if $facts['skip_kerberos'] {
     # don't use Kerberos, so remove the packages and config file
     package { [ 'heimdal-clients', 'libsasl2-modules-gssapi-mit' ]:
       ensure => purged;

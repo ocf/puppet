@@ -9,7 +9,7 @@ class ocf::packages::element::apt {
   apt::source { 'element':
     architecture => 'amd64',
     location     => 'https://packages.riot.im/debian',
-    release      => $::lsbdistcodename,
+    release      => $facts['facts['os']['distro']['codename']'],
     repos        => 'main',
     require      => Apt::Key['element'],
   }

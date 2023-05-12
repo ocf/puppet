@@ -13,7 +13,7 @@ class ocf::hidepid {
     content => "[Service]\nSupplementaryGroups=${procfs_authorized_group}\n",
   }
 
-  if str2bool($::polkit_priv_drop) {
+  if str2bool($facts['polkit_priv_drop']) {
     # Futureproof for policykit for version 0.115. policykit will create this
     # user, we just need to add it to the authorized group
     user { 'polkitd':

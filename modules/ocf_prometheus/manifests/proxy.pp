@@ -3,7 +3,7 @@ class ocf_prometheus::proxy {
   include apache::mod::proxy
   include apache::mod::proxy_http
 
-  $cname = $::host_env ? {
+  $cname = $facts['host_env'] ? {
     'dev'  => 'dev-prometheus',
     'prod' => 'prometheus',
   }
@@ -33,9 +33,9 @@ class ocf_prometheus::proxy {
       port                => 443,
       docroot             => '/var/www/html',
       ssl                 => true,
-      ssl_key             => "/etc/ssl/private/${::fqdn}.key",
-      ssl_cert            => "/etc/ssl/private/${::fqdn}.crt",
-      ssl_chain           => "/etc/ssl/private/${::fqdn}.intermediate",
+      ssl_key             => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key",
+      ssl_cert            => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.crt",
+      ssl_chain           => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.intermediate",
 
       headers             => ['always set Strict-Transport-Security max-age=31536000'],
       proxy_preserve_host => true,

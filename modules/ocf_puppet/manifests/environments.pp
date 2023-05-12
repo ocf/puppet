@@ -8,10 +8,10 @@ class ocf_puppet::environments {
   # don't use any more, but used to use.
   #
   # Instead, we just call `git clone`.
-  if $::ocf_staff {
-    $staff = split($::ocf_staff, ',')
+  if $facts['ocf_staff'] {
+    $staff = split($facts['ocf_staff'], ',')
     $staff.each |$user| {
-      $repo_path = "${::puppet_environmentpath}/${user}"
+      $repo_path = "${facts['puppet_environmentpath']}/${user}"
 
       # We do the git checkout as the user, so we must ensure the directory exists
       # (and is owned by the user) first, since users can't make directories under

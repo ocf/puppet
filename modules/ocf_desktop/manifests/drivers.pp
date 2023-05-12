@@ -2,13 +2,13 @@ class ocf_desktop::drivers {
   include ocf::apt::i386
 
   # install proprietary nvidia drivers
-  if $::gfx_brand == 'nvidia' {
+  if $facts['gfx_brand'] == 'nvidia' {
     # Install nvidia-driver from backports so that it loads properly
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=903770
     ocf::repackage { ['nvidia-smi', 'nvidia-driver', 'nvidia-cuda-toolkit']:
       backport_on => 'stretch';
     }
-    if $::os['distro']['codename'] in ['buster', 'stretch'] {
+    if $facts['os['distro']['codename']'] in ['buster', 'stretch'] {
       ocf::repackage { ['libgl1-nvidia-glx:i386']:
         backport_on => 'stretch';
       }

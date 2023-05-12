@@ -1,5 +1,5 @@
 class ocf::motd {
-  $motd_from_nfs = str2bool($::ocf_nfs) and !lookup('staff_only')
+  $motd_from_nfs = str2bool($facts['ocf_nfs']) and !lookup('staff_only')
   $owner = lookup('owner', { 'default_value' => undef, })
   $classes_from_hiera = lookup('classes')
 
@@ -9,7 +9,7 @@ class ocf::motd {
       target => '/home/s/st/staff/motd/motd',
     }
   } else {
-    $is_virtual = str2bool($::is_virtual)
+    $is_virtual = str2bool($facts['is_virtual'])
 
     file { '/etc/motd':
       content => template('ocf/motd.erb'),

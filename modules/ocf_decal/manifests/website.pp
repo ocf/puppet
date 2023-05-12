@@ -43,9 +43,9 @@ class ocf_decal::website {
     redirect_dest   => 'https://decal.ocf.berkeley.edu/',
 
     ssl             => true,
-    ssl_key         => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert        => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain       => "/etc/ssl/private/${::fqdn}.intermediate",
+    ssl_key         => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key",
+    ssl_cert        => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.crt",
+    ssl_chain       => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.intermediate",
 }
 
   apache::vhost { 'decal-ssl':
@@ -58,8 +58,8 @@ class ocf_decal::website {
     override      => ['All'],
 
     ssl           => true,
-    ssl_key       => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
+    ssl_key       => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key",
+    ssl_cert      => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.crt",
+    ssl_chain     => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.intermediate",
   }
 }

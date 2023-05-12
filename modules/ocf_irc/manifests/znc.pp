@@ -23,7 +23,7 @@ class ocf_irc::znc {
       ensure => link,
       group  => ocfznc,
       owner  => ocfznc,
-      target => "/etc/ssl/private/${::fqdn}.pem";
+      target => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.pem";
   }
 
   ocf::systemd::service { 'znc':
@@ -33,6 +33,6 @@ class ocf_irc::znc {
       File['/var/lib/znc'],
       File['/var/lib/znc/znc.pem'],
     ],
-    subscribe => Ocf::Ssl::Bundle[$::fqdn],
+    subscribe => Ocf::Ssl::Bundle[$facts['facts['networking']['fqdn']']],
   }
 }

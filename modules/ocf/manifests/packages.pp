@@ -25,7 +25,7 @@ class ocf::packages {
   # kept short, since apt-dater should be used to update almost all packages.
   #
   # TODO: Fix with the Raspberry Pi?
-  if $::lsbdistid == 'Debian' {
+  if $facts['facts['os']['distro']['id']'] == 'Debian' {
     package {
       # Ensure ocflib is the latest version to quickly push out changes in lab
       # hours, etc. We control releases on this, so this should be safe.
@@ -58,7 +58,7 @@ class ocf::packages {
   # Many staff want virtualbox for class projects (e.g. for CS161 and 162), so
   # keep it installed if this is a staff VM. Otherwise, remove it for security
   # reasons (setuid binaries allow network control). See debian bug#760569
-  if $::type != 'staffvm' {
+  if $facts['type'] != 'staffvm' {
     package {
       'virtualbox':
         ensure => purged;
@@ -135,7 +135,7 @@ class ocf::packages {
 
   # TODO: remove this once we no longer support stretch (and move to above
   # packages block)
-  if $::os[distro][codename] != 'stretch' {
+  if $facts['os[distro][codename]'] != 'stretch' {
     package {
       'kitty-terminfo':;
     }
@@ -156,7 +156,7 @@ class ocf::packages {
   # python3 is python3.7 on buster and python3.9 on bullseye
 
   # install elts kernel on stretch
-  if $::lsbdistcodename == 'stretch' {
+  if $facts['facts['os']['distro']['codename']'] == 'stretch' {
     package {
         [
         'python3.7',
@@ -167,7 +167,7 @@ class ocf::packages {
       }
   }
   # Packages to only install on Debian (not on Raspbian for example)
-  if $::lsbdistid == 'Debian' {
+  if $facts['facts['os']['distro']['id']'] == 'Debian' {
     package {
       [
         'aactivator',

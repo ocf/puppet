@@ -16,7 +16,7 @@ class ocf_prometheus::alertmanager {
   class { 'prometheus::alertmanager':
     version       => '0.23.0',
 
-    extra_options => "--cluster.advertise-address=${::ipaddress}:9094 --web.external-url=\"https://prometheus.ocf.berkeley.edu/alertmanager\"",
+    extra_options => "--cluster.advertise-address=${facts['facts['networking']['ip']']}:9094 --web.external-url=\"https://prometheus.ocf.berkeley.edu/alertmanager\"",
 
     global        => {
       'smtp_smarthost'   => 'smtp.ocf.berkeley.edu:25',

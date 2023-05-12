@@ -42,7 +42,7 @@ define ocf::privatefile(
     ensure  => $ensure,
   }
 
-  if $::dummy_secrets {
+  if $facts['dummy_secrets'] {
     # Provide a dummy file as a fallback with some pre-defined contents since
     # the private share where the source/content would have come from is not
     # available
