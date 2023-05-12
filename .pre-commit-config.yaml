@@ -3,9 +3,7 @@ repos:
     rev: v2.1.0
     hooks:
     -   id: puppet-validate
-        additional_dependencies: ['puppet:<7']
     -   id: erb-validate
-        additional_dependencies: ['puppet:<7']
     -   id: puppet-lint
         args:
         -   --fail-on-warnings
@@ -15,13 +13,11 @@ repos:
         -   --no-puppet_url_without_modules-check
         -   --no-arrow_on_right_operand_line-check
         -   --no-variable_is_lowercase-check
-        additional_dependencies: ['puppet:<7', 'puppet-lint']
+        additional_dependencies: ['puppet-lint']
     -   id: epp-validate
-        additional_dependencies: ['puppet:<7']
     -   id: r10k-validate
-        additional_dependencies: ['puppet:<7', 'r10k']
+        additional_dependencies: ['r10k']
     -   id: ruby-validate
-        additional_dependencies: ['puppet:<7']
 -   repo: https://github.com/pre-commit/pre-commit-hooks.git
     # We need to be using python3.6 by default before this can be upgraded to 3.x+
     rev: v2.5.0
