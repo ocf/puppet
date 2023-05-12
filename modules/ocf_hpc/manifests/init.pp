@@ -4,7 +4,7 @@ class ocf_hpc {
 
   package { 'slurm-wlm': }
 
-  if str2bool($::puppetdb_running) {
+  if str2bool($facts['puppetdb_running']) {
     $slurm_nodes_facts_query = puppetdb_query('inventory[facts] { resources { type = "Class" and title = "Ocf_hpc::Compute" } }')
     # To avoid a circular dependency, fallback to empty values if no nodes match the query.
     $slurm_nodes_facts = $slurm_nodes_facts_query == undef ? {

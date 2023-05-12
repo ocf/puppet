@@ -1,7 +1,7 @@
 class ocf_puppet::puppetboard {
   include ocf::firewall::allow_web
 
-  $puppet_fqdn = $::host_env ? {
+  $puppet_fqdn = $facts['host_env'] ? {
     'dev'  => 'dev-puppet.ocf.berkeley.edu',
     'prod' => 'puppet.ocf.berkeley.edu',
   }
@@ -21,8 +21,8 @@ class ocf_puppet::puppetboard {
       'pb.ocf.berkeley.edu',
       'pb',
       'puppet',
-      $::hostname,
-      $::fqdn,
+      $facts['facts['networking']['hostname']'],
+      $facts['facts['networking']['fqdn']'],
     ],
     proxy          => 'http://lb.ocf.berkeley.edu:4080',
     ssl            => true,

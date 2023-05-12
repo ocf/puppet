@@ -20,7 +20,7 @@ class ocf_ssh::webssh {
     weekday => 'Wednesday',
   }
 
-  case $::hostname {
+  case $facts['facts['networking']['hostname']'] {
     tsunami: { $webssh_fqdn = 'ssh.ocf.berkeley.edu' }
     default: { $webssh_fqdn = 'dev-ssh.ocf.berkeley.edu' }
   }
@@ -52,8 +52,8 @@ class ocf_ssh::webssh {
       proxy        => 'http://webssh',
 
       ssl          => true,
-      ssl_cert     => "/etc/ssl/private/${::fqdn}.bundle",
-      ssl_key      => "/etc/ssl/private/${::fqdn}.key",
+      ssl_cert     => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.bundle",
+      ssl_key      => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key",
 
       add_header   => {
         'Strict-Transport-Security' => 'max-age=31536000',

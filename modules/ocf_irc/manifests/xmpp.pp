@@ -19,7 +19,7 @@ class ocf_irc::xmpp {
   service { 'prosody':
     enable    => true,
     require   => Package['prosody'],
-    subscribe => Ocf::Ssl::Bundle[$::fqdn],
+    subscribe => Ocf::Ssl::Bundle[$facts['facts['networking']['fqdn']']],
   }
 
   # Make the prosody user able to read the certs
@@ -38,7 +38,7 @@ class ocf_irc::xmpp {
       }
   }
 
-  $vhost_name = $::host_env ? {
+  $vhost_name = $facts['host_env'] ? {
     'dev'  => 'dev-xmpp.ocf.berkeley.edu',
     # We use an SRV record in our DNS configuration so this host actually points
     # to the XMPP server.
@@ -46,21 +46,21 @@ class ocf_irc::xmpp {
   }
 
   # The subdomain used for Multi-User Chats (MUCs)
-  $muc_name = $::host_env ? {
+  $muc_name = $facts['host_env'] ? {
     # This doesn't resolve in DNS, but it doesn't matter since this won't be
     # exposed publicly. See https://prosody.im/doc/chatrooms#dns
     'dev'  => 'dev-xmpp-muc.ocf.berkeley.edu',
     'prod' => 'xmpp.ocf.berkeley.edu',
   }
 
-  $irc_server = $::host_env ? {
+  $irc_server = $facts['host_env'] ? {
     'dev'  => 'dev-irc.ocf.berkeley.edu',
     'prod' =>  'irc.ocf.berkeley.edu',
   }
 
   $mysql_password = lookup('xmpp::prosody_mysql_password')
 
-  $component_password = $::host_env ? {
+  $component_password = $facts['host_env'] ? {
     'dev'  => lookup('xmpp::dev_biboumi_component_password'),
     'prod' =>  lookup('xmpp::biboumi_component_password'),
   }

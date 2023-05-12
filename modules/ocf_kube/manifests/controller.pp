@@ -23,15 +23,15 @@
 # configure the four containers.
 
 class ocf_kube::controller {
-  $is_prod = $::hostname in lookup('kube::controller_nodes')
-  $is_dev = $::hostname in lookup('kube_dev::controller_nodes')
+  $is_prod = $facts['facts['networking']['hostname']'] in lookup('kube::controller_nodes')
+  $is_dev = $facts['facts['networking']['hostname']'] in lookup('kube_dev::controller_nodes')
 
   if $is_prod and $is_dev {
-    fail("${::hostname} is in both the production and the development kubernetes cluster")
+    fail("${facts['facts['networking']['hostname']']} is in both the production and the development kubernetes cluster")
   }
 
   if !$is_prod and !$is_dev {
-    fail("${::hostname} is not in any kubernetes cluster")
+    fail("${facts['facts['networking']['hostname']']} is not in any kubernetes cluster")
   }
 
   # Namespace for hiera variables
@@ -49,7 +49,7 @@ class ocf_kube::controller {
 
   # initial cluster members
   $initial_cluster_hosts = lookup("${kube_prefix}::controller_nodes").reduce([]) |$acc, $node| {
-    (($acc != []) and $acc[-1] == $::hostname) ? {
+    (($acc != []) and $acc[-1] == $facts['facts['networking']['hostname']']) ? {
       # If we are on the list, stop adding nodes
       true  => $acc,
       # Otherwise, add the next node, and recurse
@@ -179,10 +179,10 @@ class ocf_kube::controller {
     # kubelet server key
     '/etc/kubernetes/pki/kubelet-server.crt':
       mode         => '0600',
-      content_path => "${certs_dir}/${::hostname}-kubelet-server.crt";
+      content_path => "${certs_dir}/${facts['facts['networking']['hostname']']}-kubelet-server.crt";
     '/etc/kubernetes/pki/kubelet-server.key':
       mode         => '0600',
-      content_path => "${certs_dir}/${::hostname}-kubelet-server.key";
+      content_path => "${certs_dir}/${facts['facts['networking']['hostname']']}-kubelet-server.key";
 
     # kubelet -> apiserver client key
     '/etc/kubernetes/pki/apiserver-kubelet-client.crt':
@@ -242,18 +242,18 @@ class ocf_kube::controller {
     # apiserver/etcd -> etcd client key
     '/etc/kubernetes/pki/etcd/client.crt':
       mode         => '0600',
-      content_path => "${certs_dir}/${::hostname}-etcd-client.crt";
+      content_path => "${certs_dir}/${facts['facts['networking']['hostname']']}-etcd-client.crt";
     '/etc/kubernetes/pki/etcd/client.key':
       mode         => '0600',
-      content_path => "${certs_dir}/${::hostname}-etcd-client.key";
+      content_path => "${certs_dir}/${facts['facts['networking']['hostname']']}-etcd-client.key";
 
     # etcd server key
     '/etc/kubernetes/pki/etcd/server.crt':
       mode         => '0600',
-      content_path => "${certs_dir}/${::hostname}-etcd-server.crt";
+      content_path => "${certs_dir}/${facts['facts['networking']['hostname']']}-etcd-server.crt";
     '/etc/kubernetes/pki/etcd/server.key':
       mode         => '0600',
-      content_path => "${certs_dir}/${::hostname}-etcd-server.key";
+      content_path => "${certs_dir}/${facts['facts['networking']['hostname']']}-etcd-server.key";
 
     # front-proxy ca
     '/etc/kubernetes/pki/front-proxy-ca.crt':

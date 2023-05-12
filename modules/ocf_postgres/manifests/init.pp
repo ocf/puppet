@@ -17,9 +17,9 @@ class ocf_postgres {
     'ssl':
       value => 'on';
     'ssl_cert_file':
-      value => "/etc/ssl/private/${::fqdn}.bundle";
+      value => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.bundle";
     'ssl_key_file':
-      value => "/etc/ssl/private/${::fqdn}.key";
+      value => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key";
   }
 
   ocf::firewall::firewall46 {

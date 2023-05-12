@@ -17,8 +17,8 @@ class ocf_apphost {
     recurse => true,
     purge   => true;
   }
-  if $::ocf_apphost {
-    $devs = split($::ocf_apphost, ',')
+  if $facts['ocf_apphost'] {
+    $devs = split($facts['ocf_apphost'], ',')
   } else {
     # ocf_apphost is empty on the first run which causes a runtime error above
     $devs = []

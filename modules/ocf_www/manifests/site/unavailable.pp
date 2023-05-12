@@ -49,8 +49,8 @@ class ocf_www::site::unavailable {
     port      => 443,
 
     ssl       => true,
-    ssl_key   => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain => "/etc/ssl/private/${::fqdn}.intermediate",
+    ssl_key   => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key",
+    ssl_cert  => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.crt",
+    ssl_chain => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.intermediate",
   }
 }

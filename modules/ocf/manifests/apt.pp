@@ -11,8 +11,8 @@ class ocf::apt($stage = 'first') {
 
   $repos = 'main contrib non-free'
 
-  if $::lsbdistid == 'Debian' {
-    if $::operatingsystemmajrelease == '9' {
+  if $facts['facts['os']['distro']['id']'] == 'Debian' {
+    if $facts['facts['os']['release']['major']'] == '9' {
       apt::key { 'freexian':
           id     => 'AB597C4F6F3380BD4B2BEBC2A07310D369055D5A',
           source => 'https://deb.freexian.com/extended-lts/archive-key.gpg';
@@ -21,7 +21,7 @@ class ocf::apt($stage = 'first') {
       apt::source {
       'debian':
           location => 'https://mirrors.ocf.berkeley.edu/debian/',
-          release  => $::lsbdistcodename,
+          release  => $facts['facts['os']['distro']['codename']'],
           repos    => $repos,
           include  => {
           src => true
@@ -29,7 +29,7 @@ class ocf::apt($stage = 'first') {
 
       'debian-updates':
           location => 'https://mirrors.ocf.berkeley.edu/debian/',
-          release  => "${::lsbdistcodename}-updates",
+          release  => "${facts['facts['os']['distro']['codename']']}-updates",
           repos    => $repos,
           include  => {
           src => true
@@ -37,7 +37,7 @@ class ocf::apt($stage = 'first') {
 
       'debian-security':
           location => 'https://mirrors.ocf.berkeley.edu/debian-security/',
-          release  => "${::lsbdistcodename}/updates",
+          release  => "${facts['facts['os']['distro']['codename']']}/updates",
           repos    => $repos,
           include  => {
           src => true
@@ -45,12 +45,12 @@ class ocf::apt($stage = 'first') {
 
       'extended-lts':
           location => 'https://mirrors.ocf.berkeley.edu/freexian/',
-          release  => $::lsbdistcodename,
+          release  => $facts['facts['os']['distro']['codename']'],
           repos    => $repos;
 
       'ocf':
           location => 'https://apt.ocf.berkeley.edu/',
-          release  => $::lsbdistcodename,
+          release  => $facts['facts['os']['distro']['codename']'],
           repos    => 'main',
           include  => {
           src => true
@@ -58,7 +58,7 @@ class ocf::apt($stage = 'first') {
 
       'ocf-backports':
           location => 'https://apt.ocf.berkeley.edu/',
-          release  => "${::lsbdistcodename}-backports",
+          release  => "${facts['facts['os']['distro']['codename']']}-backports",
           repos    => 'main',
           include  => {
           src => true
@@ -68,7 +68,7 @@ class ocf::apt($stage = 'first') {
       # Pin anything coming from *-backports to be lower than normal priority
       apt::pin { 'ocf-backports':
       priority => 200,
-      codename => "${::lsbdistcodename}-backports",
+      codename => "${facts['facts['os']['distro']['codename']']}-backports",
       }
 
       # TODO: Submit patch to puppetlabs-apt to enable having includes for
@@ -77,11 +77,11 @@ class ocf::apt($stage = 'first') {
       location => 'https://mirrors.ocf.berkeley.edu/debian/';
       }
     }
-  elsif $::operatingsystemmajrelease == '10' {
+  elsif $facts['facts['os']['release']['major']'] == '10' {
     apt::source {
       'debian':
           location => 'https://mirrors.ocf.berkeley.edu/debian/',
-          release  => $::lsbdistcodename,
+          release  => $facts['facts['os']['distro']['codename']'],
           repos    => $repos,
           include  => {
           src => true
@@ -89,7 +89,7 @@ class ocf::apt($stage = 'first') {
 
       'debian-updates':
           location => 'https://mirrors.ocf.berkeley.edu/debian/',
-          release  => "${::lsbdistcodename}-updates",
+          release  => "${facts['facts['os']['distro']['codename']']}-updates",
           repos    => $repos,
           include  => {
           src => true
@@ -97,7 +97,7 @@ class ocf::apt($stage = 'first') {
 
       'debian-security':
           location => 'https://mirrors.ocf.berkeley.edu/debian-security/',
-          release  => "${::lsbdistcodename}/updates",
+          release  => "${facts['facts['os']['distro']['codename']']}/updates",
           repos    => $repos,
           include  => {
           src => true
@@ -105,7 +105,7 @@ class ocf::apt($stage = 'first') {
 
       'ocf':
           location => 'https://apt.ocf.berkeley.edu/',
-          release  => $::lsbdistcodename,
+          release  => $facts['facts['os']['distro']['codename']'],
           repos    => 'main',
           include  => {
           src => true
@@ -113,7 +113,7 @@ class ocf::apt($stage = 'first') {
 
       'ocf-backports':
           location => 'https://apt.ocf.berkeley.edu/',
-          release  => "${::lsbdistcodename}-backports",
+          release  => "${facts['facts['os']['distro']['codename']']}-backports",
           repos    => 'main',
           include  => {
           src => true
@@ -123,7 +123,7 @@ class ocf::apt($stage = 'first') {
       # Pin anything coming from *-backports to be lower than normal priority
       apt::pin { 'ocf-backports':
       priority => 200,
-      codename => "${::lsbdistcodename}-backports",
+      codename => "${facts['facts['os']['distro']['codename']']}-backports",
       }
 
       # TODO: Submit patch to puppetlabs-apt to enable having includes for
@@ -137,7 +137,7 @@ class ocf::apt($stage = 'first') {
     apt::source {
       'debian':
           location => 'https://mirrors.ocf.berkeley.edu/debian/',
-          release  => $::lsbdistcodename,
+          release  => $facts['facts['os']['distro']['codename']'],
           repos    => $repos,
           include  => {
           src => true
@@ -145,7 +145,7 @@ class ocf::apt($stage = 'first') {
 
       'debian-updates':
           location => 'https://mirrors.ocf.berkeley.edu/debian/',
-          release  => "${::lsbdistcodename}-updates",
+          release  => "${facts['facts['os']['distro']['codename']']}-updates",
           repos    => $repos,
           include  => {
           src => true
@@ -153,7 +153,7 @@ class ocf::apt($stage = 'first') {
 
       'debian-security':
           location => 'https://mirrors.ocf.berkeley.edu/debian-security/',
-          release  => "${::lsbdistcodename}-security",
+          release  => "${facts['facts['os']['distro']['codename']']}-security",
           repos    => $repos,
           include  => {
           src => true
@@ -161,7 +161,7 @@ class ocf::apt($stage = 'first') {
 
       'ocf':
           location => 'https://apt.ocf.berkeley.edu/',
-          release  => $::lsbdistcodename,
+          release  => $facts['facts['os']['distro']['codename']'],
           repos    => 'main',
           include  => {
           src => true
@@ -169,7 +169,7 @@ class ocf::apt($stage = 'first') {
 
       'ocf-backports':
           location => 'https://apt.ocf.berkeley.edu/',
-          release  => "${::lsbdistcodename}-backports",
+          release  => "${facts['facts['os']['distro']['codename']']}-backports",
           repos    => 'main',
           include  => {
           src => true
@@ -179,7 +179,7 @@ class ocf::apt($stage = 'first') {
       # Pin anything coming from *-backports to be lower than normal priority
       apt::pin { 'ocf-backports':
       priority => 200,
-      codename => "${::lsbdistcodename}-backports",
+      codename => "${facts['facts['os']['distro']['codename']']}-backports",
       }
 
       # TODO: Submit patch to puppetlabs-apt to enable having includes for
@@ -189,11 +189,11 @@ class ocf::apt($stage = 'first') {
       }
   }
 
-  } elsif $::lsbdistid == 'Raspbian' {
+  } elsif $facts['facts['os']['distro']['id']'] == 'Raspbian' {
     apt::source {
       'raspbian':
         location => 'https://mirrors.ocf.berkeley.edu/raspbian/raspbian/',
-        release  => $::lsbdistcodename,
+        release  => $facts['facts['os']['distro']['codename']'],
         repos    => 'main contrib non-free rpi',
         include  => {
           src => true
@@ -201,7 +201,7 @@ class ocf::apt($stage = 'first') {
 
       'archive-rpi':
         location => 'https://archive.raspberrypi.org/debian/',
-        release  => $::lsbdistcodename,
+        release  => $facts['facts['os']['distro']['codename']'],
         repos    => 'main ui',
         include  => {
           src => true
@@ -212,7 +212,7 @@ class ocf::apt($stage = 'first') {
   apt::source {
     'puppetlabs':
       location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
-      release  => $::lsbdistcodename,
+      release  => $facts['facts['os']['distro']['codename']'],
       repos    => 'puppet',
   }
 

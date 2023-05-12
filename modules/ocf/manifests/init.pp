@@ -5,7 +5,7 @@ class ocf {
   include ocf::etc
   include ocf::firewall
   include ocf::groups
-  if ($::hostname != 'fallingrocks') {
+  if ($facts['facts['networking']['hostname']'] != 'fallingrocks') {
     include ocf::hidepid
   }
   include ocf::kerberos

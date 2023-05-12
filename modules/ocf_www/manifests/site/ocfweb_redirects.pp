@@ -2,7 +2,7 @@
 # redirect those sites to the appropriate pages on ocfweb.
 class ocf_www::site::ocfweb_redirects {
   # accounts
-  $accounts_canonical_url = $::host_env ? {
+  $accounts_canonical_url = $facts['host_env'] ? {
     'dev'  => 'https://dev-accounts.ocf.berkeley.edu/',
     'prod' => 'https://accounts.ocf.berkeley.edu/',
   }
@@ -14,9 +14,9 @@ class ocf_www::site::ocfweb_redirects {
     docroot       => '/var/www/html',
 
     ssl           => true,
-    ssl_key       => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
+    ssl_key       => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key",
+    ssl_cert      => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.crt",
+    ssl_chain     => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.intermediate",
 
     rewrites      => [
       {rewrite_rule => '^/(change-password(/.*)?)?$ https://www.ocf.berkeley.edu/account/password [R=301,L]'},
@@ -43,7 +43,7 @@ class ocf_www::site::ocfweb_redirects {
   }
 
   # wiki
-  $wiki_canonical_url = $::host_env ? {
+  $wiki_canonical_url = $facts['host_env'] ? {
     'dev'  => 'https://dev-wiki.ocf.berkeley.edu/',
     'prod' => 'https://wiki.ocf.berkeley.edu/',
   }
@@ -55,9 +55,9 @@ class ocf_www::site::ocfweb_redirects {
     docroot       => '/var/www/html',
 
     ssl           => true,
-    ssl_key       => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
+    ssl_key       => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key",
+    ssl_cert      => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.crt",
+    ssl_chain     => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.intermediate",
 
     rewrites      => [
       {rewrite_rule => '^/(.*)$ https://www.ocf.berkeley.edu/docs/$1 [R=301]'},
@@ -80,7 +80,7 @@ class ocf_www::site::ocfweb_redirects {
   }
 
   # hello
-  $hello_canonical_url = $::host_env ? {
+  $hello_canonical_url = $facts['host_env'] ? {
     'dev'  => 'https://dev-hello.ocf.berkeley.edu/',
     'prod' => 'https://hello.ocf.berkeley.edu/',
   }
@@ -96,9 +96,9 @@ class ocf_www::site::ocfweb_redirects {
     docroot       => '/var/www/html',
 
     ssl           => true,
-    ssl_key       => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
+    ssl_key       => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key",
+    ssl_cert      => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.crt",
+    ssl_chain     => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.intermediate",
 
     rewrites      => [
       {rewrite_rule => '^/lab.html$ https://www.ocf.berkeley.edu/about/lab/open-source [R=301,L]'},

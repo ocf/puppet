@@ -9,22 +9,22 @@ class ocf_irc::biboumi {
     require => Package['biboumi'],
   }
 
-  $irc_server = $::host_env ? {
+  $irc_server = $facts['host_env'] ? {
     'dev'  => 'dev-irc.ocf.berkeley.edu',
     'prod' => 'irc.ocf.berkeley.edu',
   }
 
-  $psql_user = $::host_env ? {
+  $psql_user = $facts['host_env'] ? {
     'dev'  => 'ocfdevbiboumi',
     'prod' => 'ocfbiboumi',
   }
 
-  $psql_password = $::host_env ? {
+  $psql_password = $facts['host_env'] ? {
     'dev'  => lookup('xmpp::dev_biboumi_psql_password'),
     'prod' => lookup('xmpp::biboumi_psql_password'),
   }
 
-  $component_password = $::host_env ? {
+  $component_password = $facts['host_env'] ? {
     'dev'  => lookup('xmpp::dev_biboumi_component_password'),
     'prod' => lookup('xmpp::biboumi_component_password'),
   }

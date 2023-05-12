@@ -7,6 +7,6 @@
 # CNAME records 'www', then this function (with the suffix 'ocf.io' would
 # return ['death.ocf.io', 'dev-vhost.ocf.io', 'www.ocf.io']
 function ocf::get_host_fqdns(String $suffix = 'ocf.berkeley.edu') >> Array[String] {
-  $dns_entries = concat([$::hostname], delete($::dnsA, '@'), $::dnsCname)
+  $dns_entries = concat([$facts['facts['networking']['hostname']']], delete($facts['dnsA'], '@'), $facts['dnsCname'])
   suffix(delete($dns_entries, ''), ".${suffix}")
 }

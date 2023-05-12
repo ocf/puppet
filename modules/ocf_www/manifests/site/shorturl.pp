@@ -1,5 +1,5 @@
 class ocf_www::site::shorturl {
-  $canonical_url = $::host_env ? {
+  $canonical_url = $facts['host_env'] ? {
     'dev'  => 'https://dev-ocf-io.ocf.berkeley.edu/',
     'prod' => 'https://ocf.io/',
   }
@@ -11,9 +11,9 @@ class ocf_www::site::shorturl {
     docroot       => '/var/www/html',
 
     ssl           => true,
-    ssl_key       => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
+    ssl_key       => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key",
+    ssl_cert      => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.crt",
+    ssl_chain     => "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.intermediate",
 
     rewrites      => [
       # Short URLs

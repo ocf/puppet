@@ -11,7 +11,7 @@ class ocf::puppet($stage = 'first') {
         # defined separately in the ocf_puppet module, causing the
         # puppet agent on the puppetmaster to restart twice. Make sure
         # the changes made here are also made in that module.
-        "set agent/environment ${::environment}",
+        "set agent/environment ${facts['environment']}",
         'set agent/usecacheonfailure false',
       ],
       require => Package[$puppet_pkg],
@@ -25,7 +25,7 @@ class ocf::puppet($stage = 'first') {
     augeas { '/etc/puppet/puppet.conf':
       context => '/files/etc/puppet/puppet.conf',
       changes => [
-        "set agent/environment ${::environment}",
+        "set agent/environment ${facts['environment']}",
         'set agent/usecacheonfailure false',
       ],
       require => Package[$puppet_pkg, 'augeas-tools'],

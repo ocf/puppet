@@ -8,12 +8,12 @@ class ocf_irc {
 
   # The prod server also needs a cert for ocf.berkeley.edu, since we use XMPP
   # domain delegation. See https://prosody.im/doc/certificates#which_domain
-  if $::host_env == 'prod' {
-    ocf::ssl::bundle { $::fqdn:
+  if $facts['host_env'] == 'prod' {
+    ocf::ssl::bundle { $facts['facts['networking']['fqdn']']:
       domains =>   ocf::get_host_fqdns() + ocf::get_host_fqdns('ocf.io') + ['ocf.berkeley.edu'],
     }
   } else {
-    ocf::ssl::bundle { $::fqdn:
+    ocf::ssl::bundle { $facts['facts['networking']['fqdn']']:
       domains =>   ocf::get_host_fqdns() + ocf::get_host_fqdns('ocf.io'),
     }
   }

@@ -11,8 +11,8 @@ class ocf_jenkins::proxy {
 
   ocf::nginx_proxy { 'jenkins.ocf.berkeley.edu':
     server_aliases => [
-      $::hostname,
-      $::fqdn,
+      $facts['facts['networking']['hostname']'],
+      $facts['facts['networking']['fqdn']'],
     ],
     ssl            => true,
     proxy          => 'http://localhost:8080',

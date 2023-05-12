@@ -1,5 +1,5 @@
 define ocf::ssl::lets_encrypt::dns(
-  Array[String] $domains = [$::fqdn],
+  Array[String] $domains = [$facts['facts['networking']['fqdn']']],
   String $owner = 'ocfletsencrypt',
   String $group = 'ssl-cert',
 ) {
@@ -10,7 +10,7 @@ define ocf::ssl::lets_encrypt::dns(
     content => "${join($domains, ' ')} > ${title}",
   }
 
-  $parsed_cert_info = parsejson($::le_cert_info)
+  $parsed_cert_info = parsejson($facts['le_cert_info'])
 
   $have_cert_info = $title in $parsed_cert_info
   if $have_cert_info {

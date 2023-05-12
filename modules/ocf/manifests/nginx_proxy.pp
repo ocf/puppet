@@ -8,8 +8,8 @@ define ocf::nginx_proxy(
   $headers        = {},
 
   $ssl         = false,
-  $ssl_cert    = "/etc/ssl/private/${::fqdn}.bundle",
-  $ssl_key     = "/etc/ssl/private/${::fqdn}.key",
+  $ssl_cert    = "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.bundle",
+  $ssl_key     = "/etc/ssl/private/${facts['facts['networking']['fqdn']']}.key",
   $ssl_dhparam = '/etc/ssl/dhparam.pem',
 
   # Accept any other arbitrary options passed in and pass them on to

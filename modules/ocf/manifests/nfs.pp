@@ -29,7 +29,7 @@ class ocf::nfs($cron = false, $web = false) {
     file {
       '/var/spool/cron/crontabs':
         ensure => link,
-        target => "/services/crontabs/${::hostname}",
+        target => "/services/crontabs/${facts['facts['networking']['hostname']']}",
         force  => true;
     }
 
