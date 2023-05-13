@@ -215,7 +215,7 @@ class ocf::apt($stage = 'first') {
         release  => 'bullseye',
         repos    => 'puppet',
     }
-  } else { 
+  } else {
     apt::source {
       'puppetlabs':
         location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
