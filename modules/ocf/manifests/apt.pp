@@ -208,12 +208,20 @@ class ocf::apt($stage = 'first') {
         };
     }
   }
-
-  apt::source {
-    'puppetlabs':
-      location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
-      release  => $::lsbdistcodename,
-      repos    => 'puppet',
+  if $::operatingsystemmajrelease == '12' {
+    apt::source {
+      'puppetlabs':
+        location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
+        release  => 'bullseye',
+        repos    => 'puppet',
+    }
+  } else { 
+    apt::source {
+      'puppetlabs':
+        location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
+        release  => $::lsbdistcodename,
+        repos    => 'puppet',
+    }
   }
 
   # Add the puppetlabs apt repo key
