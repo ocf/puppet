@@ -12,6 +12,14 @@ class ocf::packages::powershell::apt {
         repos        => 'main',
         require      => Apt::Key['powershell repo key'],
     }
+  } elsif $::lsbdistcodename == 'bookworm' {
+    apt::source { 'powershell':
+      architecture => 'amd64',
+      location     => "https://packages.microsoft.com/debian/11/prod",
+      release      => 'bullseye',
+      repos        => 'main',
+      require      => Apt::Key['powershell repo key'],
+    }
   } else {
     apt::source { 'powershell':
       architecture => 'amd64',
