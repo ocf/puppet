@@ -40,6 +40,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::mx_linux
   include ocf_mirrors::projects::mx_packages
   include ocf_mirrors::projects::openbsd
+  include ocf_mirrors::projects::openeuler
   include ocf_mirrors::projects::opensuse
   include ocf_mirrors::projects::openwrt
   include ocf_mirrors::projects::osdn

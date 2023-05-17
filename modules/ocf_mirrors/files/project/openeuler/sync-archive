@@ -1,0 +1,4 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -avzH --delete --delete-after \
+--delay-updates--safe-links \
+rsync://repo.openeuler.openatom.cn/openeuler/ /opt/mirrors/ftp/openeuler/
