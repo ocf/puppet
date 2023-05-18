@@ -149,27 +149,6 @@ class ocf_prometheus::server {
         static_configs  => [{targets => ['www:9117']}],
       },
       {
-        job_name        => 'co2_hurricane',
-        scrape_interval => '10s',
-        scrape_timeout  => '10s',
-
-        static_configs  => [{targets => ['hurricane:9999']}],
-      },
-      {
-        job_name        => 'fallingrocks_apache',
-        scrape_interval => '30s',
-        scrape_timeout  => '30s',
-
-        static_configs  => [{targets => ['fallingrocks:9117']}],
-      },
-      {
-        job_name        => 'fallingrocks_nginx',
-        scrape_interval => '10s',
-        scrape_timeout  => '10s',
-
-        static_configs  => [{targets => ['fallingrocks:9113']}],
-      },
-      {
         job_name        => 'slurm',
         scrape_interval => '30s',
         scrape_timeout  => '30s',
@@ -197,7 +176,14 @@ class ocf_prometheus::server {
         scheme          => 'https',
 
         static_configs  => [{targets =>['matrix.ocf.berkeley.edu']}],
-      }
+      },
+      {
+        job_name        => 'nvidia',
+        scrape_interval => '15s',
+        scrape_timeout  => '10s',
+
+        static_configs  => [{targets =>['corruption:9835']}],
+     }
     ]
   }
 }
