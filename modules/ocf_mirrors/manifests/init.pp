@@ -44,6 +44,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::openeuler
   include ocf_mirrors::projects::opensuse
   include ocf_mirrors::projects::openwrt
+  include ocf_mirrors::projects::opnsense
   include ocf_mirrors::projects::osdn
   include ocf_mirrors::projects::parrot
   include ocf_mirrors::projects::parabola
