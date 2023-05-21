@@ -40,6 +40,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::manjaro
   include ocf_mirrors::projects::mx_linux
   include ocf_mirrors::projects::mx_packages
+  include ocf_mirrors::projects::nongnu
   include ocf_mirrors::projects::openbsd
   include ocf_mirrors::projects::openeuler
   include ocf_mirrors::projects::opensuse
