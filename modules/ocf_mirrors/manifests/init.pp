@@ -29,6 +29,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::gimp
   include ocf_mirrors::projects::gnome
   include ocf_mirrors::projects::gnu
+  include ocf_mirrors::projects::gutenberg
   include ocf_mirrors::projects::ipfire
   include ocf_mirrors::projects::kali
   include ocf_mirrors::projects::kde
