@@ -55,6 +55,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::rocky
   include ocf_mirrors::projects::rpmfusion
   include ocf_mirrors::projects::sage
+  include ocf_mirrors::projects::siduction
   include ocf_mirrors::projects::slackware
   include ocf_mirrors::projects::tails
   include ocf_mirrors::projects::tdf
