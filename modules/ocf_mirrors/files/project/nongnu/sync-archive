@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -vrltpHS --delete-excluded \
+	rsync://dl.sv.gnu.org/releases/ /opt/mirrors/ftp/nongnu/
