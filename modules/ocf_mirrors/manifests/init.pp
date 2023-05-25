@@ -10,6 +10,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::alpine
   include ocf_mirrors::projects::archlinux
   include ocf_mirrors::projects::archlinuxcn
+  include ocf_mirrors::projects::artix_iso
   include ocf_mirrors::projects::artix_linux
   include ocf_mirrors::projects::blackarch
   include ocf_mirrors::projects::blender
