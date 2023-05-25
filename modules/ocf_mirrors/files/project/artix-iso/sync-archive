@@ -1,3 +1,3 @@
 #!/bin/sh -eu
 /usr/local/bin/rsync-no-vanished -avuH --delete-after \
-	rsync://download.artixlinux.org/iso/ /opt/mirrors/ftp/artix-linux/
+	rsync://download.artixlinux.org/iso/ /opt/mirrors/ftp/artix-iso/
