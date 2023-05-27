@@ -1,5 +1,5 @@
 #!/bin/sh -eu
 /usr/local/bin/rsync-no-vanished -avH --delete --delete-after \
 	--delay-updates --safe-links \
-	rsync://mirror.math.princeton.edu/pub/siduction/  \
+	rsync://packages.siduction.org/siduction/  \
 	/opt/mirrors/ftp/siduction/
