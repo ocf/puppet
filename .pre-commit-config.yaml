@@ -3,15 +3,15 @@ repos:
     rev: v2.1.0
     hooks:
     -   id: puppet-validate
-        additional_dependencies: ['puppet:<7']
+        additional_dependencies: ['puppet:<8']
     -   id: erb-validate
-        additional_dependencies: ['puppet:<7']
+        additional_dependencies: ['puppet:<8']
     -   id: epp-validate
-        additional_dependencies: ['puppet:<7']
+        additional_dependencies: ['puppet:<8']
     -   id: r10k-validate
-        additional_dependencies: ['puppet:<7', 'r10k']
+        additional_dependencies: ['puppet:<8', 'r10k']
     -   id: ruby-validate
-        additional_dependencies: ['puppet:<7']
+        additional_dependencies: ['puppet:<8']
 -   repo: https://github.com/pre-commit/pre-commit-hooks.git
     # We need to be using python3.6 by default before this can be upgraded to 3.x+
     rev: v2.5.0
