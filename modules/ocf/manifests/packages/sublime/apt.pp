@@ -8,6 +8,8 @@ class ocf::packages::sublime::apt {
   apt::source { 'sublime':
     architecture => 'amd64',
     location     => 'https://download.sublimetext.com/ apt/stable/',
+    release      => '',
+    repos        => '',
     require      => Apt::Key['sublime'],
   }
 }
