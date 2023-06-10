@@ -49,7 +49,7 @@ class ocf_prometheus::server {
 
   class { 'prometheus::server':
     version              => '2.32.1',
-    extra_options        => '--web.listen-address="127.0.0.1:9090"',
+    extra_options        => '--web.listen-address="127.0.0.1:9090" --storage.tsdb.retention.time=45d',
     external_url         => 'https://prometheus.ocf.berkeley.edu',
     rule_files           => [ '/etc/prometheus/rules.d/*.yaml' ],
     group                => 'prometheus',
