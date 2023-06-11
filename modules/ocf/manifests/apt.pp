@@ -9,7 +9,11 @@ class ocf::apt($stage = 'first') {
     };
   }
 
-  $repos = 'main contrib non-free'
+  if $::operatingsystemmajrelease == '12' {
+    $repos = 'main contrib non-free non-free-firmware'
+  } else {
+    $repos = 'main contrib non-free'
+  }
 
   if $::lsbdistid == 'Debian' {
     if $::operatingsystemmajrelease == '9' {
