@@ -10,7 +10,7 @@ class ocf::packages::grub {
   # need os-prober anyway to detect other OSes since we don't have other OSes,
   # and we'd rather not have data corruption in the future:
   # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=788062
-  if $::lsbdistid != 'Raspbian' {
+  if $facts['os']['distro']['id'] != 'Raspbian' {
     # grub-pc or grub-efi aren't available on Raspbian.
     if str2bool($::is_efi_host) {
       ocf::repackage { 'grub-efi':

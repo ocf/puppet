@@ -19,7 +19,7 @@ class ocf_irc::ircd {
 
   $irc_creds = lookup('irc_creds')
 
-  if $::lsbdistcodename == 'buster' {
+  if $facts['os']['distro']['codename'] == 'buster' {
     # Disable the AppArmor profile for inspircd, since it prevents us from
     # accessing the necessary TLS certs
     file { '/etc/apparmor.d/disable/usr.sbin.inspircd':

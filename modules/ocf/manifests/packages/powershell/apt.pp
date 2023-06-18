@@ -4,7 +4,7 @@ class ocf::packages::powershell::apt {
     id     => 'BC528686B50D79E339D3721CEB3E94ADBE1229CF',
     source => 'https://packages.microsoft.com/keys/microsoft.asc';
   }
-  if $::lsbdistcodename == 'stretch' {
+  if $facts['os']['distro']['codename'] == 'stretch' {
     apt::source { 'powershell':
         architecture => 'amd64',
         location     => 'https://packages.microsoft.com/repos/microsoft-debian-stretch-prod',
@@ -12,7 +12,7 @@ class ocf::packages::powershell::apt {
         repos        => 'main',
         require      => Apt::Key['powershell repo key'],
     }
-  } elsif $::lsbdistcodename == 'bookworm' {
+  } elsif $facts['os']['distro']['codename'] == 'bookworm' {
     apt::source { 'powershell':
       architecture => 'amd64',
       location     => "https://packages.microsoft.com/debian/11/prod",
@@ -24,7 +24,7 @@ class ocf::packages::powershell::apt {
     apt::source { 'powershell':
       architecture => 'amd64',
       location     => "https://packages.microsoft.com/debian/${::operatingsystemmajrelease}/prod",
-      release      => $::lsbdistcodename,
+      release      => $facts['os']['distro']['codename'],
       repos        => 'main',
       require      => Apt::Key['powershell repo key'],
     }

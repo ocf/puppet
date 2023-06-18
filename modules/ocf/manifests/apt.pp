@@ -192,7 +192,7 @@ class ocf::apt($stage = 'first') {
       }
   }
 
-  } elsif $::lsbdistid == 'Raspbian' {
+  } elsif $facts['os']['distro']['id'] == 'Raspbian' {
     apt::source {
       'raspbian':
         location => 'https://mirrors.ocf.berkeley.edu/raspbian/raspbian/',
