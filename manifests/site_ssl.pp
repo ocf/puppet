@@ -6,7 +6,7 @@
 # https://wiki.mozilla.org/Security/Server_Side_TLS#Intermediate_compatibility_.28default.29
 #
 # This should be updated from time-to-time.
-if $facts['os']['distro']['codename'] == 'bullseye' {
+if Integer($facts['os']['release']['major']) >= 11 {
   $ssl_ciphersuite = 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256'
   $ssl_protocols = 'TLSv1.2 TLSv1.3'
 } else {
