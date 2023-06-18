@@ -206,7 +206,7 @@ class ocf::extrapackages {
     backport_on =>  ['buster', 'stretch'],
   }
 
-  if $::lsbdistcodename == 'stretch' {
+  if $facts['os']['distro']['codename'] == 'stretch' {
     package {
       [
         # php-mcrypt is deprecated since PHP 7.1 in favor of using openssl
@@ -220,12 +220,12 @@ class ocf::extrapackages {
         'php7.0-dba',
       ]:;
     }
-  } elsif $::lsbdistcodename == 'buster' {
+  } elsif $facts['os']['distro']['codename'] == 'buster' {
     # This isn't available as php-dba unfortunately (that's just a virtual
     # package for this), and with virtual packages puppet will try to install
     # them every run, leading to unnecessary noise
     package { 'php7.3-dba':; }
-  } elsif $::lsbdistcodename == 'bullseye' {
+  } elsif $facts['os']['distro']['codename'] == 'bullseye' {
     # This isn't available as php-dba unfortunately (that's just a virtual
     # package for this), and with virtual packages puppet will try to install
     # them every run, leading to unnecessary noise
