@@ -12,18 +12,10 @@ class ocf::packages::powershell::apt {
         repos        => 'main',
         require      => Apt::Key['powershell repo key'],
     }
-  } elsif $facts['os']['distro']['codename'] == 'bookworm' {
-    apt::source { 'powershell':
-      architecture => 'amd64',
-      location     => "https://packages.microsoft.com/debian/11/prod",
-      release      => 'bullseye',
-      repos        => 'main',
-      require      => Apt::Key['powershell repo key'],
-    }
   } else {
     apt::source { 'powershell':
       architecture => 'amd64',
-      location     => "https://packages.microsoft.com/debian/${::operatingsystemmajrelease}/prod",
+      location     => "https://packages.microsoft.com/debian/${facts['os']['release']['major']}/prod",
       release      => $facts['os']['distro']['codename'],
       repos        => 'main',
       require      => Apt::Key['powershell repo key'],
