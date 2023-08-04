@@ -152,7 +152,7 @@ class ocf_desktop::xsession(
   }
 
   # use ocf logo on login screen
-  if $::lsbdistcodename == 'bullseye' {
+  if $facts['os']['distro']['codename'] == 'bullseye' {
     file {
       ['/usr/share/icons/Adwaita', '/usr/share/icons/Adwaita/512x512', '/usr/share/icons/Adwaita/512x512/status']:
         ensure => directory;

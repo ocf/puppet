@@ -1,5 +1,5 @@
 class ocf::packages::memtest {
-  if $::lsbdistid != 'Raspbian' {
+  if $facts['os']['distro']['id'] != 'Raspbian' {
     package { 'memtest86+': }
   }
 }

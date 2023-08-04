@@ -79,7 +79,7 @@ class ocf_www::site::www {
           # ...and not if it's the matrix well-known file
           '%{REQUEST_URI} !^/\.well-known/matrix',
         ],
-        rewrite_rule => '^/(.*)$ http://lb.ocf.berkeley.edu:4080/$1 [P]',
+        rewrite_rule => '^/(.*)$ http://hozer-81.ocf.berkeley.edu/$1 [P]',
       }
     ],
 

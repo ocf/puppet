@@ -34,3 +34,13 @@ Codename: bullseye-backports
 Architectures: amd64 source
 Components: main
 SignWith: D72A0AF4
+
+Codename: bookworm
+Architectures: amd64 source
+Components: main
+SignWith: D72A0AF4
+
+Codename: bookworm-backports
+Architectures: amd64 source
+Components: main
+SignWith: D72A0AF4

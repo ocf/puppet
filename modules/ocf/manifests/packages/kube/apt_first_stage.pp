@@ -21,7 +21,7 @@ class ocf::packages::kube::apt_first_stage {
   apt::key { 'crio repo key':
     id     => '2472D6D0D2F66AF87ABA8DA34D64390375060AA4',
     # the key is the same for both
-    source => "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${::operatingsystemmajrelease}/Release.key";
+    source => "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${facts['os']['release']['major']}/Release.key";
   }
 
   # TODO: Generate this from kubernetes version...
@@ -30,14 +30,14 @@ class ocf::packages::kube::apt_first_stage {
   # for packages: cri-o cri-o-runc
   apt::source { 'crio':
       architecture => 'amd64',
-      location     => "http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/${crio_version}/Debian_${::operatingsystemmajrelease}/",
+      location     => "http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/${crio_version}/Debian_${facts['os']['release']['major']}/",
       repos        => '/',
       release      => '',
       require      => Apt::Key['crio repo key'],
   }
   apt::source { 'libcontainers':
       architecture => 'amd64',
-      location     => "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${::operatingsystemmajrelease}/",
+      location     => "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${facts['os']['release']['major']}/",
       repos        => '/',
       release      => '',
       require      => Apt::Key['crio repo key'],

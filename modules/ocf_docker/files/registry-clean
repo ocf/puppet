@@ -5,10 +5,10 @@ set -euo pipefail
 trap 'systemctl start docker-registry' EXIT
 
 # Delete all images older than a month.
-deckschrubber -repos 9999 -month 1
+deckschrubber -repos 1000 -month 1
 
 systemctl stop docker-registry
 docker run --rm \
     -v /var/lib/registry:/var/lib/registry \
-    registry:2 \
+    registry:latest \
     registry garbage-collect /etc/docker/registry/config.yml

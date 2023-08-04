@@ -1,0 +1,4 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -avH --delete --delete-after \
+	--delay-updates --safe-links \
+	rsync://pkg.opnsense.org/opnsense-dist/ /opt/mirrors/ftp/opnsense/

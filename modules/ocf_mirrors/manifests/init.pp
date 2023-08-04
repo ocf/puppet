@@ -10,6 +10,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::alpine
   include ocf_mirrors::projects::archlinux
   include ocf_mirrors::projects::archlinuxcn
+  include ocf_mirrors::projects::artix_iso
   include ocf_mirrors::projects::artix_linux
   include ocf_mirrors::projects::blackarch
   include ocf_mirrors::projects::blender
@@ -20,6 +21,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::debian
   include ocf_mirrors::projects::debian_nonfree
   include ocf_mirrors::projects::devuan
+  include ocf_mirrors::projects::dragora
   include ocf_mirrors::projects::emacs_lisp_archive
   include ocf_mirrors::projects::fedora
   include ocf_mirrors::projects::finnix
@@ -29,6 +31,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::gimp
   include ocf_mirrors::projects::gnome
   include ocf_mirrors::projects::gnu
+  include ocf_mirrors::projects::gutenberg
   include ocf_mirrors::projects::ipfire
   include ocf_mirrors::projects::kali
   include ocf_mirrors::projects::kde
@@ -39,9 +42,12 @@ class ocf_mirrors {
   include ocf_mirrors::projects::manjaro
   include ocf_mirrors::projects::mx_linux
   include ocf_mirrors::projects::mx_packages
+  include ocf_mirrors::projects::nongnu
   include ocf_mirrors::projects::openbsd
+  include ocf_mirrors::projects::openeuler
   include ocf_mirrors::projects::opensuse
   include ocf_mirrors::projects::openwrt
+  include ocf_mirrors::projects::opnsense
   include ocf_mirrors::projects::osdn
   include ocf_mirrors::projects::parrot
   include ocf_mirrors::projects::parabola
@@ -54,6 +60,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::rocky
   include ocf_mirrors::projects::rpmfusion
   include ocf_mirrors::projects::sage
+  include ocf_mirrors::projects::siduction
   include ocf_mirrors::projects::slackware
   include ocf_mirrors::projects::tails
   include ocf_mirrors::projects::tdf

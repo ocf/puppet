@@ -1,5 +1,5 @@
 [mysqld]
-bind-address = ::
+bind-address = *
 
 # enable encrypted connections
 ssl-cert=/etc/ssl/private/<%= @fqdn %>.crt

@@ -44,7 +44,7 @@ class ocf_desktop::packages {
     # notifications
     ['libnotify-bin', 'notification-daemon']:;
     # security tools
-    ['scdaemon', 'yubikey-manager']:;
+    ['gnome-keyring', 'scdaemon', 'yubikey-manager']:;
     # utilities
     ['wakeonlan']:;
     # Xorg
@@ -61,8 +61,6 @@ class ocf_desktop::packages {
       ensure => purged;
     # causes the fcitx menu to vanish
     'ayatana-indicator-application':;
-    # meant for personal machines, and has invasive prompt
-    'gnome-keyring':;
     # dependencies conflict with backports
     'remmina':;
     # causes gid conflicts
