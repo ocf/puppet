@@ -15,8 +15,8 @@ mod 'herculesteam-augeasproviders_core',   '2.5.0' # Dependency of puppetlabs-ku
 mod 'herculesteam-augeasproviders_sysctl', '2.3.1' # Dependency of puppetlabs-kubernetes
 mod 'puppet-nginx',                        '5.0.0'
 mod 'puppet-archive',                      '6.0.1' # Dependency of puppet-prometheus
-mod 'puppet-prometheus',                   '12.2.0'
-mod 'puppet-alternatives',                 '4.0.0'
+mod 'puppet-prometheus',                   '13.3.0'
+mod 'puppet-alternatives',                 '5.0.0'
 mod 'puppetlabs-apache',                   '10.1.1'
 mod 'puppetlabs-apt',                      '9.1.0'
 mod 'puppetlabs-concat',                   '9.0.0'
@@ -31,6 +31,6 @@ mod 'puppetlabs-puppet_authorization',     '0.4.0'
 mod 'puppetlabs-puppetdb',                 '7.13.0'
 mod 'puppetlabs-stdlib',                   '9.3.0'
 mod 'puppetlabs-tagmail',                  '4.1.0'
-mod 'puppetlabs-vcsrepo',                  '5.3.0'
+mod 'puppetlabs-vcsrepo',                  '6.1.0'
 mod 'thias-sysctl',                        '1.0.6'
 mod 'puppetlabs/translate',                '2.0.0' # Dependency of puppetlabs-kubernetes
