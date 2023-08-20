@@ -13,13 +13,6 @@ class ocf_ocfweb::dev_config($group = 'ocfstaff') {
   $backend = $broker
   $redis_uri = "rediss://:${redis_password}@admin.ocf.berkeley.edu:6378/1"
 
-
-  # libcrack2-dev is a dependency of the crypto libraries that
-  # ocfweb depends on, but we can't just declare the package
-  # because it conflicts with extrapackages, which is declared in
-  # ocf_admin along with this manifest (for supernova)
-  ensure_packages(['libcrack2-dev'])
-
   # Install some packages for generating puppet diffs
   # TODO: Move this somewhere else alongside the puppet certs added below
   package { ['octocatalog-diff', 'puppetdb-termini']:; }
