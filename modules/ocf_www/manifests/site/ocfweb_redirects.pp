@@ -38,7 +38,7 @@ class ocf_www::site::ocfweb_redirects {
     port            => 80,
     docroot         => '/var/www/html',
 
-    redirect_status => 301,
+    redirect_status => 'permanent',
     redirect_dest   => $accounts_canonical_url;
   }
 
