@@ -85,7 +85,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/irc$ https://www.ocf.berkeley.edu/docs/contact/irc/ [R]'},
       {rewrite_rule => '^/job$ https://docs.google.com/document/d/1oS3ma415LbtuyeEuuoucWKYLcWOJaWmzhv2nIs5f718/edit [R]'},
       {rewrite_rule => '^/join$ https://www.ocf.berkeley.edu/account/register/ [R]'},
-      {rewrite_rule => '^/joinstaff$ https://docs.google.com/presentation/d/1HNSWfHlPf_gwlOo7TJQcRwttGYUlo567h1u9qDxi48c/edit?usp=sharing [R]'},
+      {rewrite_rule => '^/joinstaff$ https://docs.google.com/presentation/d/10_V1RoMHhbo3-VIjAO--Mhm7MM_rkhbKHjJwqeJaLG0/edit?usp=sharing [R]'},
       {rewrite_rule => '^/k$ https://kanboard.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/k/a$ https://kanboard.ocf.berkeley.edu/?controller=BoardViewController&action=show&project_id=2 [R]'},
       {rewrite_rule => '^/k/([0-9]+)$ https://kanboard.ocf.berkeley.edu/?controller=TaskViewController&action=show&task_id=$1 [R]'},
