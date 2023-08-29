@@ -2,23 +2,27 @@
 #admin principals
 bencuan/admin@OCF.BERKELEY.EDU          all,get-keys
 etw/admin@OCF.BERKELEY.EDU              all,get-keys
+jaysa/admin@OCF.BERKELEY.EDU            all,get-keys
 kian/admin@OCF.BERKELEY.EDU             all,get-keys
 laksith/admin@OCF.BERKELEY.EDU          all,get-keys
 longlian/admin@OCF.BERKELEY.EDU         all,get-keys
 ncograin/admin@OCF.BERKELEY.EDU         all,get-keys
 njha/admin@OCF.BERKELEY.EDU             all,get-keys
 rjz/admin@OCF.BERKELEY.EDU              all,get-keys
+trinityc/admin@OCF.BERKELEY.EDU         all,get-keys
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
 bencuan/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 etw/root@OCF.BERKELEY.EDU               change-password                         *@OCF.BERKELEY.EDU
+jaysa/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
 kian/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
 laksith/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 longlian/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 ncograin/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 njha/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
 rjz/root@OCF.BERKELEY.EDU               change-password                         *@OCF.BERKELEY.EDU
+trinityc/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 
 # create
 create/admin@OCF.BERKELEY.EDU           add,get,change-password                 *@OCF.BERKELEY.EDU
