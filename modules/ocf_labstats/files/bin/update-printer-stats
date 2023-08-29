@@ -15,7 +15,8 @@ def update_printer_stats(ocfstats_pass, printer):
     except OSError as ex:
         return
 
-    with get_connection(user='ocfstats', password=ocfstats_pass) as c:
+    conn = get_connection(user='ocfstats', password=ocfstats_pass)
+    with conn.cursor() as c:
         c.execute(
             (
                 'INSERT INTO `printer_toner` (`date`, `printer`, `value`, `max`)'
@@ -31,6 +32,8 @@ def update_printer_stats(ocfstats_pass, printer):
             ),
             (printer, lifetime_pages),
         )
+    conn.commit()
+    conn.close()
 
 
 def main():

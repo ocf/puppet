@@ -18,10 +18,13 @@ def main(argv=None):
     user = current_user()
 
     if user_exists(user) and not user_is_group(user):
-        with get_connection() as c:
+        conn = get_connection()
+        with conn.cursor() as c:
             quota = get_quota(c, user)
             daily_quota = quota.daily
             semester_quota = quota.semesterly
+        conn.commit()
+        conn.close()
 
     PANEL_TEXT = '{} {} left today | {} left this semester'
     print(PANEL_TEXT.format(daily_quota, 'side of paper' if daily_quota == 1 else 'sides of paper',
