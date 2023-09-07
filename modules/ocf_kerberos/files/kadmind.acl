@@ -8,6 +8,7 @@ laksith/admin@OCF.BERKELEY.EDU          all,get-keys
 longlian/admin@OCF.BERKELEY.EDU         all,get-keys
 ncograin/admin@OCF.BERKELEY.EDU         all,get-keys
 njha/admin@OCF.BERKELEY.EDU             all,get-keys
+oliverni/admin@OCF.BERKELEY.EDU         all,get-keys
 rjz/admin@OCF.BERKELEY.EDU              all,get-keys
 trinityc/admin@OCF.BERKELEY.EDU         all,get-keys
 
@@ -21,6 +22,7 @@ laksith/root@OCF.BERKELEY.EDU           change-password                         
 longlian/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 ncograin/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 njha/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
+oliverni/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 rjz/root@OCF.BERKELEY.EDU               change-password                         *@OCF.BERKELEY.EDU
 trinityc/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 
