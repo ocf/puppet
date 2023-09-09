@@ -24,7 +24,7 @@ class ocf_desktop::packages {
       'xterm']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'arc-theme',
-      'desktop-file-utils', 'gnome-icon-theme', 'paper-icon-theme', 'redshift',
+      'desktop-file-utils', 'foot-terminfo', 'gnome-icon-theme', 'paper-icon-theme', 'redshift',
       'xfce4-whiskermenu-plugin']:;
     # desktop helpers
     ['libimage-exiftool-perl']:;
