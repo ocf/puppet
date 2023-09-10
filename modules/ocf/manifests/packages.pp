@@ -88,6 +88,7 @@ class ocf::packages {
       'dnsutils',
       'dtach',
       'finger',
+      'foot-terminfo',
       'gist',
       'hexedit',
       'htop',
