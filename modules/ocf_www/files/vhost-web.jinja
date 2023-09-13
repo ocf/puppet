@@ -18,7 +18,6 @@
         # Doesn't matter too much for vhosts.
         RewriteRule ^(.*)$ {{vhost.redirect_dest}}$1 [L,R=302]
     {% elif vhost.is_apphost %}
-        RewriteEngine on
         RequestHeader set X-Forwarded-Proto https
         ProxyPreserveHost On
         SSLProxyEngine on
