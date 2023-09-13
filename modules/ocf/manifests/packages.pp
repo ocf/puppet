@@ -141,6 +141,13 @@ class ocf::packages {
     }
   }
 
+  # TODO: remove this once we replace vampires
+  if $::os[distro][codename] >= 11 {
+    package {
+      'foot-terminfo':;
+    }
+  }
+
   ocf::repackage { 'python3-attr':
     backport_on =>  ['stretch'],
   }
