@@ -134,7 +134,7 @@ class ocf::packages {
   }
 
   # TODO: remove this once we replace vampires and no longer support stretch (and move to above
-  # packages block) 
+  # packages block)
   if $::os[distro][codename] != 'stretch' {
     package {
       [
