@@ -133,17 +133,11 @@ class ocf::packages {
     ]:;
   }
 
-  # TODO: remove this once we no longer support stretch (and move to above
-  # packages block)
+  # TODO: remove this once we replace vampires and no longer support stretch (and move to above
+  # packages block) 
   if $::os[distro][codename] != 'stretch' {
     package {
       'kitty-terminfo':;
-    }
-  }
-
-  # TODO: remove this once we replace vampires
-  if $::os[distro][codename] >= 11 {
-    package {
       'foot-terminfo':;
     }
   }
