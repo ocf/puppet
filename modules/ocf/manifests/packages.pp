@@ -137,8 +137,10 @@ class ocf::packages {
   # packages block) 
   if $::os[distro][codename] != 'stretch' {
     package {
-      'kitty-terminfo':;
-      'foot-terminfo':;
+      [
+        'kitty-terminfo',
+        'foot-terminfo',
+      ]:;
     }
   }
 
