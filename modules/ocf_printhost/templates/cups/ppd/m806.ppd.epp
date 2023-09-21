@@ -159,7 +159,7 @@
 *OpenGroup: HPPaperQualityPanel/Paper/Quality
 *OpenUI *HPPrintQuality/Print Quality: PickOne
 *OrderDependency: 5 DocumentSetup *HPPrintQuality
-*DefaultHPPrintQuality: FastRes1200
+*DefaultHPPrintQuality: ProRes1200
 *HPPrintQuality FastRes1200/FastRes 1200: "<</HWResolution [600 600] /PreRenderingEnhance true>> setpagedevice"
 *HPPrintQuality 600dpi/600 dpi: "<</HWResolution [600 600] /PreRenderingEnhance false>> setpagedevice"
 *HPPrintQuality ProRes1200/ProRes 1200: "<</HWResolution [1200 1200] /PreRenderingEnhance false>> setpagedevice"
