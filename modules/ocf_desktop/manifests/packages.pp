@@ -20,7 +20,7 @@ class ocf_desktop::packages {
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
       'musescore3', 'mpv', 'mssh', 'mumble', 'numlockx',
       'simple-scan', 'ssh-askpass-gnome', 'texmaker',
-      'texstudio', 'tigervnc-viewer', 'vlc', 'xarchiver', 'xcape', 'xournal',
+      'texstudio', 'tigervnc-viewer', 'vlc', 'xarchiver', 'xcape', 'xournalpp',
       'xterm']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'arc-theme',
