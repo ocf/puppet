@@ -17,6 +17,12 @@
         # 301 redirects are more correct, but get cached forever by dumb browsers.
         # Doesn't matter too much for vhosts.
         RewriteRule ^(.*)$ {{vhost.redirect_dest}}$1 [L,R=302]
+    {% elif vhost.is_apphost %}
+        RequestHeader set X-Forwarded-Proto https
+        ProxyPreserveHost On
+        SSLProxyEngine on
+        # Proxy to apphost server
+        ProxyPass / https://apphost.ocf.berkeley.edu/ upgrade=websocket
     {% elif vhost.disabled %}
         # Proxy to the local "unavailable" vhost, which serves up a friendly
         # "your website is rekt" page.

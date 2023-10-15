@@ -102,6 +102,10 @@ class VirtualHost(namedtuple('VirtualHost', (
         return self.bind_type == 'redirect'
 
     @property
+    def is_apphost(self):
+        return self.bind_type == 'socket'
+
+    @property
     def docroot(self):
         assert self.bind_type == 'docroot'
         return os.path.join(
@@ -386,7 +390,22 @@ def main():
 
     if args.target == 'web':
         site_cfg = APACHE_SITE_CONFIG
+        # Build app vhosts so that they can get proxied to apphost.o.b.e
+        # Placed before regular vhosts so they take priority in domain matching
+        # (sometimes hosts have entries in both vhost.conf and vhost-app.conf)
+        # Filter out dev app vhosts so they don't clobber existing vhost entries
+        prod_app_vhosts = {
+            domain: conf
+            for domain, conf in get_app_vhosts().items()
+            if 'dev' not in conf['flags']
+        }
         config = build_config(
+            prod_app_vhosts,
+            jinja_env.get_template('vhost-web.jinja'),
+            dev_config=args.dev,
+        )
+        config += '\n\n'
+        config += build_config(
             get_vhosts(),
             jinja_env.get_template('vhost-web.jinja'),
             dev_config=args.dev,

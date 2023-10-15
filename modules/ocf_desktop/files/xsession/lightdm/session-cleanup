@@ -7,4 +7,8 @@ if [ -n "$USER" ]; then
   pkill -9 -u "$USER"
 fi
 
+# Cleanup Chrome filesystem usage
+rm -rf "$HOME/.cache/google-chrome"
+rm -rf "$HOME/.config/google-chrome"
+
 sudo -u ocfstats /opt/stats/update-delay.sh cleanup &
