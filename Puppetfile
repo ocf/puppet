@@ -29,7 +29,7 @@ mod 'puppetlabs-haproxy',                  '2.2.0'
 mod 'puppetlabs-postgresql',               '8.0.0' # Dependency of puppetlabs-puppetdb
 mod 'puppetlabs-puppet_authorization',     '0.4.0'
 mod 'puppetlabs-puppetdb',                 '6.0.2'
-mod 'puppetlabs-stdlib',                   '4.25.1'
+mod 'puppetlabs-stdlib',                   '9.4.0'
 mod 'puppetlabs-tagmail',                  '2.4.0'
 mod 'puppetlabs-vcsrepo',                  '5.3.0'
 mod 'thias-sysctl',                        '1.0.6'
