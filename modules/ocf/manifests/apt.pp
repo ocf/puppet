@@ -1,5 +1,5 @@
 class ocf::apt($stage = 'first') {
-  package { ['aptitude', 'imvirt', 'apt-transport-https', 'lsb-release', 'ethtool', 'unattended-upgrades']:; }
+  package { ['aptitude', 'imvirt', 'lsb-release', 'ethtool', 'unattended-upgrades']:; }
 
   class { '::apt':
     purge => {

@@ -38,9 +38,9 @@ class ocf_www {
     '::apache::mod::worker':
       startservers    => 8,
       # maxclients should be set to a max of serverlimit * threadsperchild
-      maxclients      => 5000,
-      threadsperchild => 50,
-      serverlimit     => 100;
+      maxrequestworkers => 5000,
+      threadsperchild   => 50,
+      serverlimit       => 100;
   }
 
   # Prometheus user needed for the prometheus-apache-exporter daemon,

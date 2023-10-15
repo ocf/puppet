@@ -161,7 +161,7 @@ class ocf_www::site::www {
       ],
       port                 => 80,
       docroot              => '/var/www/html',
-      redirectmatch_status => 301,
+      redirectmatch_status => '301',
       # ugly exceptions
       redirectmatch_regexp => '^((?!\/\.well-known\/matrix\/(client|server)).*)',
       redirectmatch_dest   => $canonical_url;
@@ -185,7 +185,7 @@ class ocf_www::site::www {
       ],
       port                 => 443,
       docroot              => '/var/www/html',
-      redirectmatch_status => 301,
+      redirectmatch_status => '301',
       # ugly exceptions
       redirectmatch_regexp => '^((?!\/\.well-known\/matrix\/(client|server)).*)',
       redirectmatch_dest   => $canonical_url,

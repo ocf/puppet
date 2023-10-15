@@ -180,7 +180,7 @@ class ocf_www::site::shorturl {
     port            => 80,
     docroot         => '/var/www/html',
 
-    redirect_status => 301,
+    redirect_status => 'permanent',
     redirect_dest   => $canonical_url;
   }
 }
