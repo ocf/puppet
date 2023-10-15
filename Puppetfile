@@ -18,7 +18,7 @@ mod 'puppet-archive',                      '6.0.1' # Dependency of puppet-promet
 mod 'puppet-prometheus',                   '12.2.0'
 mod 'puppet-alternatives',                 '4.0.0'
 mod 'puppetlabs-apache',                   '3.1.0'
-mod 'puppetlabs-apt',                      '6.3.0'
+mod 'puppetlabs-apt',                      '9.1.0'
 mod 'puppetlabs-concat',                   '4.2.1'
 # Make sure to update alexharvey/firewall_multi version
 mod 'puppetlabs-firewall',                 '2.5.0'
