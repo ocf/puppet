@@ -18,7 +18,7 @@ class ocf_desktop::packages {
     ['arandr', 'blender', 'claws-mail', 'clementine', 'eog', 'evince',
       'filezilla', 'freeplane', 'geany', 'gimp',
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
-      'musescore3', 'mpv', 'mssh', 'mumble', 'numlockx',
+      'musescore3', 'mpv', 'mssh', 'mumble', 'numlockx', 'pass',
       'simple-scan', 'ssh-askpass-gnome', 'texmaker',
       'texstudio', 'tigervnc-viewer', 'vlc', 'xarchiver', 'xcape', 'xournalpp',
       'xterm']:;
