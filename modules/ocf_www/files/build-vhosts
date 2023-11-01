@@ -139,6 +139,12 @@ class VirtualHost(namedtuple('VirtualHost', (
         return self.bind_dest
 
     @property
+    def redirect_type(self):
+        if '301' in self.additional_rules:
+            return 301
+        return 302
+
+    @property
     def websocket_locations(self):
         if self.bind_type == 'socket' and 'ws' in self.additional_rules:
             return self.additional_rules['ws']
@@ -179,6 +185,8 @@ def build_config(src_vhosts, template, dev_config=False):
             ws_match = re.match(r'ws\=(.+)', flag)
             if ws_match:
                 additional_rules.setdefault('ws', []).append(ws_match.group(1))
+            elif flag == '301':
+                additional_rules['301'] = True
 
         # primary vhost
         primary = VirtualHost(
@@ -240,7 +248,7 @@ def build_config(src_vhosts, template, dev_config=False):
                 ssl=ssl,
                 bind_type='redirect',
                 bind_dest=primary.canonical_url,
-                additional_rules={},
+                additional_rules=additional_rules,
             ))
 
     return '\n\n'.join(
