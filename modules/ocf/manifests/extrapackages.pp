@@ -80,6 +80,7 @@ class ocf::extrapackages {
     'libexpect-perl',
     'libfcgi-dev',
     'libffi-dev',
+    'libfuse3-dev',
     'libgdbm-dev',
     'libgtk-3-dev',
     'libgtk2.0-dev',
