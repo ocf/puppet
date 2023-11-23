@@ -30,6 +30,9 @@
         ProxyPass / http://localhost/
     {% else %}
         DocumentRoot {{vhost.docroot}}
+        {% for name, value in vhost.response_headers.items() %}
+        Header set {{name}} {{value | tojson}}
+        {% endfor %}
 
         <Directory {{vhost.docroot}}>
             Options ExecCGI IncludesNoExec Indexes MultiViews SymLinksIfOwnerMatch
