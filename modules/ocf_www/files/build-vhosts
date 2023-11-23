@@ -143,6 +143,13 @@ class VirtualHost(namedtuple('VirtualHost', (
         if '301' in self.additional_rules:
             return 301
         return 302
+    
+    @property
+    def response_headers(self):
+        result = {}
+        if 'noindex' in self.additional_rules:
+            result['X-Robots-Tag'] = 'noindex'
+        return result
 
     @property
     def websocket_locations(self):
@@ -185,8 +192,8 @@ def build_config(src_vhosts, template, dev_config=False):
             ws_match = re.match(r'ws\=(.+)', flag)
             if ws_match:
                 additional_rules.setdefault('ws', []).append(ws_match.group(1))
-            elif flag == '301':
-                additional_rules['301'] = True
+            else:
+                additional_rules[flag] = True
 
         # primary vhost
         primary = VirtualHost(
