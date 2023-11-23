@@ -143,7 +143,7 @@ class VirtualHost(namedtuple('VirtualHost', (
         if '301' in self.additional_rules:
             return 301
         return 302
-    
+
     @property
     def response_headers(self):
         result = {}
