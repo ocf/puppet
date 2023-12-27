@@ -4,6 +4,7 @@ class ocf_ns {
     require => Package['bind9'];
   }
 
+  $decal_ddns_key = assert_type(Stdlib::Base64, lookup('decal::ddns::key'))
   $letsencrypt_ddns_key = assert_type(Stdlib::Base64, lookup('letsencrypt::ddns::key'))
 
   file {
