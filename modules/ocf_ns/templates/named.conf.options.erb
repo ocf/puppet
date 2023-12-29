@@ -60,6 +60,11 @@ zone "multi.uribl.com" {
   forwarders {};
 };
 
+key "decal.ocf.io" {
+  algorithm HMAC-SHA512;
+  secret "<%= @decal_ddns_key -%>";
+};
+
 key "letsencrypt.ocf.io" {
   algorithm HMAC-SHA512;
   secret "<%= @letsencrypt_ddns_key -%>";
