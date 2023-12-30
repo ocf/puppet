@@ -2,9 +2,9 @@ options {
         directory "/var/cache/bind";
 
         forwarders {
-                <% @upstream_nameservers.each do |nameserver| -%>
-                <%= nameserver %>;
-                <% end -%>
+                <%- @upstream_nameservers.each do |nameserver| -%>
+                <%=- nameserver -%>;
+                <%- end -%>
         };
 
         //========================================================================
