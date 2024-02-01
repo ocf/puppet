@@ -152,7 +152,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/stf-cost-breakdown$ https://docs.google.com/spreadsheets/d/1U3YfU5S1hyi4c9u1vME84lz5hQPz23LKWCaD8mq4JHI/edit [R]'},
       {rewrite_rule => '^/survey$ https://goo.gl/forms/sk1s0dnuxDY71vBR2 [R]'},
       {rewrite_rule => '^/today$ https://www.ocf.berkeley.edu/tv$1 [R]'},
-      {rewrite_rule => '^/teamsus$ https://forms.gle/hWpMGqduFPMff5f5A [R]'},
+      {rewrite_rule => '^/teamsus$ https://docs.google.com/spreadsheets/d/1YNqk5O9JWSr5fqCpY09lLluDJKthbYiElQYAZC6A5eA/edit?usp=sharing [R]'},
       {rewrite_rule => '^/tw(/.*)?$ https://ocf.io/twitter$1 [R]'},
       {rewrite_rule => '^/twitter(/.*)?$ https://twitter.com/ucbocf$1 [R]'},
       {rewrite_rule => '^/tv(/.*)?$ https://www.ocf.berkeley.edu/tv$1 [R]'},
