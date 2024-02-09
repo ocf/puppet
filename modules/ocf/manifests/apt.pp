@@ -23,7 +23,7 @@ class ocf::apt($stage = 'first') {
 
       apt::source {
       'debian':
-          location => 'https://mirrors.ocf.berkeley.edu/debian/',
+          location => 'https://mirrors.wikimedia.org/debian/',
           release  => $facts['os']['distro']['codename'],
           repos    => $repos,
           include  => {
@@ -31,7 +31,7 @@ class ocf::apt($stage = 'first') {
           };
 
       'debian-updates':
-          location => 'https://mirrors.ocf.berkeley.edu/debian/',
+          location => 'https://mirrors.wikimedia.org/debian/',
           release  => "${facts['os']['distro']['codename']}-updates",
           repos    => $repos,
           include  => {
@@ -39,7 +39,7 @@ class ocf::apt($stage = 'first') {
           };
 
       'debian-security':
-          location => 'https://mirrors.ocf.berkeley.edu/debian-security/',
+          location => 'http://deb.debian.org/debian-security/',
           release  => "${facts['os']['distro']['codename']}/updates",
           repos    => $repos,
           include  => {
@@ -47,7 +47,7 @@ class ocf::apt($stage = 'first') {
           };
 
       'extended-lts':
-          location => 'https://mirrors.ocf.berkeley.edu/freexian/',
+          location => 'http://deb.freexian.com/extended-lts/',
           release  => $facts['os']['distro']['codename'],
           repos    => $repos;
 
@@ -77,13 +77,13 @@ class ocf::apt($stage = 'first') {
       # TODO: Submit patch to puppetlabs-apt to enable having includes for
       # apt::backports (so that we can include the source too)
       class { 'apt::backports':
-      location => 'https://mirrors.ocf.berkeley.edu/debian/';
+      location => 'https://mirrors.wikimedia.org/debian/';
       }
     }
   elsif $facts['os']['release']['major'] == '10' {
     apt::source {
       'debian':
-          location => 'https://mirrors.ocf.berkeley.edu/debian/',
+          location => 'https://mirrors.wikimedia.org/debian/',
           release  => $facts['os']['distro']['codename'],
           repos    => $repos,
           include  => {
@@ -91,7 +91,7 @@ class ocf::apt($stage = 'first') {
           };
 
       'debian-updates':
-          location => 'https://mirrors.ocf.berkeley.edu/debian/',
+          location => 'https://mirrors.wikimedia.org/debian/',
           release  => "${facts['os']['distro']['codename']}-updates",
           repos    => $repos,
           include  => {
@@ -99,7 +99,7 @@ class ocf::apt($stage = 'first') {
           };
 
       'debian-security':
-          location => 'https://mirrors.ocf.berkeley.edu/debian-security/',
+          location => 'http://deb.debian.org/debian-security/',
           release  => "${facts['os']['distro']['codename']}/updates",
           repos    => $repos,
           include  => {
@@ -132,14 +132,14 @@ class ocf::apt($stage = 'first') {
       # TODO: Submit patch to puppetlabs-apt to enable having includes for
       # apt::backports (so that we can include the source too)
       class { 'apt::backports':
-      location => 'https://mirrors.ocf.berkeley.edu/debian/';
+      location => 'https://mirrors.wikimedia.org/debian/';
       }
 
     }
   else {
     apt::source {
       'debian':
-          location => 'https://mirrors.ocf.berkeley.edu/debian/',
+          location => 'https://mirrors.wikimedia.org/debian/',
           release  => $facts['os']['distro']['codename'],
           repos    => $repos,
           include  => {
@@ -147,7 +147,7 @@ class ocf::apt($stage = 'first') {
           };
 
       'debian-updates':
-          location => 'https://mirrors.ocf.berkeley.edu/debian/',
+          location => 'https://mirrors.wikimedia.org/debian/',
           release  => "${facts['os']['distro']['codename']}-updates",
           repos    => $repos,
           include  => {
@@ -155,7 +155,7 @@ class ocf::apt($stage = 'first') {
           };
 
       'debian-security':
-          location => 'https://mirrors.ocf.berkeley.edu/debian-security/',
+          location => 'http://deb.debian.org/debian-security/',
           release  => "${facts['os']['distro']['codename']}-security",
           repos    => $repos,
           include  => {
@@ -188,7 +188,7 @@ class ocf::apt($stage = 'first') {
       # TODO: Submit patch to puppetlabs-apt to enable having includes for
       # apt::backports (so that we can include the source too)
       class { 'apt::backports':
-      location => 'https://mirrors.ocf.berkeley.edu/debian/';
+      location => 'https://mirrors.wikimedia.org/debian/';
       }
   }
 
@@ -214,14 +214,14 @@ class ocf::apt($stage = 'first') {
   if $facts['os']['release']['major'] == '12' {
     apt::source {
       'puppetlabs':
-        location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
+        location => 'https://apt.puppetlabs.com/',
         release  => 'bullseye',
         repos    => 'puppet',
     }
   } else {
     apt::source {
       'puppetlabs':
-        location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
+        location => 'https://apt.puppetlabs.com/',
         release  => $facts['os']['distro']['codename'],
         repos    => 'puppet',
     }
