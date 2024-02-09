@@ -17,7 +17,7 @@ if Integer($facts['os']['release']['major']) >= 11 {
 # default for Apache and Nginx vhosts
 Apache::Vhost {
   ssl_cipher   => $ssl_ciphersuite,
-  ssl_protocol => $ssl_protocols,
+  ssl_protocol => "-all ${join(ssl_protocols.split(' ').map |$protocol| { "+${protocol}" }, ' ')}",
 }
 
 Nginx::Resource::Server {
