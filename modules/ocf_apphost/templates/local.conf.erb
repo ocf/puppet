@@ -5,7 +5,7 @@
 server_names_hash_bucket_size 128;
 
 ssl_dhparam /etc/ssl/dhparam.pem;
-ssl_protocols <%= @ssl_protocols %>;
+ssl_protocols <%= @ssl_protocols_nginx %>;
 ssl_ciphers '<%= @ssl_ciphersuite %>';
 
 # combined log format, with virtual host added (rt#4459)
