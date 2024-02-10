@@ -24,6 +24,6 @@ Apache::Vhost {
 
 Nginx::Resource::Server {
   ssl_ciphers   => $ssl_ciphersuite,
-  ssl_protocols => $ssl_protocols,
+  ssl_protocols => $ssl_protocols_nginx,
   ssl_dhparam   => '/etc/ssl/dhparam.pem',
 }
