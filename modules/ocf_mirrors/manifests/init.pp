@@ -160,16 +160,13 @@ class ocf_mirrors {
   nginx::resource::server { 'ca.us.mirror.archlinuxarm.org':
     www_root             => '/opt/mirrors/ftp/archlinuxarm',
     listen_port          => 80,
-    ssl_port             => 443,
-    ssl                  => true,
-    http2                => on,
-    ssl_cert             => "/etc/ssl/private/${::fqdn}.bundle",
-    ssl_key              => "/etc/ssl/private/${::fqdn}.key",
     ipv6_enable          => true,
     ipv6_listen_port     => 80,
     format_log           => 'main',
     use_default_location => false,
+    autoindex            => 'on',
   }
+
   nginx::resource::location { '= /':
     ensure => present,
     server => 'mirrors.ocf.berkeley.edu',
