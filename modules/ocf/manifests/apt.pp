@@ -51,21 +51,6 @@ class ocf::apt($stage = 'first') {
           release  => $facts['os']['distro']['codename'],
           repos    => $repos;
 
-      'ocf':
-          location => 'https://apt.ocf.berkeley.edu/',
-          release  => $facts['os']['distro']['codename'],
-          repos    => 'main',
-          include  => {
-          src => true
-          };
-
-      'ocf-backports':
-          location => 'https://apt.ocf.berkeley.edu/',
-          release  => "${facts['os']['distro']['codename']}-backports",
-          repos    => 'main',
-          include  => {
-          src => true
-          };
       }
 
       # Pin anything coming from *-backports to be lower than normal priority
@@ -106,21 +91,6 @@ class ocf::apt($stage = 'first') {
           src => true
           };
 
-      'ocf':
-          location => 'https://apt.ocf.berkeley.edu/',
-          release  => $facts['os']['distro']['codename'],
-          repos    => 'main',
-          include  => {
-          src => true
-          };
-
-      'ocf-backports':
-          location => 'https://apt.ocf.berkeley.edu/',
-          release  => "${facts['os']['distro']['codename']}-backports",
-          repos    => 'main',
-          include  => {
-          src => true
-          };
       }
 
       # Pin anything coming from *-backports to be lower than normal priority
@@ -162,21 +132,6 @@ class ocf::apt($stage = 'first') {
           src => true
           };
 
-      'ocf':
-          location => 'https://apt.ocf.berkeley.edu/',
-          release  => $facts['os']['distro']['codename'],
-          repos    => 'main',
-          include  => {
-          src => true
-          };
-
-      'ocf-backports':
-          location => 'https://apt.ocf.berkeley.edu/',
-          release  => "${facts['os']['distro']['codename']}-backports",
-          repos    => 'main',
-          include  => {
-          src => true
-          };
       }
 
       # Pin anything coming from *-backports to be lower than normal priority
@@ -233,10 +188,6 @@ class ocf::apt($stage = 'first') {
     source => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/pubkey.gpg';
   }
 
-  apt::key { 'ocf':
-    id     => '9FBEC942CCA7D929B41A90EC45A686E7D72A0AF4',
-    source => 'https://apt.ocf.berkeley.edu/pubkey.gpg';
-  }
 
   # Configure automatic security upgrades
   file {

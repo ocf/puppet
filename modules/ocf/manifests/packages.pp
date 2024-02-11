@@ -167,12 +167,4 @@ class ocf::packages {
       }
   }
   # Packages to only install on Debian (not on Raspbian for example)
-  if $facts['os']['distro']['id'] == 'Debian' {
-    package {
-      [
-        'aactivator',
-        'fluffy',
-      ]:;
-    }
-  }
 }
