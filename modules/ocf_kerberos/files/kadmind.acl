@@ -11,6 +11,7 @@ ncograin/admin@OCF.BERKELEY.EDU         all,get-keys
 njha/admin@OCF.BERKELEY.EDU             all,get-keys
 oliverni/admin@OCF.BERKELEY.EDU         all,get-keys
 rjz/admin@OCF.BERKELEY.EDU              all,get-keys
+ronitnath/admin@OCF.BERKELEY.EDU        all,get-keys
 trinityc/admin@OCF.BERKELEY.EDU         all,get-keys
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
@@ -26,6 +27,7 @@ ncograin/root@OCF.BERKELEY.EDU          change-password                         
 njha/root@OCF.BERKELEY.EDU              change-password                         *@OCF.BERKELEY.EDU
 oliverni/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 rjz/root@OCF.BERKELEY.EDU               change-password                         *@OCF.BERKELEY.EDU
+ronitnath/root@OCF.BERKELEY.EDU         change-password                         *@OCF.BERKELEY.EDU
 trinityc/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 
 # create
