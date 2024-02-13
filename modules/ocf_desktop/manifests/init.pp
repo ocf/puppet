@@ -14,6 +14,7 @@ class ocf_desktop {
   include ocf_desktop::firewall_output
   include ocf_desktop::grub
   include ocf_desktop::modprobe
+  include ocf_desktop::oom_manage
   include ocf_desktop::packages
   include ocf_desktop::printnotify
   include ocf_desktop::sshfs
