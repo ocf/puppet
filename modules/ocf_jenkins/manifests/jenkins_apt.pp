@@ -1,6 +1,6 @@
 class ocf_jenkins::jenkins_apt {
   apt::key { 'jenkins':
-    id     => '150FDE3F7787E7D11EF4E12A9B7D32F2D50582E6',
+    id     => '63667EE74BBA1F0A08A698725BA31D57EF5975CA',
     source => 'http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key';
   }
 
