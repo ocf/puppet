@@ -32,6 +32,8 @@ class ocf_desktop::packages {
     ['openjdk-17-jdk']:;
     # display manager
     ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
+    # drivers
+    ['epsonscan2']:;
     # games
     ['armagetronad', 'freeciv', 'gl-117', 'gnome-games', 'minecraft-launcher', 'minetest', 'redeclipse',
       'supertuxkart', 'wesnoth', 'wesnoth-music']:;
