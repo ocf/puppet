@@ -211,21 +211,6 @@ class ocf::apt($stage = 'first') {
         };
     }
   }
-  if $facts['os']['release']['major'] == '12' {
-    apt::source {
-      'puppetlabs':
-        location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
-        release  => 'bullseye',
-        repos    => 'puppet',
-    }
-  } else {
-    apt::source {
-      'puppetlabs':
-        location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
-        release  => $facts['os']['distro']['codename'],
-        repos    => 'puppet',
-    }
-  }
 
   # Add the puppetlabs apt repo key
   apt::key { 'puppet gpg key':
