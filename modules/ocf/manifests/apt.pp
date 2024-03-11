@@ -215,7 +215,7 @@ class ocf::apt($stage = 'first') {
     'puppetlabs':
       location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
       release  => $facts['os']['distro']['codename'],
-      repos    => 'puppet',
+      repos    => 'puppet7',
   }
 
   # Add the puppetlabs apt repo key
