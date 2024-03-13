@@ -51,6 +51,7 @@ class ocf::extrapackages {
     'elinks',
     'elpa-markdown-mode',
     'epic5',
+    'ffmpeg',
     'flex',
     'fortune-mod',
     'gdb',
