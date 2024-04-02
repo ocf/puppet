@@ -72,7 +72,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/guest$ https://goo.gl/forms/ImNfnZkrRrakZcIr1 [R]'},
       {rewrite_rule => '^/halloween$ https://forms.gle/44kTL8Eo9Tr3GsH66 [R=301]'},
       {rewrite_rule => '^/help(/.*)?$ https://www.ocf.berkeley.edu/docs$1 [R]'},
-      {rewrite_rule => '^/hiring$ https://docs.google.com/forms/d/e/1FAIpQLSfAAZIScKfF2GPEDXx4lgxZofYFpt6JlQxM-duAKpl-1FAYww/viewform [R]'},
+      {rewrite_rule => '^/hiring$ https://docs.google.com/forms/d/e/1FAIpQLSfNBDvH1pVVtc0DY2-UpTei5lUiLgtg8tkQ36NVpe4cb2aquw/viewform [R]'},
       {rewrite_rule => '^/hiringinterest$ https://docs.google.com/forms/d/e/1FAIpQLSfuu2EN28bPksyA8h_BjRsHQvnzE8gk7gC5ySEAp50GExhUgg/viewform [R]'},
       {rewrite_rule => '^/hosting$ https://www.ocf.berkeley.edu/docs/services/web/ [R]'},
       {rewrite_rule => '^/hours$ https://ocf.io/lab#hours [R,NE]'},
