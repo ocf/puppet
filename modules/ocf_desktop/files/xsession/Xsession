@@ -9,7 +9,7 @@ for d in .steam .local; do
 done
 
 # Remove scanner desktop icon if not detected as connected over USB
-if ! lsusb | grep -qE '(Fujitsu|CanoScan|Canon, Inc)'; then
+if ! lsusb | grep -qE '(Fujitsu|CanoScan|Canon, Inc|Seiko Epson)'; then
   rm $HOME/Desktop/scanner.desktop
 fi
 
