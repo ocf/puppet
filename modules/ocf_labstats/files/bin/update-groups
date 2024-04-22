@@ -9,8 +9,7 @@ from ocflib.lab.stats import get_connection
 def update_group(ocfstats_pass, table, users):
     """Update any tables of usernames used in ocfstats to generate views."""
 
-    conn = get_connection(user='ocfstats', password=ocfstats_pass)
-    with conn.cursor() as c:
+    with get_connection(user='ocfstats', password=ocfstats_pass) as c:
         # This is not great, but this seems like the only way to insert lists
         # into a SQL query without the possibility of SQL injection. That being
         # said, if a staff member has a username that actually causes SQL
@@ -26,8 +25,6 @@ def update_group(ocfstats_pass, table, users):
             'REPLACE INTO `{}` (`user`) VALUES (%s)'.format(table),
             users,
         )
-    conn.commit()
-    conn.close()
 
 
 def main():

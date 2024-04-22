@@ -31,16 +31,13 @@ RSYNC_LOG_REGEX = re.compile(
 
 
 def log_to_mysql(projects, log_date, quiet=False):
-    conn = get_connection(user='ocfstats', password=OCFSTATS_PWD)
-    with conn.cursor() as cursor:
+    with get_connection(user='ocfstats', password=OCFSTATS_PWD) as cursor:
         for name, data in projects.items():
             cursor.execute(
                 'INSERT INTO `mirrors` (`date`, `dist`, `up`, `down`) '
                 'VALUES (%s, %s, %s, %s)',
                 (log_date, name, data['up'], data['down'])
             )
-    conn.commit()
-    conn.close()
 
 
 def process_nginx_log(projects, fn, log_date):

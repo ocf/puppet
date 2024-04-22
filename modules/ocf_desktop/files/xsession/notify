@@ -31,11 +31,8 @@ def main():
 
     # Show user's print quota when changed
     user = current_user()
-    conn = get_connection()
-    with conn.cursor() as c:
+    with get_connection() as c:
         quota = get_quota(c, user)
-    conn.commit()
-    conn.close()
 
     msg = '   → {} {}\n'.format(quota.semesterly, 'remaining this semester')
     msg += '   → {} {}\n'.format(quota.daily, 'remaining today')

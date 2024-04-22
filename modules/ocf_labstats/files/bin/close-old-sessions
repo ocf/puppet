@@ -20,11 +20,8 @@ def close_old_sessions(ocfstats_pass):
                 `last_update` < ADDDATE(NOW(), INTERVAL -{} MINUTE)
     """.format(HOST_TIMEOUT)
 
-    conn = get_connection(user='ocfstats', password=ocfstats_pass)
-    with conn.cursor() as c:
+    with get_connection(user='ocfstats', password=ocfstats_pass) as c:
         c.execute(query)
-    conn.commit()
-    conn.close()
 
 
 def main():
