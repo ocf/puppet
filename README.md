@@ -168,4 +168,4 @@ to change just the necessary values.
 [augeas]: https://puppet.com/docs/puppet/4.8/types/augeas.html
 [augeas-example]: https://github.com/ocf/puppet/blob/57c9bec/modules/ocf/manifests/auth.pp#L95
 [sed]: https://github.com/ocf/puppet/blob/e7de500/modules/ocf_desktop/manifests/grub.pp#L13
-
+!!1
