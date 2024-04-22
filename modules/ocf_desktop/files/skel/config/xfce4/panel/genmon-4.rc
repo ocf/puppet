@@ -1,4 +1,4 @@
-Command=/usr/local/bin/paper-genmon
+Command=/opt/share/utils/paper-genmon
 UseLabel=0
 Text=(genmon)
 UpdatePeriod=60000
