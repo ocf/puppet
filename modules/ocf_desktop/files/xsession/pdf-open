@@ -1,4 +1,6 @@
 #!/bin/bash
+# shellcheck disable=SC2317
+
 set -uo pipefail
 
 viewer=okular
