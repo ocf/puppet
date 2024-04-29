@@ -104,7 +104,7 @@ def main():
         debug = functools.partial(print, flush=True)
 
     if args.target == 'web':
-        vhosts, target_domain = get_vhosts(), 'death.ocf.berkeley.edu'
+        vhosts, target_domain = {**get_vhosts(), **get_app_vhosts()}, 'death.ocf.berkeley.edu'
     else:
         vhosts, target_domain = get_app_vhosts(), 'vampires.ocf.berkeley.edu'
 
