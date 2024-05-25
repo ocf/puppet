@@ -37,6 +37,7 @@ class ocf_mirrors {
   include ocf_mirrors::projects::kde
   include ocf_mirrors::projects::kde_applicationdata
   include ocf_mirrors::projects::libreelec
+  include ocf_mirrors::projects::lineageos
   include ocf_mirrors::projects::linux_mint
   include ocf_mirrors::projects::linuxmint_packages
   include ocf_mirrors::projects::manjaro
