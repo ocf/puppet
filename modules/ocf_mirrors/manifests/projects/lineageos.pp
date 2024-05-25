@@ -9,6 +9,12 @@ class ocf_mirrors::projects::lineageos {
       recurse => true;
   }
 
+  ocf_mirrors::monitoring { 'lineageos':
+    type          => 'unix_timestamp',
+    upstream_host => 'mirror.accum.se',
+    ts_path       => 'mirror/lineageos/TIMESTAMP',
+  }
+
   ocf_mirrors::timer {
     'lineageos':
       exec_start => '/opt/mirrors/project/lineageos/sync-archive',
