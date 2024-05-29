@@ -19,8 +19,8 @@ class ocf_desktop::packages {
       'filezilla', 'freeplane', 'geany', 'gimp',
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
       'musescore3', 'mpv', 'mssh', 'mumble', 'numlockx', 'pass',
-      'simple-scan', 'ssh-askpass-gnome', 'texmaker',
-      'texstudio', 'tigervnc-viewer', 'vlc', 'xarchiver', 'xcape', 'xournalpp',
+      'simple-scan', 'ssh-askpass-gnome', 'texmaker', 'texstudio',
+      'tuxpaint', 'tigervnc-viewer', 'vlc', 'xarchiver', 'xcape', 'xournalpp',
       'xterm']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'arc-theme',
