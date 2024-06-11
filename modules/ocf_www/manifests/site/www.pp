@@ -21,7 +21,6 @@ class ocf_www::site::www {
   include apache::mod::rewrite
   include apache::mod::status
   include apache::mod::security
-  include apache::mod::unique_id
   include ocf_www::mod::cgi
   include ocf_www::mod::fcgid
   include ocf_www::mod::ocfdir
