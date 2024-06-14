@@ -196,7 +196,7 @@ class ocf::extrapackages {
     ]:;
   }
 
-  if Integer($::os['distro']['release']['major']) >= 11 {
+  if $::os[release][major] !~ /\d+/ or Integer($::os['distro']['release']['major']) >= 11 {
     package {
       [
         'bat',
