@@ -196,7 +196,7 @@ class ocf::extrapackages {
     ]:;
   }
 
-  if Integer($::os['distro']['release']['major']) >= 11 {
+  if Integer($facts['os']['distro']['release']['major']) >= 11 {
     package {
       [
         'bat',
@@ -249,5 +249,18 @@ class ocf::extrapackages {
     command => '/usr/local/sbin/download-wp-cli',
     creates => '/usr/local/bin/wp',
     require => File['/usr/local/sbin/download-wp-cli'];
+  }
+
+  # neofetch config
+  file { '/etc/neofetch':
+    ensure => directory,
+  }
+  file { '/etc/neofetch/config.conf':
+    source  => 'puppet:///modules/ocf/neofetch_config',
+    require => Package['neofetch'];
+  }
+  file { '/opt/neofetch-waddles':
+    source  => 'puppet:///modules/ocf/neofetch_waddles_ascii',
+    require => Package['neofetch'];
   }
 }
