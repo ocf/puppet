@@ -46,8 +46,12 @@ xset m 0 0
 # Configure PulseAudio properly
 sleep 8 && /usr/local/bin/fix-audio &
 
-# Auto logout inactive users
-/usr/bin/xautolock -locker /usr/local/bin/auto-lock -time 7 -noclose &
+# Auto logout inactive users, longer auto logout for ATDP
+if [ "$USER" = "atdpstudent" ]; then
+    /usr/bin/xautolock -locker /usr/local/bin/auto-lock -time 30 -noclose &
+else
+    /usr/bin/xautolock -locker /usr/local/bin/auto-lock -time 7 -noclose &
+fi
 
 # Source custom rc shared across desktops
 # NOTE: This should always be right at the end of this file so that users can
