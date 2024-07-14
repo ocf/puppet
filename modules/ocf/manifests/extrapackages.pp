@@ -74,7 +74,7 @@ class ocf::extrapackages {
     'jupyter-core',
     'jupyter-notebook',
     'keychain',
-    'kubernetes-deploy',
+    'krane',
     'latexmk',
     'libcrack2-dev',
     'libdbi-perl',
