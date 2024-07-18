@@ -8,13 +8,13 @@ class ocf_mirrors::projects::lyx {
       ensure => directory,
       mode   => '0755';
 
-    '/opt/mirrors/project/lyx/sync-releases':
-      source => 'puppet:///modules/ocf_mirrors/project/lyx/sync-releases',
+    '/opt/mirrors/project/lyx/sync-archive':
+      source => 'puppet:///modules/ocf_mirrors/project/lyx/sync-archive',
       mode   => '0755';
   }
 
   ocf_mirrors::timer { 'lyx':
-    exec_start => '/opt/mirrors/project/lyx/sync-releases',
+    exec_start => '/opt/mirrors/project/lyx/sync-archive',
     minute     => '30',
     hour       => '1',
   }
