@@ -1,4 +1,4 @@
 #!/bin/sh -eu
-/usr/local/bin/rsync-no-vanished -avHP  \
+/usr/local/bin/rsync-no-vanished -avHP --delete --delete-after \
 	rsync://download1.rpmfusion.org/rpmfusion/ \
 	/opt/mirrors/ftp/rpmfusion/
