@@ -20,7 +20,6 @@ class ocf_www::site::www {
   include apache::mod::proxy_http
   include apache::mod::rewrite
   include apache::mod::status
-  include apache::mod::security
   include ocf_www::mod::cgi
   include ocf_www::mod::fcgid
   include ocf_www::mod::ocfdir
