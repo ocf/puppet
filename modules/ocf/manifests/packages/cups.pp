@@ -1,7 +1,14 @@
 class ocf::packages::cups {
 
   # install cups
-  package { [ 'cups', 'cups-bsd' ]: }
+  package { [ 'cups', 'cups-bsd' ]:
+    install_options => ['--no-install-recommends']
+  }
+
+  # CVE-2024-47076, CVE-2024-47175, CVE-2024-47176, CVE-2024-47177
+  package { [ 'cups-browsed' ]:
+    ensure => 'absent'
+  }
 
   file {
     # set print server destination
