@@ -13,7 +13,7 @@ set -euo pipefail
 # Whichever architecture and distribution is first in the arrays is the default,
 # and is (ab)used for the PXE boot menu.
 archs=(amd64)
-dists=(bullseye bookworm buster)
+dists=(bookworm bullseye buster sid)
 menu_arch="${archs[0]}"
 menu_dist="${dists[0]}"
 menu_path="debian-installer/$menu_arch"
@@ -31,7 +31,6 @@ txt_cfg="$menu_path/boot-screens/txt.cfg"
 # testing with a VM, be sure to give it sufficient RAM.
 finnix="https://www.ocf.berkeley.edu/~staff/finnix.tar.gz"
 dban="https://sourceforge.net/projects/dban/files/latest/download"
-memtest="http://www.memtest.org/download/5.01/memtest86+-5.01.bin.gz"
 tftpdir='/opt/tftp'
 preseeddir='/opt/preseed'
 
@@ -40,10 +39,21 @@ rm -rf $tftpdir
 mkdir $tftpdir
 chmod 755 $tftpdir
 
+tempdir=$(mktemp -d)
+cd $tempdir
+apt source shim-signed
+cp shim-signed-*/shimx64.efi.signed $tftpdir/bootx64.efi
+cd $tftpdir
+rm -rf $tempdir
+
+wget -O "$tftpdir/grubx64.efi" https://mirrors.ocf.berkeley.edu/ubuntu/dists/jammy/main/uefi/grub2-amd64/current/grubnetx64.efi.signed
+mkdir "$tempdir/grub"
+cp /usr/share/grub/unicode.pf2 $tempdir/grub/fonts
+
 for dist in "${dists[@]}"; do
     for arch in "${archs[@]}"; do
-        netboot="http://mirrors/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
-        fw="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/$dist/current/firmware.tar.gz"
+        netboot="https://mirrors.ocf.berkeley.edu/debian/dists/$dist/main/installer-$arch/current/images/netboot/netboot.tar.gz"
+        fw="https://mirrors.ocf.berkeley.edu/debian-nonfree/firmware/$dist/current/firmware.tar.gz"
 
         fwdir=$(mktemp -d)
         label="${dist}-${arch}"
@@ -122,20 +132,6 @@ echo "label dban
 >> "$txt_cfg"
 
 
-# Download Memtest86+, add to menu
-echo "Downloading Memtest86+..."
-cd $tftpdir
-mkdir -p memtest
-wget -q -O memtest/memtest.bin.gz "$memtest"
-echo "Extracting Memtest86+..."
-gunzip -c memtest/memtest.bin.gz > memtest/memtest
-
-echo "label memtest
-    menu label Memtest86+
-    kernel memtest/memtest" \
->> "$txt_cfg"
-
-
 # Extract and add Finnix to menu
 echo "Downloading finnix..."
 wget -q -O finnix.tar.gz "$finnix"
@@ -152,11 +148,9 @@ echo "label finnix
 echo "Cleaning up..."
 rm "$tftpdir/netboot.tar.gz"
 rm dban.iso
-rm memtest/memtest.bin.gz
-
 
 # Restart tftpd to provide the new PXE boot files
 echo "Restarting TFTP service..."
-service tftpd-hpa restart
+systemctl restart tftpd-hpa
 
 echo "PXE image is ready."
