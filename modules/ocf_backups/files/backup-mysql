@@ -18,4 +18,4 @@ parallel -i \
              --triggers \
              --routines \
              --single-transaction \
-             --databases {} > "mysql-{}-$(date +%F).sql"' -- $databases
+             --databases {} > "mysql-{}.sql"' -- $databases
