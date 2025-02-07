@@ -20,7 +20,7 @@ wallpaperplugin=org.kde.image
 PreloadWeight=42
 
 [Containments][1][Wallpaper][org.kde.image][General]
-Image=file:///opt/share/xsession/images/background.png
+Image=file:///opt/share/xsession/images/background-fa23.png
 
 [Containments][18]
 ItemGeometriesHorizontal=

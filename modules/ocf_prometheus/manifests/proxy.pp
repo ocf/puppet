@@ -71,7 +71,7 @@ class ocf_prometheus::proxy {
       port            => 80,
       docroot         => '/var/www/html',
 
-      redirect_status => 301,
+      redirect_status => 'permanent',
       redirect_dest   => "https://${cname}.ocf.berkeley.edu/";
   }
 }

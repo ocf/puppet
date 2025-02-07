@@ -1,5 +1,5 @@
 class ocf::apt($stage = 'first') {
-  package { ['aptitude', 'imvirt', 'apt-transport-https', 'lsb-release', 'ethtool', 'unattended-upgrades']:; }
+  package { ['aptitude', 'imvirt', 'lsb-release', 'ethtool', 'unattended-upgrades']:; }
 
   class { '::apt':
     purge => {
@@ -47,7 +47,7 @@ class ocf::apt($stage = 'first') {
           };
 
       'extended-lts':
-          location => 'https://mirrors.ocf.berkeley.edu/freexian/',
+          location => 'http://deb.freexian.com/extended-lts/',
           release  => $facts['os']['distro']['codename'],
           repos    => $repos;
 
@@ -211,20 +211,11 @@ class ocf::apt($stage = 'first') {
         };
     }
   }
-  if $facts['os']['release']['major'] == '12' {
-    apt::source {
-      'puppetlabs':
-        location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
-        release  => 'bullseye',
-        repos    => 'puppet',
-    }
-  } else {
-    apt::source {
-      'puppetlabs':
-        location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
-        release  => $facts['os']['distro']['codename'],
-        repos    => 'puppet',
-    }
+  apt::source {
+    'puppetlabs':
+      location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
+      release  => $facts['os']['distro']['codename'],
+      repos    => 'puppet7',
   }
 
   # Add the puppetlabs apt repo key

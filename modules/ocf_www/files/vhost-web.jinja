@@ -16,7 +16,13 @@
         RewriteCond %{REQUEST_URI} !^/\.well-known/
         # 301 redirects are more correct, but get cached forever by dumb browsers.
         # Doesn't matter too much for vhosts.
-        RewriteRule ^(.*)$ {{vhost.redirect_dest}}$1 [L,R=302]
+        RewriteRule ^(.*)$ {{vhost.redirect_dest}}$1 [L,R={{vhost.redirect_type}}]
+    {% elif vhost.is_apphost %}
+        RequestHeader set X-Forwarded-Proto https
+        ProxyPreserveHost On
+        SSLProxyEngine on
+        # Proxy to apphost server
+        ProxyPass / https://apphost.ocf.berkeley.edu/ upgrade=websocket
     {% elif vhost.disabled %}
         # Proxy to the local "unavailable" vhost, which serves up a friendly
         # "your website is rekt" page.
@@ -39,6 +45,10 @@
 
         SuexecUserGroup {{vhost.user}} ocf
     {% endif %}
+
+    {% for name, value in vhost.response_headers.items() %}
+        Header set {{name}} {{value | tojson}}
+    {% endfor %}
 
     Alias /.well-known /var/lib/lets-encrypt/.well-known
 

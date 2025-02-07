@@ -18,9 +18,9 @@ class ocf_desktop::packages {
     ['arandr', 'blender', 'claws-mail', 'clementine', 'eog', 'evince',
       'filezilla', 'freeplane', 'geany', 'gimp',
       'gnome-calculator', 'gparted', 'hexchat', 'imagej', 'inkscape', 'lyx',
-      'musescore3', 'mpv', 'mssh', 'mumble', 'numlockx',
-      'simple-scan', 'ssh-askpass-gnome', 'texmaker',
-      'texstudio', 'tigervnc-viewer', 'vlc', 'xarchiver', 'xcape', 'xournal',
+      'musescore3', 'mpv', 'mssh', 'mumble', 'numlockx', 'pass',
+      'simple-scan', 'ssh-askpass-gnome', 'texmaker', 'texstudio',
+      'tuxpaint', 'tigervnc-viewer', 'vlc', 'xarchiver', 'xcape', 'xournalpp',
       'xterm']:;
     # desktop
     ['desktop-base', 'anacron', 'accountsservice', 'arc-theme',
@@ -32,6 +32,8 @@ class ocf_desktop::packages {
     ['openjdk-17-jdk']:;
     # display manager
     ['lightdm', 'lightdm-gtk-greeter', 'libpam-trimspaces']:;
+    # drivers
+    ['epsonscan2']:;
     # games
     ['armagetronad', 'freeciv', 'gl-117', 'gnome-games', 'minecraft-launcher', 'minetest', 'redeclipse',
       'supertuxkart', 'wesnoth', 'wesnoth-music']:;

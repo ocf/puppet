@@ -15,7 +15,7 @@ class ocf_puppet::puppetserver {
   augeas { '/etc/default/puppetserver':
     context => '/files/etc/default/puppetserver',
     changes => [
-      "set JAVA_ARGS '\"-Xms1536m -Xmx1536m\"'",
+      "set JAVA_ARGS '\"-Xms1536m -Xmx5120m\"'",
     ],
     require => Package['puppetserver'],
     notify  => Service['puppetserver'],

@@ -1,7 +1,7 @@
 class ocf_jenkins::jenkins_apt {
   apt::key { 'jenkins':
-    id     => '150FDE3F7787E7D11EF4E12A9B7D32F2D50582E6',
-    source => 'http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key';
+    id     => '63667EE74BBA1F0A08A698725BA31D57EF5975CA',
+    source => 'https://pkg.jenkins.io/debian/jenkins.io-2023.key';
   }
 
   apt::source { 'jenkins':

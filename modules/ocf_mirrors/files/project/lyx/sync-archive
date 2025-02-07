@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -avH --delete --delete-after \
+	rsync://ftp.lyx.org/ftp/pub/lyx/ /opt/mirrors/ftp/lyx/

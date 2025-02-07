@@ -37,8 +37,10 @@ class ocf_mirrors {
   include ocf_mirrors::projects::kde
   include ocf_mirrors::projects::kde_applicationdata
   include ocf_mirrors::projects::libreelec
+  include ocf_mirrors::projects::lineageos
   include ocf_mirrors::projects::linux_mint
   include ocf_mirrors::projects::linuxmint_packages
+  include ocf_mirrors::projects::lyx
   include ocf_mirrors::projects::manjaro
   include ocf_mirrors::projects::mx_linux
   include ocf_mirrors::projects::mx_packages
@@ -157,6 +159,21 @@ class ocf_mirrors {
       fancyindex_show_path off;
       END
   }
+  nginx::resource::server { 'ca.us.mirror.archlinuxarm.org':
+    www_root             => '/opt/mirrors/ftp/archlinuxarm',
+    listen_port          => 80,
+    ipv6_enable          => true,
+    ipv6_listen_port     => 80,
+    ssl_port             => 443,
+    ssl                  => true,
+    http2                => on,
+    ssl_cert             => '/etc/letsencrypt/live/ca.us.mirror.archlinuxarm.org/fullchain.pem',
+    ssl_key              => '/etc/letsencrypt/live/ca.us.mirror.archlinuxarm.org/privkey.pem',
+    format_log           => 'main',
+    use_default_location => false,
+    autoindex            => 'on',
+  }
+
   nginx::resource::location { '= /':
     ensure => present,
     server => 'mirrors.ocf.berkeley.edu',

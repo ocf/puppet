@@ -7,7 +7,7 @@ class ocf_kvm($group = 'root') {
   # install kvm, libvirt, lvm, bridge networking, IPMI
   package {
     # KVM/virt tools
-    ['libvirt-clients', 'libvirt-daemon-system', 'qemu-kvm', 'virtinst', 'virt-manager', 'virt-top', 'kpartx', 'ksmtuned']:;
+    ['libvirt-clients', 'libvirt-daemon-system', 'qemu-kvm', 'virtinst', 'virt-manager', 'kpartx', 'ksmtuned']:;
   }
   include ocf::packages::lvm
 

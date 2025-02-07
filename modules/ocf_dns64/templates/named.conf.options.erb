@@ -1,0 +1,20 @@
+options {
+        directory "/var/cache/bind";
+
+        forwarders {
+                <%- @upstream_nameservers.each do |nameserver| -%>
+                <%=- nameserver -%>;
+                <%- end -%>
+        };
+
+        //========================================================================
+        // If BIND logs error messages about the root key being expired,
+        // you will need to update your keys.  See https://www.isc.org/bind-keys
+        //========================================================================
+        dnssec-validation auto;
+
+        listen-on { any; };
+        listen-on-v6 { any; };
+
+        dns64 64:ff9b::/96 { clients { <%= @ocf_ipv6_mask -%>; }; };
+};
