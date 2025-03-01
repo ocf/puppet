@@ -13,9 +13,9 @@ class ocf::browser_sandbox {
     # defense in depth, but not critical. See
     # <https://www.morbo.org/2018/05/linux-sandboxing-improvements-in_10.html>.
     'kernel.unprivileged_userns_clone':
-      value => '1';
+      ensure => absent;
     # Enable ptrace protection. Only allow ptrace from a parent process to its
-    # children or via CAP_SYS_PTRACE.
+    # children or via CAP_SYS_PTRACE. This is also set by hardening-runtime.
     'kernel.yama.ptrace_scope':
       value => '1';
   }
