@@ -8,6 +8,7 @@ ronitnath/admin@OCF.BERKELEY.EDU        all,get-keys
 laksith/admin@OCF.BERKELEY.EDU          all,get-keys
 storce/admin@OCF.BERKELEY.EDU           all,get-keys
 longlian/admin@OCF.BERKELEY.EDU         all,get-keys
+sbwilliams/admin@OCF.BERKELEY.EDU	all,get-keys
 
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
@@ -20,6 +21,7 @@ ronitnath/root@OCF.BERKELEY.EDU         change-password                         
 laksith/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 storce/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 longlian/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
+sbwilliams/root@OCF.BERKELEY.EDU	change-password
 
 
 # create
