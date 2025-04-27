@@ -1,4 +1,0 @@
-#!/bin/sh -eu
-# compression disabled
-/usr/local/bin/rsync-no-vanished -rplHtSPv --delete --delete-after \
-	rsync://mirror.math.princeton.edu/pub/osdn/ /tank/osdn
