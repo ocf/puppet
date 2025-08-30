@@ -167,6 +167,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/zoom$ https://berkeley.zoom.us/j/92953066816 [R]'},
       {rewrite_rule => '^/mail-list$ https://forms.gle/9FAm7SQX5y2aDshH6 [R]'},
       {rewrite_rule => '^/inventory$ https://docs.google.com/spreadsheets/d/1URbyAc_F_rVIgsiuTFzyShA_ROAlQ9FeSXMa-cy1AmM/edit?usp=sharing [R]'},
+      {rewrite_rule => '^/projects$ https://github.com/orgs/ocf/projects/13 [R]'},
       # Otherwise, send a temporary redirect to the appropriate userdir
       {rewrite_rule => '^/~?([a-z0-9]{3,16}(?:/.*)?)$ https://www.ocf.berkeley.edu/~$1 [R]'},
     ],
