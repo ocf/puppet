@@ -1,3 +1,4 @@
 #!/bin/sh -eu
 rclone sync --s3-provider Other --s3-endpoint https://s3.cern.ch --s3-region us-east-1 --s3-access-key-id "" \
-	--s3-secret-access-key "" :s3:kicad-downloads /opt/mirrors/ftp/kicad --verbose
+	--s3-secret-access-key "" :s3:kicad-downloads /opt/mirrors/ftp/kicad --verbose --exclude \
+	"index.html" --exclude "list.js" --exclude "favicon.ico"
