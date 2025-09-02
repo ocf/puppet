@@ -62,7 +62,7 @@ command:
     rjz@supernova:~$ ssh supernova
     rjz@supernova:~$ sudo puppet-trigger -te rjz
 
-This changes the environment to `ckuehl` and triggers a run.
+This changes the environment to `rjz` and triggers a run.
 
 Make sure to switch the environment back to `production` after pushing your
 changes.
