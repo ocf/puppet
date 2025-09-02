@@ -160,7 +160,7 @@ to change just the necessary values.
 [puppet]: https://en.wikipedia.org/wiki/Puppet_(software)
 [ocf]: https://www.ocf.berkeley.edu/
 [debian]: https://www.debian.org/
-[ubuntu]: http://www.ubuntu.com/
+[ubuntu]: https://www.ubuntu.com/
 [about-staff]: https://www.ocf.berkeley.edu/about/staff
 [jenkins]: https://jenkins.ocf.berkeley.edu/view/puppet-deploy/
 [r10k]: https://github.com/puppetlabs/r10k
