@@ -12,7 +12,7 @@ class ocf_mirrors::projects::kicad {
   ocf_mirrors::timer {
     'kicad':
       exec_start => '/opt/mirrors/project/kicad/sync-archive',
-      hour       => '0/12',
+      hour       => '6/12',
       minute     => '0';
   }
 }
