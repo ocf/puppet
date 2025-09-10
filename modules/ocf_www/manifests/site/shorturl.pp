@@ -23,7 +23,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/account$ https://www.ocf.berkeley.edu/docs/services/account/ [R]'},
       {rewrite_rule => '^/apphost$ https://www.ocf.berkeley.edu/docs/services/webapps/ [R]'},
       {rewrite_rule => '^/announce$ https://groups.google.com/a/lists.berkeley.edu/forum/#!forum/ocf/join [NE,R]'},
-      {rewrite_rule => '^/apply$ https://forms.gle/xs7747TkxSKLFkGb9 [R]'},
+      {rewrite_rule => '^/apply$ https://forms.gle/H1YAUg8F6f2SefFD9 [R]'},
       {rewrite_rule => '^/apparel$ https://docs.google.com/forms/d/e/1FAIpQLSdJJeyRjkJhGVcH9frHtE6dtXHbgfD-fy9J5d2wRkzqSl5nPw/viewform [R]'},
       {rewrite_rule => '^/banquet$ https://forms.gle/z2d8H8K4VoJEq1hw5 [R]'},
       #{rewrite_rule => '^/bjb$ https://jukebox.ocf.berkeley.edu/ [R]'},
@@ -168,6 +168,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/mail-list$ https://forms.gle/9FAm7SQX5y2aDshH6 [R]'},
       {rewrite_rule => '^/inventory$ https://docs.google.com/spreadsheets/d/1URbyAc_F_rVIgsiuTFzyShA_ROAlQ9FeSXMa-cy1AmM/edit?usp=sharing [R]'},
       {rewrite_rule => '^/projects$ https://github.com/orgs/ocf/projects/13 [R]'},
+      {rewrite_rule => '^/intake$ https://forms.gle/McFXZJxrNpx9Adt36 [R]'},
       # Otherwise, send a temporary redirect to the appropriate userdir
       {rewrite_rule => '^/~?([a-z0-9]{3,16}(?:/.*)?)$ https://www.ocf.berkeley.edu/~$1 [R]'},
     ],
