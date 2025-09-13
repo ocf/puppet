@@ -12,7 +12,7 @@ class ocf_filehost(
       # We don't root_squash admin, ssh, or apphost because they need to access
       # /services/crontabs/$server/ as root.
       options => ['rw', 'fsid=0', 'no_subtree_check', 'no_root_squash'],
-      hosts   => concat(['admin', 'www', 'dev-www', 'ssh', 'dev-ssh', 'apphost', 'dev-apphost', 'adenine', 'guanine', 'cytosine', 'thymine'], lookup('kubernetes::worker_nodes'));
+      hosts   => ['admin', 'www', 'ssh', 'apphost', 'adenine', 'guanine', 'cytosine', 'thymine'];
   }
 
   file {
