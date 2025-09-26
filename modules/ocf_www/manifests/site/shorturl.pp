@@ -117,6 +117,7 @@ class ocf_www::site::shorturl {
       #{rewrite_rule => '^/projects$ https://github.com/orgs/ocf/projects/7 [R]'},
       #{rewrite_rule => '^/referendum-cost-breakdown$ https://docs.google.com/spreadsheets/d/1vIwrHlYtn1IcFH-1pTbUw2JvKNsR4rwlUzCJUbapID8/edit?usp=sharing [R]'},
       #{rewrite_rule => '^/register2vote$ https://www.vote.org/register-to-vote/ [R]'},
+      {rewrite_rule => '^/report$ https://forms.gle/6CkwrSsa8e9Uve9f7 [R]'},
       {rewrite_rule => '^/rt/?$ https://rt.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/rt/([0-9]+)$ https://rt.ocf.berkeley.edu/Ticket/Display.html?id=$1 [R]'},
       {rewrite_rule => '^/rt/([a-z]+)$ https://rt.ocf.berkeley.edu/Search/Results.html?Query=Queue\\ =\\ \'$1\'\\ AND\\ Status\\ =\\ \'__Active__\' [R]'},
