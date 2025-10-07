@@ -12,7 +12,7 @@ class ocf_filehost(
       # We don't root_squash admin, ssh, or apphost because they need to access
       # /services/crontabs/$server/ as root.
       options => ['rw', 'fsid=0', 'no_subtree_check', 'no_root_squash'],
-      hosts   => ['admin', 'www', 'ssh', 'apphost', 'adenine', 'guanine', 'cytosine', 'thymine'];
+      hosts   => ['admin', 'www', 'ssh', 'apphost', 'adenine', 'guanine', 'cytosine', 'thymine', 'fluttershy'];
   }
 
   file {
