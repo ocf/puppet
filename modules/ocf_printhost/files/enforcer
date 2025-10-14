@@ -136,7 +136,7 @@ NOTIFY_JOB_ERROR = dedent("""\
         Please contact a staff member for assistance.\
 """)
 
-NOTIFY_NON_LETTER_ERROR = dedent("""\
+NOTIFY_NON_LETTER = dedent("""\
         Your print job '{document}' failed due to not being letter sized.
         Please ensure you are not printing from your browser.
 """)
@@ -191,10 +191,10 @@ def prehook(c, r, job):
 
     if "media=Letter" not in os.environ['TEAOPTIONS']:
         send_printer_mail(NON_LETTER_ERROR_MESSAGE, job, quo)
-        msg = NOTIFY_NON_LETTER_MESSAGE.format(
+        msg = NOTIFY_NON_LETTER.format(
             document=job.doc_name,
         )
-        r.publish('user' + job.user, msg)
+        r.publish('user-' + job.user, msg)
         sys.exit(255)
             
 
