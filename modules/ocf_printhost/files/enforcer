@@ -103,6 +103,25 @@ ENFORCER_ERROR_MESSAGE = Message(
         """) + MAIL_SIGNATURE
 )
 
+NON_LETTER_ERROR_MESSAGE = Message(
+    subject='[OCF] Your latest print job failed',
+    body=dedent("""\
+        Greetings from the Open Computing Facility,
+
+        This email is letting you know that your most recent print job was
+        rejected since it was not letter sized. Please ensure that you are
+        following all instructions on the computers, and not printing
+        directly from your browser.
+
+        """) + USER_ERROR_INFO + dedent("""
+
+        Does something look wrong? Please reply to
+
+            help@ocf.berkeley.edu
+
+        """) + MAIL_SIGNATURE
+)
+
 NOTIFY_QUOTA_MESSAGE = dedent("""\
         Your print job failed due to insufficient pages. Your job was
         {pages} pages, and you have {quota} pages remaining today.\
@@ -115,6 +134,11 @@ NOTIFY_JOB_ACCEPTED = dedent("""\
 NOTIFY_JOB_ERROR = dedent("""\
         Your print job '{document}' failed due to a printer error.
         Please contact a staff member for assistance.\
+""")
+
+NOTIFY_NON_LETTER = dedent("""\
+        Your print job '{document}' failed due to not being letter sized.
+        Please ensure you are not printing from your browser.
 """)
 
 
@@ -164,6 +188,15 @@ def send_printer_mail(message, job, quo):
 
 def prehook(c, r, job):
     quo = quota.get_quota(c, job.user)
+
+    if "media=Letter" not in os.environ['TEAOPTIONS']:
+        send_printer_mail(NON_LETTER_ERROR_MESSAGE, job, quo)
+        msg = NOTIFY_NON_LETTER.format(
+            document=job.doc_name,
+        )
+        r.publish('user-' + job.user, msg)
+        sys.exit(255)
+            
 
     if job.pages > quo.daily:
         send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
