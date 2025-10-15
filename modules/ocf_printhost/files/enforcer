@@ -221,6 +221,20 @@ def posthook(c, r, job, success):
         quo = quota.get_quota(c, job.user)
         msg = NOTIFY_JOB_ERROR.format(document=job.doc_name)
         send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
+
+        err_msg = dedent("""\
+            enforcer encountered a printer error while processing a job
+
+            tea4cups environment variables:
+            {vars}
+            """).format(
+            # seems unlikely a non-tea4cups var will start with TEA
+            vars='\n'.join('  {}: {}'.format(k, v) for k, v in
+                           os.environ.items() if k.startswith('TEA'))
+        )
+
+        syslog(err_msg)
+        send_problem_report(err_msg)
     r.publish('user-' + job.user, msg)
 
 
