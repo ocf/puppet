@@ -189,7 +189,7 @@ def send_printer_mail(message, job, quo):
 def prehook(c, r, job):
     quo = quota.get_quota(c, job.user)
 
-    if 'media=Letter' not in os.environ['TEAOPTIONS']:
+    if 'PageSize=Letter' not in os.environ['TEAOPTIONS'] and 'media=Letter' not in os.environ['TEAOPTIONS']:
         send_printer_mail(NON_LETTER_ERROR_MESSAGE, job, quo)
         msg = NOTIFY_NON_LETTER.format(
             document=job.doc_name,
