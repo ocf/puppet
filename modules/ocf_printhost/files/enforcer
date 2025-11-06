@@ -158,6 +158,11 @@ def page_count(env):
     return num_copy * int(subprocess.check_output(('/usr/local/bin/enforcer-pc', path), timeout=30))
 
 
+def page_size(env):
+    path = env['TEADATAFILE']
+    return subprocess.check_output(('/usr/local/bin/enforcer-size', path), timeout=30)
+
+
 def create_job(env):
     printer = env['TEAPRINTERNAME']
     queue = env['CLASS']
@@ -189,7 +194,7 @@ def send_printer_mail(message, job, quo):
 def prehook(c, r, job):
     quo = quota.get_quota(c, job.user)
 
-    if 'PageSize=Letter' not in os.environ['TEAOPTIONS'] and 'media=Letter' not in os.environ['TEAOPTIONS']:
+    if page_size(os.environ) != 'Letter':
         send_printer_mail(NON_LETTER_ERROR_MESSAGE, job, quo)
         msg = NOTIFY_NON_LETTER.format(
             document=job.doc_name,

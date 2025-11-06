@@ -17,6 +17,10 @@ class ocf_printhost::enforcer {
       source => 'puppet:///modules/ocf_printhost/enforcer-pc',
       mode   => '0755';
 
+    '/usr/local/bin/enforcer-size':
+      source => 'puppet:///modules/ocf_printhost/enforcer-size',
+      mode   => '0755';
+
     '/opt/share/enforcer':
       ensure => directory,
       mode   => '0500';
