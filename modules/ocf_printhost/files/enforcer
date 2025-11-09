@@ -160,7 +160,7 @@ def page_count(env):
 
 def page_size(env):
     path = env['TEADATAFILE']
-    return subprocess.check_output(('/usr/local/bin/enforcer-size', path), timeout=30)
+    return subprocess.check_output(('/usr/local/bin/enforcer-size', path), timeout=30).strip()
 
 
 def create_job(env):
