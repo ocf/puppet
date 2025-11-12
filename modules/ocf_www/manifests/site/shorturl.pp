@@ -169,6 +169,8 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/inventory$ https://docs.google.com/spreadsheets/d/1URbyAc_F_rVIgsiuTFzyShA_ROAlQ9FeSXMa-cy1AmM/edit?usp=sharing [R]'},
       {rewrite_rule => '^/projects$ https://github.com/orgs/ocf/projects/13 [R]'},
       {rewrite_rule => '^/intake$ https://forms.gle/McFXZJxrNpx9Adt36 [R]'},
+      # TODO: remove after Fall25
+      {rewrite_rule => '^/retreat$ https://docs.google.com/document/d/15GQxFxvZ6W0ZYxuyQCH9o3H9NyVcK3gCWv76TqgDVYM/edit?usp=sharing [R]'}
       # Otherwise, send a temporary redirect to the appropriate userdir
       {rewrite_rule => '^/~?([a-z0-9]{3,16}(?:/.*)?)$ https://www.ocf.berkeley.edu/~$1 [R]'},
     ],
