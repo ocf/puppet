@@ -33,6 +33,8 @@ from ocflib.misc.mail import send_problem_report
 
 CONF_FILE = '/opt/share/enforcer/enforcer.conf'
 
+COLOR_QUEUE = 'color-single'
+
 Message = namedtuple('Message', ['subject', 'body'])
 
 
@@ -42,7 +44,8 @@ USER_ERROR_INFO = dedent("""\
     File: {doc_name}
     Total pages: {pages}
     Pages left today: {daily_pages}
-    Pages left this semester: {semester_pages}\
+    Pages left this semester: {semester_pages}
+    Color pages left: {color_pages}\
 """)
 
 INSUFFICIENT_QUOTA_MESSAGE = Message(
@@ -53,6 +56,26 @@ INSUFFICIENT_QUOTA_MESSAGE = Message(
         This email is letting you know that your most recent print job was
         rejected since it would exceed your daily quota. The daily quota is
         {daily_quota} pages today and the semesterly quota is {semester_quota} pages.
+
+        """) + USER_ERROR_INFO + dedent("""
+
+        Does something look wrong? Please reply to
+
+            help@ocf.berkeley.edu
+
+
+        """) + MAIL_SIGNATURE
+)
+
+INSUFFICIENT_COLOR_QUOTA_MESSAGE = Message(
+    subject='[OCF] Your latest print job was rejected',
+    body=dedent("""\
+        Greetings from the Open Computing Facility,
+
+        This email is letting you know that your most recent print job was
+        rejected since it would exceed your color printing quota. The color printing
+        quota is {color_quota} pages and the semesterly quota is {semester_quota}
+        pages.
 
         """) + USER_ERROR_INFO + dedent("""
 
@@ -185,8 +208,10 @@ def send_printer_mail(message, job, quo):
         pages=job.pages,
         daily_pages=quo.daily,
         semester_pages=quo.semesterly,
+        color_pages=quo.color,
         daily_quota=quota.daily_quota(),
         semester_quota=quota.SEMESTERLY_QUOTA,
+        color_quota=quota.COLOR_QUOTA,
     )
     send_mail_user(job.user, message.subject, body)
 
@@ -205,6 +230,14 @@ def prehook(c, r, job):
 
     if job.pages > quo.daily:
         send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
+        msg = NOTIFY_QUOTA_MESSAGE.format(
+            pages=job.pages,
+            quota=quo.daily,
+        )
+        r.publish('user-' + job.user, msg)
+        sys.exit(255)
+    elif job.queue == COLOR_QUEUE and job.pages > quo.color:
+        send_printer_mail(INSUFFICIENT_COLOR_QUOTA_MESSAGE, job, quo)
         msg = NOTIFY_QUOTA_MESSAGE.format(
             pages=job.pages,
             quota=quo.daily,
