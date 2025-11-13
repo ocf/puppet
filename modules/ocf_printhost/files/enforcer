@@ -33,7 +33,7 @@ from ocflib.misc.mail import send_problem_report
 
 CONF_FILE = '/opt/share/enforcer/enforcer.conf'
 
-COLOR_QUEUE = 'admin-only'
+COLOR_QUEUE = 'color-single'
 
 Message = namedtuple('Message', ['subject', 'body'])
 
