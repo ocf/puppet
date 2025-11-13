@@ -103,6 +103,25 @@ ENFORCER_ERROR_MESSAGE = Message(
         """) + MAIL_SIGNATURE
 )
 
+NON_LETTER_ERROR_MESSAGE = Message(
+    subject='[OCF] Your latest print job failed',
+    body=dedent("""\
+        Greetings from the Open Computing Facility,
+
+        This email is letting you know that your most recent print job was
+        rejected since it was not letter sized. Please ensure that you are
+        following all instructions on the computers, and not printing
+        directly from your browser.
+
+        """) + USER_ERROR_INFO + dedent("""
+
+        Does something look wrong? Please reply to
+
+            help@ocf.berkeley.edu
+
+        """) + MAIL_SIGNATURE
+)
+
 NOTIFY_QUOTA_MESSAGE = dedent("""\
         Your print job failed due to insufficient pages. Your job was
         {pages} pages, and you have {quota} pages remaining today.\
@@ -115,6 +134,11 @@ NOTIFY_JOB_ACCEPTED = dedent("""\
 NOTIFY_JOB_ERROR = dedent("""\
         Your print job '{document}' failed due to a printer error.
         Please contact a staff member for assistance.\
+""")
+
+NOTIFY_NON_LETTER = dedent("""\
+        Your print job '{document}' failed due to not being letter sized.
+        Please ensure you are not printing from your browser.
 """)
 
 
@@ -132,6 +156,11 @@ def page_count(env):
     path = env['TEADATAFILE']
     num_copy = int(env['TEACOPIES'])
     return num_copy * int(subprocess.check_output(('/usr/local/bin/enforcer-pc', path), timeout=30))
+
+
+def page_size(env):
+    path = env['TEADATAFILE']
+    return subprocess.check_output(('/usr/local/bin/enforcer-size', path), timeout=30).decode("UTF-8").strip()
 
 
 def create_job(env):
@@ -164,6 +193,15 @@ def send_printer_mail(message, job, quo):
 
 def prehook(c, r, job):
     quo = quota.get_quota(c, job.user)
+    size = page_size(os.environ)
+
+    if size not in ['Letter', '279x215mm', '215x279mm', '279x216mm', '216x279mm']:
+        send_printer_mail(NON_LETTER_ERROR_MESSAGE, job, quo)
+        msg = NOTIFY_NON_LETTER.format(
+            document=job.doc_name,
+        )
+        r.publish('user-' + job.user, msg)
+        sys.exit(255)
 
     if job.pages > quo.daily:
         send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
@@ -189,6 +227,20 @@ def posthook(c, r, job, success):
         quo = quota.get_quota(c, job.user)
         msg = NOTIFY_JOB_ERROR.format(document=job.doc_name)
         send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
+
+        err_msg = dedent("""\
+            enforcer encountered a printer error while processing a job
+
+            tea4cups environment variables:
+            {vars}
+            """).format(
+            # seems unlikely a non-tea4cups var will start with TEA
+            vars='\n'.join('  {}: {}'.format(k, v) for k, v in
+                           os.environ.items() if k.startswith('TEA'))
+        )
+
+        syslog(err_msg)
+        send_problem_report(err_msg)
     r.publish('user-' + job.user, msg)
 
 
