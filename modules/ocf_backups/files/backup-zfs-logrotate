@@ -1,0 +1,5 @@
+/var/log/ocf-backup-zfs.log {
+	rotate 100
+	daily
+	compress
+}
