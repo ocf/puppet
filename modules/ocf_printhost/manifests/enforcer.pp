@@ -1,4 +1,8 @@
 class ocf_printhost::enforcer {
+  user { 'ocfenforcer':
+    ensure => present,
+  }
+
   package { ['cups-tea4cups', 'mariadb-client']: }
 
   $mysql_password = assert_type(Pattern[/^[a-zA-Z0-9]*$/], lookup('ocfprinting::mysql::password'))
@@ -23,6 +27,7 @@ class ocf_printhost::enforcer {
 
     '/opt/share/enforcer':
       ensure => directory,
+      owner  => 'ocfenforcer',
       mode   => '0500';
 
     '/opt/share/enforcer/enforcer.conf':
@@ -30,6 +35,8 @@ class ocf_printhost::enforcer {
         'ocf_printhost/enforcer/enforcer.conf.erb',
         'ocf/broker/broker.conf.erb',
       ),
+      owner     => 'ocfenforcer',
+      mode      => '0500',
       show_diff => false;
   }
 
