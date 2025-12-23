@@ -8,7 +8,7 @@ storce/admin@OCF.BERKELEY.EDU           all,get-keys
 longlian/admin@OCF.BERKELEY.EDU         all,get-keys
 sbwilliams/admin@OCF.BERKELEY.EDU       all,get-keys
 chamburr/admin@OCF.BERKELEY.EDU         all,get-keys
-michaelzls/admin@OCF.BERKELEY.EDU       all, get-keys
+michaelzls/admin@OCF.BERKELEY.EDU       all,get-keys
 
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
