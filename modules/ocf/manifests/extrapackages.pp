@@ -200,6 +200,7 @@ class ocf::extrapackages {
     package {
       [
         'bat',
+        'pipx',
       ]:;
     }
   }
