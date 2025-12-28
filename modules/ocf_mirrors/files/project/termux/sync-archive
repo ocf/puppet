@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -aHv --delete --delete-after --delay-updates --safe-links \
+	rsync://packages.termux.dev/termux /opt/mirrors/ftp/termux
