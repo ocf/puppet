@@ -59,7 +59,7 @@ root staffer to change the environment.
 If you have root, you can change a host's environment with the `puppet-trigger`
 command:
 
-    rjz@tsunami:~$ ssh supernova
+    rjz@supernova:~$ ssh supernova
     rjz@supernova:~$ sudo puppet-trigger -te rjz
 
 This changes the environment to `rjz` and triggers a run.
