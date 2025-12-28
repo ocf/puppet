@@ -8,5 +8,6 @@ Type=simple
 Environment="<%= env %>=<%= val %>"
 <% end -%>
 ExecStart=<%= @exec_start %>
-# one day should be good enough for anyone
-RuntimeMaxSec=86400
+# ~~one day should be good enough for anyone~~
+# not enough for opensuse, it seems
+RuntimeMaxSec=172800
