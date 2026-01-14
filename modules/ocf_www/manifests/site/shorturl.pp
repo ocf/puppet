@@ -23,7 +23,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/account$ https://www.ocf.berkeley.edu/docs/services/account/ [R]'},
       {rewrite_rule => '^/apphost$ https://www.ocf.berkeley.edu/docs/services/webapps/ [R]'},
       {rewrite_rule => '^/announce$ https://groups.google.com/a/lists.berkeley.edu/forum/#!forum/ocf/join [NE,R]'},
-      {rewrite_rule => '^/apply$ https://forms.gle/H1YAUg8F6f2SefFD9 [R]'},
+      {rewrite_rule => '^/apply$ https://forms.gle/vpCvfbSSQ9MQupAL8 [R]'},
       {rewrite_rule => '^/apparel$ https://docs.google.com/forms/d/e/1FAIpQLSdJJeyRjkJhGVcH9frHtE6dtXHbgfD-fy9J5d2wRkzqSl5nPw/viewform [R]'},
       {rewrite_rule => '^/banquet$ https://forms.gle/z2d8H8K4VoJEq1hw5 [R]'},
       #{rewrite_rule => '^/bjb$ https://jukebox.ocf.berkeley.edu/ [R]'},
