@@ -10,6 +10,7 @@ class ocf_desktop {
   include ocf::packages::vscode
   include ocf_desktop::crondeny
   include ocf_desktop::defaults
+  include ocf_desktop::displaycontrol
   include ocf_desktop::drivers
   include ocf_desktop::firewall_output
   include ocf_desktop::grub
