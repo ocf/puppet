@@ -4,7 +4,6 @@
 #  - milter configuration
 #  - clamav virus scanning
 #  - spamassassin
-#  - postgrey (graylisting)
 #  - policyd-weight (DNSBLs and more)
 #  - basic metadata logging to /var/log/ocfmail.log
 #
@@ -14,7 +13,7 @@ class ocf_mail::spam {
   # badness filtering common to all site configurations
 
   package {
-    ['clamav-milter', 'spamassassin', 'spamass-milter', 'postgrey',
+    ['clamav-milter', 'spamassassin', 'spamass-milter',
     'policyd-weight']:;
   }
 
@@ -26,8 +25,6 @@ class ocf_mail::spam {
       require => Package['spamass-milter'];
     'clamav-milter':
       require => Package['clamav-milter'];
-    'postgrey':
-      require => Package['postgrey'];
     'policyd-weight':
       require => Package['policyd-weight'];
   }
@@ -78,10 +75,6 @@ class ocf_mail::spam {
       source  => 'puppet:///modules/ocf_mail/spam/clamav/clamav-milter.conf',
       notify  => Service['clamav-milter'],
       require => Package['clamav-milter'];
-    '/etc/default/postgrey':
-      source  => 'puppet:///modules/ocf_mail/spam/postgrey/postgrey',
-      notify  => Service['postgrey'],
-      require => Package['postgrey'];
     '/etc/policyd-weight.conf':
       source  => 'puppet:///modules/ocf_mail/spam/policyd-weight/policyd-weight.conf',
       notify  => Service['policyd-weight'],
