@@ -28,6 +28,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/banquet$ https://forms.gle/z2d8H8K4VoJEq1hw5 [R]'},
       #{rewrite_rule => '^/bjb$ https://jukebox.ocf.berkeley.edu/ [R]'},
       {rewrite_rule => '^/bod(/.*)?$ https://www.ocf.berkeley.edu/~staff/bod$1 [R]'},
+      {rewrite_rule => '^/bodnotes$ https://notes.ocf.berkeley.edu/Pd601HFMR1O8aRRxA2DkGg?both [R]'},
       {rewrite_rule => '^/buy$ https://goo.gl/forms/PnlB5dJawGZcUS0S2 [R]'},
       {rewrite_rule => '^/buysheet$ https://docs.google.com/spreadsheets/d/16tMZGSrr3D6ao8V-cIyeE5PTEYf1XQEQ9rALGAjoWls/edit?usp=sharing [R]'},
       {rewrite_rule => '^/callinkapi(.*)?$ https://studentgroupservice.sait-west.berkeley.edu/service.asmx$1 [R]'},
