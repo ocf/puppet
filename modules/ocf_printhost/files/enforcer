@@ -220,6 +220,7 @@ def send_printer_mail(message, job, quo):
     )
     send_mail_user(job.user, message.subject, body)
 
+
 def send_notification(wayout_pass, summary, body, username):
     try:
         hostname = get_hostname_from_username(username)
@@ -239,6 +240,7 @@ def send_notification(wayout_pass, summary, body, username):
     except Exception as e:
         syslog('Exception: ' + str(e))
 
+
 def get_hostname_from_username(username):
     try:
         # Use labmap to get hostname from username
@@ -251,6 +253,7 @@ def get_hostname_from_username(username):
         return None
     except Exception as e:
         syslog('Exception: ' + str(e))
+
 
 def prehook(c, r, job, wayout_pass):
     quo = quota.get_quota(c, job.user)
