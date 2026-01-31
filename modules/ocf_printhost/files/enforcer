@@ -36,7 +36,7 @@ CONF_FILE = '/opt/share/enforcer/enforcer.conf'
 
 COLOR_QUEUE = 'color-single'
 
-APP_NAME = "Printer"
+APP_NAME = 'Printer'
 PORT = 6767
 
 Message = namedtuple('Message', ['subject', 'body'])
@@ -225,32 +225,32 @@ def send_notification(wayout_pass, summary, body, username):
         hostname = get_hostname_from_username(username)
         if not hostname:
             return
-        url = "http://" + hostname + ":" + str(PORT) + "/notify"
+        url = 'http://' + hostname + ':' + str(PORT) + '/notify'
         data = {
-            "summary": summary,
-            "body": body,
-            "app_name": APP_NAME,
+            'summary': summary,
+            'body': body,
+            'app_name': APP_NAME,
         }
         headers = {
-            "Authorization": wayout_pass,
-            "Content-Type": "application/json"
+            'Authorization': wayout_pass,
+            'Content-Type': 'application/json'
         }
         requests.post(url=url, json=data, headers=headers, timeout=5)
     except Exception as e:
-        syslog("Exception: " + str(e))
+        syslog('Exception: ' + str(e))
 
 def get_hostname_from_username(username):
     try:
         # Use labmap to get hostname from username
-        url = "https://labmap.ocf.berkeley.edu/api/generate"
+        url = 'https://labmap.ocf.berkeley.edu/api/generate'
         res = requests.get(url, timeout=5).json()
-        desktops = res.get("desktops", [])
+        desktops = res.get('desktops', [])
         for desktop in desktops:
-            if desktop.get("user", "") == username:
-                return desktop.get("name")
+            if desktop.get('user', '') == username:
+                return desktop.get('name')
         return None
     except Exception as e:
-        syslog("Exception: " + str(e))
+        syslog('Exception: ' + str(e))
 
 def prehook(c, r, job, wayout_pass):
     quo = quota.get_quota(c, job.user)
@@ -262,7 +262,7 @@ def prehook(c, r, job, wayout_pass):
             document=job.doc_name,
         )
         r.publish('user-' + job.user, msg)
-        send_notification(wayout_pass, "Non Letter Error", msg, job.user)
+        send_notification(wayout_pass, 'Non Letter Error', msg, job.user)
 
         sys.exit(255)
 
@@ -273,7 +273,7 @@ def prehook(c, r, job, wayout_pass):
             quota=quo.daily,
         )
         r.publish('user-' + job.user, msg)
-        send_notification(wayout_pass, "Insufficient Quota", msg, job.user)
+        send_notification(wayout_pass, 'Insufficient Quota', msg, job.user)
         sys.exit(255)
     elif job.queue == COLOR_QUEUE and job.pages > quo.color:
         send_printer_mail(INSUFFICIENT_COLOR_QUOTA_MESSAGE, job, quo)
@@ -282,7 +282,7 @@ def prehook(c, r, job, wayout_pass):
             quota=quo.daily,
         )
         r.publish('user-' + job.user, msg)
-        send_notification(wayout_pass, "Insufficient Color Quota", msg, job.user)
+        send_notification(wayout_pass, 'Insufficient Color Quota', msg, job.user)
         sys.exit(255)
 
 
@@ -296,7 +296,7 @@ def posthook(c, r, job, success, wayout_pass):
             printer=printer_name,
         )
         r.publish('printer-' + printer_name, job.user)
-        send_notification(wayout_pass, "Printer Success", msg, job.user)
+        send_notification(wayout_pass, 'Printer Success', msg, job.user)
     else:
         quo = quota.get_quota(c, job.user)
         msg = NOTIFY_JOB_ERROR.format(document=job.doc_name)
@@ -315,7 +315,7 @@ def posthook(c, r, job, success, wayout_pass):
 
         syslog(err_msg)
         send_problem_report(err_msg)
-        send_notification(wayout_pass, "Printer Error", msg, job.user)
+        send_notification(wayout_pass, 'Printer Error', msg, job.user)
     r.publish('user-' + job.user, msg)
 
 
