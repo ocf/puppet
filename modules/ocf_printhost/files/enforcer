@@ -37,338 +37,340 @@ CONF_FILE = '/opt/share/enforcer/enforcer.conf'
 COLOR_QUEUE = 'color-single'
 
 APP_NAME = "Printer"
+PORT = 6767
 
 Message = namedtuple('Message', ['subject', 'body'])
 
 
 USER_ERROR_INFO = dedent("""\
-    Username: {user}
-    Time: {time}
-    File: {doc_name}
-    Total pages: {pages}
-    Pages left today: {daily_pages}
-    Pages left this semester: {semester_pages}
-    Color pages left: {color_pages}\
+    Username: {user}
+    Time: {time}
+    File: {doc_name}
+    Total pages: {pages}
+    Pages left today: {daily_pages}
+    Pages left this semester: {semester_pages}
+    Color pages left: {color_pages}\
 """)
 
 INSUFFICIENT_QUOTA_MESSAGE = Message(
-    subject='[OCF] Your latest print job was rejected',
-    body=dedent("""\
-        Greetings from the Open Computing Facility,
+    subject='[OCF] Your latest print job was rejected',
+    body=dedent("""\
+        Greetings from the Open Computing Facility,
 
-        This email is letting you know that your most recent print job was
-        rejected since it would exceed your daily quota. The daily quota is
-        {daily_quota} pages today and the semesterly quota is {semester_quota} pages.
+        This email is letting you know that your most recent print job was
+        rejected since it would exceed your daily quota. The daily quota is
+        {daily_quota} pages today and the semesterly quota is {semester_quota} pages.
 
-        """) + USER_ERROR_INFO + dedent("""
+        """) + USER_ERROR_INFO + dedent("""
 
-        Does something look wrong? Please reply to
+        Does something look wrong? Please reply to
 
-            help@ocf.berkeley.edu
+            help@ocf.berkeley.edu
 
 
-        """) + MAIL_SIGNATURE
+        """) + MAIL_SIGNATURE
 )
 
 INSUFFICIENT_COLOR_QUOTA_MESSAGE = Message(
-    subject='[OCF] Your latest print job was rejected',
-    body=dedent("""\
-        Greetings from the Open Computing Facility,
+    subject='[OCF] Your latest print job was rejected',
+    body=dedent("""\
+        Greetings from the Open Computing Facility,
 
-        This email is letting you know that your most recent print job was
-        rejected since it would exceed your color printing quota. The color printing
-        quota is {color_quota} pages and the semesterly quota is {semester_quota}
-        pages.
+        This email is letting you know that your most recent print job was
+        rejected since it would exceed your color printing quota. The color printing
+        quota is {color_quota} pages and the semesterly quota is {semester_quota}
+        pages.
 
-        """) + USER_ERROR_INFO + dedent("""
+        """) + USER_ERROR_INFO + dedent("""
 
-        Does something look wrong? Please reply to
+        Does something look wrong? Please reply to
 
-            help@ocf.berkeley.edu
+            help@ocf.berkeley.edu
 
 
-        """) + MAIL_SIGNATURE
+        """) + MAIL_SIGNATURE
 )
 
 PRINTER_ERROR_MESSAGE = Message(
-    subject='[OCF] Your latest print job failed',
-    body=dedent("""\
-        Greetings from the Open Computing Facility,
+    subject='[OCF] Your latest print job failed',
+    body=dedent("""\
+        Greetings from the Open Computing Facility,
 
-        This email is from the OCF to let you know that your most recent print
-        job failed due to a printer error. If there's something wrong with the
-        printers, please alert the operations staff at the desk.
+        This email is from the OCF to let you know that your most recent print
+        job failed due to a printer error. If there's something wrong with the
+        printers, please alert the operations staff at the desk.
 
-        """) + USER_ERROR_INFO + dedent("""
+        """) + USER_ERROR_INFO + dedent("""
 
-        Still can't get it to print? Please reply to
+        Still can't get it to print? Please reply to
 
-            help@ocf.berkeley.edu
+            help@ocf.berkeley.edu
 
 
-        """) + MAIL_SIGNATURE
+        """) + MAIL_SIGNATURE
 )
 
 ENFORCER_ERROR_MESSAGE = Message(
-    subject='[OCF] Your latest print job failed',
-    body=dedent("""\
-        Greetings from the Open Computing Facility,
+    subject='[OCF] Your latest print job failed',
+    body=dedent("""\
+        Greetings from the Open Computing Facility,
 
-        This email is from the OCF to let you know that your most recent print
-        job failed due to a problem with the print accounting system. OCF staff
-        have been notified of the problem and should fix it shortly. If there
-        is a staff member in lab, you can ask them for help in the meantime.
+        This email is from the OCF to let you know that your most recent print
+        job failed due to a problem with the print accounting system. OCF staff
+        have been notified of the problem and should fix it shortly. If there
+        is a staff member in lab, you can ask them for help in the meantime.
 
-        """) + USER_ERROR_INFO + dedent("""
+        """) + USER_ERROR_INFO + dedent("""
 
-        Still can't get it to print? Please reply to
+        Still can't get it to print? Please reply to
 
-            help@ocf.berkeley.edu
+            help@ocf.berkeley.edu
 
 
-        """) + MAIL_SIGNATURE
+        """) + MAIL_SIGNATURE
 )
 
 NON_LETTER_ERROR_MESSAGE = Message(
-    subject='[OCF] Your latest print job failed',
-    body=dedent("""\
-        Greetings from the Open Computing Facility,
+    subject='[OCF] Your latest print job failed',
+    body=dedent("""\
+        Greetings from the Open Computing Facility,
 
-        This email is letting you know that your most recent print job was
-        rejected since it was not letter sized. Please ensure that you are
-        following all instructions on the computers, and not printing
-        directly from your browser.
+        This email is letting you know that your most recent print job was
+        rejected since it was not letter sized. Please ensure that you are
+        following all instructions on the computers, and not printing
+        directly from your browser.
 
-        """) + USER_ERROR_INFO + dedent("""
+        """) + USER_ERROR_INFO + dedent("""
 
-        Does something look wrong? Please reply to
+        Does something look wrong? Please reply to
 
-            help@ocf.berkeley.edu
+            help@ocf.berkeley.edu
 
-        """) + MAIL_SIGNATURE
+        """) + MAIL_SIGNATURE
 )
 
 NOTIFY_QUOTA_MESSAGE = dedent("""\
-        Your print job failed due to insufficient pages. Your job was
-        {pages} pages, and you have {quota} pages remaining today.\
+        Your print job failed due to insufficient pages. Your job was
+        {pages} pages, and you have {quota} pages remaining today.\
 """)
 
 NOTIFY_JOB_ACCEPTED = dedent("""\
-        Your print job '{document}' was accepted and sent to {printer}.\
+        Your print job '{document}' was accepted and sent to {printer}.\
 """)
 
 NOTIFY_JOB_ERROR = dedent("""\
-        Your print job '{document}' failed due to a printer error.
-        Please contact a staff member for assistance.\
+        Your print job '{document}' failed due to a printer error.
+        Please contact a staff member for assistance.\
 """)
 
 NOTIFY_NON_LETTER = dedent("""\
-        Your print job '{document}' failed due to not being letter sized.
-        Please ensure you are not printing from your browser.
+        Your print job '{document}' failed due to not being letter sized.
+        Please ensure you are not printing from your browser.
 """)
 
 
 def read_config():
-    conf = ConfigParser()
-    conf.read(CONF_FILE)
-    mysql_user = conf.get('mysql', 'user')
-    mysql_passwd = conf.get('mysql', 'password')
-    redis_host = conf.get('broker', 'host')
-    redis_passwd = conf.get('broker', 'password')
-    wayout_passwd = conf.get('wayout', 'password')
-    return mysql_user, mysql_passwd, redis_host, redis_passwd, wayout_passwd
+    conf = ConfigParser()
+    conf.read(CONF_FILE)
+    mysql_user = conf.get('mysql', 'user')
+    mysql_passwd = conf.get('mysql', 'password')
+    redis_host = conf.get('broker', 'host')
+    redis_passwd = conf.get('broker', 'password')
+    wayout_passwd = conf.get('wayout', 'password')
+    return mysql_user, mysql_passwd, redis_host, redis_passwd, wayout_passwd
 
 
 def page_count(env):
-    path = env['TEADATAFILE']
-    num_copy = int(env['TEACOPIES'])
-    return num_copy * int(subprocess.check_output(('/usr/local/bin/enforcer-pc', path), timeout=30))
+    path = env['TEADATAFILE']
+    num_copy = int(env['TEACOPIES'])
+    return num_copy * int(subprocess.check_output(('/usr/local/bin/enforcer-pc', path), timeout=30))
 
 
 def page_size(env):
-    path = env['TEADATAFILE']
-    return subprocess.check_output(('/usr/local/bin/enforcer-size', path), timeout=30).decode('UTF-8').strip()
+    path = env['TEADATAFILE']
+    return subprocess.check_output(('/usr/local/bin/enforcer-size', path), timeout=30).decode('UTF-8').strip()
 
 
 def create_job(env):
-    printer = env['TEAPRINTERNAME']
-    queue = env['CLASS']
-    return quota.Job(
-        user=env['TEAUSERNAME'],
-        time=datetime.now(),
-        pages=page_count(env),
-        queue=queue,
-        printer=printer,
-        doc_name=env['TEATITLE'],
-        filesize=env['TEAJOBSIZE'],
-    )
+    printer = env['TEAPRINTERNAME']
+    queue = env['CLASS']
+    return quota.Job(
+        user=env['TEAUSERNAME'],
+        time=datetime.now(),
+        pages=page_count(env),
+        queue=queue,
+        printer=printer,
+        doc_name=env['TEATITLE'],
+        filesize=env['TEAJOBSIZE'],
+    )
 
 
 def send_printer_mail(message, job, quo):
-    body = message.body.format(
-        user=job.user,
-        time=job.time,
-        doc_name=job.doc_name,
-        pages=job.pages,
-        daily_pages=quo.daily,
-        semester_pages=quo.semesterly,
-        color_pages=quo.color,
-        daily_quota=quota.daily_quota(),
-        semester_quota=quota.SEMESTERLY_QUOTA,
-        color_quota=quota.COLOR_QUOTA,
-    )
-    send_mail_user(job.user, message.subject, body)
+    body = message.body.format(
+        user=job.user,
+        time=job.time,
+        doc_name=job.doc_name,
+        pages=job.pages,
+        daily_pages=quo.daily,
+        semester_pages=quo.semesterly,
+        color_pages=quo.color,
+        daily_quota=quota.daily_quota(),
+        semester_quota=quota.SEMESTERLY_QUOTA,
+        color_quota=quota.COLOR_QUOTA,
+    )
+    send_mail_user(job.user, message.subject, body)
 
 def send_notification(wayout_pass, summary, body, username):
-    try:
-        hostname = get_hostname_from_username(username)
-        if not hostname:
-            return
-        url = hostname + ":" + port + "/notify"
-        data = {
-            "summary": summary,
-            "body": body,
-            "app_name": APP_NAME,
-        }
-        headers = {
-            "Authorization": wayout_pass,
-            "Content-Type": "application/json"
-        }
-        requests.post(url=url, data=data, headers=headers)
-    except Exception as e:
-        print("Exception: " + e)
+    try:
+        hostname = get_hostname_from_username(username)
+        if not hostname:
+            return
+        url = "http://" + hostname + ":" + str(PORT) + "/notify"
+        data = {
+            "summary": summary,
+            "body": body,
+            "app_name": APP_NAME,
+        }
+        headers = {
+            "Authorization": wayout_pass,
+            "Content-Type": "application/json"
+        }
+        requests.post(url=url, json=data, headers=headers, timeout=5)
+    except Exception as e:
+        syslog("Exception: " + str(e))
 
 def get_hostname_from_username(username):
-    try:
-        # Use labmap to get hostname from username
-        url = "https://labmap.ocf.berkeley.edu/api/generate"
-        res = requests.get(url)
-        desktops = res.get("desktops", [])
-        for desktop in desktops:
-            if desktop.get("user", "") == username:
-                return desktop.get("name")
-        return None
-    except Exception as e:
-        print("Exception: " + e)
+    try:
+        # Use labmap to get hostname from username
+        url = "https://labmap.ocf.berkeley.edu/api/generate"
+        res = requests.get(url, timeout=5).json()
+        desktops = res.get("desktops", [])
+        for desktop in desktops:
+            if desktop.get("user", "") == username:
+                return desktop.get("name")
+        return None
+    except Exception as e:
+        syslog("Exception: " + str(e))
 
 def prehook(c, r, job, wayout_pass):
-    quo = quota.get_quota(c, job.user)
-    size = page_size(os.environ)
+    quo = quota.get_quota(c, job.user)
+    size = page_size(os.environ)
 
-    if size not in ['Letter', '279x215mm', '215x279mm', '279x216mm', '216x279mm']:
-        send_printer_mail(NON_LETTER_ERROR_MESSAGE, job, quo)
-        msg = NOTIFY_NON_LETTER.format(
-            document=job.doc_name,
-        )
-        r.publish('user-' + job.user, msg)
-        send_notification(wayout_pass, msg.subject, msg.body, job.user)
+    if size not in ['Letter', '279x215mm', '215x279mm', '279x216mm', '216x279mm']:
+        send_printer_mail(NON_LETTER_ERROR_MESSAGE, job, quo)
+        msg = NOTIFY_NON_LETTER.format(
+            document=job.doc_name,
+        )
+        r.publish('user-' + job.user, msg)
+        send_notification(wayout_pass, "Non Letter Error", msg, job.user)
 
-        sys.exit(255)
+        sys.exit(255)
 
-    if job.pages > quo.daily:
-        send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
-        msg = NOTIFY_QUOTA_MESSAGE.format(
-            pages=job.pages,
-            quota=quo.daily,
-        )
-        r.publish('user-' + job.user, msg)
-        send_notification(wayout_pass, msg.subject, msg.body, job.user)
-        sys.exit(255)
-    elif job.queue == COLOR_QUEUE and job.pages > quo.color:
-        send_printer_mail(INSUFFICIENT_COLOR_QUOTA_MESSAGE, job, quo)
-        msg = NOTIFY_QUOTA_MESSAGE.format(
-            pages=job.pages,
-            quota=quo.daily,
-        )
-        r.publish('user-' + job.user, msg)
-        send_notification(wayout_pass, msg.subject, msg.body, job.user)
-        sys.exit(255)
+    if job.pages > quo.daily:
+        send_printer_mail(INSUFFICIENT_QUOTA_MESSAGE, job, quo)
+        msg = NOTIFY_QUOTA_MESSAGE.format(
+            pages=job.pages,
+            quota=quo.daily,
+        )
+        r.publish('user-' + job.user, msg)
+        send_notification(wayout_pass, "Insufficient Quota", msg, job.user)
+        sys.exit(255)
+    elif job.queue == COLOR_QUEUE and job.pages > quo.color:
+        send_printer_mail(INSUFFICIENT_COLOR_QUOTA_MESSAGE, job, quo)
+        msg = NOTIFY_QUOTA_MESSAGE.format(
+            pages=job.pages,
+            quota=quo.daily,
+        )
+        r.publish('user-' + job.user, msg)
+        send_notification(wayout_pass, "Insufficient Color Quota", msg, job.user)
+        sys.exit(255)
 
 
 def posthook(c, r, job, success, wayout_pass):
-    msg = ''
-    if success:
-        quota.add_job(c, job)
-        printer_name = job.printer.split('-')[0]
-        msg = NOTIFY_JOB_ACCEPTED.format(
-            document=job.doc_name,
-            printer=printer_name,
-        )
-        r.publish('printer-' + printer_name, job.user)
-    else:
-        quo = quota.get_quota(c, job.user)
-        msg = NOTIFY_JOB_ERROR.format(document=job.doc_name)
-        send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
+    msg = ''
+    if success:
+        quota.add_job(c, job)
+        printer_name = job.printer.split('-')[0]
+        msg = NOTIFY_JOB_ACCEPTED.format(
+            document=job.doc_name,
+            printer=printer_name,
+        )
+        r.publish('printer-' + printer_name, job.user)
+        send_notification(wayout_pass, "Printer Success", msg, job.user)
+    else:
+        quo = quota.get_quota(c, job.user)
+        msg = NOTIFY_JOB_ERROR.format(document=job.doc_name)
+        send_printer_mail(PRINTER_ERROR_MESSAGE, job, quo)
 
-        err_msg = dedent("""\
-            enforcer encountered a printer error while processing a job
+        err_msg = dedent("""\
+            enforcer encountered a printer error while processing a job
 
-            tea4cups environment variables:
-            {vars}
-            """).format(
-            # seems unlikely a non-tea4cups var will start with TEA
-            vars='\n'.join('  {}: {}'.format(k, v) for k, v in
-                           os.environ.items() if k.startswith('TEA'))
-        )
+            tea4cups environment variables:
+            {vars}
+            """).format(
+            # seems unlikely a non-tea4cups var will start with TEA
+            vars='\n'.join('  {}: {}'.format(k, v) for k, v in
+                           os.environ.items() if k.startswith('TEA'))
+        )
 
-        syslog(err_msg)
-        send_problem_report(err_msg)
-    r.publish('user-' + job.user, msg)
-    send_notification(wayout_pass, msg.subject, msg.body, job.user)
+        syslog(err_msg)
+        send_problem_report(err_msg)
+        send_notification(wayout_pass, "Printer Error", msg, job.user)
+    r.publish('user-' + job.user, msg)
 
 
 def main(argv):
-    job, quo = None, None
-    try:
-        parser = argparse.ArgumentParser(
-            description=__doc__,
-            formatter_class=argparse.RawDescriptionHelpFormatter,
-        )
-        parser.add_argument('command',
-                            choices={'prehook', 'posthook'})
-        args = parser.parse_args(argv[1:])
-        job = create_job(os.environ)
-        mysql_user, mysql_pass, redis_host, redis_pass, wayout_pass = read_config()
-        r = redis.StrictRedis(host=redis_host, port=6378, password=redis_pass, ssl=True)
-        with quota.get_connection(user=mysql_user, password=mysql_pass) as c:
-            if args.command == 'prehook':
-                prehook(c, r, job, wayout_pass)
-            else:
-                success = os.environ['TEASTATUS'] == '0'
-                posthook(c, r, job, success, wayout_pass)
-    except SystemExit as e:
-        sys.exit(e.code)
-    except Exception:
-        msg = dedent("""\
-            enforcer encountered the following error while processing a job:
+    job, quo = None, None
+    try:
+        parser = argparse.ArgumentParser(
+            description=__doc__,
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+        )
+        parser.add_argument('command',
+                            choices={'prehook', 'posthook'})
+        args = parser.parse_args(argv[1:])
+        job = create_job(os.environ)
+        mysql_user, mysql_pass, redis_host, redis_pass, wayout_pass = read_config()
+        r = redis.StrictRedis(host=redis_host, port=6378, password=redis_pass, ssl=True)
+        with quota.get_connection(user=mysql_user, password=mysql_pass) as c:
+            if args.command == 'prehook':
+                prehook(c, r, job, wayout_pass)
+            else:
+                success = os.environ['TEASTATUS'] == '0'
+                posthook(c, r, job, success, wayout_pass)
+    except SystemExit as e:
+        sys.exit(e.code)
+    except Exception:
+        msg = dedent("""\
+            enforcer encountered the following error while processing a job:
 
-            {traceback}
+            {traceback}
 
 
-            tea4cups environment variables:
-            {vars}
-            """).format(
-            traceback=format_exc(),
-            # seems unlikely a non-tea4cups var will start with TEA
-            vars='\n'.join('  {}: {}'.format(k, v) for k, v in
-                           os.environ.items() if k.startswith('TEA'))
-        )
+            tea4cups environment variables:
+            {vars}
+            """).format(
+            traceback=format_exc(),
+            # seems unlikely a non-tea4cups var will start with TEA
+            vars='\n'.join('  {}: {}'.format(k, v) for k, v in
+                           os.environ.items() if k.startswith('TEA'))
+        )
 
-        syslog(msg)
-        send_problem_report(msg)
-        if job and args.command == 'prehook':
-            try:
-                send_printer_mail(
-                    ENFORCER_ERROR_MESSAGE,
-                    job,
-                    quo or quota.UserQuota(user=job.user, daily='Unknown',
-                                           semesterly='Unknown')
-                )
-            except Exception:
-                pass
-        # Don't retry; it's not going to print the second time.
-        sys.exit(255)
+        syslog(msg)
+        send_problem_report(msg)
+        if job and args.command == 'prehook':
+            try:
+                send_printer_mail(
+                    ENFORCER_ERROR_MESSAGE,
+                    job,
+                    quo or quota.UserQuota(user=job.user, daily='Unknown',
+                                           semesterly='Unknown')
+                )
+            except Exception:
+                pass
+        # Don't retry; it's not going to print the second time.
+        sys.exit(255)
 
 
 if __name__ == '__main__':
-    main(sys.argv)
+    main(sys.argv)
