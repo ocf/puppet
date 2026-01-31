@@ -17,6 +17,7 @@ import argparse
 import os
 import subprocess
 import sys
+import requests
 from collections import namedtuple
 from configparser import ConfigParser
 from datetime import datetime
@@ -34,6 +35,9 @@ from ocflib.misc.mail import send_problem_report
 CONF_FILE = '/opt/share/enforcer/enforcer.conf'
 
 COLOR_QUEUE = 'color-single'
+
+APP_NAME = "Printer"
+PORT = 6767
 
 Message = namedtuple('Message', ['subject', 'body'])
 
@@ -172,7 +176,8 @@ def read_config():
     mysql_passwd = conf.get('mysql', 'password')
     redis_host = conf.get('broker', 'host')
     redis_passwd = conf.get('broker', 'password')
-    return mysql_user, mysql_passwd, redis_host, redis_passwd
+    wayout_passwd = conf.get('wayout', 'password')
+    return mysql_user, mysql_passwd, redis_host, redis_passwd, wayout_passwd
 
 
 def page_count(env):
@@ -215,8 +220,39 @@ def send_printer_mail(message, job, quo):
     )
     send_mail_user(job.user, message.subject, body)
 
+def send_notification(wayout_pass, summary, body, username):
+    try:
+        hostname = get_hostname_from_username(username)
+        if not hostname:
+            return
+        url = "http://" + hostname + ":" + str(PORT) + "/notify"
+        data = {
+            "summary": summary,
+            "body": body,
+            "app_name": APP_NAME,
+        }
+        headers = {
+            "Authorization": wayout_pass,
+            "Content-Type": "application/json"
+        }
+        requests.post(url=url, json=data, headers=headers, timeout=5)
+    except Exception as e:
+        syslog("Exception: " + str(e))
 
-def prehook(c, r, job):
+def get_hostname_from_username(username):
+    try:
+        # Use labmap to get hostname from username
+        url = "https://labmap.ocf.berkeley.edu/api/generate"
+        res = requests.get(url, timeout=5).json()
+        desktops = res.get("desktops", [])
+        for desktop in desktops:
+            if desktop.get("user", "") == username:
+                return desktop.get("name")
+        return None
+    except Exception as e:
+        syslog("Exception: " + str(e))
+
+def prehook(c, r, job, wayout_pass):
     quo = quota.get_quota(c, job.user)
     size = page_size(os.environ)
 
@@ -226,6 +262,8 @@ def prehook(c, r, job):
             document=job.doc_name,
         )
         r.publish('user-' + job.user, msg)
+        send_notification(wayout_pass, "Non Letter Error", msg, job.user)
+
         sys.exit(255)
 
     if job.pages > quo.daily:
@@ -235,6 +273,7 @@ def prehook(c, r, job):
             quota=quo.daily,
         )
         r.publish('user-' + job.user, msg)
+        send_notification(wayout_pass, "Insufficient Quota", msg, job.user)
         sys.exit(255)
     elif job.queue == COLOR_QUEUE and job.pages > quo.color:
         send_printer_mail(INSUFFICIENT_COLOR_QUOTA_MESSAGE, job, quo)
@@ -243,10 +282,11 @@ def prehook(c, r, job):
             quota=quo.daily,
         )
         r.publish('user-' + job.user, msg)
+        send_notification(wayout_pass, "Insufficient Color Quota", msg, job.user)
         sys.exit(255)
 
 
-def posthook(c, r, job, success):
+def posthook(c, r, job, success, wayout_pass):
     msg = ''
     if success:
         quota.add_job(c, job)
@@ -256,6 +296,7 @@ def posthook(c, r, job, success):
             printer=printer_name,
         )
         r.publish('printer-' + printer_name, job.user)
+        send_notification(wayout_pass, "Printer Success", msg, job.user)
     else:
         quo = quota.get_quota(c, job.user)
         msg = NOTIFY_JOB_ERROR.format(document=job.doc_name)
@@ -274,6 +315,7 @@ def posthook(c, r, job, success):
 
         syslog(err_msg)
         send_problem_report(err_msg)
+        send_notification(wayout_pass, "Printer Error", msg, job.user)
     r.publish('user-' + job.user, msg)
 
 
@@ -288,14 +330,14 @@ def main(argv):
                             choices={'prehook', 'posthook'})
         args = parser.parse_args(argv[1:])
         job = create_job(os.environ)
-        mysql_user, mysql_pass, redis_host, redis_pass = read_config()
+        mysql_user, mysql_pass, redis_host, redis_pass, wayout_pass = read_config()
         r = redis.StrictRedis(host=redis_host, port=6378, password=redis_pass, ssl=True)
         with quota.get_connection(user=mysql_user, password=mysql_pass) as c:
             if args.command == 'prehook':
-                prehook(c, r, job)
+                prehook(c, r, job, wayout_pass)
             else:
                 success = os.environ['TEASTATUS'] == '0'
-                posthook(c, r, job, success)
+                posthook(c, r, job, success, wayout_pass)
     except SystemExit as e:
         sys.exit(e.code)
     except Exception:
