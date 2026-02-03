@@ -2,10 +2,7 @@
 #admin principals
 jaysa/admin@OCF.BERKELEY.EDU            all,get-keys
 oliverni/admin@OCF.BERKELEY.EDU         all,get-keys
-rjz/admin@OCF.BERKELEY.EDU              all,get-keys
-laksith/admin@OCF.BERKELEY.EDU          all,get-keys
 storce/admin@OCF.BERKELEY.EDU           all,get-keys
-longlian/admin@OCF.BERKELEY.EDU         all,get-keys
 sbwilliams/admin@OCF.BERKELEY.EDU       all,get-keys
 chamburr/admin@OCF.BERKELEY.EDU         all,get-keys
 michaelzls/admin@OCF.BERKELEY.EDU       all,get-keys
@@ -15,10 +12,7 @@ michaelzls/admin@OCF.BERKELEY.EDU       all,get-keys
 #root principals
 jaysa/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
 oliverni/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
-rjz/root@OCF.BERKELEY.EDU               change-password                         *@OCF.BERKELEY.EDU
-laksith/root@OCF.BERKELEY.EDU           change-password                         *@OCF.BERKELEY.EDU
 storce/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
-longlian/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 sbwilliams/root@OCF.BERKELEY.EDU        change-password                         *@OCF.BERKELEY.EDU
 chamburr/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 michaelzls/root@OCF.BERKELEY.EDU        change-password                         *@OCF.BERKELEY.EDU
