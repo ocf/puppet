@@ -37,6 +37,7 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/contact$ https://bestdocs.ocf.io/user-docs/contact/ [R]'},
       #{rewrite_rule => '^/coffeechats$ https://docs.google.com/spreadsheets/d/1_xACT5YKjBi1W-mZjKo6YdkfTQinzcPG5iOXrWgs72E/edit [R]'},
       #{rewrite_rule => '^/committee$ https://docs.google.com/spreadsheets/d/17vjngK4aMUDdLtRGaGNap3fmTwxbP3D3QJKrwZz7uk4/edit#gid=0 [R]'},
+      {rewrite_rule => '^/cookie$ https://www.ocf.berkeley.edu/~staff/Cookie-Monster-Sesame-Street-2016.jpg [R]'},
       #{rewrite_rule => '^/d$ https://discourse.ocf.berkeley.edu/ [R]'},
       #{rewrite_rule => '^/d/([0-9]+)$ https://discourse.ocf.berkeley.edu/t/$1 [R]'},
       {rewrite_rule => '^/decal(/.*)?$ https://decal.ocf.berkeley.edu$1 [R]'},
