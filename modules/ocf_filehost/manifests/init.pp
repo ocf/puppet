@@ -8,11 +8,20 @@ class ocf_filehost(
   }
 
   ocf_filehost::nfs_export {
-    '/opt/homes':
-      # We don't root_squash admin, ssh, or apphost because they need to access
-      # /services/crontabs/$server/ as root.
-      options => ['rw', 'fsid=0', 'no_subtree_check', 'no_root_squash'],
-      hosts   => ['admin', 'www', 'ssh', 'apphost', 'adenine', 'guanine', 'cytosine', 'thymine', 'fluttershy', 'rainbowdash'];
+    '/opt/homes': clients => [
+      {
+        # We don't root_squash admin, ssh, or apphost because they need to access
+        # /services/crontabs/$server/ as root.
+        options => ['rw', 'fsid=0', 'no_subtree_check', 'no_root_squash'],
+        hosts   => ['admin', 'www', 'ssh', 'apphost', 'adenine', 'guanine', 'cytosine', 'thymine', 'fluttershy', 'rainbowdash'],
+      },
+      {
+        # allow other hosts (including desktops) to mount nfs, but with limitations (no
+        # root, strict subtree checking, kerberos auth/integrity/encryption.
+        options => ['rw', 'fsid=0', 'subtree_check', 'root_squash', 'sec=krb5p'],
+        hosts   => ['*.ocf.berkeley.edu'],
+      },
+    ],
   }
 
   file {
