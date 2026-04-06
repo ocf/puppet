@@ -1,15 +1,12 @@
 # Nginx reverse proxy in front of Apache for slowloris protection.
-# CR-soon oliverni: move to 80/443, put apache on 127.0.0.1:$backend_port
 #
 # Static vhosts (www, shorturl, etc.) are defined here.
 # Dynamic user vhosts come from build-vhosts via /etc/nginx/ocf-vhost.conf.
 class ocf_www::nginx {
   include ocf::ssl::default
-  include ocf_www::nginx::firewall
 
-  # CR-soon oliverni: change listen/ssl ports to 80/443
-  $http_port = 8080
-  $ssl_port  = 8443
+  $http_port = 80
+  $ssl_port  = 443
 
   $backend = "http://127.0.0.1:${ocf_www::backend_port}"
 

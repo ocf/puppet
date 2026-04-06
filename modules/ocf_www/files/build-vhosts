@@ -417,15 +417,18 @@ def main():
 
         web_vhosts = get_vhosts()
 
-        # Apache config (existing behavior)
+        # Exclude web vhosts that overlap with app vhosts (app vhosts
+        # take priority and are proxied directly to apphost by nginx)
+        web_only_vhosts = {
+            domain: conf
+            for domain, conf in web_vhosts.items()
+            if domain not in prod_app_vhosts
+        }
+
+        # Apache config (web-only vhosts; apphost vhosts are proxied
+        # directly by nginx and don't need Apache backend vhosts)
         apache_config = build_config(
-            prod_app_vhosts,
-            jinja_env.get_template('vhost-web.jinja'),
-            dev_config=args.dev,
-        )
-        apache_config += '\n\n'
-        apache_config += build_config(
-            web_vhosts,
+            web_only_vhosts,
             jinja_env.get_template('vhost-web.jinja'),
             dev_config=args.dev,
         )
@@ -438,7 +441,7 @@ def main():
         )
         nginx_config += '\n\n'
         nginx_config += build_config(
-            web_vhosts,
+            web_only_vhosts,
             jinja_env.get_template('vhost-web-nginx.jinja'),
             dev_config=args.dev,
         )

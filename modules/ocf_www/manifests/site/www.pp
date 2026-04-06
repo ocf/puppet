@@ -98,11 +98,6 @@ class ocf_www::site::www {
         allow_override => ['All'],
       },
       {
-        path        => '\.(cgi|shtml|phtml|php)$',
-        provider    => 'filesmatch',
-        ssl_options => '+StdEnvVars',
-      },
-      {
         path       => '\.(php[3457]?|phtml|fcgi)$',
         provider   => 'filesmatch',
         sethandler => 'fcgid-script',
@@ -117,27 +112,16 @@ class ocf_www::site::www {
     ],
 
     custom_fragment     => '
-      Protocols h2 http/1.1
+      # Trust X-Forwarded-Proto from nginx so %{HTTPS} works in userdirs
+      SetEnvIf X-Forwarded-Proto "https" HTTPS=on
+
       UserDir /services/http/users/
       UserDir disabled root
     ',
   }
 
-  apache::vhost { 'www':
-    *               => $www_options,
-    port            => 443,
-    ssl             => true,
-    ssl_key         => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert        => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain       => "/etc/ssl/private/${::fqdn}.intermediate",
-    headers         => ['always set Strict-Transport-Security max-age=31536000'],
-    request_headers => ['set X-Forwarded-Proto https'],
-  }
-
-  # nginx backend (plain HTTP on localhost)
   apache::vhost { 'www-backend':
-    *    => $www_options,
-    port => $ocf_www::backend_port,
+    * => $www_options,
   }
 
   # canonical redirects
@@ -146,38 +130,6 @@ class ocf_www::site::www {
     'prod' => 'https://www.ocf.berkeley.edu$1',
   }
 
-  apache::vhost {
-    # redirect HTTP -> canonical HTTPS
-    'www-http-redirect':
-      servername           => 'www.ocf.berkeley.edu',
-      serveraliases        => [
-        'www',
-        'dev-www',
-        'dev-www.ocf.berkeley.edu',
-        'ocf.berkeley.edu',
-        'dev-ocf.berkeley.edu',
-        'secure',
-        'secure.ocf.berkeley.edu',
-        'ocf.asuc.org',
-
-        # Domains we don't actually use, but want to redirect to our home page
-        # (rather than show the 503 unavailable error).
-        'death.berkeley.edu',
-        'linux.berkeley.edu',
-
-        $::hostname,
-        $::fqdn,
-      ],
-      port                 => 80,
-      docroot              => '/var/www/html',
-      redirectmatch_status => '301',
-      # ugly exceptions
-      redirectmatch_regexp => '^((?!\/\.well-known\/matrix\/(client|server)).*)',
-      redirectmatch_dest   => $canonical_url;
-
-  }
-
-  # redirect weird HTTPS -> canonical HTTPS
   $https_redirect_options = {
     servername           => 'ocf.berkeley.edu',
     serveraliases        => [
@@ -201,18 +153,7 @@ class ocf_www::site::www {
     redirectmatch_dest   => $canonical_url,
   }
 
-  apache::vhost { 'www-https-redirect':
-    *         => $https_redirect_options,
-    port      => 443,
-    ssl       => true,
-    ssl_key   => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain => "/etc/ssl/private/${::fqdn}.intermediate",
-  }
-
-  # nginx backend (plain HTTP on localhost)
   apache::vhost { 'www-https-redirect-backend':
-    *    => $https_redirect_options,
-    port => $ocf_www::backend_port,
+    * => $https_redirect_options,
   }
 }

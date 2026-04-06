@@ -1,35 +1,17 @@
+{% if not vhost.is_redirect %}
 # {{vhost.comment}}
-{% set ports = [vhost.port, backend_port] if vhost.ssl else [vhost.port] %}
-{% for port in ports %}
-<VirtualHost *:{{port}}>
+<VirtualHost 127.0.0.1:{{backend_port}}>
     ServerName {{vhost.fqdn}}
     ServerAdmin {{vhost.contact_email}}
 
-    {% if vhost.ssl and port != backend_port %}
-        # SSL
-        SSLEngine on
-        SSLCertificateFile {{vhost.ssl.bundle}}
-        SSLCertificateKeyFile {{vhost.ssl.key}}
-        Protocols h2 http/1.1
-    {% endif %}
+    # Trust X-Forwarded-Proto from nginx so %{HTTPS} works in .htaccess
+    SetEnvIf X-Forwarded-Proto "https" HTTPS=on
 
-    {% if vhost.is_redirect %}
-        RewriteEngine on
-        RewriteCond %{REQUEST_URI} !^/\.well-known/
-        # 301 redirects are more correct, but get cached forever by dumb browsers.
-        # Doesn't matter too much for vhosts.
-        RewriteRule ^(.*)$ {{vhost.redirect_dest}}$1 [L,R={{vhost.redirect_type}}]
-    {% elif vhost.is_apphost %}
-        RequestHeader set X-Forwarded-Proto https
-        ProxyPreserveHost On
-        SSLProxyEngine on
-        # Proxy to apphost server
-        ProxyPass / https://apphost.ocf.berkeley.edu/ upgrade=websocket
-    {% elif vhost.disabled %}
+    {% if vhost.disabled %}
         # Proxy to the local "unavailable" vhost, which serves up a friendly
         # "your website is rekt" page.
         RequestHeader set Host unavailable.ocf.berkeley.edu
-        ProxyPass / http://127.0.0.1/
+        ProxyPass / http://127.0.0.1:{{backend_port}}/
     {% else %}
         DocumentRoot {{vhost.docroot}}
 
@@ -61,4 +43,4 @@
 
     UserDir disabled
 </VirtualHost>
-{% endfor %}
+{% endif %}
