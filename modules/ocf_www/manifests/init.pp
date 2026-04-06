@@ -69,13 +69,8 @@ class ocf_www {
       backport_on => 'stretch';
   }
 
-  # Apache no longer serves SSL directly (nginx handles it), but mod_ssl is
-  # still needed for SSLProxyEngine (outbound HTTPS to apphost).
-  include apache::mod::ssl
-
   include ocf_www::lets_encrypt
   include ocf_www::logging
-  include ocf_www::ssl
 
   # sites
   include ocf_www::site::ocfweb_redirects
