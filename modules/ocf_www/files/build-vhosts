@@ -8,13 +8,16 @@ import subprocess
 import sys
 import tempfile
 from collections import namedtuple
+from concurrent.futures import ThreadPoolExecutor
 from itertools import chain
 from pathlib import Path
 from socket import getfqdn
 
 import jinja2
+from ocflib.account.search import SORRIED_SHELL
 from ocflib.account.search import user_is_sorried
 from ocflib.account.utils import web_dir
+from ocflib.infra.ldap import ldap_ocf
 from ocflib.misc.mail import email_for_user
 from ocflib.vhost.application import get_app_vhosts
 from ocflib.vhost.web import get_vhosts
@@ -99,7 +102,7 @@ class VirtualHost(namedtuple('VirtualHost', (
     """
     @property
     def contact_email(self):
-        return email_for_user(self.user)
+        return email_for_user(self.user, check_exists=False)
 
     @property
     def is_redirect(self):
@@ -130,6 +133,8 @@ class VirtualHost(namedtuple('VirtualHost', (
 
     @property
     def disabled(self):
+        if _sorried_users is not None:
+            return self.user in _sorried_users
         return user_is_sorried(self.user)
 
     @property
@@ -173,6 +178,25 @@ def report(*args, **kwargs):
     print(*args, **kwargs)
     kwargs.setdefault('file', sys.stdout)
     kwargs['file'].flush()
+
+
+def _prefetch_vhost_lookups():
+    """Pre-fetch LDAP data used during template rendering.
+
+    VirtualHost.disabled makes a per-vhost LDAP query to check if the user is
+    sorried. This fetches all sorried users in a single bulk query instead.
+    """
+    global _sorried_users
+    with ldap_ocf() as c:
+        c.search(
+            'ou=People,dc=OCF,dc=Berkeley,dc=EDU',
+            f'(loginShell={SORRIED_SHELL})',
+            attributes=['uid'],
+        )
+        _sorried_users = {entry['uid'].value for entry in c.entries}
+
+
+_sorried_users = None
 
 
 def build_config(src_vhosts, template, dev_config=False):
@@ -405,17 +429,24 @@ def main():
         changed |= process_app_vhosts()
 
     if args.target == 'web':
+        # Fetch app vhosts, web vhosts, and sorried users in parallel
+        # to avoid sequential LDAP round-trips (~5s total vs 30s+)
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            app_future = pool.submit(get_app_vhosts)
+            web_future = pool.submit(get_vhosts)
+            pool.submit(_prefetch_vhost_lookups)
+
         # Build app vhosts so that they can get proxied to apphost.o.b.e
         # Placed before regular vhosts so they take priority in domain matching
         # (sometimes hosts have entries in both vhost.conf and vhost-app.conf)
         # Filter out dev app vhosts so they don't clobber existing vhost entries
         prod_app_vhosts = {
             domain: conf
-            for domain, conf in get_app_vhosts().items()
+            for domain, conf in app_future.result().items()
             if 'dev' not in conf['flags']
         }
 
-        web_vhosts = get_vhosts()
+        web_vhosts = web_future.result()
 
         # Exclude web vhosts that overlap with app vhosts (app vhosts
         # take priority and are proxied directly to apphost by nginx)
