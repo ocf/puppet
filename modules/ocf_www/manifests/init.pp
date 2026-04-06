@@ -12,12 +12,18 @@
 # www.ocf.berkeley.edu, which is by far the most complicated domain.
 #
 # Nginx sits in front of Apache for slowloris protection.
-# CR-soon oliverni: swap nginx to 80/443, apache to 127.0.0.1:$backend_port only
+# Nginx handles 80/443, Apache only listens on 127.0.0.1:$backend_port.
 class ocf_www {
   # Port Apache listens on as nginx's backend (plain HTTP on localhost).
   # Must match BACKEND_PORT in build-vhosts.
-  # Phase 2: make this the only Apache port and bind to 127.0.0.1.
   $backend_port = 16767
+
+  # All Apache vhosts are backend-only (nginx handles 80/443).
+  Apache::Vhost {
+    ip   => '127.0.0.1',
+    port => $backend_port,
+  }
+
   include ocf::acct
   include ocf::extrapackages
   include ocf::firewall::allow_web
@@ -25,15 +31,12 @@ class ocf_www {
   include ocf::tmpfs
   include ocf::ssl::default
 
-  # enables the http2 module
-  apache::mod { 'http2': }
-
   class { 'ocf::nfs':
     cron => false,
     web  => false,
   }
 
-  # nginx reverse proxy (test ports for now)
+  # nginx reverse proxy
   include ocf_www::nginx
 
   class {
@@ -66,8 +69,9 @@ class ocf_www {
       backport_on => 'stretch';
   }
 
-  # Restart apache if any cert changes occur
-  Class['ocf::ssl::default'] ~> Class['Apache::Service']
+  # Apache no longer serves SSL directly (nginx handles it), but mod_ssl is
+  # still needed for SSLProxyEngine (outbound HTTPS to apphost).
+  include apache::mod::ssl
 
   include ocf_www::lets_encrypt
   include ocf_www::logging

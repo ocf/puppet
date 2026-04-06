@@ -2,11 +2,6 @@
 # redirect those sites to the appropriate pages on ocfweb.
 class ocf_www::site::ocfweb_redirects {
   # accounts
-  $accounts_canonical_url = $::host_env ? {
-    'dev'  => 'https://dev-accounts.ocf.berkeley.edu/',
-    'prod' => 'https://accounts.ocf.berkeley.edu/',
-  }
-
   $accounts_options = {
     servername    => 'accounts.ocf.berkeley.edu',
     serveraliases => ['dev-accounts.ocf.berkeley.edu'],
@@ -21,42 +16,11 @@ class ocf_www::site::ocfweb_redirects {
     ],
   }
 
-  apache::vhost { 'accounts':
-    *         => $accounts_options,
-    port      => 443,
-    ssl       => true,
-    headers   => ['always set Strict-Transport-Security max-age=31536000'],
-    ssl_key   => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain => "/etc/ssl/private/${::fqdn}.intermediate",
-  }
-
-  # nginx backend (plain HTTP on localhost)
   apache::vhost { 'accounts-backend':
-    *    => $accounts_options,
-    port => $ocf_www::backend_port,
-  }
-
-  apache::vhost { 'accounts-http-redirect':
-    servername      => 'accounts.ocf.berkeley.edu',
-    serveraliases   => [
-      'dev-accounts',
-      'dev-accounts.ocf.berkeley.edu',
-      'accounts',
-    ],
-    port            => 80,
-    docroot         => '/var/www/html',
-
-    redirect_status => 'permanent',
-    redirect_dest   => $accounts_canonical_url;
+    * => $accounts_options,
   }
 
   # wiki
-  $wiki_canonical_url = $::host_env ? {
-    'dev'  => 'https://dev-wiki.ocf.berkeley.edu/',
-    'prod' => 'https://wiki.ocf.berkeley.edu/',
-  }
-
   $wiki_options = {
     servername    => 'wiki.ocf.berkeley.edu',
     serveraliases => ['dev-wiki.ocf.berkeley.edu'],
@@ -67,42 +31,11 @@ class ocf_www::site::ocfweb_redirects {
     ],
   }
 
-  apache::vhost { 'wiki':
-    *         => $wiki_options,
-    port      => 443,
-    ssl       => true,
-    headers   => ['always set Strict-Transport-Security max-age=31536000'],
-    ssl_key   => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain => "/etc/ssl/private/${::fqdn}.intermediate",
-  }
-
-  # nginx backend (plain HTTP on localhost)
   apache::vhost { 'wiki-backend':
-    *    => $wiki_options,
-    port => $ocf_www::backend_port,
-  }
-
-  apache::vhost { 'wiki-http-redirect':
-    servername      => 'wiki.ocf.berkeley.edu',
-    serveraliases   => [
-      'dev-wiki',
-      'dev-wiki.ocf.berkeley.edu',
-      'wiki',
-    ],
-    port            => 80,
-    docroot         => '/var/www/html',
-
-    redirect_status => 'permanent',
-    redirect_dest   => $wiki_canonical_url;
+    * => $wiki_options,
   }
 
   # hello
-  $hello_canonical_url = $::host_env ? {
-    'dev'  => 'https://dev-hello.ocf.berkeley.edu/',
-    'prod' => 'https://hello.ocf.berkeley.edu/',
-  }
-
   $hello_options = {
     servername    => 'hello.ocf.berkeley.edu',
     serveraliases => [
@@ -118,35 +51,7 @@ class ocf_www::site::ocfweb_redirects {
     ],
   }
 
-  apache::vhost { 'hello':
-    *         => $hello_options,
-    port      => 443,
-    ssl       => true,
-    headers   => ['always set Strict-Transport-Security max-age=31536000'],
-    ssl_key   => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain => "/etc/ssl/private/${::fqdn}.intermediate",
-  }
-
-  # nginx backend (plain HTTP on localhost)
   apache::vhost { 'hello-backend':
-    *    => $hello_options,
-    port => $ocf_www::backend_port,
-  }
-
-  apache::vhost { 'hello-http-redirect':
-    servername      => 'hello.ocf.berkeley.edu',
-    serveraliases   => [
-      'dev-hello',
-      'dev-hello.ocf.berkeley.edu',
-      'dev-staff.ocf.berkeley.edu',
-      'hello',
-      'staff.ocf.berkeley.edu',
-    ],
-    port            => 80,
-    docroot         => '/var/www/html',
-
-    redirect_status => 'permanent',
-    redirect_dest   => $hello_canonical_url;
+    * => $hello_options,
   }
 }
