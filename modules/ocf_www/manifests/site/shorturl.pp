@@ -4,16 +4,10 @@ class ocf_www::site::shorturl {
     'prod' => 'https://ocf.io/',
   }
 
-  apache::vhost { 'shorturl':
+  $shorturl_options = {
     servername    => 'ocf.io',
     serveraliases => ['dev-ocf-io.ocf.berkeley.edu', 'www.ocf.io'],
-    port          => 443,
     docroot       => '/var/www/html',
-
-    ssl           => true,
-    ssl_key       => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert      => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain     => "/etc/ssl/private/${::fqdn}.intermediate",
 
     rewrites      => [
       # Short URLs
@@ -175,8 +169,22 @@ class ocf_www::site::shorturl {
       # Otherwise, send a temporary redirect to the appropriate userdir
       {rewrite_rule => '^/~?([a-z0-9]{3,16}(?:/.*)?)$ https://www.ocf.berkeley.edu/~$1 [R]'},
     ],
+  }
 
-    headers       => ['always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"'],
+  apache::vhost { 'shorturl':
+    *         => $shorturl_options,
+    port      => 443,
+    ssl       => true,
+    headers   => ['always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"'],
+    ssl_key   => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain => "/etc/ssl/private/${::fqdn}.intermediate",
+  }
+
+  # nginx backend (plain HTTP on localhost)
+  apache::vhost { 'shorturl-backend':
+    *    => $shorturl_options,
+    port => $ocf_www::backend_port,
   }
 
   # canonical redirects

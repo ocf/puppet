@@ -10,7 +10,14 @@
 #
 # The interesting config is in ocf_www::site::www, which sets up
 # www.ocf.berkeley.edu, which is by far the most complicated domain.
+#
+# Nginx sits in front of Apache for slowloris protection.
+# CR-soon oliverni: swap nginx to 80/443, apache to 127.0.0.1:$backend_port only
 class ocf_www {
+  # Port Apache listens on as nginx's backend (plain HTTP on localhost).
+  # Must match BACKEND_PORT in build-vhosts.
+  # Phase 2: make this the only Apache port and bind to 127.0.0.1.
+  $backend_port = 16767
   include ocf::acct
   include ocf::extrapackages
   include ocf::firewall::allow_web
@@ -25,6 +32,9 @@ class ocf_www {
     cron => false,
     web  => false,
   }
+
+  # nginx reverse proxy (test ports for now)
+  include ocf_www::nginx
 
   class {
     '::apache':

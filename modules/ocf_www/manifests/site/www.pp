@@ -36,19 +36,11 @@ class ocf_www::site::www {
   }
 
   # TODO: dev-death should add a robots.txt disallowing everything
-  apache::vhost { 'www':
+  $www_options = {
     servername          => 'www.ocf.berkeley.edu',
     serveraliases       => ['dev-www.ocf.berkeley.edu'],
-    port                => 443,
     docroot             => '/services/http/users',
 
-    ssl                 => true,
-    ssl_key             => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert            => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain           => "/etc/ssl/private/${::fqdn}.intermediate",
-
-    headers             => ['always set Strict-Transport-Security max-age=31536000'],
-    request_headers     => ['set X-Forwarded-Proto https'],
     proxy_preserve_host => true,
 
     aliases             => [
@@ -131,6 +123,23 @@ class ocf_www::site::www {
     ',
   }
 
+  apache::vhost { 'www':
+    *               => $www_options,
+    port            => 443,
+    ssl             => true,
+    ssl_key         => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert        => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain       => "/etc/ssl/private/${::fqdn}.intermediate",
+    headers         => ['always set Strict-Transport-Security max-age=31536000'],
+    request_headers => ['set X-Forwarded-Proto https'],
+  }
+
+  # nginx backend (plain HTTP on localhost)
+  apache::vhost { 'www-backend':
+    *    => $www_options,
+    port => $ocf_www::backend_port,
+  }
+
   # canonical redirects
   $canonical_url = $::host_env ? {
     'dev'  => 'https://dev-www.ocf.berkeley.edu$1',
@@ -166,33 +175,44 @@ class ocf_www::site::www {
       redirectmatch_regexp => '^((?!\/\.well-known\/matrix\/(client|server)).*)',
       redirectmatch_dest   => $canonical_url;
 
-    # redirect weird HTTPS -> canonical HTTPS
-    'www-https-redirect':
-      servername           => 'ocf.berkeley.edu',
-      serveraliases        => [
-        'dev-ocf.berkeley.edu',
-        'secure.ocf.berkeley.edu',
-        $::fqdn,
-      ],
-      directories          => [
-        {
-          path            => '/.well-known/matrix/client',
-          provider        => 'location',
-          custom_fragment => '
-              Header set Access-Control-Allow-Origin "*"
-          ',
-        },
-      ],
-      port                 => 443,
-      docroot              => '/var/www/html',
-      redirectmatch_status => '301',
-      # ugly exceptions
-      redirectmatch_regexp => '^((?!\/\.well-known\/matrix\/(client|server)).*)',
-      redirectmatch_dest   => $canonical_url,
+  }
 
-      ssl                  => true,
-      ssl_key              => "/etc/ssl/private/${::fqdn}.key",
-      ssl_cert             => "/etc/ssl/private/${::fqdn}.crt",
-      ssl_chain            => "/etc/ssl/private/${::fqdn}.intermediate";
+  # redirect weird HTTPS -> canonical HTTPS
+  $https_redirect_options = {
+    servername           => 'ocf.berkeley.edu',
+    serveraliases        => [
+      'dev-ocf.berkeley.edu',
+      'secure.ocf.berkeley.edu',
+      $::fqdn,
+    ],
+    directories          => [
+      {
+        path            => '/.well-known/matrix/client',
+        provider        => 'location',
+        custom_fragment => '
+            Header set Access-Control-Allow-Origin "*"
+        ',
+      },
+    ],
+    docroot              => '/var/www/html',
+    redirectmatch_status => '301',
+    # ugly exceptions
+    redirectmatch_regexp => '^((?!\/\.well-known\/matrix\/(client|server)).*)',
+    redirectmatch_dest   => $canonical_url,
+  }
+
+  apache::vhost { 'www-https-redirect':
+    *         => $https_redirect_options,
+    port      => 443,
+    ssl       => true,
+    ssl_key   => "/etc/ssl/private/${::fqdn}.key",
+    ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
+    ssl_chain => "/etc/ssl/private/${::fqdn}.intermediate",
+  }
+
+  # nginx backend (plain HTTP on localhost)
+  apache::vhost { 'www-https-redirect-backend':
+    *    => $https_redirect_options,
+    port => $ocf_www::backend_port,
   }
 }

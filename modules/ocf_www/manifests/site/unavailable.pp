@@ -53,4 +53,10 @@ class ocf_www::site::unavailable {
     ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
     ssl_chain => "/etc/ssl/private/${::fqdn}.intermediate",
   }
+
+  # nginx backend (plain HTTP on localhost)
+  apache::vhost { 'unavailable-backend':
+    *    => $options,
+    port => $ocf_www::backend_port,
+  }
 }
