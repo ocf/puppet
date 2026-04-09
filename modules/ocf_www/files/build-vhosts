@@ -22,6 +22,10 @@ from ocflib.vhost.web import get_vhosts
 
 APACHE_SITE_CONFIG = '/etc/apache2/ocf-vhost.conf'
 NGINX_SITE_CONFIG = '/etc/nginx/sites-enabled/virtual'
+NGINX_WEB_SITE_CONFIG = '/etc/nginx/ocf-vhost.conf'
+
+# Must match $backend_port in ocf_www::init
+BACKEND_PORT = 16767
 
 LETS_ENCRYPT_SSL = Path('/services/http/ssl')
 SYSTEM_SSL = Path('/etc/ssl/private')
@@ -259,7 +263,7 @@ def build_config(src_vhosts, template, dev_config=False):
             ))
 
     return '\n\n'.join(
-        template.render(vhost=vhost)
+        template.render(vhost=vhost, backend_port=BACKEND_PORT)
         for vhost in sorted(
             vhosts,
             key=lambda vhost: (vhost.user, vhost.fqdn, bool(vhost.ssl)),
@@ -267,7 +271,7 @@ def build_config(src_vhosts, template, dev_config=False):
     )
 
 
-def test_and_overwrite_config(config_path, new_config, target):
+def test_and_overwrite_config(config_path, new_config, test_cmd):
     """Diffs and tests the new config and overwrites the old config if
     the test passes.
 
@@ -306,10 +310,7 @@ def test_and_overwrite_config(config_path, new_config, target):
         os.rename(new_path, config_path)
 
         report('Performing config test.')
-        if target == 'web':
-            ret = subprocess.call(('apachectl', 'configtest'))
-        else:
-            ret = subprocess.call(('nginx', '-t'))
+        ret = subprocess.call(test_cmd)
 
         if ret != 0:
             report('Test failed!')
@@ -404,7 +405,6 @@ def main():
         changed |= process_app_vhosts()
 
     if args.target == 'web':
-        site_cfg = APACHE_SITE_CONFIG
         # Build app vhosts so that they can get proxied to apphost.o.b.e
         # Placed before regular vhosts so they take priority in domain matching
         # (sometimes hosts have entries in both vhost.conf and vhost-app.conf)
@@ -414,17 +414,58 @@ def main():
             for domain, conf in get_app_vhosts().items()
             if 'dev' not in conf['flags']
         }
-        config = build_config(
+
+        web_vhosts = get_vhosts()
+
+        # Apache config (existing behavior)
+        apache_config = build_config(
             prod_app_vhosts,
             jinja_env.get_template('vhost-web.jinja'),
             dev_config=args.dev,
         )
-        config += '\n\n'
-        config += build_config(
-            get_vhosts(),
+        apache_config += '\n\n'
+        apache_config += build_config(
+            web_vhosts,
             jinja_env.get_template('vhost-web.jinja'),
             dev_config=args.dev,
         )
+
+        # Nginx frontend config
+        nginx_config = build_config(
+            prod_app_vhosts,
+            jinja_env.get_template('vhost-web-nginx.jinja'),
+            dev_config=args.dev,
+        )
+        nginx_config += '\n\n'
+        nginx_config += build_config(
+            web_vhosts,
+            jinja_env.get_template('vhost-web-nginx.jinja'),
+            dev_config=args.dev,
+        )
+
+        if args.dry_run:
+            report('=== Apache config ===')
+            report(apache_config)
+            report('\n=== Nginx config ===')
+            report(nginx_config)
+            return 0
+
+        changed |= test_and_overwrite_config(
+            APACHE_SITE_CONFIG, apache_config, ('apachectl', 'configtest'),
+        )
+        changed |= test_and_overwrite_config(
+            NGINX_WEB_SITE_CONFIG, nginx_config, ('nginx', '-t'),
+        )
+
+        if changed:
+            if not args.no_reload:
+                report('Things changed, reloading.')
+                subprocess.check_call(('systemctl', 'reload', 'apache2'))
+                subprocess.check_call(('systemctl', 'reload', 'nginx'))
+            else:
+                report('Not reloading, as you requested.')
+        else:
+            report('Nothing changed, not doing anything.')
     else:
         site_cfg = NGINX_SITE_CONFIG
         config = build_config(
@@ -433,22 +474,22 @@ def main():
             dev_config=args.dev,
         )
 
-    if args.dry_run:
-        report(config)
-        return 0
+        if args.dry_run:
+            report(config)
+            return 0
 
-    changed |= test_and_overwrite_config(site_cfg, config, args.target)
-    if changed:
-        if not args.no_reload:
-            report('Things changed, reloading.')
-            if args.target == 'web':
-                subprocess.check_call(('systemctl', 'reload', 'apache2'))
-            else:
+        changed |= test_and_overwrite_config(
+            site_cfg, config, ('nginx', '-t'),
+        )
+
+        if changed:
+            if not args.no_reload:
+                report('Things changed, reloading.')
                 subprocess.check_call(('systemctl', 'reload', 'nginx'))
+            else:
+                report('Not reloading, as you requested.')
         else:
-            report('Not reloading, as you requested.')
-    else:
-        report('Nothing changed, not doing anything.')
+            report('Nothing changed, not doing anything.')
 
 
 if __name__ == '__main__':

@@ -6,11 +6,15 @@ class ocf_www::site::vhosts {
       require => [
         Package['python3-ocflib', 'python3-jinja2'],
         File['/opt/share/vhost-web.jinja'],
+        File['/opt/share/vhost-web-nginx.jinja'],
       ],
       notify  => Ocf::Exec_And_Cron['build-vhosts'];
 
     '/opt/share/vhost-web.jinja':
       source  => 'puppet:///modules/ocf_www/vhost-web.jinja';
+
+    '/opt/share/vhost-web-nginx.jinja':
+      source  => 'puppet:///modules/ocf_www/vhost-web-nginx.jinja';
 
     '/var/www/suexec':
       ensure  => directory,

@@ -1,9 +1,11 @@
 # {{vhost.comment}}
-<VirtualHost *:{{vhost.port}}>
+{% set ports = [vhost.port, backend_port] if vhost.ssl else [vhost.port] %}
+{% for port in ports %}
+<VirtualHost *:{{port}}>
     ServerName {{vhost.fqdn}}
     ServerAdmin {{vhost.contact_email}}
 
-    {% if vhost.ssl %}
+    {% if vhost.ssl and port != backend_port %}
         # SSL
         SSLEngine on
         SSLCertificateFile {{vhost.ssl.bundle}}
@@ -27,7 +29,7 @@
         # Proxy to the local "unavailable" vhost, which serves up a friendly
         # "your website is rekt" page.
         RequestHeader set Host unavailable.ocf.berkeley.edu
-        ProxyPass / http://localhost/
+        ProxyPass / http://127.0.0.1/
     {% else %}
         DocumentRoot {{vhost.docroot}}
 
@@ -59,3 +61,4 @@
 
     UserDir disabled
 </VirtualHost>
+{% endfor %}
