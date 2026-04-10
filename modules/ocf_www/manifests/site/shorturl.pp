@@ -1,9 +1,4 @@
 class ocf_www::site::shorturl {
-  $canonical_url = $::host_env ? {
-    'dev'  => 'https://dev-ocf-io.ocf.berkeley.edu/',
-    'prod' => 'https://ocf.io/',
-  }
-
   $shorturl_options = {
     servername    => 'ocf.io',
     serveraliases => ['dev-ocf-io.ocf.berkeley.edu', 'www.ocf.io'],
@@ -171,30 +166,7 @@ class ocf_www::site::shorturl {
     ],
   }
 
-  apache::vhost { 'shorturl':
-    *         => $shorturl_options,
-    port      => 443,
-    ssl       => true,
-    headers   => ['always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"'],
-    ssl_key   => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain => "/etc/ssl/private/${::fqdn}.intermediate",
-  }
-
-  # nginx backend (plain HTTP on localhost)
   apache::vhost { 'shorturl-backend':
-    *    => $shorturl_options,
-    port => $ocf_www::backend_port,
-  }
-
-  # canonical redirects
-  apache::vhost { 'shorturl-http-redirect':
-    servername      => 'ocf.io',
-    serveraliases   => ['dev-ocf-io.ocf.berkeley.edu', 'www.ocf.io'],
-    port            => 80,
-    docroot         => '/var/www/html',
-
-    redirect_status => 'permanent',
-    redirect_dest   => $canonical_url;
+    * => $shorturl_options,
   }
 }
