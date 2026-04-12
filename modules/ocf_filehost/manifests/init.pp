@@ -13,12 +13,14 @@ class ocf_filehost(
         # We don't root_squash admin, ssh, or apphost because they need to access
         # /services/crontabs/$server/ as root.
         options => ['rw', 'fsid=0', 'no_subtree_check', 'no_root_squash'],
-        hosts   => ['admin', 'www', 'ssh', 'apphost', 'adenine', 'guanine', 'cytosine', 'thymine', 'fluttershy', 'rainbowdash'],
+        hosts   => ['admin', 'www', 'ssh', 'apphost', 'adenine', 'guanine', 'cytosine', 'thymine', 'tsunami', 'supernova'],
       },
       {
         # allow other hosts (including desktops) to mount nfs, but with limitations (no
-        # root, strict subtree checking, kerberos auth/integrity/encryption.
-        options => ['rw', 'fsid=0', 'subtree_check', 'root_squash', 'sec=krb5p'],
+        # root, kerberos auth/integrity/encryption). subtree_check absolutely destroyed
+        # performance in testing, especially with git repositories (git status would hang),
+        # so lets disable that.
+        options => ['rw', 'fsid=0', 'no_subtree_check', 'root_squash', 'sec=krb5p'],
         hosts   => ['*.ocf.berkeley.edu'],
       },
     ],
