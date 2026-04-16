@@ -1,5 +1,7 @@
 class ocf_www::site::shorturl {
   $shorturl_options = {
+    ip            => '127.0.0.1',
+    port          => $ocf_www::backend_port,
     servername    => 'ocf.io',
     serveraliases => ['dev-ocf-io.ocf.berkeley.edu', 'www.ocf.io'],
     docroot       => '/var/www/html',
