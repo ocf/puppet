@@ -43,7 +43,7 @@ class ocf_www {
     '::apache':
       log_formats => {
         # Log vhost name
-        combined => '%v %h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"'
+        combined => '%v %a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"'
       },
       # "false" lets us define the class below with custom args
       mpm_module  => false;
@@ -69,6 +69,7 @@ class ocf_www {
       backport_on => 'stretch';
   }
 
+  include ocf_www::mod::remoteip
   include ocf_www::lets_encrypt
   include ocf_www::logging
 
