@@ -3,8 +3,6 @@
 class ocf_www::site::ocfweb_redirects {
   # accounts
   $accounts_options = {
-    ip            => '127.0.0.1',
-    port          => $ocf_www::backend_port,
     servername    => 'accounts.ocf.berkeley.edu',
     serveraliases => ['dev-accounts.ocf.berkeley.edu'],
     docroot       => '/var/www/html',
@@ -24,8 +22,6 @@ class ocf_www::site::ocfweb_redirects {
 
   # wiki
   $wiki_options = {
-    ip            => '127.0.0.1',
-    port          => $ocf_www::backend_port,
     servername    => 'wiki.ocf.berkeley.edu',
     serveraliases => ['dev-wiki.ocf.berkeley.edu'],
     docroot       => '/var/www/html',
@@ -41,8 +37,6 @@ class ocf_www::site::ocfweb_redirects {
 
   # hello
   $hello_options = {
-    ip            => '127.0.0.1',
-    port          => $ocf_www::backend_port,
     servername    => 'hello.ocf.berkeley.edu',
     serveraliases => [
       'dev-hello.ocf.berkeley.edu',

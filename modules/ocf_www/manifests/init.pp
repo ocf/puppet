@@ -42,9 +42,8 @@ class ocf_www {
   class {
     '::apache':
       log_formats => {
-        # Log vhost name, use %a (not %h) so mod_remoteip provides real client IP
-        combined      => '%v %a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"',
-        vhost_combined => '%v:%p %a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"',
+        # Log vhost name
+        combined => '%v %a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"'
       },
       # "false" lets us define the class below with custom args
       mpm_module  => false;
