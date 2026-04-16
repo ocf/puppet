@@ -18,6 +18,8 @@ class ocf_www::site::unavailable {
     # priority 10 so this is the default vhost
     priority   => 10,
 
+    ip         => '127.0.0.1',
+    port       => $ocf_www::backend_port,
     servername => 'unavailable.ocf.berkeley.edu',
     docroot    => '/srv/unavailable',
 

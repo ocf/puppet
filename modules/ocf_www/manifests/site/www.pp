@@ -37,6 +37,8 @@ class ocf_www::site::www {
 
   # TODO: dev-death should add a robots.txt disallowing everything
   $www_options = {
+    ip                  => '127.0.0.1',
+    port                => $ocf_www::backend_port,
     servername          => 'www.ocf.berkeley.edu',
     serveraliases       => ['dev-www.ocf.berkeley.edu'],
     docroot             => '/services/http/users',
@@ -131,6 +133,8 @@ class ocf_www::site::www {
   }
 
   $https_redirect_options = {
+    ip                   => '127.0.0.1',
+    port                 => $ocf_www::backend_port,
     servername           => 'ocf.berkeley.edu',
     serveraliases        => [
       'dev-ocf.berkeley.edu',
