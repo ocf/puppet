@@ -119,6 +119,7 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
   augeas { 'sshd_config':
     context => '/files/etc/ssh/sshd_config',
     changes => [
+      'set ChallengeResponseAuthentication yes',
       'set GSSAPIAuthentication yes',
       'set GSSAPICleanupCredentials yes',
       'set GSSAPIStrictAcceptorCheck no',
