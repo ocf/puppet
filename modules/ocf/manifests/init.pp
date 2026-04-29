@@ -2,6 +2,7 @@ class ocf {
   include ocf::apt
   include ocf::auth
   include ocf::autologout
+  include ocf::copy_fail
   include ocf::etc
   include ocf::firewall
   include ocf::groups
