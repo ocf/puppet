@@ -56,12 +56,15 @@ class ocf_www::site::ocfweb_redirects {
   }
   # new
   $new_options = {
-    servername    => 'new.ocf.berkeley.edu',
-    serveraliases => ['ocf.berkeley.edu'],
-    docroot       => '/var/www/html',
+    servername => 'new.ocf.berkeley.edu',
+    docroot    => '/var/www/html',
 
-    rewrites      => [
-      {rewrite_rule => '^.$ https://www.ocf.berkeley.edu/'},
+    rewrites   => [
+      {rewrite_rule => '^.*$ https://www.ocf.berkeley.edu/'},
     ],
+  }
+
+  apache::vhost { 'new-backend':
+    * => $new_options,
   }
 }
