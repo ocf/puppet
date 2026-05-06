@@ -65,6 +65,7 @@ class ocf_www::nginx {
         'wiki.ocf.berkeley.edu', 'dev-wiki.ocf.berkeley.edu',
         'hello.ocf.berkeley.edu', 'dev-hello.ocf.berkeley.edu',
         'staff.ocf.berkeley.edu', 'dev-staff.ocf.berkeley.edu',
+        'new.ocf.berkeley.edu',
       ],
       access_log          => '/var/log/nginx/www-access.log vhost',
       error_log           => '/var/log/nginx/www-error.log';
@@ -108,6 +109,7 @@ class ocf_www::nginx {
         'wiki.ocf.berkeley.edu', 'dev-wiki', 'dev-wiki.ocf.berkeley.edu', 'wiki',
         'hello.ocf.berkeley.edu', 'dev-hello', 'dev-hello.ocf.berkeley.edu', 'hello',
         'staff.ocf.berkeley.edu', 'dev-staff.ocf.berkeley.edu',
+        'new.ocf.berkeley.edu',
         $::hostname, $::fqdn,
       ],
       listen_port       => $http_port,
