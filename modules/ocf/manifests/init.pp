@@ -3,6 +3,7 @@ class ocf {
   include ocf::auth
   include ocf::autologout
   include ocf::copy_fail
+  include ocf::dirtyfrag
   include ocf::etc
   include ocf::firewall
   include ocf::groups
