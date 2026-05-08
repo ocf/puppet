@@ -7,7 +7,7 @@ class ocf_hpc {
   if str2bool($::puppetdb_running) {
     $slurm_nodes_facts_query = puppetdb_query('inventory[facts] { resources { type = "Class" and title = "Ocf_hpc::Compute" } }')
     # To avoid a circular dependency, fallback to empty values if no nodes match the query.
-    $slurm_nodes_facts = $slurm_nodes_facts_query == undef ? {
+    $slurm_nodes_facts = ($slurm_nodes_facts_query == undef or empty($slurm_nodes_facts_query)) ? {
       false => $slurm_nodes_facts_query.map |$value| { $value['facts'] },
       true  => [],
     }
@@ -15,7 +15,7 @@ class ocf_hpc {
     # This is hacky, as it will select the first entry in the query, and assumes there is only one controller.
     # It also assumes the slurmdbd host is the same machine as the controller.
     $slurm_controller_query = puppetdb_query('inventory[facts] { resources { type = "Class" and title = "Ocf_hpc::Controller" } }')
-    $slurm_controller_hostname = $slurm_controller_query == undef ? {
+    $slurm_controller_hostname = ($slurm_controller_query == undef or empty($slurm_controller_query)) ? {
       false => $slurm_controller_query[0]['facts']['hostname'],
       true  => '',
     }
