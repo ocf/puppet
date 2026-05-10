@@ -10,9 +10,9 @@ class ocf_kerberos {
   }
 
   # The inetd service is installed as a dependency of the heimdal-kdc package
-  # service { 'inetd':
-  #   require => Package['heimdal-kdc'];
-  # }
+  service { 'inetd':
+    require => Package['heimdal-kdc'];
+  }
 
   file {
     '/etc/heimdal-kdc/kdc.conf':
