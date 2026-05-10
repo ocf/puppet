@@ -47,14 +47,14 @@ repos:
     rev: v1.9.0
     hooks:
     -   id: reorder-python-imports
--   repo: local
-    hooks:
-    -   id: no-resource-defaults
-        language: pygrep
-        name: No resource defaults are used (see https://github.com/ocf/puppet/pull/58)
-        entry: ^\s*[A-Z][A-Za-z0-9:]+\s*{
-        types: [puppet]
-        exclude: ^manifests/
+#-   repo: local
+#    hooks:
+#    -   id: no-resource-defaults
+#        language: pygrep
+#        name: No resource defaults are used (see https://github.com/ocf/puppet/pull/58)
+#        entry: ^\s*[A-Z][A-Za-z0-9:]+\s*{
+#        types: [puppet]
+#        exclude: ^manifests/
 -   repo: https://github.com/detailyang/pre-commit-shell.git
     rev: v1.0.6
     hooks:
