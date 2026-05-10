@@ -2,7 +2,7 @@
 # http://www.postfix.org/ldap_table.5.html
 # http://postfix.1071664.n5.nabble.com/Postfix-ldap-table-authenticate-to-LDAP-using-GSSAPI-or-EXTERNAL-td54278.html
 
-server_host = ldaps://ldap0.ocf.berkeley.edu/
+server_host = ldaps://ldap.ocf.berkeley.edu/
 start_tls = no
 tls_require_cert = no
 tls_ca_cert_file = /etc/ssl/certs/ca-certificates.crt

@@ -82,17 +82,17 @@ class ocf_ldap {
   # Daily local git backup
   package { 'ldap-git-backup':; }
 
-  # cron { 'ldap-git-backup':
-  #   # Back up all of LDAP, including configuration options
-  #   # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=721155
-  #   #
-  #   # Make sure this occurs before the rsync backup for rsnapshot, since this
-  #   # ensures we have a more recent daily backup stored on our backup server
-  #   command => '/usr/sbin/ldap-git-backup',
-  #   minute  => 0,
-  #   hour    => 1,
-  #   require => Package['ldap-git-backup'];
-  # }
+  cron { 'ldap-git-backup':
+    # Back up all of LDAP, including configuration options
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=721155
+    #
+    # Make sure this occurs before the rsync backup for rsnapshot, since this
+    # ensures we have a more recent daily backup stored on our backup server
+    command => '/usr/sbin/ldap-git-backup',
+    minute  => 0,
+    hour    => 1,
+    require => Package['ldap-git-backup'];
+  }
 
   file {
     # Use the puppet cron task instead of the packaged cron script for more
