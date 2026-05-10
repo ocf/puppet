@@ -10,9 +10,9 @@ class ocf_kerberos {
   }
 
   # The inetd service is installed as a dependency of the heimdal-kdc package
-  service { 'inetd':
-    require => Package['heimdal-kdc'];
-  }
+  # service { 'inetd':
+  #   require => Package['heimdal-kdc'];
+  # }
 
   file {
     '/etc/heimdal-kdc/kdc.conf':
@@ -64,23 +64,6 @@ class ocf_kerberos {
     require => File['/usr/local/sbin/kerberos-git-backup'];
   }
 
-  ocf::firewall::firewall46 {
-    '101 allow kerberos':
-      opts => {
-        chain  => 'PUPPET-INPUT',
-        proto  => ['tcp', 'udp'],
-        dport  => 88,
-        action => 'accept',
-      };
-
-    '101 allow kpasswd':
-      opts => {
-        chain  => 'PUPPET-INPUT',
-        proto  => 'udp',
-        dport  => 464,
-        action => 'accept',
-      };
-  }
   # Allow Kerberos Admin from desktops (as well as internal zone)
   firewall_multi {
     '101 allow kerberos-adm from desktops (IPv4)':
@@ -97,5 +80,23 @@ class ocf_kerberos {
       proto     => 'tcp',
       dport     => 749,
       action    => 'accept';
+  }
+
+  ocf::firewall::firewall46 {
+    '101 allow kerberos':
+      opts => {
+        chain  => 'PUPPET-INPUT',
+        proto  => ['tcp', 'udp'],
+        dport  => 88,
+        action => 'accept',
+      };
+
+    '101 allow kpasswd':
+      opts => {
+        chain  => 'PUPPET-INPUT',
+        proto  => 'udp',
+        dport  => 464,
+        action => 'accept',
+      };
   }
 }
