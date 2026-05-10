@@ -31,6 +31,7 @@ authz-regexp ^uid=host/([^,/]+)\.ocf\.berkeley\.edu,cn=OCF.BERKELEY.EDU,cn=GSSAP
 ## Database general configuration
 moduleload   back_mdb
 database     mdb
+readonly     on
 suffix       dc=OCF,dc=Berkeley,dc=EDU
 
 ## OCF virtual attribute overlay
