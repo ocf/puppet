@@ -28,7 +28,6 @@ class ocf_ns {
   # with zone" errors on reload.
   exec { 'bind9-sync-clean':
     command => '/usr/sbin/rndc sync -clean',
-    onlyif  => '/usr/bin/find /srv/dns/etc/zones -name "*.jnl" -print -quit | /bin/grep -q .',
     require => Service['bind9'],
     before  => Vcsrepo['/srv/dns'],
   }
