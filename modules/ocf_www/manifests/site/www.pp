@@ -36,19 +36,11 @@ class ocf_www::site::www {
   }
 
   # TODO: dev-death should add a robots.txt disallowing everything
-  apache::vhost { 'www':
+  $www_options = {
     servername          => 'www.ocf.berkeley.edu',
     serveraliases       => ['dev-www.ocf.berkeley.edu'],
-    port                => 443,
     docroot             => '/services/http/users',
 
-    ssl                 => true,
-    ssl_key             => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert            => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain           => "/etc/ssl/private/${::fqdn}.intermediate",
-
-    headers             => ['always set Strict-Transport-Security max-age=31536000'],
-    request_headers     => ['set X-Forwarded-Proto https'],
     proxy_preserve_host => true,
 
     aliases             => [
@@ -106,11 +98,6 @@ class ocf_www::site::www {
         allow_override => ['All'],
       },
       {
-        path        => '\.(cgi|shtml|phtml|php)$',
-        provider    => 'filesmatch',
-        ssl_options => '+StdEnvVars',
-      },
-      {
         path       => '\.(php[3457]?|phtml|fcgi)$',
         provider   => 'filesmatch',
         sethandler => 'fcgid-script',
@@ -125,10 +112,16 @@ class ocf_www::site::www {
     ],
 
     custom_fragment     => '
-      Protocols h2 http/1.1
+      # Trust X-Forwarded-Proto from nginx so %{HTTPS} works in userdirs
+      SetEnvIf X-Forwarded-Proto "https" HTTPS=on
+
       UserDir /services/http/users/
       UserDir disabled root
     ',
+  }
+
+  apache::vhost { 'www-backend':
+    * => $www_options,
   }
 
   # canonical redirects
@@ -137,62 +130,30 @@ class ocf_www::site::www {
     'prod' => 'https://www.ocf.berkeley.edu$1',
   }
 
-  apache::vhost {
-    # redirect HTTP -> canonical HTTPS
-    'www-http-redirect':
-      servername           => 'www.ocf.berkeley.edu',
-      serveraliases        => [
-        'www',
-        'dev-www',
-        'dev-www.ocf.berkeley.edu',
-        'ocf.berkeley.edu',
-        'dev-ocf.berkeley.edu',
-        'secure',
-        'secure.ocf.berkeley.edu',
-        'ocf.asuc.org',
+  $https_redirect_options = {
+    servername           => 'ocf.berkeley.edu',
+    serveraliases        => [
+      'dev-ocf.berkeley.edu',
+      'secure.ocf.berkeley.edu',
+      $::fqdn,
+    ],
+    directories          => [
+      {
+        path            => '/.well-known/matrix/client',
+        provider        => 'location',
+        custom_fragment => '
+            Header set Access-Control-Allow-Origin "*"
+        ',
+      },
+    ],
+    docroot              => '/var/www/html',
+    redirectmatch_status => '301',
+    # ugly exceptions
+    redirectmatch_regexp => '^((?!\/\.well-known\/matrix\/(client|server)).*)',
+    redirectmatch_dest   => $canonical_url,
+  }
 
-        # Domains we don't actually use, but want to redirect to our home page
-        # (rather than show the 503 unavailable error).
-        'death.berkeley.edu',
-        'linux.berkeley.edu',
-
-        $::hostname,
-        $::fqdn,
-      ],
-      port                 => 80,
-      docroot              => '/var/www/html',
-      redirectmatch_status => '301',
-      # ugly exceptions
-      redirectmatch_regexp => '^((?!\/\.well-known\/matrix\/(client|server)).*)',
-      redirectmatch_dest   => $canonical_url;
-
-    # redirect weird HTTPS -> canonical HTTPS
-    'www-https-redirect':
-      servername           => 'ocf.berkeley.edu',
-      serveraliases        => [
-        'dev-ocf.berkeley.edu',
-        'secure.ocf.berkeley.edu',
-        $::fqdn,
-      ],
-      directories          => [
-        {
-          path            => '/.well-known/matrix/client',
-          provider        => 'location',
-          custom_fragment => '
-              Header set Access-Control-Allow-Origin "*"
-          ',
-        },
-      ],
-      port                 => 443,
-      docroot              => '/var/www/html',
-      redirectmatch_status => '301',
-      # ugly exceptions
-      redirectmatch_regexp => '^((?!\/\.well-known\/matrix\/(client|server)).*)',
-      redirectmatch_dest   => $canonical_url,
-
-      ssl                  => true,
-      ssl_key              => "/etc/ssl/private/${::fqdn}.key",
-      ssl_cert             => "/etc/ssl/private/${::fqdn}.crt",
-      ssl_chain            => "/etc/ssl/private/${::fqdn}.intermediate";
+  apache::vhost { 'www-https-redirect-backend':
+    * => $https_redirect_options,
   }
 }

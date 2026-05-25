@@ -39,18 +39,7 @@ class ocf_www::site::unavailable {
     ],
   }
 
-  apache::vhost { 'unavailable':
-    *    => $options,
-    port => 80,
-  }
-
-  apache::vhost { 'https-unavailable':
-    *         => $options,
-    port      => 443,
-
-    ssl       => true,
-    ssl_key   => "/etc/ssl/private/${::fqdn}.key",
-    ssl_cert  => "/etc/ssl/private/${::fqdn}.crt",
-    ssl_chain => "/etc/ssl/private/${::fqdn}.intermediate",
+  apache::vhost { 'unavailable-backend':
+    * => $options,
   }
 }

@@ -59,10 +59,10 @@ root staffer to change the environment.
 If you have root, you can change a host's environment with the `puppet-trigger`
 command:
 
-    ckuehl@supernova:~$ ssh raptors
-    ckuehl@raptors:~$ sudo puppet-trigger -te ckuehl
+    rjz@supernova:~$ ssh supernova
+    rjz@supernova:~$ sudo puppet-trigger -te rjz
 
-This changes the environment to `ckuehl` and triggers a run.
+This changes the environment to `rjz` and triggers a run.
 
 Make sure to switch the environment back to `production` after pushing your
 changes.
@@ -160,7 +160,7 @@ to change just the necessary values.
 [puppet]: https://en.wikipedia.org/wiki/Puppet_(software)
 [ocf]: https://www.ocf.berkeley.edu/
 [debian]: https://www.debian.org/
-[ubuntu]: http://www.ubuntu.com/
+[ubuntu]: https://www.ubuntu.com/
 [about-staff]: https://www.ocf.berkeley.edu/about/staff
 [jenkins]: https://jenkins.ocf.berkeley.edu/view/puppet-deploy/
 [r10k]: https://github.com/puppetlabs/r10k

@@ -43,6 +43,7 @@ class ocf::extrapackages {
     'chktex',
     'chrpath',
     'cmake',
+    'colordiff',
     'cowsay',
     'debhelper',
     'default-jdk',

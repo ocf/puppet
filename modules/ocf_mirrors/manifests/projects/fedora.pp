@@ -7,11 +7,12 @@ class ocf_mirrors::projects::fedora {
   }
 
   ocf_mirrors::monitoring { 'epel':
-    type          => 'http_last_modified',
-    upstream_host => 'dl.fedoraproject.org',
-    ts_path       => 'fullfiletimelist-epel',
-    upstream_path => '/pub/epel',
-    local_path    => '/fedora/epel';
+    type              => 'http_last_modified',
+    upstream_host     => 'dl.fedoraproject.org',
+    ts_path           => 'fullfiletimelist-epel',
+    upstream_path     => '/pub/epel',
+    upstream_protocol => 'https',
+    local_path        => '/fedora/epel';
   }
 
   ocf_mirrors::qfm {
@@ -22,10 +23,11 @@ class ocf_mirrors::projects::fedora {
   }
 
   ocf_mirrors::monitoring { 'enchilada':
-    type          => 'http_last_modified',
-    upstream_host => 'dl.fedoraproject.org',
-    ts_path       => 'fullfiletimelist-fedora',
-    upstream_path => '/pub/fedora',
-    local_path    => '/fedora/fedora';
+    type              => 'http_last_modified',
+    upstream_host     => 'dl.fedoraproject.org',
+    ts_path           => 'fullfiletimelist-fedora',
+    upstream_path     => '/pub/fedora',
+    upstream_protocol => 'https',
+    local_path        => '/fedora/fedora';
   }
 }

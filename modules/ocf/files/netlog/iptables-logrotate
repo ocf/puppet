@@ -1,8 +1,12 @@
 # Logrotate configuration for logging iptables
 /var/log/iptables.log {
+	rotate 45
 	daily
 	missingok
-	rotate 30
+	notifempty
 	compress
-	compresscmd /bin/gzip
+	delaycompress
+	sharedscripts
+	postrotate /usr/lib/rsyslog/rsyslog-rotate
+	endscript
 }
