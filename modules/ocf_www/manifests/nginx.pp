@@ -35,8 +35,7 @@ class ocf_www::nginx {
       'vhost' => '$host $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"',
     },
     http_cfg_append        => {
-      'include'        => '/etc/nginx/ocf-vhost.conf',
-      'limit_req_zone' => '$binary_remote_addr zone=per_ip:10m rate=10r/s',
+      'include' => '/etc/nginx/ocf-vhost.conf',
     },
   }
 
@@ -136,6 +135,13 @@ class ocf_www::nginx {
         'X-Forwarded-For $remote_addr',
         'X-Real-IP $remote_addr',
       ];
+  }
+
+  # Rate limiting zone: cap total requests per vhost
+  file { '/etc/nginx/conf.d/rate-limiting.conf':
+    ensure  => file,
+    content => "limit_req_zone \$host zone=per_vhost:10m rate=50r/s;\n",
+    notify  => Class['Nginx::Service'],
   }
 
   # seed empty config so nginx starts before build-vhosts runs
