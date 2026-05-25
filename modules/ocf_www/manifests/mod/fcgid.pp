@@ -30,8 +30,27 @@ class ocf_www::mod::fcgid {
 
   apache::custom_config { 'fcgid_options':
     content => '
+      # Per-user process cap: prevents one user from exhausting the global
+      # backend pool (e.g. a compromised WordPress site attracting bot traffic).
+      FcgidMaxProcessesPerClass 5
+
+      # Global backend pool cap.  With 300 Apache worker threads and each
+      # request potentially blocking on a backend, keep this well under
+      # MaxRequestWorkers so idle workers remain available for static files.
+      FcgidMaxProcesses 200
+
+      # Kill backends that are busy for longer than 120 s (default 300).
+      FcgidBusyTimeout 120
+
+      # Kill backends that do not send output within 40 s (default 40, but
+      # stated explicitly for clarity).
+      FcgidIOTimeout 40
+
+      # Reap idle backends after 5 min instead of 1 hour so they do not
+      # accumulate across hundreds of user vhosts.
+      FcgidIdleTimeout 300
+
       # A process can live for at max an hour, whether it is idle or not
-      FcgidIdleTimeout 3600
       FcgidProcessLifeTime 3600
 
       # After 200 requests, a process will be killed off (and another spawned
