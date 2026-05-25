@@ -1,12 +1,3 @@
 classes:
     - ocf_backups
-    - ocf_kvm
 
-ocf::networking::bridge: true
-ocf::networking::bond: true
-
-ocf::packages::ntp::master: true
-ocf::packages::ntp::peers:
-    - pandemic.ocf.berkeley.edu
-    - riptide.ocf.berkeley.edu
-    - dataloss.ocf.berkeley.edu
