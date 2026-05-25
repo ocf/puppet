@@ -140,7 +140,7 @@ class ocf_www::nginx {
   # Rate limiting zone: cap total requests per vhost
   file { '/etc/nginx/conf.d/rate-limiting.conf':
     ensure  => file,
-    content => "limit_req_zone \$host zone=per_vhost:10m rate=50r/s;\n",
+    content => "limit_req_zone \$host zone=per_vhost:10m rate=20r/s;\n",
     notify  => Class['Nginx::Service'],
   }
 

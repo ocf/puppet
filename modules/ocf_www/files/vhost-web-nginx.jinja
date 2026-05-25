@@ -20,7 +20,7 @@ server {
     }
 
     location / {
-        limit_req zone=per_vhost burst=100 nodelay;
+        limit_req zone=per_vhost burst=20 nodelay;
         limit_req_status 429;
 
         {% if vhost.is_redirect %}
