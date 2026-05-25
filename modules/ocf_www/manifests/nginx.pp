@@ -35,7 +35,8 @@ class ocf_www::nginx {
       'vhost' => '$host $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"',
     },
     http_cfg_append        => {
-      'include' => '/etc/nginx/ocf-vhost.conf',
+      'include'        => '/etc/nginx/ocf-vhost.conf',
+      'limit_req_zone' => '$binary_remote_addr zone=per_ip:10m rate=10r/s',
     },
   }
 
