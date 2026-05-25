@@ -20,6 +20,9 @@ server {
     }
 
     location / {
+        limit_req zone=per_vhost burst=20 nodelay;
+        limit_req_status 429;
+
         {% if vhost.is_redirect %}
         return {{vhost.redirect_type}} {{vhost.redirect_dest}}$request_uri;
         {% elif vhost.is_apphost and vhost.disabled %}

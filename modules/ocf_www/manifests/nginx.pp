@@ -137,6 +137,13 @@ class ocf_www::nginx {
       ];
   }
 
+  # Rate limiting zone: cap total requests per vhost
+  file { '/etc/nginx/conf.d/rate-limiting.conf':
+    ensure  => file,
+    content => "limit_req_zone \$host zone=per_vhost:10m rate=20r/s;\n",
+    notify  => Class['Nginx::Service'],
+  }
+
   # seed empty config so nginx starts before build-vhosts runs
   file { '/etc/nginx/ocf-vhost.conf':
     ensure  => file,
