@@ -18,7 +18,7 @@ devices_ipv4_only:
     - pandemic-mgmt
     - papercut
     - riptide-mgmt
-    - scurvy-mgmt
+    - yuu-mgmt
     - y2k-mgmt
 
 devices_ipv46:
