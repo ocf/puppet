@@ -79,7 +79,7 @@ class ocf_www::site::shorturl {
       #{rewrite_rule => '^/k/([0-9]+)$ https://kanboard.ocf.berkeley.edu/?controller=TaskViewController&action=show&task_id=$1 [R]'},
       {rewrite_rule => '^/register$ https://www.ocf.berkeley.edu/account/register/ [R]'},
       {rewrite_rule => '^/reserve$ https://bestdocs.ocf.io/user-docs/services/lab/lab-reservation-policy/ [R]'},
-      {rewrite_rule => '^/lab$ https://www.ocf.berkeley.edu/lab/ [R]'},
+      {rewrite_rule => '^/lab$ https://www.ocf.berkeley.edu/lab [R]'},
       {rewrite_rule => '^/labmap(/.*)?$ https://labmap.ocf.berkeley.edu$1 [R]'},
       {rewrite_rule => '^/mail$ https://bestdocs.ocf.io/user-docs/services/vhost/mail/ [R]'},
       {rewrite_rule => '^/mailrequest$ https://www.ocf.berkeley.edu/account/vhost/mail/ [R]'},
