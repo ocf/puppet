@@ -22,16 +22,6 @@ class ocf_ns {
       notify  => Service['bind9'];
   }
 
-  # Flush BIND journals to zone files and remove .jnl files before git pull.
-  # Without this, git overwrites zone files that have pending journal entries
-  # (from dynamic updates or inline signing), causing "journal out of sync
-  # with zone" errors on reload.
-  exec { 'bind9-sync-clean':
-    command => '/usr/sbin/rndc sync -clean',
-    require => Service['bind9'],
-    before  => Vcsrepo['/srv/dns'],
-  }
-
   vcsrepo { '/srv/dns':
     ensure   => latest,
     provider => git,
@@ -40,13 +30,7 @@ class ocf_ns {
     revision => 'master',
     source   => 'https://github.com/ocf/dns.git',
     require  => Package['bind9'],
-    notify   => Exec['bind9-reload'],
-  }
-
-  exec { 'bind9-reload':
-    command     => '/usr/sbin/rndc reload',
-    refreshonly => true,
-    require     => Service['bind9'],
+    notify   => Service['bind9'];
   }
 
   ocf::firewall::firewall46 {
