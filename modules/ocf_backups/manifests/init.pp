@@ -13,6 +13,15 @@ class ocf_backups {
       ensure => directory,
       group  => ocfroot,
       mode   => '0750';
+
+    '/opt/share/backups/offsite-host':
+        content => lookup('ocfbackups::offsite_host'),
+        owner   => root,
+        group   => root,
+        mode    => '0400';
+
+    '/etc/logrotate.d/backup-zfs':
+      source  => 'puppet:///modules/ocf_backups/backup-zfs-logrotate';
   }
 
   # keytab for ocfbackups user, used to rsync from remote servers
