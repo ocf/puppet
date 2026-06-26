@@ -1,7 +1,7 @@
 class ocf_mirrors::projects::debian {
   ocf_mirrors::ftpsync {
     'debian':
-      rsync_host  => 'mirrors.wikimedia.org',
+      rsync_host  => 'mirrors.lug.mtu.edu',
       cron_hour   => '2/3',
       cron_minute => '30';
 
