@@ -3,6 +3,7 @@ classes:
     - ocf_kvm
 
 ocf::networking::bond: true
+ocf::networking::bridge: true
 ocf::networking::is_vlan: true
 ocf::networking::vlan: '875'
 ocf::networking::netmask: '255.255.255.240'
