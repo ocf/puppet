@@ -30,7 +30,7 @@ class ocf_hpc::compute {
     require => Package['nvidia-driver'],
   }
 
-  file { '/etc/slurm-llnl/gres.conf':
+  file { '/etc/slurm/gres.conf':
     content => template('ocf_hpc/gres.conf.erb'),
     mode    => '0644',
     owner   => 'slurm',
@@ -42,7 +42,7 @@ class ocf_hpc::compute {
     incl    => '/etc/default/grub',
     lens    => 'ShellVars.lns',
     changes => [
-      "set GRUB_CMDLINE_LINUX '\"cgroup_enable=memory swapaccount=1\"'",
+      "set GRUB_CMDLINE_LINUX '\"cgroup_enable=memory swapaccount=1 systemd.unified_cgroup_hierarchy=0\"'",
     ],
   } ~> exec { 'update-grub':
     user        => 'root',
@@ -54,9 +54,9 @@ class ocf_hpc::compute {
     enable     => true,
     hasrestart => true,
     subscribe  => [
-      File['/etc/slurm-llnl/slurm.conf'],
-      File['/etc/slurm-llnl/gres.conf'],
-      File['/etc/slurm-llnl/cgroup.conf'],
+      File['/etc/slurm/slurm.conf'],
+      File['/etc/slurm/gres.conf'],
+      File['/etc/slurm/cgroup.conf'],
     ],
   }
 }

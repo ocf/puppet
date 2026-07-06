@@ -185,6 +185,12 @@ class ocf::apt($stage = 'first') {
       codename => "${facts['os']['distro']['codename']}-backports",
       }
 
+      # Pin anything coming from puppetlabs-apt to be higher than normal priority
+      apt::pin { 'puppetlabs-apt':
+      priority => 900,
+      codename => 'bullseye',
+      }
+
       # TODO: Submit patch to puppetlabs-apt to enable having includes for
       # apt::backports (so that we can include the source too)
       class { 'apt::backports':

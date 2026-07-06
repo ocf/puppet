@@ -9,19 +9,6 @@ class ocf::packages::mysql_server(
     responsefile => $responsefile,
   }
 
-  if $manage_service {
-    if Integer($::os[release][major]) < 11 {
-      $servicename = 'mysql'
-    } else {
-      $servicename = 'mariadb'
-    }
-    service { $servicename:
-      ensure  => stopped,
-      enable  => false,
-      require => Package['mariadb-server'],
-    }
-  }
-
   # TODO: Remove once mysqladmin is made executable on all hosts again
   # (rt#5981, fixed in mariadb-server 10.1.22-1)
   file { '/usr/bin/mysqladmin':

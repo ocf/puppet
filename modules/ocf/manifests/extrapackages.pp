@@ -14,7 +14,6 @@ class ocf::extrapackages {
   # special snowflake packages that require some config
   include ocf::packages::chrome
   include ocf::packages::emacs
-  include ocf::packages::kubectl
   include ocf::packages::mysql
   include ocf::packages::mysql_server
   include ocf::packages::nmap
@@ -197,7 +196,13 @@ class ocf::extrapackages {
     ]:;
   }
 
-  if Integer($::os['distro']['release']['major']) >= 11 {
+  if $::lsbdistcodename == 'bookworm' {
+    package {
+      [
+        'bat',
+      ]:;
+    }
+  } elsif Integer($::os['distro']['release']['major']) >= 11 {
     package {
       [
         'bat',
