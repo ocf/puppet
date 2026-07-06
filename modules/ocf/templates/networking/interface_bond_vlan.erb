@@ -6,14 +6,18 @@ iface bond0 inet manual
   bond-mode 802.3ad
   bond-miimon 100
 
-iface <%= @logical_primary_interface %> inet static
+iface bond0.<%= @vlan %> inet static
   vlan-raw-device bond0
+  <%- if @logical_primary_interface == 'bond0' -%>
   address <%= @ipaddress %>
   netmask <%= @netmask %>
   gateway <%= @gateway %>
+  <% end %>
 
-iface <%= @logical_primary_interface %> inet6 static
+iface bond0.<%= @vlan %> inet6 static
   vlan-raw-device bond0
+  <%- if @logical_primary_interface == 'bond0' -%>
   address <%= @ipaddress6 %>
   netmask <%= @netmask6 %>
   gateway <%= @gateway6 %>
+  <% end %>
