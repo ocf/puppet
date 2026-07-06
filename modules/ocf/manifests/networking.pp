@@ -52,11 +52,7 @@ class ocf::networking(
       $bridged_iface = $first_active_iface
     }
   } elsif $bond {
-    if $is_vlan {
-      $logical_primary_interface = "bond0.${vlan}"
-    } else {
-      $logical_primary_interface = 'bond0'
-    }
+    $logical_primary_interface = 'bond0'
   } else {
     $logical_primary_interface = $first_active_iface
   }
