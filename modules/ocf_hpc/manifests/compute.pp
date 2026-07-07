@@ -42,7 +42,7 @@ class ocf_hpc::compute {
     incl    => '/etc/default/grub',
     lens    => 'ShellVars.lns',
     changes => [
-      "set GRUB_CMDLINE_LINUX '\"cgroup_enable=memory swapaccount=1 systemd.unified_cgroup_hierarchy=0\"'",
+      "set GRUB_CMDLINE_LINUX '\"swapaccount=1 systemd.unified_cgroup_hierarchy=1\"'",
     ],
   } ~> exec { 'update-grub':
     user        => 'root',
