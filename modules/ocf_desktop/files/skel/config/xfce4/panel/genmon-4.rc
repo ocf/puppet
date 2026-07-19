@@ -1,5 +1,0 @@
-Command=/opt/share/utils/paper-genmon
-UseLabel=0
-Text=(genmon)
-UpdatePeriod=60000
-Font=Sans 13
