@@ -99,13 +99,12 @@ recipient_delimiter = +
 propagate_unmatched_extensions = canonical
 
 # client restrictions for SMTP connections
-# skip OCF, reject if no reverse DNS, greylist if not whitelisted
+# skip OCF, reject if no reverse DNS
 smtpd_client_restrictions =
     permit_mynetworks,
     permit_sasl_authenticated,
     reject_unknown_client_hostname,
     permit_dnswl_client list.dnswl.org,
-    check_policy_service inet:127.0.0.1:10023,
     sleep 5,
     permit,
 
