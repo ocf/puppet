@@ -9,6 +9,7 @@ michaelzls/admin@OCF.BERKELEY.EDU       all,get-keys
 blakeh/admin@OCF.BERKELEY.EDU           all,get-keys
 ericgu/admin@OCF.BERKELEY.EDU           all,get-keys
 rsang/admin@OCF.BEREKELY.EDU            all,get-keys
+rschuetz/admin@OCF.BERKELEY.EDU         all,get-keys
 
 #principal                              [priv1,priv2,...]                       [glob-pattern]
 #root principals
@@ -21,6 +22,7 @@ michaelzls/root@OCF.BERKELEY.EDU        change-password                         
 blakeh/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 ericgu/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 rsang/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
+rschuetz/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 
 # create
 create/admin@OCF.BERKELEY.EDU           add,get,change-password                 *@OCF.BERKELEY.EDU
