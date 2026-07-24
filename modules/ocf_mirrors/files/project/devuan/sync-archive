@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+/usr/local/bin/rsync-no-vanished -e 'ssh -i /opt/mirrors/project/devuan/devuan_rsa' \
+--delete -razX files.devuan.org::devuan /opt/mirrors/ftp/devuan-cd
