@@ -21,6 +21,9 @@ server {
 
     location / {
         limit_req zone=per_vhost burst=20 nodelay;
+        limit_req zone=per_ip burst=20 nodelay;
+        limit_req zone=wordpress_login burst=3 nodelay;
+        limit_req zone=wordpress_xmlrpc burst=10 nodelay;
         limit_req_status 429;
 
         {% if vhost.is_redirect %}
@@ -75,6 +78,12 @@ server {
     }
 
     location / {
+        limit_req zone=per_vhost burst=20 nodelay;
+        limit_req zone=per_ip burst=20 nodelay;
+        limit_req zone=wordpress_login burst=3 nodelay;
+        limit_req zone=wordpress_xmlrpc burst=10 nodelay;
+        limit_req_status 429;
+
         {% if vhost.is_redirect %}
         return {{vhost.redirect_type}} {{vhost.redirect_dest}}$request_uri;
         {% else %}
