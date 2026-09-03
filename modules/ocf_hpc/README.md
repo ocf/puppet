@@ -82,6 +82,93 @@ Interpret common states as follows:
 | UVM exists but `cuInit` fails | Driver library, device access, or module/library coherence |
 | Direct probe passes but a Slurm job fails | Slurm GRES/cgroup configuration or job environment |
 | CUDA Driver API passes but one framework fails | User environment or framework compatibility |
+| GPU memory remains allocated with no Slurm job or live PID | Stale CUDA context, orphaned process, or driver bookkeeping |
+
+## Stale GPU memory recovery
+
+Treat unexplained GPU memory as an incident until it is correlated with a
+Slurm allocation or a live process. A process shown as `[Not Found]` by
+`nvidia-smi` is evidence for a stale driver context, but is not sufficient by
+itself to reset a device. Capture evidence first and avoid disrupting valid
+workloads.
+
+From the controller, confirm that the node and GPU are not allocated:
+
+```console
+squeue -w corruption
+sacct --starttime today --state=RUNNING,PENDING \
+  --format=JobID,JobName,User,State,NodeList,AllocTRES
+scontrol show node corruption
+```
+
+From a Slurm allocation on `corruption`, record the visible GPU UUID, memory,
+and process accounting:
+
+```console
+nvidia-smi -L
+nvidia-smi \
+  --query-gpu=index,uuid,name,memory.total,memory.used,memory.free,utilization.gpu,compute_mode,persistence_mode \
+  --format=csv,noheader
+nvidia-smi \
+  --query-compute-apps=gpu_uuid,pid,process_name,used_gpu_memory \
+  --format=csv,noheader
+nvidia-smi pmon -c 1
+```
+
+If memory remains assigned after the corresponding Slurm job has ended, drain
+the node before host-level investigation:
+
+```console
+sudo scontrol update NodeName=corruption State=DRAIN \
+  Reason="Investigating unexplained GPU memory"
+squeue -w corruption
+```
+
+On `corruption`, use the reported PID and GPU UUID to distinguish a live
+process from stale accounting. These checks require administrator access to
+avoid process-visibility restrictions:
+
+```console
+sudo nvidia-smi
+sudo nvidia-smi \
+  --query-compute-apps=gpu_uuid,pid,process_name,used_gpu_memory \
+  --format=csv
+sudo ps -fp PID
+sudo fuser -v /dev/nvidia*
+sudo lsof /dev/nvidia*
+sudo systemctl status nvidia-persistenced
+sudo journalctl -u nvidia-persistenced -b --no-pager
+sudo dmesg -T | grep -Ei 'NVRM|Xid|nvidia'
+```
+
+Do not kill a process or reset a GPU until its Slurm ownership and purpose are
+known. If the PID is absent from `/proc`, no job owns the GPU, and no peer GPU
+or display workload depends on it, an administrator may attempt a targeted
+reset using the UUID reported by `nvidia-smi`:
+
+```console
+sudo nvidia-smi --gpu-reset -i GPU_UUID
+```
+
+Some device topologies or driver failures do not support an isolated reset. If
+the reset is rejected or memory remains allocated, reboot the drained compute
+node instead of repeatedly changing packages or killing unrelated processes.
+Restarting `nvidia-persistenced` may repair service state, but does not prove
+that an orphaned CUDA context has been released.
+
+After reset or reboot, require all of the following before resuming the node:
+
+1. Idle memory is back to the expected baseline on every GPU.
+2. `/usr/local/sbin/check-ocf-gpu-readiness` exits successfully.
+3. A Slurm GPU canary initializes CUDA and completes a synchronized operation.
+4. The canary process disappears and its allocated memory is released.
+5. No new NVIDIA Xid errors appear in the kernel log.
+
+Only then return the node to service:
+
+```console
+sudo scontrol update NodeName=corruption State=RESUME
+```
 
 If recovery requires rollback, restore the kernel, NVIDIA modules, userspace
 driver libraries, and package-source policy as one tested set. Reverting only
