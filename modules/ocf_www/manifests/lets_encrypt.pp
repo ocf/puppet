@@ -15,16 +15,21 @@ class ocf_www::lets_encrypt {
   }
 
   if $::host_env == 'prod' {
+    # Run 5 minutes past the hour to allow for build-vhosts to be run so as
+    # to minimize the time between a vhost being configured and getting HTTPS
+    # enabled
+    ocf::systemd::timer { 'lets-encrypt-update@web':
+      service_source => 'puppet:///modules/ocf_www/lets-encrypt-update@.service',
+      timer_source   => 'puppet:///modules/ocf_www/lets-encrypt-update@.timer',
+      require        => [
+        File['/usr/local/bin/lets-encrypt-update'],
+        Ocf::Privatefile['/etc/ssl/lets-encrypt/le-vhost.key'],
+      ],
+    }
+
     cron { 'lets-encrypt-update':
-      command     => 'chronic /usr/local/bin/lets-encrypt-update -v web',
-      user        => ocfletsencrypt,
-      environment => ['MAILTO=root', 'PATH=/bin:/usr/bin:/usr/local/bin'],
-      # Run 5 minutes past the hour to allow for build-vhosts to be run so as
-      # to minimize the time between a vhost being configured and getting HTTPS
-      # enabled
-      minute      => 5,
-      require     => [File['/usr/local/bin/lets-encrypt-update'],
-                      Ocf::Privatefile['/etc/ssl/lets-encrypt/le-vhost.key']],
+      ensure => absent,
+      user   => ocfletsencrypt,
     }
   }
 }

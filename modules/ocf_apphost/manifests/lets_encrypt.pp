@@ -15,13 +15,18 @@ class ocf_apphost::lets_encrypt {
   }
 
   if $::host_env == 'prod' {
+    ocf::systemd::timer { 'lets-encrypt-update@app':
+      service_source => 'puppet:///modules/ocf_www/lets-encrypt-update@.service',
+      timer_source   => 'puppet:///modules/ocf_www/lets-encrypt-update@.timer',
+      require        => [
+        File['/usr/local/bin/lets-encrypt-update'],
+        Ocf::Privatefile['/etc/ssl/lets-encrypt/le-vhost.key'],
+      ],
+    }
+
     cron { 'lets-encrypt-update':
-      command     => 'chronic /usr/local/bin/lets-encrypt-update -v app',
-      user        => ocfletsencrypt,
-      environment => ['MAILTO=root', 'PATH=/bin:/usr/bin:/usr/local/bin'],
-      special     => hourly,
-      require     => [File['/usr/local/bin/lets-encrypt-update'],
-                      Ocf::Privatefile['/etc/ssl/lets-encrypt/le-vhost.key']],
+      ensure => absent,
+      user   => ocfletsencrypt,
     }
   }
 }
