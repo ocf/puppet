@@ -47,6 +47,14 @@ repos:
     rev: v1.9.0
     hooks:
     -   id: reorder-python-imports
+-   repo: local
+    hooks:
+    -   id: ocf-hpc-gpu-readiness-tests
+        name: OCF HPC GPU readiness tests
+        entry: python3 -m unittest discover -s modules/ocf_hpc/tests -p test_*.py
+        language: system
+        pass_filenames: false
+        files: ^modules/ocf_hpc/(files/check_gpu_readiness|tests/)
 #-   repo: local
 #    hooks:
 #    -   id: no-resource-defaults
