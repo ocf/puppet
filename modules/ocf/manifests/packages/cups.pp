@@ -13,11 +13,11 @@ class ocf::packages::cups {
   file {
     # set print server destination
     '/etc/cups/client.conf':
-      content => "ServerName printhost\nEncryption Always\n",
+      content => "ServerName printhost.ocf.berkeley.edu\nEncryption Always\n",
       require => Package[ 'cups', 'cups-bsd' ];
-    # set default printer double
+    # set default printer OCF-BW
     '/etc/cups/lpoptions':
-      content => 'Default double',
+      content => 'Default OCF-BW',
       require => Package[ 'cups', 'cups-bsd' ];
     # set default paper size
     '/etc/papersize':
