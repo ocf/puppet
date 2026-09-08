@@ -5,6 +5,7 @@ class ocf_www::mod::php {
     'stretch'  => '7.0',
     'buster'   => '7.3',
     'bullseye' => '7.4',
+    'bookworm' => '8.2',
   }
 
   file { "/etc/php/${php_version}/cgi/conf.d/99-ocf.ini":
