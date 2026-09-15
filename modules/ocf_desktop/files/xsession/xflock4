@@ -1,4 +1,0 @@
-#!/bin/bash -eu
-
-/usr/local/bin/staff-logout &
-exec xscreensaver-command -lock
