@@ -11,10 +11,11 @@ class ocf_mirrors::projects::kde_applicationdata {
 
   ocf_mirrors::monitoring {
     'kde-applicationdata':
-      type          => 'unix_timestamp',
-      upstream_host => 'files.kde.org',
-      upstream_path => '',
-      ts_path       => 'last-updated';
+      type              => 'unix_timestamp',
+      upstream_host     => 'cdn.files.kde.org',
+      upstream_path     => '',
+      upstream_protocol => 'https',
+      ts_path           => 'last-updated';
   }
 
   ocf_mirrors::timer {
