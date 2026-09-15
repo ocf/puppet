@@ -11,8 +11,8 @@ class ocf_mirrors::projects::manjaro {
 
   ocf_mirrors::monitoring { 'manjaro':
     type          => 'manjaro',
-    upstream_host => 'manjaro.mirrors.uk2.net',
-    upstream_path => '',
+    upstream_host => 'www.mirrorservice.org',
+    upstream_path => '/sites/repo.manjaro.org/repos',
     ts_path       => 'state',
   }
 
