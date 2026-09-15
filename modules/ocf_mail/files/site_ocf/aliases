@@ -8,6 +8,7 @@ postmaster: sm
 mailer-daemon: postmaster
 
 mirrors: root
+ocfenforcer: root
 ocfstats: root
 jenkins: root
 rancid: root

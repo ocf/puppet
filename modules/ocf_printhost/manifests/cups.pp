@@ -62,9 +62,16 @@ class ocf_printhost::cups {
     }
   }
 
+  #Tea4cups saves files based on its owner
+  file { '/usr/lib/cups/backend/tea4cups':
+    ensure => 'file',
+    owner  => 'ocfenforcer',
+    mode   => '0700';
+  }
+
   mount { '/var/spool/cups':
     device  => 'tmpfs',
     fstype  => 'tmpfs',
-    options => 'mode=0710,gid=lp,noatime,nodev,noexec,nosuid';
+    options => 'uid=ocfenforcer,mode=0710,gid=lp,noatime,nodev,noexec,nosuid';
   }
 }
