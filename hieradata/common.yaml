@@ -15,7 +15,6 @@ devices_ipv4_only:
     - paws-mgmt
     - logjam
     - pagefault
-    - pandemic-mgmt
     - papercut
     - riptide-mgmt
     - yuu-mgmt
