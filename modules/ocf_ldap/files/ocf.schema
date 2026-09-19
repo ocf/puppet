@@ -55,6 +55,20 @@ objectclass ( 1.3.6.1.4.1.41759.1.1.1
         MUST ( cn $ uid $ uidNumber $ gidNumber $ homeDirectory $ loginShell )
         MAY ( calnetUid $ oslGid $ callinkOid $ mail $ lastRenewal $ creationTime $ ocfEmail ) )
 
+attributetype ( 1.3.6.1.4.1.41759.1.8.1
+        NAME 'ocfOfficerRole'
+        DESC 'A record of one OCF officer stint (role, term, dates, acting flag)'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{512} )
+
+objectclass ( 1.3.6.1.4.1.41759.1.1.2
+        NAME 'ocfOfficer'
+        DESC 'Attributes for OCF officer history'
+        SUP top
+        AUXILIARY
+        MAY ( ocfOfficerRole ) )
+
 attributetype ( 1.3.6.1.4.1.41759.2.2.1
         NAME 'type'
         DESC 'Host type'
