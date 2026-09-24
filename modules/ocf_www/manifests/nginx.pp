@@ -137,10 +137,24 @@ class ocf_www::nginx {
       ];
   }
 
-  # Rate limiting zone: cap total requests per vhost
   file { '/etc/nginx/conf.d/rate-limiting.conf':
     ensure  => file,
-    content => "limit_req_zone \$host zone=per_vhost:10m rate=20r/s;\n",
+    content => "
+      # empty keys are not rate limited, so only matched requests use these zones
+      map \$request_method:\$uri \$wordpress_login_rate_limit_key {
+        default '';
+        POST:/wp-login.php \$binary_remote_addr;
+      }
+      map \$uri \$wordpress_xmlrpc_rate_limit_key {
+        default '';
+        /xmlrpc.php \$binary_remote_addr;
+      }
+
+      limit_req_zone \$host zone=per_vhost:10m rate=20r/s;
+      limit_req_zone \$binary_remote_addr zone=per_ip:10m rate=20r/s;
+      limit_req_zone \$wordpress_login_rate_limit_key zone=wordpress_login:10m rate=5r/m;
+      limit_req_zone \$wordpress_xmlrpc_rate_limit_key zone=wordpress_xmlrpc:10m rate=1r/s;
+    ",
     notify  => Class['Nginx::Service'],
   }
 
