@@ -30,6 +30,14 @@ class ocf_hpc::compute {
     require => Package['nvidia-driver'],
   }
 
+  file { '/usr/local/sbin/check-ocf-gpu-readiness':
+    source  => 'puppet:///modules/ocf_hpc/check_gpu_readiness',
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+    require => Package['nvidia-driver'],
+  }
+
   file { '/etc/slurm/gres.conf':
     content => template('ocf_hpc/gres.conf.erb'),
     mode    => '0644',
