@@ -6,7 +6,7 @@ storce/admin@OCF.BERKELEY.EDU           all,get-keys
 sbwilliams/admin@OCF.BERKELEY.EDU       all,get-keys
 chamburr/admin@OCF.BERKELEY.EDU         all,get-keys
 michaelzls/admin@OCF.BERKELEY.EDU       all,get-keys
-blakeh/admin@OCF.BERKELEY.EDU           all,get-keys
+elenah/admin@OCF.BERKELEY.EDU           all,get-keys
 ericgu/admin@OCF.BERKELEY.EDU           all,get-keys
 rsang/admin@OCF.BEREKELY.EDU            all,get-keys
 rschuetz/admin@OCF.BERKELEY.EDU         all,get-keys
@@ -19,7 +19,7 @@ storce/root@OCF.BERKELEY.EDU            change-password                         
 sbwilliams/root@OCF.BERKELEY.EDU        change-password                         *@OCF.BERKELEY.EDU
 chamburr/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
 michaelzls/root@OCF.BERKELEY.EDU        change-password                         *@OCF.BERKELEY.EDU
-blakeh/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
+elenah/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 ericgu/root@OCF.BERKELEY.EDU            change-password                         *@OCF.BERKELEY.EDU
 rsang/root@OCF.BERKELEY.EDU             change-password                         *@OCF.BERKELEY.EDU
 rschuetz/root@OCF.BERKELEY.EDU          change-password                         *@OCF.BERKELEY.EDU
