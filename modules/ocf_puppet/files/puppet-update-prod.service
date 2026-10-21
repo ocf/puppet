@@ -1,0 +1,11 @@
+[Unit]
+Description=Update the production Puppet environment
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+Environment="PATH=/opt/puppetlabs/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment=GIT_TERMINAL_PROMPT=0
+ExecStart=/opt/puppetlabs/scripts/update-prod
+TimeoutStartSec=15min

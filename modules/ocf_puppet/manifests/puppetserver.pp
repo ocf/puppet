@@ -136,6 +136,14 @@ class ocf_puppet::puppetserver {
       require => Package['puppetserver'];
   }
 
+  if $::host_env == 'prod' {
+    ocf::systemd::timer { 'puppet-update-prod':
+      timer_source   => 'puppet:///modules/ocf_puppet/puppet-update-prod.timer',
+      service_source => 'puppet:///modules/ocf_puppet/puppet-update-prod.service',
+      require        => File['/opt/puppetlabs/scripts/update-prod'],
+    }
+  }
+
   vcsrepo { '/opt/puppetlabs/shares/etc':
     ensure   => latest,
     provider => git,
