@@ -101,9 +101,6 @@ class ocf_www::site::www {
         path       => '\.(php[3457]?|phtml|fcgi)$',
         provider   => 'filesmatch',
         sethandler => 'fcgid-script',
-        custom_fragment => '
-            Redirect 503 /
-        ',
       },
       {
         # XXX: Strip OCFWEB_* cookies before we hit userdirs so that they
@@ -120,8 +117,6 @@ class ocf_www::site::www {
 
       UserDir /services/http/users/
       UserDir disabled root
-
-      ErrorDocument 503 "To avoid a potential security vulnerability, this website is temporarily offline. Please check back in a few hours."
     ',
   }
 
