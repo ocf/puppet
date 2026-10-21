@@ -3,11 +3,19 @@ ENV_DIR=$(puppet config print environmentpath)
 PRODUCTION="$ENV_DIR/production"
 REMOTE="https://github.com/ocf/puppet.git"
 
+exec 9>"$ENV_DIR/.update-prod.lock"
+flock -n 9 || exit 0
+
 if [ ! -d "$PRODUCTION" ]; then
     git init "$PRODUCTION"
 fi
 
 cd "$PRODUCTION"
+
+if ! git diff --quiet || ! git diff --cached --quiet; then
+    echo "Refusing to update a dirty production checkout." >&2
+    exit 1
+fi
 
 # update origin url
 if ! git remote | grep origin > /dev/null; then
@@ -18,7 +26,7 @@ fi
 
 # update from remote
 git fetch origin master
-git reset --hard origin/master
+git merge --ff-only origin/master
 git submodule sync --recursive
 git submodule update --init --recursive
 
