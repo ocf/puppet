@@ -101,6 +101,10 @@ class ocf_www::site::www {
         path       => '\.(php[3457]?|phtml|fcgi)$',
         provider   => 'filesmatch',
         sethandler => 'fcgid-script',
+        custom_fragment => '
+            Redirect 503 /
+            ErrorDocument 503 "Temporarily unavailable. Please try again later."
+        ',
       },
       {
         # XXX: Strip OCFWEB_* cookies before we hit userdirs so that they
