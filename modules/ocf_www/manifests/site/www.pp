@@ -103,7 +103,7 @@ class ocf_www::site::www {
         sethandler => 'fcgid-script',
         custom_fragment => '
             Redirect 503 /
-            ErrorDocument 503 "Temporarily unavailable. Please try again later."
+            ErrorDocument 503 "To avoid a potential security vulnerability, this website is temporarily offline. Please check back in a few hours."
         ',
       },
       {
