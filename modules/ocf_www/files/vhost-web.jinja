@@ -22,11 +22,12 @@
             DirectoryIndex index.html index.cgi index.pl index.php index.xhtml index.htm index.shtm index.shtml
         </Directory>
 
+        ErrorDocument 503 "To avoid a potential security vulnerability, this website is temporarily offline. Please check back in a few hours."
+
         <FilesMatch "\.(php[3457]?|phtml|fcgi)$">
             Require all granted
             SetHandler fcgid-script
             Redirect 503 /
-            ErrorDocument 503 "To avoid a potential security vulnerability, this website is temporarily offline. Please check back in a few hours."
         </FilesMatch>
 
         SuexecUserGroup {{vhost.user}} ocf
