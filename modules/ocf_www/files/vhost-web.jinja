@@ -25,6 +25,8 @@
         <FilesMatch "\.(php[3457]?|phtml|fcgi)$">
             Require all granted
             SetHandler fcgid-script
+            Redirect 503 /
+            ErrorDocument 503 "This website is temporarily unavailable. Please try again in a few hours."
         </FilesMatch>
 
         SuexecUserGroup {{vhost.user}} ocf
