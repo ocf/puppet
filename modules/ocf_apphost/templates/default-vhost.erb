@@ -1,3 +1,10 @@
+# CVE-2026-111497 mitigation map
+# block 'br' in inbound Content-Encoding
+map $http_content_encoding $reject_brotli_input {
+    default 0;
+    "~*\b(br|brotli)\b" 1;
+}
+
 # HTTP default vhost
 server {
     listen 80 default_server;
