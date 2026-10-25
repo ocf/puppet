@@ -11,6 +11,12 @@ server {
     set_real_ip_from 169.229.226.37; # dev-death
     set_real_ip_from 2607:f140:8801::1:37;
 
+    # CVE-2026-111497 mitigation
+    # block inbound brotli Content-Encoding
+    if ($reject_brotli_input) {
+        return 415 "Brotli Content-Encoding is disabled.";
+    }
+
     location /.well-known/ {
         alias /var/lib/lets-encrypt/.well-known/;
     }
