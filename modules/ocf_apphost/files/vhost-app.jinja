@@ -30,6 +30,10 @@ server {
             proxy_set_header X-Forwarded-For $remote_addr;
             proxy_set_header X-Forwarded-Proto $scheme;
             proxy_set_header X-Real-IP $remote_addr;
+
+            # CVE-2026-111497 mitigation
+            # set Accept-Encoding to what every backend app should definitely support, excluding br  
+            proxy_set_header Accept-Encoding "gzip, deflate";
         {% endif %}
     }
 
@@ -40,6 +44,10 @@ server {
             proxy_set_header Connection "Upgrade";
             proxy_set_header Host $host;
             proxy_pass http://unix:{{vhost.socket}};
+            
+            # CVE-2026-111497 mitigation
+            # set Accept-Encoding to what every backend app should definitely support, excluding br  
+            proxy_set_header Accept-Encoding "gzip, deflate";
     }
     {% endfor %}
 
