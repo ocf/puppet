@@ -7,9 +7,8 @@ class ocf_admin::create {
     '/etc/ocf-create':
       ensure => directory;
 
-    # TODO: ideally this file wouldn't be directly readable by staff
     '/etc/ocf-create/ocf-create.conf':
-      group     => ocfstaff,
+      group     => ocfroot,
       content   => template('ocf_admin/create.conf.erb'),
       mode      => '0440',
       show_diff => false;
