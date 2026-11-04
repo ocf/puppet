@@ -4,15 +4,15 @@ classes:
 apt::sources:
   zerotier:
     key:
-      id: 74A5E9C458E1A431F1DA57A71657198823E52A61
-      server: pool.sks-keyservers.net
+      name: zerotier.gpg
+      source: https://raw.githubusercontent.com/zerotier/ZeroTierOne/main/doc/contact%40zerotier.com.gpg
     location: https://download.zerotier.com/debian/stretch
     repos: main
     release: stretch
   syncthing:
     key:
-      id: 37C84554E7E0A261E4F76E1ED26E6ED000654A3E
-      server: pool.sks-keyservers.net
+      name: syncthing-archive-keyring.gpg
+      source: https://syncthing.net/release-key.gpg
     location: https://apt.syncthing.net
     release: syncthing
     repos: stable

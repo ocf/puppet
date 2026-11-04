@@ -1,8 +1,7 @@
 # Don't import this, use ocf::packages::kube::apt instead.
 # This is a dependency order hack.
 class ocf::packages::kube::apt_first_stage {
-  apt::key { 'kubernetes':
-      id      => '7F92E05B31093BEF5A3C2D38FEEA9169307EA071',
+  apt::keyring { 'kubernetes.gpg':
       source  => 'https://packages.cloud.google.com/apt/doc/apt-key.gpg',
   }
 
@@ -15,10 +14,11 @@ class ocf::packages::kube::apt_first_stage {
       # is written in Go, which doesn't do dynamic linking. So this is safe to
       # pull.
       release  => 'kubernetes-xenial',
+      keyring  => '/etc/apt/keyrings/kubernetes.gpg',
+      require  => Apt::Keyring['kubernetes.gpg'],
   }
 
-  apt::key { 'crio repo key':
-    id     => '2472D6D0D2F66AF87ABA8DA34D64390375060AA4',
+  apt::keyring { 'crio-repo-key.asc':
     # the key is the same for both
     source => "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${facts['os']['release']['major']}/Release.key";
   }
@@ -32,13 +32,15 @@ class ocf::packages::kube::apt_first_stage {
       location     => "http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/${crio_version}/Debian_${facts['os']['release']['major']}/",
       repos        => '/',
       release      => '',
-      require      => Apt::Key['crio repo key'],
+      keyring      => '/etc/apt/keyrings/crio-repo-key.asc',
+      require      => Apt::Keyring['crio-repo-key.asc'],
   }
   apt::source { 'libcontainers':
       architecture => 'amd64',
       location     => "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_${facts['os']['release']['major']}/",
       repos        => '/',
       release      => '',
-      require      => Apt::Key['crio repo key'],
+      keyring      => '/etc/apt/keyrings/crio-repo-key.asc',
+      require      => Apt::Keyring['crio-repo-key.asc'],
   }
 }

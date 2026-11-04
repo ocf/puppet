@@ -14,7 +14,7 @@ class ocf_apphost::lets_encrypt {
     mode   => '0400',
   }
 
-  if $::host_env == 'prod' {
+  if $facts['host_env'] == 'prod' {
     ocf::systemd::timer { 'lets-encrypt-update@app':
       service_source => 'puppet:///modules/ocf_www/lets-encrypt-update@.service',
       timer_source   => 'puppet:///modules/ocf_www/lets-encrypt-update@.timer',

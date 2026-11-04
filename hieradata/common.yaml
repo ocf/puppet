@@ -71,8 +71,8 @@ kubernetes::etcd_peers:
     - 169.229.226.75
     - 169.229.226.76
     - 169.229.226.77
-kubernetes::etcd_ip: "%{::ipaddress}"
-kubernetes::kube_api_advertise_address: "%{::ipaddress}"
+kubernetes::etcd_ip: "%{facts.networking.ip}"
+kubernetes::kube_api_advertise_address: "%{facts.networking.ip}"
 kubernetes::api_server_count: 3
 kubernetes::install_dashboard: false
 kubernetes::controller_address: 169.229.226.75:6443

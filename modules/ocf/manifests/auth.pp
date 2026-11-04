@@ -157,19 +157,19 @@ class ocf::auth($glogin = [], $ulogin = [[]], $gsudo = [], $usudo = [], $nopassw
 
   # Get all DNS names, FQDNs, and IPs for a host to include in SSH keys
   $ssh_aliases = delete(concat(
-    suffix(delete(any2array($::dnsA), ''), ".${::domain}"),
+    suffix(delete(any2array($::dnsA), ''), ".${facts['networking']['domain']}"),
     $::dnsA,
-    suffix(delete(any2array($::dnsCname), ''), ".${::domain}"),
+    suffix(delete(any2array($::dnsCname), ''), ".${facts['networking']['domain']}"),
     $::dnsCname,
-    $::fqdn,
+    $facts['networking']['fqdn'],
     $::ipHostNumber,
     $::ip6HostNumber,
   ), '')
 
   # Export SSH keys from every host if PuppetDB is running, and use them
   # to populate the global list in /etc/ssh/ssh_known_hosts.
-  if str2bool($::puppetdb_running) {
-    @@sshkey { $::hostname:
+  if str2bool($facts['puppetdb_running']) {
+    @@sshkey { $facts['networking']['hostname']:
       host_aliases => $ssh_aliases,
       key          => $::sshecdsakey,
       type         => ecdsa-sha2-nistp256,

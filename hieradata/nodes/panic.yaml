@@ -5,15 +5,15 @@ classes:
 apt::sources:
   tailscale:
     key:
-      id: 2596A99EAAB33821893C0A79458CA832957F5868
+      name: tailscale.gpg
       source: https://pkgs.tailscale.com/stable/debian/stretch.gpg
     location: https://pkgs.tailscale.com/stable/debian
     repos: main
     release: stretch
   syncthing:
     key:
-      id: 37C84554E7E0A261E4F76E1ED26E6ED000654A3E
-      server: pool.sks-keyservers.net
+      name: syncthing-archive-keyring.gpg
+      source: https://syncthing.net/release-key.gpg
     location: https://apt.syncthing.net
     release: syncthing
     repos: stable
