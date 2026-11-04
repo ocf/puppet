@@ -25,9 +25,3 @@ ocfdeploy ALL=NOPASSWD: /usr/local/sbin/puppet-trigger
 # This needs to be positioned lower in this file to not be overridden by
 # previous sections (rt#6210)
 #includedir /etc/sudoers.d
-
-# Allow ocfstaff to run a few commands without password for easier scripting.
-%ocfstaff ALL=(ALL:ALL) NOPASSWD: /usr/bin/virsh list, /usr/bin/virsh list --all
-
-# Same with ocfroot
-%ocfroot ALL=(ALL:ALL) NOPASSWD: /usr/local/sbin/puppet-trigger, /sbin/shutdown, /usr/bin/apt update, /usr/bin/apt-get update
