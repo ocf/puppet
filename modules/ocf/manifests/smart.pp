@@ -1,5 +1,5 @@
 class ocf::smart {
-  if !str2bool($::is_virtual) {
+  if !str2bool($facts['is_virtual']) {
     file {
       '/usr/local/sbin/smartmon.sh':
         source  => 'puppet:///modules/ocf/smartmon.sh',

@@ -14,7 +14,7 @@ class ocf_www::lets_encrypt {
     mode   => '0400',
   }
 
-  if $::host_env == 'prod' {
+  if $facts['host_env'] == 'prod' {
     # Run 5 minutes past the hour to allow for build-vhosts to be run so as
     # to minimize the time between a vhost being configured and getting HTTPS
     # enabled

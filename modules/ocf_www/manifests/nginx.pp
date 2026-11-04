@@ -10,8 +10,8 @@ class ocf_www::nginx {
 
   $backend = "http://127.0.0.1:${ocf_www::backend_port}"
 
-  $ssl_cert = "/etc/ssl/private/${::fqdn}.bundle"
-  $ssl_key  = "/etc/ssl/private/${::fqdn}.key"
+  $ssl_cert = "/etc/ssl/private/${facts['networking']['fqdn']}.bundle"
+  $ssl_key  = "/etc/ssl/private/${facts['networking']['fqdn']}.key"
 
   $proxy_headers = [
     'Host $host',
@@ -20,7 +20,7 @@ class ocf_www::nginx {
     'X-Real-IP $remote_addr',
   ]
 
-  $www_canonical = $::host_env ? {
+  $www_canonical = $facts['host_env'] ? {
     'dev'  => 'dev-www.ocf.berkeley.edu',
     'prod' => 'www.ocf.berkeley.edu',
   }
@@ -60,7 +60,7 @@ class ocf_www::nginx {
       server_name         => [
         'www.ocf.berkeley.edu', 'dev-www.ocf.berkeley.edu',
         'ocf.berkeley.edu', 'dev-ocf.berkeley.edu',
-        'secure.ocf.berkeley.edu', $::fqdn,
+        'secure.ocf.berkeley.edu', $facts['networking']['fqdn'],
         'accounts.ocf.berkeley.edu', 'dev-accounts.ocf.berkeley.edu',
         'wiki.ocf.berkeley.edu', 'dev-wiki.ocf.berkeley.edu',
         'hello.ocf.berkeley.edu', 'dev-hello.ocf.berkeley.edu',
@@ -92,7 +92,7 @@ class ocf_www::nginx {
   }
 
   # HTTP redirects
-  $shorturl_canonical = $::host_env ? {
+  $shorturl_canonical = $facts['host_env'] ? {
     'dev'  => 'dev-ocf-io.ocf.berkeley.edu',
     'prod' => 'ocf.io',
   }
@@ -110,7 +110,7 @@ class ocf_www::nginx {
         'hello.ocf.berkeley.edu', 'dev-hello', 'dev-hello.ocf.berkeley.edu', 'hello',
         'staff.ocf.berkeley.edu', 'dev-staff.ocf.berkeley.edu',
         'new.ocf.berkeley.edu',
-        $::hostname, $::fqdn,
+        $facts['networking']['hostname'], $facts['networking']['fqdn'],
       ],
       listen_port       => $http_port,
       server_cfg_append => {

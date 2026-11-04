@@ -16,8 +16,7 @@ class ocf::apt($stage = 'first') {
 
   if $facts['os']['distro']['id'] == 'Debian' {
     if $facts['os']['release']['major'] == '9' {
-      apt::key { 'freexian':
-          id     => 'AB597C4F6F3380BD4B2BEBC2A07310D369055D5A',
+      apt::keyring { 'freexian.gpg':
           source => 'https://deb.freexian.com/extended-lts/archive-key.gpg';
           }
 
@@ -49,12 +48,16 @@ class ocf::apt($stage = 'first') {
       'extended-lts':
           location => 'http://deb.freexian.com/extended-lts/',
           release  => $facts['os']['distro']['codename'],
-          repos    => $repos;
+          repos    => $repos,
+          keyring  => '/etc/apt/keyrings/freexian.gpg',
+          require  => Apt::Keyring['freexian.gpg'];
 
       'ocf':
           location => 'https://apt.ocf.berkeley.edu/',
           release  => $facts['os']['distro']['codename'],
           repos    => 'main',
+          keyring  => '/etc/apt/keyrings/ocf.gpg',
+          require  => Apt::Keyring['ocf.gpg'],
           include  => {
           src => true
           };
@@ -63,6 +66,8 @@ class ocf::apt($stage = 'first') {
           location => 'https://apt.ocf.berkeley.edu/',
           release  => "${facts['os']['distro']['codename']}-backports",
           repos    => 'main',
+          keyring  => '/etc/apt/keyrings/ocf.gpg',
+          require  => Apt::Keyring['ocf.gpg'],
           include  => {
           src => true
           };
@@ -110,6 +115,8 @@ class ocf::apt($stage = 'first') {
           location => 'https://apt.ocf.berkeley.edu/',
           release  => $facts['os']['distro']['codename'],
           repos    => 'main',
+          keyring  => '/etc/apt/keyrings/ocf.gpg',
+          require  => Apt::Keyring['ocf.gpg'],
           include  => {
           src => true
           };
@@ -118,6 +125,8 @@ class ocf::apt($stage = 'first') {
           location => 'https://apt.ocf.berkeley.edu/',
           release  => "${facts['os']['distro']['codename']}-backports",
           repos    => 'main',
+          keyring  => '/etc/apt/keyrings/ocf.gpg',
+          require  => Apt::Keyring['ocf.gpg'],
           include  => {
           src => true
           };
@@ -166,6 +175,8 @@ class ocf::apt($stage = 'first') {
           location => 'https://apt.ocf.berkeley.edu/',
           release  => $facts['os']['distro']['codename'],
           repos    => 'main',
+          keyring  => '/etc/apt/keyrings/ocf.gpg',
+          require  => Apt::Keyring['ocf.gpg'],
           include  => {
           src => true
           };
@@ -174,6 +185,8 @@ class ocf::apt($stage = 'first') {
           location => 'https://apt.ocf.berkeley.edu/',
           release  => "${facts['os']['distro']['codename']}-backports",
           repos    => 'main',
+          keyring  => '/etc/apt/keyrings/ocf.gpg',
+          require  => Apt::Keyring['ocf.gpg'],
           include  => {
           src => true
           };
@@ -222,16 +235,16 @@ class ocf::apt($stage = 'first') {
       location => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/',
       release  => $facts['os']['distro']['codename'],
       repos    => 'puppet7',
+      keyring  => '/etc/apt/keyrings/puppetlabs.gpg',
+      require  => Apt::Keyring['puppetlabs.gpg'],
   }
 
   # Add the puppetlabs apt repo key
-  apt::key { 'puppet gpg key':
-    id     => 'D6811ED3ADEEB8441AF5AA8F4528B6CD9E61EF26',
+  apt::keyring { 'puppetlabs.gpg':
     source => 'https://mirrors.ocf.berkeley.edu/puppetlabs/apt/pubkey.gpg';
   }
 
-  apt::key { 'ocf':
-    id     => '9FBEC942CCA7D929B41A90EC45A686E7D72A0AF4',
+  apt::keyring { 'ocf.gpg':
     source => 'https://apt.ocf.berkeley.edu/pubkey.gpg';
   }
 

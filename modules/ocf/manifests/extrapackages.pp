@@ -196,13 +196,13 @@ class ocf::extrapackages {
     ]:;
   }
 
-  if $::lsbdistcodename == 'bookworm' {
+  if $facts['os']['distro']['codename'] == 'bookworm' {
     package {
       [
         'bat',
       ]:;
     }
-  } elsif Integer($::os['distro']['release']['major']) >= 11 {
+  } elsif Integer($facts['os']['distro']['release']['major']) >= 11 {
     package {
       [
         'bat',

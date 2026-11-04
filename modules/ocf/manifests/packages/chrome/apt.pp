@@ -1,14 +1,7 @@
 # Include Google Chrome apt repo.
 class ocf::packages::chrome::apt {
-  apt::key { 'google':
-    id     => 'EB4C1BFD4F042F6DDDCCEC917721F63BD38B4796',
+  apt::keyring { 'google.asc':
     source => 'https://dl-ssl.google.com/linux/linux_signing_key.pub';
-  }
-
-  # Remove old key causing duplicate installations
-  apt::key { 'google-old':
-    ensure => absent,
-    id     => '4CCA1EAF950CEE4AB83976DCA040830F7FAC5991',
   }
 
   # Chrome creates /etc/apt/sources.list.d/google-chrome.list upon
@@ -21,6 +14,7 @@ class ocf::packages::chrome::apt {
       location => '[arch=amd64] http://dl.google.com/linux/chrome/deb/',
       release  => 'stable',
       repos    => 'main',
-      require  => Apt::Key['google'];
+      keyring  => '/etc/apt/keyrings/google.asc',
+      require  => Apt::Keyring['google.asc'];
   }
 }

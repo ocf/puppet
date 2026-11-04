@@ -14,7 +14,7 @@ class ocf::ssl::default(
     $extra_domains = []
   }
 
-  ocf::ssl::bundle { $::fqdn:
+  ocf::ssl::bundle { $facts['networking']['fqdn']:
     domains => ocf::get_host_fqdns() + ocf::get_host_fqdns('ocf.io') + $extra_domains,
     owner   => $owner,
     group   => $group,

@@ -1,7 +1,6 @@
 # Include PowerShell apt repo
 class ocf::packages::powershell::apt {
-  apt::key { 'powershell repo key':
-    id     => 'BC528686B50D79E339D3721CEB3E94ADBE1229CF',
+  apt::keyring { 'powershell.asc':
     source => 'https://packages.microsoft.com/keys/microsoft.asc';
   }
   if $facts['os']['distro']['codename'] == 'stretch' {
@@ -10,7 +9,8 @@ class ocf::packages::powershell::apt {
         location     => 'https://packages.microsoft.com/repos/microsoft-debian-stretch-prod',
         release      => 'stretch',
         repos        => 'main',
-        require      => Apt::Key['powershell repo key'],
+        keyring      => '/etc/apt/keyrings/powershell.asc',
+        require      => Apt::Keyring['powershell.asc'],
     }
   } else {
     apt::source { 'powershell':
@@ -18,7 +18,8 @@ class ocf::packages::powershell::apt {
       location     => "https://packages.microsoft.com/debian/${facts['os']['release']['major']}/prod",
       release      => $facts['os']['distro']['codename'],
       repos        => 'main',
-      require      => Apt::Key['powershell repo key'],
+      keyring      => '/etc/apt/keyrings/powershell.asc',
+      require      => Apt::Keyring['powershell.asc'],
     }
   }
 }

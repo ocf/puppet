@@ -12,13 +12,13 @@ hierarchy:
     path: "private.yaml"
 
   - name: "Nodes"
-    path: "nodes/%{::hostname}.yaml"
+    path: "nodes/%{facts.networking.hostname}.yaml"
 
   - name: "Type"
     path: "type/%{::type}.yaml"
 
   - name: "Virtual or physical"
-    path: "is_virtual/%{::is_virtual}.yaml"
+    path: "is_virtual/%{facts.is_virtual}.yaml"
 
   - name: "OS version"
     path: "os/%{facts.os.distro.codename}.yaml"
@@ -27,10 +27,10 @@ hierarchy:
     path: "common.yaml"
 
   - name: "Kubernetes hosts"
-    path: "kubernetes/hosts/%{::hostname}.yaml"
+    path: "kubernetes/hosts/%{facts.networking.hostname}.yaml"
 
   - name: "Kubernetes os"
-    path: "kubernetes/os/%{::osfamily}.yaml"
+    path: "kubernetes/os/%{facts.os.family}.yaml"
 
   - name: "Dummy secrets"
     path: "dummy_secrets.yaml"

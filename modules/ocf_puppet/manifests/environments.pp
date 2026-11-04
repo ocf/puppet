@@ -8,8 +8,8 @@ class ocf_puppet::environments {
   # don't use any more, but used to use.
   #
   # Instead, we just call `git clone`.
-  if $::ocf_staff {
-    $staff = split($::ocf_staff, ',')
+  if $facts['ocf_staff'] {
+    $staff = split($facts['ocf_staff'], ',')
     $staff.each |$user| {
       $repo_path = "${::puppet_environmentpath}/${user}"
 

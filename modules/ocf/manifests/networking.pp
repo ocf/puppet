@@ -20,9 +20,9 @@ class ocf::networking(
     fail("Can't have more than 3 nameservers")
   }
 
-  $fqdn = $::clientcert
-  $hostname = regsubst($::clientcert, '^([\w-]+)\..*$', '\1')
-  $linked_ifaces_array = split($::ifaces_linked, ' ')
+  $fqdn = $facts['clientcert']
+  $hostname = regsubst($facts['clientcert'], '^([\w-]+)\..*$', '\1')
+  $linked_ifaces_array = split($facts['ifaces_linked'], ' ')
   $first_active_iface = $linked_ifaces_array[0]
 
   # packages

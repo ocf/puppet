@@ -115,8 +115,8 @@ bundle generation manifest (used by lots of servers), consider just creating a
 new class under the `ocf` module.
 
 Try not to refer to servers by hostname (such as `lightning`). Instead, use the
-service CNAME (such as `puppet`) or the top-level variables `$::hostname` and
-`$::fqdn`.
+service CNAME (such as `puppet`) or the facts `$facts['networking']['hostname']` and
+`$facts['networking']['fqdn']`.
 
 ### Including third-party modules
 

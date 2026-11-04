@@ -125,7 +125,7 @@ class ocf_www::site::www {
   }
 
   # canonical redirects
-  $canonical_url = $::host_env ? {
+  $canonical_url = $facts['host_env'] ? {
     'dev'  => 'https://dev-www.ocf.berkeley.edu$1',
     'prod' => 'https://www.ocf.berkeley.edu$1',
   }
@@ -135,7 +135,7 @@ class ocf_www::site::www {
     serveraliases        => [
       'dev-ocf.berkeley.edu',
       'secure.ocf.berkeley.edu',
-      $::fqdn,
+      $facts['networking']['fqdn'],
     ],
     directories          => [
       {

@@ -1,8 +1,7 @@
 # Include VS Code apt repo.
 class ocf::packages::vscode::apt {
-  apt::key { 'vscode':
-    id     => 'BC528686B50D79E339D3721CEB3E94ADBE1229CF',
-    server => 'keyserver.ubuntu.com',
+  apt::keyring { 'vscode.asc':
+    source => 'https://packages.microsoft.com/keys/microsoft.asc',
   }
 
   apt::source { 'vscode':
@@ -10,6 +9,7 @@ class ocf::packages::vscode::apt {
     location     => 'http://packages.microsoft.com/repos/vscode',
     release      => 'stable',
     repos        => 'main',
-    require      => Apt::Key['vscode'],
+    keyring      => '/etc/apt/keyrings/vscode.asc',
+    require      => Apt::Keyring['vscode.asc'],
   }
 }

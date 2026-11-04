@@ -7,7 +7,7 @@ class ocf_irc::ircd {
     restart   => 'service inspircd reload',
     enable    => true,
     require   => Ocf::Repackage['inspircd'],
-    subscribe => Ocf::Ssl::Bundle[$::fqdn],
+    subscribe => Ocf::Ssl::Bundle[$facts['networking']['fqdn']],
   } ->
   cron { 'reload-irc-cert':
     command => 'chronic systemctl kill inspircd.service --signal=SIGUSR1',

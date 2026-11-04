@@ -52,7 +52,7 @@ class ocf_puppet::puppetserver {
     match_request_path   => '/puppet-ca/v1/(?:certificate|certificate_status)',
     match_request_type   => 'regex',
     match_request_method => ['get', 'post', 'put', 'delete'],
-    allow                => $::fqdn,
+    allow                => $facts['networking']['fqdn'],
     sort_order           => 998,
     path                 => '/etc/puppetlabs/puppetserver/conf.d/auth.conf',
     require              => Package['puppetserver'],
@@ -136,7 +136,7 @@ class ocf_puppet::puppetserver {
       require => Package['puppetserver'];
   }
 
-  if $::host_env == 'prod' {
+  if $facts['host_env'] == 'prod' {
     ocf::systemd::timer { 'puppet-update-prod':
       timer_source   => 'puppet:///modules/ocf_puppet/puppet-update-prod.timer',
       service_source => 'puppet:///modules/ocf_puppet/puppet-update-prod.service',
