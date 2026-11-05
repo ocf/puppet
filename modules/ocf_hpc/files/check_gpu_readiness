@@ -1,0 +1,232 @@
+#!/usr/bin/env python3
+"""Report basic CUDA driver availability, not workload readiness."""
+import argparse
+import csv
+import ctypes
+import glob
+import io
+import json
+import os
+import shutil
+import stat
+import subprocess
+import sys
+
+
+def check(name, ready, detail, required=True):
+    return dict(name=name, ready=bool(ready), required=required, detail=detail)
+
+
+def text(value):
+    if isinstance(value, bytes):
+        return value.decode('utf-8', errors='replace')
+    return '' if value is None else str(value)
+
+
+def failure_detail(error):
+    # TimeoutExpired can contain bytes even when run() requested text output.
+    return '{}: {}'.format(error, text(getattr(error, 'stderr', '')).strip())
+
+
+def run(command, timeout=10):
+    # subprocess.run kills and waits for the direct child on timeout.
+    return subprocess.run(
+        command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        timeout=timeout, universal_newlines=True, encoding='utf-8',
+        errors='replace',
+    )
+
+
+def nvidia_smi_check():
+    command = shutil.which('nvidia-smi')
+    if not command:
+        return check('nvidia_smi', False, 'nvidia-smi is not installed')
+    try:
+        result = run([
+            command, '--query-gpu=index,name,uuid,driver_version',
+            '--format=csv,noheader,nounits',
+        ])
+    except (OSError, subprocess.SubprocessError) as error:
+        return check('nvidia_smi', False, failure_detail(error))
+
+    gpus = []
+    try:
+        for row in csv.reader(io.StringIO(text(result.stdout)), strict=True):
+            if len(row) != 4:
+                raise ValueError('expected index, name, UUID and driver version')
+            index, name, uuid, version = [field.strip() for field in row]
+            if not index.isdecimal() or not name or not uuid.startswith('GPU-') or not version:
+                raise ValueError('invalid GPU inventory fields')
+            gpus.append(dict(index=index, name=name, uuid=uuid, driver_version=version))
+        indices = [int(gpu['index']) for gpu in gpus]
+        uuids = [gpu['uuid'] for gpu in gpus]
+        if len(set(indices)) != len(indices) or len(set(uuids)) != len(uuids):
+            raise ValueError('duplicate GPU index or UUID')
+    except (ValueError, csv.Error) as error:
+        return check('nvidia_smi', False, str(error))
+    return check('nvidia_smi', bool(gpus), dict(gpus=gpus, count=len(gpus)))
+
+
+def kernel_module_check(name):
+    return check('module_' + name, os.path.isdir('/sys/module/' + name), name)
+
+
+def character_device_check(path, required=True):
+    try:
+        ready = stat.S_ISCHR(os.stat(path).st_mode)
+        detail = path
+    except OSError as error:
+        ready, detail = False, str(error)
+    return check('device_' + os.path.basename(path), ready, detail, required)
+
+
+def gpu_device_check():
+    paths = sorted(path for path in glob.glob('/dev/nvidia[0-9]*')
+                   if os.path.basename(path)[6:].isdecimal())
+    checks = [character_device_check(path) for path in paths]
+    indices = [int(os.path.basename(path)[6:]) for path in paths]
+    ready = bool(paths) and all(item['ready'] for item in checks)
+    ready = ready and len(set(indices)) == len(indices)
+    return check('gpu_devices', ready, dict(
+        paths=paths, indices=indices, count=len(paths), devices=checks,
+    ))
+
+
+def cuda_worker(loader=None):
+    """Called only in the isolated child, or with a fake loader in unit tests."""
+    if loader is None:
+        loader = ctypes.CDLL
+    try:
+        driver = loader('libcuda.so.1')
+        signatures = [
+            ('cuInit', [ctypes.c_uint]),
+            ('cuDeviceGetCount', [ctypes.POINTER(ctypes.c_int)]),
+            ('cuGetErrorName', [ctypes.c_int, ctypes.POINTER(ctypes.c_char_p)]),
+        ]
+        for name, args in signatures:
+            function = getattr(driver, name)
+            function.argtypes = args
+            function.restype = ctypes.c_int
+        count = ctypes.c_int()
+        for name, argument in [('cuInit', 0), ('cuDeviceGetCount', ctypes.byref(count))]:
+            status = getattr(driver, name)(argument)
+            if status:
+                error_name = ctypes.c_char_p()
+                driver.cuGetErrorName(status, ctypes.byref(error_name))
+                return check('cuda_driver_api', False, '{} failed: {}'.format(
+                    name, text(error_name.value) or 'CUDA_ERROR_{}'.format(status),
+                ))
+        return check('cuda_driver_api', count.value > 0, dict(device_count=count.value))
+    except (OSError, AttributeError) as error:
+        return check('cuda_driver_api', False, str(error))
+
+
+def cuda_driver_check():
+    try:
+        result = run([sys.executable, os.path.realpath(__file__), '--cuda-worker'])
+    except (OSError, subprocess.SubprocessError) as error:
+        return check('cuda_driver_api', False, failure_detail(error))
+    try:
+        payload = json.loads(text(result.stdout))
+        if not isinstance(payload, dict) or not isinstance(payload.get('ready'), bool):
+            raise ValueError('missing boolean ready field')
+        detail = payload['detail']
+        if payload['ready']:
+            count = detail.get('device_count') if isinstance(detail, dict) else None
+            if isinstance(count, bool) or not isinstance(count, int) or count <= 0:
+                raise ValueError('invalid CUDA device count')
+        elif not isinstance(detail, (str, dict)):
+            raise ValueError('invalid CUDA failure detail')
+    except (ValueError, KeyError, TypeError) as error:
+        return check('cuda_driver_api', False, 'Invalid CUDA child report: {}'.format(error))
+    return check('cuda_driver_api', payload['ready'], detail)
+
+
+def inventory_check(smi, devices, cuda, expected_gpus):
+    if not all(item['ready'] for item in (smi, devices, cuda)):
+        return check('gpu_inventory', False, 'Inventory unavailable: a prerequisite check failed')
+    smi_indices = sorted(int(gpu['index']) for gpu in smi['detail']['gpus'])
+    device_indices = sorted(devices['detail']['indices'])
+    count = cuda['detail']['device_count']
+    ready = smi_indices == device_indices and count == len(smi_indices)
+    if expected_gpus is not None:
+        ready = ready and count == expected_gpus
+    return check('gpu_inventory', ready, dict(
+        nvidia_smi_indices=smi_indices, device_indices=device_indices,
+        cuda_device_count=count, expected_gpu_count=expected_gpus,
+    ))
+
+
+def package_diagnostics():
+    command = shutil.which('dpkg-query')
+    if not command:
+        return dict(available=False, packages=[], error='dpkg-query is not installed')
+    try:
+        result = run([
+            command, '-W', '-f=${binary:Package}\t${Version}\n',
+            'nvidia-*', 'libnvidia-*', 'libcuda1',
+        ])
+        packages = []
+        for line in text(result.stdout).splitlines():
+            fields = line.split('\t')
+            if len(fields) != 2 or not all(fields):
+                raise ValueError('invalid package inventory row')
+            packages.append(dict(name=fields[0], version=fields[1]))
+        if not packages:
+            raise ValueError('empty package inventory')
+        return dict(available=True, packages=packages)
+    except (OSError, subprocess.SubprocessError, ValueError) as error:
+        return dict(available=False, packages=[], error=failure_detail(error))
+
+
+def evaluate(checks):
+    return all(item['ready'] for item in checks if item['required'])
+
+
+def probe(expected_gpus=None):
+    smi = nvidia_smi_check()
+    # Initialize before taking the module/device snapshot: driver initialization
+    # may itself affect transient module or device state.
+    cuda = cuda_driver_check()
+    devices = gpu_device_check()
+    checks = [
+        smi, kernel_module_check('nvidia'), kernel_module_check('nvidia_uvm'),
+        character_device_check('/dev/nvidiactl'),
+        character_device_check('/dev/nvidia-uvm'),
+        character_device_check('/dev/nvidia-uvm-tools', required=False),
+        devices, cuda, inventory_check(smi, devices, cuda, expected_gpus),
+    ]
+    return dict(
+        schema_version=1, scope='basic_cuda_driver', expected_gpu_count=expected_gpus,
+        ready=evaluate(checks), checks=checks,
+        diagnostics=dict(kernel_release=os.uname().release, packages=package_diagnostics()),
+    )
+
+
+def positive_integer(value):
+    try:
+        number = int(value)
+        if number > 0:
+            return number
+    except ValueError:
+        pass
+    raise argparse.ArgumentTypeError('expected a positive integer')
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--compact', action='store_true', help='write JSON on one line')
+    parser.add_argument('--expected-gpus', type=positive_integer, metavar='N',
+                        help='require N GPUs, from an administrator-confirmed inventory')
+    parser.add_argument('--cuda-worker', action='store_true', help=argparse.SUPPRESS)
+    args = parser.parse_args(argv)
+    if args.cuda_worker:
+        print(json.dumps(cuda_worker()))
+        return 0
+    report = probe(args.expected_gpus)
+    print(json.dumps(report, indent=None if args.compact else 2, sort_keys=True))
+    return 0 if report['ready'] else 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())
