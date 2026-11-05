@@ -12,7 +12,5 @@ class ocf_ssh {
     cron => true,
     web  => true;
   }
-
-  include ocf_ssh::makeservices
   include ocf_ssh::webssh
 }
