@@ -13,7 +13,6 @@ class ocf::packages {
   include ocf::packages::ldapvi
   include ocf::packages::ntp
   include ocf::packages::postfix
-  include ocf::packages::powershell
   include ocf::packages::restic
   include ocf::packages::rsync
   include ocf::packages::shell
