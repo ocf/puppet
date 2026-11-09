@@ -67,3 +67,8 @@ key "letsencrypt.ocf.io" {
   algorithm HMAC-SHA512;
   secret "<%= @letsencrypt_ddns_key -%>";
 };
+
+key "staging.letsencrypt.ocf.io" {
+  algorithm HMAC-SHA512;
+  secret "<%= @letsencrypt_staging_ddns_key -%>";
+};

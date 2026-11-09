@@ -6,6 +6,7 @@ class ocf_ns {
 
   $decal_ddns_key = assert_type(Stdlib::Base64, lookup('decal::ddns::key'))
   $letsencrypt_ddns_key = assert_type(Stdlib::Base64, lookup('letsencrypt::ddns::key'))
+  $letsencrypt_staging_ddns_key = assert_type(Stdlib::Base64, lookup('letsencryptstaging::ddns::key'));
 
   file {
     '/etc/bind/named.conf.options':
