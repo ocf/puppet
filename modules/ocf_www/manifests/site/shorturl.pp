@@ -48,6 +48,8 @@ class ocf_www::site::shorturl {
       {rewrite_rule => '^/gh/u(/.*)?$ https://github.com/ocf/utils$1 [R]'},
       {rewrite_rule => '^/gh/w(/.*)?$ https://github.com/ocf/ocfweb$1 [R]'},
       {rewrite_rule => '^/gh(/.*)?$ https://ocf.io/github$1 [R]'},
+      {rewrite_rule => '^/g(/.*)?$ https://ocf.io/github$1 [R]'},
+      {rewrite_rule => '^/git(/.*)?$ https://ocf.io/github$1 [R]'},
       {rewrite_rule => '^/github(/.*)?$ https://github.com/ocf$1 [R]'},
       {rewrite_rule => '^/gadmin$ https://admin.google.com/a/ocf.berkeley.edu [R]'},
       {rewrite_rule => '^/get(ing)?involved$ https://bestdocs.ocf.io/staff-docs/get-involved/ [R]'},
