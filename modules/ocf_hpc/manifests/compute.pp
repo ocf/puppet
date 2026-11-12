@@ -19,7 +19,7 @@ class ocf_hpc::compute {
       backport_on => buster;
   } -> file { '/etc/modules-load.d/nvidia-uvm.conf':
     # The nvidia-uvm kernel module, which is needed for CUDA apps, can't be loaded as needed from within Singularity.
-    content => "nvidia-uvm\n";
+    content => "nvidia-current-uvm\n";
   }
   # This has to be run for software within a singularity container to use CUDA after a boot:
   # see https://github.com/sylabs/singularity/issues/2203
