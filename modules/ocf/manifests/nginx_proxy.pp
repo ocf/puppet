@@ -38,7 +38,8 @@ define ocf::nginx_proxy(
         ssl_cert         => $ssl_cert,
         ssl_key          => $ssl_key,
         ssl_dhparam      => $ssl_dhparam,
-        http2            => 'on',
+        http2            => 'off',
+        http3            => 'off',
 
         add_header       => merge({
           # HSTS header
@@ -69,6 +70,8 @@ define ocf::nginx_proxy(
           ssl_cert          => $ssl_cert,
           ssl_key           => $ssl_key,
           ssl_dhparam       => $ssl_dhparam,
+          http2             => 'off',
+          http3             => 'off',
 
           add_header        => merge({
             # HSTS header
@@ -85,6 +88,8 @@ define ocf::nginx_proxy(
       proxy_redirect   => $proxy_redirect,
       proxy_set_header => concat($base_headers, $proxy_set_header),
       add_header       => $headers,
+      http2            => 'off',
+      http3            => 'off',
       *                => $nginx_options,
     }
   }
