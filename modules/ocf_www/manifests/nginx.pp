@@ -49,7 +49,8 @@ class ocf_www::nginx {
       ssl               => true,
       ssl_cert          => $ssl_cert,
       ssl_key           => $ssl_key,
-      http2             => 'on',
+      http2             => 'off',
+      http3             => 'off',
       proxy             => $backend,
       proxy_set_header  => $proxy_headers,
       add_header        => {
