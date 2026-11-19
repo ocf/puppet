@@ -2,8 +2,10 @@
 
 {% if vhost.ssl %}
 server {
-    listen 443 ssl http2;
-    listen [::]:443 ssl http2;
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 off;
+    http3 off;
     server_name "{{vhost.fqdn}}";
 
     ssl_certificate {{vhost.ssl.bundle}};
